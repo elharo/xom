@@ -25,6 +25,15 @@ package nu.xom;
 
 /**
  * <p>
+ * <code>Builder</code>s use a <code>NodeFactory</code> object
+ * to construct each <code>Node</code> object (<code>Element</code>,
+ * <code>Text</code>, <code>Attribute</code>, etc.) they add to the
+ * tree. The default implementation simply calls the relevant 
+ * constructor, stuffs the resulting <code>Node</code> object in a 
+ * length one <code>Nodes</code> object, and returns it. 
+ * </p>
+ * 
+ * <p>
  * Subclassing this class allows builders to produce
  * instance of subclasses (for example,
  * <code>HTMLElement</code>) instead of the
@@ -39,10 +48,10 @@ package nu.xom;
  *   <code>xinclude:include</code> element could be replaced
  *   with the content it references. All such changes must be 
  *   consistent with the usual rules of well-formedness. For example,
- *   the <code>makeDocTypeDeclaration()</code> method could not 
+ *   the <code>makeDocType()</code> method should not 
  *   return a list containing two <code>DocType</code> objects
  *   because an XML document can have at most one document type
- *   declaration. Nor could it return a list containing an element,
+ *   declaration. Nor should it return a list containing an element,
  *   because an element cannot appear in a document prolog. However,
  *   it could return a list containing any number of comments and
  *   processing instructions, and not more than one 
@@ -55,6 +64,7 @@ package nu.xom;
  */
 public class NodeFactory {
 
+    
     /**
      * <p>
      * Creates a new <code>Element</code> in the specified namespace 
@@ -66,11 +76,11 @@ public class NodeFactory {
      * Subclasses may change the name, namespace, content, or other 
      * characteristics of the <code>Element</code> returned.
      * The default implementation merely calls 
-     * <code>startMakingElement</code>. However, when subclassing it is 
-     * often useful to be able to easily distinguish between the root 
-     * element and a non-root element because the root element cannot  
-     * be detached. Therefore, subclasses must not return null from  
-     * this method. Doing so will cause a 
+     * <code>startMakingElement</code>. However, when subclassing, it 
+     * is often useful to be able to easily distinguish between the  
+     * root element and a non-root element because the root element   
+     * cannot be detached. Therefore, subclasses must not return null  
+     * from this method. Doing so will cause a 
      * <code>NullPointerException</code>.
      * </p>
      * 
@@ -123,11 +133,12 @@ public class NodeFactory {
      * a list containing any number of nodes, all of which will be 
      * added to the tree at the current position in the order given by 
      * the list (subject to the usual well-formedness constraints, of 
-     * course. For instance, the list may not contain a 
+     * course. For instance, the list should not contain a 
      * <code>DocType</code> object unless the element is the root 
-     * element). If this method returns an empty list, then the element
-     * (including all its contents) is not included in the finished 
-     * document.
+     * element, and the document does not already have a 
+     * <code>DocType</code>). If this method returns an empty list,
+     * then the element (including all its contents) is not included 
+     * in the finished document.
      * </p>
      * 
      * <p>
@@ -135,10 +146,12 @@ public class NodeFactory {
      * subclass so that it functions as a callback. When you're done
      * processing the <code>Element</code>, return an empty list so  
      * that it will be removed from the tree and garbage collected.
-     * be careful not to attempt to detach the root element though.
-     * That is, when the element passed to this method is the root
-     * element, the list returned must contain exactly one 
-     * <code>Element</code> object.
+     * Be careful not to return an empty list for the root element 
+     * though. That is, when the element passed to this method is the 
+     * root element, the list returned must contain exactly one 
+     * <code>Element</code> object. The simplest way to check this 
+     * is testing if <code>element.getParent() instanceof 
+     * Document<code>.
      * </p>
      * 
      * <p>
@@ -156,11 +169,47 @@ public class NodeFactory {
         return new Nodes(element);
     }
 
+
+    /**
+     * <p>
+     * Creates a new <code>Document</code> object. 
+     * The root element of this document is initially set to 
+     * <code><&lt;root xmlns=http://www.xom.nu/fakeRoot""/></code>.
+     * This is only temporary. As soon as the real root element's
+     * start-tag is read, this element is replaced by the real root.
+     * This fake root should never be exposed.
+     * </p>
+     * 
+     * <p>
+     *  The <code>Builder</code> calls this method at the beginning of
+     *  each document, before it calls any other mehtod in this class.
+     *  Thus this is a useful place to perform per-document 
+     *  initialization tasks.
+     * </p>
+     * 
+     * <p>
+     * Subclasses may change the root element, content, 
+     * or other characteristics of the <code>Document</code> 
+     * returned. However, this method must not return null
+     * or the builder will throw a <code>NullPointerException</code>.
+     * </p>
+     * 
+     * @return the newly created <code>Document</code>
+     */
+    public Document makeDocument() {
+        return new Document(
+          Element.build("root", "http://www.xom.nu/fakeRoot")
+        );  
+    }
+    
+    
     /**
      * <p>
      * The <code>Builder</code> calls this method to signal the end 
      * of a document. The default implementation of this method  
-     * does nothing.
+     * does nothing. The <code>Builder</code> does not call this 
+     * method is an exception is thrown while building a 
+     * <code>Document</code>.
      * </p>
      * 
      * @param document the completed <code>Document</code>
@@ -199,18 +248,17 @@ public class NodeFactory {
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing a 
-     * <code>Comment</code> with the specified data.
+     * <code>Comment</code> with the specified text.
      * </p>
      * 
      * <p>
      * Subclasses may change the content or other 
-     * characteristics of the <code>Comment</code> 
-     * returned. 
+     * characteristics of the <code>Comment</code> returned. 
      * Subclasses may change the nodes returned from this method.
      * They may return a <code>Nodes</code> object containing any 
      * number of children and attributes which are appended and 
      * added to the current parent element. This <code>Nodes</code> 
-     * object may not contain any <code>Document</code> objects.
+     * object should not contain any <code>Document</code> objects.
      * All of the nodes returned must be parentless.
      * Subclasses may return an empty <code>Nodes</code> to indicate  
      * the <code>Comment</code> should not be included in the 
@@ -255,32 +303,12 @@ public class NodeFactory {
      * 
      * @return the nodes to be added to the document
      */
+    // pass internal DTD subset as well????
     public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
         return new Nodes(new DocType(rootElementName, publicID, systemID));    
     }
 
-    /**
-     * <p>
-     * Creates a new <code>Document</code> with an initial fake root
-     * which will be replaced by the real root shortly.
-     * This fake root should never be exposed.
-     * </p>
-     * 
-     * <p>
-     * Subclasses may change the root element, content, 
-     * or other characteristics of the <code>Document</code> 
-     * returned. However, this method must not return null
-     * or the builder will throw a <code>NullPointerException</code>.
-     * </p>
-     * 
-     * @return the newly created <code>Document</code>
-     */
-    public Document makeDocument() {
-        return new Document(
-          Element.build("root", "http://www.xom.nu/fakeRoot")
-        );  
-    }
 
     /**
      * <p>
@@ -358,4 +386,5 @@ public class NodeFactory {
         return new Nodes(new ProcessingInstruction(target, data)); 
     }
 
+    
 }

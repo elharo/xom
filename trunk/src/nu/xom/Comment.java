@@ -50,7 +50,7 @@ public class Comment extends LeafNode {
      * and the last character of the comment may not be a hyphen.
      * </p>
      * 
-     * @param data The initial text of the object
+     * @param data the initial text of the comment
      */
     public Comment(String data) {
         setValue(data);  
@@ -59,11 +59,11 @@ public class Comment extends LeafNode {
     
     /**
      * <p>
-     * Creates a new comment that's a <code>Comment</code> 
-     * object of its argument.
+     * Creates a new comment that's a copy of its argument.
      * The copy has the same data but no parent node.
      * </p>
-     * @param comment The comment to copy
+     * 
+     * @param comment the comment to copy
      */
     public Comment(Comment comment) {
         this.data = comment.data;  
@@ -158,6 +158,7 @@ public class Comment extends LeafNode {
      * </p>
      * 
      * @return the content of the comment
+     * 
      * @see nu.xom.Node#getValue()
      */
     public final String getValue() {

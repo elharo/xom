@@ -312,17 +312,17 @@ public class Element extends ParentNode {
     /**
      * <p>
      * Adds an attribute to this element, replacing any existing 
-     * attribute with the same local name
-     * and namespace URI.
+     * attribute with the same local name and namespace URI.
      * </p>
      * 
      * @param attribute the attribute to add
      * 
      * @throws IllegalAddException if the attribute already has a parent
-     * @throws NamespaceException if the attribute is in a namespace  
-     *      which conflicts with the element's own namespace
-     *      or the namespace of another attribute
-     *      or an additional namespace declaration
+     * @throws NamespaceConflictException if the attribute's prefix   
+     *      is mapped to a different namespace URI than the same prefix
+     *      is mapped to by the element itself, another attribute of 
+     *      the same element, or an additional namespace declaration
+     *      of that element
      * @throws XMLException if a subclass has rejected this attribute
      */
     public final void addAttribute(Attribute attribute) {
@@ -505,6 +505,15 @@ public class Element extends ParentNode {
      * which this <code>Element</code> object was read.
      * As with most lists in Java, attributes are numbered  
      * from 0 to one less than the length of the list.
+     * </p>
+     * 
+     * <p>
+     * In general, you should not add attributes to or remove 
+     * attriubtes from the list while iterating across it. 
+     * Doing so will change the indexes of the other attributes in 
+     * the list. it is, however, safe to remove an attribute from 
+     * either end of the list (0 or <code>getAttributeCount()-1</code>)
+     * until there are no attributes left. 
      * </p>
      * 
      * @param index the attribute to return
