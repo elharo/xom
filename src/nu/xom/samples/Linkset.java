@@ -23,17 +23,14 @@
 
 package nu.xom.samples;
 
-/**
- * @author Elliotte Rusty Harold
- *
- */
+
 import java.io.IOException;
 
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 
 /**
@@ -70,7 +67,7 @@ public class Linkset {
       }
       System.out.println(newRoot.toXML());
     }
-    catch (ParseException e) {
+    catch (ParsingException e) {
       System.out.println(url + " is not well-formed.");
     }
     catch (IOException e) { 

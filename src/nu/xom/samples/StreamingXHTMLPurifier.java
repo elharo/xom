@@ -33,7 +33,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
 import nu.xom.Text;
@@ -54,6 +54,9 @@ import nu.xom.Text;
  *   This is modeled after Example 8-9 in
  *   <cite>Processing XML with Java</cite>.
  * </p>
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.0d22
  * 
  */
 
@@ -147,7 +150,7 @@ public class StreamingXHTMLPurifier extends NodeFactory {
             serializer.write(doc);
         }
         // indicates a well-formedness error
-        catch (ParseException ex) { 
+        catch (ParsingException ex) { 
             System.out.println(args[0] + " is not well-formed.");
             System.out.println(ex.getMessage());
             ex.printStackTrace();

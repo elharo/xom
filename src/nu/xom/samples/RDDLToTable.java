@@ -32,7 +32,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
 /**
@@ -86,6 +86,8 @@ import nu.xom.Serializer;
  * &lt;/tr>
  *&lt;/table></code></pre>
  * 
+ * @author Elliotte Rusty Harold
+ * @version 1.0d22
  */
 
 public class RDDLToTable extends NodeFactory {
@@ -111,7 +113,7 @@ public class RDDLToTable extends NodeFactory {
             Serializer out = new Serializer(System.out);
             out.write(doc);
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

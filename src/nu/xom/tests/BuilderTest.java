@@ -35,7 +35,7 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.ValidityException;
 
@@ -47,7 +47,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d20
+ * @version 1.0d22
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -134,7 +134,7 @@ public class BuilderTest extends XOMTestCase {
 
 
     public void testNotationAttributeType() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(attributeDoc);
         Document document = builder.build(reader1);
         Element root = document.getRootElement();
@@ -144,7 +144,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testCDATAAttributeType() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(attributeDoc);
         Document document = builder.build(reader1);
         Element root = document.getRootElement();
@@ -154,7 +154,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testEntityAttributeType() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(attributeDoc);
         Document document = builder.build(reader1);
         Element root = document.getRootElement();
@@ -164,7 +164,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testEntitiesAttributeType() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(attributeDoc);
         Document document = builder.build(reader1);
         Element root = document.getRootElement();
@@ -174,7 +174,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testNameTokenAttributeType() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(attributeDoc);
         Document document = builder.build(reader1);
         Element root = document.getRootElement();
@@ -185,7 +185,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testNameTokensAttributeType() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(attributeDoc);
         Document document = builder.build(reader1);
         Element root = document.getRootElement();
@@ -196,7 +196,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testIDAttributeType() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(attributeDoc);
         Document document = builder.build(reader1);
         Element root = document.getRootElement();
@@ -207,7 +207,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testIDREFAttributeType() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(attributeDoc);
         Document document = builder.build(reader1);
         Element root = document.getRootElement();
@@ -218,7 +218,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testIDREFSAttributeType() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(attributeDoc);
         Document document = builder.build(reader1);
         Element root = document.getRootElement();
@@ -231,7 +231,7 @@ public class BuilderTest extends XOMTestCase {
 
 
     public void testBuildFromReader() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(source);
         Document document = builder.build(reader1);
         verify(document);        
@@ -239,7 +239,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testBuildFromReaderWithBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(source);
         Document document = builder.build(reader1, base);
         verify(document);        
@@ -248,7 +248,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testBuildFromInputStreamWithBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         InputStream in = new ByteArrayInputStream(source.getBytes("UTF-8"));
         Document document = builder.build(in, base);
         verify(document);        
@@ -256,7 +256,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testBuildFromInputStreamWithoutBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         InputStream in = new ByteArrayInputStream(source.getBytes("UTF-8"));
         Document document = builder.build(in);
         verify(document);        
@@ -264,14 +264,14 @@ public class BuilderTest extends XOMTestCase {
     }
 
     public void testBuildFromStringWithBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Document document = builder.build(source, base);
         verify(document);       
         assertEquals(base, document.getBaseURI());  
     }
     
     public void testBuildFromStringWithNullBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Document document = builder.build(source, null);
         verify(document);        
         assertNull(document.getBaseURI());    
@@ -316,14 +316,14 @@ public class BuilderTest extends XOMTestCase {
     }
 
     public void testValidateFromReader() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(validDoc);
         Document document = validator.build(reader1);       
         assertNull(document.getBaseURI());
     }
     
     public void testValidateFromReaderWithBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(validDoc);
         Document document = validator.build(reader1, base); 
         assertEquals(base, document.getBaseURI());
@@ -331,27 +331,27 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testValidateFromInputStreamWithBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
         Document document = validator.build(in, base);  
         assertEquals(base, document.getBaseURI());  
     }
     
     public void testValidateFromInputStreamWithoutBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
         Document document = validator.build(in);        
         assertNull(document.getBaseURI());
     }
 
     public void testValidateFromStringWithBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Document document = validator.build(validDoc, base);        
         assertEquals(base, document.getBaseURI());  
     }
     
     public void testValidateFromStringWithNullBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Document document = validator.build(validDoc, null);    
         assertNull(document.getBaseURI());  
     }
@@ -363,13 +363,13 @@ public class BuilderTest extends XOMTestCase {
             builder.build("<root:root/>", null);
             fail("Builder allowed undeclared prefix");
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
             // success    
         }        
     }
 
     public void testInvalidDocFromReader() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(source);
         try {
             validator.build(reader1);   
@@ -381,7 +381,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testInvalidDocFromReaderWithBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         StringReader reader1 = new StringReader(source);
         try {
             validator.build(reader1, base); 
@@ -394,7 +394,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testInvalidDocFromInputStreamWithBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         InputStream in = new ByteArrayInputStream(source.getBytes("UTF-8"));
         try {
             validator.build(in, base);  
@@ -406,7 +406,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testInvalidDocFromInputStreamWithoutBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         InputStream in = new ByteArrayInputStream(source.getBytes("UTF-8"));
         try {
             validator.build(in);        
@@ -418,7 +418,7 @@ public class BuilderTest extends XOMTestCase {
     }
 
     public void testInvalidDocFromStringWithBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         try {
             validator.build(source, base);        
             fail("Allowed invalid doc");
@@ -429,7 +429,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testInvalidDocFromStringWithNullBase()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         try {
             validator.build(source, null);    
             fail("Allowed invalid doc");
@@ -444,24 +444,26 @@ public class BuilderTest extends XOMTestCase {
     // This bug explains why the canonicalizer tests fail
     // with Crimson
     public void testCrimsonCharacterReferenceBug()
-      throws IOException, ParseException {
-        String data = new String(
+      throws IOException, ParsingException {
+        String data = 
           "<!DOCTYPE test [<!ATTLIST test name ID #IMPLIED>]>"
-          + "<test name='&#x0D;'/>");
-        InputStream in = new ByteArrayInputStream(data.getBytes("UTF8"));
+          + "<test name='&#x0D;'/>";
+        InputStream in = new ByteArrayInputStream(
+          data.getBytes("UTF8"));
         Document document = builder.build(in, null);      
-        assertEquals("\r", document.getRootElement().getAttributeValue("name"));  
+        assertEquals("\r", 
+          document.getRootElement().getAttributeValue("name"));  
     }
     
     public void testBaseRelativeResolution()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         builder.build(new File("data/baserelative/test.xml"));
     }
     
     // make sure transcoders on input are using normalization
     // form C when converting from other encodings
     public void testNFC()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Document doc = builder.build(new File("data/nfctest.xml"));
         Element root = doc.getRootElement();
         String s = root.getValue();
@@ -472,12 +474,12 @@ public class BuilderTest extends XOMTestCase {
    // This tests XOM's workaround for a bug in Crimson, Xerces,
    // and possibly other parsers
    public void testBaseRelativeResolutionRemotely()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         builder.build("http://www.cafeconleche.org");
    }
     
    public void testExternalEntityResolution()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         File input = new File("data/entitytest.xml");
         Builder builder = new Builder(false);
         Document doc = builder.build(input);
@@ -492,7 +494,7 @@ public class BuilderTest extends XOMTestCase {
    // processing instructions in the external DTD subset are not
    // reported.
    public void testExternalDTDSubset()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         File input = new File("data/externalDTDtest.xml");
         Builder builder = new Builder(false);
         Document doc = builder.build(input);
@@ -506,7 +508,7 @@ public class BuilderTest extends XOMTestCase {
    // and possibly other parsers. I've reported the bug in Xerces.
    // I don't have a workaround for this yet.
    /* public void testBaseRelativeResolutionRemotelyWithDirectory()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Document doc = builder.build("http://www.ibiblio.org/xml");
    } */
 

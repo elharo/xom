@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import nu.xom.Builder;
 import nu.xom.Element;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Text;
 
 /**
@@ -36,7 +36,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  */
 public class RSSHeadlines extends MinimalNodeFactory {
 
@@ -73,7 +73,7 @@ public class RSSHeadlines extends MinimalNodeFactory {
           Builder parser = new Builder(new RSSHeadlines());
           parser.build(url);
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(url + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

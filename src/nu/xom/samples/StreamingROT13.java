@@ -30,14 +30,14 @@ import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Builder;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
 import nu.xom.Text;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class StreamingROT13 extends NodeFactory {
@@ -99,7 +99,7 @@ public class StreamingROT13 extends NodeFactory {
       "Due to an IOException, the parser could not encode " + args[0]
       ); 
     }
-    catch (ParseException e) { 
+    catch (ParsingException e) { 
       System.out.println(e); 
       e.printStackTrace(); 
     }

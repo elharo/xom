@@ -22,8 +22,23 @@
 // to http://www.xom.nu/
 package nu.xom.tests;
 
-import java.io.*;
-import nu.xom.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PipedReader;
+import java.io.PipedWriter;
+import java.io.Reader;
+import java.io.Writer;
+
+import nu.xom.Attribute;
+import nu.xom.Builder;
+import nu.xom.Comment;
+import nu.xom.DocType;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.NodeFactory;
+import nu.xom.ParsingException;
+import nu.xom.ProcessingInstruction;
+import nu.xom.Text;
 
 
 /**
@@ -32,7 +47,7 @@ import nu.xom.*;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d20
+ * @version 1.0d22
  *
  */
 public class MegaTest extends XOMTestCase {
@@ -85,7 +100,7 @@ public class MegaTest extends XOMTestCase {
     }
     
     public void testMegaFile() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
 
         Document doc = builder.build(in);
         assertEquals(expectedResult, actualResult);

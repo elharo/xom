@@ -30,7 +30,7 @@ import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Node;
 import nu.xom.ParentNode;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 
 /**
@@ -40,7 +40,7 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class Restructurer {
@@ -90,7 +90,7 @@ public class Restructurer {
             System.out.println(document.toXML());
       
         }
-        catch (ParseException e) {
+        catch (ParsingException e) {
             System.out.println(url + " is not well-formed.");
         }
         catch (IOException e) { 

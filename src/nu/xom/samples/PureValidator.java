@@ -26,7 +26,7 @@ package nu.xom.samples;
 import java.io.IOException;
 
 import nu.xom.Builder;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 /**
@@ -37,7 +37,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class PureValidator {
@@ -60,7 +60,7 @@ public class PureValidator {
       System.out.println(" at line " + ex.getLineNumber() 
         + ", column " + ex.getColumnNumber());
     }
-    catch (ParseException ex) {
+    catch (ParsingException ex) {
       System.out.println(args[0] + " is not well-formed.");
       System.out.println(ex.getMessage());
       System.out.println(" at line " + ex.getLineNumber() 

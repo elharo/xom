@@ -32,14 +32,14 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
-public class ValidityException extends ParseException {
+public class ValidityException extends ParsingException {
 
     /**
      * <p>
-     *   Creates a new ValidityException.
+     *   Creates a new <code>ValidityException</code>.
      *  <p>
      */
     public ValidityException() {

@@ -29,7 +29,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Builder;
 import nu.xom.Comment;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Attribute;
 
@@ -42,7 +42,7 @@ import java.io.StringReader;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -231,7 +231,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testElementWithText() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         String data = "   test   \n\n   \n  \n hello again";
         root.appendChild(data);
@@ -248,7 +248,7 @@ public class SerializerTest extends XOMTestCase {
     }    
     
     public void testElementWithTextAndCarriageReturns() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         String data = "   test   \r\n   \n  \r hello again";
         root.appendChild(data);
@@ -265,7 +265,7 @@ public class SerializerTest extends XOMTestCase {
     }    
     
     private void serializeParseAndCompare(Document doc) 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out, "UTF-8");
         serializer.write(doc);
@@ -276,7 +276,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testBasicElementWithText() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         String data = "   test   \n  hello again";
         root.appendChild(data);
@@ -286,7 +286,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testAttributes() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "sadlkhasdk"));
         String data = "   test   \n  hello again";
@@ -308,7 +308,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testChildElements() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         Document doc = new Document(root);
         serializeParseAndCompare(doc);
@@ -346,7 +346,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testPrologAndEpilog() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         Document doc = new Document(root);
         serializeParseAndCompare(doc);
@@ -612,7 +612,7 @@ public class SerializerTest extends XOMTestCase {
 
     
     public void testLineFeedInAttributeValueWithDefaultOptions() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\n"));
         Document original = new Document(root);
@@ -626,7 +626,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testCarriageReturnInAttributeValueWithDefaultOptions() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\r"));
         Document original = new Document(root);
@@ -640,7 +640,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testCarriageReturnInTextWithDefaultOptions() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.appendChild("\r");
         Document original = new Document(root);
@@ -654,7 +654,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testTabInAttributeValueWithDefaultOptions() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\t"));
         Document original = new Document(root);
@@ -674,10 +674,10 @@ public class SerializerTest extends XOMTestCase {
      * </p>
      * 
      * @throws IOException
-     * @throws ParseException
+     * @throws ParsingException
      */
     public void testTabInAttributeValueWithLineSeparator() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\t"));
         Document original = new Document(root);
@@ -698,10 +698,10 @@ public class SerializerTest extends XOMTestCase {
      * </p>
      * 
      * @throws IOException
-     * @throws ParseException
+     * @throws ParsingException
      */
     public void testTabInAttributeValueWithIndenting() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\t"));
         Document original = new Document(root);
@@ -717,7 +717,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testCRLFInAttributeValueWithLineSeparatorCR() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\r\n"));
         Document original = new Document(root);
@@ -733,7 +733,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testCRLFInAttributeValueWithLineSeparatorLF() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\r\n"));
         Document original = new Document(root);
@@ -749,7 +749,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testLFInAttributeValueWithLineSeparatorCRLF() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\n"));
         Document original = new Document(root);
@@ -765,7 +765,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testNotEscapeLinefeedInTextContent() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.appendChild("\r\n");
         Document original = new Document(root);
@@ -781,7 +781,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testCRLFInAttributeValueWithIndenting() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\r\n"));
         Document original = new Document(root);
@@ -799,7 +799,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testCRLFInAttributeValueWithMaxLength() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\r\n"));
         Document original = new Document(root);
@@ -815,7 +815,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testCRInTextValueWithLineSeparator() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.appendChild("\r");
         Document original = new Document(root);
@@ -831,7 +831,7 @@ public class SerializerTest extends XOMTestCase {
     } 
     
     public void testCRLFInTextValueWithLineSeparator() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.appendChild("test \r\n test");
         Document original = new Document(root);
@@ -847,7 +847,7 @@ public class SerializerTest extends XOMTestCase {
     } 
     
     public void testCRInTextWithIndenting() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.appendChild("\r");
         Document original = new Document(root);
@@ -867,7 +867,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testCRInTextWithMaxLength() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.appendChild("\r");
         Document original = new Document(root);
@@ -883,7 +883,7 @@ public class SerializerTest extends XOMTestCase {
     }
     
     public void testTabInAttributeValueWithMaxLength() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\t"));
         Document original = new Document(root);
@@ -905,10 +905,10 @@ public class SerializerTest extends XOMTestCase {
      * </p>
      * 
      * @throws IOException
-     * @throws ParseException
+     * @throws ParsingException
      */
     public void testTabInAttributeValueWithZeroMaxLength() 
-      throws IOException, ParseException {        
+      throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\t"));
         Document original = new Document(root);
@@ -963,7 +963,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testLineLength() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
           
         int length = 40;        
         Element root = new Element("root");

@@ -34,7 +34,7 @@ import nu.xom.Comment;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 
 /**
@@ -45,7 +45,7 @@ import nu.xom.ParseException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class StreamingElementLister extends NodeFactory{
@@ -67,7 +67,7 @@ public class StreamingElementLister extends NodeFactory{
             Document doc = builder.build(args[0]);
         }
         // indicates a well-formedness error
-        catch (ParseException e) { 
+        catch (ParsingException e) { 
             System.out.println(args[0] + " is not well-formed.");
             System.out.println(e.getMessage());
         }  

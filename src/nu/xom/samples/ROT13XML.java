@@ -28,7 +28,7 @@ import java.io.IOException;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Node;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Text;
 
 
@@ -39,7 +39,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class ROT13XML {
@@ -102,7 +102,7 @@ public class ROT13XML {
       "Due to an IOException, the parser could not encode " + url
       ); 
     }
-    catch (ParseException e) { 
+    catch (ParsingException e) { 
       System.out.println(e);
     }
      

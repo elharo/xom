@@ -30,7 +30,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 
 /**
@@ -41,7 +41,7 @@ import nu.xom.ParseException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class TreePrinter {
@@ -61,7 +61,7 @@ public class TreePrinter {
       listChildren(root);      
     }
     // indicates a well-formedness error
-    catch (ParseException e) { 
+    catch (ParsingException e) { 
       System.out.println(args[0] + " is not well-formed.");
       System.out.println(e.getMessage());
     }  

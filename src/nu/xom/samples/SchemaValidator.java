@@ -26,7 +26,8 @@ package nu.xom.samples;
 import java.io.IOException;
 
 import nu.xom.Builder;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -38,7 +39,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class SchemaValidator {
@@ -67,7 +68,7 @@ public class SchemaValidator {
       System.out.println("Could not load Xerces.");
       System.out.println(ex.getMessage());
     }
-    catch (ParseException ex) {
+    catch (ParsingException ex) {
       System.out.println(args[0] + " is not schema valid.");
       System.out.println(ex.getMessage());
       ex.printStackTrace();

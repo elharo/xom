@@ -30,7 +30,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 /**
  * <p>
@@ -41,7 +41,7 @@ import nu.xom.ParseException;
  * </p>
  * 
  *  @author Elliotte Rusty Harold
- *  @version 1.0d18
+ *  @version 1.0d22
  *
  */
 public class RDDLFilter extends NodeFactory {
@@ -74,7 +74,7 @@ public class RDDLFilter extends NodeFactory {
           Document doc = parser.build(args[0]);
           System.out.println(doc.toXML());
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

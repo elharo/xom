@@ -39,7 +39,7 @@ import nu.xom.MalformedURIException;
 import nu.xom.MultipleParentException;
 import nu.xom.NamespaceException;
 import nu.xom.Node;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.XMLException;
@@ -47,11 +47,11 @@ import nu.xom.XMLException;
 
 /**
  * <p>
- * 
+ *   Tests for the <code>Element</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -195,7 +195,7 @@ public class ElementTest extends XOMTestCase {
         assertTrue(s.indexOf("xmlns=") != -1);       
     }
 
-    public void testToXML2() throws ParseException, IOException {
+    public void testToXML2() throws ParsingException, IOException {
         Builder builder = new Builder();
         File f = new File("data/soapresponse.xml");   
         Document doc = builder.build(f); 

@@ -29,7 +29,7 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.Text;
 
@@ -51,7 +51,7 @@ import nu.xom.Text;
  * </p>
  * 
  *  @author Elliotte Rusty Harold
- *  @version 1.0d21
+ *  @version 1.0d22
  *
  */
 public class NormalizingFactory extends NodeFactory {
@@ -108,7 +108,7 @@ public class NormalizingFactory extends NodeFactory {
             serializer.write(doc);
         }
         // indicates a well-formedness error
-        catch (ParseException ex) { 
+        catch (ParsingException ex) { 
             System.out.println(args[0] + " is not well-formed.");
             System.out.println(ex.getMessage());
         }  

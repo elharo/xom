@@ -29,7 +29,7 @@ import java.io.InputStream;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 
 
@@ -41,13 +41,13 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class PseudoAttributes {
 
     public static Element getAttributes(ProcessingInstruction pi)
-      throws ParseException  {
+      throws ParsingException  {
   
         StringBuffer sb = new StringBuffer("<");
         sb.append(pi.getTarget());
@@ -59,7 +59,7 @@ public class PseudoAttributes {
             InputStream in = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
             Builder parser = new Builder();
               
-            // This line will throw a ParseException if the processing
+            // This line will throw a ParsingException if the processing
             // instruction does not use pseudo-attributes
             Document doc = parser.build(in);
             Element root = doc.getRootElement();
@@ -68,7 +68,7 @@ public class PseudoAttributes {
             return root;
         }
         catch (Exception ex) {
-            throw new ParseException(pi.toXML() 
+            throw new ParsingException(pi.toXML() 
              + " is not in pseudo-attribute format.", ex);   
         }
     

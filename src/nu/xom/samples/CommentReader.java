@@ -29,7 +29,7 @@ import nu.xom.Builder;
 import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Node;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 /**
  * <p>
@@ -38,7 +38,7 @@ import nu.xom.ParseException;
  * </p>
  * 
  *  @author Elliotte Rusty Harold
- *  @version 1.0d18
+ *  @version 1.0d22
  *
  */
 public class CommentReader {
@@ -69,7 +69,7 @@ public class CommentReader {
           Document doc = parser.build(args[0]);
           list(doc);
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

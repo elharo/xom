@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import nu.xom.Builder;
 import nu.xom.Document;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 /**
  *
@@ -37,7 +37,7 @@ import nu.xom.ParseException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class DocumentMerger {
@@ -52,7 +52,7 @@ public class DocumentMerger {
         catch (IOException e) {
             System.err.println(e);
         }    
-        catch (ParseException e) {
+        catch (ParsingException e) {
             System.err.println(e);
         }        
         

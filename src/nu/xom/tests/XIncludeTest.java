@@ -31,7 +31,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.CircularIncludeException;
@@ -41,7 +41,7 @@ import nu.xom.xinclude.XIncluder;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -57,7 +57,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void test1() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/test.xml");
         Document doc = builder.build(input);
@@ -84,7 +84,7 @@ public class XIncludeTest extends XOMTestCase {
     
     // from the XInclude CR
     public void testC1() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c1.xml");
         Document doc = builder.build(input);
@@ -98,7 +98,7 @@ public class XIncludeTest extends XOMTestCase {
     
     // from the XInclude CR
     public void testC2() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c2.xml");
         Document doc = builder.build(input);
@@ -112,7 +112,7 @@ public class XIncludeTest extends XOMTestCase {
     
     // from the XInclude CR
     public void testC3() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c3.xml");
         Document doc = builder.build(input);
@@ -130,7 +130,7 @@ public class XIncludeTest extends XOMTestCase {
     // from the XInclude CR
     // Don't use this one yet, because there appear to be 
     // mistakes in the spec examples
-    /*public void testC5() throws ParseException, IOException, XIncludeException {
+    /*public void testC5() throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c5.xml");
         Document doc = builder.build(input);
@@ -141,7 +141,7 @@ public class XIncludeTest extends XOMTestCase {
     } */
     
     public void testSiblingIncludes() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/paralleltest.xml");
         Document doc = builder.build(input);
@@ -154,7 +154,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testNamespaces() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/namespacetest.xml");
         Document doc = builder.build(input);
@@ -167,7 +167,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testNoInclusions() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/latin1.xml");
         Document doc = builder.build(input);
@@ -180,7 +180,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void test2() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/simple.xml");
         Document doc = builder.build(input);
@@ -193,7 +193,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testReplaceRoot() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/roottest.xml");
         Document doc = builder.build(input);
@@ -207,7 +207,7 @@ public class XIncludeTest extends XOMTestCase {
 
     
     public void testCircle1() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/circle1.xml");
         Document doc = builder.build(input);
         try {
@@ -220,7 +220,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testCircle2() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/circle2a.xml");
         Document doc = builder.build(input);
         try {
@@ -233,7 +233,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testMissingHref() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/missinghref.xml");
         Document doc = builder.build(input);
         try {
@@ -246,7 +246,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testBadParseAttribute() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/badparseattribute.xml");
         Document doc = builder.build(input);
         try {
@@ -259,7 +259,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testUnavailableResource() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/missingfile.xml");
         Document doc = builder.build(input);
         try {
@@ -272,7 +272,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testFallback() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/fallbacktest.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
@@ -283,7 +283,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testFallbackWithRecursiveInclude() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/fallbacktest2.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
@@ -294,7 +294,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testEncodingAttribute() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/utf16.xml");
         Document doc = builder.build(input);
@@ -307,7 +307,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testXPointerBareNameID() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/xptridtest.xml");
         Document doc = builder.build(input);
@@ -320,7 +320,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testShorthandXPointerMatchesNothing() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/xptridtest2.xml");
         Document doc = builder.build(input);
@@ -345,7 +345,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testXPointerPureTumbler() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/xptrtumblertest.xml");
         Document doc = builder.build(input);
@@ -361,7 +361,7 @@ public class XIncludeTest extends XOMTestCase {
     // The first and second one point to nothing. The third one
     // selects something.
     public void testXPointerTripleTumbler() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/xptr2tumblertest.xml");
         Document doc = builder.build(input);
@@ -378,7 +378,7 @@ public class XIncludeTest extends XOMTestCase {
     // and points to nothing. The second one
     // selects something.
     public void testXPointerDoubleTumbler() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/xptrdoubletumblertest.xml");
         Document doc = builder.build(input);
@@ -394,7 +394,7 @@ public class XIncludeTest extends XOMTestCase {
     // Make sure XPointer failures are treated as a resource error,
     // not a fatal error.
     public void testXPointerFailureIsAResourceError() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/xptrtumblerfailsbutfallback.xml"
@@ -421,7 +421,7 @@ public class XIncludeTest extends XOMTestCase {
       syntax error in an [XPointer Framework]) result in a resource 
       error.  */
     public void testXPointerSyntaxErrorIsAResourceError() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/xptrsyntaxerrorbutfallback.xml"
@@ -440,7 +440,7 @@ public class XIncludeTest extends XOMTestCase {
     // The first one points to nothing. The third one
     // selects something.
     public void testXPointerTumblerWithWhiteSpace() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/xptrtumblertest3.xml");
         Document doc = builder.build(input);
@@ -453,7 +453,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testXPointerTumblerMatchesNothing() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/xptrtumblertest2.xml"
@@ -470,7 +470,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testMalformedXPointer() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         try {
             File input = new File("data/xinclude/input/badxptr.xml");
@@ -484,7 +484,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testAnotherMalformedXPointer() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
         
         // testing use of non NCNAME as ID
         try {
@@ -499,7 +499,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testMalformedXPointerWithFallback() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/xptrfallback.xml");
         Document doc = builder.build(input);
@@ -512,7 +512,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testIDAndTumbler() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/xptridandtumblertest.xml"
@@ -527,7 +527,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testAutoDetectUTF16BigEndianWithByteOrderMark() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/UTF16BigEndianWithByteOrderMark.xml"
@@ -542,7 +542,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testAutoDetectUTF16LittleEndianWithByteOrderMark() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/UTF16LittleEndianWithByteOrderMark.xml"
@@ -557,7 +557,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testAutoDetectUTF8WithByteOrderMark() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/UTF8WithByteOrderMark.xml"
@@ -572,7 +572,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testAutoDetectUnicodeBigUnmarked() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/UnicodeBigUnmarked.xml"
@@ -587,7 +587,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testUnicodeLittleUnmarked() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/UnicodeLittleUnmarked.xml"
@@ -603,7 +603,7 @@ public class XIncludeTest extends XOMTestCase {
 
 /*// Java doesn't yet support the UTF-32BE and UTF32LE encodings
     public void testUTF32BE() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/UTF32BE.xml"
@@ -618,7 +618,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testUTF32LE() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/UTF32LE.xml"
@@ -633,7 +633,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 */
     public void testEBCDIC() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
           "data/xinclude/input/EBCDIC.xml"
@@ -657,7 +657,7 @@ public class XIncludeTest extends XOMTestCase {
     // Plus some of those tests have mistakes. You need my patched 
     // version of the tests.
     public void testXIncludeTestSuite()  
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
         
         File testDescription = new File("data/XInclude-Test-Suite/testdescr.xml");
         if (testDescription.exists()) {
@@ -690,7 +690,7 @@ public class XIncludeTest extends XOMTestCase {
                         catch (IOException ex) {
                            // success   
                         }
-                        catch (ParseException ex) {
+                        catch (ParsingException ex) {
                            // success   
                         }
                     }
@@ -710,7 +710,7 @@ public class XIncludeTest extends XOMTestCase {
 
   // Turn off these tests because Java doesn't support UCS4 yet
  /*   public void testAutoDetectUCS4BE() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/UCS4BE.xml");
         Document doc = builder.build(input);
@@ -723,7 +723,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testAutoDetectUCS4LE() 
-      throws ParseException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/UCS4LE.xml");
         Document doc = builder.build(input);

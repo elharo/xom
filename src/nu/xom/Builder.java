@@ -269,7 +269,7 @@ public class Builder {
      * <p>
      * If the validate argument is true, then a validity error
      *  while parsing will cause a fatal error; that is, it 
-     * will throw a <code>ParseException</code>
+     * will throw a <code>ParsingException</code>
      * </p>
      * 
      * @param parser the SAX2 <code>XMLReader</code> that parses
@@ -296,7 +296,7 @@ public class Builder {
      * <p>
      * If the validate argument is true, then a validity error
      *  while parsing will cause a fatal error; that is, 
-     * it will throw a <code>ParseException</code>
+     * it will throw a <code>ParsingException</code>
      * </p>
      * 
      * @param parser The SAX2 XMLReader that parses the document.
@@ -398,12 +398,12 @@ public class Builder {
      * 
      * @throws ValidityException if a validity error is detected. This 
      *     is only thrown if the builder has been instructed to validate.
-     * @throws ParseException if a well-formedness error is detected
+     * @throws ParsingException if a well-formedness error is detected
      * @throws IOException if an I/O error such as a broken socket  
      *     prevents the document from being fully read.
      */
     public Document build(String systemID) 
-      throws ParseException, ValidityException, IOException {
+      throws ParsingException, ValidityException, IOException {
 
         systemID = canonicalizeURL(systemID);
         InputSource source = new InputSource(systemID);
@@ -424,12 +424,12 @@ public class Builder {
      * 
      * @throws ValidityException if a validity error is detected; 
      *     only thrown if the builder has been instructed to validate.
-     * @throws ParseException  if a well-formedness error is detected
+     * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException  if an I/O error such as a broken 
      *     socket prevents the document from being fully read.
      */
     public Document build(InputStream in) 
-      throws ParseException, ValidityException, IOException {
+      throws ParsingException, ValidityException, IOException {
 
         InputSource source = new InputSource(in);
         // parser.setEntityResolver(new BaseRelativeResolver(null));
@@ -452,12 +452,12 @@ public class Builder {
      * 
      * @throws ValidityException if a validity error is detected; 
      *     only thrown if the builder has been instructed to validate.
-     * @throws ParseException  if a well-formedness error is detected
+     * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException  if an I/O error such as a broken
      *       socket prevents the document from being fully read.
      */
     public Document build(InputStream in, String baseURI) 
-      throws ParseException, ValidityException, IOException {
+      throws ParsingException, ValidityException, IOException {
 
         baseURI = canonicalizeURL(baseURI);
         InputSource source = new InputSource(in);
@@ -491,14 +491,14 @@ public class Builder {
      * 
      * @return the parsed <code>Document</code>
      * 
-     * @throws ParseException    if a well-formedness error is detected
+     * @throws ParsingException    if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk 
      *     prevents the file from being read
      * @throws ValidityException if a validity error is detected. This 
      *   is only thrown if the builder has been instructed to validate.
      */
     public Document build(File in) 
-      throws ParseException, ValidityException, IOException {
+      throws ParsingException, ValidityException, IOException {
 
         InputStream fin = new FileInputStream(in);
         // Java's toURL method doesn't properly escape file
@@ -529,13 +529,13 @@ public class Builder {
      * 
      * @return  the parsed <code>Document</code>
      * 
-     * @throws ParseException    if a well-formedness error is detected
+     * @throws ParsingException    if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk.
      * @throws ValidityException if a validity error is detected. This 
      *   is only thrown if the builder has been instructed to validate.
      */
     public Document build(Reader in) 
-      throws ParseException, ValidityException, IOException {
+      throws ParsingException, ValidityException, IOException {
 
         InputSource source = new InputSource(in);
         // parser.setEntityResolver(new BaseRelativeResolver(null));
@@ -555,14 +555,14 @@ public class Builder {
      * 
      * @return  the parsed <code>Document</code>
      * 
-     * @throws ParseException    if a well-formedness error is detected
+     * @throws ParsingException    if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk 
      *     prevents the document from being completely read
      * @throws ValidityException if a validity error is detected. This 
      *   is only thrown if the builder has been instructed to validate.
      */
     public Document build(Reader in, String baseURI) 
-      throws ParseException, ValidityException, IOException {
+      throws ParsingException, ValidityException, IOException {
           
         baseURI = canonicalizeURL(baseURI);
         InputSource source = new InputSource(in);
@@ -586,13 +586,13 @@ public class Builder {
      * 
      * @throws IOException       if an I/O error such as a bad disk 
      *     prevents the doucment's external DTD subset from being read
-     * @throws ParseException    if a well-formedness error is detected
+     * @throws ParsingException    if a well-formedness error is detected
      * @throws ValidityException if a validity error is detected. This 
      *     is only thrown if the builder has been instructed to 
      *     validate.
      */
     public Document build(String document, String baseURI) 
-      throws ParseException, ValidityException, IOException {
+      throws ParsingException, ValidityException, IOException {
 
 
         Reader reader = new StringReader(document);
@@ -631,7 +631,7 @@ public class Builder {
      * 
      * @return  the parsed <code>Document</code>
      * 
-     * @throws ParseException    if a well-formedness error is detected
+     * @throws ParsingException    if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk
      *     prevents the doucment from being read
      * @throws ValidityException if a validity error is detected. This 
@@ -639,7 +639,7 @@ public class Builder {
      *     validate.
      */
     private Document build(InputSource in) 
-      throws ParseException, ValidityException, IOException {
+      throws ParsingException, ValidityException, IOException {
 
         try {
             parser.parse(in);
@@ -664,14 +664,14 @@ public class Builder {
                     nested);                
             }
             // end workaround
-            throw new ParseException(
+            throw new ParsingException(
                 ex.getMessage(),
                 ex.getLineNumber(),
                 ex.getColumnNumber(),
                 ex);
         }
         catch (SAXException ex) {
-            throw new ParseException(ex.getMessage(), ex);
+            throw new ParsingException(ex.getMessage(), ex);
         }
 
         XOMHandler handler = (XOMHandler) (parser.getContentHandler());

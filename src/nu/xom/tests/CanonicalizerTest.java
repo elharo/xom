@@ -33,12 +33,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-// import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
-// import nu.xom.Element;
-// import nu.xom.NodeList;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.XMLException;
 import nu.xom.canonical.CanonicalXMLSerializer;
@@ -49,7 +46,7 @@ import nu.xom.canonical.CanonicalXMLSerializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d122
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -64,7 +61,7 @@ public class CanonicalizerTest extends XOMTestCase {
         builder = new Builder();       
     }
 
-    public void testWithComments() throws ParseException, IOException {
+    public void testWithComments() throws ParsingException, IOException {
       
         File tests = new File("data/canonical/input/");
         String[] inputs = tests.list(new XMLFilter());
@@ -104,7 +101,7 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     public void testWithoutComments() 
-      throws ParseException, IOException {
+      throws ParsingException, IOException {
       
         File tests = new File("data/canonical/input/");
         String[] inputs = tests.list(new XMLFilter());
@@ -141,7 +138,7 @@ public class CanonicalizerTest extends XOMTestCase {
     }    
     
     public void testRelativeNamespaceURIsForbidden() 
-      throws ParseException, IOException {
+      throws ParsingException, IOException {
         
         try {
             String data = "<test xmlns=\"relative\">data</test>";
@@ -159,7 +156,7 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
 /*    public void testNodeList() 
-      throws ParseException, IOException {
+      throws ParsingException, IOException {
         
         Element element = new Element("test");
         NodeList nodes = new NodeList();
@@ -176,7 +173,7 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     public void testNodeListNamespace() 
-      throws ParseException, IOException {
+      throws ParsingException, IOException {
         
         Element parent = new Element("parent");
         parent.addNamespaceDeclaration(
@@ -200,7 +197,7 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     public void testNodeListXMLAttributes() 
-      throws ParseException, IOException {
+      throws ParsingException, IOException {
         
         Element grandparent = new Element("grandparent");
         grandparent.addAttribute(new Attribute("xml:base", 

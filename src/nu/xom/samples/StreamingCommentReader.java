@@ -32,7 +32,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 
@@ -46,7 +46,7 @@ import nu.xom.Text;
  * </p>
  * 
  *  @author Elliotte Rusty Harold
- *  @version 1.0d18
+ *  @version 1.0d22
  *
  */
 public class StreamingCommentReader extends NodeFactory {
@@ -100,7 +100,7 @@ public class StreamingCommentReader extends NodeFactory {
           Builder parser = new Builder(new StreamingCommentReader());
           Document doc = parser.build(args[0]);
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

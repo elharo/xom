@@ -23,11 +23,7 @@
 
 package nu.xom.samples;
 
-/**
- * @author Elliotte Rusty Harold
- * @version 1.0d18
- *
- */
+
 import java.io.IOException;
 
 import nu.xom.Attribute;
@@ -35,7 +31,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 
 /**
@@ -82,7 +78,7 @@ public class IDTagger {
         
         System.out.println(document.toXML());         
       }
-      catch (ParseException ex) {
+      catch (ParsingException ex) {
         System.err.println(ex);
         continue; 
       }

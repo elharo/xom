@@ -30,7 +30,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -42,7 +42,7 @@ import java.util.ArrayList;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class DTDGenerator {
@@ -64,7 +64,7 @@ public class DTDGenerator {
             System.err.println("Could not read " + args[0] 
               + " due to " + ex.getMessage());
         }       
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
             System.err.println(args[0] + " is not well-formed");
         } 
               
