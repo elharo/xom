@@ -39,10 +39,6 @@ import nu.xom.ProcessingInstruction;
  */
 public class ProcessingInstructionTest extends XOMTestCase {
 
-    public ProcessingInstructionTest() {
-        super("Processing Instruction tests");
-    }
-
     public ProcessingInstructionTest(String name) {
         super(name);
     }

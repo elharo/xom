@@ -739,6 +739,6 @@ public class BuilderTest extends XOMTestCase {
               newAttributes);
 
         }        
-    } 
+    }
 
 }

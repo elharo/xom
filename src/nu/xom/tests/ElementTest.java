@@ -97,10 +97,6 @@ public class ElementTest extends XOMTestCase {
 
     }
 
-    public ElementTest() {
-        super("Element tests");
-    }
-
     public ElementTest(String name) {
         super(name);
     }
