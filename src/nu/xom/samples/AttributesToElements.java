@@ -58,9 +58,11 @@ public class AttributesToElements extends NodeFactory {
           
         Element element = new Element(name, URI);  
         element.appendChild(value);
-        if (maintainTypes && !type.equals(Attribute.Type.UNDECLARED)) {
+        if (maintainTypes 
+          && !type.equals(Attribute.Type.UNDECLARED)
+          && !type.equals(Attribute.Type.ENUMERATION)) {
             Attribute xsiType = new Attribute("xsi:type", 
-              "http://www.w3.org/2001/XMLSchema-instance", type.toXML());
+              "http://www.w3.org/2001/XMLSchema-instance", type.getName());
             element.addAttribute(xsiType); 
         }
         return new Nodes(element);
@@ -69,7 +71,9 @@ public class AttributesToElements extends NodeFactory {
     public static void main(String[] args) {
   
         if (args.length <= 0) {
-          System.out.println("Usage: java nu.xom.samples.AttributesToElements URL");
+          System.out.println(
+            "Usage: java nu.xom.samples.AttributesToElements URL"
+          );
           return;
         }
         
