@@ -34,7 +34,7 @@ import java.util.StringTokenizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  */
 final class Verifier {
@@ -177,7 +177,7 @@ final class Verifier {
                 // all properly matched surrogate pairs are legal in PCDATA
             }  // end if 
             else if ((flags[result] & XML_CHARACTER) == 0) {
-                throwIllegalCharacterDataException(text, "0x " 
+                throwIllegalCharacterDataException(text, "0x" 
                   + Integer.toHexString(result)
                   + " is not allowed in XML content");
             }
@@ -186,6 +186,7 @@ final class Verifier {
 
     }
 
+    
     // This seems to be allowing URIs with fragment IDs.
     // Make sure this is OK everywhere it's used. It's
     // definitely needed in some places; might need separate
@@ -356,7 +357,6 @@ final class Verifier {
         
     }    
 
-
     
     private static int decodeSurrogatePair(int high, int low) {
         // This method is only called after a high-surrogate 
@@ -477,6 +477,7 @@ final class Verifier {
         return false; 
     }
 
+    
     /**
      * <p>
      * Checks a string to see if it is an RFC 2396/RFC 2732 absolute 
@@ -810,4 +811,5 @@ final class Verifier {
         return false;
     } 
 
+    
 }
