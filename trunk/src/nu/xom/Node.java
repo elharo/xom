@@ -337,11 +337,15 @@ public abstract class Node {
         return super.hashCode();    
     }
     
+    // ???? how does document order work with
+    // nodes selected from multiple documents
+    // document(url1) | document(url2) ?
     
     /**
      * <p>
      * Returns the nodes selected by the XPath expression in the 
-     * context of this node. All namespace prefixes used in the 
+     * context of this node in document order as defined in XSLT. 
+     * All namespace prefixes used in the 
      * expression should be bound to namespace URIs by the 
      * second argument. 
      * </p>
@@ -419,7 +423,7 @@ public abstract class Node {
                 }
             }
             
-            return new Nodes(results);
+            return sortResults(results);
         }
         catch (XPathException ex) {
             ex.setXPath(xpath);
@@ -442,20 +446,87 @@ public abstract class Node {
     }
 
 
+    // recursively descend through document; in document
+    // order, and add results as they are found
+    private Nodes sortResults(List in) {
+
+        Node root = this.getRoot();
+        if (in.size() > 1 && root instanceof ParentNode) {
+            Nodes out = new Nodes();
+            process(in, out, (ParentNode) root);
+            return out;
+        }
+        else {
+            return new Nodes(in);
+        }
+    }
+
+
+    private static void process(List in, Nodes out, ParentNode parent) {
+
+        if (in.isEmpty()) return;
+        if (in.contains(parent)) {
+            out.append(parent);
+            in.remove(parent);
+            if (in.isEmpty()) return;
+        }
+        
+        int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            Node child = parent.getChild(i);
+            if (child.isElement()) {
+                Element element = (Element) child;
+                for (int a = 0; a < element.getAttributeCount(); a++) {
+                    Attribute att = element.getAttribute(a);
+                    if (in.contains(att)) {
+                        out.append(att);
+                        in.remove(att);
+                        if (in.isEmpty()) return;
+                    }
+                }
+                process(in, out, element);
+            }
+            else {
+                if (in.contains(child)) {
+                    out.append(child);
+                    in.remove(child);
+                    if (in.isEmpty()) return;
+                }
+            }
+        }
+        
+    }
+
+
+    private static void process(List in, Nodes out, Text text) {
+
+        Iterator iterator = in.iterator();
+        while (iterator.hasNext()) {
+            Object next = iterator.next();
+            if (next instanceof JaxenNavigator.XOMList) {
+                List l = (List) next;
+                if (l.contains(text)) {
+                    out.append(text);
+                    l.remove(text);
+                    if (l.isEmpty()) in.remove(l);
+                    return;
+                }
+            }
+        }
+        
+    }
+
+
     /**
      * <p>
      * Returns the nodes selected by the XPath expression in the 
-     * context of this node. This XPath expression must not contain
+     * context of this node in document order as defined by XSLT. 
+     * This XPath expression must not contain
      * any namespace prefixes.
      * </p>
      * 
      * <p>
      * No variables are bound. No namespace prefixes are bound.
-     * </p>
-     * 
-     * <p>
-     * XPath node-sets are unordered. XOM makes no promises about the
-     * order in which selected nodes will appear in the result.
      * </p>
      * 
      * @param xpath the XPath expression to evaluate
