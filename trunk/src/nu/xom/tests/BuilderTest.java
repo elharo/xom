@@ -1887,10 +1887,25 @@ public class BuilderTest extends XOMTestCase {
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI(),
-          doc.getBaseURI().endsWith("data/%" 
+        assertTrue(doc.getBaseURI().endsWith("data/%" 
           + Integer.toHexString('|').toUpperCase()
           + "file.xml"));
+        
+    }
+
+    
+    public void testBuildFromFileThatContainsColonInName()
+      throws ParsingException, IOException {
+        
+        File f = makeFile(":file.xml");
+        Document doc = builder.build(f);
+        f.delete();
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/:file.xml"));
         
     }
 
