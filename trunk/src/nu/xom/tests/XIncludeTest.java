@@ -160,6 +160,48 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testXMLLangAttributes() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/langtest1.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/langtest1.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testInheritedXMLLangAttributes() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/langtest2.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/langtest2.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testNoLanguageSpecified() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/langtest3.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/langtest3.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
     // According to RFC 2396 empty string URI always refers to the 
     // current document irrespective of base URI
     public void testXMLBaseNotUsedToResolveMissingHref() 
