@@ -34,8 +34,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d7
- * 
+ * @version 1.0d21
  *
  */
 
@@ -53,7 +52,8 @@ public class IllegalNameException extends WellformednessException {
 
     /**
      * <p>
-     * Creates a new <code>IllegalNameException</code> with a detail message.
+     * Creates a new <code>IllegalNameException</code> 
+     * with a detail message.
      * </p>
      * 
      * @param message indicates the specific problem
@@ -64,15 +64,15 @@ public class IllegalNameException extends WellformednessException {
 
     /**
      * <p>
-     * Creates a new <code>IllegalNameException</code> with a detail message
-     * and an underlying root cause.
+     * Creates a new <code>IllegalNameException</code> 
+     * with a detail message and an underlying root cause.
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public IllegalNameException(String message, Throwable ex) {
-        super(message, ex);
+    public IllegalNameException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

@@ -46,7 +46,9 @@ public class XMLException extends RuntimeException {
     private Throwable cause;
 
     /**
+     * <p>
      * Creates a new <code>XMLException</code>.
+     * </p>
      */
     public XMLException() {
         super();
@@ -60,11 +62,11 @@ public class XMLException extends RuntimeException {
      *  </p>
      *
      * @param message information about the cause of the exception
-     * @param ex the nested exception that caused this exception
+     * @param cause the nested exception that caused this exception
      */
-    public XMLException(String message, Throwable ex) {
+    public XMLException(String message, Throwable cause) {
         super(message);
-        this.initCause(ex);
+        this.initCause(cause);
     }
     
     /**

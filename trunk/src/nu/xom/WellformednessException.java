@@ -32,20 +32,25 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d4
+ * @version 1.0d21
  *
  */
 public class WellformednessException extends XMLException {
 
     /**
+     * <p>
      * Creates a new <code>WellformednessException</code>.
+     * </p>
      */
     public WellformednessException() {
         super();
     }
 
-    /**
-     * Creates a new <code>WellformednessException</code> with a detail message.
+     /**
+     * <p>
+     * Creates a new <code>WellformednessException</code> 
+     * with a detail message.
+     * </p>
      * 
      * @param message indicates the specific problem
      */
@@ -54,14 +59,16 @@ public class WellformednessException extends XMLException {
     }
 
     /**
-     * Creates a new <code>WellformednessException</code> with a detail message
-     * and an underlying root cause.
+     * <p>
+     * Creates a new <code>WellformednessException</code> 
+     * with a detail message and an underlying root cause.
+     * </p>
      * 
      * @param message indicates the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public WellformednessException(String message, Throwable ex) {
-        super(message, ex);
+    public WellformednessException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

@@ -34,7 +34,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d7
+ * @version 1.0d21
  * 
  *
  */
@@ -54,7 +54,8 @@ public class IllegalTargetException extends IllegalNameException {
 
     /**
      * <p>
-     * Creates a new <code>IllegalTargetException</code> with a detail message.
+     * Creates a new <code>IllegalTargetException</code> 
+     * with a detail message.
      * </p>
      * 
      * @param message indicates the specific problem
@@ -65,15 +66,15 @@ public class IllegalTargetException extends IllegalNameException {
 
     /**
      * <p>
-     * Creates a new <code>IllegalTargetException</code> with a detail message
-     * and an underlying root cause.
+     * Creates a new <code>IllegalTargetException</code> 
+     * with a detail message and an underlying root cause.
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public IllegalTargetException(String message, Throwable ex) {
-        super(message, ex);
+    public IllegalTargetException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

@@ -67,7 +67,7 @@ public class IllegalDataException extends WellformednessException {
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
     public IllegalDataException(String message, Throwable ex) {
         super(message, ex);

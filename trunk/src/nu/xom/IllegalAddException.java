@@ -33,8 +33,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d7
- * 
+ * @version 1.0d21
  *
  */
 
@@ -52,7 +51,8 @@ public class IllegalAddException extends WellformednessException {
 
     /**
      * <p>
-     * Creates a new <code>IllegalAddException</code> with a detail message.
+     * Creates a new <code>IllegalAddException</code> 
+     * with a detail message.
      * </p>
      * 
      * @param message indicates the specific problem
@@ -68,10 +68,10 @@ public class IllegalAddException extends WellformednessException {
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public IllegalAddException(String message, Throwable ex) {
-        super(message, ex);
+    public IllegalAddException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

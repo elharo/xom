@@ -30,7 +30,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d4
+ * @version 1.0d21
  * 
  *
  */
@@ -61,10 +61,10 @@ public class MultipleParentException extends IllegalAddException {
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public MultipleParentException(String message, Throwable ex) {
-        super(message, ex);
+    public MultipleParentException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }
