@@ -177,10 +177,13 @@ public class XOMTestCase extends TestCase {
         if ("xml:base".equals(expected.getQualifiedName())) {
             // handle possibility that one is relative and other is not
             if (value1.equals(value2)) return;
-            if (value1.startsWith("/") && value2.endsWith(value1)) return;
-            if (value2.startsWith("/") && value1.endsWith(value2)) return;
-            assertTrue(message, 
-              value1.endsWith('/' + value2) || value2.endsWith('/' + value1));
+            if (value1.startsWith("../")) {
+                assertTrue(value2.endsWith(value1.substring(2)));
+            }
+            else {
+                assertTrue(message, 
+                  value1.endsWith('/' + value2) || value2.endsWith('/' + value1)); 
+            }
         } 
         else { 
             assertEquals(message, value1, value2);
