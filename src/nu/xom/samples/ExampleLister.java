@@ -121,14 +121,14 @@ public class ExampleLister {
              list(document.getRootElement());
     
         }
-        catch (ParsingException e) {
-            System.out.println(e);
+        catch (ParsingException ex) {
+            System.out.println(ex);
         }
-        catch (IOException e) { 
+        catch (IOException ex) { 
               System.out.println(
               "Due to an IOException, the parser could not read " + url
             ); 
-            System.out.println(e);
+            System.out.println(ex);
         } 
      
     } // end main

@@ -59,12 +59,12 @@ public class ElementLister {
       listChildren(root, 0);      
     }
     // indicates a well-formedness error
-    catch (ParsingException e) { 
+    catch (ParsingException ex) { 
       System.out.println(args[0] + " is not well-formed.");
-      System.out.println(e.getMessage());
+      System.out.println(ex.getMessage());
     }  
-    catch (IOException e) { 
-      System.out.println(e);
+    catch (IOException ex) { 
+      System.out.println(ex);
     }  
   
   }

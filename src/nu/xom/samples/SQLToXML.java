@@ -58,7 +58,7 @@ public class SQLToXML {
     try {
       Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
     }
-    catch (ClassNotFoundException e) {
+    catch (ClassNotFoundException ex) {
       System.err.println("Could not load the JDBC-ODBC Bridge");
       return;
     }
@@ -72,8 +72,8 @@ public class SQLToXML {
       sout.write(doc); 
       sout.flush();
     }
-    catch (IOException e) {
-      System.err.println(e);
+    catch (IOException ex) {
+      System.err.println(ex);
     }
 
     
@@ -116,8 +116,8 @@ public class SQLToXML {
         stmnt.close();
         conn.close();
       }
-      catch(SQLException e) {
-        System.err.println(e);
+      catch(SQLException ex) {
+        System.err.println(ex);
       }
     }
               

@@ -85,7 +85,7 @@ public class HierarchicalXMLBudget {
           Integer.parseInt(args[0]);
         }
       }
-      catch (NumberFormatException e) {
+      catch (NumberFormatException ex) {
         System.out.println(
          "Usage: HierarchicalXMLBudget year infile outfile");
         return;        

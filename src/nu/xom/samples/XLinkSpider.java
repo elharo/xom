@@ -46,7 +46,7 @@ import nu.xom.Elements;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class XLinkSpider {
@@ -111,7 +111,7 @@ public class XLinkSpider {
                     queue.add(discovered);   
                 }
             }
-            catch (MalformedURLException e) {
+            catch (MalformedURLException ex) {
                 // skip this one   
             }
         }
@@ -129,8 +129,8 @@ public class XLinkSpider {
             try { 
                 spider.search(new URL(args[i]));
             }
-            catch (MalformedURLException e) {
-                System.err.println(e);   
+            catch (MalformedURLException ex) {
+                System.err.println(ex);   
             }
         }
       

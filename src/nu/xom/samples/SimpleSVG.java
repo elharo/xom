@@ -40,7 +40,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class SimpleSVG {
@@ -77,8 +77,8 @@ public class SimpleSVG {
       System.out.println(doc.toXML());
         
     }
-    catch (XMLException e) {
-      System.err.println(e); 
+    catch (XMLException ex) {
+      System.err.println(ex); 
     }
   
   }

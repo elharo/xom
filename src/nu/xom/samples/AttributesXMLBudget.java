@@ -48,7 +48,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class AttributesXMLBudget {
@@ -128,8 +128,8 @@ public class AttributesXMLBudget {
       List results = BudgetData.parse(in);
       convert(results, out);
     }
-    catch (IOException e) {
-      System.err.println(e);       
+    catch (IOException ex) {
+      System.err.println(ex);       
     }
   
   }

@@ -67,10 +67,10 @@ public class Linkset {
       }
       System.out.println(newRoot.toXML());
     }
-    catch (ParsingException e) {
+    catch (ParsingException ex) {
       System.out.println(url + " is not well-formed.");
     }
-    catch (IOException e) { 
+    catch (IOException ex) { 
       System.out.println(
        "Due to an IOException, the parser could not read " + url
       ); 

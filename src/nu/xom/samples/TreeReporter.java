@@ -62,11 +62,11 @@ public class TreeReporter {
           iterator.followNode(document);
     
         }
-        catch (IOException e) { 
-          System.out.println(e); 
+        catch (IOException ex) { 
+          System.out.println(ex); 
         }
-        catch (ParsingException e) { 
-          System.out.println(e); 
+        catch (ParsingException ex) { 
+          System.out.println(ex); 
         }
   
     } // end main

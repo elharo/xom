@@ -57,14 +57,14 @@ public class ROT13File {
       System.out.println(document.toXML());
 
     }
-    catch (IOException e) { 
+    catch (IOException ex) { 
       System.out.println(
       "Due to an IOException, the parser could not encode " + file
       ); 
     }
-    catch (ParsingException e) { 
-      System.out.println(e); 
-      e.printStackTrace(); 
+    catch (ParsingException ex) { 
+      System.out.println(ex); 
+      ex.printStackTrace(); 
     }
      
   } // end main

@@ -42,7 +42,7 @@ import nu.xom.Elements;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class TreeViewer {
@@ -103,8 +103,8 @@ public class TreeViewer {
                 display(doc);
             }
         }
-        catch (Exception e) {
-            System.err.println(e);
+        catch (Exception ex) {
+            System.err.println(ex);
         }
 
     } // end main()
