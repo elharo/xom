@@ -1661,8 +1661,9 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
+    // This test fails on Mac OS X. It passes on Linux. 
     public void testBuildFromFileThatContainsPlane1CharacterInName()
-      throws ParsingException, IOException { // ????
+      throws ParsingException, IOException { 
         
         int gclef = 0x1D120;
         char high = (char) ((gclef - 0x10000)/0x400 + 0xD800);
@@ -1914,6 +1915,58 @@ public class BuilderTest extends XOMTestCase {
             assertEquals(expectedResult, actual);
             assertTrue(doc.getBaseURI().startsWith("file:/"));
             assertTrue(doc.getBaseURI().endsWith("data/,file.xml"));
+        }
+        finally {
+            if (f.exists()) f.delete();
+        }
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsBackslashInName()
+      throws ParsingException, IOException {
+        
+        // ???? I'm using forward slashes in file names here. I really
+        // should fix that. Use a data File field
+        File f = new File("data/\\file.xml");
+        try {
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("<data />");
+            out.flush();
+            out.close();
+            Document doc = builder.build(f);
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/%5Cfile.xml"));
+        }
+        finally {
+            if (f.exists()) f.delete();
+        }
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsTildeInName()
+      throws ParsingException, IOException {
+        
+        File f = new File("data/~file.xml");
+        try {
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("<data />");
+            out.flush();
+            out.close();
+            Document doc = builder.build(f);
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/~file.xml"));
         }
         finally {
             if (f.exists()) f.delete();
