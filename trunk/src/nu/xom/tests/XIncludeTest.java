@@ -1495,6 +1495,42 @@ public class XIncludeTest extends XOMTestCase {
     }
 
 
+    // Test with 2 element schemes in the XPointer.
+    // The first one uses an ID that points to something. 
+    // The second one points to something too. Both element schemes
+    // use IDs exclusively, no child sequences.
+    public void testXPointerDoubleElementByID() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/xptrdoubleelementtest.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/xptrdoubleelementtest.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+
+
+    // Test with 2 element schemes in the XPointer.
+    // The first one uses a child sequence that points to something. 
+    // The second one points to something too. Both element schemes
+    // use child sequences exclusively, no IDs.
+    public void testXPointerDoubleElementByChildSequence() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/xptrdoublechildsequence.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/xptrdoubleelementtest.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+
+
     // Make sure XPointer failures are treated as a resource error,
     // not a fatal error.
     public void testXPointerFailureIsAResourceError() 
