@@ -165,7 +165,7 @@ public class Builder {
     
     // These are stored in the order of preference.
     private static String[] parsers = {
-        "nu.xom.xerces.XML1_0Parser",
+        "nu.xom.XML1_0Parser",
         "org.apache.xerces.parsers.SAXParser",
         "gnu.xml.aelfred2.XmlReader",
         "org.apache.crimson.parser.XMLReaderImpl",
@@ -185,9 +185,7 @@ public class Builder {
         // so we can't load it with the XMLReaderFactory
         XMLReader parser; 
         try {
-            parser = XMLReaderFactory.createXMLReader(
-              "nu.xom.xerces.XML1_0Parser"
-            );
+            parser = new XML1_0Parser();
             setupParser(parser, validate);
             return parser;
         } 
@@ -263,7 +261,7 @@ public class Builder {
         }
         
         // A couple of Xerces specific properties
-        if (parser.getClass().getName().equals("nu.xom.xerces.XML1_0Parser") 
+        if (parser.getClass().getName().equals("nu.xom.XML1_0Parser") 
          || parser.getClass().getName().equals("org.apache.xerces.parsers.SAXParser")) {
             try {
                 parser.setFeature(

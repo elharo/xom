@@ -55,7 +55,7 @@ class TextWriterFactory {
         }    
         else if (encodingUpperCase.equals("ISO-8859-1")) {
             return new Latin1Writer(out, encoding); 
-        }           
+        }          
         else if (encodingUpperCase.equals("ISO-8859-2")) {
             return new Latin2Writer(out, encodingUpperCase); 
         }           
@@ -77,7 +77,9 @@ class TextWriterFactory {
         else if (encodingUpperCase.equals("ISO-8859-8")) {
             return new ISOHebrewWriter(out, encodingUpperCase); 
         }           
-        else if (encodingUpperCase.equals("ISO-8859-9")) {
+        else if (encodingUpperCase.equals("ISO-8859-9")
+            || encodingUpperCase.equals("EBCDIC-CP-TR")
+            || encodingUpperCase.equals("CP1037")) {
             return new Latin5Writer(out, encodingUpperCase); 
         }         
         else if (encodingUpperCase.equals("ISO-8859-11")
