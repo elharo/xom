@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jaxen.JaxenException;
-import org.jaxen.XPath;
 
 /**
  *
@@ -425,15 +424,15 @@ public abstract class Node {
         }
         
         try {
-            XPath xp = new JaxenConnector(xpath);
+            JaxenConnector connector = new JaxenConnector(xpath);
             if (namespaces == null) {
-                xp.setNamespaceContext((new XPathContext()).getJaxenContext());
+                connector.setNamespaceContext((new XPathContext()).getJaxenContext());
             }
             else {
-                xp.setNamespaceContext(namespaces.getJaxenContext());
+                connector.setNamespaceContext(namespaces.getJaxenContext());
             }
 
-            HashSet results = new HashSet(xp.selectNodes(this));
+            HashSet results = new HashSet(connector.selectNodes(this));
             List namespaceList = new ArrayList();
             Iterator iterator = results.iterator();
             while (iterator.hasNext()) {
@@ -495,7 +494,7 @@ public abstract class Node {
         
         if (in.size() > 1) {
             Node root = this.getRoot();
-            if (root instanceof ParentNode) {
+            if (root.isParentNode()) {
                 Nodes out = new Nodes();
                 process(in, namespaces, out, (ParentNode) root);
                 return out;
@@ -625,6 +624,10 @@ public abstract class Node {
     }
 
     boolean isDocumentFragment() {
+        return false;
+    }
+    
+    boolean isParentNode() {
         return false;
     }
     
