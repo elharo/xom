@@ -24,6 +24,7 @@
 package nu.xom.tests;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -45,6 +46,7 @@ import nu.xom.Text;
 import nu.xom.XMLException;
 import nu.xom.converters.DOMConverter;
 
+import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.DocumentFragment;
@@ -54,11 +56,12 @@ import org.xml.sax.SAXException;
 
 /**
  * <p>
- *   Basic tests for conversion from DOM trees to XOM trees.
+ *  Basic tests for conversion from DOM trees to XOM trees
+ *  and back again.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0b3
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -149,7 +152,7 @@ public class DOMConverterTest extends XOMTestCase {
         }
         catch (Exception ex) {
             // shouldn't happen from known good doc 
-            throw new RuntimeException("Ooops!");  
+            throw new RuntimeException("Oops!");  
         }
         
     }
@@ -471,6 +474,73 @@ public class DOMConverterTest extends XOMTestCase {
         
         
     }
+    
+    
+    /**
+     * Test a bug in a document provided by Wolfgang Hoschek.
+     */
+    public void testFullHoschek() throws ParsingException, IOException {
+        
+        File f = new File("data/hoschektest.xml");
+        Builder builder = new Builder();
+        Document xomDocIn = builder.build(f);
+        org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
+        org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
+        Document xomDocOut = DOMConverter.convert(domDoc);
+        assertEquals(xomDocIn, xomDocOut);
+        
+    } 
+ 
+    
+    /**
+     * Test a bug in identified by Wolfgang Hoschek.
+     */
+    public void testSimplifiedHoschekDOMToXOM() 
+      throws SAXException, IOException {
+         
+        File f = new File("data/simplehoschektest.xml");
+        org.w3c.dom.Document domDocIn = builder.parse(f);
+        int domRootNumber = domDocIn.getDocumentElement().getChildNodes().getLength(); 
+        Document xomDoc = DOMConverter.convert(domDocIn);
+        Element xomRoot = xomDoc.getRootElement();
+        assertEquals(domRootNumber, xomRoot.getChildCount());
+        
+    }
+    
+    
+    public void testChildNodesRemainChildNodes() 
+      throws ParsingException, IOException {
+        
+        String data = "<root><scope><a>1</a><b>2</b><c /></scope></root>";
+        Builder builder = new Builder();
+        Document xomDocIn = builder.build(data, null);
+        System.out.println(xomDocIn.toXML());
+        int xomRootNumber = xomDocIn.getRootElement().getChildCount(); 
+        org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
+        org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
+        XMLSerializer serializer = new XMLSerializer();
+        serializer.setOutputByteStream(System.err);
+        serializer.serialize(domDoc);
+        assertEquals(xomRootNumber, domRoot.getChildNodes().getLength());
+        Document xomDocOut = DOMConverter.convert(domDoc);
+        assertEquals(xomDocIn, xomDocOut);
+        
+    } 
+ 
+    
+    public void testLastChildNodeIsLeafNode() 
+      throws ParsingException, IOException {
+        
+        String data = "<root><top><empty />ABCD</top></root>";
+        Builder builder = new Builder();
+        Document xomDocIn = builder.build(data, null);
+        int xomRootNumber = xomDocIn.getRootElement().getChildCount(); 
+        org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
+        org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
+        org.w3c.dom.Node domTop = domRoot.getFirstChild();
+        assertEquals(2, domTop.getChildNodes().getLength());
+        
+    } 
  
     
 }
