@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 2002-2004 Elliotte Rusty Harold
+<!-- Copyright 2002-2005 Elliotte Rusty Harold
 
 This library is free software; you can redistribute 
 it and/or modify it under the terms of version 2.1 of 
@@ -559,11 +559,12 @@ location="${dist.dir}/xom-maven-${version}.jar" />
 
   <!-- ???? set this up to compile jaxen and parameterize locations -->
   <target name="jaxen" description="Minimal Jar file for Jaxen" depends="init">
-    <jar jarfile="${jaxen.jar}" excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/**" basedir="/Users/elharo/projects/workspace/jaxen/bin">
+    <jar jarfile="${jaxen.jar}"
+         index="no"
+		 compress="yes"
+         excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/**" basedir="/Users/elharo/projects/workspace/jaxen/bin">
     </jar>
   </target>
-
-
   
 </project>
 
