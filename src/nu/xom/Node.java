@@ -22,6 +22,8 @@
 package nu.xom;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -430,7 +432,8 @@ public abstract class Node {
             else {
                 xp.setNamespaceContext(namespaces.getJaxenContext());
             }
-            List results = xp.selectNodes(this);
+
+            HashSet results = new HashSet(xp.selectNodes(this));
             List namespaceList = new ArrayList();
             Iterator iterator = results.iterator();
             while (iterator.hasNext()) {
@@ -488,7 +491,7 @@ public abstract class Node {
     // XXX remove recursion
     // recursively descend through document; in document
     // order, and add results as they are found
-    private Nodes sortResults(List in, List namespaces) {
+    private Nodes sortResults(Collection in, List namespaces) {
         
         if (in.size() > 1) {
             Node root = this.getRoot();
@@ -498,12 +501,15 @@ public abstract class Node {
                 return out;
             }
         }
-        return new Nodes(in);
+        else if (in.size() == 0) {
+            return new Nodes();
+        }
+        return new Nodes((Node) in.iterator().next());
         
     }
 
 
-    private static void process(List in, List namespaces, Nodes out, ParentNode parent) {
+    private static void process(Collection in, List namespaces, Nodes out, ParentNode parent) {
 
         if (in.isEmpty()) return;
         if (in.contains(parent)) {
