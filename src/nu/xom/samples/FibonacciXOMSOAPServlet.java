@@ -47,7 +47,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d21
  *
  */
 public class FibonacciXOMSOAPServlet extends HttpServlet 
@@ -67,7 +67,7 @@ public class FibonacciXOMSOAPServlet extends HttpServlet
   public final static String UNEXPECTED_PROBLEM
   = "UnexpectedProblem";    
     
-  private Builder   parser;
+  private transient Builder parser;
   
   // Load a parser, transformer, and implementation
   public void init() throws ServletException {  
