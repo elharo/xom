@@ -51,8 +51,8 @@ final class Verifier {
 
     static {
         
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        if (loader == null) loader = Verifier.class.getClassLoader();
+        ClassLoader loader = Verifier.class.getClassLoader();
+        if (loader == null) Thread.currentThread().getContextClassLoader();
         if (loader == null) throw new RuntimeException(
           "Verifier couldn't find the right ClassLoader!");
         
@@ -925,6 +925,12 @@ final class Verifier {
     
     static boolean isSchemeCharacter(char c) {
         
+        /* The : and the ? cannot be reached here because they'll
+         * have been parsed out separately before this mehtod is
+         * called. They're included here strictly for alignment
+         * so the compiler will generate a table lookup.
+         */
+        
         switch(c) {
             case '+': return true;
             case ',': return false;
@@ -941,12 +947,12 @@ final class Verifier {
             case '7': return true;
             case '8': return true;
             case '9': return true;
-            case ':': return false;
+            case ':': return false;  // unreachable
             case ';': return false;
             case '<': return false;
             case '=': return false;
             case '>': return false;
-            case '?': return false;
+            case '?': return false;  // unreachable
             case '@': return false;
             case 'A': return true;
             case 'B': return true;
