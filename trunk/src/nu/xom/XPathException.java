@@ -28,11 +28,6 @@ public class XPathException extends RuntimeException {
     private Throwable cause;
 
     
-    public XPathException() {
-        super();
-    }
-
-
     public XPathException(String message) {
         super(message);
     }
