@@ -64,6 +64,7 @@ public class XOMTests extends TestCase {
         // Too slow to run routinely
         // result.addTest(new TestSuite(MegaTest.class));
         result.addTest(new TestSuite(XMLExceptionTest.class));
+        result.addTest(new TestSuite(XPathExceptionTest.class));
         result.addTest(new TestSuite(ValidityExceptionTest.class));
         result.addTest(new TestSuite(ParsingExceptionTest.class));
         result.addTest(new TestSuite(XSLExceptionTest.class));
@@ -85,6 +86,7 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(XSLTransformTest.class));
         result.addTest(new TestSuite(EncodingTest.class));
         return result;
+        
     }
 
     
