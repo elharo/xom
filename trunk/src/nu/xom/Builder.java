@@ -1140,6 +1140,10 @@ public class Builder {
         XOMHandler handler = (XOMHandler) (parser.getContentHandler());
         ErrorHandler errorHandler = parser.getErrorHandler();
         Document result = handler.getDocument();
+        String base = in.getSystemId();
+        if (result != null && "".equals(result.getBaseURI())) {
+            result.setBaseURI(in.getSystemId());
+        }
         
         if (errorHandler instanceof ValidityRequired) {
             ValidityRequired validityHandler 
