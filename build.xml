@@ -89,7 +89,7 @@ to http://www.xom.nu/
       </and>
     </condition> 
     
-    <path id="compile.class.path">
+     <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
       <pathelement location="${normalizer.jar}"/>
@@ -121,6 +121,12 @@ to http://www.xom.nu/
       <pathelement location="${tagsoup.jar}"/>
     </path>
 
+<echo>test</echo>
+   <available property="tagsoup.installed" classname="org.ccil.cowan.tagsoup.Parser">
+  <classpath>
+    <pathelement location="lib2/tagsoup-1.0rc1.jar" />
+  </classpath>
+  </available>
     
   </target>
   
@@ -171,7 +177,7 @@ XOM Build file
            target="1.2"
            source="1.3"
            encoding="UTF-8"
-           excludes="nu/xom/pantry/*.java nu/xom/tools/* nu/xom/samples/*Servlet.java">
+           excludes="nu/xom/pantry/* nu/xom/tools/* nu/xom/samples/*Servlet.java">
        <classpath refid="compile.class.path"/>
     </javac>
     <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
@@ -306,8 +312,16 @@ XOM Build file
   <target name="apidoc"     depends="javadoc"/>
   <target name="betterdocs" depends="betterdoc"/>
 
+  <target name="-checkForTagSoup" unless="tagsoup.installed">
+    <echo>
+    Better documentation requires TagSoup to be installed 
+    in the lib2 directory. You can download it from
+    http://mercury.ccil.org/~cowan/XML/tagsoup/
+    </echo>
+  </target>
+
   <!-- This task requires Ant 1.6 and TagSoup -->
-  <target name="betterdoc" depends="compile"
+  <target name="betterdoc" depends="compile, -checkForTagSoup" if="tagsoup.installed"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
