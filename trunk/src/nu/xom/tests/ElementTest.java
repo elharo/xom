@@ -52,7 +52,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a2
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -1192,6 +1192,57 @@ public class ElementTest extends XOMTestCase {
         
     }    
 
+    
+    public void testTriple() 
+      throws IOException, ParsingException {  
+        String data = "<b><c1 /><c2 /></b>";
+        Builder builder = new Builder();
+        Document doc = builder.build(data, "http://www.example.org/");
+        Node root = doc.getRootElement();
+        Node rootcopy = root.copy();
+        assertEquals(data, rootcopy.toXML());      
+    }    
+    
+    
+    public void testCopyChildElementWithNoChildren() {
+        
+        Element parent = new Element("parent");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        Element copy = new Element(child);
+        assertEquals(child, copy);
+        
+    }
+    
+    
+    public void testSimpleCopy() {
+        
+        Element parent = new Element("parent");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        Element copy = new Element(parent);
+        assertEquals(parent, copy);
+        
+    }
+    
+    
+    public void testCopyEmptyElement() {
+        
+        Element parent = new Element("parent");
+        Element copy = new Element(parent);
+        assertEquals(parent, copy);
+        
+    }
+    
+    
+    public void testEmptyElementAsRootElementCopy() {
+        
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        Node copy = doc.copy();
+        assertEquals(doc, copy);
+    }
+    
     
     public void testCopy() {
 
