@@ -26,11 +26,11 @@ package nu.xom;
 /**
  * <p>
  *  A <code>CycleException</code> indicates an attempt to
- *  add insert an ancestor element as a child.
+ *  insert an ancestor element as one of its own descendants.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  * 
  *
  */
