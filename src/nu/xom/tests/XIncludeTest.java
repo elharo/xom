@@ -370,6 +370,38 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    public void testXPointerSyntaxErrorInSecondPart() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/laterfailure.xml");
+        Document doc = builder.build(input);
+        try {
+            Document result = XIncluder.resolve(doc);
+            fail("Didn't find syntax error in 2nd XPointer part" +
+                " when the first part resolved successfully");
+        }
+        catch (XIncludeException ex) {
+            // success   
+        }  
+        
+    }
+
+    public void testXPointerSyntaxErrorMissingFinalParenthesis() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/laterfailure2.xml");
+        Document doc = builder.build(input);
+        try {
+            Document result = XIncluder.resolve(doc);
+            fail("Didn't find syntax error in 2nd XPointer part" +
+                " when the first part resolved successfully");
+        }
+        catch (XIncludeException ex) {
+            // success   
+        }  
+        
+    }
+
     // Test with 3 element schemes in the XPointer.
     // The first and second one point to nothing. The third one
     // selects something.

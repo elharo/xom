@@ -57,6 +57,8 @@ class XPointer {
       throws XPointerSyntaxException, XPointerResourceException {    
             
         Nodes result = new Nodes();
+        boolean found = false;
+        
         xptr = decode(xptr);
         try { // Is this a shorthand XPointer
             new Element(xptr);
@@ -96,8 +98,9 @@ class XPointer {
                     Element identified = findByID(
                       doc.getRootElement(), currentData); 
                     if (identified != null) {
-                        result.append(identified);   
-                        return result;                
+                        if (!found) result.append(identified); 
+                        found = true;  
+                        // return result;                
                     }
                 }
                 else if (!currentData.startsWith("/")) {
@@ -128,21 +131,25 @@ class XPointer {
                 }
             
                 if (current != null) {
-                    result.append(current);
-                    return result;
+                    if (!found) result.append(current); 
+                    found = true;  
+                    // return result;
                 }
               
             }
             
         }
         
-        // If we get here and still haven't been able to match an
-        // element, the XPointer has failed. 
-        throw new XPointerResourceException(
-          "XPointer " + xptr 
-          + " did not locate any nodes in the document "
-          + doc.getBaseURI()
-        );
+        if (found) return result;
+        else {
+            // If we get here and still haven't been able to match an
+            // element, the XPointer has failed. 
+            throw new XPointerResourceException(
+              "XPointer " + xptr 
+              + " did not locate any nodes in the document "
+              + doc.getBaseURI()
+            );
+        }
     }
     
     
@@ -222,30 +229,35 @@ class XPointer {
         int open = 1; // parentheses count
         i++;
         StringBuffer schemeData = new StringBuffer();
-        while (open > 0) {
-            char c = xptr.charAt(i);   
-            if (c == '^') {
-                c = xptr.charAt(i+1);
-                schemeData.append(c);
-                if (c != '^' && c != '(' && c != ')') {
-                    throw new XPointerSyntaxException(
-                      "Illegal XPointer escape sequence"
-                    );   
+        try {
+            while (open > 0) {
+                char c = xptr.charAt(i);   
+                if (c == '^') {
+                    c = xptr.charAt(i+1);
+                    schemeData.append(c);
+                    if (c != '^' && c != '(' && c != ')') {
+                        throw new XPointerSyntaxException(
+                          "Illegal XPointer escape sequence"
+                        );   
+                    }
+                    i++;
+                }
+                else if (c == '(') {
+                    schemeData.append(c);
+                    open++;   
+                }
+                else if (c == ')') {
+                    open--;
+                    if (open > 0) schemeData.append(c);
+                }
+                else {
+                    schemeData.append(c);   
                 }
                 i++;
             }
-            else if (c == '(') {
-                schemeData.append(c);
-                open++;   
-            }
-            else if (c == ')') {
-                open--;
-                if (open > 0) schemeData.append(c);
-            }
-            else {
-                schemeData.append(c);   
-            }
-            i++;
+        }
+        catch (StringIndexOutOfBoundsException ex) {
+            throw new XPointerSyntaxException("Unbalanced parentheses");   
         }
         
         if (scheme.toString().equals("element")) {
