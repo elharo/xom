@@ -34,7 +34,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d3
+ * @version 1.1d5
  *
  */
 public class AttributeTest extends XOMTestCase {
