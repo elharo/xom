@@ -47,7 +47,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0d24
  * 
  */
 public class Serializer {
@@ -151,7 +151,6 @@ public class Serializer {
      * 
      * 
      * @param out the output stream to write the document on
-     * @param encoding the character encoding for the serialization
 
      * @throws NullPointerException if <code>out</code> is null
      * @throws IOException if the previous <code>OutputStream</code> 
@@ -174,6 +173,7 @@ public class Serializer {
         setLineSeparator(lineSeparator); 
     }
 
+    
     private void setOutputStream(OutputStream out, String encoding)
         throws UnsupportedEncodingException {
         Writer writer;  
@@ -364,7 +364,6 @@ public class Serializer {
      * </p>
      * 
      * @param element the element whose start-tag is written
-     * @param empty true if the element is empty, false if it isn't
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *     encounters an I/O error
@@ -396,7 +395,6 @@ public class Serializer {
      * </p>
      * 
      * @param element the element whose empty-element tag is written
-     * @param empty true if the element is empty, false if it isn't
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *     encounters an I/O error
