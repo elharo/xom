@@ -27,7 +27,7 @@ package nu.xom;
 /**
  * <p>
  *  This is the generic superclass for all the
- *  runtime exceptions thrown in XOM. The general
+ *  runtime exceptions thrown in nu.xom. The general
  *  principle followed is that anything that could
  *  plausibly be detected by testing such as 
  *  using spaces in an element name is a runtime exception.
@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d14
+ * @version 1.0d21
  *
  */
 public class XMLException extends RuntimeException {
@@ -83,8 +83,8 @@ public class XMLException extends RuntimeException {
     /**
      * <p>
      *  Return the original cause that led to this exception,
-     *   or null if there was no original exception.
-     *  </p>
+     *  or null if there was no original exception.
+     * </p>
      *
      * @return the root cause of this exception
      */
@@ -92,6 +92,9 @@ public class XMLException extends RuntimeException {
         return this.cause;  
     }
 
+    // null is insufficient for detemrin unset cause.
+    // The cause may be set to null whicn may not then be reset.
+    private boolean causeSet = false;
 
     /**
      * <p>
@@ -99,16 +102,30 @@ public class XMLException extends RuntimeException {
      * only be called once. Subsequent calls throw an 
      * <code>IllegalStateException</code>.
      * </p>
+     * 
+     * <p>
+     * This method is unnecessary in Java 1.4 where it could easily be
+     * inherited from the superclass. However, including it here
+     * allows this  method to be used in Java 1.3 and earlier.
+     * </p>
      *
      * @param cause the root cause of this exception
      * 
-     * @return the root cause of this exception
+     * @return this <code>XMLException</code>
      * 
+     * @throws IllegalArgumentException if the cause is this exception
+     *   (An exception cannot be its own cause.)
      * @throws IllegalStateException if this method is called twice
      */
     public Throwable initCause(Throwable cause) {
-        if (this.cause == null) this.cause = cause; 
-        else throw new IllegalStateException("Cannot reset the cause");
+        if (causeSet) {
+            throw new IllegalStateException("Can't overwrite cause");
+        } 
+        else if (cause == this) {
+            throw new IllegalArgumentException("Self-causation not permitted"); 
+        }
+        else this.cause = cause;
+        causeSet = true;
         return this;
     }
 

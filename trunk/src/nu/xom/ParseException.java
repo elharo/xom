@@ -37,7 +37,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d15
+ * @version 1.0d21
  *
  */
 public class ParseException extends Exception {
@@ -125,17 +125,6 @@ public class ParseException extends Exception {
     
     /**
      * <p>
-     * Returns the underlying exception that caused this exception.
-     * </p>
-     * 
-     * @return the root exception that caused this exception to be thrown
-     */
-    public Throwable getCause() {
-        return this.cause;  
-    }
-
-    /**
-     * <p>
      * Returns the approximate row number of the construct that
      * caused this exception. If the row number is not known,
      * -1 is returned.
@@ -160,22 +149,53 @@ public class ParseException extends Exception {
         return this.columnNumber;  
     }
 
+    // null is insufficient for detemrin unset cause.
+    // The cause may be set to null whicn may not then be reset.
+    private boolean causeSet = false;
+
     /**
      * <p>
-     * The <code>initCause()</code> method initializes the root 
-     * exception. This can be called only once, normally from 
-     * the constructor. Calling it a second time throws an 
-     * <code>IllegalStateException</code>. Personally, I'm not 
-     * very fond of this pattern; but it is what Java 1.4 requires.
+     * Sets the root cause of this exception. This may 
+     * only be called once. Subsequent calls throw an 
+     * <code>IllegalStateException</code>.
      * </p>
      * 
-     * @param cause the original exception which led to this exception
-     * @return this exception object
+     * <p>
+     * This method is unnecessary in Java 1.4 where it could easily be
+     * inherited from the superclass. However, including it here
+     * allows this  method to be used in Java 1.3 and earlier.
+     * </p>
+     *
+     * @param cause the root cause of this exception
+     * 
+     * @return this <code>XMLException</code>
+     * 
+     * @throws IllegalArgumentException if the cause is this exception
+     *   (An exception cannot be its own cause.)
+     * @throws IllegalStateException if this method is called twice
      */
     public Throwable initCause(Throwable cause) {
-        if (this.cause == null) this.cause = cause; 
-        else throw new IllegalStateException("Cannot reset the cause");
+        if (causeSet) {
+            throw new IllegalStateException("Can't overwrite cause");
+        } 
+        else if (cause == this) {
+            throw new IllegalArgumentException("Self-causation not permitted"); 
+        }
+        else this.cause = cause;
+        causeSet = true;
         return this;
+    }
+
+    /**
+     * <p>
+     * Returns the underlying exception that caused this exception.
+     * </p>
+     * 
+     * @return the root exception that caused this exception 
+     *     to be thrown
+     */
+    public Throwable getCause() {
+        return this.cause;  
     }
 
     /**
