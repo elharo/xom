@@ -26,8 +26,11 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.xml.sax.helpers.NamespaceSupport;
 
@@ -129,6 +132,9 @@ public class Canonicalizer {
 
     private class CanonicalXMLSerializer extends Serializer {
         
+        // If nodes is null we're canonicalizing all nodes;
+        // the entire document; this is somewhat easier than when
+        // canonicalizing only a document subset embedded in nodes
         private Nodes nodes;
         private NamespaceSupport inScope;
 
@@ -361,7 +367,9 @@ public class Canonicalizer {
             
             Attribute[] sorted = sortAttributes(element);        
             for (int i = 0; i < sorted.length; i++) {
-                if (nodes == null || nodes.contains(sorted[i])) {
+                if (nodes == null || nodes.contains(sorted[i]) 
+                   || (sorted[i].getNamespaceURI().equals(Namespace.XML_NAMESPACE) 
+                       && sorted[i].getParent() != element)) {
                     writeRaw(" ");
                     write(sorted[i]);
                 }
@@ -404,14 +412,55 @@ public class Canonicalizer {
             
         }    
         
+        private final XPathContext xmlcontext = new XPathContext("xml", Namespace.XML_NAMESPACE);
         
         private Attribute[] sortAttributes(Element element) {
     
+            Map nearest = new TreeMap();
+            // ???? add in any inherited xml: attributes 
+            if (nodes != null && indexOf(element) != -1) {
+                // grab all xml: attributes
+                Nodes attributes = element.query("ancestor::*/@xml:*", xmlcontext);
+                if (attributes.size() != 0) {
+                    for (int i = attributes.size()-1; i >= 0; i--) {
+                        Attribute a = (Attribute) attributes.get(i);
+                        String name = a.getLocalName();
+                        if (element.getAttribute(name, Namespace.XML_NAMESPACE) != null) {
+                            // this element already has that attribute
+                            continue;
+                        }
+                        if (! nearest.containsKey(name)) {
+                            Element parent = (Element) a.getParent();
+                            if (indexOf(parent) == -1) {
+                                nearest.put(name, a);
+                            }
+                            else {
+                                nearest.put(name, null); // ???? allowed null values?
+                            }
+                        }
+                    }
+                }
+                
+                // remove null values
+                Iterator iterator = nearest.values().iterator();
+                while (iterator.hasNext()) {
+                    if (iterator.next() == null) iterator.remove();
+                }
+                
+            }
+            
+            int localCount = element.getAttributeCount();
             Attribute[] result 
-              = new Attribute[element.getAttributeCount()];
-            for (int i = 0; i < element.getAttributeCount(); i++) {
+              = new Attribute[localCount + nearest.size()];
+            for (int i = 0; i < localCount; i++) {
                 result[i] = element.getAttribute(i); 
             }
+            
+            Iterator iterator = nearest.values().iterator();
+            for (int j = localCount; j < result.length; j++) {
+                result[j] = (Attribute) iterator.next();
+            }
+            
             Arrays.sort(result, comparator);       
             
             return result;        

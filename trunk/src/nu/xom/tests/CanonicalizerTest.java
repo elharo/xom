@@ -173,14 +173,14 @@ public class CanonicalizerTest extends XOMTestCase {
         Element root = new Element("root");
         Document doc = new Document(root);
         root.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p1"));
-        root.appendChild(new Element("child"));
+        root.appendChild(new Element("child312"));
         
-        String expected = "<child xml:id=\"p1\"></child>";
+        String expected = "<child312 xml:id=\"p1\"></child312>";
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
-            serializer.write(doc, "/*/child", null);
+            serializer.write(doc, "/*/child312", null);
         }
         finally {
             out.close();
