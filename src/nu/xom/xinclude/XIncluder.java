@@ -770,11 +770,6 @@ public class XIncluder {
                 }
             
             }
-            // XXX how to distinguish between syntactically incorrect and unsupported scheme?
-            // use URIUtil?
-            /* catch (MalformedURLException ex) {
-                throw new BadHrefAttributeException("Syntactically incorrect IRI", href);
-            } */
             catch (IOException ex) {
                 return processFallbackSilently(element, builder, baseURLs, ex);
             }
@@ -1136,25 +1131,105 @@ URI reference by escaping all disallowed characters as follows: ]
     }
     
     
-    // XXX could switch to lookup table
     private static boolean needsEscaping(byte c) {
         
-        // This first test includes high-byte characters
-        // which are negative as bytes
-        if (c <= 0x20) return true;
-        if (c <= 0x21) return false;
-        if (c <= 0x22) return true;
-        if (c <= 0x3B) return false;
-        if (c <= 0x3C) return true;
-        if (c <= 0x3D) return false;
-        if (c <= 0x3E) return true;
-        if (c <= 0x5B) return false;
-        if (c <= 0x5C) return true;
-        if (c <= 0x5D) return false;
-        if (c <= 0x5E) return true;
-        if (c <= 0x5F) return false;
-        if (c <= 0x60) return true;
-        if (c <= 0x7E) return false;
+        switch (c) {
+            case 0x21: return false; // !
+            case 0x22: return true;  // "
+            case 0x23: return false; // #
+            case 0x24: return false; // $
+            case 0x25: return false; // %
+            case 0x26: return false; // &
+            case 0x27: return false; // '
+            case 0x28: return false; // (
+            case 0x29: return false; // )
+            case 0x2a: return false; // *
+            case 0x2b: return false; // +
+            case 0x2c: return false; // ,
+            case 0x2d: return false; // -
+            case 0x2e: return false; // .
+            case 0x2f: return false; // /
+            case 0x30: return false; // 0
+            case 0x31: return false; // 1
+            case 0x32: return false; // 2
+            case 0x33: return false; // 3
+            case 0x34: return false; // 4
+            case 0x35: return false; // 5
+            case 0x36: return false; // 6
+            case 0x37: return false; // 7
+            case 0x38: return false; // 8
+            case 0x39: return false; // 9
+            case 0x3a: return false; // :
+            case 0x3b: return false; // ;
+            case 0x3c: return true;  // <
+            case 0x3d: return false; // =
+            case 0x3e: return true;  // >
+            case 0x3f: return false; // ?
+            case 0x40: return false; // @
+            case 0x41: return false; // A
+            case 0x42: return false; // B
+            case 0x43: return false; // C
+            case 0x44: return false; // D
+            case 0x45: return false; // E
+            case 0x46: return false; // F
+            case 0x47: return false; // G
+            case 0x48: return false; // H
+            case 0x49: return false; // I
+            case 0x4a: return false; // J
+            case 0x4b: return false; // K
+            case 0x4c: return false; // L
+            case 0x4d: return false; // M
+            case 0x4e: return false; // N
+            case 0x4f: return false; // O
+            case 0x50: return false; // P
+            case 0x51: return false; // Q
+            case 0x52: return false; // R
+            case 0x53: return false; // S
+            case 0x54: return false; // T
+            case 0x55: return false; // U
+            case 0x56: return false; // V
+            case 0x57: return false; // W
+            case 0x58: return false; // X
+            case 0x59: return false; // Y
+            case 0x5a: return false; // Z
+            case 0x5b: return false; // [
+            case 0x5c: return true;  // \
+            case 0x5d: return false; // ]
+            case 0x5e: return true;  // ^
+            case 0x5f: return false; // _
+            case 0x60: return true;  // `
+            case 0x61: return false; // a
+            case 0x62: return false; // b
+            case 0x63: return false; // c
+            case 0x64: return false; // d
+            case 0x65: return false; // e
+            case 0x66: return false; // f
+            case 0x67: return false; // g
+            case 0x68: return false; // h
+            case 0x69: return false; // i
+            case 0x6a: return false; // j
+            case 0x6b: return false; // k
+            case 0x6c: return false; // l
+            case 0x6d: return false; // m
+            case 0x6e: return false; // n
+            case 0x6f: return false; // o
+            case 0x70: return false; // p
+            case 0x71: return false; // q
+            case 0x72: return false; // r
+            case 0x73: return false; // s
+            case 0x74: return false; // t
+            case 0x75: return false; // u
+            case 0x76: return false; // v
+            case 0x77: return false; // w
+            case 0x78: return false; // x
+            case 0x79: return false; // y
+            case 0x7a: return false; // z
+            case 0x7b: return false; // {
+            case 0x7c: return false; // |
+            case 0x7d: return false; // }
+            case 0x7e: return false; // ~       
+        }
+
         return true;
         
     }
