@@ -36,17 +36,18 @@ import nu.xom.Serializer;
 
 /**
  * <p>
- *    Tests support for the typical U.S. EBCDIC encoding.
- *    Unfortunately this test exposes a bug in the handling
- *    of NEL, character 0x85, in Sun's JDK. Specifically
- *    InputStreamReader maps 0x85 to a line feed rather than 
- *    NEL. I've reported the bug to the Java Developer Connection,
- *    but until it's fixed this test fails. I don't have an easy
- *    workaround. 
+ *  Tests support for the typical U.S. EBCDIC encoding.
+ *  Unfortunately this test exposes a bug in the handling
+ *  of NEL, character 0x85, in Sun's JDK. Specifically
+ *  InputStreamReader maps 0x85 to a line feed rather than 
+ *  NEL. I've reported the bug to the Java Developer Connection,
+ *  but until it's fixed this test fails. I don't have an easy
+ *  workaround. 
+ *  XXX link to JDC bug
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class EBCDICTest extends XOMTestCase {
@@ -86,7 +87,6 @@ public class EBCDICTest extends XOMTestCase {
             // We have to look directly rather than converting to
             // a String because Java gets the conversion of NEL to
             // Unicode wrong
-            boolean foundNEL = false;
             for (int i = 0; i < result.length; i++) {
                 if (result[i] == 0x15) fail("Bad NEL output");        
             }
