@@ -60,7 +60,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b5
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -88,6 +88,21 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
+    public void testXPointersResolvedAgainstAcquiredInfoset() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/tobintop.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expected = builder.build(
+          new File("data/xinclude/output/tobintop.xml")
+        );
+        assertEquals(expected, result);
+                
+    }
+
     
     public void testXMLBaseUsedToResolveHref() 
       throws ParsingException, IOException, XIncludeException {
@@ -681,6 +696,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    // changed for b5
     public void testFallbackInIncludedDocumentIncludesADocumentWithParseEqualsText() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -744,16 +760,19 @@ public class XIncludeTest extends XOMTestCase {
     }
     
 
-    public void testXPointerResourceErrorInIncludedDocument() 
+    // changed in b5
+    public void testXPointerIsNotResolvedAgainstTheSourceInfoset() 
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/metafallbacktest5.xml");
         Document doc = builder.build(input);
-        Document result = XIncluder.resolve(doc);
-        Document expectedResult = builder.build(
-          new File("data/xinclude/output/metafallbacktest5.xml")
-        );
-        assertEquals(expectedResult, result);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed XPointer that doesn't resolve against the acquired infoset but does resolve against the source infoset");
+        }
+        catch (XIncludeException ex) {
+            assertNotNull(ex.getMessage());
+        }
 
     }
     
@@ -786,10 +805,12 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    // changed in b5
     // test case where fallback falls back to text and comments rather than
     // an element
     public void testFallbackInIncludedDocumentWithXPointer2() 
       throws ParsingException, IOException, XIncludeException {
+        
         // This test case activates processFallbackSilently
         File input = new File("data/xinclude/input/metafallbacktestwithxpointer2.xml");
         Document doc = builder.build(input);
@@ -866,18 +887,19 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
-    // In this case the circle is OK because the XPointer
-    // doesn't cover the whole xinclude:include element
+    // changed in b5
     public void testAcceptableCirclePointer() 
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/legalcircle.xml");
         Document doc = builder.build(input);
-        Document result = XIncluder.resolve(doc);
-        Document expectedResult = builder.build(
-          new File("data/xinclude/output/legalcircle.xml")
-        );
-        assertEquals(expectedResult, result);        
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed circular reference");
+        }
+        catch (InclusionLoopException success) {
+            assertNotNull(success.getMessage());
+        }
 
     }
     
