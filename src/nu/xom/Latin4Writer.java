@@ -27,7 +27,7 @@ import java.io.Writer;
 
 /**
  * <p>
- *   ISO 8859-4, Latin plus the charaters needed for Greenlandic, 
+ *   ISO 8859-4, Latin plus the characters needed for Greenlandic, 
  *   Icelandic, and Lappish.
  * </p>
  * 

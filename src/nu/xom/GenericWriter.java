@@ -32,16 +32,16 @@ import java.io.Writer;
 /**
  * <p>
  * <code>GenericWriter</code> is a hack that figures out whether a 
- * character is or is not avilable in a particular encoding by writing
+ * character is or is not available in a particular encoding by writing
  * it onto an OutputStream and seeing whether or not the character 
  * written is a question mark (Java's substitution character). 
- * There's amore staright-forward way to do this using 
+ * There's a more staright-forward way to do this using 
  * <code>java.nio.Charset</code> in Java 1.4, but I'm not willing to 
  * assume Java 1.4. 
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b1
+ * @version 1.0b3
  * 
  */
 class GenericWriter extends TextWriter {
