@@ -34,7 +34,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b4
  *
  */
 class XOMHandler 
@@ -352,7 +352,7 @@ class XOMHandler
                 if (node.isProcessingInstruction() || node.isComment()) {
                     internalDTDSubset.append("  ");            
                     internalDTDSubset.append(node.toXML());            
-                    internalDTDSubset.append("\r\n");            
+                    internalDTDSubset.append("\n");            
                 }
                 else {
                     throw new XMLException("Factory tried to put a " 
@@ -459,7 +459,7 @@ class XOMHandler
                 if (node.isComment() || node.isProcessingInstruction()) {
                     internalDTDSubset.append("  ");            
                     internalDTDSubset.append(node.toXML());            
-                    internalDTDSubset.append("\r\n");            
+                    internalDTDSubset.append("\n");            
                 }
                 else {
                     throw new XMLException("Factory tried to put a " 
@@ -478,7 +478,7 @@ class XOMHandler
             internalDTDSubset.append(name); 
             internalDTDSubset.append(' '); 
             internalDTDSubset.append(model); 
-            internalDTDSubset.append(">\r\n"); 
+            internalDTDSubset.append(">\n"); 
         }
     }
   
@@ -504,7 +504,7 @@ class XOMHandler
                 internalDTDSubset.append(defaultValue);
                 internalDTDSubset.append("\"");         
             }
-            internalDTDSubset.append(">\r\n");   
+            internalDTDSubset.append(">\n");   
         }
     }
   
@@ -517,7 +517,7 @@ class XOMHandler
                 internalDTDSubset.append(name); 
                 internalDTDSubset.append(" \""); 
                 internalDTDSubset.append(value); 
-                internalDTDSubset.append("\">\r\n"); 
+                internalDTDSubset.append("\">\n"); 
             }
         }
     }
@@ -541,7 +541,7 @@ class XOMHandler
                     internalDTDSubset.append(" SYSTEM \""); 
                     internalDTDSubset.append(systemID); 
                 }
-                internalDTDSubset.append("\">\r\n"); 
+                internalDTDSubset.append("\">\n"); 
             }
         }
     }
@@ -568,7 +568,7 @@ class XOMHandler
                 internalDTDSubset.append(systemID);
                 internalDTDSubset.append('"');                 
             }
-            internalDTDSubset.append(">\r\n"); 
+            internalDTDSubset.append(">\n"); 
         }        
         
     }
@@ -594,7 +594,7 @@ class XOMHandler
                 internalDTDSubset.append("\" NDATA "); 
                 internalDTDSubset.append(notationName);     
             }
-            internalDTDSubset.append(">\r\n"); 
+            internalDTDSubset.append(">\n"); 
         }
         
     }

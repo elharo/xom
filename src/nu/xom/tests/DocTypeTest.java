@@ -87,7 +87,7 @@ public class DocTypeTest extends XOMTestCase {
     public void testToXMLWithInternalDTDSubset() 
       throws ValidityException, ParsingException, IOException {
         String data = "<?xml version=\"1.0\"?>\n" 
-          + "<!DOCTYPE root [\n  <!ELEMENT test (#PCDATA)>\r\n]>"
+          + "<!DOCTYPE root [\n  <!ELEMENT test (#PCDATA)>\n]>"
           + "\n<test />\n";  
         Document doc = (new Builder()).build(data, null);
         String result = doc.toXML();
@@ -101,8 +101,8 @@ public class DocTypeTest extends XOMTestCase {
         
         String data = "<?xml version=\"1.0\"?>\n" 
           + "<!DOCTYPE root [\n" +
-                "  <!--comment-->\r\n  <!ELEMENT test (#PCDATA)>" +
-            "\r\n  <!--comment-->\r\n]>"
+                "  <!--comment-->\n  <!ELEMENT test (#PCDATA)>" +
+            "\n  <!--comment-->\n]>"
           + "\n<test />\n";  
         Document doc = (new Builder()).build(data, null);
         String result = doc.toXML();
@@ -116,8 +116,8 @@ public class DocTypeTest extends XOMTestCase {
         
         String data = "<?xml version=\"1.0\"?>\n" 
           + "<!DOCTYPE root [\n" +
-                "  <?target data?>\r\n  <!ELEMENT test (#PCDATA)>" +
-            "\r\n  <?target?>\r\n]>"
+                "  <?target data?>\n  <!ELEMENT test (#PCDATA)>" +
+            "\n  <?target?>\n]>"
           + "\n<test />\n";  
         Document doc = (new Builder()).build(data, null);
         String result = doc.toXML();
@@ -135,7 +135,7 @@ public class DocTypeTest extends XOMTestCase {
         DocType doctype = doc.getDocType();
         assertEquals("root", doctype.getRootElementName());
         String internalSubset =   doctype.getInternalDTDSubset();
-        assertEquals("  <!ELEMENT root EMPTY>\r\n", internalSubset);
+        assertEquals("  <!ELEMENT root EMPTY>\n", internalSubset);
         assertTrue(doctype.toXML().indexOf("[") > 0);
         assertTrue(doctype.toXML().indexOf("]") > 0);
         assertTrue(doctype.toXML().indexOf("<!ELEMENT root EMPTY>") > 0);

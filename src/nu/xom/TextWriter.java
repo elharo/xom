@@ -35,7 +35,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b4
  *
  */
 abstract class TextWriter {
@@ -47,6 +47,7 @@ abstract class TextWriter {
     // true if the user has requested a specific 
     // line separator
     private boolean lineSeparatorSet = false;
+    private boolean inDocType = false;
     private int     maxLength = 0;
     private int     indent = 0;
     private String  indentString = "";
@@ -304,6 +305,7 @@ abstract class TextWriter {
       // Carriage returns are completely handled by
       // writePCDATA and writeAttributeValue. They never
       // enter this method.
+      // ???? Can they enter through the internalDTDSubset?
       if ((c == ' ' || c == '\n' || c == '\t')) {
             if (needsBreak()) {
                 breakLine();
@@ -350,7 +352,7 @@ abstract class TextWriter {
     private void writeLineSeparator(char c) 
       throws IOException {
         
-        if (!lineSeparatorSet || preserveSpace) out.write(c);
+        if (!inDocType && (!lineSeparatorSet || preserveSpace)) out.write(c);
         else if (lineSeparator.equals("\r\n")) {
             out.write("\r\n");    
         } 
@@ -539,6 +541,11 @@ abstract class TextWriter {
             throw new IllegalArgumentException(
               "Illegal Line Separator");
         }  
+    }
+
+    
+    void setInDocType(boolean inDocType) {
+        this.inDocType = inDocType;  
     }
 
     

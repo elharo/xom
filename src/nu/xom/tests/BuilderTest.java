@@ -1435,9 +1435,9 @@ public class BuilderTest extends XOMTestCase {
         Document doc = builder.build(new File("data/097.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<!DOCTYPE doc [\n"
-            + "  <!ELEMENT doc (#PCDATA)>\r\n"
-            + "  <!ATTLIST doc a1 CDATA \"v1\">\r\n"
-            + "  <!ATTLIST doc a2 CDATA #IMPLIED>\r\n"
+            + "  <!ELEMENT doc (#PCDATA)>\n"
+            + "  <!ATTLIST doc a1 CDATA \"v1\">\n"
+            + "  <!ATTLIST doc a2 CDATA #IMPLIED>\n"
             + "]>\n"
             + "<doc a1=\"v1\" />\n";
         String actual = doc.toXML();
