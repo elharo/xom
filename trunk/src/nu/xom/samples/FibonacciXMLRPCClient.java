@@ -47,7 +47,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class FibonacciXMLRPCClient {
@@ -163,10 +163,13 @@ public class FibonacciXMLRPCClient {
             code = value1.getValue();   
             detail = value2.getValue();
         }
-        else {
+        else if (name2.getValue().equals("faultCode")) {
             code = value2.getValue();   
             detail = value1.getValue();
         }   
+        else {
+            throw new RuntimeException("Incorrect fault message");  
+        }
         System.err.println("Fault: ");
         System.err.println("  code: " + code);
         System.err.println("  " + detail);
