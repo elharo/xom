@@ -632,7 +632,18 @@ public class NamespacesTest extends XOMTestCase {
         String namespace = "uri:schemespecificdata#test#id";
         try {
             new Element("test", namespace);
-            fail("Allowed scheme name to contain multiple fragment IDs");
+            fail("Allowed URI reference to contain multiple fragment IDs");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
+
+    public void testHalfPercentEscape() {
+        String namespace = "http://www.example.org/%ce%a";
+        try {
+            new Element("test", namespace);
+            fail("Allowed path to contain only half a percent escape");
         }
         catch (MalformedURIException success) {
             assertNotNull(success.getMessage());
