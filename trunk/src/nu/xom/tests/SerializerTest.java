@@ -50,7 +50,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.1a3
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -1497,6 +1497,27 @@ public class SerializerTest extends XOMTestCase {
         
         Element root = new Element("a");
         root.appendChild("c\u0327"); // c with combining cedilla
+        Document doc = new Document(root);
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<a>\u00E7</a>\r\n", 
+          result
+        ); 
+        
+    }
+
+    
+    public void testNFCInConsecutiveTextNodes() throws IOException {
+        
+        Element root = new Element("a");
+        root.appendChild("c"); 
+        root.appendChild("\u0327"); // combining cedilla
         Document doc = new Document(root);
         Serializer serializer = new Serializer(out);
         serializer.setUnicodeNormalizationFormC(true);
