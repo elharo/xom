@@ -1269,7 +1269,8 @@ public class Element extends ParentNode {
         
         while (true) {
             String currentEntity = current.getActualBaseURI();
-            if (sourceEntity.length() != 0 && sourceEntity != currentEntity) {
+            if (sourceEntity.length() != 0 
+              && ! sourceEntity.equals(currentEntity)) {
                 baseURI = URIUtil.absolutize(sourceEntity, baseURI);
                 break;
             }
