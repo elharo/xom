@@ -144,18 +144,12 @@ class JaxenNavigator extends DefaultNavigator {
 
 
     public String getNamespacePrefix(Object o) {
-        
-        if (o instanceof Element) return ((Element) o).getNamespacePrefix();
-        else if (o instanceof Attribute) return ((Attribute) o).getNamespacePrefix();
-        return null; // ???? throw exception????
-        
+        throw new UnsupportedOperationException("Namespace axis not supported yet");
     }
     
     
     public String getNamespaceStringValue(Object o) {
-        if (o instanceof Element) return ((Element) o).getNamespaceURI();
-        else if (o instanceof Attribute) return ((Attribute) o).getNamespaceURI();
-        return null; // ???? throw exception????
+        throw new UnsupportedOperationException("Namespace axis not supported yet");
     }
 
     
