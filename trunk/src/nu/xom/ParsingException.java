@@ -149,7 +149,6 @@ public class ParsingException extends Exception {
      * </p>
      * 
      * @param message a string indicating the specific problem
-     * @param message a string indicating the specific problem
      * @param lineNumber the approximate line number 
      *     where the problem occurs
      * @param columnNumber the approximate column number 
@@ -274,8 +273,8 @@ public class ParsingException extends Exception {
     
     /**
      * <p>
-     *   Returns a string suitable for display to the developer
-     *   summarizing what went wrong where.
+     * Returns a string suitable for display to the developer
+     * summarizing what went wrong where.
      * </p>
      * 
      * @return an exception message suitable for display to a developer
@@ -285,4 +284,5 @@ public class ParsingException extends Exception {
           + lineNumber + ", column " + columnNumber + ".";    
     }
 
+    
 }
