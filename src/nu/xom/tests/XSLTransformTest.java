@@ -25,6 +25,7 @@ package nu.xom.tests;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -381,12 +382,14 @@ public class XSLTransformTest extends XOMTestCase {
     // For debugging
     private static void dumpResult(Document result, String filename) 
       throws IOException {
+        
         File debug = new File("data/xslt/debug/" + filename);
         OutputStream out = new FileOutputStream(debug);
         Serializer serializer = new Serializer(out);
         serializer.write(result);
         serializer.flush();
         out.close();
+        
     }
 
     
@@ -688,6 +691,7 @@ public class XSLTransformTest extends XOMTestCase {
     
     public void testElementsToAttributes() 
       throws IOException, ParsingException, XSLException {  
+        
         File stylesheet = new File("data/xslt/input/identity.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
         xform.setNodeFactory(new AttributeFactory());
@@ -724,6 +728,7 @@ public class XSLTransformTest extends XOMTestCase {
 
     public void testAttributesToElements() 
       throws IOException, ParsingException, XSLException {  
+        
         File stylesheet = new File("data/xslt/input/identity.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
         xform.setNodeFactory(new AttributesToElements());
@@ -764,7 +769,8 @@ public class XSLTransformTest extends XOMTestCase {
 
 
     public void testCommentToAttribute() 
-      throws IOException, ParsingException, XSLException {  
+      throws IOException, ParsingException, XSLException {
+        
         File stylesheet = new File("data/xslt/input/identity.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
         xform.setNodeFactory(new NodeFactory() {
@@ -853,15 +859,71 @@ public class XSLTransformTest extends XOMTestCase {
                         Document inputDoc = builder.build(input);
                         Document styleDoc = builder.build(style);
                         XSLTransform xform = new XSLTransform(styleDoc);
+                        Nodes result = xform.transform(inputDoc);
+                        if (output == null) {
+                            // transform should have failed
+                            fail("Transformed " + testcase.getAttributeValue("id"));
+                        }
+                        // need to compare output here. However, the test suite doesn't
+                        // include the sample output????
                     }
                     catch (MalformedURIException ex) {
-                        // a few of the test cases use relative namespace URIs
-                        // XOM doesn't support
+                        // some of the test cases do contain relative namespace URIs
+                        // XOM does not support
                     }
                     catch (XSLException ex) {
-                        System.err.println(testcase.getAttributeValue("id"));
-                        System.err.println(ex.getMessage());
-                        // throw ex;
+                        // if the output was null the transformation was expected to fail
+                        if (output != null) {
+                            // a few of the test cases use relative namespace URIs
+                            // XOM doesn't support
+                            Throwable cause = ex.getCause();
+                            if (cause instanceof MalformedURIException) {
+                                continue;
+                            }
+                            
+                            String id = testcase.getAttributeValue("id");
+                            // known, reported bugs in Xalan
+                            if ("axes_axes62".equals(id)) {  
+                                // Bug 27934
+                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27934
+                                continue;
+                            }
+                            else if ("namespace_nspc24".equals(id)) {
+                                // Bug 27935
+                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27935
+                                continue;
+                            }
+                            else if ("numberformat_numberformat45".equals(id)) {
+                                // Bug 27938
+                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27938
+                                continue;
+                            }
+                            else if ("numberformat_numberformat46".equals(id)) {
+                                // Bug 27938
+                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27938
+                                continue;
+                            }
+                            else if ("select_select85".equals(id)) {
+                                // Bug 27939
+                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27939
+                                continue;
+                            }
+                            
+                            // test suite bugs
+                            if ("impincl_impincl27".equals(id)) {  
+                                // Uses a file URI I'm not sure is legal????
+                                continue;
+                            }
+                            
+                            // discretionary cases
+                            if ("output_output87".equals(id)) {  
+                                continue;
+                            }
+                            
+                            System.err.println(id);
+                            System.err.println(ex.getMessage());
+                            throw ex;
+                        }
                     }
                     
                 }
@@ -875,8 +937,8 @@ public class XSLTransformTest extends XOMTestCase {
     public void testOASISMicrosoftConformanceSuite()  
       throws IOException, ParsingException, XSLException {
 
-        /* ???? fix this after we find out what's up at Oasis
-        File base = new File("data/oasis_xslt_testsuite/TESTS/MSFT_Conformance_Tests/");
+        //???? fix this after we find out what's up at Oasis
+        /* File base = new File("data/oasis_xslt_testsuite/TESTS/MSFT_Conformance_Tests/");
         File catalog = new File(base, "xslt.xml");
         if (catalog.exists()) {
             Builder builder = new Builder();
@@ -906,7 +968,7 @@ public class XSLTransformTest extends XOMTestCase {
                         try {
                             Document input = builder.build(xml);
                             XSLTransform style = new XSLTransform(builder.build(xsl));
-                            Nodes output = style.transform(input);
+                            // Nodes output = style.transform(input);
                         }
                         catch (MalformedURIException ex) {
                             System.err.println("Malformed uri in " + xsl);
