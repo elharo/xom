@@ -275,7 +275,6 @@ public class Serializer {
         }       
         
         // Namespaces
-        // Is this next line redundant????
         ParentNode parentNode = element.getParent();
         for (int i = 0; 
              i < element.getNamespaceDeclarationCount(); 
@@ -695,9 +694,9 @@ public class Serializer {
      *   document.
      * </p>
      * 
-     * What happens when this set to a negative value????
+     * What happens when this is set to a negative value????
      * 
-     * @param indent the numer of spaces to indent 
+     * @param indent the number of spaces to indent 
      *      each successive level of the hierarchy
      */
     public void setIndent(int indent) {
