@@ -95,10 +95,11 @@ public class DocType extends Node {
      * 
      * @throws IllegalNameException  if <code>rootElementName</code> 
      *     is not a legal XML 1.0 name
-     * @throws IllegalDataException if <code>systemID</code> 
-     *     is not a legal XML 1.0 system literal or 
-     *     <code>publicID</code> is not a legal 
-     *     XML 1.0 public identifier
+     * @throws IllegalDataException if <code>publicID</code> is not a  
+     *     legal XML 1.0 public identifier
+     * @throws MalformedURIException if the system ID is not a 
+     *     syntactically correct URI, or if it contains a fragment
+     *     identifier 
      */
     public DocType(
       String rootElementName, String publicID, String systemID) {
@@ -120,8 +121,9 @@ public class DocType extends Node {
      * 
      * @throws IllegalNameException if the rootElementName is not 
      *     a legal XML 1.0 name
-     * @throws IllegalDataException if the system ID is not 
-     *     a legal XML 1.0 system literal
+     * @throws MalformedURIException if the system ID is not a 
+     *     syntactically correct URI, or if it contains a fragment
+     *     identifier 
      */
     public DocType(String rootElementName, String systemID) {
         this(rootElementName, null, systemID);  
@@ -326,8 +328,9 @@ public class DocType extends Node {
      * 
      * @param id the URL of the external DTD subset
      * 
-     * @throws IllegalDataException if the system ID is not a legal 
-     *      XML 1.0 system literal
+     * @throws MalformedURIException if the system ID is not a 
+     *     syntactically correct URI, or if it contains a fragment
+     *     identifier 
      * @throws WellformednessException if the public ID is non-null 
      *     and you attempt to remove the system ID
      */
@@ -349,7 +352,7 @@ public class DocType extends Node {
             Verifier.checkURIReference(id);
             
             if (id.indexOf('#') != -1) {
-                IllegalDataException ex = new IllegalDataException(
+                MalformedURIException ex = new MalformedURIException(
                  "System literals cannot contain fragment identifiers"
                 );
                 ex.setData(id);
@@ -364,8 +367,7 @@ public class DocType extends Node {
 
     /**
      * <p>
-     * Returns the empty string.
-     * XPath 1.0 does not define a value 
+     * Returns the empty string. XPath 1.0 does not define a value 
      * for document type declarations.
      * </p>
      * 
