@@ -131,6 +131,60 @@ public class SerializerTest extends XOMTestCase {
     }
 
     
+    public void testParenthesizedOjeon() 
+      throws ParsingException, IOException {
+    
+        // (Initial consonant Medial Vowel Initial consonant Medial Vowel Final Consonant)
+        String input = "<a>&#x0028;&#x110B;&#x1169;&#x110C;&#x1165;&#x11AB;&#x0029;</a>";
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<a>(&#xC624;&#xC804;)</a>\r\n";  
+            
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(output, result);
+            
+    }
+
+    
+    public void testNonParenthesizedOjeon() 
+      throws ParsingException, IOException {
+    
+        // Initial consonant Medial Vowel Initial consonant Medial Vowel Final Consonant
+        String input = "<a>&#x110B;&#x1169;&#x110C;&#x1165;&#x11AB;</a>";
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<a>&#xC624;&#xC804;</a>\r\n";  
+            
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(output, result);
+            
+    }
+
+    
+    public void testOjeon() 
+      throws ParsingException, IOException {
+    
+        // (Initial consonant Medial Vowel Initial consonant Medial Vowel Final Consonant)
+        String input = "<a>&#x110C;&#x1165;&#x11AB;</a>";
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<a>&#xC804;</a>\r\n";  
+            
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(output, result);
+            
+    }
+
+    
     public void testKannadaVowelSignOO() 
       throws ParsingException, IOException {
     
@@ -1659,13 +1713,13 @@ public class SerializerTest extends XOMTestCase {
             String v5 = root.getAttributeValue("v5"); */
             
             assertEquals(c1, c2);
-            assertEquals(root.getValue(), c2, c3);
+            assertEquals(c2, c3);
             // I'm not sure the v's are correct past the BMP
             //assertEquals(root.getValue(), c1, v1);
             // assertEquals(c1, v2);
             // assertEquals(c1, v3);
             
-            assertEquals(c4, c5);
+            assertEquals(root.getValue(), c4, c5);
             // assertEquals(c4, v4);
             // assertEquals(c4, v5);
             
