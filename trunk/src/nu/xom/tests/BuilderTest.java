@@ -32,8 +32,6 @@ import java.io.InputStream;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
@@ -545,8 +543,8 @@ public class BuilderTest extends XOMTestCase {
             builder.build("<root:root/>", null);
             fail("Builder allowed undeclared prefix");
         }
-        catch (ParsingException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());   
         }        
     }
 
@@ -557,18 +555,18 @@ public class BuilderTest extends XOMTestCase {
             validator.build(reader);   
             fail("Allowed invalid doc");
         }
-        catch (ValidityException ex) {
-            assertNotNull(ex.getMessage());
-            assertTrue(ex.getErrorCount() > 0);
-            for (int i = 0; i < ex.getErrorCount(); i++) {
-                assertNotNull(ex.getValidityError(i));   
-                assertTrue(ex.getLineNumber(i) >= -1);   
-                assertTrue(ex.getColumnNumber(i) >= -1);   
+        catch (ValidityException success) {
+            assertNotNull(success.getMessage());
+            assertTrue(success.getErrorCount() > 0);
+            for (int i = 0; i < success.getErrorCount(); i++) {
+                assertNotNull(success.getValidityError(i));   
+                assertTrue(success.getLineNumber(i) >= -1);   
+                assertTrue(success.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
                 Document doc = builder.build(reader); 
-                this.verify(ex.getDocument());
-                assertEquals(doc, ex.getDocument());
+                this.verify(success.getDocument());
+                assertEquals(doc, success.getDocument());
             }
         }
     }
@@ -837,6 +835,8 @@ public class BuilderTest extends XOMTestCase {
         Element root = doc.getRootElement();
         Attribute name = root.getAttribute("name");
         assertEquals("value", name.getValue());
+        DocType doctype = doc.getDocType();
+        assertEquals("", doctype.getInternalDTDSubset());
     }
     
     /* <?xml version="1.0"?>
