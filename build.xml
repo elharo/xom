@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <!-- Copyright 2002, 2003 Elliotte Rusty Harold
 
 This library is free software; you can redistribute 
@@ -32,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0d20"/>
+    <property name="version" value="1.0d21"/>
     <property name="year"    value="2003"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -84,23 +85,23 @@ to http://www.xom.nu/
   </target>
 
   <target name="help">
-    <echo message=""/>
-    <echo message="XOM Build file"/>
-    <echo message="-------------------------------------------------------------"/>
-    <echo message=""/>
-    <echo message=" available targets are:"/>
-    <echo message=""/>
-    <echo message="   help     --> print this message"/>
-    <echo message="   jar      --> build the xom.jar file"/>
-    <echo message="   compile  --> compile the source code"/>
-    <echo message="   javadoc  --> generate the API documentation"/>
-    <echo message="   test     --> run JUnit test suite"/>
-    <echo message="   testui   --> run Junit test suite in GUI"/> 
-    <echo message="   clean    --> clean up the build directory"/>
-    <echo message="   dist     --> the zip and .tar.gz files"/>
-    <echo message=""/>
-    <echo message="-------------------------------------------------------------"/>
-    <echo message=""/>
+    <echo>
+XOM Build file
+-------------------------------------------------------------
+    
+  available targets are:
+    
+    help     --> print this message
+    jar      --> build the xom.jar file
+    compile  --> compile the source code
+    javadoc  --> generate the API documentation
+    test     --> run JUnit test suite
+    testui   --> run Junit test suite in GUI 
+    clean    --> clean up the build directory
+    dist     --> the zip and .tar.gz files
+    
+-------------------------------------------------------------
+    </echo>
   </target>
 
   <target name="prepare" depends="init">
@@ -148,7 +149,8 @@ to http://www.xom.nu/
              noindex="false"
              windowtitle="${Name} ${version}  API"
              doctitle="${Name} ${version}"
-             bottom="Copyright ${year} Elliotte Rusty Harold. All Rights Reserved.">
+             bottom="Copyright ${year} &lt;a href='http://www.elharo.com'&gt;Elliotte Rusty Harold&lt;/a&gt;
+			 &lt;br/&gt; &lt;a href='mailto:elharo@metalab.unc.edu?Subject=XOM'&gt;elharo@metalab.unc.edu&lt;/a&gt;">
       <classpath refid="run.class.path"/>
     </javadoc>
   </target>
@@ -156,12 +158,9 @@ to http://www.xom.nu/
   <target name="dist" depends="zip, tar.gz" />
 
   <!-- I can never remember the exact target name -->
-  <target name="javadocs" depends="javadoc"
-          description="Generate the API documentation" />
-  <target name="apidocs" depends="javadoc"
-          description="Generate the API documentation" />
-  <target name="apidoc" depends="javadoc"
-          description="Generate the API documentation" />
+  <target name="javadocs" depends="javadoc" />
+  <target name="apidocs" depends="javadoc"/>
+  <target name="apidoc" depends="javadoc"/>
 
   <target name="zip" depends="jar, javadoc" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
@@ -189,7 +188,7 @@ to http://www.xom.nu/
 
  
   <!-- This task requires the ANT optional.jar -->
-  <target name="test" depends="compile">
+  <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
     <junit printsummary="on" fork="no">
        <classpath refid="run.class.path" />
        <formatter type="${test.outputFormat}" />
@@ -203,7 +202,7 @@ to http://www.xom.nu/
    </junit>
   </target>
  
-  <target name="testui" depends="compile">
+  <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
     <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
       <!-- <jvmarg value="-Xbootclasspath/p:${xml-apis.jar}:${parser.jar}"/> -->
       <sysproperty key="org.xml.sax.driver" value="org.apache.parsers.SAXParser"/> 
