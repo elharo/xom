@@ -434,15 +434,8 @@ public class Builder {
         
         // setup the handlers
         this.parser = parser;
-        if (factory != null) {
-            setHandlers(factory);             
-        }
-        else if (knownGoodParser(parser)) {
-            setHandlers(new NonVerifyingFactory()); 
-        } 
-        else {
-            setHandlers(new NodeFactory());             
-        }
+        this.factory = factory;
+        setHandlers();
 
     }
     
@@ -479,14 +472,20 @@ public class Builder {
     }
 
 
-    private void setHandlers(NodeFactory factory) {
+    private void setHandlers() {
         
-        this.factory = factory;
         XOMHandler handler;
-        if (factory instanceof NonVerifyingFactory) {
-            handler = new NonVerifyingHandler(factory);
+        if ((factory == null 
+          || factory.getClass().getName().equals("nu.xom.NodeFactory"))
+          && knownGoodParser(parser)) {
+            // If no factory is supplied by user, don't 
+            // return one
+            NodeFactory tempFactory = factory;
+            if (tempFactory == null) tempFactory = new NodeFactory();
+            handler = new NonVerifyingHandler(tempFactory);
         }
         else {
+            if (factory == null) factory = new NodeFactory();
             handler = new XOMHandler(factory);
         }
         parser.setContentHandler(handler);
@@ -1246,21 +1245,16 @@ public class Builder {
 
     
     // I added this because XIncluder needed it.
-    // Note that this method is careful to not return an instance
-    // of NonVerifyingFactory.
     /**
      * <p>
      * Returns this builder's <code>NodeFactory</code>. It may return
-     * null if a factory was not supplied when the builder was created.
+     * null if a factory was not supplied when the builder was created. XXX
      * </p>
      * 
      * @return the node factory that was specified in the constructor
      */
-    public NodeFactory getNodeFactory() {
-        
-        if (factory instanceof NonVerifyingFactory) return null;
-        else return factory;
-        
+    public NodeFactory getNodeFactory() {  
+        return factory;
     }
 
     
