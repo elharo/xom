@@ -23,6 +23,7 @@
 
 package nu.xom.tests;
 
+import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.IllegalNameException;
 import nu.xom.MalformedURIException;
@@ -108,14 +109,14 @@ public class VerifierTest extends XOMTestCase {
             0x3FFFD, 0x40000, 0x4FFFD, 0x50000, 0x5FFFD, 0x60000, 
             0x6FFFD, 0x70000, 0x7FFFD, 0x80000, 0x8FFFD, 0x90000, 
             0x9FFFD, 0xA0000, 0xAFFFD, 0xB0000, 0xBFFFD, 0xC0000, 
-            0xCFFFD, 0xD0000, 0xDFFFD, 0xE1000, 0xEFFFD};
+            0xCFFFD, 0xD0000, 0xDFFFD, 0xE1000, 0xEFFFD, 0xCFFFD};
         
         Element element = new Element("test");
         for (int i = 0; i < legalChars.length; i++) {
             String utf16 = convertToUTF16(legalChars[i]);
             String url = "http://www.example.com/" + utf16 + ".xml";
-            element.setBaseURI(url);
-            assertEquals(url, element.getBaseURI());
+            element.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", url));
+            assertEquals(url, element.getAttributeValue("base", "http://www.w3.org/XML/1998/namespace"));
         }    
         
     }
@@ -123,17 +124,17 @@ public class VerifierTest extends XOMTestCase {
     
     public void testIllegalIRIs() {
         
-        int[] illegalChars = {0x00, 0xE7FF, 0xF899, 0xFDDF, 0xFDE0,
-            0xFFFF, 0x1FFFE,  0x2FFFE, 0x3FFFF, 0x4FFFE, 0x4FFFF,
-            0x5FFFE, 0x6FFFF, 0x7FFFE, 0x8FFFF, 0x9FFFE,
-            0xAFFFE, 0xBFFFF, 0xCFFFE, 0xDFFFE, 0xEFFFF};
+        int[] illegalChars = {0x00, 0xDC00, 0xE7FF, 0xF899, 0xD800, 
+            0xFDE0, 0xFFFF, 0x1FFFE,  0x2FFFE, 0x3FFFF, 0x4FFFE, 
+            0x4FFFF, 0x5FFFE, 0x6FFFF, 0x7FFFE, 0x8FFFF, 0x9FFFE,
+            0xAFFFE, 0xBFFFF, 0xCFFFE, 0xDFFFE, 0xEFFFF, 0xFDDF};
         
         Element element = new Element("test");
         for (int i = 0; i < illegalChars.length; i++) {
             String utf16 = convertToUTF16(illegalChars[i]);
             String url = "http://www.example.com/" + utf16 + ".xml";
             try {
-                element.setBaseURI(url);
+                element.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", url));
                 fail("Allowed IRI containing 0x" + 
                   Integer.toHexString(illegalChars[i]).toUpperCase());
             }
@@ -152,7 +153,7 @@ public class VerifierTest extends XOMTestCase {
         StringBuffer sb = new StringBuffer(2);
         sb.append(high);
         sb.append(low);
-        return sb.toString();
+        return sb.toString().toLowerCase();
     }
     
 
