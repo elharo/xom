@@ -237,6 +237,17 @@ public class TextTest extends XOMTestCase {
         String xml = text.toXML();
         assertEquals("data&#x0D;data", xml);   
     }
+    
+    public void testHighSurrogateWithNoLowSurrogate() {
+        String data = Character.toString((char) 0xD800);
+        try {
+            new Text(data);
+            fail("Allowed signle high surrogte in text node");
+        }
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
 
 
 }
