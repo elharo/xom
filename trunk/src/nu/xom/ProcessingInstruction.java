@@ -113,11 +113,30 @@ public class ProcessingInstruction extends LeafNode {
      *   satisfy the local constraints
      */
     public final void setTarget(String target) {
-        Verifier.checkProcessingInstructionTarget(target);
+        
+        try {
+            Verifier.checkNCName(target);
+        }
+        catch (NamespaceException ex) {
+            throw new IllegalTargetException(target +
+              "- Processing instruction targets must be non-colonized names"
+            );         
+        }
+        catch (IllegalNameException ex) {
+            throw new IllegalTargetException(ex.getMessage());            
+        }
+        
+        if (target.equalsIgnoreCase("xml")) {
+            throw new IllegalTargetException(
+              "Processing instructions targets cannot be XML better message????.");
+        }
+        
         checkTarget(target);
+        
         this.target = target;
-    }
-
+    }  
+    
+    
     /**
      * <p>
      * Subclasses can override this method to perform additional 
@@ -146,11 +165,33 @@ public class ProcessingInstruction extends LeafNode {
      *   the local constraints
      */
     public final void setValue(String data) {
-        Verifier.checkProcessingInstructionData(data);
+        
+        Verifier.checkCharacterData(data);
+        if (data.length() != 0) {
+            if (data.indexOf("?>") >= 0) {
+                throw new IllegalDataException(
+                  "Processing instruction data must not contain \"?>\""
+                );
+            }
+            if (data.indexOf('\r') >= 0) {
+                throw new IllegalDataException(
+                  "Processing instruction data cannot contain carriage returns"
+                );
+            }
+            
+            char first = data.charAt(0);
+            if (first == ' ' || first == '\n' || first == '\t') {
+                throw new IllegalDataException(
+                  "Processing instruction data cannot contain " +
+                  "leading white space"
+                );
+            }
+        }
         checkValue(data);
         this.data = data;
     }
 
+    
     /**
      * <p>
      * Returns the processing instruction data.
@@ -195,8 +236,10 @@ public class ProcessingInstruction extends LeafNode {
     public final String toXML() {
         StringBuffer result = new StringBuffer("<?");
         result.append(target);
-        result.append(' ');
-        result.append(data);
+        if (data.length() > 0) {
+            result.append(' ');
+            result.append(data);
+        }
         result.append("?>");
         return result.toString();   
     }
