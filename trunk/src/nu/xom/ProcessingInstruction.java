@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -166,7 +166,7 @@ public class ProcessingInstruction extends LeafNode {
      */
     public final void setValue(String data) {
         
-        Verifier.checkCharacterData(data);
+        Verifier.checkPCDATA(data);
         if (data.length() != 0) {
             if (data.indexOf("?>") >= 0) {
                 throw new IllegalDataException(

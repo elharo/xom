@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -34,7 +34,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  * 
  */
 public class Comment extends LeafNode {
@@ -93,7 +93,7 @@ public class Comment extends LeafNode {
     public final void setValue(String data) {
         if (data == null) data = "";
         else {
-            Verifier.checkCharacterData(data);
+            Verifier.checkPCDATA(data);
             if (data.indexOf("--") != -1) {
                 throw new IllegalDataException(
                  "Comment data contains a double hyphen (--).");
