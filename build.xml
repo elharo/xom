@@ -31,13 +31,13 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.1a3"/>
+    <property name="version" value="1.1b1"/>
     <property name="year"    value="2005"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
-    <property name="debug"       value="off"/>
-    <property name="optimize"    value="on"/>
+    <property name="debug"       value="on"/>
+    <property name="optimize"    value="off"/>
     <property name="deprecation" value="off"/>
 
     <property name="src.dir"    value="./src"/>
@@ -55,11 +55,11 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="dist.dir"        value="./dist"/>    
     <property name="clover.dir"      value="./clover"/>
     <property name="testreports.dir" value="./testreports" />
+    <property name="jaxen.dir"       value="${build.dir}/jaxen-classes"/>
 
     <property name="xml-apis.jar"   value="${lib.dir}/xmlParserAPIs.jar"/>
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
-    <property name="jaxen.jar"      value="${lib.dir}/jaxen-1.1-min.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.0rc1.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
@@ -98,7 +98,7 @@ subject line. The XOM home page is http://www.xom.nu/
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
       <pathelement location="${junit.jar}"/>
-      <pathelement location="${jaxen.jar}"/>
+      <pathelement location="${jaxen.dir}"/>
       <pathelement location="${servlet.jar}"/>
     </path>
 
@@ -106,7 +106,7 @@ subject line. The XOM home page is http://www.xom.nu/
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
       <pathelement location="${xom-core}"/>
-      <pathelement location="${jaxen.jar}"/>
+      <pathelement location="${jaxen.dir}"/>
       <pathelement location="${xslt.jar}"/>
     </path>
     
@@ -177,8 +177,8 @@ XOM Build file
     
   </target>
 
-  <target name="compile" depends="prepare, compile-servlets" 
-          description="Compile the source code" unless="servlet.jar.installed">
+  <target name="compile-core" depends="prepare, compile-jaxen" 
+          description="Compile the source code">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
@@ -191,30 +191,31 @@ XOM Build file
        <classpath refid="compile.class.path"/>
     </javac>
     <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
-    <copy file="${build.src}/nu/xom/comp.xml" tofile="${build.dest}/nu/xom/comp.xml"/>
+
+    <copy file="${build.src}/nu/xom/comp.xml" tofile="${build.dest}/nu/xom/comp.xml" />
+
     <!-- This file requires Java 1.5 to generate so we compile it with a 
          different target and copy it over here. -->
     <copy file="classes15/nu/xom/JDK15XML1_0Parser.class" tofile="${build.dest}/nu/xom/JDK15XML1_0Parser.class"/>
   </target>
 
+  <target name="compile" depends="compile-core, compile-servlets" 
+          description="Compile the source code" />
   
-  <target name="compile-servlets" depends="prepare" if="servlet.jar.installed"
+  <target name="compile-servlets" depends="compile-core" if="servlet.jar.installed"
           description="Compile the source code including the servlet samples">
     <javac srcdir="${build.src}"
+           sourcepath=""
            destdir="${build.dest}"
            debug="${debug}"
            optimize="${optimize}"
            deprecation="${deprecation}"
            target="1.2"
            source="1.3"
-           encoding="UTF-8"
-           excludes="nu/xom/pantry/*.java nu/xom/tools/*">
+           encoding="UTF-8">
        <classpath refid="compile.class.path"/>
+       <include name="nu/xom/samples/*Servlet.java" />
     </javac>
-    <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
-    <!-- This file requires Java 1.5 to generate so we compile it with a 
-         different target and copy it over here. -->
-    <copy file="classes15/nu/xom/JDK15XML1_0Parser.class" tofile="${build.dest}/nu/xom/JDK15XML1_0Parser.class"/>
   </target>
 
   
