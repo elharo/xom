@@ -49,7 +49,8 @@ import nu.xom.Serializer;
  */
 class XHTMLJavaDoc {
     
-    private static Builder builder = new Builder(new org.ccil.cowan.tagsoup.Parser());
+    private static Builder builder 
+      = new Builder(new org.ccil.cowan.tagsoup.Parser());
 
 
     private static class HTMLFilter implements FileFilter {
@@ -102,6 +103,11 @@ class XHTMLJavaDoc {
                         root.addAttribute(xmlen);
                         Attribute version = root.getAttribute("version");
                         if (version != null) root.removeAttribute(version);
+                        Element body = root.getFirstChildElement("body", "http://www.w3.org/1999/xhtml");
+                        Element frameset = root.getFirstChildElement("frameset", "http://www.w3.org/1999/xhtml");
+                        if (frameset != null && body != null) {
+                            root.removeChild(body);
+                        }
                         Serializer serializer = new HTMLSerializer(new FileOutputStream(f));
                         serializer.write(doc);
                         serializer.flush();
