@@ -327,7 +327,6 @@ public class Serializer {
         for (int i = 0; i < childCount; i++) {
             Node child = element.getChild(i);
             if (child.isText()) {
-                // XXX add an isEmpty method to Text to avoid calling getValue here?
                 Text t = (Text) child;
                 if (t.isEmpty()) continue;
             }
@@ -358,7 +357,7 @@ public class Serializer {
             escaper.decrementIndent();
             if (escaper.getIndent() > 0 && !escaper.isPreserveSpace()) {
                 if (hasNonTextChildren(element)) {
-                     escaper.breakLine();
+                    escaper.breakLine();
                 }
             }
             writeEndTag(element);
@@ -379,7 +378,6 @@ public class Serializer {
     
     private boolean hasNonTextChildren(Element element) {
         
-        // XXX pass in childCount?
         int childCount = element.getChildCount();
         for (int i = 0; i < childCount; i++) {
             if (! element.getChild(i).isText()) return true;  
@@ -728,7 +726,8 @@ public class Serializer {
         if (text.isCDATASection() 
           && value.indexOf("]]>") == -1) {
             if (!(escaper instanceof UnicodeWriter)) {
-                for (int i = 0; i < value.length(); i++) {
+                int length = value.length();
+                for (int i = 0; i < length; i++) {
                    if (escaper.needsEscaping(value.charAt(i))) {
                         // can't use CDATA section
                         escaper.writePCDATA(value);
@@ -759,7 +758,6 @@ public class Serializer {
         if (!"".equals(text.getValue().trim())) return false;
         ParentNode parent = text.getParent();
         
-        // XXX expensive, do I already have this in caller?
         int position = parent.indexOf(text);
         
         if (position == 0 && parent.getChildCount() == 1) return false;
