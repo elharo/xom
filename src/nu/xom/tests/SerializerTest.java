@@ -92,6 +92,69 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.indexOf(value) > 0);            
     }
 
+    
+    /**
+     * <p>
+     *   Check that the UTF-16LE encoding omits the byte-order mark.
+     * </p>
+     * 
+     * @throws IOException
+     */
+    public void testUTF16LEBOM() throws IOException {
+        Document doc = new Document(new Element("test"));
+        ByteArrayOutputStream out = new ByteArrayOutputStream();    
+        Serializer serializer = new Serializer(out, "UTF-16LE");
+        serializer.write(doc);
+        serializer.flush();
+        out.flush();
+        out.close();
+        byte[] data = out.toByteArray();
+        assertEquals('<', (char) data[0]);     
+        assertEquals((byte) 0, data[1]);
+    }   
+    
+    /**
+     * <p>
+     *   Check that the UTF-16 encoding outputs a byte-order mark.
+     * </p>
+     * 
+     * @throws IOException
+     */
+    public void testUTF16BOM() throws IOException {
+        Document doc = new Document(new Element("test"));
+        ByteArrayOutputStream out = new ByteArrayOutputStream();    
+        Serializer serializer = new Serializer(out, "UTF-16");
+        serializer.write(doc);
+        serializer.flush();
+        out.flush();
+        out.close();
+        byte[] data = out.toByteArray();
+        assertEquals((byte) 0xFE, data[0]);
+        assertEquals((byte) 0xFF, data[1]);
+        assertEquals((byte) 0, data[2]);
+        assertEquals('<', (char) data[3]);     
+    }
+    
+    /**
+     * <p>
+     *   Check that the UTF-16BE encoding omits the byte-order mark.
+     * </p>
+     * 
+     * @throws IOException
+     */
+    public void testUTF16BEBOM() throws IOException {
+        Document doc = new Document(new Element("test"));
+        ByteArrayOutputStream out = new ByteArrayOutputStream();    
+        Serializer serializer = new Serializer(out, "UTF-16BE");
+        serializer.write(doc);
+        serializer.flush();
+        out.flush();
+        out.close();
+        byte[] data = out.toByteArray();
+        assertEquals((byte) 0, data[0]);
+        assertEquals('<', (char) data[1]);     
+    }
+
     public void testXMLSpaceDefault() throws IOException {
         Element root = new Element("test");
         root.addAttribute(
