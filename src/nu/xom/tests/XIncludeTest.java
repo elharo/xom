@@ -57,7 +57,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -741,16 +741,12 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/metafallbacktestwithfragmentid.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Allowed document with fragment ID in href attribute");
         }
         catch (BadHrefAttributeException success) {
             assertNotNull(success.getMessage());
         }
-        /* Document expectedResult = builder.build(
-          new File("data/xinclude/output/metafallbacktest.xml")
-        );
-        assertEquals(expectedResult, result);*/
 
     }
     
@@ -1935,18 +1931,12 @@ public class XIncludeTest extends XOMTestCase {
         );
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Allowed href attribute with fragment ID");
         }
         catch (XIncludeException success) {
             assertNotNull(success.getMessage());
         }
-
-
-        /*Document expected = builder.build(
-          new File("data/xinclude/output/xpointeroverridesfragmentid.xml")
-        );
-        assertEquals(expected, result);*/
                 
     }
     
@@ -1958,16 +1948,12 @@ public class XIncludeTest extends XOMTestCase {
           "data/xinclude/input/ignoresfragmentid.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Allowed href attribute with fragment ID");
         }
         catch (XIncludeException success) {
             assertNotNull(success.getMessage());
         }
-        /* Document expected = builder.build(
-          new File("data/xinclude/output/ignoresfragmentid.xml")
-        );
-        assertEquals(expected, result);*/
                 
     }
     
@@ -1996,16 +1982,12 @@ public class XIncludeTest extends XOMTestCase {
           "data/xinclude/input/meaninglessfragmentid.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Allowed href attribute with fragment ID");
         }
         catch (XIncludeException success) {
             assertNotNull(success.getMessage());
         }
-        /* Document expected = builder.build(
-          new File("data/xinclude/output/ignoresfragmentid.xml")
-        );
-        assertEquals(expected, result); */
                 
     }
     
