@@ -22,8 +22,6 @@
 
 package nu.xom.xslt;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 import nu.xom.Attribute;
@@ -53,7 +51,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b7
  *
  */
 class XSLTHandler 
@@ -62,7 +60,6 @@ class XSLTHandler
     private Nodes        result;
     private Stack        parents;
     private NodeFactory  factory;
-    private Map          prefixes; // in scope right now
     private StringBuffer buffer;
     
     
@@ -71,7 +68,6 @@ class XSLTHandler
         result   = new Nodes();
         parents  = new Stack();
         buffer   = new StringBuffer();
-        prefixes = new HashMap();
     }   
     
     
