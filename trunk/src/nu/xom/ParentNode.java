@@ -23,7 +23,6 @@
 package nu.xom;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -88,14 +87,6 @@ public abstract class ParentNode extends Node {
      * child of this node. Inserting at the position 
      * <code>getChildCount()</code> makes the child the 
      * last child of the node.
-     * </p>
-     * 
-     * <p>
-     * An as yet unproven hypothesis: it is significantly faster to 
-     * construct documents from the top down than the bottom up.
-     * That is, one should add an element to its parent before
-     * adding its children. This short-circuits some possibly
-     * expensive checks. 
      * </p>
      * 
      * <p>
