@@ -239,8 +239,6 @@ public class XPathTest extends XOMTestCase {
         grandparent.appendChild(parent);
         
         Nodes result = child.query("ancestor::*");
-        // ???? appears to be a bug where root node is considered to
-        // be of principle node type on ancestor axis
         assertEquals(2, result.size());
         assertEquals(parent, result.get(0));   
         assertEquals(grandparent, result.get(1));
@@ -254,11 +252,46 @@ public class XPathTest extends XOMTestCase {
         Document doc = new Document(root);
         
         Nodes result = root.query("parent::*");
-        // ???? appears to be a bug where root node is considered to
-        // be of principle node type on parent axis
         assertEquals(0, result.size());
         
     }
+    
+    
+    public void testParentAxisWithNodeMatchingDocument() {
+        
+        Element root = new Element("Test");
+        Document doc = new Document(root);
+        
+        Nodes result = root.query("parent::node()");
+        assertEquals(1, result.size());
+        assertEquals(doc, result.get(0));
+        
+    }
+    
+    
+    public void testSubstringFunction() {
+        
+        Element root = new Element("Test");
+        Document doc = new Document(root);
+        
+        Nodes result = root.query("/*[substring('12345', 0, 3)='12']");
+        assertEquals(1, result.size());
+        assertEquals(root, result.get(0));
+        
+    }
+    
+    
+    public void testPrecedingAxisWithElementName() {
+        
+        Element root = new Element("Test");
+        Document doc = new Document(root);
+        
+        Nodes result = doc.query("/descendant::*/preceding::x");
+        assertEquals(0, result.size());
+        
+    }
+    
+    
     
     
     public void testDocTypeIsNotAnXPathNode() {
