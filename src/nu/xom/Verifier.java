@@ -33,7 +33,7 @@ import java.util.StringTokenizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b8
  * 
  */
 final class Verifier {
@@ -236,9 +236,10 @@ final class Verifier {
     }
     
 
-    private static void checkQuery(String query) {
+    private static void checkQuery(final String query) {
         
-        for (int i = 0; i < query.length(); i++) {
+        int length = query.length();
+        for (int i = 0; i < length; i++) {
             char c = query.charAt(i);
             if (c == '%') {
                try {
@@ -375,13 +376,15 @@ final class Verifier {
     
     // Besides the legal characters issues, a path must
     // not contain two consecutive forward slashes
-    private static void checkPath(String path) {
+    private static void checkPath(final String path) {
         
-        for (int i = 0; i < path.length(); i++) {
-            char c = path.charAt(i);
+        int length = path.length();
+        char[] text = path.toCharArray();
+        for (int i = 0; i < length; i++) {
+            char c = text[i];
             if (c == '/') {
-                if (i < path.length()-1) {
-                    if (path.charAt(i+1) == '/') {
+                if (i < length-1) {
+                    if (text[i+1] == '/') {
                         throwMalformedURIException(path, 
                           "Double slash (//) in path");
                     }
@@ -389,13 +392,13 @@ final class Verifier {
             }
             else if (c == '%') {
                try {
-                   if (!isHexDigit(path.charAt(i+1)) 
-                     || !isHexDigit(path.charAt(i+2))) {
+                   if (!isHexDigit(text[i+1]) 
+                     || !isHexDigit(text[i+2])) {
                        throwMalformedURIException(path, 
                          "Bad percent escape sequence");    
                    }
                }
-               catch (StringIndexOutOfBoundsException ex) {
+               catch (ArrayIndexOutOfBoundsException ex) {
                    throwMalformedURIException(path, 
                      "Bad percent escape sequence");                       
                }
@@ -445,32 +448,34 @@ final class Verifier {
     }
 
 
-    private static void checkHost(String host) {
+    private static void checkHost(final String host) {
     
-        if (host.length() == 0) return; // file URI
+        int length = host.length();
+        if (length == 0) return; // file URI
         
-        if (host.charAt(0) == '[') {
-            if (host.charAt(host.length()-1) != ']') {
+        char[] text = host.toCharArray();
+        if (text[0] == '[') {
+            if (text[length-1] != ']') {
                 throw new MalformedURIException("Missing closing ]");
             }
                             // trim [ and ] from ends of host
-            checkIP6Address(host.substring(1, host.length()-1));
+            checkIP6Address(host.substring(1, length-1));
         }
         else {
-            if (host.length() > 255) {
+            if (length > 255) {
                 throw new MalformedURIException("Host name too long: " + host);
             }
             
-            for (int i = 0; i < host.length(); i++) {
-                char c = host.charAt(i);
+            for (int i = 0; i < length; i++) {
+                char c = text[i];
                 if (c == '%') {
                    try {
-                       if (!isHexDigit(host.charAt(i+1)) || !isHexDigit(host.charAt(i+2))) {
+                       if (!isHexDigit(text[i+1]) || !isHexDigit(text[i+2])) {
                            throwMalformedURIException(host, 
                              "Bad percent escape sequence");    
                        }
                    }
-                   catch (StringIndexOutOfBoundsException ex) {
+                   catch (ArrayIndexOutOfBoundsException ex) {
                        throwMalformedURIException(host, 
                          "Bad percent escape sequence");                       
                    }
@@ -591,7 +596,7 @@ final class Verifier {
 
     private static void checkPort(String port) {
         
-        for (int i = 0; i < port.length(); i++) {
+        for (int i = port.length()-1; i >= 0; i--) {
             char c = port.charAt(i);
             if (c < '0' || c > '9') {
                 throw new MalformedURIException("Bad port: " + port);
@@ -603,7 +608,8 @@ final class Verifier {
 
     private static void checkUserInfo(String userInfo) {
 
-        for (int i = 0; i < userInfo.length(); i++) {
+        int length = userInfo.length();
+        for (int i = 0; i < length; i++) {
             char c = userInfo.charAt(i);
             if (c == '%') {
                try {
@@ -635,7 +641,7 @@ final class Verifier {
               "Illegal initial scheme character " + c);
         }
         
-        for (int i = 1; i < scheme.length(); i++) {
+        for (int i = scheme.length()-1; i >= 1; i--) {
             c = scheme.charAt(i);
             if (!isSchemeCharacter(c)) {
                 throw new MalformedURIException(
