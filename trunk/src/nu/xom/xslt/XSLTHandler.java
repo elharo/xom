@@ -54,7 +54,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b4
  *
  */
 class XSLTHandler 
@@ -201,7 +201,7 @@ class XSLTHandler
                     catch (NamespaceConflictException ex) {
                        // work around Bug 27937 in Xalan
                        // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27937
-                       // Xalan somtimes use the XML namespace 
+                       // Xalan sometimes use the XML namespace 
                        // http://www.w3.org/XML/1998/namespace where it
                        // should use the empty string
                        if ("http://www.w3.org/XML/1998/namespace".equals(namespaceName)
@@ -322,7 +322,6 @@ class XSLTHandler
     
     public void startPrefixMapping(String prefix, String uri) {
         
-       
        if ("".equals(prefix)) {
            namespaceDeclarations.addAttribute("", "xmlns", "xmlns", "CDATA", uri);
        }

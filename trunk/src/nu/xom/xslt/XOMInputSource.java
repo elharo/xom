@@ -1,4 +1,4 @@
-// Copyright 2002-2004 Elliotte Rusty Harold
+// Copyright 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -23,34 +23,25 @@
 
 package nu.xom.xslt;
 
-import javax.xml.transform.sax.SAXResult;
-
-import nu.xom.NodeFactory;
 import nu.xom.Nodes;
-import org.xml.sax.ext.LexicalHandler;
 
-/**
- * <p>
- *   Interface to TrAX.
- * </p>
- * 
- * @author Elliotte Rusty Harold
- * @version 1.0b4
- *
- */
-class XOMResult extends SAXResult {
+import org.xml.sax.InputSource;
+
+
+class XOMInputSource extends InputSource {
+
     
-   
-    XOMResult(NodeFactory factory) {
-        super(new XSLTHandler(factory));
-        this.setLexicalHandler((LexicalHandler) this.getHandler());
+    private Nodes nodes;
+    
+    
+    XOMInputSource(Nodes nodes) {
+        this.nodes = nodes;
     }
     
     
-    public Nodes getResult() {
-        XSLTHandler handler = (XSLTHandler) this.getHandler();
-        return handler.getResult();   
+    Nodes getNodes() {
+        return this.nodes;
     }
-
+    
     
 }

@@ -52,8 +52,10 @@ import nu.xom.XMLException;
  * Transformation to a XOM document and get the transformation result 
  * in the form of a XOM <code>Nodes</code>:</p>
  * <blockquote><pre>public static Nodes transform(Document in) 
- *   throws XSLException {
- *     XSLTransform stylesheet = new XSLTransform("mystylesheet.xsl");
+ *   throws XSLException, ParsingException, IOException {
+ *     Builder builder = new Builder();
+ *     Document stylesheet = builder.build("mystylesheet.xsl");
+ *     XSLTransform stylesheet = new XSLTransform(stylesheet);
  *     return stylesheet.transform(doc);
  * } </pre></blockquote>
  *
@@ -109,7 +111,10 @@ import nu.xom.XMLException;
  *    a default implementation is chosen. In Sun's JDK 1.4.0 and 1.4.1,
  *    this is Xalan 2.2d10. In JDK 1.4.2, this is Xalan 2.4. 
  *    In JDK 1.4.2_02, this is Xalan 2.4.1.
- *    In JDK 1.4.2_03 and 1.5 beta 2 this is Xalan 2.5.2. </li>
+ *    In JDK 1.4.2_03, 1.5 beta 2, and 1.5 RC1 this is Xalan 2.5.2. 
+ *    In JDK 1.4.2_05, this is Xalan 2.4.1. (Yes, Sun appears to have
+ *    reverted to 2.4.1 in 1.4.2_05.)
+ *    </li>
  *    </ol>
  *
  * @author Elliotte Rusty Harold
@@ -174,8 +179,9 @@ public final class XSLTransform {
      *
      * @deprecated  This method does not provide a base URL for the
      * stylesheet so relative URLs used by xsl:import, xsl:include,
-     * and the document() function cannot be resolved. Use 
-     * {@link #XSLTransform(InputStream,String)} instead.
+     * and the document() function cannot be resolved. Instead, use
+     * a {@link nu.xom.Builder} to load the stylesheet and call
+     * {@link #XSLTransform(Document)} instead.
      * 
      * @param stylesheet input stream from 
      *      which the stylesheet is read
@@ -191,35 +197,14 @@ public final class XSLTransform {
     /**
      * <p>
      * Creates a new <code>XSLTransform</code> by reading the 
-     * stylesheet from the specified input stream.
-     * </p>
-     * 
-     * @param stylesheet input stream from 
-     *      which the stylesheet is read
-     * @param url the base URL used to resolve relative URLs within
-     *     the stylesheet. This may be null if this is not known. 
-     *     In this case, however, the stylesheet must use any relative
-     *     URLs. test????
-     * 
-     * @throws XSLException when an IOException, format error, or
-     *     something else prevents the stylesheet from being compiled 
-     */ 
-    public XSLTransform(InputStream stylesheet, String url) 
-      throws XSLException {
-        this(new StreamSource(stylesheet, url));
-    }
-
-    
-    /**
-     * <p>
-     * Creates a new <code>XSLTransform</code> by reading the 
      * stylesheet from the specified reader.
      * </p>
      * 
      * @deprecated  This method does not provide a base URL for the
      * stylesheet so relative URLs used by xsl:import, xsl:include,
-     * and the document() function cannot be resolved. Use 
-     * {@link #XSLTransform(Reader,String)} instead.
+     * and the document() function cannot be resolved. Instead, use
+     * a {@link nu.xom.Builder} to load the stylesheet and call
+     * {@link #XSLTransform(Document)} instead.
      * 
      * @param stylesheet character stream from which the stylesheet
      *     is read
@@ -234,31 +219,12 @@ public final class XSLTransform {
     
     /**
      * <p>
-     * Creates a new <code>XSLTransform</code> by reading the 
-     * stylesheet from the specified reader.
-     * </p>
-     * 
-     * @param stylesheet character stream from which the stylesheet
-     *     is read
-     * @param url the base URL used to resolve relative URLs within
-     *     the stylesheet. This may be null if this is not known. 
-     *     In this case, however, the stylesheet must use any relative
-     *     URLs. test????
-     * 
-     * @throws XSLException when an IOException, format error, or
-     *     something else prevents the stylesheet from being compiled 
-     */ 
-    public XSLTransform(Reader stylesheet, String url) 
-      throws XSLException {
-        this(new StreamSource(stylesheet, url));
-    }
-  
-    
-    /**
-     * <p>
      * Creates a new <code>XSLTransform</code> 
      * by reading the stylesheet from the specified file.
      * </p>
+     *
+     * @deprecated  Use a {@link nu.xom.Builder} to load the stylesheet
+     *  and call {@link #XSLTransform(Document)} instead.
      *
      * @param stylesheet file from which the stylesheet is read
      * 
@@ -276,14 +242,6 @@ public final class XSLTransform {
      * reading the stylesheet from the specified document.
      * </p>
      * 
-     * <p>
-     * This method is currently implemented very inefficiently.
-     * If a stylesheet exists in serialized form as a file, stream, 
-     * web resource or some such format, it's likely to be faster
-     * to use one of the other constructors to load it directly
-     * from its original source.
-     * </p>
-     *
      * @param stylesheet document containing the stylesheet
      * 
      * @throws XSLException when the supplied document
@@ -299,6 +257,9 @@ public final class XSLTransform {
      * Creates a new <code>XSLTransform</code> by
      * reading the stylesheet from the specified URL.
      * </p>
+     *
+     * @deprecated  Use a {@link nu.xom.Builder} to load the stylesheet
+     *  and call {@link #XSLTransform(Document)} instead.
      *
      * @param systemID URL from which the stylesheet is read
      * 
@@ -348,8 +309,11 @@ public final class XSLTransform {
      *     due to an XSLT error
      */ 
     public Nodes transform(Nodes in) throws XSLException {
+        
         if (in.size() == 0) return new Nodes();
-        return transform(new XOMSource(in));
+        XOMSource source = new XOMSource(in);
+        return transform(source);
+        
     }
 
     

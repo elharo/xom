@@ -23,34 +23,21 @@
 
 package nu.xom.xslt;
 
-import java.io.Reader;
-import java.io.StringReader;
-
 import javax.xml.transform.sax.SAXSource;
 
 import nu.xom.Document;
 import nu.xom.Nodes;
 
 import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0b4
  *
  */
 class XOMSource extends SAXSource {
-
-  /**
-   * <p>
-   *  Used to determine if a 
-   *  <code>TransformerFactory</code> natively supports XOM input.
-   *  Factories that do not natively support XOM can use 
-   *  <code>XOMSource</code> objects as instances of
-   *  <code>SAXSource</code> instead.
-   * <p>
-   */
-    public final static String XOM_FEATURE
-       = "http://nu.xom/XOMResultFeature";
+    
 
     private Nodes source;
 
@@ -64,9 +51,8 @@ class XOMSource extends SAXSource {
      * 
      * @param source 
      */
-    public XOMSource(Document source) {
-        this.source = new Nodes();
-        this.source.append(source);
+    XOMSource(Document source) {
+        this.source = new Nodes(source);
     }
     
     
@@ -84,20 +70,19 @@ class XOMSource extends SAXSource {
 
     
     public InputSource getInputSource() {
-        StringBuffer data = new StringBuffer();
-        for (int i = 0; i < source.size(); i++) {
-            data.append(source.get(i).toXML());
-        }
-        Reader in = new StringReader(data.toString());
-        InputSource source = new InputSource(in);
-        source.setSystemId(getSystemId()); 
-        return source; 
+        return new XOMInputSource(source);
     }
 
+    
+    public XMLReader getXMLReader() {
+        return new XOMReader(source);
+    }
+    
     
     public String getSystemId() {
         if (this.source.size() == 0) return null;
         else return this.source.get(0).getBaseURI();
     }      
 
+    
 }
