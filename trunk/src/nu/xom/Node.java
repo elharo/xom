@@ -309,18 +309,7 @@ public abstract class Node {
     public final int hashCode() {
         return super.hashCode();    
     }
-    
-    /**
-     * <p>
-     * Returns a string representation of this node suitable for
-     * debugging and diagnosis. This is <em>not</em>
-     * the XML representation of this node.
-     * </p>
-     * 
-     * @return a non-XML string representation of this node
-     * @see java.lang.Object#toString()
-     */
-    public abstract String toString();
+
     
     // Simple methods to replace instanceof tests
     boolean isElement() {
