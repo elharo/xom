@@ -289,16 +289,15 @@ public class NodeFactory {
      * </p>
      * 
      * <p>
-     * Subclasses may change the content, 
-     * or other characteristics of the <code>Text</code> 
-     * returned. Subclasses may change the nodes returned from this 
-     * method. They may return a <code>Nodes</code> object containing 
-     * any  number of nodes which are added or
+     * Subclasses may change the content, or other characteristics of 
+     * the <code>Text</code> returned. Subclasses may change the nodes 
+     * returned from this method. They may return a <code>Nodes</code> 
+     * object containing any number of nodes which are added or 
      * appended to the current parent node. This <code>Nodes</code> 
-     * object may not contain any <code>Document</code> nodes. 
-     * All of the nodes returned must be parentless. Subclasses 
-     * may return an empty <code>Nodes</code> to indicate the text 
-     * should not be included in the finished document.
+     * object must not contain any <code>Document</code> nodes. All of 
+     * the nodes returned must be parentless. Subclasses may return an 
+     * empty <code>Nodes</code> to indicate the text should not be 
+     * included in the finished document.
      * </p> 
      * 
      * @param data the complete text content of the node
@@ -346,8 +345,8 @@ public class NodeFactory {
      * 
      * @return the nodes to be added to the tree
      */
-    public Nodes makeWhiteSpaceInElementContent(String data) {
-        return makeText(data);  
+    public String makeWhiteSpaceInElementContent(String data) {
+        return "";  
     }
 
     /**

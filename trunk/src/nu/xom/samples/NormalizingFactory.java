@@ -71,9 +71,6 @@ public class NormalizingFactory extends NodeFactory {
         return super.makeAttribute(name, URI, value, type);
     }
 
-    public Nodes makeWhiteSpaceInElementContent(String data) {
-        return empty;  
-    }
     
     // not the most efficient implementation
     private static String normalizeSpace(String data) {
@@ -92,6 +89,7 @@ public class NormalizingFactory extends NodeFactory {
         
         return result.toString();
     }
+    
     
     public static void main(String[] args) {
   

@@ -284,15 +284,11 @@ class XOMHandler
     private void flushText() {
         if (buffer.length() > 0) {
             Nodes result;
-            if (!isIgnorable &&!inCDATA) {
+            if (!inCDATA) {
                 result = factory.makeText(buffer.toString());
             }
-            else if (inCDATA) {
-                result = factory.makeCDATASection(buffer.toString());
-            }
             else {
-                result = factory.makeWhiteSpaceInElementContent(
-                  buffer.toString());
+                result = factory.makeCDATASection(buffer.toString());
             }
             for (int i=0; i < result.size(); i++) {
                 Node node = result.get(i);
@@ -305,19 +301,17 @@ class XOMHandler
             }
             buffer = new StringBuffer();
         }
-        isIgnorable = false;
         inCDATA = false;
         finishedCDATA = false;
     }
   
-    private boolean isIgnorable = false;
-  
+    
     public void ignorableWhitespace(
       char[] text, int start, int length) {
         characters(text, start, length);
-        isIgnorable = true;
     }
   
+    
     public void processingInstruction(String target, String data) {
         
         Nodes result = factory.makeProcessingInstruction(target, data);
