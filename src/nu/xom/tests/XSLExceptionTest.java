@@ -40,6 +40,10 @@ public class XSLExceptionTest extends XOMTestCase {
     private XSLException ex;
     private Exception cause;
     
+    public XSLExceptionTest(String name) {
+        super(name);   
+    }
+
     protected void setUp() {
         ex = new XSLException();
         cause = new Exception();

@@ -36,6 +36,9 @@ import nu.xom.Text;
  */
 public class AttributeTypeTest extends XOMTestCase {
 
+    public AttributeTypeTest(String name) {
+        super(name);   
+    }
 
     public void testEquals() {
         assertEquals(Attribute.Type.CDATA, Attribute.Type.CDATA);

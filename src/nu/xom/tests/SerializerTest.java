@@ -32,7 +32,6 @@ import nu.xom.Comment;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Attribute;
-import nu.xom.ValidityException;
 import nu.xom.XMLException;
 
 import java.io.ByteArrayInputStream;

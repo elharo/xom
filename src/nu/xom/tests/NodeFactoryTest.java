@@ -53,6 +53,10 @@ import nu.xom.ValidityException;
  */
 public class NodeFactoryTest extends XOMTestCase {
 
+    public NodeFactoryTest(String name) {
+        super(name);
+    }
+    
     public void testSkippingComment() 
       throws IOException, ParsingException {
         
