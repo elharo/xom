@@ -38,6 +38,11 @@ package nu.xom;
  */
 class CDATASection extends Text {
 
+
+    CDATASection(Text text) {
+        super(text.getValue());
+    }
+
     CDATASection(String data) {
         super(data);   
     }

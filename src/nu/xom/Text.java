@@ -33,7 +33,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class Text extends LeafNode {
@@ -166,7 +166,12 @@ public class Text extends LeafNode {
      * @see nu.xom.Node#copy()
      */
     public Node copy() {
-        return new Text(this);
+        if (isCDATASection()) {
+            return new CDATASection(this);
+        }
+        else {
+            return new Text(this);
+        }
     }
 
     /**

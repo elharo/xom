@@ -35,7 +35,7 @@ import nu.xom.*;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class CDATASectionTest extends XOMTestCase {
@@ -62,6 +62,15 @@ public class CDATASectionTest extends XOMTestCase {
         doc = builder.build(data, "http://www.base.com");   
     }
     
+    public void testCopy() {
+        Element child1 = doc.getRootElement().getFirstChildElement("child1");
+        Node cdata = child1.getChild(0);
+        Node copy = cdata.copy();
+        assertTrue(cdata instanceof Text);  
+        assertEquals("nu.xom.CDATASection", copy.getClass().getName());  
+        assertEquals("<&>", copy.getValue());  
+    }
+
     public void testUseCDATAWherePossible() {
         Element child1 = doc.getRootElement().getFirstChildElement("child1");
         Node cdata = child1.getChild(0);
