@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -25,7 +25,7 @@ package nu.xom;
  * <p>
  *   This class represents an XML comment such as 
  *   <code>&lt;-- This is a comment--></code>. 
- *   It cannot have any child nodes.
+ *   A comment node cannot have any child nodes.
  *   It can be a child of an <code>Element</code> 
  *   or a <code>Document</code>.
  *   It has essentially no internal substructure.
