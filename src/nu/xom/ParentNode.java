@@ -46,13 +46,13 @@ import java.util.List;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  *
  */
 public abstract class ParentNode extends Node {
 
-              List   children; 
-    protected String actualBaseURI;
+    List   children; 
+    String actualBaseURI;
 
     /**
      * <p>
