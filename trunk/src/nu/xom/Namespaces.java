@@ -36,7 +36,7 @@ import java.util.HashMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  */
 class Namespaces {
     

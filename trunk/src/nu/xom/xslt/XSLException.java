@@ -28,9 +28,9 @@ package nu.xom.xslt;
  *   is thrown when an XSL stylesheet fails to compile
  *   or an XSL transform fails.
  * </p>
-` * 
+ * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public class XSLException extends Exception {

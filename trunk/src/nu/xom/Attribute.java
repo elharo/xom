@@ -591,7 +591,7 @@ public class Attribute extends Node {
      * </p>
      * 
      * @author Elliotte Rusty Harold
-     * @version 1.0a1
+     * @version 1.0d25
      *
      */
     public static final class Type {
