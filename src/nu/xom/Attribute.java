@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d3
+ * @version 1.1d5
  * 
  */
 public class Attribute extends Node {
@@ -196,16 +196,14 @@ public class Attribute extends Node {
     private Attribute() {}
     
     static Attribute build(
-      String name, String URI, String value, Type type) {
+      String qualifiedName, String URI, String value, Type type, String localName) {
         
         Attribute result = new Attribute();
     
         String prefix = "";
-        String localName = name;
-        if (name.indexOf(':') >= 0) {
-            prefix = name.substring(0, name.indexOf(':')).intern();   
-            localName = name.substring(name.indexOf(':') + 1).intern();
-            if ("xml:id".equals(name)) {
+        if (qualifiedName.indexOf(':') >= 0) {
+            prefix = qualifiedName.substring(0, qualifiedName.indexOf(':')).intern();
+            if ("xml:id".equals(qualifiedName)) {
                 type = Attribute.Type.ID;
                 value = normalize(value);
                 Verifier.checkNCName(value);

@@ -86,7 +86,8 @@ class NonVerifyingHandler extends XOMHandler {
                   qName, 
                   namespace, 
                   value, 
-                  convertStringToType(attributes.getType(i))
+                  convertStringToType(attributes.getType(i)),
+                  attributes.getLocalName(i)
                 );
                 element.fastAddAttribute(attribute);
             }
