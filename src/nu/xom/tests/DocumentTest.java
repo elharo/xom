@@ -233,6 +233,19 @@ public class DocumentTest extends XOMTestCase {
     }
 
     
+    public void testReplaceNonDocTypeWithDocTypeUsingReplaceChild() {
+        
+        Comment c = new Comment("Not a doctype");
+        DocType newDocType = new DocType("new");
+        doc.insertChild(c, 0);
+        doc.replaceChild(c, newDocType);
+        assertEquals(newDocType, doc.getDocType());
+        assertNull(c.getParent());
+        assertEquals(doc, newDocType.getParent());
+        
+    }
+
+    
     public void testDetach() {
         Comment comment 
           = new Comment("This will be attached then detached");
