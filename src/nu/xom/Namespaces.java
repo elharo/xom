@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -36,15 +36,13 @@ import java.util.HashMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  */
 class Namespaces {
     
-    private HashMap   namespaces = new HashMap(0);
-    private ArrayList prefixes   = new ArrayList(0);
+    private HashMap   namespaces = new HashMap(1);
+    private ArrayList prefixes   = new ArrayList(1);
     
-    // prevent instantiation from outside this package
-    Namespaces() {}
 
     void put(String prefix, String URI) {
         namespaces.put(prefix, URI);
@@ -52,6 +50,7 @@ class Namespaces {
         prefixes.add(prefix);        
     }
 
+    
     void remove(String prefix) {
         if (prefix == null) prefix = "";
         namespaces.remove(prefix);
@@ -66,28 +65,30 @@ class Namespaces {
      * returns null if the prefix is not found in the list.
      * </p>
      * 
-     * @param prefix the prefix whose URI is deserved.
+     * @param prefix the prefix whose URI is desired
      * 
      * @return the namespace URI for this prefix, or null if this 
      *      prefix is not not mapped to a URI by these namespace 
      *      declarations
      */
-    public String getURI(String prefix) {
+    String getURI(String prefix) {
         return (String) (namespaces.get(prefix));
     }
 
+    
     /**
      * <p>
      * Returns the number of namespace declarations in this list.
      * This is guaranteed to be non-negative.
      * </p>
      * 
-     * @return the number of namespace declarations in this list.
+     * @return the number of namespace declarations in this list
      */
-    public int size() {
+    int size() {
         return namespaces.size();
     }
 
+    
     /**
      * <p>
      * Returns the index<sup>th</sup> prefix in this list.
@@ -103,10 +104,23 @@ class Namespaces {
         return (String) prefixes.get(index);
     }
     
+    
     // This violates encapsulation. Don't change the 
     // array returned.
     ArrayList getPrefixes() {
         return this.prefixes;
+    }
+    
+    
+    Namespaces copy() {
+        
+        Namespaces result = new Namespaces();
+        // shallow copies work here because these collections only
+        // contain immutable strings
+        result.namespaces = (HashMap)   this.namespaces.clone();
+        result.prefixes   = (ArrayList) this.prefixes.clone();
+        return result;
+        
     }
 
 }

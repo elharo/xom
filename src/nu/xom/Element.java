@@ -160,11 +160,12 @@ public class Element extends ParentNode {
         
         // Attach additional namespaces
         if (element.namespaces != null) {
-            for (int i = 0; i < element.namespaces.size(); i++) {
+            this.namespaces = element.namespaces.copy();
+            /* for (int i = 0; i < element.namespaces.size(); i++) {
                 String prefix = element.namespaces.getPrefix(i);
                 String uri = element.namespaces.getURI(prefix);
                 this.addNamespaceDeclaration(prefix, uri);
-            }
+            } */
         }
         
         // Attach clones of attributes
