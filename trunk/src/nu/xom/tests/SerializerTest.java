@@ -23,6 +23,7 @@
 
 package nu.xom.tests;
 
+import nu.xom.Node;
 import nu.xom.Serializer;
 import nu.xom.Element;
 import nu.xom.DocType;
@@ -39,6 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
@@ -1642,6 +1644,7 @@ public class SerializerTest extends XOMTestCase {
         );       
     }
 
+    
     public void testConflictBetweenMaxLengthAndIndent() 
       throws IOException {
         Element root = new Element("a");
@@ -1667,7 +1670,44 @@ public class SerializerTest extends XOMTestCase {
           result
         );       
     }
+
     
+    public void testWriteChild() throws IOException {
+                  
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        OutputStream out = new ByteArrayOutputStream();
+        ExposingSerializer serializer = new ExposingSerializer(out, "UTF-8");
+        try {
+            serializer.writeChild(doc);
+            fail("writeChild wrote a document");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+        try {
+            serializer.writeChild(new Attribute("name", "value"));
+            fail("writeChild wrote an attribute");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+       
+    }
     
+    // just so we can test a protected writeChild() method
+    private static class ExposingSerializer extends Serializer {
+        
+        ExposingSerializer(OutputStream out, String encoding) 
+          throws UnsupportedEncodingException {
+            super(out, encoding);   
+        }
+        
+        public void writeChild(Node node) throws IOException {
+            super.writeChild(node);
+        }
+        
+    }
+
     
 }
