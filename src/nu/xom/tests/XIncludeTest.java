@@ -70,6 +70,19 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    private void dumpResult(File original, Document result)
+      throws IOException {
+        
+        String name = original.getName();
+        File debug = new File("data/xinclude/debug/");
+        File output = new File(debug, name);
+        FileOutputStream out = new FileOutputStream(output);
+        Serializer serializer = new Serializer(out);
+        serializer.write(result);        
+        
+    }
+
+    
     public void testXMLBaseUsedToResolveHref() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -416,18 +429,6 @@ public class XIncludeTest extends XOMTestCase {
     } */
 
     
-    private void dumpResult(File original, Document result)
-      throws IOException {
-        
-        String name = original.getName();
-        File debug = new File("data/xinclude/debug/");
-        File output = new File(debug, name);
-        FileOutputStream out = new FileOutputStream(output);
-        Serializer serializer = new Serializer(out);
-        serializer.write(result);        
-    }
-
-    
     public void testNullBaseURI() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -508,7 +509,6 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/metafallbacktest2.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
-        dumpResult(input, result);
         Document expectedResult = builder.build(
           new File("data/xinclude/output/metafallbacktest2.xml")
         );
@@ -614,7 +614,6 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/metafallbacktestwithxpointer2.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
-        dumpResult(input, result);
         Document expectedResult = builder.build(
           new File("data/xinclude/output/metafallbacktestwithxpointer2.xml")
         );
@@ -894,7 +893,6 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/roottest2.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
-        dumpResult(input, result);
         Document expectedResult = builder.build(
           new File("data/xinclude/output/roottest2.xml")
         );
