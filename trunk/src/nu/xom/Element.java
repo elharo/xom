@@ -170,7 +170,7 @@ public class Element extends ParentNode {
         
         this.actualBaseURI = element.findActualBaseURI();
         
-        nonrecursiveCopy(element, this);
+        copyChildren(element, this);
         
     }
     
@@ -196,9 +196,10 @@ public class Element extends ParentNode {
     }
 
 
-    private static Element nonrecursiveCopy(
-      final Element sourceElement, Element resultElement) {
+    private static void copyChildren(final Element sourceElement, 
+      Element resultElement) {
         
+        // if (sourceElement.getChildCount() == 0) return;
         ParentNode originalParent = sourceElement.getParent(); // may be null
         ParentNode resultParent = resultElement;
         Node sourceCurrent = sourceElement;
@@ -252,9 +253,7 @@ public class Element extends ParentNode {
                 resultParent.appendChild(child);
             }
             
-        }
-        
-        return resultElement;  
+        } 
         
     }
 
@@ -1577,8 +1576,9 @@ public class Element extends ParentNode {
      * @return a deep copy of this element with no parent
      */
     public Node copy() {
-        Element shallow = copyTag(this);
-        return nonrecursiveCopy(this, shallow);
+        Element result = copyTag(this);
+        copyChildren(this, result);
+        return result;
     }
     
     
