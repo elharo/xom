@@ -69,8 +69,12 @@ class NonVerifyingHandler extends XOMHandler {
         // namespaces are attached.      
         int length = attributes.getLength();
         
-        // XXX we've got a pretty good guess at how many attributes there
-        // will be here; we should ensureCapacity up to that length
+        // We've got a pretty good guess at how many attributes there
+        // will be here; we could ensureCapacity up to that length.
+        // However, that might waste memory because we wouldn't use 
+        // the ones for namespace declarations. We could always 
+        // trimToSize when we're done, but it's probably not worth
+        // the effort.
         for (int i = 0; i < length; i++) {
             String qName = attributes.getQName(i);
             if (qName.startsWith("xmlns:") || qName.equals("xmlns")) {               
