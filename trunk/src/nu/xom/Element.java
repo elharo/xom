@@ -22,6 +22,7 @@
 
 package nu.xom;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -55,7 +56,7 @@ public class Element extends ParentNode {
     private String prefix;
     private String URI;
 
-    private Attributes attributes = null;
+    private ArrayList  attributes = null;
     private Namespaces namespaces = null;
 
     /**
@@ -165,7 +166,7 @@ public class Element extends ParentNode {
         
         // Attach clones of attributes
         if (element.attributes != null) {
-            this.attributes = element.attributes.copy();
+            this.attributes = element.copyAttributes();
         } 
         
         this.actualBaseURI = element.findActualBaseURI();
@@ -175,6 +176,18 @@ public class Element extends ParentNode {
     }
     
 
+    private ArrayList copyAttributes() {
+
+        int size = attributes.size();
+        ArrayList copy = new ArrayList(size);
+        for (int i = 0; i < size; i++) {
+            copy.add(((Attribute) attributes.get(i)).copy());
+        }
+        return copy;
+        
+    }
+    
+    
     private static Element copyTag(final Element source) {
         
         Element result = source.shallowCopy();
@@ -186,7 +199,7 @@ public class Element extends ParentNode {
         
         // Attach clones of attributes
         if (source.attributes != null) {
-            result.attributes = source.attributes.copy();
+            result.attributes = source.copyAttributes();
         } 
         
         result.actualBaseURI = source.findActualBaseURI();
@@ -443,20 +456,19 @@ public class Element extends ParentNode {
                       + " conflicts with namespace declaration.");            
                 }
             }
-            // The Attributes class checks for conflicts with the 
-            // namespaces of other attributes
+            
         }
         
-        if (attributes == null) attributes = new Attributes();
-        attributes.add(attribute);
+        // XXX inline?
+        add(attribute);
         attribute.setParent(this);
         
     }
     
     
     void fastAddAttribute(Attribute attribute) {
-        if (attributes == null) attributes = new Attributes();
-        attributes.fastAdd(attribute);
+        if (attributes == null) attributes = new ArrayList(1);
+        attributes.add(attribute);
         attribute.setParent(this);
     }
 
@@ -477,13 +489,25 @@ public class Element extends ParentNode {
     public Attribute removeAttribute(Attribute attribute) {
         
         if (attributes == null) {
-            throw new NoSuchAttributeException( "Tried to remove attribute "
+            throw new NoSuchAttributeException(
+              "Tried to remove attribute "
               + attribute.getQualifiedName() 
               + " from non-parent element");
         }        
-        attributes.remove(attribute);
-        attribute.setParent(null);
-        return attribute;
+        if (attribute == null) {
+            throw new NullPointerException(
+              "Tried to remove null attribute");
+        }        
+        if (attributes.remove(attribute)) {
+            attribute.setParent(null);
+            return attribute;
+        }
+        else {
+            throw new NoSuchAttributeException(
+              "Tried to remove attribute "
+              + attribute.getQualifiedName() 
+              + " from non-parent element");            
+        }
         
     }
 
@@ -520,7 +544,8 @@ public class Element extends ParentNode {
     public final Attribute getAttribute(String localName,
       String namespaceURI) {
         if (attributes == null) return null;
-        return attributes.get(localName, namespaceURI);
+        // XXX inline
+        return get(localName, namespaceURI);
     }
 
     
@@ -589,12 +614,14 @@ public class Element extends ParentNode {
      * 
      */
     public final Attribute getAttribute(int index) {
+        
         if (attributes == null) {
             throw new IndexOutOfBoundsException(
               "Element does not have any attributes"
             );
         }
-        return attributes.get(index);   
+        return (Attribute) attributes.get(index); 
+        
     }
 
 
@@ -615,7 +642,7 @@ public class Element extends ParentNode {
                                           String namespaceURI) {
         
         if (attributes == null) return null;                                      
-        Attribute attribute = attributes.get(localName, namespaceURI);
+        Attribute attribute = get(localName, namespaceURI);
         if (attribute == null) return null;
         else return attribute.getValue();
         
@@ -722,7 +749,7 @@ public class Element extends ParentNode {
         // Look in the attributes
         if (prefix.length() != 0 && attributes != null) {
             for (int i = 0; i < attributes.size(); i++) {
-                Attribute a = attributes.get(i);
+                Attribute a = (Attribute) attributes.get(i);
                 if (a.getNamespacePrefix().equals(prefix)) {
                     return a.getNamespaceURI();
                 }   
@@ -805,7 +832,7 @@ public class Element extends ParentNode {
         // Look in the attributes
         if (uri.length() > 0 && attributes != null) {
             for (int i = 0; i < attributes.size(); i++) {
-                Attribute a = attributes.get(i);
+                Attribute a = (Attribute) attributes.get(i);
                 String attPrefix = a.getNamespacePrefix();
                 if (attPrefix.length() == 0) continue;
                 if (a.getNamespacePrefix().equals(prefix)) {
@@ -1479,7 +1506,7 @@ public class Element extends ParentNode {
         // attributes
         if (element.attributes != null) {
             for (int i = 0; i < element.attributes.size(); i++) {
-                Attribute attribute = element.attributes.get(i);
+                Attribute attribute = (Attribute) element.attributes.get(i);
                 result.append(' ');
                 result.append(attribute.toXML());   
             }       
@@ -1627,5 +1654,94 @@ public class Element extends ParentNode {
         return true;   
     } 
 
+
+    
+    private void add(Attribute attribute) {
+
+        if (attributes == null) attributes = new ArrayList(1);
+        checkPrefixConflict(attribute);
+        
+        // Is there already an attribute with this local name
+        // and namespace? If so, remove it.
+        Attribute oldAttribute = get(attribute.getLocalName(), 
+          attribute.getNamespaceURI());
+        // remove directly from arraylist????
+        if (oldAttribute != null) remove(oldAttribute);
+        
+        attributes.add(attribute);
+        
+    }
+    
+    
+    private void checkPrefixConflict(Attribute attribute) {
+        
+        String prefix = attribute.getNamespacePrefix();
+        String namespaceURI = attribute.getNamespaceURI();
+        
+        // Look for conflicts
+        int size = attributes.size();
+        for (int i = 0; i < size; i++) {
+            Attribute a = (Attribute) attributes.get(i);
+            if (a.getNamespacePrefix().equals(prefix)) {
+              if (a.getNamespaceURI().equals(namespaceURI)) return;
+              throw new NamespaceConflictException(
+                "Prefix of " + attribute.getQualifiedName() 
+                + " conflicts with " + a.getQualifiedName());
+            }   
+        }
+        
+    }
+
+    
+    // Remove the specified Attribute object from the list.
+    private void remove(Attribute attribute) {
+        
+        if (attribute == null) {
+            throw new NullPointerException(
+              "Tried to remove null attribute"
+            );
+        }
+        boolean removed = attributes.remove(attribute);
+        if (!removed) {
+            throw new NoSuchAttributeException(
+              "Tried to remove attribute " 
+              + attribute.getQualifiedName() 
+              + " from non-parent element");
+        }
+        
+    }
+
+    
+    /**
+     * <p>
+     * Retrieves the attribute with the specified local name 
+     * and namespace. The prefix is not considered when matching 
+     * attributes. 
+     * </p>
+     * 
+     * @param localName  the local name of the attribute to return
+     * @param namespaceURI the namespace URI of the attribute to 
+     *     return, or the empty string if this attribute is not in  
+     *     a namespace. (All unprefixed attributes are never in 
+     *     a namespace.)
+     * 
+     * @return the attribute with the specified name and URI, or null
+     *     if this <code>Attributes</code> object does not contain 
+     *     such an attribute
+     */
+    private Attribute get(String localName, String namespaceURI) {
+        
+        int size = attributes.size();
+        for (int i = 0; i < size; i++) {
+            Attribute a = (Attribute) attributes.get(i);
+            if (a.getLocalName().equals(localName) 
+             && a.getNamespaceURI().equals(namespaceURI)) {
+                return a;
+            }   
+        }
+        
+        return null;
+        
+    }
     
 }
