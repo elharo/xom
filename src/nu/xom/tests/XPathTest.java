@@ -1079,10 +1079,9 @@ public class XPathTest extends XOMTestCase {
     
     public void testSelfAxisWithAttribute() {
         
-        Text text = new Text("test");
         Element e = new Element("child");
         e.addAttribute(new Attribute("test", "value"));
-        Nodes result = text.query("child/@*[self::test]");
+        Nodes result = e.query("@*[self::test]");
         assertEquals(0, result.size());
         
     }
