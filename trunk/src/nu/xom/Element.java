@@ -48,7 +48,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public class Element extends ParentNode {
@@ -254,8 +254,8 @@ public class Element extends ParentNode {
      * 
      * @param name the name of the elements included in the list
      * 
-     * @return a comatose list containing the  
-     *    child elements of this element with the specified name
+     * @return a comatose list containing the child elements of this 
+     *     element with the specified name
      */
     public final Elements getChildElements(String name) {
         return getChildElements(name, "");
@@ -390,7 +390,6 @@ public class Element extends ParentNode {
      *      is mapped to by the element itself, another attribute of 
      *      the same element, or an additional namespace declaration
      *      of that element
-     * @throws XMLException if a subclass has rejected this attribute
      */
     public void addAttribute(Attribute attribute) {
 
@@ -443,8 +442,6 @@ public class Element extends ParentNode {
      * @throws NullPointerException if the argument is null
      * @throws NoSuchAttributeException if this element is not the  
      *     parent of attribute
-     * @throws XMLException if removing the attribute 
-     *     does not satisfy the local constraints
      * 
      */
     public Attribute removeAttribute(Attribute attribute) {
@@ -465,7 +462,7 @@ public class Element extends ParentNode {
      * <p>
      * Returns the attribute with the specified name in no namespace,
      * or null if this element does not have an attribute 
-     * with that name.
+     * with that name in no namespace.
      * </p>
      * 
      * @param name the name of the attribute
@@ -484,10 +481,10 @@ public class Element extends ParentNode {
      * with that name in that namespace.
      * </p>
      * 
-     * @param localName the name of the attribute
+     * @param localName the local name of the attribute
      * @param namespaceURI the namespace of the attribute
      * 
-     * @return  the attribute of this element 
+     * @return the attribute of this element 
      *     with the specified name and namespace
      */
     public final Attribute getAttribute(String localName,
@@ -954,9 +951,7 @@ public class Element extends ParentNode {
 
     /**
      * <p>
-     * Detaches all children from this node. This method either removes
-     * all the children or none of them (if a subclass throws an 
-     * exception). It will never remove only some of the nodes.
+     * Detaches all children from this node. 
      * </p>
      * 
      * <p>
@@ -969,9 +964,6 @@ public class Element extends ParentNode {
      * 
      * @return a list of all the children removed in the order they
      *     appeared in the element
-     * 
-     * @throws XMLException if a subclass refuses to remove any of the
-     *     child nodes
      */
     public Nodes removeChildren() {
         
@@ -1015,8 +1007,6 @@ public class Element extends ParentNode {
      * @throws NamespaceConflictException if the mapping conflicts 
      *     with an existing element, attribute,
      *     or additional namespace declaration
-     * @throws XMLException if the namespace prefix and/or URI 
-     *     is disallowed by a subclass
      */
     public void addNamespaceDeclaration(String prefix, String uri) {
 
@@ -1079,9 +1069,6 @@ public class Element extends ParentNode {
      * </p>
      * 
      * @param prefix the prefix whose declaration should be removed
-     * 
-     * @throws XMLException if the namespace prefix cannot be removed
-     *     due to subclass constraints
      */
     public void removeNamespaceDeclaration(String prefix) {
 
