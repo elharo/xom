@@ -99,7 +99,7 @@ public class DocTypeTest extends XOMTestCase {
         DocType doctype = doc.getDocType();
         assertEquals("root", doctype.getRootElementName());
         String internalSubset =   doctype.getInternalDTDSubset();
-        assertEquals("  <!ELEMENT root EMPTY>", internalSubset);
+        assertEquals("  <!ELEMENT root EMPTY>\r\n", internalSubset);
         assertTrue(doctype.toXML().indexOf("[") > 0);
         assertTrue(doctype.toXML().indexOf("]") > 0);
         assertTrue(doctype.toXML().indexOf("<!ELEMENT root EMPTY>") > 0);

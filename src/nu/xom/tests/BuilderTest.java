@@ -57,7 +57,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -286,6 +286,7 @@ public class BuilderTest extends XOMTestCase {
         assertNull(document.getBaseURI());
     }
 
+    
     public void testBuildFromReader() 
       throws IOException, ParsingException {
         Reader reader = new StringReader(source);
@@ -293,6 +294,7 @@ public class BuilderTest extends XOMTestCase {
         verify(document);        
         assertNull(document.getBaseURI());
     }
+    
     
     public void testBuildFromReaderWithBase()
       throws IOException, ParsingException {
@@ -303,6 +305,7 @@ public class BuilderTest extends XOMTestCase {
         
     }
     
+    
     public void testBuildFromInputStreamWithBase()
       throws IOException, ParsingException {
         InputStream in = new ByteArrayInputStream(source.getBytes("UTF-8"));
@@ -310,6 +313,7 @@ public class BuilderTest extends XOMTestCase {
         verify(document);        
         assertEquals(base, document.getBaseURI());    
     }
+    
     
     public void testBuildFromInputStreamWithoutBase()
       throws IOException, ParsingException {
@@ -319,12 +323,14 @@ public class BuilderTest extends XOMTestCase {
         assertNull(document.getBaseURI());
     }
 
+    
     public void testBuildFromStringWithBase()
       throws IOException, ParsingException {
         Document document = builder.build(source, base);
         verify(document);       
         assertEquals(base, document.getBaseURI());  
     }
+    
     
     public void testBuildFromInvalidDoc()
       throws IOException, ParsingException {
@@ -488,6 +494,7 @@ public class BuilderTest extends XOMTestCase {
                
     }
 
+    
     public void testValidateFromReader() 
       throws IOException, ParsingException {
         Reader reader1 = new StringReader(validDoc);
@@ -498,6 +505,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(document2, document1);     
     }
 
+    
     public void testDocumentWithDefaultNamespaceOnPrefixedElement()
       throws IOException, ParsingException {
         Reader reader = new StringReader("<pre:root " +
@@ -549,6 +557,7 @@ public class BuilderTest extends XOMTestCase {
         validator.build(in, base);       
     }
     
+    
     public void testValidateFromInputStreamWithoutBase()
       throws IOException, ParsingException {
         InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
@@ -559,6 +568,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(document2, document);     
     }
 
+    
     public void testValidateFromStringWithBase()
       throws IOException, ParsingException {
         Document document = validator.build(validDoc, base);        
@@ -567,6 +577,7 @@ public class BuilderTest extends XOMTestCase {
         Document document2 = builder.build(reader2);  
         assertEquals(document2, document);     
     }
+    
     
     public void testValidateWithCrimson()
       throws IOException, ParsingException {
@@ -613,6 +624,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("root", document.getRootElement().getQualifiedName());
     }   
     
+    
     public void testValidateFromStringWithNullBase()
       throws IOException, ParsingException {
         Document document = validator.build(validDoc, null);    
@@ -634,6 +646,7 @@ public class BuilderTest extends XOMTestCase {
         }        
     }
 
+    
     public void testInvalidDocFromReader() 
       throws IOException, ParsingException {
         Reader reader = new StringReader(source);
@@ -656,6 +669,7 @@ public class BuilderTest extends XOMTestCase {
             }
         }
     }
+    
     
     public void testNamespaceMalformedDocumentWithCrimson() 
       throws IOException {
@@ -680,6 +694,7 @@ public class BuilderTest extends XOMTestCase {
         
     }
 
+    
     public void testValidateNamespaceMalformedInvalidDocumentWithCrimson() 
       throws IOException {
         StringReader reader = new StringReader("<!DOCTYPE root [" +
@@ -711,9 +726,9 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
-    
     public void testInvalidDocFromReaderWithBase()
       throws IOException, ParsingException {
+        
         Reader reader1 = new StringReader(source);
         try {
             validator.build(reader1, base); 
@@ -739,6 +754,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testInvalidDocFromInputStreamWithBase()
       throws IOException, ParsingException {
+        
         InputStream in = new ByteArrayInputStream(source.getBytes("UTF-8"));
         try {
             validator.build(in, base);  
@@ -758,11 +774,13 @@ public class BuilderTest extends XOMTestCase {
                 assertEquals(doc, ex.getDocument());
             }
         }
+        
     }
     
     
     public void testInvalidDocFromInputStreamWithoutBase()
       throws IOException, ParsingException {
+        
         InputStream in = new ByteArrayInputStream(source.getBytes("UTF-8"));
         try {
             validator.build(in);        
@@ -782,11 +800,13 @@ public class BuilderTest extends XOMTestCase {
                 assertEquals(doc, ex.getDocument());
             }
         }
+        
     }
 
     
     public void testInvalidDocFromStringWithBase()
       throws IOException, ParsingException {
+        
         try {
             validator.build(source, base);        
             fail("Allowed invalid doc");
@@ -805,11 +825,29 @@ public class BuilderTest extends XOMTestCase {
                 assertEquals(doc, ex.getDocument());
             }
         }
+        
     }
     
 
+    public void testSkippedEntities()
+      throws IOException, ParsingException, SAXException {
+        
+        String doc = "<!DOCTYPE root SYSTEM 'http://www.cafeaulait.org/DTD/none.dtd'>"
+          + "<root>&none;</root>";
+        XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        Builder builder = new Builder(xerces);
+        
+        xerces.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        xerces.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        
+        Document result = builder.build(doc, "http://www.example.org/");
+        
+    }   
+        
+        
     public void testInvalidDocWithCrimson()
       throws IOException, ParsingException {
+        
         XMLReader crimson;
         try {
             crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
@@ -829,11 +867,13 @@ public class BuilderTest extends XOMTestCase {
                 assertNotNull(ex.getValidityError(i));   
             }    
         }
-    }   
         
-        
+    }         
+
+    
     public void testInvalidDocFromStringWithNullBase()
       throws IOException, ParsingException {
+        
         try {
             validator.build(source, null);    
             fail("Allowed invalid doc");
@@ -849,11 +889,13 @@ public class BuilderTest extends XOMTestCase {
                 assertEquals(doc, ex.getDocument());
             } 
         }
+        
     }
     
     
     public void testJavaEncodings() 
       throws IOException, ParsingException {
+        
         String str = "<?xml version='1.0' encoding='ISO8859_1'?>" +            "<root>é</root>"; 
         byte[] data = str.getBytes("8859_1"); 
         InputStream in = new ByteArrayInputStream(data);
@@ -869,6 +911,7 @@ public class BuilderTest extends XOMTestCase {
     // with Crimson
     public void testCrimsonCharacterReferenceBug()
       throws IOException, ParsingException {
+        
         String data = 
           "<!DOCTYPE test [<!ATTLIST test name ID #IMPLIED>]>"
           + "<test name='&#x0D;'/>";
@@ -876,7 +919,8 @@ public class BuilderTest extends XOMTestCase {
           data.getBytes("UTF8"));
         Document document = builder.build(in, null);      
         assertEquals("\r", 
-          document.getRootElement().getAttributeValue("name"));  
+          document.getRootElement().getAttributeValue("name"));
+        
     }
     
     
@@ -890,11 +934,13 @@ public class BuilderTest extends XOMTestCase {
     // form C when converting from other encodings
     public void testNFC()
       throws IOException, ParsingException {
+        
         Document doc = builder.build(new File("data/nfctest.xml"));
         Element root = doc.getRootElement();
         String s = root.getValue();
         assertEquals(1, s.length());
         assertEquals(0xE9, s.charAt(0));
+        
     }
     
     
@@ -904,6 +950,7 @@ public class BuilderTest extends XOMTestCase {
       throws IOException, ParsingException {
         builder.build("http://www.cafeconleche.org");
     }
+    
     
     public void testExternalEntityResolution()
       throws IOException, ParsingException {
@@ -915,6 +962,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("Hello from an entity!", external.getValue());
     }
      
+    
     // This test exposes a bug in Crimson but not Xerces.
     // It's testing whether the external DTD subset is read,
     // default attribute values applied, and comments and
@@ -933,7 +981,8 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("", doctype.getInternalDTDSubset());
     }
 
-    // Not realy ignore, simple resolve, and not 
+    
+    // Not really ignore, simple resolve, and not 
     // treat specially otherwise; i.e. don't copy
     // parameter entity declarations into the internal
     // DTD subset string
@@ -947,6 +996,7 @@ public class BuilderTest extends XOMTestCase {
         DocType doctype = doc.getDocType();
         assertEquals("", doctype.getInternalDTDSubset());
     }
+    
     
     public void testIgnoreExternalParameterEntitiesInInternalDTDSubset()
       throws IOException, ParsingException {
@@ -1004,6 +1054,7 @@ public class BuilderTest extends XOMTestCase {
         builder.build("http://www.ibiblio.org/xml");
     } 
 
+    
     // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
     // and possibly other parsers. I've reported the bug in Xerces,
     // and it should be fixed in Xerces 2.6.
@@ -1012,6 +1063,7 @@ public class BuilderTest extends XOMTestCase {
         builder.build("http://www.ibiblio.org/xml/redirecttest.xml");
     } 
 
+    
     public void testDontGetNodeFactory() {
         Builder builder = new Builder();
         NodeFactory factory = builder.getNodeFactory();
@@ -1019,6 +1071,7 @@ public class BuilderTest extends XOMTestCase {
             assertFalse(factory.getClass().getName().equals("NonVerifyingFactory"));
         }
     }
+    
     
     public void testGetNodeFactory() {
         NodeFactory factory = new NodeFactory();
@@ -1042,8 +1095,10 @@ public class BuilderTest extends XOMTestCase {
        Element root = doc.getRootElement();
        root.removeAttribute(root.getAttribute(0));
        assertNull(root.getNamespaceURI("pre"));
+       
     }
 
+    
     private static class OrderingFilter extends XMLFilterImpl {
         
         public void startElement(String namespaceURI, String localName,
@@ -1064,10 +1119,11 @@ public class BuilderTest extends XOMTestCase {
               "value");
             super.startElement(namespaceURI, localName, qualifiedName, 
               newAttributes);
-
         }        
+
     }
 
+    
     public void testValidateMalformedDocument() 
       throws IOException {
         Reader reader = new StringReader("<!DOCTYPE root [" +
@@ -1087,8 +1143,10 @@ public class BuilderTest extends XOMTestCase {
         }
     }    
 
+    
     public void testValidateMalformedDocumentWithCrimson() 
       throws IOException {
+        
         Reader reader = new StringReader("<!DOCTYPE root [" +
                 "<!ELEMENT root (a, b)>" +
                 "<!ELEMENT a (EMPTY)>" +
@@ -1113,10 +1171,13 @@ public class BuilderTest extends XOMTestCase {
         catch (ParsingException ex) {
             assertNotNull(ex.getMessage());
         }
+        
     }        
 
+    
     public void testBuildMalformedDocumentWithCrimson() 
       throws IOException {
+        
         Reader reader = new StringReader("<!DOCTYPE root [" +
                 "<!ELEMENT root (a, b)>" +
                 "<!ELEMENT a (EMPTY)>" +
@@ -1141,6 +1202,26 @@ public class BuilderTest extends XOMTestCase {
         catch (ParsingException ex) {
             assertNotNull(ex.getMessage());
         }
-    }        
+        
+    }   
+    
+    
+    // from XML Conformance Test Suite; James Clark test
+    // valid 097
+    public void testLineBreaksInInternalDTDSubset()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/097.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\r\n"
+            + "<!DOCTYPE doc [\r\n"
+            + "  <!ELEMENT doc (#PCDATA)>\r\n"
+            + "  <!ATTLIST doc a1 CDATA \"v1\">\r\n"
+            + "  <!ATTLIST doc a2 CDATA #IMPLIED>\r\n"
+            + "]>\r\n"
+            + "<doc a1=\"v1\" />\r\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        
+    }
     
 }
