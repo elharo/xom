@@ -156,7 +156,8 @@ public final class XSLTransform {
            throw new XSLException(
              "Could not locate a TrAX TransformerFactory", error
            );    
-        } catch (TransformerConfigurationException ex) {
+        } 
+        catch (TransformerConfigurationException ex) {
            throw new XSLException(
              "Syntax error in stylesheet", ex
            );    
