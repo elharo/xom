@@ -1546,6 +1546,7 @@ final class UnicodeUtil {
         
         if (needsNormalizing) {
             
+            // ???? unnecessarily invoking this in many cases
             s = decomposeHangul(s);
             UnicodeString ustring = new UnicodeString(s);
             UnicodeString decomposed = ustring.decompose(); 
@@ -8713,6 +8714,7 @@ final class UnicodeUtil {
             int index = 0;
             int lastStarter = -1;
             int lastStarterIndex = -1;
+            int composedLastStarterIndex = -1;
             
             for (int i = 0; i < size; i++) {
                 int c = data[i];
@@ -8721,6 +8723,7 @@ final class UnicodeUtil {
                     if (isStarter(c) ) {
                         lastStarter = c;
                         lastStarterIndex = i;
+                        composedLastStarterIndex = composed.size-1;
                     }
                 }
                 else  {
@@ -8730,6 +8733,7 @@ final class UnicodeUtil {
                         if (isStarter(c) ) {
                             lastStarter = c;
                             lastStarterIndex = i;
+                            composedLastStarterIndex = composed.size-1;
                         }
                     }
                     else {
@@ -8737,8 +8741,7 @@ final class UnicodeUtil {
                         // XXX dangerous side effects
                         data[lastStarterIndex] = composedChar;
                         data[i] = 0;
-                        
-                        composed.data[lastStarterIndex] = composedChar; 
+                        composed.data[composedLastStarterIndex] = composedChar;
                     }
                 }
             }

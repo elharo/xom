@@ -75,6 +75,65 @@ public class SerializerTest extends XOMTestCase {
        parser = new Builder();  
     }
     
+    // I'm not sure this test makes sense; should 8859-2 be invariant under NFC?
+    public void testNFC88592() throws IOException, ParsingException {
+        
+        // String data = " Ą˘Ł¤ĽŚ§¨ŠŞŤŹ­ŽŻ°ą˛ł´ľśˇ¸šşťź˝žżŔÁÂĂÄĹĆÇČÉĘËĚÍÎĎĐŃŇÓÔŐÖ×ŘŮÚŰÜÝŢßŕáâăäĺćçčéęëěíîďđńňóôőö÷řůúűüýţ˙";
+        String data = "ĄĽ";
+        Element root = new Element("a");
+        root.appendChild(data);
+        Document doc = new Document(root);
+        
+        // try with 8859-2 encoding on serializer
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        byte[] temp = out.toByteArray();
+        Document roundTrip = parser.build(new ByteArrayInputStream(temp));
+        
+        assertEquals(data, roundTrip.getValue());
+        
+    }
+    
+    
+    /* public void testNFC88592()
+      throws ParsingException, IOException {
+        
+        String encoding = "ISO-8859-2";
+        String prolog = "<?xml version='1.0' encoding='ISO-8859-2'?>\r\n<root>";
+        byte[] prologData = prolog.getBytes(encoding);
+        
+        String epilog = "</root>";
+        byte[] epilogData = epilog.getBytes(encoding);  
+        
+        byte[] data = new byte[prologData.length + epilogData.length + 255 - 160 + 1];
+        System.arraycopy(prologData, 0, data, 0, prologData.length);
+        System.arraycopy(epilogData, 0, data, 
+          data.length - epilogData.length, epilogData.length);
+        for (int i = 160; i <= 255; i++) {
+            data[prologData.length + (i-160)] = (byte) i;   
+        }
+        
+        InputStream in = new ByteArrayInputStream(data);
+        Builder builder = new Builder();
+        Document doc = builder.build(in);
+        
+        // make a Unicode normalized version of the same document
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        byte[] temp = out.toByteArray();
+        in = new ByteArrayInputStream(temp);
+        Document nfcDoc = builder.build(in);
+        
+        assertEquals(doc.getValue().length(), nfcDoc.getValue().length());
+        assertEquals(doc.getValue(), nfcDoc.getValue());
+        
+    } */
+    
     
     public void testMultipleCombiningCharactersWithNFC() 
       throws ParsingException, IOException {
