@@ -146,7 +146,7 @@ XOM Build file
          basedir="${build.dest}"
          index="no"
 		 compress="yes"
-         includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/xerces/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
+         includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/*">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
@@ -158,9 +158,6 @@ XOM Build file
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="nu/xom/xinclude/">
-          <attribute name="Sealed" value="true"/>
-        </section>
-        <section name="nu/xom/xerces/">
           <attribute name="Sealed" value="true"/>
         </section>
         <section name="nu/xom/converters/">
@@ -180,7 +177,7 @@ XOM Build file
          index="yes"
 		 compress="no"
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
-         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/xerces/* nu/xom/canonical/* nu/xom/pantry/* nu/xom/pantry">
+         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/pantry/* nu/xom/pantry">
     </jar>
   </target>
 
