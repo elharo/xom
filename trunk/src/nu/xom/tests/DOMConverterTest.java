@@ -38,6 +38,8 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ProcessingInstruction;
+import nu.xom.Text;
+import nu.xom.XMLException;
 import nu.xom.converters.DOMConverter;
 
 import org.w3c.dom.DOMImplementation;
@@ -144,9 +146,8 @@ public class DOMConverterTest extends XOMTestCase {
         }
     }
 
-    public void testToDOM() throws IOException {
-        
-        org.w3c.dom.Document domDoc = DOMConverter.translate(xomDocument, impl);
+    public void testToDOM() throws IOException {      
+        org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocument, impl);
         org.w3c.dom.DocumentType doctype = domDoc.getDoctype();
         
         assertEquals("test", domDoc.getDocumentElement().getNodeName());
@@ -155,20 +156,11 @@ public class DOMConverterTest extends XOMTestCase {
           domDoc.getFirstChild().getNodeType());
         assertEquals(org.w3c.dom.Node.COMMENT_NODE,
           domDoc.getLastChild().getNodeType());
-        
-    /*  org.apache.xml.serialize.OutputFormat format 
-         = new org.apache.xml.serialize.OutputFormat();
-        org.apache.xml.serialize.DOMSerializer serializer 
-          = new org.apache.xml.serialize.XMLSerializer(
-          System.out, format);
-        serializer.serialize(domDoc);
-        
-        System.out.flush(); */
     }
 
     public void testToXOM() {
         
-        Document xomDoc = DOMConverter.translate(domDocument);
+        Document xomDoc = DOMConverter.convert(domDocument);
         DocType doctype = xomDoc.getDocType();
         Element root = xomDoc.getRootElement();
 
@@ -197,7 +189,7 @@ public class DOMConverterTest extends XOMTestCase {
         factory.setNamespaceAware(true);
         org.w3c.dom.Document doc = factory.newDocumentBuilder()
           .parse(new ByteArrayInputStream(data));
-        Document xomDoc = DOMConverter.translate(doc);
+        Document xomDoc = DOMConverter.convert(doc);
         
         Element root = xomDoc.getRootElement();
         assertEquals("root", root.getQualifiedName());
@@ -211,11 +203,132 @@ public class DOMConverterTest extends XOMTestCase {
         factory.setNamespaceAware(true);
         org.w3c.dom.Document doc = factory.newDocumentBuilder()
           .parse(new ByteArrayInputStream(data));
-        Document xomDoc = DOMConverter.translate(doc);
+        Document xomDoc = DOMConverter.convert(doc);
         
         Element root = xomDoc.getRootElement();
         assertEquals("pre:root", root.getQualifiedName());
         assertEquals("http://www.example.com", root.getNamespaceURI());         
+    }
+
+    public void testConvertAttr() 
+      throws SAXException, IOException, ParserConfigurationException {
+        byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        org.w3c.dom.Document doc = factory.newDocumentBuilder()
+          .parse(new ByteArrayInputStream(data));
+          
+        org.w3c.dom.Element root = doc.getDocumentElement();
+        Attribute attribute = DOMConverter.convert(root.getAttributeNode("name"));
+        assertEquals("name", attribute.getQualifiedName());
+        assertEquals("", attribute.getNamespacePrefix());
+        assertEquals("", attribute.getNamespaceURI());
+        assertEquals("value", attribute.getValue());
+        
+        try {
+            DOMConverter.convert(root.getAttributeNode("xmlns"));
+            fail("Converted xmlns attribute");
+        }
+        catch (XMLException ex) {
+           assertNotNull(ex.getMessage());   
+        }
+        try {
+            DOMConverter.convert(root.getAttributeNode("xmlns:pre"));
+            fail("Converted xmlns:pre attribute");
+        }
+        catch (XMLException ex) {
+           assertNotNull(ex.getMessage());   
+        }
+                 
+    }
+
+    public void testConvertElement() 
+      throws SAXException, IOException, ParserConfigurationException {
+        byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        org.w3c.dom.Document doc = factory.newDocumentBuilder()
+          .parse(new ByteArrayInputStream(data));
+          
+        org.w3c.dom.Element root = doc.getDocumentElement();
+        Element xomRoot = DOMConverter.convert(root);
+        assertEquals("name", xomRoot.getAttribute("name").getQualifiedName());
+        assertEquals("", xomRoot.getAttribute("name").getNamespacePrefix());
+        assertEquals("", xomRoot.getAttribute("name").getNamespaceURI());
+        assertEquals("value", xomRoot.getAttribute("name").getValue());
+        assertEquals("element", xomRoot.getQualifiedName());
+        assertEquals("", xomRoot.getValue());
+        assertEquals(0, xomRoot.getChildCount());
+        assertEquals("http://example.com/", xomRoot.getNamespaceURI());
+        assertEquals("http://example.net", xomRoot.getNamespaceURI("pre"));
+                 
+    }
+
+    public void testConvertComment() 
+      throws SAXException, IOException, ParserConfigurationException {
+
+        byte[] data = "<element><!--data--></element>".getBytes();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        org.w3c.dom.Document doc = factory.newDocumentBuilder()
+          .parse(new ByteArrayInputStream(data));
+          
+        org.w3c.dom.Element root = doc.getDocumentElement();
+        org.w3c.dom.Comment comment = (org.w3c.dom.Comment) (root.getChildNodes().item(0));
+        Comment xomComment = DOMConverter.convert(comment);
+        assertEquals(comment.getNodeValue(), xomComment.getValue());
+                 
+    }
+
+    public void testConvertText() 
+      throws SAXException, IOException, ParserConfigurationException {
+
+        byte[] data = "<element> here's the text </element>".getBytes();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        org.w3c.dom.Document doc = factory.newDocumentBuilder()
+          .parse(new ByteArrayInputStream(data));
+          
+        org.w3c.dom.Element root = doc.getDocumentElement();
+        org.w3c.dom.Text node = (org.w3c.dom.Text) (root.getChildNodes().item(0));
+        Text text = DOMConverter.convert(node);
+        assertEquals(node.getNodeValue(), text.getValue());
+                 
+    }
+
+    public void testConvertProcessingInstruction() 
+      throws SAXException, IOException, ParserConfigurationException {
+
+        byte[] data = "<element><?target PI data?></element>".getBytes();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        org.w3c.dom.Document doc = factory.newDocumentBuilder()
+          .parse(new ByteArrayInputStream(data));
+          
+        org.w3c.dom.Element root = doc.getDocumentElement();
+        org.w3c.dom.ProcessingInstruction node 
+          = (org.w3c.dom.ProcessingInstruction) (root.getChildNodes().item(0));
+        ProcessingInstruction pi = DOMConverter.convert(node);
+        assertEquals(node.getNodeValue(), pi.getValue());
+        assertEquals(node.getTarget(), pi.getTarget());
+                 
+    }
+
+    public void testConvertDocType() 
+      throws SAXException, IOException, ParserConfigurationException {
+
+        byte[] data = "<!DOCTYPE root ><element />".getBytes();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setValidating(false);
+        factory.setExpandEntityReferences(false);
+        org.w3c.dom.Document doc = factory.newDocumentBuilder()
+          .parse(new ByteArrayInputStream(data));
+          
+        org.w3c.dom.DocumentType type = doc.getDoctype();
+        DocType xomType = DOMConverter.convert(type);
+        assertEquals(type.getName(), xomType.getRootElementName());
+                 
     }
 
 }
