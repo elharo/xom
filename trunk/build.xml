@@ -62,6 +62,7 @@ to http://www.xom.nu/
     <property name="xml-apis.jar" value="${lib.dir}/xmlParserAPIs.jar"/>
     <property name="parser.jar"   value="${lib.dir}/xercesImpl.jar"/>
     <property name="junit.jar"    value="${lib.dir}/junit.jar"/>
+    <property name="normalizer.jar"    value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"     value="${lib.dir}/saxon-6.5.2.jar"/>
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"  value="${lib.dir}/servlet.jar"/>
@@ -72,6 +73,7 @@ to http://www.xom.nu/
     <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
+      <pathelement location="${normalizer.jar}"/>
       <pathelement location="${servlet.jar}"/>
       <pathelement location="${junit.jar}"/>
     </path>
@@ -204,8 +206,8 @@ XOM Build file
  
   <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
     <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
-      <!-- <jvmarg value="-Xbootclasspath/p:${xml-apis.jar}:${parser.jar}"/> -->
       <sysproperty key="org.xml.sax.driver" value="org.apache.parsers.SAXParser"/> 
+      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xmlParserAPIs.jar"/> 
       <classpath refid="run.class.path" />
       <arg value="nu.xom.tests.XOMTests"/> 
     </java>
