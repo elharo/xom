@@ -947,7 +947,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
-    public void testSkippedEntityThrowsXMLException()
+    public void testSkippedEntityThrowsParsingException()
       throws IOException, ParsingException, SAXException {
         
         XMLReader xerces = XMLReaderFactory.createXMLReader(
@@ -959,7 +959,7 @@ public class BuilderTest extends XOMTestCase {
             builder.build("<root>replace</root>", base); 
             fail("Allowed skipped entity");
         }
-        catch (XMLException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());
         }   
         
@@ -2607,4 +2607,31 @@ public class BuilderTest extends XOMTestCase {
     }
     
 
+    public void testSaxonsAElfredIsVerified() 
+      throws SAXException, IOException {
+        
+        XMLReader parser;
+        try {
+          parser = XMLReaderFactory.createXMLReader(
+            "com.icl.saxon.aelfred.SAXDriver"
+          );
+        }
+        catch (SAXException ex) {
+            // Can't test SAXON if you can't load it
+            throw ex;
+            // return;
+        }
+        Builder builder = new Builder(parser);
+        
+        try {
+            // known bug in Saxon: doesn't catch 
+            // colon in processing instruction targets
+            builder.build("<?test:data ?><data/>", null);
+            fail("Didn't verify Saxon's input");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
 }

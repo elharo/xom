@@ -462,10 +462,11 @@ public class Builder {
         
         // These two parsers are known to not make all the checks
         // they're supposed to. :-(
-        // XXX test this line; but be prepared for NoSuchClassDefError
+        // XXX test this line
         if (parserName.equals("gnu.xml.aelfred2.XmlReader")) return false;
-        // XXX test this line; but be prepared for NoSuchClassDefError
+        // XXX test this line
         if (parserName.equals("net.sf.saxon.aelfred.SAXDriver")) return false;
+        if (parserName.equals("com.icl.saxon.aelfred.SAXDriver")) return false;
         
         if (parserName.equals("org.apache.xerces.parsers.SAXParser")
             && xercesVersion >= 2.4) {
@@ -1125,7 +1126,7 @@ public class Builder {
             throw pex;
         }
         catch (XMLException ex) {
-            throw ex;
+            throw new ParsingException(ex.getMessage(), ex);
         }
         catch (RuntimeException ex) {
             // Work-around for non-conformant parsers, especially Piccolo
