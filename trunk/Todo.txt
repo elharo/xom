@@ -51,6 +51,9 @@ additional properties to be configured
 
 a setInternalDTDSubset mehod that simply uses a parser to check the subset????
 
+should Builder have an option to cache all external entities so it doesn't keep reloading them, perhaps via a SAX EntityResolver.
+
+
 1.0.1:
 --------
 
@@ -64,6 +67,7 @@ Optimize toXML for Elements and Documents by adding a package private
 toXML(StringBuffer method)
 
 dvholten suggests zipping characters.dat to save space
+This gets almost 99% compression. How many times would I have to reload it?
 
 Can XInclude be rewritten to be non-recursive?
 
@@ -78,31 +82,10 @@ be extended via lookup tables????
 would it be possible to get a minimal interoperable subset of Big5, SJIS, etc
 and escape all non-interoperable characters?
 
+A streaming serializer based on a  NodeFactory that can serialize arbitrarily large documents without having the entire document in memory
+
 Before 1.0:
 -----------
-
-Run Jester
-
-Update all versions to 1.0
-
-Look into a code beautifier for the line length
-Line length corrections; would jalopy help?
-
-Add a class hierarchy diagram to nu.xom package.html
-
-Add information about O(1), O(length) etc. to JavaDoc
-
-Check Javadoc guidelines at Sun for where to capitalize and put periods.
-Bottom line: don't capitalize first word; use period only at end of complete sentences;
-or for multisentence comments; use lower case non code-tagged to distinguish objects from classes
-
-redo copyright and license notice to use /* */ instead of //
-comments????
-
-Add JavaDoc comments to unit tests that describe what each test tests
-
-Look at the order of the methods in the various classes;
-see if they make sense
 
 register XOM as a trademark
 
@@ -125,6 +108,32 @@ Do an exhaustive test and report bugs to Sun. Note especially
     } 
     
     
+    send %escape test case for XInclude to W3C 
+
+
+submit toUpperCase toLowerCase with no Locale as a code smell to various testing tools due to Turkish issues. (but not toHesString.toUpperCase)
+
+get xom.nu working and upgraeded to latest apache httpd
+
+Before 1.0RC1:
+-----------
+
+Update all versions to 1.0
+
+Look into a code beautifier for the line length
+Line length corrections; would jalopy help?
+
+Add a class hierarchy diagram to nu.xom package.html
+
+Add information about O(1), O(length) etc. to JavaDoc
+
+redo copyright and license notice to use /* */ instead of //
+comments????
+
+Look at the order of the methods in the various classes;
+see if they make sense
+
+    
 Add a tools package for the character table generator
 
 Write 
@@ -132,6 +141,62 @@ Write
 # Unit tests
 # Sample Programs
 for web site
+
+The new PR adds the following text: "The value of this attribute is an EncName as defined in XML specification, section 4.3.3, rule [81]"
+
+OK. That seems eminently reasonable. Looking in the XML spec I find:
+
+EncName	   ::=   	[A-Za-z] ([A-Za-z0-9._] | '-')*
+
+No surprises. Ann encoding name contains ASCII alphanumeric characters, period, underscore, and hyphen. Nothing unexpected here.
+
+However, what should I do if the encoding attribute does not satisfy this production? e.g. it's encoding="ISO 8859 1"?
+
+Is this a resource error? A fatal error? Should the processor simply ignore the encoding attribute? or treat it as if it's an unrecognized encoding? 
+
+I don't know that this requires going back to CR, but it should be clarified. Also there should probably be a test case for this.
+
+===============
+Done 1.0b6:
+===============
+
+SAXConverter no longer converts XOM xml:base attributes into SAX attributes.
+Instead the xml:base attributes are used to determine the URI information
+the locator reports. Providing xml:base attributes as well would risk 
+double counting some relative URLs. 
+
+Fixed a number of bugs in converting file names to base URIs 
+
+Improved compatibility with Turkish locales that do not see I as the 
+upper case form of i and vice versa
+
+Fixed bug where carriage returns in internal entity 
+replacement text in the internal DTD subset was not properly escaped
+on reserialization
+
+Fixed bug where carriage returns, less than signs, double
+quotes, and ampersands in attribute default values in the 
+internal DTD subset were not properly escaped
+on reserialization
+
+Hid the error messages logged by Xerces and Xalan on System.err
+when deliberately testing error conditions. Therefore, there should
+be no output fropm the test cases when all tests pass.
+
+Added a junithtml build target to convert JUnit results to HTML. 
+
+The strings returned by toString in Comment, ProcessingInstruction,
+Attribute, and text are all now truncated if they get too long.
+Furthermore any embedded line breaks and tabs are escaped as \n, \t, 
+and \r. This makes the objects easier to inspect in various debuggers.
+
+The Ant build file now specifies that the input encoding of all .java files 
+is UTF-8. Most files are pure ASCII, but there are a couple of places where 
+non-ASCII characters are used. 
+
+Unit test coverage has been improved slightly.
+
+Fixed a bug in Serializer that did not always properly trim whitespace
 
 ===============
 Done 1.0b5:
