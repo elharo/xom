@@ -75,7 +75,7 @@ class XOMHandler
 
     
     public void startDocument() {
-        document = factory.makeDocument();
+        document = factory.startMakingDocument();
         parent = document;
         current = document;
         parents = new Stack();
@@ -92,7 +92,7 @@ class XOMHandler
   
     
     public void endDocument() {
-        factory.endDocument(document);
+        factory.finishMakingDocument(document);
         parents.pop();
     }
   

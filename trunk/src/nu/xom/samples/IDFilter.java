@@ -46,9 +46,9 @@ public class IDFilter extends NodeFactory {
 
     private int counter = 0;
     
-    public Document makeDocument() {
+    public Document startMakingDocument() {
         counter = 0;
-        return super.makeDocument();
+        return super.startMakingDocument();
     }
 
     public Nodes finishMakingElement(Element element) {

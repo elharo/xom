@@ -194,12 +194,12 @@ public class NodeFactory {
      * Subclasses may change the root element, content, 
      * or other characteristics of the <code>Document</code> 
      * returned. However, this method must not return null
-     * or the builder will throw a <code>NullPointerException</code>.
+     * or the builder will throw a <code>ParsingException</code>.
      * </p>
      * 
      * @return the newly created <code>Document</code>
      */
-    public Document makeDocument() {
+    public Document startMakingDocument() {
         return new Document(
           Element.build("root", "http://www.xom.nu/fakeRoot")
         );  
@@ -217,7 +217,7 @@ public class NodeFactory {
      * 
      * @param document the completed <code>Document</code>
      */
-    public void endDocument(Document document) {}
+    public void finishMakingDocument(Document document) {}
 
     
     /**
