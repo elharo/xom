@@ -47,18 +47,34 @@ final class Verifier {
     private final static byte NAME_START_CHARACTER = 4;
     private final static byte NCNAME_CHARACTER     = 8;
     
-    private final static byte[] flags = new byte[65536];
+    private       static byte[] flags = null;
 
     static {
         
         ClassLoader loader = Verifier.class.getClassLoader();
-        if (loader == null) Thread.currentThread().getContextClassLoader();
-        if (loader == null) throw new RuntimeException(
-          "Verifier couldn't find the right ClassLoader!");
+        if (loader != null) loadFlags(loader);
+        // If that didn't work, try a different ClassLoader
+        if (flags == null) {
+            loader = Thread.currentThread().getContextClassLoader();
+            loadFlags(loader);
+        }
+        if (flags == null) {
+            throw new RuntimeException(
+                "Verifier couldn't load the lookup table"
+            );
+        }
+        
+    }
+    
+    
+    private static void loadFlags(ClassLoader loader) {
         
         DataInputStream in = new DataInputStream(
           loader.getResourceAsStream("nu/xom/characters.dat"));
+        if (in == null) return;
+        
         try {
+            flags = new byte[65536];
             in.readFully(flags);
         }
         catch (IOException ex) {
@@ -75,8 +91,8 @@ final class Verifier {
         }
         
     }
-    
-    
+
+
     /**
      * <p>
      * Check whether <code>name</code> is 
