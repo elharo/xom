@@ -72,19 +72,25 @@ public class ProcessingInstructionTest extends XOMTestCase {
           new ProcessingInstruction("test:test", "test");
           fail("Processing instruction targets cannot contain colons");
         }
-        catch (IllegalTargetException success) {}
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());
+        }
         
         try {
           new ProcessingInstruction("", "test");
           fail("Processing instruction targets cannot be empty");
         }
-        catch (IllegalTargetException success) {}
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());
+        }
         
         try {
            new ProcessingInstruction(null, "test");
            fail("Processing instruction targets cannot be empty");
         }
-        catch (IllegalTargetException success) {}
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());
+        }
         
         try {
            new ProcessingInstruction("12345", "test");
