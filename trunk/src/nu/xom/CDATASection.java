@@ -45,5 +45,11 @@ class CDATASection extends Text {
     boolean isCDATASection() {
         return true;
     }
+    
+    static Text build(String data) {
+        if (data == null) data = "";
+        CDATASection result = new CDATASection(data);
+        return result;
+    }
 
 }
