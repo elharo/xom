@@ -442,23 +442,37 @@ public class NamespacesTest extends XOMTestCase {
      
    }
 
+    // ????
+    public void testCountNamespaces() {
+        Element html = new Element("html");
+        assertEquals(1, html.getNamespaceDeclarationCount());
+        html.setNamespaceURI("http://www.w3.org/1999/xhtml");
+        assertEquals(1, html.getNamespaceDeclarationCount());
+        html.addAttribute(new Attribute("pre:test", "http://www.examnple.org/", "value"));
+        assertEquals(2, html.getNamespaceDeclarationCount());
+        html.addNamespaceDeclaration("rddl", "http://www.rddl.org");
+        assertEquals(3, html.getNamespaceDeclarationCount());
+        html.addNamespaceDeclaration("xlink", "http://www.w3.org/2001/xlink");
+        assertEquals(4, html.getNamespaceDeclarationCount());
+        html.addAttribute(new Attribute("xml:space", "http://www.w3.org/XML/1998/namespace", "default"));
+        assertEquals(4, html.getNamespaceDeclarationCount());        
+    }
 
+    public void testGetNamespaceURIByPrefix() {
 
-   public void testGetNamespaceURIByPrefix() {
-
-      Element a = new Element("a");
-      a.addNamespaceDeclaration("foo", "urn:foo");
-      Element b = new Element("b");
-      Element c = new Element("c");
-      Element d = new Element("foo:d", "urn:foo");
-      a.appendChild(b);
-      b.appendChild(c);
-      c.appendChild(d);
-
-      assertEquals("urn:foo", a.getNamespaceURI("foo"));
-      assertEquals("urn:foo", b.getNamespaceURI("foo"));
-      assertEquals("urn:foo", c.getNamespaceURI("foo"));
-      assertEquals("urn:foo", d.getNamespaceURI("foo"));
-   }
+        Element a = new Element("a");
+        a.addNamespaceDeclaration("foo", "urn:foo");
+        Element b = new Element("b");
+        Element c = new Element("c");
+        Element d = new Element("foo:d", "urn:foo");
+        a.appendChild(b);
+        b.appendChild(c);
+        c.appendChild(d);
+        
+        assertEquals("urn:foo", a.getNamespaceURI("foo"));
+        assertEquals("urn:foo", b.getNamespaceURI("foo"));
+        assertEquals("urn:foo", c.getNamespaceURI("foo"));
+        assertEquals("urn:foo", d.getNamespaceURI("foo"));
+    }
 
 }
