@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class XIncluder {
@@ -321,6 +321,8 @@ public class XIncluder {
       throws IOException, ParsingException, XIncludeException {
         
         if (isIncludeElement(element)) {
+            verifyIncludeElement(element);
+            
             String parse = element.getAttributeValue("parse");
             if (parse == null) parse = "xml";
             String xpointer = element.getAttributeValue("xpointer");
@@ -328,26 +330,7 @@ public class XIncluder {
             String href = element.getAttributeValue("href");
             // empty string href is same as no href attribute
             if ("".equals(href)) href = null;
-            if (href == null && xpointer == null) {
-                throw new NoIncludeLocationException(
-                  "Missing href attribute", 
-                  element.getDocument().getBaseURI()
-                );   
-            }
-            if (href != null) {
-                if (href.indexOf('#') > -1) {
-                    throw new BadHrefAttributeException(
-                      "fragment identifier in URI " + href, 
-                      (String) baseURLs.peek()
-                    );
-                }
-
-            }
             
-            verifyEncoding(encoding, element.getBaseURI());
-            
-            testForForbiddenChildElements(element);
-
             ParentNode parent = element.getParent();
             String base = element.getBaseURI();
             URL baseURL = null;
@@ -536,21 +519,60 @@ public class XIncluder {
     }
     
     
-    private static void verifyEncoding(String encoding, String url) 
+    private static void verifyIncludeElement(Element element) 
+      throws XIncludeException {
+
+        testHref(element);
+        testForFragmentIdentifier(element);
+        verifyEncoding(element);
+        testForForbiddenChildElements(element);
+    }
+
+    
+    private static void testHref(Element include) throws NoIncludeLocationException {
+
+        String href = include.getAttributeValue("href");
+        String xpointer = include.getAttributeValue("xpointer");
+        if (href == null && xpointer == null) {
+            throw new NoIncludeLocationException(
+              "Missing href attribute", 
+              include.getDocument().getBaseURI()
+            );   
+        }
+    }
+
+    
+    private static void testForFragmentIdentifier(Element include) 
+      throws BadHrefAttributeException {
+
+        String href = include.getAttributeValue("href");
+        if (href != null) {
+            if (href.indexOf('#') > -1) {
+                throw new BadHrefAttributeException(
+                  "fragment identifier in URI " + href, include.getBaseURI()
+                );
+            }
+        }
+        
+    }
+
+    
+    private static void verifyEncoding(Element include) 
       throws BadEncodingAttributeException {
 
+        String encoding = include.getAttributeValue("encoding");
         if (encoding == null) return;
         // production 81 of XML spec
         // EncName :=[A-Za-z] ([A-Za-z0-9._] | '-')*
         char[] text = encoding.toCharArray();
         if (text.length == 0) {
             throw new BadEncodingAttributeException(
-              "Empty encoding attribute", url);
+              "Empty encoding attribute", include.getBaseURI());
         }
         char c = text[0];
         if (!((c >= 'A' &&  c <= 'Z') || (c >= 'a' &&  c <= 'z'))) {
             throw new BadEncodingAttributeException(
-              "Illegal value for encoding attribute: " + encoding, url
+              "Illegal value for encoding attribute: " + encoding, include.getBaseURI()
             );
         }
         for (int i = 1; i < text.length; i++) {
@@ -560,7 +582,7 @@ public class XIncluder {
                 continue;
             }
             throw new BadEncodingAttributeException(
-              "Illegal value for encoding attribute: " + encoding, url
+              "Illegal value for encoding attribute: " + encoding, include.getBaseURI()
             );
         }
         
@@ -651,7 +673,8 @@ public class XIncluder {
         // is an include or a fallback element 
         if (isIncludeElement(element) || isFallbackElement(element) ) {
             throw new RuntimeException(
-              "XOM BUG: include or fallback element passed to resolveSilently; please report with a test case");
+              "XOM BUG: include or fallback element passed to resolveSilently;"
+              + " please report with a test case");
         }
         
         Elements children = element.getChildElements();
@@ -665,20 +688,21 @@ public class XIncluder {
     
     private static void testForForbiddenChildElements(Element element) 
       throws XIncludeException {
-        Elements fallbacks 
-          = element.getChildElements("fallback", XINCLUDE_NS);
-        if (fallbacks.size() > 1) {
-            throw new XIncludeException("Multiple fallback elements", 
-              element.getDocument().getBaseURI());   
-        }
         
-        // while we're at it let's test to see if there are any
-        // other children from the XInclude namespace
+        int fallbacks = 0;
         Elements children = element.getChildElements();
-        for (int i = 0; i < children.size(); i++) {
+        int size = children.size();
+        for (int i = 0; i < size; i++) {
             Element child = children.get(i);
             if (XINCLUDE_NS.equals(child.getNamespaceURI())) {
-                if (!("fallback".equals(child.getLocalName()))) {
+                if ("fallback".equals(child.getLocalName())) {
+                    fallbacks++;
+                    if (fallbacks > 1) {
+                        throw new XIncludeException("Multiple fallback elements", 
+                          element.getDocument().getBaseURI()); 
+                    }
+                }
+                else {
                     throw new XIncludeException(
                       "Include element contains an include child",
                       element.getDocument().getBaseURI());     
@@ -864,9 +888,8 @@ public class XIncluder {
             Reader reader = new BufferedReader(
               new InputStreamReader(in, encoding)
             );
-            int c;
             StringBuffer sb = new StringBuffer(contentLength);
-            while ((c = reader.read()) != -1) {
+            for (int c = reader.read(); c != -1; c = reader.read()) {
               sb.append((char) c);
             }
             
@@ -927,6 +950,15 @@ public class XIncluder {
      
         return element.getLocalName().equals("fallback")
           && element.getNamespaceURI().equals(XINCLUDE_NS);
+        
+    }
+    
+    
+    private static void checkForFatalErrors(Element include) 
+      throws XIncludeException {
+        
+        
+        
         
     }
 
