@@ -668,6 +668,147 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
+    public void testXMLNamespaceAttributeInheritanceThroughMultipleLevels() 
+      throws IOException {
+     
+        Element superroot = new Element("superroot");
+        Element root = new Element("root");
+        superroot.appendChild(root);
+        superroot.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p0"));
+        Document doc = new Document(superroot);
+        root.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p1"));
+        root.appendChild(new Element("child312"));
+        
+        String expected = "<child312 xml:id=\"p1\"></child312>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc.query("/*/*/child312"));
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    public void testXMLNamespaceAttributeInheritanceThroughMultipleLevelsWithSkippedMiddle() 
+      throws IOException {
+     
+        Element superroot = new Element("superroot");
+        Element root = new Element("root");
+        superroot.appendChild(root);
+        superroot.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p0"));
+        Document doc = new Document(superroot);
+        root.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p1"));
+        root.appendChild(new Element("child312"));
+        
+        String expected = "<superroot xml:id=\"p0\"><child312 xml:id=\"p1\"></child312></superroot>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc.query("/* | //child312 | /*/@* | //child312/@*"));
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    public void testXMLNamespaceAttributeInheritanceNearestIsInSubset() 
+      throws IOException {
+     
+        Element superroot = new Element("superroot");
+        Element root = new Element("root");
+        superroot.appendChild(root);
+        superroot.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p0"));
+        Document doc = new Document(superroot);
+        root.appendChild(new Element("child312"));
+        
+        String expected = "<superroot xml:id=\"p0\"><child312></child312></superroot>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc.query("/* | //child312 | /*/@* | //child312/@*"));
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    public void testXMLNamespaceAttributeNotOverridden() 
+      throws IOException {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        Element child = new Element("child312");
+        
+        root.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p1"));
+        child.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p2"));
+        
+        root.appendChild(child);
+        
+        String expected = "<child312 xml:id=\"p2\"></child312>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc.query("/*/child312 | /*/*/@*"));
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    public void testXMLNamespaceAttributeNotOverridden2() 
+      throws IOException {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        Element child = new Element("child312");
+        
+        root.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p1"));
+        child.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p2"));
+        
+        root.appendChild(child);
+        
+        String expected = "<child312></child312>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc.query("/*/child312 "));
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
     public void testXMLNamespaceAttributeNotInheritedWithExclusiveCanonicalization() 
       throws IOException {
      
@@ -1014,6 +1155,27 @@ public class CanonicalizerTest extends XOMTestCase {
             
         String actual = new String(out.toByteArray(), "UTF-8");
         assertEquals(expected, actual);
+        
+    }
+    
+
+    public void testCanonicalizeDocumentSubsetThatOnlyContainsRoot() 
+      throws IOException {
+        
+        Document doc = new Document(new Element("root"));
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            Nodes subset = doc.query("/");
+            serializer.write(subset);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals("", actual);
         
     }
     
