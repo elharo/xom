@@ -71,7 +71,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="resolver.jar"   value="${lib2.dir}/resolver.jar"/>
     <property name="dom4j.jar"      value="${lib2.dir}/dom4j-1.5.1.jar"/>
 
-    <property name="excludes"      value=".DS_Store, **/.DS_Store, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb"/>
+    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb"/>
 
     <property name="test.outputFormat" value="xml"/>   
     
@@ -168,7 +168,8 @@ XOM Build file
     
   </target>
 
-  <target name="compile" depends="prepare, compile-servlets" description="Compile the source code" unless="servlet.jar.installed">
+  <target name="compile" depends="prepare, compile-servlets" 
+          description="Compile the source code" unless="servlet.jar.installed">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
@@ -187,7 +188,8 @@ XOM Build file
   </target>
 
   
-  <target name="compile-servlets" depends="prepare" description="Compile the source code including the servlet samples" if="servlet.jar.installed">
+  <target name="compile-servlets" depends="prepare" if="servlet.jar.installed"
+          description="Compile the source code including the servlet samples">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
