@@ -592,14 +592,6 @@ abstract class TextWriter {
      *   It may result in substantially slower code. 
      * </p>
      * 
-     * <p>
-     *   This feature only really applies in Unicode encodings
-     *   (and possibly GB18030, I need to check????). 
-     *   There's no reason to turn it on for non-Unicode encodings. 
-     *   Nothing will break if you do so. However, the output
-     *   may be noticeably slower.
-     * </p>
-     * 
      * @param normalize true if normalization is performed; 
      *     false if it isn't.
      */
