@@ -33,7 +33,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class Text extends LeafNode {
