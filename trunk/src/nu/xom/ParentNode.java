@@ -387,23 +387,28 @@ public abstract class ParentNode extends Node {
     }
 
 
-    protected String findActualBaseURI() {
+    final String findActualBaseURI() {
         
-        // XXX remove recursion
-        String actualBase = getActualBaseURI();
-        ParentNode parent = getParent();
+        ParentNode current = this;
+        while (true) {
+            String actualBase = current.getActualBaseURI();
+            ParentNode parent = current.getParent();
     
-        if (parent == null) {
+            if (parent == null) {
+                if (actualBase != null) return actualBase;
+                return null;
+            }
+               
+            if (actualBase == null || "".equals(actualBase)) {
+                current = parent;
+                continue;  
+            }
+               
+            // The parent is loaded from a different entity.
+            // Therefore just return the actual base.
             if (actualBase != null) return actualBase;
             return null;
         }
-               
-        if (actualBase == null || "".equals(actualBase)) return parent.findActualBaseURI();      
-               
-        // The parent is loaded from a different entity.
-        // Therefore just return the actual base.
-        if (actualBase != null) return actualBase;
-        return null;
         
     }
 
