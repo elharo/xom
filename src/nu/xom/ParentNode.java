@@ -172,7 +172,9 @@ public abstract class ParentNode extends Node {
         return (Node) children.get(position); 
         
     }
-
+    
+    
+    // private int lastPosition = -1;
     
     /**
      *<p>
@@ -191,17 +193,15 @@ public abstract class ParentNode extends Node {
         
         if (children == null) return -1;
         
-        // There might be an optimization here. We tend to iterate
-        // through in order. We could store the last index returned and
-        // check that index and the one immediately after it first; 
-        // before searching the list from the beginning. However, in
-        // tests the effect ranged from unobservable to slightly slower
-        // so I'm ruling this out for now. 
-        /* if (lastPosition >= 0 && lastPosition < children.size()-1) {
-            lastPosition++;
+        // Programs tend to iterate through in order so we store the 
+        // last index returned and check the one immediately after it
+        //  first; before searching the list from the beginning. 
+        /* lastPosition++;
+        if (lastPosition != children.size()) {
             if (child == children.get(lastPosition)) {
               return lastPosition;
             }
+            else lastPosition = -1;
         }
         lastPosition = children.indexOf(child);
         return lastPosition; */
