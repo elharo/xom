@@ -292,6 +292,14 @@ public class TextTest extends XOMTestCase {
     }
 
 
+    public void testToStringWithTab() {
+        
+        Text t = new Text("content\tcontent");
+        assertEquals("[nu.xom.Text: content\\tcontent]", t.toString());          
+        
+    }
+
+
     public void testToString() {
         
         Text t = new Text("content");
