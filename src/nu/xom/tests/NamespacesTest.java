@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -32,7 +32,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d6
  *
  */
 public class NamespacesTest extends XOMTestCase {
@@ -95,6 +95,16 @@ public class NamespacesTest extends XOMTestCase {
         catch (NamespaceConflictException ex) {
             assertNotNull(ex.getMessage());
         }
+        
+    }
+    
+    
+    public void testAdditionalNamespaceDuplicatesElementNamespace() {
+        
+        Element element = new Element("pre:element", "http://www.example.org");
+        element.addNamespaceDeclaration("pre", "http://www.example.org");
+        element.setNamespacePrefix("foo");
+        assertEquals("http://www.example.org", element.getNamespaceURI("pre"));
         
     }
     
