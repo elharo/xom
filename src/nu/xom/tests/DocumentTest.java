@@ -45,7 +45,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class DocumentTest extends XOMTestCase {
@@ -114,7 +114,8 @@ public class DocumentTest extends XOMTestCase {
         doc.setDocType(type2);
         assertEquals(type2, doc.getDocType());
         assertEquals(1, doc.indexOf(type2));
-        
+        assertNull(type1.getParent());
+        assertEquals(doc, type2.getParent());
     }
 
     public void testBaseURI() {
