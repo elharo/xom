@@ -83,12 +83,12 @@ public class TextSerializer extends Serializer {
         super(out, encoding);
     }
     
-    protected void writeStartTag(Element element) {};
-    protected void writeEmptyElementTag(Element element) {};
-    protected void writeEndTag(Element element) {};
-    protected void writeXMLDeclaration() {};
-    protected void write(Comment comment) {};
-    protected void write(ProcessingInstruction instruction) {};
+    protected void writeStartTag(Element element) {}
+    protected void writeEmptyElementTag(Element element) {}
+    protected void writeEndTag(Element element) {}
+    protected void writeXMLDeclaration() {}
+    protected void write(Comment comment) {}
+    protected void write(ProcessingInstruction instruction) {}
     protected void write(DocType doctype) {}
 
     // Here we use writeRaw because we don't want characters like &
