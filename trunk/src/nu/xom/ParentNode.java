@@ -46,7 +46,7 @@ import java.util.List;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a3
  *
  */
 public abstract class ParentNode extends Node {
@@ -394,20 +394,16 @@ public abstract class ParentNode extends Node {
             String actualBase = current.getActualBaseURI();
             ParentNode parent = current.getParent();
     
-            if (parent == null) {
-                if (actualBase != null) return actualBase;
-                return null;
-            }
+            if (parent == null) return actualBase;
                
-            if (actualBase == null || "".equals(actualBase)) {
+            if ("".equals(actualBase)) {
                 current = parent;
                 continue;  
             }
                
             // The parent is loaded from a different entity.
             // Therefore just return the actual base.
-            if (actualBase != null) return actualBase;
-            return null;
+            return actualBase;
         }
         
     }
