@@ -28,7 +28,6 @@ import nu.xom.IllegalDataException;
 import nu.xom.IllegalNameException;
 import nu.xom.MalformedURIException;
 import nu.xom.NamespaceConflictException;
-import nu.xom.Text;
 
 /**
  * <p>
@@ -246,6 +245,15 @@ public class AttributeTest extends XOMTestCase {
         }
 
     }
+    
+    
+    public void testXMLLangAttributeCanBeEmpty() {
+     
+        String xmlNamespace = "http://www.w3.org/XML/1998/namespace";       
+        Attribute a = new Attribute("xml:lang", xmlNamespace, "");
+        assertEquals("", a.getValue());
+        
+    }
 
     
     public void testWrongPrefixNotAllowedWithXMLURI() {
@@ -300,7 +308,7 @@ public class AttributeTest extends XOMTestCase {
        String s = a.toString();
        assertEquals(
          "[nu.xom.Attribute: name=\"01234567890123456789012345678901234...\"]", 
-         a.toString());          
+         s);          
         
     }
 
@@ -674,6 +682,5 @@ public class AttributeTest extends XOMTestCase {
         
     }
 
-    
     
 }
