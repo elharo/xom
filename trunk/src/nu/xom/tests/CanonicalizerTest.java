@@ -51,7 +51,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1d5
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -125,6 +125,53 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
+    public void testNamedAlgorithmWithComments() 
+      throws ParsingException, IOException {
+      
+        File tests = input;
+        String[] inputs = tests.list(new XMLFilter());
+        for (int i = 0; i < inputs.length; i++) {
+            File input = new File(tests, inputs[i]);   
+            Document doc = builder.build(input);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            try {
+                Canonicalizer serializer = new Canonicalizer(
+                  out, Canonicalizer.CANONICAL_XML_WITH_COMMENTS);
+                serializer.write(doc);
+            }
+            finally {
+                out.close();
+            }            
+            byte[] actual = out.toByteArray();
+            
+            // for debugging
+            File debug = new File(canonical, "debug/" 
+              + input.getName() + ".dbg");
+            OutputStream fout = new FileOutputStream(debug);
+            fout.write(actual);
+            fout.close();
+            
+            File expected = new File(output, input.getName() + ".out");
+            assertEquals(
+              input.getName(), expected.length(), actual.length);
+            byte[] expectedBytes = new byte[actual.length];
+            InputStream fin = new FileInputStream(expected);
+            DataInputStream in = new DataInputStream(fin);
+            try {
+                in.readFully(expectedBytes);
+            }
+            finally {
+                in.close();
+            }
+            for (int j = 0; j < expectedBytes.length; j++) {
+                assertEquals(expectedBytes[i], actual[i]);   
+            }
+            
+        }
+        
+    }
+    
+    
     public void testWithoutComments() 
       throws ParsingException, IOException {
       
@@ -138,6 +185,48 @@ public class CanonicalizerTest extends XOMTestCase {
             try {
                 Canonicalizer serializer 
                   = new Canonicalizer(out, false);
+                serializer.write(doc);
+            }
+            finally {
+                out.close();
+            }
+            
+            byte[] actual = out.toByteArray();
+            
+            File expected = new File(canonical, "wocommentsoutput/");
+            expected = new File(expected, input.getName() + ".out");
+            byte[] expectedBytes = new byte[actual.length];
+            InputStream fin = new FileInputStream(expected);
+            DataInputStream in =  new DataInputStream(fin);
+            try {
+                in.readFully(expectedBytes);
+            }
+            finally {
+                in.close();
+            }
+            for (int j = 0; j < expectedBytes.length; j++) {
+                assertEquals(expectedBytes[i], actual[i]);   
+            }
+            out.close();
+
+        }
+        
+    }   
+    
+    
+    public void testNamesdAlgorithmWithoutComments() 
+      throws ParsingException, IOException {
+      
+        File tests = input;
+        String[] inputs = tests.list(new XMLFilter());
+        for (int i = 0; i < inputs.length; i++) {
+            File input = new File(tests, inputs[i]); 
+            Document doc = builder.build(input);
+           
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            try {
+                Canonicalizer serializer = new Canonicalizer(
+                  out, Canonicalizer.CANONICAL_XML);
                 serializer.write(doc);
             }
             finally {
