@@ -254,8 +254,11 @@ public class Builder {
         
         XMLReader baseParser = parser;
         while (baseParser instanceof XMLFilter) {
-            baseParser = ((XMLFilter) baseParser).getParent();
+             XMLReader parent = ((XMLFilter) baseParser).getParent();
+             if (parent == null) break;
+             baseParser = parent;
         }
+        
         String parserName = baseParser.getClass().getName();
         if (!validate) {
             parser.setFeature(
