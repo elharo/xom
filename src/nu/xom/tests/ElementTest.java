@@ -213,6 +213,12 @@ public class ElementTest extends XOMTestCase {
         assertEquals(root, root2);
          
     }
+    
+    public void testToXMLWithXMLLangAttribute() {
+        Element e = new Element("e");
+        e.addAttribute(new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "en"));
+        assertEquals("<e xml:lang=\"en\" />", e.toXML());
+    }    
 
     public void testAllowNullNamespace() {
         String name = "sakjdhjhd";
