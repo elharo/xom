@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0d22"/>
+    <property name="version" value="1.0d23"/>
     <property name="year"    value="2003"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -67,6 +67,7 @@ to http://www.xom.nu/
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"  value="${lib.dir}/servlet.jar"/>
     <property name="xom-core"     value="${build.dest}"/>
+    <property name="ant-home"     value="/opt/java/ant"/>
 
     <property name="test.outputFormat" value="xml"/>    
     
@@ -85,6 +86,8 @@ to http://www.xom.nu/
     </path>
     
   </target>
+
+  <taskdef resource="clovertasks"/>
 
   <target name="help">
     <echo>
@@ -126,6 +129,7 @@ XOM Build file
            optimize="${optimize}">
       <classpath refid="compile.class.path"/>
     </javac>
+    <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
   </target>
 
   <target name="jar" depends="compile" description="Create xom.jar">
@@ -202,7 +206,7 @@ XOM Build file
            <exclude name="**/EBCDICTest.java" />
          </fileset>
       </batchtest>
-   </junit>
+    </junit>
   </target>
  
   <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
@@ -216,7 +220,51 @@ XOM Build file
     
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
+    <delete>
+      <fileset dir="." includes="xom_coverage.db*"/>
+      <fileset dir="." includes="junit*properties"/>
+    </delete>
   </target>
+
+  <taskdef resource="clovertasks"/>
+  
+  <target name="with.clover" depends="init">
+    <clover-setup initString="xom_coverage.db">
+       <files>
+	       <exclude name="nu/xom/samples/**"/>
+	       <exclude name="nu/xom/pantry/**"/>
+	       <exclude name="nu/xom/benchmarks/**"/>
+       </files>
+    </clover-setup>
+  </target>
+
+  <target name="clover.html" depends="with.clover">
+    <clover-report>
+       <current outfile="clover_html" title="${Name} ${version}">
+	       <format type="html"/>
+       </current>	 
+    </clover-report>
+  </target>
+
+ 
+  <!-- This task requires the ANT optional.jar -->
+  <target name="clovertest" depends="compile" description="Run JUnit tests with clover.jar in classpath">
+    <junit printsummary="on" fork="no">
+       <classpath refid="run.class.path" />
+        <classpath>
+            <pathelement path="${ant-home}/lib/clover.jar"/>
+        </classpath>
+        <formatter type="${test.outputFormat}" />
+       <batchtest fork="yes" todir="${testoutput.dir}">
+         <fileset dir="${build.src}">
+           <include name="**/*Test.java" />
+           <exclude name="**/MegaTest.java" />
+           <exclude name="**/benchmarks/*.java" />
+           <exclude name="**/EBCDICTest.java" />
+         </fileset>
+      </batchtest>
+   </junit>
+  </target>  
   
 </project>
 
