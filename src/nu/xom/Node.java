@@ -415,7 +415,13 @@ public abstract class Node {
                       + "does not support.");
                 }
                 else if (o instanceof DocumentFragment) {
-                    iterator.remove(); // throw exception????
+                    iterator.remove();
+                    // Want to allow // and //* and so forth
+                    // but not / for rootless documents
+                    if (results.isEmpty()) {
+                        throw new XPathException("Tried to get document "
+                          + "node of disconnected subtree");
+                    }
                 }
                 else if (!(o instanceof Node)) {
                     throw new XPathException("XPath expression " 

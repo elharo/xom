@@ -96,7 +96,6 @@ public class XPathTest extends XOMTestCase {
         b.appendChild(x3);
         a.appendChild(b);
         a.appendChild(x4);
-        System.out.println(doc.toXML());
         Nodes result = doc.query("//x");
         assertEquals(4, result.size());
         assertTrue(result.get(0) instanceof Element);
@@ -132,8 +131,23 @@ public class XPathTest extends XOMTestCase {
         assertEquals(1, result.size());
         assertEquals(test, result.get(0));   
         
-        result = test.query("/");
-        assertEquals(0, result.size());  
+        try {
+            test.query("/");
+            fail("Did not throw exception when querying rootless document for root");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+
+    public void testUseRootNodeWhenQueryingDocumentLessElements2() {
+        
+        Element test = new Element("Test");  
+        
+        Nodes result = test.query("//");
+        assertEquals(1, result.size());
         
     }
     
