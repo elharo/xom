@@ -75,7 +75,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d7
+ * @version 1.1a3
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -2844,7 +2844,7 @@ public class BuilderTest extends XOMTestCase {
             assertNull(builder.getNodeFactory());
         }
         catch (ClassNotFoundException ex) {
-            // Can't test is we can't find the class
+            // Can't test if we can't find the class
         }
         catch (SAXException ex) {
             // Need a trusted parser to test this
