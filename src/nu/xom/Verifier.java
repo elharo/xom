@@ -50,7 +50,11 @@ final class Verifier {
     private final static byte[] flags = new byte[65536];
 
     static {
-        ClassLoader loader = ClassLoader.getSystemClassLoader();
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if (loader == null) loader = Verifier.class.getClassLoader();
+        if (loader == null) throw new RuntimeException(
+          "Verifier couldn't find the right ClassLoader!");
+        
         DataInputStream in = new DataInputStream(
           loader.getResourceAsStream("nu/xom/characters.dat"));
         try {
