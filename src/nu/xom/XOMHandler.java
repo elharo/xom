@@ -208,14 +208,7 @@ class XOMHandler
                 for (int i=0; i < result.size(); i++) {
                     Node node = result.get(i);
                      if (node.isAttribute()) {
-                         try {
-                             ((Element) temp).addAttribute((Attribute) node);
-                         }
-                         catch (ClassCastException ex) {
-                            throw new XMLException(
-                              "Factory tried to add an attribute to a document", 
-                              ex);   
-                         }
+                         ((Element) temp).addAttribute((Attribute) node);
                      }
                      else {
                          temp.appendChild(node);   
