@@ -40,10 +40,12 @@ import junit.framework.TestSuite;
  */
 public class XOMTests extends TestCase {
 
+    
     public XOMTests() {
         super("All XOM Tests");   
     }
 
+    
     public static Test suite() {
         TestSuite result = new TestSuite();
         result.addTest(new TestSuite(VerifierTest.class));
@@ -73,11 +75,11 @@ public class XOMTests extends TestCase {
         // result.addTest(new TestSuite(EBCDICTest.class));
         result.addTest(new TestSuite(RoundTripTest.class));
         result.addTest(new TestSuite(DOMConverterTest.class));
-        result.addTest(new TestSuite(SAXConverterTest.class));
         result.addTest(new TestSuite(SerializerTest.class));
         result.addTest(new TestSuite(CanonicalizerTest.class));
         result.addTest(new TestSuite(BuilderTest.class));
         result.addTest(new TestSuite(XIncludeTest.class));
+        result.addTest(new TestSuite(SAXConverterTest.class));
         result.addTest(new TestSuite(BaseURITest.class));
         result.addTest(new TestSuite(TextTest.class));
         result.addTest(new TestSuite(XSLTransformTest.class));
@@ -85,4 +87,5 @@ public class XOMTests extends TestCase {
         return result;
     }
 
+    
 }
