@@ -60,7 +60,7 @@ public class AttributeTypeTest extends XOMTestCase {
         assertTrue(Attribute.Type.UNDECLARED != Attribute.Type.CDATA);
         assertTrue(Attribute.Type.NMTOKEN != Attribute.Type.CDATA);
         
-        assertFalse(Attribute.Type.CDATA.equals(new Object()));
+        assertFalse(Attribute.Type.CDATA.equals(new Integer(1)));
         assertFalse(Attribute.Type.CDATA.equals(new Text("data")));
     }
 
