@@ -65,7 +65,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -98,9 +98,17 @@ public class XSLTransformTest extends XOMTestCase {
     // before each test and restores it after each test.
     private PrintStream systemErr = System.err;
     
+    private File inputDir;
+    
     protected void setUp() {
+        
         System.setErr(new PrintStream(new ByteArrayOutputStream()));
-    }
+        
+        inputDir = new File("data");
+        inputDir = new File(inputDir, "xslt");
+        inputDir = new File(inputDir, "input");
+        
+    } 
     
     
     protected void tearDown() {
@@ -112,7 +120,8 @@ public class XSLTransformTest extends XOMTestCase {
     public void testIdentityTransform() 
       throws ParsingException, IOException, XSLException {
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -135,7 +144,7 @@ public class XSLTransformTest extends XOMTestCase {
            + "<span xmlns:a='http://www.example.com'/>"
            + "<span xmlns:b='http://www.example.net'/>"
            + "</test>"; 
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -213,8 +222,8 @@ public class XSLTransformTest extends XOMTestCase {
         element2.appendChild(
           "Remember, the XSLT processor is going to strip out the literal white space"
         );
-        File doc = new File("data/xslt/input/8-14.xml");
-        File stylesheet = new File("data/xslt/input/fragment.xsl");
+        File doc = new File(inputDir, "8-14.xml");
+        File stylesheet = new File(inputDir, "fragment.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -234,8 +243,8 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTransform() 
       throws ParsingException, IOException, XSLException {
         
-        File doc = new File("data/xslt/input/8-1.xml");
-        File stylesheet = new File("data/xslt/input/8-8.xsl");
+        File doc = new File(inputDir, "8-1.xml");
+        File stylesheet = new File(inputDir, "8-8.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -252,8 +261,8 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTransformWithCFilter() 
       throws ParsingException, IOException, XSLException {
         
-        File doc = new File("data/xslt/input/8-1.xml");
-        File stylesheet = new File("data/xslt/input/8-8.xsl");
+        File doc = new File(inputDir, "8-1.xml");
+        File stylesheet = new File(inputDir, "8-8.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(
@@ -281,8 +290,8 @@ public class XSLTransformTest extends XOMTestCase {
         element2.appendChild(
           "Remember, the XSLT processor is going to strip out the literal white space"
         );
-        File doc = new File("data/xslt/input/8-14.xml");
-        File stylesheet = new File("data/xslt/input/fragment.xsl");
+        File doc = new File(inputDir, "8-14.xml");
+        File stylesheet = new File(inputDir, "fragment.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(
@@ -312,8 +321,8 @@ public class XSLTransformTest extends XOMTestCase {
         element2.appendChild(
           "Remember, the XSLT processor is going to strip out the literal white space"
         );
-        File doc = new File("data/xslt/input/8-14.xml");
-        File stylesheet = new File("data/xslt/input/fragment.xsl");
+        File doc = new File(inputDir, "8-14.xml");
+        File stylesheet = new File(inputDir, "fragment.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc, 
@@ -342,8 +351,8 @@ public class XSLTransformTest extends XOMTestCase {
         element2.appendChild(
           "Remember, the XSLT processor is going to strip out the literal white space"
         );
-        File doc = new File("data/xslt/input/8-14.xml");
-        File stylesheet = new File("data/xslt/input/fragment.xsl");
+        File doc = new File(inputDir, "8-14.xml");
+        File stylesheet = new File(inputDir, "fragment.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc,
@@ -365,8 +374,8 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTransform2() 
       throws ParsingException, IOException, XSLException {
         
-        File doc = new File("data/xslt/input/8-1.xml");
-        File stylesheet = new File("data/xslt/input/8-12.xsl");
+        File doc = new File(inputDir, "8-1.xml");
+        File stylesheet = new File(inputDir, "8-12.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -398,7 +407,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTransformFromDocument() 
       throws ParsingException, IOException, XSLException {
         
-        File doc = new File("data/xslt/input/8-1.xml");
+        File doc = new File(inputDir, "8-1.xml");
         Builder builder = new Builder();
         Document stylesheet = builder.build("data/xslt/input/8-12.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
@@ -415,7 +424,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTransformFromSystemID() 
       throws ParsingException, IOException, XSLException {
         
-        File doc = new File("data/xslt/input/8-1.xml");
+        File doc = new File(inputDir, "8-1.xml");
         Builder builder = new Builder();
         String stylesheet = "data/xslt/input/8-12.xsl";
         Document stylesheetDoc = builder.build(stylesheet);
@@ -433,8 +442,8 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTransformWithNamespaces() 
       throws ParsingException, IOException, XSLException {
         
-        File doc = new File("data/xslt/input/8-14.xml");
-        File stylesheet = new File("data/xslt/input/8-15.xsl");
+        File doc = new File(inputDir, "8-14.xml");
+        File stylesheet = new File(inputDir, "8-15.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -452,8 +461,8 @@ public class XSLTransformTest extends XOMTestCase {
     public void testSingleTextNode() 
       throws ParsingException, IOException, XSLException {
         
-        File doc = new File("data/xslt/input/8-14.xml");
-        File stylesheet = new File("data/xslt/input/singlestring.xsl");
+        File doc = new File(inputDir, "8-14.xml");
+        File stylesheet = new File(inputDir, "singlestring.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -469,7 +478,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testToString() 
       throws XSLException, ParsingException, IOException {
         
-        File stylesheet = new File("data/xslt/input/singlestring.xsl");
+        File stylesheet = new File(inputDir, "singlestring.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -484,8 +493,8 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTextMethod() 
       throws ParsingException, IOException, XSLException {
         
-        File doc = new File("data/xslt/input/8-14.xml");
-        File stylesheet = new File("data/xslt/input/textmethod.xsl");
+        File doc = new File(inputDir, "8-14.xml");
+        File stylesheet = new File(inputDir, "textmethod.xsl");
         Builder builder = new Builder(); 
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -506,7 +515,7 @@ public class XSLTransformTest extends XOMTestCase {
       throws XSLException, ParsingException, IOException {
         
         Builder builder = new Builder();
-        File stylesheet = new File("data/xslt/input/commentwithparent.xsl");
+        File stylesheet = new File(inputDir, "commentwithparent.xsl");
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
         Document input = new Document(new Element("root"));
@@ -525,7 +534,7 @@ public class XSLTransformTest extends XOMTestCase {
       throws XSLException, ParsingException, IOException {
         
         Builder builder = new Builder();
-        File stylesheet = new File("data/xslt/input/piwithparent.xsl");
+        File stylesheet = new File(inputDir, "piwithparent.xsl");
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
         Document input = new Document(new Element("root"));
@@ -544,7 +553,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTransformNodes()
       throws XSLException, ParsingException, IOException {
         
-        File stylesheet = new File("data/xslt/input/piwithparent.xsl");
+        File stylesheet = new File(inputDir, "piwithparent.xsl");
         Builder builder = new Builder();
         Nodes input = new Nodes(new Element("root"));
         Document stylesheetDoc = builder.build(stylesheet);
@@ -564,7 +573,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTriple() 
       throws IOException, ParsingException, XSLException {
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc,
@@ -592,7 +601,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testPassingNullSetsDefaultFactory() 
       throws IOException, ParsingException, XSLException { 
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc, null);
@@ -617,7 +626,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testTransformEmptyNodesList() 
       throws IOException, ParsingException, XSLException {  
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -632,7 +641,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testMinimizingFactory() 
       throws XSLException, ParsingException, IOException {
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc,
@@ -650,7 +659,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testIllegalTransform() 
       throws XSLException, ParsingException, IOException {
         
-        File stylesheet = new File("data/xslt/input/illegaltransform.xsl");
+        File stylesheet = new File(inputDir, "illegaltransform.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -670,7 +679,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testRemapPrefixToSameURI() 
       throws IOException, ParsingException, XSLException { 
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -689,7 +698,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testElementsToAttributes() 
       throws IOException, ParsingException, XSLException {  
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc,
@@ -727,7 +736,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testAttributesToElements() 
       throws IOException, ParsingException, XSLException {  
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc,
@@ -770,7 +779,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testCommentsAreTransformed() 
       throws IOException, ParsingException, XSLException {
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -795,7 +804,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testCommentToAttribute() 
       throws IOException, ParsingException, XSLException {
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc, 
@@ -825,7 +834,7 @@ public class XSLTransformTest extends XOMTestCase {
     public void testAdditionalDefaultNamespace() 
       throws IOException, ParsingException, XSLException {  
         
-        File stylesheet = new File("data/xslt/input/identity.xsl");
+        File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
@@ -904,7 +913,10 @@ public class XSLTransformTest extends XOMTestCase {
         NodeFactory stripper = new StrippingFactory();
         Builder strippingBuilder = new Builder(stripper);
         
-        File base = new File("data/oasis-xslt-testsuite/TESTS/Xalan_Conformance_Tests/");
+        File base = new File("data");
+        base = new File(base, "oasis-xslt-testsuite");
+        base = new File(base, "TESTS");
+        base = new File("Xalan_Conformance_Tests");
         File catalog = new File(base, "catalog.xml");
         
         // The test suite need to be installed separately. If we can't
@@ -1120,7 +1132,9 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         NodeFactory stripper = new StrippingFactory();
         Builder strippingBuilder = new Builder(stripper);
-        File base = new File("data/oasis-xslt-testsuite/TESTS/");
+        File base = new File("data");
+        base = new File(base, "oasis-xslt-testsuite");
+        base = new File("TESTS");
         File catalog = new File(base, "catalog.xml");
         
         // The test suite need to be installed separately. If we can't
@@ -1134,7 +1148,6 @@ public class XSLTransformTest extends XOMTestCase {
             for (int j = 0; j < testcases.size(); j++) {
                 Element testcase = testcases.get(j);
                 String id = testcase.getAttributeValue("id");
-                // System.out.println(id);
                 File root = new File(base, "MSFT_Conformance_Tests");
                 root = new File(root, testcase.getFirstChildElement("file-path").getValue());
                 File input = null;
