@@ -81,10 +81,16 @@ public class DOMConverterTest extends XOMTestCase {
     private Document xomDocument;
     private org.w3c.dom.Document domDocument;
     private DOMImplementation impl;
+    private DocumentBuilder builder;
 
 
     protected void setUp() throws ParserConfigurationException {
-               
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        builder = factory.newDocumentBuilder();
+        impl = factory.newDocumentBuilder().getDOMImplementation();        
+
         DocType type = new DocType("test");
         Element root = new Element("test");          
         xomDocument = new Document(root);
@@ -130,16 +136,10 @@ public class DOMConverterTest extends XOMTestCase {
         text.appendChild("text in a namespace");
         
         Reader reader = new StringReader(source);
-        DocumentBuilderFactory factory 
-          = DocumentBuilderFactory.newInstance();
-        impl = factory.newDocumentBuilder().getDOMImplementation();        
         InputSource inso = new InputSource(reader);
         
-        DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
-        fac.setNamespaceAware(true);
-        DocumentBuilder parser = fac.newDocumentBuilder();
         try {
-            domDocument = parser.parse(inso);
+            domDocument = builder.parse(inso);
         }
         catch (Exception ex) {
             // shouldn't happen from known good doc 
@@ -186,10 +186,7 @@ public class DOMConverterTest extends XOMTestCase {
     public void testDefaultNamespacedElement() 
       throws SAXException, IOException, ParserConfigurationException {
         byte[] data = "<root xmlns=\"http://www.example.com\"/>".getBytes();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        org.w3c.dom.Document doc = factory.newDocumentBuilder()
-          .parse(new ByteArrayInputStream(data));
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
         Document xomDoc = DOMConverter.convert(doc);
         
         Element root = xomDoc.getRootElement();
@@ -200,10 +197,7 @@ public class DOMConverterTest extends XOMTestCase {
     public void testPrefixedElement() 
       throws SAXException, IOException, ParserConfigurationException {
         byte[] data = "<pre:root xmlns:pre=\"http://www.example.com\"/>".getBytes();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        org.w3c.dom.Document doc = factory.newDocumentBuilder()
-          .parse(new ByteArrayInputStream(data));
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
         Document xomDoc = DOMConverter.convert(doc);
         
         Element root = xomDoc.getRootElement();
@@ -214,10 +208,7 @@ public class DOMConverterTest extends XOMTestCase {
     public void testConvertAttr() 
       throws SAXException, IOException, ParserConfigurationException {
         byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        org.w3c.dom.Document doc = factory.newDocumentBuilder()
-          .parse(new ByteArrayInputStream(data));
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
         org.w3c.dom.Element root = doc.getDocumentElement();
         Attribute attribute = DOMConverter.convert(root.getAttributeNode("name"));
@@ -245,11 +236,8 @@ public class DOMConverterTest extends XOMTestCase {
 
     public void testConvertElement() 
       throws SAXException, IOException, ParserConfigurationException {
-        byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        org.w3c.dom.Document doc = factory.newDocumentBuilder()
-          .parse(new ByteArrayInputStream(data));
+        byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();;
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
         org.w3c.dom.Element root = doc.getDocumentElement();
         Element xomRoot = DOMConverter.convert(root);
@@ -269,10 +257,7 @@ public class DOMConverterTest extends XOMTestCase {
       throws SAXException, IOException, ParserConfigurationException {
 
         byte[] data = "<element><!--data--></element>".getBytes();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        org.w3c.dom.Document doc = factory.newDocumentBuilder()
-          .parse(new ByteArrayInputStream(data));
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
         org.w3c.dom.Element root = doc.getDocumentElement();
         org.w3c.dom.Comment comment = (org.w3c.dom.Comment) (root.getChildNodes().item(0));
@@ -286,10 +271,7 @@ public class DOMConverterTest extends XOMTestCase {
       throws SAXException, IOException, ParserConfigurationException {
 
         byte[] data = "<element> here's the text </element>".getBytes();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        org.w3c.dom.Document doc = factory.newDocumentBuilder()
-          .parse(new ByteArrayInputStream(data));
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
         org.w3c.dom.Element root = doc.getDocumentElement();
         org.w3c.dom.Text node = (org.w3c.dom.Text) (root.getChildNodes().item(0));
@@ -302,11 +284,8 @@ public class DOMConverterTest extends XOMTestCase {
     public void testConvertCDATASection() 
       throws SAXException, IOException, ParserConfigurationException {
 
-        byte[] data = "<element><![CDATA[ here's the text ]]></element>".getBytes();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        org.w3c.dom.Document doc = factory.newDocumentBuilder()
-          .parse(new ByteArrayInputStream(data));
+        byte[] data = "<element><![CDATA[ here's the text ]]></element>".getBytes();;
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
         org.w3c.dom.Element root = doc.getDocumentElement();
         CDATASection node = (CDATASection) (root.getChildNodes().item(0));
@@ -323,10 +302,7 @@ public class DOMConverterTest extends XOMTestCase {
       throws SAXException, IOException, ParserConfigurationException {
 
         byte[] data = "<element><?target PI data?></element>".getBytes();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        org.w3c.dom.Document doc = factory.newDocumentBuilder()
-          .parse(new ByteArrayInputStream(data));
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
         org.w3c.dom.Element root = doc.getDocumentElement();
         org.w3c.dom.ProcessingInstruction node 
