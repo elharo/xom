@@ -146,10 +146,15 @@ public class Document extends ParentNode {
      *     oldChild or the insertion of newChild
      */
     public final void replaceChild(Node oldChild, Node newChild) {
-        
-        if (oldChild == getRootElement() && newChild != null && newChild.isElement()) {
+          
+        if (oldChild == getRootElement() 
+          && newChild != null && newChild.isElement()) {
             setRootElement((Element) newChild);
         } 
+        else if (oldChild == getDocType() 
+          && newChild != null && newChild.isDocType()) {
+            setDocType((DocType) newChild);
+        }
         else {
             super.replaceChild(oldChild, newChild);
         }
