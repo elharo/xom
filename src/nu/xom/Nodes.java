@@ -44,12 +44,13 @@ import java.util.List;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a4
  *
  */
 public final class Nodes {
     
     private List nodes;
+    
     
     /**
      * <p>
@@ -59,6 +60,7 @@ public final class Nodes {
     public Nodes() {
         nodes = new ArrayList();
     }
+    
     
     /**
      * <p>
@@ -72,10 +74,11 @@ public final class Nodes {
         nodes.add(node);
     }
     
+    
     /**
      * <p>
      * Returns the number of nodes in the list.
-     * This is guaranteed non-negative. 
+     * This is guaranteed to be non-negative. 
      * </p>
      * 
      * @return the number of nodes in the list
@@ -83,6 +86,7 @@ public final class Nodes {
     public int size() {
         return nodes.size(); 
     }
+    
     
     /**
      * <p>
@@ -102,6 +106,7 @@ public final class Nodes {
         return (Node) nodes.get(index);   
     }
 
+    
     /**
      * <p>
      * Removes the index<sup>th</sup>node in the list.
@@ -119,6 +124,7 @@ public final class Nodes {
         nodes.remove(index);   
     }
     
+    
     /**
      * <p>
      * Inserts a node at the index<sup>th</sup> position in the list.
@@ -131,11 +137,12 @@ public final class Nodes {
      * @return the node at the specified position
      * 
      * @throws <code>IndexOutOfBoundsException</code> if index is  
-     *     negative or greater than or equal to the size of the list
+     *     negative or strictly greater than the size of the list
      */
     public void insert(Node node, int index) {
         nodes.add(index, node);   
     }
+    
     
     /**
      * <p>
@@ -148,4 +155,5 @@ public final class Nodes {
         nodes.add(node);
     }
 
+    
 }

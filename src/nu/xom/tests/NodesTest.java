@@ -34,20 +34,23 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a4
  *
  */
 public class NodesTest extends XOMTestCase {
 
+    
     public NodesTest(String name) {
         super(name);
     }
+    
     
     public void testNoArgsConstructor() {
         Nodes nodes = new Nodes();
         assertEquals(0, nodes.size());   
     }
 
+    
     public void testOneArgConstructor() {
         Element test = new Element("test");
         Nodes nodes = new Nodes(test);
@@ -55,6 +58,7 @@ public class NodesTest extends XOMTestCase {
         Element stored = (Element) nodes.get(0);
         assertEquals(test, stored);  
     }
+    
     
     public void testIndexOutofBoundsException() {
         Nodes nodes = new Nodes();
@@ -84,7 +88,9 @@ public class NodesTest extends XOMTestCase {
         
     }
 
+    
     public void testAppendAndGet() {
+        
         Nodes nodes = new Nodes();
         int length = 10;
         for (int i = 0; i < length; i++) {
@@ -94,9 +100,23 @@ public class NodesTest extends XOMTestCase {
         for (int i = 0; i < length; i++) {
             assertEquals(String.valueOf(i), nodes.get(i).getValue());   
         }     
+        
+    }
+    
+    
+    public void testInsertAtEnd() {
+        
+        Nodes nodes = new Nodes();
+        nodes.insert(new Text("test"), 0);
+        assertEquals("test", nodes.get(0).getValue());
+        nodes.insert(new Text("test2"), 1);
+        assertEquals("test2", nodes.get(1).getValue());
+        
     }
 
+    
     public void testInsert() {
+        
         Nodes nodes = new Nodes();
         int length = 10;
         for (int i = 0; i < length; i++) {
@@ -138,6 +158,7 @@ public class NodesTest extends XOMTestCase {
         }
                  
     }
+    
     
     public void testDelete() {
         
@@ -188,5 +209,6 @@ public class NodesTest extends XOMTestCase {
         }
           
     }
+    
     
 }
