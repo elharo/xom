@@ -120,8 +120,8 @@ public final class Nodes {
      * @throws <code>IndexOutOfBoundsException</code> if index is  
      *     negative or greater than or equal to the size of the list
      */
-    public void remove(int index) {
-        nodes.remove(index);   
+    public Node remove(int index) {
+        return (Node) nodes.remove(index);   
     }
     
     
@@ -133,8 +133,6 @@ public final class Nodes {
      * 
      * @param node the node to insert
      * @param index the position at which to insert the node
-     * 
-     * @return the node at the specified position
      * 
      * @throws <code>IndexOutOfBoundsException</code> if index is  
      *     negative or strictly greater than the size of the list

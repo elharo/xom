@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -25,6 +25,7 @@ package nu.xom.tests;
 
 import nu.xom.Comment;
 import nu.xom.Element;
+import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.Text;
 
@@ -168,8 +169,10 @@ public class NodesTest extends XOMTestCase {
             nodes.append(new Text(String.valueOf(i)));   
         }     
         
-        nodes.remove(0);
+        Node result = nodes.remove(0);
         assertEquals(length-1, nodes.size());
+        assertEquals("0", result.getValue());
+        
         for (int i = 0; i < nodes.size(); i++) {
             assertEquals(String.valueOf(i+1), nodes.get(i).getValue());   
         }  
