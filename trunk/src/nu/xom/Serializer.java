@@ -354,13 +354,6 @@ public class Serializer {
         
     }
     
-    /* private boolean preserveWhiteSpace(Element element) {
-        String xmlSpace = element.getAttributeValue(
-          "space", "http://www.w3.org/XML/1998/namespace");
-        if ("preserve".equals(xmlSpace)) return true;
-        return false;
-    } */
-    
     /**
      * <p>
      * Serializes a <code>Comment</code> object
@@ -475,7 +468,22 @@ public class Serializer {
      *     encounters an I/O error
      */
     protected void write(Text text) throws IOException {
-        escaper.writePCDATA(text.getValue());
+        String value = text.getValue();
+        if (text.isCDATASection()) {
+           for (int i = 0; i < value.length(); i++) {
+               if (escaper.needsEscaping(value.charAt(i))) {
+                    // can't use CDATA section
+                    escaper.writePCDATA(value);
+                    return;   
+               }   
+           }
+           escaper.writeMarkup("<![CDATA[");
+           escaper.writeMarkup(value);
+           escaper.writeMarkup("]]>");
+        }
+        else {
+            escaper.writePCDATA(value);
+        }
     }   
 
     

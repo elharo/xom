@@ -224,14 +224,18 @@ class XOMHandler
   
     public void characters(char[] text, int start, int length) {
         buffer.append(text, start, length); 
+        if (finishedCDATA && length > 0) inCDATA = false;
     }
  
     // acumulate all text that's in the buffer into a text node
     private void flushText() {
         if (buffer.length() > 0) {
             Text data;
-            if (!isIgnorable) {
+            if (!isIgnorable &&!inCDATA) {
                 data = factory.makeText(buffer.toString());
+            }
+            else if (inCDATA) {
+                data = factory.makeCDATASection(buffer.toString());
             }
             else data = factory.makeWhiteSpaceInElementContent(
               buffer.toString()
@@ -240,6 +244,8 @@ class XOMHandler
             buffer = new StringBuffer();
         }
         isIgnorable = false;
+        inCDATA = false;
+        finishedCDATA = false;
     }
   
     private boolean isIgnorable = false;
@@ -317,8 +323,17 @@ class XOMHandler
       if (name.equals("[dtd]")) inExternalSubset = false;    
     }
     
-    public void startCDATA() {}
-    public void endCDATA() {}
+    private boolean inCDATA = false;
+    private boolean finishedCDATA = false;
+    
+    public void startCDATA() {
+        if (buffer.length() == 0) inCDATA = true;
+        finishedCDATA = false;
+    }
+    
+    public void endCDATA() {
+        finishedCDATA = true;
+    }
 
     public void comment(char[] text, int start, int length) {
         
