@@ -306,13 +306,17 @@ public class Canonicalizer {
                 // user meant to put it there; and so we will escape it 
                 // with a character reference
                 char[] data = value.toCharArray();
+                boolean seenFirstNonSpace = false;
                 for (int i = 0; i < data.length; i++) {
                     if (data[i] == ' ') {
-                        if (i != 0 && data[i-1] != ' ') {
-                            result.append(data[i]);   
+                        if (i != data.length-1 && data[i+1] != ' ' && seenFirstNonSpace) {
+                             result.append(data[i]); 
                         }
-                    }
-                    else if (data[i] == '\t') {
+                        continue;
+                    } 
+                    // should this go here or after tab, CR and LF????
+                    seenFirstNonSpace = true;
+                    if (data[i] == '\t') {
                         result.append("&#x9;");
                     }
                     else if (data[i] == '\n') {
