@@ -36,6 +36,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
+import org.xml.sax.SAXParseException;
+
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
@@ -109,7 +111,7 @@ import nu.xom.XMLException;
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  */
 public final class XSLTransform {
 
@@ -305,15 +307,31 @@ public final class XSLTransform {
      *     due to an XSLT error
      */ 
     private Nodes transform(Source in) throws XSLException {
+        
         try {
             XOMResult out = new XOMResult(factory);
             Transformer transformer = templates.newTransformer();
             transformer.transform(in, out);
             return out.getResult();
         }
-        catch (TransformerException ex) {
-            throw new XSLException("XSLT Transformation failed", ex);
+        catch (Exception ex) {
+            // workaround bugs that wrap RuntimeExceptions
+            Throwable cause = ex;
+            if (cause instanceof TransformerException) {
+                TransformerException tex = (TransformerException) cause;
+                Throwable nested = tex.getException();
+                if (nested != null) {
+                    cause = nested;
+                    if (cause instanceof SAXParseException) {
+                        nested = ((SAXParseException) cause).getException();
+                        if (nested != null) cause = nested;
+                    }
+                }
+            }
+            
+            throw new XSLException(ex.getMessage(), cause);
         }
+        
     }
     
     
