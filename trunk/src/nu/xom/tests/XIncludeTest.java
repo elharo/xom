@@ -1306,4 +1306,21 @@ public class XIncludeTest extends XOMTestCase {
     }
     
  
+    // This is semantically bad; but still meets the
+    // syntax of fragment IDs from RFC 2396
+    public void testBadXPointerInFragmentIDIsIgnored() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/meaninglessfragmentid.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expected = builder.build(
+          new File("data/xinclude/output/ignoresfragmentid.xml")
+        );
+        assertEquals(expected, result);
+                
+    }
+    
+ 
 }
