@@ -44,10 +44,15 @@ import nu.xom.XPathException;
  *
  */
 public class XPathTest extends XOMTestCase {
+    
+    // need to test for expressions that don't return node-sets????
+    // FIXME don't use Map for namespaces, use a custom class
+    // for 1.1 compatibility
 
     public XPathTest(String name) {
         super(name);
     }
+    
     
     public void testSimpleQuery() {
         
@@ -58,6 +63,48 @@ public class XPathTest extends XOMTestCase {
         Nodes result = parent.query("*");
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
+        
+    }
+    
+
+    public void testEmptyTextNodesDontCount() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child1");
+        parent.appendChild(child1);
+        parent.appendChild(new Text(""));
+        parent.appendChild(new Text(""));
+        Element child2 = new Element("child2");
+        parent.appendChild(child2);
+        
+        Nodes result = parent.query("*");
+        assertEquals(2, result.size());
+        assertEquals(child1, result.get(0));   
+        
+        result = parent.query("*[2]");
+        assertEquals(1, result.size());
+        assertEquals(child2, result.get(0));
+        
+    }
+    
+
+    public void testEmptyTextNodesDontCount2() {
+        
+        Element parent = new Element("Test");
+        parent.appendChild(new Text(""));
+        Element child1 = new Element("child1");
+        parent.appendChild(child1);
+        Element child2 = new Element("child2");
+        parent.appendChild(child2);
+        
+        Nodes result = parent.query("*");
+        assertEquals(2, result.size());
+        assertEquals(child1, result.get(0));   
+        assertEquals(child2, result.get(1));   
+        
+        result = parent.query("*[1]");
+        assertEquals(1, result.size());
+        assertEquals(child1, result.get(0));
         
     }
     
@@ -223,7 +270,7 @@ public class XPathTest extends XOMTestCase {
         
         Element element = new Element("test");
         try {
-            element.query("document('http://www.cafeaulait.org.org/formatter/Formatter.java')/*");
+            element.query("document('http://www.cafeaulait.org/formatter/Formatter.java')/*");
             fail("Queried malformed document!");
         }
         catch (XPathException success) {
@@ -299,7 +346,7 @@ public class XPathTest extends XOMTestCase {
     }
     
     
-    public void testGetProcessingInstrcutionData() {
+    public void testGetProcessingInstructionData() {
         
         Element grandparent = new Element("Test");
         Document doc = new Document(grandparent);
@@ -543,6 +590,28 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testIDQueryOnDocumentNode() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child1");
+        Element child2 = new Element("child2");
+        Element child3 = new Element("child3");
+        Attribute id = new Attribute("a", "anchor");
+        id.setType(Attribute.Type.ID);
+        child2.addAttribute(id);
+        
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        parent.appendChild(child3);
+        Document doc = new Document(parent);
+        
+        Nodes result = doc.query("id('anchor')");
+        assertEquals(1, result.size());     
+        assertEquals(child2, result.get(0));
+        
+    }
+    
+
     public void testIDFunctionWithoutType() {
         
         Element parent = new Element("Test");
@@ -626,6 +695,62 @@ public class XPathTest extends XOMTestCase {
         Nodes result = parent.query("child::pre:child", namespaces);
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testPrefixedNamespaceQuery() {
+        
+        Element parent = new Element("a:Test", "http://www.example.org");
+        Element child = new Element("b:child", "http://www.example.org");
+        Attribute att = new Attribute("c:dog", "http://www.cafeconleche.org/", "test");
+        parent.appendChild(child);
+        child.addAttribute(att);
+        
+        Map namespaces = new HashMap();
+        namespaces.put("pre", "http://www.example.org");
+        namespaces.put("c", "http://www.cafeconleche.org/");
+        Nodes result = parent.query("child::pre:child", namespaces);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0)); 
+        
+        result = child.query("@c:*", namespaces);
+        assertEquals(1, result.size());
+        assertEquals(att, result.get(0)); 
+        
+    }
+    
+    
+    public void testBradley() {
+     
+        Element element = new Element("root");
+        Text t1 = new Text("makes ");
+        Text t2 = new Text("a");
+        Text t3 = new Text(" good");
+        Text t4 = new Text(" point.");
+        Element child = new Element("someElement");
+        Text t5 = new Text("  Yes");
+        Text t6 = new Text(" he");
+        Text t7 = new Text(" does!");
+        element.appendChild(t1);
+        element.appendChild(t2);
+        element.appendChild(t3);
+        element.appendChild(t4);
+        element.appendChild(child);
+        element.appendChild(t5);
+        element.appendChild(t6);
+        element.appendChild(t7);
+        
+        Nodes result = element.query("./text()[contains(., 'o')]");
+        assertEquals(7, result.size());
+        assertEquals(t1, result.get(0));
+        assertEquals(t2, result.get(1));
+        assertEquals(t3, result.get(2));
+        assertEquals(t4, result.get(3));
+        assertEquals(t5, result.get(4));
+        assertEquals(t6, result.get(5));
+        assertEquals(t7, result.get(6));
+        
         
     }
     
