@@ -575,4 +575,18 @@ public class DOMConverterTest extends XOMTestCase {
     }
  
     
+    public void testConvertXMLSpaceAttributeFromXOMToDOM() 
+      throws SAXException, IOException {
+     
+        Element root = new Element("element");
+        Document doc = new Document(root);
+        root.addAttribute(new Attribute("xml:space", 
+          "http://www.w3.org/XML/1998/namespace", "preserve"));
+        org.w3c.dom.Document domDoc = DOMConverter.convert(doc, impl);
+        org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
+        assertEquals(1, domRoot.getAttributes().getLength());
+         
+    }
+ 
+    
 }
