@@ -42,11 +42,6 @@ public final class XPathContext {
     Map namespaces = new HashMap();
     
     
-    String getURI(String prefix) {
-        return (String) namespaces.get(prefix);
-    }   
-    
-    
     /**
      * <p>
      * Creates a new XPath context that bonds the prefix to the
