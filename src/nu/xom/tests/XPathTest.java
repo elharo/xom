@@ -70,6 +70,47 @@ public class XPathTest extends XOMTestCase {
     }
     
     
+    /* <a>
+<x>1</x>
+<b>
+<x>2</x>
+<x>3</x>
+</b>
+<x>4</x>
+</a> */
+    public void testDescendantAxisOrder() {
+        
+        Element a = new Element("a");
+        Document doc = new Document(a);
+        Element x1 = new Element("x");
+        x1.appendChild("a1");
+        Element x2 = new Element("x");
+        x2.appendChild("b2");
+        Element x3 = new Element("x");
+        x3.appendChild("c3");
+        Element x4 = new Element("x");
+        x4.appendChild("d4");
+        a.appendChild(x1);
+        Element b = new Element("b");
+        b.appendChild(x2);
+        b.appendChild(x3);
+        a.appendChild(b);
+        a.appendChild(x4);
+        System.out.println(doc.toXML());
+        Nodes result = doc.query("//x");
+        assertEquals(4, result.size());
+        assertTrue(result.get(0) instanceof Element);
+        assertTrue(result.get(1) instanceof Element);
+        assertTrue(result.get(2) instanceof Element);
+        assertTrue(result.get(3) instanceof Element);
+        assertEquals(x1, result.get(0));   
+        assertEquals(x2, result.get(1));
+        assertEquals(x3, result.get(2));
+        assertEquals(x4, result.get(3));
+        
+    }
+    
+
     public void testSimpleQuery() {
         
         Element parent = new Element("Test");
@@ -243,8 +284,8 @@ public class XPathTest extends XOMTestCase {
         
         Nodes result = child.query("ancestor::*");
         assertEquals(2, result.size());
-        assertEquals(parent, result.get(0));   
-        assertEquals(grandparent, result.get(1));
+        assertEquals(grandparent, result.get(0));   
+        assertEquals(parent, result.get(1));
         
     }
     
@@ -363,42 +404,6 @@ public class XPathTest extends XOMTestCase {
     }
   
     
-    /* <a>
-<x>1</x>
-<b>
-<x>2</x>
-<x>3</x>
-</b>
-<x>4</x>
-</a> */
-    public void testDescendantAxisOrder() {
-        
-        Element a = new Element("a");
-        Document doc = new Document(a);
-        Element x1 = new Element("x");
-        x1.appendChild("1");
-        Element x2 = new Element("x");
-        x2.appendChild("2");
-        Element x3 = new Element("x");
-        x3.appendChild("3");
-        Element x4 = new Element("x");
-        x4.appendChild("4");
-        a.appendChild(x1);
-        Element b = new Element("b");
-        b.appendChild(x2);
-        b.appendChild(x3);
-        a.appendChild(b);
-        a.appendChild(x4);
-        Nodes result = doc.query("//x");
-        assertEquals(4, result.size());
-        assertEquals(x1, result.get(0));   
-        assertEquals(x2, result.get(1));
-        assertEquals(x3, result.get(2));
-        assertEquals(x4, result.get(3));
-        
-    }
-    
-
     public void testGetElementQName() {
         
         Element grandparent = new Element("Test");
@@ -451,6 +456,7 @@ public class XPathTest extends XOMTestCase {
     public void testGetDocument() {
         
         Element element = new Element("test");
+        // do this locally????
         Nodes result = element.query("document('http://www.cafeconleche.org/')/*");
         assertEquals(1, result.size());
         
@@ -635,9 +641,9 @@ public class XPathTest extends XOMTestCase {
         
         Nodes result = child.query("ancestor-or-self::*");
         assertEquals(3, result.size());
-        assertEquals(child, result.get(0));   
+        assertEquals(child, result.get(2));   
         assertEquals(parent, result.get(1));   
-        assertEquals(grandparent, result.get(2));
+        assertEquals(grandparent, result.get(0));
         
     }
     
@@ -696,7 +702,8 @@ public class XPathTest extends XOMTestCase {
         assertEquals(child1, result.get(0));
         assertEquals(child2, result.get(1));
         assertEquals(child3, result.get(2));
-        assertEquals(child4, result.get(3));       
+        assertEquals(child4, result.get(3));  
+        
     }
     
 
