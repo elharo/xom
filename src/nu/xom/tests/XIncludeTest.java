@@ -48,6 +48,7 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.Text;
 
+import nu.xom.xinclude.BadEncodingAttributeException;
 import nu.xom.xinclude.BadHTTPHeaderException;
 import nu.xom.xinclude.BadHrefAttributeException;
 import nu.xom.xinclude.BadParseAttributeException;
@@ -1855,7 +1856,9 @@ public class XIncludeTest extends XOMTestCase {
         URL baseURL = testDescription.toURL();
         if (!testDescription.exists()) {
             baseURL = new URL(
-              "http://dev.w3.org/cvsweb/~checkout~/2001/XInclude-Test-Suite/testdescr.xml?content-type=text/plain&only_with_tag=HEAD"
+              "http://dev.w3.org/cvsweb/~checkout~/2001/" +
+              "XInclude-Test-Suite/testdescr.xml?content-type=text/" +
+              "plain&only_with_tag=HEAD"
             );
         }
         Document master = builder.build(baseURL.toExternalForm());
@@ -2325,9 +2328,142 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (XIncludeException success) {
             assertNotNull(success.getMessage());
+            Exception cause = (Exception) success.getCause();
+            assertNotNull(cause);
         }
                 
     }
         
     
+    // WARNING: this test is one interpretation of the XInclude 
+    // proposed recommendation. It asserts that encoding attributes 
+    // that do not contain legal encoding names are fatal errors.
+    // This is far from certain. It is also possible the working group
+    // will choose to interpret these as resource errors. 
+    public void testMalformedEncodingAttribute() 
+      throws IOException, ParsingException, XIncludeException {
+      
+        File input = new File(inputDir, "badencoding.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed encoding attribute with white space");
+        }
+        catch (BadEncodingAttributeException success) {
+            assertNotNull(success.getMessage());
+            assertTrue(success.getURI().endsWith(input.getName()));
+        }
+                
+    }
+        
+    
+    // Test that a malformed parse attribute is thrown even when the
+    // fallback element containing it is not activated.
+    public void testHiddenError() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed bad parse attribute in unactivated fallback");
+        }
+        catch (BadParseAttributeException success) {
+            assertNotNull(success.getMessage());
+        }
+                
+    }
+        
+
+    // Test that an href attribute that has a fragment identifier
+    // is a fatal error even when the
+    // fallback element containing it is not activated.????
+    public void testHiddenError2() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror2.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed fragment identifier in href attribute in unactivated fallback");
+        }
+        catch (BadParseAttributeException success) {
+            assertNotNull(success.getMessage());
+        }
+                
+    }
+
+    
+    // Test that an xpointer attribute that uses percent escapes 
+    // is a not a fatal error when the 
+    // fallback element containing it is not activated????
+    // See http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2004Oct/0006.html
+    public void testXpointerAttributeContainsPercentEscapeInUnactivatedFallback() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror3.xml");
+        Document doc = builder.build(input);
+        XIncluder.resolve(doc);
+                
+    }
+
+
+        
+    
+    // Test that a malformed parse attribute causes an exception
+    // even when the fallback element containing it is not activated.
+    public void testHiddenError4() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror4.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed bad parse attribute in unactivated fallback");
+        }
+        catch (BadParseAttributeException success) {
+            assertNotNull(success.getMessage());
+        }
+                
+    }
+        
+
+    // Test that an href attribute that has a fragment identifier
+    // is a fatal error even when the
+    // fallback element containing it is not activated.????
+    public void testHiddenError5() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror5.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed fragment identifier in href attribute in unactivated fallback");
+        }
+        catch (BadParseAttributeException success) {
+            assertNotNull(success.getMessage());
+        }
+                
+    }
+
+    
+    // Test that an xpointer attribute that uses percent escapes 
+    // is a fatal error even when the 
+    // fallback element containing it is not activated????
+    public void testHiddenError6() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror6.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed xpointer attribute to use percent escape in unactivated fallback");
+        }
+        catch (BadParseAttributeException success) {
+            assertNotNull(success.getMessage());
+        }
+                
+    }
+
+      
 }
