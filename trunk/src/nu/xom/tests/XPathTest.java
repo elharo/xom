@@ -25,10 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nu.xom.Attribute;
+import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
+import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.XPathException;
 
@@ -56,6 +58,52 @@ public class XPathTest extends XOMTestCase {
         Nodes result = parent.query("*");
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
+        
+    }
+    
+
+    public void testBasicPredicate() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child");
+        child1.appendChild("1");
+        parent.appendChild(child1);
+        Element child2 = new Element("child");
+        child2.appendChild("2");
+        parent.appendChild(child2);
+        Element child3 = new Element("child");
+        child3.appendChild("3");
+        parent.appendChild(child3);
+        
+        Nodes result = parent.query("*[.='2']");
+        assertEquals(1, result.size());
+        assertEquals(child2, result.get(0));   
+        
+    }
+    
+
+    public void testXMLLang() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child");
+        child1.addAttribute(new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "en"));
+        parent.appendChild(child1);
+        Element child2 = new Element("child");
+        child2.appendChild("2");
+        child2.addAttribute(new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "fr"));
+        parent.appendChild(child2);
+        Element child3 = new Element("child");
+        child3.appendChild("3");
+        parent.appendChild(child3);
+        Element child4 = new Element("child");
+        child4.appendChild("4");
+        child4.addAttribute(new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "en-US"));
+        parent.appendChild(child4);
+        
+        Nodes result = parent.query("child::*[lang('en')]");
+        assertEquals(2, result.size());
+        assertEquals(child1, result.get(0));   
+        assertEquals(child4, result.get(1));   
         
     }
     
@@ -106,6 +154,203 @@ public class XPathTest extends XOMTestCase {
         assertEquals(grandparent, result.get(0));   
         assertEquals(parent, result.get(1));
         assertEquals(child, result.get(2));
+        
+    }
+    
+
+    public void testGetElementQName() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child1 = new Element("pre:child", "http://www.example.org/");
+        Element child2 = new Element("pre:child", "http://www.example.com/");
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        grandparent.appendChild(parent);
+        
+        Nodes result = doc.query("descendant::*[name(.)='pre:child']");
+        assertEquals(2, result.size());
+        assertEquals(child1, result.get(0));   
+        assertEquals(child2, result.get(1));
+        
+    }
+    
+
+    public void testGetAttributeQName() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Attribute a1 = new Attribute("pre:attribute", "http://www.example.org/", "test");
+        Attribute a2 = new Attribute("pre:attribute", "http://www.example.com/", "test");
+        parent.addAttribute(a2);
+        grandparent.addAttribute(a1);
+        grandparent.appendChild(parent);
+        
+        Nodes result = doc.query("descendant::*/attribute::*[name(.)='pre:attribute']");
+        assertEquals(2, result.size());
+        assertEquals(a1, result.get(0));   
+        assertEquals(a2, result.get(1));
+        
+    }
+    
+    
+    public void testGetDocument() {
+        
+        Element element = new Element("test");
+        Nodes result = element.query("document('http://www.cafeconleche.org/')/*");
+        assertEquals(1, result.size());
+        
+    }
+    
+
+    public void testGetNonExistentDocument() {
+        
+        Element element = new Element("test");
+        try {
+            element.query("document('http://www.ibiblio.org/aksdjhk/')/*");
+            fail("That file doesn't exist!");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+
+    public void testMalformedDocument() {
+        
+        Element element = new Element("test");
+        try {
+            element.query("document('http://www.cafeaulait.org.org/formatter/Formatter.java')/*");
+            fail("Queried malformed document!");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+
+    public void testGetDocumentNode() {
+        
+        Element element = new Element("test");
+        Document doc = new Document(element);
+        Nodes result = element.query("/");
+        assertEquals(1, result.size());
+        assertEquals(doc, result.get(0));
+        
+    }
+    
+
+    public void testCommentNodeTest() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        grandparent.appendChild(parent);
+        
+        Comment c1 = new Comment("c1");
+        Comment c2 = new Comment("c2");
+        Comment c3 = new Comment("c3");
+        Comment c4 = new Comment("c4");
+        
+        doc.insertChild(c1, 0);
+        grandparent.insertChild(c2, 0);
+        parent.insertChild(c3, 0);
+        child.insertChild(c4, 0);
+        
+        Nodes result = doc.query("descendant::comment()");
+        assertEquals(4, result.size());
+        assertEquals(c1, result.get(0));   
+        assertEquals(c2, result.get(1));
+        assertEquals(c3, result.get(2));
+        assertEquals(c4, result.get(3));
+        
+    }
+    
+
+    public void testCommentStringValue() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        grandparent.appendChild(parent);
+        
+        Comment c1 = new Comment("c1");
+        Comment c2 = new Comment("c2");
+        Comment c3 = new Comment("c3");
+        Comment c4 = new Comment("c4");
+        
+        doc.insertChild(c1, 0);
+        grandparent.insertChild(c2, 0);
+        parent.insertChild(c3, 0);
+        child.insertChild(c4, 0);
+        
+        Nodes result = doc.query("descendant::comment()[.='c3']");
+        assertEquals(1, result.size());
+        assertEquals(c3, result.get(0));
+        
+    }
+    
+    
+    public void testGetProcessingInstrcutionData() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        grandparent.appendChild(parent);
+        
+        ProcessingInstruction p1 = new ProcessingInstruction("c1", "1");
+        ProcessingInstruction p2 = new ProcessingInstruction("c1", "2");
+        ProcessingInstruction p3 = new ProcessingInstruction("c1", "3");
+        ProcessingInstruction p4 = new ProcessingInstruction("c1", "4");
+        
+        doc.insertChild(p1, 0);
+        grandparent.insertChild(p2, 0);
+        parent.insertChild(p3, 0);
+        child.insertChild(p4, 0);
+        
+        Nodes result = doc.query("descendant::processing-instruction()[.='3']");
+        assertEquals(1, result.size());
+        assertEquals(p3, result.get(0));
+        
+    }
+    
+    
+    public void testProcessingInstructionNodeTest() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        grandparent.appendChild(parent);
+        
+        Comment c1 = new Comment("c1");
+        Comment c2 = new Comment("c2");
+        Comment c3 = new Comment("c3");
+        Comment c4 = new Comment("c4");
+        
+        doc.insertChild(c1, 0);
+        grandparent.insertChild(c2, 0);
+        parent.insertChild(c3, 0);
+        child.insertChild(c4, 0);
+        ProcessingInstruction pi = new ProcessingInstruction("appendix", "text");
+        doc.appendChild(pi);
+        ProcessingInstruction pi2 = new ProcessingInstruction("test", "text");
+        parent.appendChild(pi2);
+        
+        Nodes result = doc.query("descendant::processing-instruction('test')");
+        assertEquals(1, result.size());
+        assertEquals(pi2, result.get(0));
         
     }
     
@@ -188,6 +433,30 @@ public class XPathTest extends XOMTestCase {
         parent.appendChild(child4);
         Nodes result = child1.query("self::text()");
         assertEquals(4, result.size());
+        assertEquals(child1, result.get(0));
+        assertEquals(child2, result.get(1));
+        assertEquals(child3, result.get(2));
+        assertEquals(child4, result.get(3));       
+    }
+    
+
+    public void testSelfAxisWithTextChildren2() {
+        
+        Element parent = new Element("parent");
+        Node child1 = new Text("1");
+        Node child2 = new Text("2");
+        Node child3 = new Text("3");
+        Node child4 = new Text("4");
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        parent.appendChild(child3);
+        parent.appendChild(child4);
+        Nodes result = child3.query("self::text()");
+        assertEquals(4, result.size());
+        assertEquals(child1, result.get(0));
+        assertEquals(child2, result.get(1));
+        assertEquals(child3, result.get(2));
+        assertEquals(child4, result.get(3));
         
     }
     
@@ -270,6 +539,57 @@ public class XPathTest extends XOMTestCase {
         Nodes result = parent.query("id('anchor')");
         assertEquals(1, result.size());     
         assertEquals(child2, result.get(0));
+        
+    }
+    
+
+    public void testIDFunctionWithoutType() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child1");
+        Element child2 = new Element("child2");
+        Element child3 = new Element("child3");
+        Attribute id = new Attribute("id", "anchor");
+        child2.addAttribute(id);
+        
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        parent.appendChild(child3);
+        
+        Nodes result = parent.query("id('anchor')");
+        assertEquals(0, result.size());
+        
+    }
+    
+
+    public void testIDFunctionFromTextNode() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child1");
+        Element child2 = new Element("child2");
+        Element child3 = new Element("child3");
+        Text text = new Text("test");
+        child3.appendChild(text);
+        Attribute id = new Attribute("a", "anchor");
+        id.setType(Attribute.Type.ID);
+        child2.addAttribute(id);
+        
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        parent.appendChild(child3);
+        
+        Nodes result = text.query("id('anchor')");
+        assertEquals(1, result.size());     
+        assertEquals(child2, result.get(0));
+        
+    }
+    
+
+    public void testIDFunctionFromDisconnectedTextNode() {
+        
+        Text text = new Text("test");       
+        Nodes result = text.query("id('anchor')");
+        assertEquals(0, result.size());
         
     }
     
