@@ -48,7 +48,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b7
  *
  */
 public abstract class Node {
@@ -167,11 +167,8 @@ public abstract class Node {
      * @return the base URI of this node 
      */
     public String getBaseURI() {
-        
-        ParentNode parent = this.getParent();
         if (parent == null) return "";
         return parent.getBaseURI();
-        
     }
 
 
