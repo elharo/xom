@@ -50,7 +50,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -1811,5 +1811,58 @@ public class SerializerTest extends XOMTestCase {
         
     }    
     
+    
+    // This test case reproduces a bug that
+    // showed up while working on SAX conformance testing.
+    public void testElementsThatOnlyContainsAnEmptyTextNodeShouldBeOutputWithAnEmptyElementTag() 
+      throws IOException {
+        
+        Element root = new Element("a");
+        Element child = new Element("b");
+        child.appendChild("");
+        root.appendChild(child);
+        
+        Document doc = new Document(root);
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
+           
+        serializer.flush();
+        byte[] data = out.toByteArray();
+        String result = new String(data, "UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
+                "<a><b/></a>\r\n", result);      
+    }
+    
+    
+    // This test case reproduces a bug that
+    // showed up while working on SAX conformance testing.
+    public void testElementsThatOnlyContainEmptyTextNodesShouldBeOutputWithAnEmptyElementTag() 
+      throws IOException {
+        
+        Element root = new Element("a");
+        Element child = new Element("b");
+        child.appendChild("");
+        child.appendChild("");
+        child.appendChild("");
+        root.appendChild(child);
+        
+        Document doc = new Document(root);
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
+           
+        serializer.flush();
+        byte[] data = out.toByteArray();
+        String result = new String(data, "UTF-8");
+        System.err.println(result);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
+                "<a><b/></a>\r\n", result);
+        
+        
+    }
+
     
 }
