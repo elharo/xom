@@ -392,9 +392,6 @@ public class DOMConverter {
         else if (node instanceof ProcessingInstruction) {
             return convert((ProcessingInstruction) node, document);
         }
-        else if (node instanceof Text) {
-            return convert((Text) node, document);
-        }
         else {
             throw new XMLException(
               "Unexpected node type: " + node.getClass().getName()
