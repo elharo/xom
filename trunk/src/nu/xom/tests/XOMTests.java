@@ -33,7 +33,7 @@ import junit.framework.TestSuite;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1a1
  *
  */
 public class XOMTests extends TestCase {
@@ -73,6 +73,7 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(ParsingExceptionTest.class));
         result.addTest(new TestSuite(XSLExceptionTest.class));
         result.addTest(new TestSuite(XIncludeExceptionTest.class));
+        result.addTest(new TestSuite(CanonicalizationExceptionTest.class));
         result.addTest(new TestSuite(CDATASectionTest.class));
         result.addTest(new TestSuite(NodesTest.class));
         // EBCDIC test fails due to bugs in the Java class library
