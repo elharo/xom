@@ -241,7 +241,6 @@ class JaxenNavigator extends DefaultNavigator {
         
         if (o instanceof ParentNode) {
             return new ChildIterator((ParentNode) o);
-            // return getXPathChildren((ParentNode) o).iterator();
         }
         else {
             return Collections.EMPTY_LIST.iterator();
@@ -266,38 +265,6 @@ class JaxenNavigator extends DefaultNavigator {
         
     }
 
-    
-    private static int getXPathChildCount(ParentNode parent) {
-    
-        int childCount = parent.getChildCount();
-        if (parent.isDocument()) {
-            DocType doctype = ((Document) parent).getDocType();
-            if (doctype == null) return childCount;
-            else return childCount - 1;
-        }
-        int children = 0;
-        
-        boolean previousWasText = false;
-        for (int i = 0; i < childCount; i++) {
-            Node child = parent.getChild(i);
-            if (child.isText()) {
-                if (previousWasText) {
-                    continue;
-                }
-                else if (! ((Text) child).isEmpty()) {
-                    children++;
-                    previousWasText = true;
-                }
-            }
-            else {
-                previousWasText = false;
-                children++;
-            }
-        }
-        return children;
-        
-    }
-    
     
     public String getTextStringValue(Object o) {
         
@@ -391,22 +358,29 @@ class JaxenNavigator extends DefaultNavigator {
         private ParentNode parent;
 
         private int xomIndex = 0;
-        private int xpathIndex = 0;
-        private int end;
         private int xomCount;
         
         ChildIterator(ParentNode parent) {
             this.parent = parent;
-            // ???? I still iterate through this twice;
-            // could this be eliminated somehow?
-            this.end = getXPathChildCount(parent);
             this.xomCount = parent.getChildCount();
             
         }
         
         public boolean hasNext() {
-            return xpathIndex < end;
+            
+            for (int i = xomIndex; i < xomCount; i++) {
+                Node next = parent.getChild(i); 
+                if (next.isText()) {
+                    if (! ((Text) next).isEmpty()) {
+                        return true;
+                    }
+                }
+                else return true;
+            }
+            return false;
+            
         }
+        
 
         public Object next() {
             
@@ -438,7 +412,7 @@ class JaxenNavigator extends DefaultNavigator {
             else {
                 result = next;
             }
-            xpathIndex++;
+            // xpathIndex++;
             return result;
             
         }
