@@ -52,18 +52,9 @@ import nu.xom.Text;
  *   Document subset canonicalization is not yet supported.
  * </p>
  * 
- * <p>
- * Need to check on this:
- * "However, the XML processor used to prepare the XPath data model
- * input is required (by the Data Model) to use Normalization Form C 
- * [NFC, NFC-Corrigendum] when converting an XML document to the UCS  
- * character domain from any encoding that is not UCS-based".
- * Is Xerces using NFC????
- * </p>
- * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class CanonicalXMLSerializer extends Serializer {
@@ -112,7 +103,7 @@ public class CanonicalXMLSerializer extends Serializer {
      * @throws IOException if the underlying <code>OutputStream</code>
      *      encounters an I/O error
      */
-    public final void write(Document doc) throws IOException {
+     public final void write(Document doc) throws IOException {
         
         int position = 0;        
         while (true) {
@@ -136,7 +127,7 @@ public class CanonicalXMLSerializer extends Serializer {
         }
         
         flush();
-    }   
+    }  
  
     /**
      * <p>
@@ -153,12 +144,21 @@ public class CanonicalXMLSerializer extends Serializer {
      */
     protected final void write(Element element) throws IOException {
         
-        writeMarkup("<");
-        writeMarkup(element.getQualifiedName());
+        writeStartTag(element, false);
+        // children
+        for (int i = 0; i < element.getChildCount(); i++) {
+            write(element.getChild(i)); 
+        }
+        writeEndTag(element);
+    } 
+
+    protected void writeStartTag(Element element, boolean isEmpty) throws IOException {
+        writeRaw("<");
+        writeRaw(element.getQualifiedName());
         
         // Namespace
         String prefix = element.getNamespacePrefix();
-
+        
         ParentNode parent = element.getParent();
         String parentURI = "";
         if (parent instanceof Element) {
@@ -169,7 +169,7 @@ public class CanonicalXMLSerializer extends Serializer {
         if (parent instanceof Element) {
             parentElement = (Element) parent; 
         } 
-
+        
         for (int i = 0; 
              i < element.getNamespaceDeclarationCount(); 
              i++) {
@@ -186,40 +186,31 @@ public class CanonicalXMLSerializer extends Serializer {
                 continue; // no need to say xmlns=""   
             }
             
-            if ("".equals(additionalPrefix)) {
-                writeMarkup(" xmlns"); 
-            }
-            else {
-                writeMarkup(" xmlns:"); 
-                writeMarkup(additionalPrefix); 
-            } 
-            writeMarkup("=\""); 
-            writePCDATA(uri);   
-            writeMarkup("\"");
+            writeRaw(" ");
+            writeNamespaceDeclaration(additionalPrefix, uri);
         } 
-
+        
         Attribute[] sorted = sortAttributes(element);        
         for (int i = 0; i < sorted.length; i++) {
-            Attribute attribute = sorted[i];
-            writeMarkup(" ");
-            writeMarkup(attribute.getQualifiedName());
-            writeMarkup("=\"");
-            writeMarkup(prepareAttributeValue(attribute));
-            writeMarkup("\"");
+            writeRaw(" ");
+            write(sorted[i]);
         }       
         
-        writeMarkup(">");
-        // children
-        for (int i = 0; i < element.getChildCount(); i++) {
-            write(element.getChild(i)); 
-        }
-        writeMarkup("</");
-        writeMarkup(element.getQualifiedName());
-        writeMarkup(">");
-        flush();
-        
+        writeRaw(">");
+    } 
+
+    protected void write(Attribute attribute) throws IOException {
+        writeRaw(attribute.getQualifiedName());
+        writeRaw("=\"");
+        writeRaw(prepareAttributeValue(attribute));
+        writeRaw("\"");
     }
     
+    protected void writeEndTag(Element element) throws IOException {
+        writeRaw("</");
+        writeRaw(element.getQualifiedName());
+        writeRaw(">");
+    }    
     
     
     private Attribute[] sortAttributes(Element element) {
@@ -259,7 +250,6 @@ public class CanonicalXMLSerializer extends Serializer {
             }
             
         }
-
 
     }
 
@@ -381,7 +371,7 @@ public class CanonicalXMLSerializer extends Serializer {
                 result.append(c);   
             }            
         }
-        writeMarkup(result.toString());
+        writeRaw(result.toString());
     }   
 
     /**
@@ -401,7 +391,16 @@ public class CanonicalXMLSerializer extends Serializer {
         if (withComments) super.write(comment);
     }
 
-
+    
+    /**
+     *  <p>
+     *   Does nothing because canonical XML does not
+     *   include XML declarations.
+     * </p>
+     * 
+     * @see nu.xom.Serializer#writeXMLDeclaration()
+     */
+    protected void writeXMLDeclaration() {};
     
     /**
      * <p>
@@ -438,6 +437,7 @@ public class CanonicalXMLSerializer extends Serializer {
      *     successive level in the hierarchy
      */
     public final void setIndent(int indent) {
+       // throw an exception instead????
        // do nothing because canonical XML does not adjust white space
     }
 
@@ -464,6 +464,7 @@ public class CanonicalXMLSerializer extends Serializer {
      * @param lineSeparator the character(s) used to break lines
      */
     public final void setLineSeparator(String lineSeparator) {
+       // throw an excepiton instead????
         super.setLineSeparator("\n");  
     }
 
@@ -490,6 +491,7 @@ public class CanonicalXMLSerializer extends Serializer {
      */
     public final void setMaxLength(int maxLength) {
        // do nothing because canonical XML does not adjust white space
+       // throw an excepiton instead????
     }
 
     /**
@@ -521,6 +523,45 @@ public class CanonicalXMLSerializer extends Serializer {
     public final void preserveBaseURI(boolean preserve) {
        // do nothing because canonical XML 
        // does not insert extra attributes
+       // throw an excepiton instead????
+    }
+
+    /**
+     * <p>
+     *   If true, this property indicates serialization will
+     *   perform Unicode normalization on all data using normalization
+     *   form C (NFC). Because Unicode normalization and XML
+     *   canonicalization are incompatible, attempting to set this
+     *   feature to true throws an 
+     *   <code>IllegalArgumentException</code>.
+     * </p>
+     * 
+     * <p>
+     *   This feature is not yet implemented. 
+     * </p>
+     * 
+     * @param normalize true if normalization is performed; false if it isn't.
+     */
+    public final void setUnicodeNormalizationFormC(boolean normalize) {
+        if (normalize) {
+            throw new IllegalArgumentException(
+              "Normalization and canonicalization are incompatible."
+            ); 
+        }  
+    }
+
+    
+    /**
+     * <p>
+     *   A canonicalizing serializer never performs Unicode 
+     *   normalization. The method always returns false.
+     * </p>
+     * 
+     * @return false XML canonicalization does not include Unicode
+     *     normalization.
+     */
+    public final boolean getUnicodeNormalizationFormC() {
+        return false;   
     }
 
 }
