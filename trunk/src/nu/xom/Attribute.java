@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -269,10 +269,12 @@ public class Attribute extends Node {
      *     which are not legal in XML such as vertical tab or a null. 
      *     Characters such as " and &amp; are legal, but will be 
      *     automatically escaped when the attribute is serialized.
+     * @throws MalformedURIException if this is an 
+     *     <code>xml:base</code> attribute, and the value is not a
+     *     legal IRI
      */
     public final void setValue(String value) {
         // Need to check values of xml:base
-        // does this get trimmed????
         if ("xml".equals(prefix) && "base".equals(localName)) {
             Verifier.checkXMLBaseValue(value);
         }
