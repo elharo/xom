@@ -51,18 +51,17 @@ import nu.xom.Text;
 /**
  * <p>
  *   Implements XInclude resolution as specified in the 
- *   <a href="http://www.w3.org/TR/2003/WD-xinclude-20031110">November
- *   10, 2003 2nd Last Call Working Draft of <cite>XML Inclusions
+ *   <a href="http://www.w3.org/TR/2004/CR-xinclude-20040413">April
+ *   13, 2004 2nd Candidate Recommendation of <cite>XML Inclusions
  *   (XInclude) Version 1.0</cite></a>. Fallbacks are supported.
  *   The XPointer <code>element()</code> scheme and shorthand XPointers
  *   are also supported. The XPointer <code>xpointer()</code> scheme
- *   is not supported. The <code>accept</code>, 
- *   <code>accept-language</code>, and <code>accept-charset</code>
- *   attributes are supported.
+ *   is not supported. The <code>accept</code> and 
+ *   <code>accept-language</code> attributes are supported.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public class XIncluder {
@@ -80,7 +79,7 @@ public class XIncluder {
      * </p>
      */
     public final static String XINCLUDE_NS 
-      = "http://www.w3.org/2003/XInclude";
+      = "http://www.w3.org/2001/XInclude";
 
     /**
      * <p>
@@ -354,15 +353,13 @@ public class XIncluder {
                 else if (href != null) url = new URL(href);  
                 
                 String accept = element.getAttributeValue("accept");
-                String acceptCharset = element.getAttributeValue("accept-charset");
                 String acceptLanguage = element.getAttributeValue("accept-language"); 
                 
                 if (parse.equals("xml")) {
                     Nodes replacements;
                     if (url != null) { 
                         replacements = downloadXMLDocument(url, 
-                          xpointer, builder, baseURLs, accept, 
-                          acceptCharset, acceptLanguage);
+                          xpointer, builder, baseURLs, accept, acceptLanguage);
                         // Add base URIs. Base URIs added by XInclusion require
                         // the element to maintain the same base URI as it had  
                         // in the original document. Since its base URI in the 
@@ -405,7 +402,9 @@ public class XIncluder {
                             Node copy = original.copy();
                             if (copy instanceof Element) {
                                 Element copyElement = (Element) copy;
-                                copyElement.setBaseURI(original.getBaseURI());
+                                // XXX can I delete this or not? copyElement.setBaseURI(original.getBaseURI());
+                                // the copy actually sets the base URI to the original's actual base URI,
+                                // not always the same as getBaseURI
                             } 
                             replacements.append(copy);        
                         }  
@@ -463,7 +462,7 @@ public class XIncluder {
                 }
                 else if (parse.equals("text")) {                   
                     Nodes replacements 
-                      = downloadTextDocument(url, encoding, builder, accept, acceptCharset, acceptLanguage);
+                      = downloadTextDocument(url, encoding, builder, accept, acceptLanguage);
                     for (int j = 0; j < replacements.size(); j++) {
                         Node replacement = replacements.get(j);
                         if (replacement instanceof Attribute) {
@@ -595,7 +594,6 @@ public class XIncluder {
             String encoding = element.getAttributeValue("encoding");
             String href = element.getAttributeValue("href");
             String accept = element.getAttributeValue("accept");
-            String acceptCharset = element.getAttributeValue("accept-charset");
             String acceptLanguage = element.getAttributeValue("accept-language"); 
             
             if ("".equals(href)) href = null;
@@ -627,8 +625,7 @@ public class XIncluder {
                     Nodes replacements;
                     if (url != null) { 
                         replacements = downloadXMLDocument(url, 
-                          xpointer, builder, baseURLs, accept, 
-                          acceptCharset, acceptLanguage);
+                          xpointer, builder, baseURLs, accept, acceptLanguage);
                         // Add base URIs. Base URIs added by XInclusion require
                         // the element to maintain the same base URI as it had  
                         // in the original document. Since its base URI in the 
@@ -675,7 +672,7 @@ public class XIncluder {
                     return replacements; 
                 }  // end parse="xml"
                 else if (parse.equals("text")) {                   
-                    return downloadTextDocument(url, encoding, builder, accept, acceptCharset, acceptLanguage);
+                    return downloadTextDocument(url, encoding, builder, accept, acceptLanguage);
                 }
                 else {
                    throw new BadParseAttributeException(
@@ -803,7 +800,7 @@ public class XIncluder {
 
     private static Nodes downloadXMLDocument(
       URL source, String xpointer, Builder builder, Stack baseURLs,
-      String accept, String charset, String language) 
+      String accept, String language) 
       throws IOException, ParsingException, XIncludeException, 
              XPointerSyntaxException, XPointerResourceException {
 
@@ -815,7 +812,7 @@ public class XIncluder {
         }      
         
         URLConnection uc = source.openConnection();
-        setHeaders(uc, accept, charset, language);
+        setHeaders(uc, accept, language);
         Document doc = builder.build(
           uc.getInputStream(), source.toExternalForm()); 
           
@@ -865,7 +862,7 @@ public class XIncluder {
     */    
     private static Nodes downloadTextDocument(
       URL source, String encoding, Builder builder,
-      String accept, String charset, String language) 
+      String accept, String language) 
       throws IOException {
          
         if (encoding == null || encoding.length() == 0) {
@@ -873,7 +870,7 @@ public class XIncluder {
         }
 
         URLConnection uc = source.openConnection();
-        setHeaders(uc, accept, charset, language);
+        setHeaders(uc, accept, language);
         
         String encodingFromHeader = uc.getContentEncoding();
         String contentType = uc.getContentType();
@@ -932,13 +929,10 @@ public class XIncluder {
     
     
     private static void setHeaders(URLConnection uc, String accept, 
-      String charset, String language) {
+      String language) {
       
         if (accept != null) {
             uc.setRequestProperty("accept", accept);
-        }
-        if (charset != null) {
-            uc.setRequestProperty("accept-charset", charset);
         }
         if (language != null) {
             uc.setRequestProperty("accept-language", language);
@@ -1005,7 +999,7 @@ URI reference by escaping all disallowed characters as follows: ]
     }
     
     
-    // could switch to lookup table????
+    // XXX could switch to lookup table
     private static boolean needsEscaping(byte c) {
         
         // This first test includes high-byte characters
