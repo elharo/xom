@@ -162,7 +162,7 @@ public class Attribute extends Node {
      * Creates a copy of the specified attribute.
      * </p>
      * 
-     * @param attribute  the attribute to copy
+     * @param attribute the attribute to copy
      * 
      */
     public Attribute(Attribute attribute) {
@@ -777,7 +777,7 @@ public class Attribute extends Node {
          *
          * @see java.lang.Object#toString()
          */
-        public String toXML() {        
+        public String getName() {        
             switch (type) {
               case 0:
                 return "UNDECLARED";   
@@ -865,13 +865,13 @@ public class Attribute extends Node {
          *
          * @see java.lang.Object#toString()
          */
-        public String toString() {        
+         public String toString() {        
             StringBuffer result 
               = new StringBuffer("[Attribute.Type: ");
-            result.append(toXML()); 
+            result.append(getName()); 
             result.append("]");
             return result.toString();           
-        }          
+        }         
 
     }
 
