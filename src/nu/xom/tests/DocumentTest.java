@@ -198,6 +198,17 @@ public class DocumentTest extends XOMTestCase {
             assertNotNull(success.getMessage());
         }
         
+        Element top = new Element("top");
+        Element child = new Element("child");
+        top.appendChild(child);
+        try {
+            doc.setRootElement(child);
+            fail("Allowed element with two parents");
+        }
+        catch (MultipleParentException success) {
+            assertNotNull(success.getMessage());
+        }
+        
     }
 
     
