@@ -635,6 +635,8 @@ final class Verifier {
 
     private static void checkScheme(String scheme) {
 
+        // http is probably 99% of cases so check it first 
+        if ("http".equals(scheme)) return;
         char c = scheme.charAt(0);
         if (!isAlpha(c)) {
             throw new MalformedURIException(
@@ -841,7 +843,38 @@ final class Verifier {
         }
         return false; 
     }
+    
+    
+    // Since namespace URIs are commonly repeated, we can save a lot 
+    // of redundant code by storing the ones we've seen before. 
+    private static URICache cache = new URICache(); 
 
+    private final static class URICache {
+     
+        private final static int LOAD = 4;
+        private String[] cache = new String[LOAD];
+        private int position = 0;
+        
+        synchronized boolean contains(String s) {
+            for (int i = 0; i < LOAD; i++) {
+                // Here I'm assuming the namespace URIs are interned.
+                // This is commonly but not always true. This won't
+                // break if they haven't been. Using equals() instead 
+                // of == is faster when the namespace URIs haven't been
+                // interned but slower if they have.
+                if (s == cache[i]) return true;
+            }
+            return false;
+        }
+
+        synchronized void put(String s) {
+            cache[position] = s;
+            position++;
+            if (position == LOAD) position = 0;
+        }
+        
+    }
+    
     
     /**
      * <p>
@@ -857,6 +890,7 @@ final class Verifier {
      */
     static void checkAbsoluteURIReference(String uri) {
         
+        if (cache.contains(uri)) return;
         URIUtil.ParsedURI parsed = new URIUtil.ParsedURI(uri);
         try {
             if (parsed.scheme == null) {
@@ -868,6 +902,7 @@ final class Verifier {
             checkPath(parsed.path);
             if (parsed.fragment != null) checkFragment(parsed.fragment);
             if (parsed.query != null) checkQuery(parsed.query);
+            cache.put(uri);
         }
         catch (MalformedURIException ex) {
             ex.setData(uri);
@@ -878,6 +913,7 @@ final class Verifier {
 
     
     static boolean isAlpha(char c) {
+        
         switch(c) {
             case 'A': return true;
             case 'B': return true;
