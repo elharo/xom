@@ -42,7 +42,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a5
  *
  */
 public class XMLExceptionTest extends XOMTestCase {
@@ -63,84 +63,84 @@ public class XMLExceptionTest extends XOMTestCase {
 
     
     public void testConstructor() {
-        Exception ex = new XMLException(message, cause);
+        XMLException ex = new XMLException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testMalformedURIExceptionConstructor() {
-        Exception ex = new MalformedURIException(message, cause);
+        XMLException ex = new MalformedURIException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testValidityExceptionConstructor() {
-        Exception ex = new MalformedURIException(message, cause);
+        XMLException ex = new MalformedURIException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testNamespaceConflictExceptionConstructor() {
-        Exception ex = new NamespaceConflictException(message, cause);
+        XMLException ex = new NamespaceConflictException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testMultipleParentExceptionConstructor() {
-        Exception ex = new MultipleParentException(message, cause);
+        XMLException ex = new MultipleParentException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testNoSuchAttributeExceptionConstructor() {
-        Exception ex = new NoSuchAttributeException(message, cause);
+        XMLException ex = new NoSuchAttributeException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testNoSuchChildExceptionConstructor() {
-        Exception ex = new NoSuchChildException(message, cause);
+        XMLException ex = new NoSuchChildException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testCycleExceptionConstructor() {
-        Exception ex = new CycleException(message, cause);
+        XMLException ex = new CycleException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testIllegalNameExceptionConstructor() {
-        Exception ex = new IllegalNameException(message, cause);
+        XMLException ex = new IllegalNameException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testIllegalTargetExceptionConstructor() {
-        Exception ex = new IllegalTargetException(message, cause);
+        XMLException ex = new IllegalTargetException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testIllegalAddExceptionConstructor() {
-        Exception ex = new IllegalAddException(message, cause);
+        XMLException ex = new IllegalAddException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     
     public void testIllegalDataExceptionConstructor() {
-        Exception ex = new IllegalDataException(message, cause);
+        XMLException ex = new IllegalDataException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
