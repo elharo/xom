@@ -34,7 +34,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 class XOMHandler 
@@ -157,13 +157,14 @@ class XOMHandler
                       value, 
                       convertStringToType(attributes.getType(i))
                     );
+                    int numberChildren = 0;
                     for (int j=0; j < nodes.size(); j++) {
                         Node node = nodes.get(j);
                         if (node.isAttribute()) {
                             factory.addAttribute(element, (Attribute) node);
                         }
                         else {
-                            element.appendChild(node);   
+                            factory.insertChild(element, node, numberChildren++);   
                         }
                     }
                 }
