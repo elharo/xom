@@ -2038,7 +2038,7 @@ public class XIncludeTest extends XOMTestCase {
  
     // This is semantically bad; but still meets the
     // syntax of fragment IDs from RFC 2396
-    public void testBadXPointerInFragmentIDIsIgnored() 
+    public void testBadXPointerInFragmentIDIsFatalError() 
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File(
@@ -2133,5 +2133,21 @@ public class XIncludeTest extends XOMTestCase {
         
     }
  
+    public void testPercentEscapesAreNotAllowedInXPointerAttributes() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/xpointerwithpercentescape.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed xpointer attribute with percent escape");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());
+        }
+                
+    }
+        
     
 }

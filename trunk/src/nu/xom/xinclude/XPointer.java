@@ -64,7 +64,6 @@ class XPointer {
         Nodes result = new Nodes();
         boolean found = false;
         
-        xptr = decode(xptr);
         try { // Is this a shorthand XPointer?
             // Need to include a URI in case this is a colonized scheme name 
             new Element(xptr, "http://www.example.com");
@@ -331,53 +330,6 @@ class XPointer {
         return null;
         
     }
-    
-    
-    private static String decode(String xptr) 
-      throws XPointerSyntaxException {
-        StringBuffer result = new StringBuffer(xptr);
-        try {
-            for (int i = 0; i < result.length(); i++) {
-                char c = result.charAt(i);
-                if (c == '%') {
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    while (c == '%') {
-                        result.deleteCharAt(i);
-                        String hex = result.substring(i, i+2);
-                        byte character = (byte) Integer.parseInt(hex, 16);
-                        out.write(character);
-                        result.deleteCharAt(i);
-                        result.deleteCharAt(i);                    
-                        c = result.charAt(i);
-                    }
-                    byte[] raw = out.toByteArray();
-                    try {
-                        String data = new String(raw, "UTF-8");
-                        result.insert(i, data);
-                    } catch (UnsupportedEncodingException ex) {
-                        throw new RuntimeException(
-                          "Broken VM does not support UTF-8"
-                        );
-                    }
-                    
-                }
-            }
-        }
-        catch (StringIndexOutOfBoundsException ex) {
-            XPointerSyntaxException ex2 = new XPointerSyntaxException(
-              xptr + " is not a syntactically correct XPointer"); 
-            ex2.initCause(ex);
-            throw ex2; 
-        }
-        catch (NumberFormatException ex) {
-            XPointerSyntaxException ex2 = new XPointerSyntaxException(
-              xptr + " is not a syntactically correct XPointer"); 
-            ex2.initCause(ex);
-            throw ex2; 
-        }
-        return result.toString();
-        
-    }  
 
     
 }
