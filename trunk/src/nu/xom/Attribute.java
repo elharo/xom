@@ -40,7 +40,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b1
  * 
  */
 public class Attribute extends Node {
@@ -430,7 +430,8 @@ public class Attribute extends Node {
             }
             else {
                 throw new NamespaceConflictException(
-                  "Prefixed attributes cannot be in a default namespace.");
+                  "Unprefixed attribute " + this.localName 
+                  + " cannot be in default namespace " + URI);
             }
         }
         else if (URI.length() == 0) {
