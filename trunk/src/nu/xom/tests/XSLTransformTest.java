@@ -1032,7 +1032,7 @@ public class XSLTransformTest extends XOMTestCase {
         File base = new File("data");
         base = new File(base, "oasis-xslt-testsuite");
         base = new File(base, "TESTS");
-        base = new File("Xalan_Conformance_Tests");
+        base = new File(base, "Xalan_Conformance_Tests");
         File catalog = new File(base, "catalog.xml");
         
         // The test suite need to be installed separately. If we can't
@@ -1045,6 +1045,7 @@ public class XSLTransformTest extends XOMTestCase {
                 Element submitter = submitters.get(i);
                 Elements testcases = submitter.getChildElements("test-case");
                 for (int j = 0; j < testcases.size(); j++) {
+                    
                     Element testcase = testcases.get(j);
                     String id = testcase.getAttributeValue("id");
                     if (id.startsWith("output_")) {
@@ -1189,9 +1190,11 @@ public class XSLTransformTest extends XOMTestCase {
                         }
                         
                     }
-                    catch (MalformedURIException ex) {
+                    catch (ParsingException ex) {
                         // Some of the test cases contain relative 
                         // namespace URIs XOM does not support
+                        if (ex.getCause() instanceof MalformedURIException) continue;
+                        throw ex;
                     }
                     catch (XSLException ex) {
                         // If the output was null the transformation 
@@ -1250,7 +1253,7 @@ public class XSLTransformTest extends XOMTestCase {
         Builder strippingBuilder = new Builder(stripper);
         File base = new File("data");
         base = new File(base, "oasis-xslt-testsuite");
-        base = new File("TESTS");
+        base = new File(base, "TESTS");
         File catalog = new File(base, "catalog.xml");
         
         // The test suite need to be installed separately. If we can't
@@ -1649,8 +1652,7 @@ public class XSLTransformTest extends XOMTestCase {
                     
                 } // end try
                 catch (MalformedURIException ex) {
-                    // several stylesheets use relative namespace URIs XOM
-                    // does not support; skip the test
+                    
                 }
                 catch (FileNotFoundException ex) {
                     // The catalog doesn't always match what's on disk
@@ -1660,6 +1662,13 @@ public class XSLTransformTest extends XOMTestCase {
                     // point to external DTD subsets that can't be loaded
                 }
                 catch (ParsingException ex) {
+                    
+                    // several stylesheets use relative namespace URIs XOM
+                    // does not support; skip the test
+                    if (ex.getCause() instanceof MalformedURIException) {
+                        continue;
+                    }
+                    
                     String operation = scenario.getAttributeValue("operation");
                     if (!"execution-error".equals(operation)) {
                         if ("Namespace_XPath_PredefinedPrefix_XML".equals(id)) {
