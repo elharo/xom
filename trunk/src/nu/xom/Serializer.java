@@ -177,15 +177,15 @@ public class Serializer {
         throws UnsupportedEncodingException {
         Writer writer;  
         // Java's Cp037 encoding is broken, so we have to
-        // provide our own.   
+        // provide our own.
+        encoding = encoding.toUpperCase();
         if (encoding.equals("IBM037")
-                      || encoding.equals("CP037")
-                      || encoding.equals("EBCDIC-CP-US")
-                      || encoding.equals("EBCDIC-CP-CA")
-                      || encoding.equals("EBCDIC-CP-WA")
-                      || encoding.equals("EBCDIC-CP-NL")
-                      || encoding.equals("CSIBM037")) {
-                          
+          || encoding.equals("CP037")
+          || encoding.equals("EBCDIC-CP-US")
+          || encoding.equals("EBCDIC-CP-CA")
+          || encoding.equals("EBCDIC-CP-WA")
+          || encoding.equals("EBCDIC-CP-NL")
+          || encoding.equals("CSIBM037")) {
             writer = new EBCDICWriter(out);
         }
         else if (encoding.equals("UTF-16") 
@@ -195,7 +195,7 @@ public class Serializer {
         }
         else writer = new OutputStreamWriter(out, encoding);
         writer = new BufferedWriter(writer);
-        this.escaper = TextWriterFactory.getTextWriter(writer, encoding);  
+        this.escaper = TextWriterFactory.getTextWriter(writer, encoding);
     }
 
     
@@ -418,7 +418,8 @@ public class Serializer {
      * @throws IOException if the underlying <code>OutputStream</code>
      *     encounters an I/O error
      */
-    protected void writeEmptyElementTag(Element element) throws IOException {
+    protected void writeEmptyElementTag(Element element) 
+      throws IOException {
         writeTagBeginning(element);
         escaper.writeMarkup("/>");
     }
@@ -459,7 +460,6 @@ public class Serializer {
         if (preserveBaseURI) {
             if (element.getAttribute("base", 
              "http://www.w3.org/XML/1998/namespace") == null) {
-                //ParentNode elemParent = element.getParent();
                 String baseValue = element.getBaseURI();
                 if (baseValue != null) {
                     if (parent == null 
