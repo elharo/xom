@@ -331,10 +331,11 @@ class XOMHandler
                     parent.insertChild(node, position);
                     position++;
                 }
-                // what is this node is an attribute???? write unit test and fix
-                // same question for comment????
                 else {
-                    parent.appendChild(node);
+                    if (node instanceof Attribute) {
+                        ((Element) parent).addAttribute((Attribute) node);
+                    }
+                    else parent.appendChild(node);
                 }
             }
             else {
@@ -430,7 +431,10 @@ class XOMHandler
                     position++;
                 }
                 else {
-                    parent.appendChild(node);
+                    if (node instanceof Attribute) {
+                        ((Element) parent).addAttribute((Attribute) node);
+                    }
+                    else parent.appendChild(node);
                 }
             }
             else {

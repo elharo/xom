@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -60,6 +60,7 @@ public class NodeFactoryTest extends XOMTestCase {
         super(name);
     }
     
+    
     public void testSkippingComment() 
       throws IOException, ParsingException {
         
@@ -74,7 +75,8 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals(first.getValue(), "18");        
     }
 
-    private static class CommentFilter extends NodeFactory {
+    
+    static class CommentFilter extends NodeFactory {
         
         public Nodes makeComment(String data) {
             return new Nodes();
@@ -150,7 +152,8 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals("c", b.getQualifiedName());
     }    
 
-    private static class CFactory extends NodeFactory {
+    
+    static class CFactory extends NodeFactory {
 
         public Element startMakingElement(
           String name, String namespace) {
@@ -159,6 +162,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
+    
     public void testMakeRoot() throws IOException, ParsingException {       
         String data = "<a><b>18</b></a>";
         Builder builder = new Builder(new CallsMakeRoot());
@@ -170,7 +174,8 @@ public class NodeFactoryTest extends XOMTestCase {
         assertNotNull(root.getFirstChildElement("b"));
     }
 
-    private static class CallsMakeRoot extends NodeFactory {
+    
+    static class CallsMakeRoot extends NodeFactory {
 
         public Element makeRootElement(
           String name, String namepaceURI) {
@@ -195,8 +200,8 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals(first.getValue(), "18");        
     }
 
-    private static class ProcessingInstructionFilter 
-      extends NodeFactory {
+    
+    static class ProcessingInstructionFilter extends NodeFactory {
 
         public Nodes makeProcessingInstruction(
           String target, String data) {
@@ -205,6 +210,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
+    
     public void testSkippingIgnorableWhiteSpace() 
       throws IOException, ParsingException {
         
@@ -222,6 +228,7 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals(first.getValue(), "   ");        
     }
 
+    
     private static class IgnorableWhiteSpaceFilter 
       extends NodeFactory {
 
@@ -283,6 +290,7 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
     
+    
     public void testValidateWithFactory() 
       throws ParsingException, IOException {
         Builder validator = new Builder(true, new MinimizingFactory());
@@ -309,7 +317,7 @@ public class NodeFactoryTest extends XOMTestCase {
             return empty;  
         }    
     
-        protected Nodes finishMakingElement(Element element) {
+        public Nodes finishMakingElement(Element element) {
             if (element.getParent() instanceof Document) {
                 return new Nodes(element);
             }        
@@ -337,6 +345,7 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
     
+    
     public void testCDATASectionsCanBeOverridden() 
       throws ValidityException, ParsingException, IOException {
         String data ="<root><![CDATA[text]]></root>";
@@ -345,6 +354,7 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals("", doc.getValue());
     }
 
+    
     public void testNullRootNotAllowed() 
       throws IOException, ParsingException {
         
@@ -360,6 +370,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }        
     }
 
+    
     // Returns null for all elements including the root.
     // This should cause an exception.
     static class NullElementFactory extends NodeFactory {
@@ -370,7 +381,8 @@ public class NodeFactoryTest extends XOMTestCase {
         }
 
     }
-        
+       
+    
     public void testNullDocumentNotAllowed() 
       throws IOException, ParsingException {
         
@@ -385,6 +397,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }        
     }
 
+    
     // Returns null for all elements including the root.
     // This should cause an exception.
     static class NullDocumentFactory extends NodeFactory {
@@ -395,6 +408,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
+    
     public void testSkipping() throws IOException, ParsingException {
         
         String data = "<a>data<b>data<a>data</a>data</b>data</a>";
@@ -412,6 +426,7 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
 
+    
     public void testCoalesceTextNodes() 
       throws IOException, ParsingException {  
         String data = "<a>data<!-- comment--> data</a>";
@@ -424,7 +439,8 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals("data data", text.getValue());      
     }
 
-    private static class TripleElementFilter extends NodeFactory {
+    
+    static class TripleElementFilter extends NodeFactory {
      
         public Nodes finishMakingElement(Element element) {
             Nodes result = new Nodes(element);  
@@ -436,6 +452,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }   
         
     }
+    
     
     public void testTriple() 
       throws IOException, ParsingException {  
@@ -450,7 +467,8 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals("<a><b><c /><c /><c /></b><b><c /><c /><c /></b><b><c /><c /><c /></b></a>", root.toXML());      
     }
 
-    private static class UncommentFilter extends NodeFactory {
+    
+    static class UncommentFilter extends NodeFactory {
      
         public Nodes makeComment(String data) {
             Nodes result = new Nodes(new Text(data));   
@@ -472,7 +490,8 @@ public class NodeFactoryTest extends XOMTestCase {
         }            
     }
     
-    private static class DocumentFilter extends NodeFactory {
+    
+    static class DocumentFilter extends NodeFactory {
      
         public Nodes makeComment(String data) {
             Element root = new Element("root");
@@ -482,6 +501,7 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
 
+    
     public void testCantAddDocument() 
       throws ParsingException, IOException {
         String data = "<a><!-- test --></a>";
@@ -495,6 +515,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }            
     }
 
+    
     public void testCantAddTwoDoctypes() 
       throws ParsingException, IOException {
         String data = "<!DOCTYPE a><a></a>";
@@ -517,6 +538,7 @@ public class NodeFactoryTest extends XOMTestCase {
             assertNotNull(success.getMessage());   
         }            
     }
+    
     
     public void testChangeAttributesToElements() 
       throws ParsingException, IOException {
@@ -567,6 +589,7 @@ public class NodeFactoryTest extends XOMTestCase {
             assertNotNull(success.getMessage());
         }
     }
+    
     
     public void testInsertElementsInInternalDTDSubsetViaComment() 
       throws ParsingException, IOException {
@@ -664,6 +687,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }
     }
     
+    
     public void testCantBypassMultipleParentChecks() 
       throws ParsingException, IOException {
         String doc = "<root><a/><a/></root>";   
@@ -687,6 +711,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
+    
     public void testCantBypassMultipleParentChecksFromFinishMakingElement() 
       throws ParsingException, IOException {
         String doc = "<root><a/><a/></root>";   
@@ -710,6 +735,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
  
+    
     public void testFinishMakingElementIsCalledForRootElement() 
       throws ParsingException, IOException {
         String doc = "<root/>";   
@@ -730,6 +756,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
  
+    
     public void testCanReplaceRootElementFromFinishMakingElement() 
       throws ParsingException, IOException {
         String data = "<root/>";   
@@ -750,6 +777,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
  
+    
     public void testCantReplaceRootElementWithNoElement() 
       throws ParsingException, IOException {
         String data = "<root/>";   
@@ -773,6 +801,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
+    
     public void testCantReplaceRootElementWithNothing() 
       throws ParsingException, IOException {
         String data = "<root/>";   
@@ -792,7 +821,46 @@ public class NodeFactoryTest extends XOMTestCase {
         }            
 
     }
+
+    
+    public void testReplaceCommentWithAttribute() 
+      throws ParsingException, IOException {
+        String data = "<root><!--comment--></root>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes makeComment(String data) {
+                return new Nodes(new Attribute("name", "value"));   
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        assertEquals(0, root.getChildCount());
+        assertEquals(1, root.getAttributeCount());
+        assertEquals("value", root.getAttribute("name").getValue());
+
+    }
  
+    
+    public void testReplaceProcessingInstructionWithAttribute() 
+      throws ParsingException, IOException {
+        String data = "<root><?target data?></root>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes makeProcessingInstruction(String target, String data) {
+                return new Nodes(new Attribute("name", "value"));   
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        assertEquals(0, root.getChildCount());
+        assertEquals(1, root.getAttributeCount());
+        assertEquals("value", root.getAttribute("name").getValue());
+
+    }
+ 
+    
     public void testCantReplaceRootElementWithTwoElements() 
       throws ParsingException, IOException {
         String data = "<root/>";   
@@ -816,4 +884,5 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
  
+    
 }
