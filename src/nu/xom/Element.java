@@ -140,7 +140,10 @@ public class Element extends ParentNode {
      * 
      */
     public Element(Element element) {
-        this(element.getQualifiedName(), element.URI);
+        
+        this.prefix = element.prefix;
+        this.localName = element.localName;
+        this.URI = element.URI;
         
         for (int i = 0; i < element.getChildCount(); i++) {
            Node child = element.getChild(i);
