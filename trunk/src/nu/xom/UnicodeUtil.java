@@ -1588,10 +1588,19 @@ final class UnicodeUtil {
     private static int composeCharacter(int starter, int c) {
         
         StringBuffer decomposed = new StringBuffer(4);
-
-        // FIXME encode in UTF-8
-        decomposed.append((char) starter);
-        decomposed.append((char) c);
+        
+        if (starter > 0xFFFF) {
+            decomposed.append(getHighSurrogate(starter));
+            decomposed.append(getLowSurrogate(starter));
+        }
+        else decomposed.append((char) starter);
+        
+        if (c > 0xFFFF) {
+            decomposed.append(getHighSurrogate(c));
+            decomposed.append(getLowSurrogate(c));
+        }
+        else decomposed.append((char) c);
+        
         String recomposed = (String) compositions.get(decomposed.toString());
         if (recomposed == null) return -1;
         else if (recomposed.length() == 1) return recomposed.charAt(0);
