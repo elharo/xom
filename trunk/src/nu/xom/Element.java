@@ -47,7 +47,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  *
  */
 public class Element extends ParentNode {
@@ -384,9 +384,9 @@ public class Element extends ParentNode {
      *      attached to an element
      * @throws NamespaceConflictException if the attribute's prefix   
      *      is mapped to a different namespace URI than the same prefix
-     *      is mapped to by the element itself, another attribute of 
-     *      the same element, or an additional namespace declaration
-     *      of that element
+     *      is mapped to by this element, another attribute of 
+     *      this element, or an additional namespace declaration
+     *      of this element
      */
     public void addAttribute(Attribute attribute) {
 
@@ -442,7 +442,6 @@ public class Element extends ParentNode {
      * 
      * @return the attribute that was removed
      * 
-     * @throws NullPointerException if the argument is null
      * @throws NoSuchAttributeException if this element is not the  
      *     parent of attribute
      * 
@@ -554,7 +553,7 @@ public class Element extends ParentNode {
      * 
      * @param index the attribute to return
      * 
-     * @return the index<sup>th</sup> Attribute in this element
+     * @return the index<sup>th</sup> attribute of this element
      * 
      * @throws IndexOutofBoundsException if the index is negative 
      *   or greater than or equal to the number of attributes 
@@ -1212,13 +1211,13 @@ public class Element extends ParentNode {
      * 
      * <p>
      * Sets the URI from which this element was loaded,
-     * and against which relative URLs in this node will be resolved,
-     * unless an <code>xml:base</code> attribute overrides this.
-     * Setting the base URI to null or the empty string removes any
-     * existing base URI.
+     * and against which relative URLs in this element will be 
+     * resolved, unless an <code>xml:base</code> attribute overrides 
+     * this. Setting the base URI to null or the empty string removes 
+     * any existing base URI.
      * </p>
      * 
-     * @param URI the new base URI for this node
+     * @param URI the new base URI for this element
      * 
      * @throws MalformedURIException if <code>URI</code> is 
      *     not a legal RFC 2396 absolute URI
@@ -1250,15 +1249,12 @@ public class Element extends ParentNode {
      * <p>
      * If the element's <code>xml:base</code> attribute contains a 
      * value that is a syntactically illegal URI (e.g. %GF.html"),
-     * the according to the XML Base errata, the value of this element's
-     * base URI is application dependent. XOM's choice in this case is 
+     * then the base URI is application dependent. XOM's choice is 
      * to behave as if the element did not have an <code>xml:base</code>
      * attribute. 
      * </p>
      * 
      * @return the base URI of this element 
-     * 
-     * @see Node#getBaseURI()
      */
      public String getBaseURI() {
 
@@ -1343,13 +1339,11 @@ public class Element extends ParentNode {
      * <p>
      * Returns a string containing the XML serialization of this 
      * element. This includes the element and all its attributes 
-     * and descendants. However, it may not contain namespace 
+     * and descendants. However, it does not contain namespace 
      * declarations for namespaces inherited from ancestor elements.
      * </p>
      * 
      * @return the XML representation of this element
-     * 
-     * @see nu.xom.Node#toXML()
      * 
      */
     // XXX might optimize by caching index, as we're iterating through in order
@@ -1453,9 +1447,11 @@ public class Element extends ParentNode {
     
     private static void writeEndTag(
       Element element, StringBuffer result) {
+        
         result.append("</");
         result.append(element.getQualifiedName());
         result.append(">");
+        
     }
     
 
@@ -1468,8 +1464,6 @@ public class Element extends ParentNode {
      * </p>
      * 
      * @return XPath string value of this element
-     * 
-     * @see nu.xom.Node#getValue()
      * 
      */
     public final String getValue() {
@@ -1522,8 +1516,6 @@ public class Element extends ParentNode {
      * </p>
      * 
      * @return a deep copy of this element with no parent
-     * 
-     * @see nu.xom.Node#copy()
      */
     public Node copy() {
         Element shallow = copyTag(this);
