@@ -43,7 +43,7 @@ import nu.xom.Text;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d24
+ * @version 1.0a1
  *
  */
 public class XOMTestCase extends TestCase {
@@ -280,7 +280,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonFailure if the <code>Elements</code> nodes 
+     * @throws ComparisonFailure if the <code>Element</code> nodes 
      *     are not equal
      */
     public static void assertEquals(
@@ -643,7 +643,7 @@ public class XOMTestCase extends TestCase {
             }
         }
         catch (ClassCastException ex) {            
-            fail("Mismatched node types: " 
+            fail(message + "; Mismatched node types: " 
              + expected.getClass().getName() + " != "
              + actual.getClass().getName());
         }
