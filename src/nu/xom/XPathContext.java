@@ -52,7 +52,7 @@ public final class XPathContext {
      * @param uri the namespace URI the prefix is bound to
      */
     public XPathContext(String prefix, String uri) {
-        namespaces.put(prefix, uri);
+        addNamespace(prefix, uri);
     }
     
     
@@ -62,13 +62,16 @@ public final class XPathContext {
     /**
      * <p>
      * Binds the specified prefix to the specified namespace URI. 
-     * If the prefix is already bound in this context, ????.
+     * If the prefix is already bound in this context, the new URI
+     * replaces the old URI. Binding a prefix to null removes the
+     * declaration.
      * </p>
      * 
      * @param prefix the prefix to bind
      * @param uri the namespace URI the prefix is bound to
      */
     public void addNamespace(String prefix, String uri) {
+        if ("".equals(uri)) uri = null;
         namespaces.put(prefix, uri);        
     }
 
