@@ -34,12 +34,12 @@ import nu.xom.Serializer;
 /**
  * 
  * <p>
- *   Demonstartes interaction of actual base URI with xml:base
- *   attributes.
+ *   Demonstrates interaction of actual base URI with 
+ *   <code>xml:base</code> attributes.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class HelloXMLBase {
