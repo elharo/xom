@@ -176,7 +176,22 @@ public class XIncludeTest extends XOMTestCase {
         );
         assertEquals(expectedResult, result);
 
-    }   
+    }  
+    
+    
+    // from the XInclude CR
+    public void testUnrecognizedAttributesAreIgnored() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/extraattributes.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c1.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }
     
     
     // from the XInclude CR
