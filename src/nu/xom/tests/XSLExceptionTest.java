@@ -1,4 +1,4 @@
-/* Copyright 2003, 2004 Elliotte Rusty Harold
+/* Copyright 2003-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -29,22 +29,26 @@ import nu.xom.xslt.XSLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public class XSLExceptionTest extends XOMTestCase {
     
+    
     private XSLException ex;
     private Exception cause;
+    
     
     public XSLExceptionTest(String name) {
         super(name);   
     }
 
+    
     protected void setUp() {
         ex = new XSLException("message");
         cause = new Exception();
     }
+    
     
     public void testConstructor() {
         String message = "testing 1-2-3";
@@ -53,6 +57,7 @@ public class XSLExceptionTest extends XOMTestCase {
         assertEquals(cause, ex.getCause()); 
     }
 
+    
     public void testInitCause() {
         
         assertNull(ex.getCause());
@@ -64,7 +69,6 @@ public class XSLExceptionTest extends XOMTestCase {
             fail("Reinitialized cause over null");   
         }
         catch (IllegalStateException success) {
-            // success   
             assertNotNull(success.getMessage()); 
         }
         
@@ -73,7 +77,6 @@ public class XSLExceptionTest extends XOMTestCase {
             fail("Reinitialized cause over null");   
         }
         catch (IllegalStateException success) {
-            // success  
             assertNotNull(success.getMessage()); 
         }
         
@@ -89,32 +92,34 @@ public class XSLExceptionTest extends XOMTestCase {
             ex.initCause(new Exception());
             fail("Reinitialized cause over null");   
         }
-        catch (IllegalStateException result) {
-            // success   
+        catch (IllegalStateException success) {
+            assertNotNull(success.getMessage()); 
         }
 
         try {
             ex.initCause(null);   
             fail("Reinitialized cause over null");   
         }
-        catch (IllegalStateException result) {
-            // success   
+        catch (IllegalStateException success) {
+            assertNotNull(success.getMessage()); 
         }
         
     }
 
+    
     public void testSelfCause() {
         
         try {
             ex.initCause(ex);   
             fail("Allowed self-causation");   
         }
-        catch (IllegalArgumentException result) {
-            // success   
+        catch (IllegalArgumentException success) {
+            assertNotNull(success.getMessage()); 
         }
         
     }
 
+    
     public void testGetMessage() {      
         Exception ex = new XSLException("testing");
         assertEquals("testing", ex.getMessage());
