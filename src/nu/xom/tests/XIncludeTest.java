@@ -1420,10 +1420,8 @@ public class XIncludeTest extends XOMTestCase {
         }  
         
     }
-
     
-    // ???? What if xpointer attribute is required because there's no href
-    // but the xpointer doesn't identify a subresource?
+    
     public void testBadElementSchemeDataIsNotAnError() 
       throws ParsingException, IOException, XIncludeException {
       
