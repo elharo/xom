@@ -23,6 +23,7 @@
 package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
+import java.io.CharConversionException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,6 +34,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UTFDataFormatException;
 import java.io.Writer;
 
 import org.xml.sax.Attributes;
@@ -43,6 +45,8 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
@@ -1744,6 +1748,20 @@ public class BuilderTest extends XOMTestCase {
         return f;
         
     }
+
+
+    public void testBuildFromFileThatContainsAmpersandInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File(inputDir, "&file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/&file.xml"));
+        
+    }
   
     
     public void testBuildFromFileThatContainsSpaceInName()
@@ -2262,20 +2280,6 @@ public class BuilderTest extends XOMTestCase {
     }
   
     
-    public void testBuildFromFileThatContainsAmpersandInName()
-      throws ParsingException, IOException {
-        
-        Document doc = builder.build(new File(inputDir, "&file.xml"));
-        String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<data />\n";
-        String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
-        assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/&file.xml"));
-        
-    }
-  
-    
     public void testBuildFromFileThatContainsBactickInName()
       throws ParsingException, IOException {
         
@@ -2289,6 +2293,256 @@ public class BuilderTest extends XOMTestCase {
           + Integer.toHexString('`') + "file.xml"));
         
     }
+    
+    
+    private static class NonValidatingFilter extends XMLFilterImpl {
+        
+        public void setFeature(String uri, boolean value) 
+          throws SAXNotRecognizedException, SAXNotSupportedException {
+           
+            if ("http://xml.org/sax/features/validation".equals(uri) && value) {
+                throw new SAXNotSupportedException("");
+            }
+            super.setFeature(uri, value);
+            
+        }
+        
+        public boolean getFeature(String uri) 
+          throws SAXNotRecognizedException, SAXNotSupportedException {
+            
+            if ("http://xml.org/sax/features/validation".equals(uri)) {
+                return false;
+            }
+            return super.getFeature(uri);
+            
+        }
+        
+        
+    }
+    
+    
+    public void testNonValidatingParserException() throws SAXException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        XMLFilter filter = new NonValidatingFilter();
+        filter.setParent(parser);
+        
+        try {
+            new Builder(filter, true, null);
+            fail("Validating with a non-validating parser");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+  
+    private static class NonEntityResolvingFilter extends XMLFilterImpl {
+        
+        public void setFeature(String uri, boolean value) 
+          throws SAXNotRecognizedException, SAXNotSupportedException {
+           
+            if (value && (
+              "http://xml.org/sax/features/validation".equals(uri) 
+              || "http://xml.org/sax/features/external-general-entities".equals(uri))
+              || "http://xml.org/sax/features/external-parameter-entities".equals(uri)) {
+                throw new SAXNotSupportedException("");
+            }
+            super.setFeature(uri, value);
+            
+        }
+        
+        public boolean getFeature(String uri) 
+          throws SAXNotRecognizedException, SAXNotSupportedException {
+            
+            if ("http://xml.org/sax/features/validation".equals(uri)
+              || "http://xml.org/sax/features/external-general-entities".equals(uri)
+              || "http://xml.org/sax/features/external-parameter-entities".equals(uri)) {
+                return false;
+            }
+            return super.getFeature(uri);
+            
+        }
+        
+        
+    }
+    
+    
+    public void testNonEntityResolvingParserException() throws SAXException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        XMLFilter filter = new NonEntityResolvingFilter();
+        filter.setParent(parser);
+        
+        try {
+            new Builder(filter, false, null);
+            fail("Accepted a non-entity resolving parser");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
   
     
+    // Fake certain errors to test workarounds for bugs in certain
+    // parsers, especially Piccolo. 
+    private static class ExceptionTester extends XMLFilterImpl {
+        
+        private Exception ex;
+        
+        ExceptionTester(Exception ex) {
+            this.ex = ex;
+        }
+        
+        public void parse(InputSource in) throws IOException, SAXException {
+            if (ex instanceof IOException) throw (IOException) ex;
+            else if (ex instanceof SAXException) throw (SAXException) ex;
+            else throw (RuntimeException) ex;
+        }
+        
+    }
+    
+    
+    public void testParserThrowsNullPointerException() 
+      throws SAXException, IOException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        Exception cause = new NullPointerException();
+        XMLFilter filter = new ExceptionTester(cause);
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        
+        try {
+            builder.build("<data/>");
+        }
+        catch (ParsingException success) {
+            assertEquals(cause, success.getCause());
+        }
+        
+    }
+    
+    
+    public void testParserThrowsNegativeArraySizeException() 
+      throws SAXException, IOException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        Exception cause = new NegativeArraySizeException();
+        XMLFilter filter = new ExceptionTester(cause);
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        
+        try {
+            builder.build("<data/>");
+        }
+        catch (ParsingException success) {
+            assertEquals(cause, success.getCause());
+        }
+        
+    }
+    
+    
+    public void testParserThrowsArrayIndexOutOfBoundsException() 
+      throws SAXException, IOException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        Exception cause = new ArrayIndexOutOfBoundsException();
+        XMLFilter filter = new ExceptionTester(cause);
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        
+        try {
+            builder.build("<data/>");
+        }
+        catch (ParsingException success) {
+            assertEquals(cause, success.getCause());
+        }
+        
+    }
+    
+    
+    public void testParserThrowsUTFDataFormatException() 
+      throws SAXException, IOException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        Exception cause = new UTFDataFormatException();
+        XMLFilter filter = new ExceptionTester(cause);
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        
+        try {
+            builder.build("<data/>");
+        }
+        catch (ParsingException success) {
+            assertEquals(cause, success.getCause());
+        }
+        
+    }
+    
+
+    public void testParserThrowsCharConversionException() 
+      throws SAXException, IOException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        Exception cause = new CharConversionException();
+        XMLFilter filter = new ExceptionTester(cause);
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        
+        try {
+            builder.build("<data/>");
+        }
+        catch (ParsingException success) {
+            assertEquals(cause, success.getCause());
+        }
+        
+    }
+    
+
+    public void testParserThrowsPlainSAXException() 
+      throws SAXException, IOException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        Exception cause = new SAXException("What happened to no-args constructor?");
+        XMLFilter filter = new ExceptionTester(cause);
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        
+        try {
+            builder.build("<data/>");
+        }
+        catch (ParsingException success) {
+            assertEquals(cause, success.getCause());
+        }
+        
+    }
+    
+
+    public void testParserThrowsIOException() 
+      throws SAXException, ParsingException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        Exception cause = new IOException();
+        XMLFilter filter = new ExceptionTester(cause);
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        
+        try {
+            builder.build("<data/>");
+        }
+        catch (IOException success) {
+            assertEquals(cause, success);
+        }
+        
+    }
+    
+
 }
