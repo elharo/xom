@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002, 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -29,14 +29,13 @@ import java.util.Map;
 import java.util.Stack;
 
 import nu.xom.Attribute;
-import nu.xom.Comment;
 import nu.xom.Element;
+import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
-import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
 import nu.xom.XMLException;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -60,28 +59,33 @@ import org.xml.sax.ext.LexicalHandler;
 class XSLTHandler 
   implements ContentHandler, LexicalHandler {
 
-    private Nodes       result;
-    private Stack       parents;
-    private NodeFactory factory;
-    private Map         prefixes; // In scope right now
+    private Nodes        result;
+    private Stack        parents;
+    private NodeFactory  factory;
+    private Map          prefixes; // In scope right now
+    private StringBuffer buffer;
+    
     
     XSLTHandler(NodeFactory factory) {
         this.factory = factory; 
-        result = new Nodes();
-        parents = new Stack();
-        buffer = new StringBuffer();
+        result   = new Nodes();
+        parents  = new Stack();
+        buffer   = new StringBuffer();
         prefixes = new HashMap();
     }   
+    
     
     Nodes getResult() {
         flushText(); // to handle case where there's no endDocument
         return result;
     }
     
+    
     public void setDocumentLocator(Locator locator) {}
     public void startDocument() {}
     public void endDocument() {}
   
+    
     public void startElement(String namespaceURI, String localName, 
      String qualifiedName, Attributes attributes) {
         
@@ -98,7 +102,6 @@ class XSLTHandler
         }
         parents.push(element);
         
-        
         // Attach the attributes
         for (int i = 0; i < attributes.getLength(); i++) {
             String attributeName = attributes.getQName(i);
@@ -109,9 +112,6 @@ class XSLTHandler
             }
             String namespace = attributes.getURI(i);
             String value = attributes.getValue(i);
-            // Here I rely on the behavior of the default factory.
-            // This will need to be changed if I ever allow transforms
-            // to use different factory subclasses.
             
             Nodes nodes = factory.makeAttribute(
               attributeName, 
@@ -119,10 +119,17 @@ class XSLTHandler
               value, 
               Attribute.Type.UNDECLARED
             ); 
-            Attribute attribute = (Attribute) nodes.get(0); // assumes default factory
-            element.addAttribute(attribute);    
+            for (int j=0; j < nodes.size(); j++) {
+                Node node = nodes.get(j);
+                if (node instanceof Attribute) {
+                    element.addAttribute((Attribute) node);
+                }
+                else {
+                    element.appendChild(node);   
+                }
+            }   
         }
-
+        
         // Attach any additional namespaces
         Iterator iterator = prefixes.keySet().iterator();
         while (iterator.hasNext()) {
@@ -138,39 +145,35 @@ class XSLTHandler
         }
     }
   
+    
     public void endElement(String namespaceURI, String localName, 
       String qualifiedName) {
+        // call finishmakingElement????
         flushText();
-       // System.err.println("Closing " + qualifiedName);
         parents.pop(); 
     }
   
-    private StringBuffer buffer;
-  
+    
     public void characters(char[] text, int start, int length) {
         buffer.append(text, start, length); 
     }
  
+    
     // accumulate all text that's in the buffer into a text node
     private void flushText() {
         if (buffer.length() > 0) {
-            Nodes nodes = factory.makeText(buffer.toString());
-            Text data = (Text) nodes.get(0); // assumes default factory 
-            if (parents.isEmpty()) {
-                result.append(data); 
-            }
-            else {
-                ParentNode parent = (ParentNode) parents.peek();
-                parent.appendChild(data);
-            }    
-            buffer.setLength(0);
-        }   
+            Nodes text = factory.makeText(buffer.toString());
+            addToResultTree(text);
+            buffer = new StringBuffer();
+        } 
     }
   
+    
     public void ignorableWhitespace(char[] text, int start, int length) {
         characters(text, start, length);
     }
   
+    
     public void processingInstruction(String target, String data) 
       throws SAXException {
 
@@ -179,21 +182,37 @@ class XSLTHandler
         if ("saxon:warning".equals(target)) {
             throw new SAXException("continue");   
         }
-
-        flushText();
-                
+        
         Nodes nodes = factory.makeProcessingInstruction(target, data);
-        ProcessingInstruction instruction = (ProcessingInstruction) nodes.get(0);
-        if (parents.isEmpty()) {
-            result.append(instruction); 
-        }
-        else {
-            ParentNode parent = (ParentNode) parents.peek();
-            parent.appendChild(instruction);
-        }
+        if (nodes.size() > 0) flushText();
+        addToResultTree(nodes);
 
     }
 
+    
+    private void addToResultTree(Nodes nodes) {
+        
+        if (parents.isEmpty()) {
+            for (int i = 0; i < nodes.size(); i++) {
+                result.append(nodes.get(i));          
+            }            
+        }
+        else {
+            ParentNode parent = (ParentNode) parents.peek();
+            for (int i = 0; i < nodes.size(); i++) {
+                Node node = nodes.get(i);
+                if (node instanceof Attribute) {
+                    ((Element) parent).addAttribute((Attribute) node);
+                }
+                else {
+                    parent.appendChild(node);
+                }            
+            }
+        }
+        
+    }
+
+    
     public void endPrefixMapping(String prefix) {
         Stack uris = (Stack) prefixes.get(prefix);
         uris.pop();
@@ -213,15 +232,16 @@ class XSLTHandler
         else {
              String current = (String) uris.peek();
              if (!uri.equals(current)) uris.push(uri);
-            // System.err.println("Prefix: " + prefix);
         }
         
     }
 
+    
     public void skippedEntity(String name) {
         flushText();
         throw new XMLException("Could not resolve entity " + name);                         
     }
+    
     
     // LexicalHandler events
     public void startCDATA() {}
@@ -231,18 +251,11 @@ class XSLTHandler
     public void startEntity(String name) {}
     public void endEntity(String name) {}
 
+    
     public void comment(char[] text, int start, int length) {
-        flushText();
         Nodes nodes = factory.makeComment(new String(text, start, length));
-        
-        Comment comment = (Comment) nodes.get(0); // assumes default node factory
-        if (parents.isEmpty()) {
-            result.append(comment); 
-        }
-        else {
-            ParentNode parent = (ParentNode) parents.peek();         
-            parent.appendChild(comment);
-        }
+        if (nodes.size() > 0) flushText();
+        addToResultTree(nodes);
     } 
         
 }
