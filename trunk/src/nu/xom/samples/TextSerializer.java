@@ -45,7 +45,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class TextSerializer extends Serializer {
@@ -89,7 +89,7 @@ public class TextSerializer extends Serializer {
     protected void writeXMLDeclaration() {};
     protected void write(Comment comment) {};
     protected void write(ProcessingInstruction instruction) {};
-    protected void write(DocType doctype) throws IOException {}
+    protected void write(DocType doctype) {}
 
     // Here we use writeRaw because we don't want characters like &
     // and < to be escaped. If they can't be written in the specified

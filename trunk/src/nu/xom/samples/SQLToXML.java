@@ -79,8 +79,7 @@ public class SQLToXML {
     
   }
   
-  private static void writeAgencies(Element parent) 
-   throws IOException {
+  private static void writeAgencies(Element parent) {
 
     Connection conn = null;
     Statement stmnt = null;
@@ -124,7 +123,7 @@ public class SQLToXML {
   }
   
   private static void writeBureaus(Element parent, Connection conn, 
-   String agencyCode) throws IOException, SQLException {
+   String agencyCode) throws SQLException {
 
     String query 
      = "SELECT DISTINCT BureauName, BureauCode "

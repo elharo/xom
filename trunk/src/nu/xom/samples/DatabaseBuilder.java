@@ -34,7 +34,7 @@ import java.io.*;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  */
 public class DatabaseBuilder  {
 
@@ -138,7 +138,7 @@ public class DatabaseBuilder  {
 
     }
   
-    private Text hexEncode(InputStream in) throws SQLException {
+    private Text hexEncode(InputStream in) {
     
         StringBuffer result = new StringBuffer();
         try {
