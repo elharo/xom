@@ -98,7 +98,23 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expected, result);
                 
     }
+
     
+    // Tests that use XPointer to
+    // grab a part of the document that contains an include element
+    // and make sure that's fully resolved too
+    public void testResolveThroughXPointer() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/resolvethruxpointer.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/resolvethruxpointer.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }    
  
     public void testXMLBaseOnIncludeElementUsedToResolveHref() 
       throws ParsingException, IOException, XIncludeException {
@@ -114,6 +130,22 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
     
+
+    public void testXMLBaseRetainedFromUnincludedElement() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/xmlbasetest3.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expected = builder.build(
+          new File("data/xinclude/output/xmlbasetest3.xml")
+        );
+        assertEquals(expected, result);
+                
+    }
+    
+ 
     public void testMarsh() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -486,23 +518,6 @@ public class XIncludeTest extends XOMTestCase {
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File("data/xinclude/output/includefromsamedocumentwithbase.xml")
-        );
-        assertEquals(expectedResult, result);
-        
-    }
-
-    
-    // Tests that use XPointer to
-    // grab a part of the document that contains an include element
-    // and make sure that's fully resolved too
-    public void testResolveThroughXPointer() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File("data/xinclude/input/resolvethruxpointer.xml");
-        Document doc = builder.build(input);
-        Document result = XIncluder.resolve(doc);
-        Document expectedResult = builder.build(
-          new File("data/xinclude/output/resolvethruxpointer.xml")
         );
         assertEquals(expectedResult, result);
         
