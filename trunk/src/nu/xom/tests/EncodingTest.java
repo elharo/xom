@@ -41,7 +41,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d7
+ * @version 1.1a2
  *
  */
 public class EncodingTest extends XOMTestCase {
@@ -54,7 +54,6 @@ public class EncodingTest extends XOMTestCase {
     
     private Document doc;
     
-    private static int LEAD_OFFSET = 0xD800 - (0x10000 >> 10);
     private static int SURROGATE_OFFSET = 0x10000 - (0xD800 << 10) - 0xDC00;
 
     protected void setUp() {
