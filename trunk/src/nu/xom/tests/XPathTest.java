@@ -561,9 +561,7 @@ public class XPathTest extends XOMTestCase {
         parent.appendChild(child);
         grandparent.appendChild(parent);
         
-        Nodes result = child.query("ancestor::*");
-        // ???? appears to be a bug where root node is considered to
-        // be of principle node type on ancestor axis
+        Nodes result = child.query("ancestor-or-self::*");
         assertEquals(3, result.size());
         assertEquals(child, result.get(0));   
         assertEquals(parent, result.get(1));   
