@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -23,6 +23,7 @@
 
 package nu.xom.tests;
 
+import nu.xom.ParsingException;
 import nu.xom.ValidityException;
 
 /**
@@ -31,29 +32,34 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a5
  *
  */
 public class ValidityExceptionTest extends XOMTestCase {
+    
     
     private ValidityException ex;
     private Exception cause;
     private String message = "testing 1-2-3";
     
+    
     public ValidityExceptionTest(String name) {
         super(name);
     }
+    
     
     protected void setUp() {
         ex = new ValidityException("message");
         cause = new Exception();
     }
 
+    
     public void testConstructor() {
-        Exception ex = new ValidityException(message, cause);
+        ParsingException ex = new ValidityException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
+    
     
     public void testLineAndColumnNumbers() {
         ValidityException ex = new ValidityException(message, 10, 20);
@@ -62,6 +68,7 @@ public class ValidityExceptionTest extends XOMTestCase {
         assertEquals(10, ex.getLineNumber()); 
         assertEquals(20, ex.getColumnNumber()); 
     }
+    
     
     public void testInitCause() {
         
@@ -114,6 +121,7 @@ public class ValidityExceptionTest extends XOMTestCase {
         
     }
 
+    
     public void testSelfCause() {
         
         try {
@@ -126,9 +134,11 @@ public class ValidityExceptionTest extends XOMTestCase {
         
     }
 
+    
     public void testGetMessage() {      
         Exception ex = new ValidityException("testing");
         assertEquals("testing", ex.getMessage());
     }
 
+    
 }
