@@ -67,7 +67,6 @@ to http://www.xom.nu/
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"    value="${lib.dir}/servlet.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
-    <property name="ant-home"       value="/opt/java/ant"/>
 
     <property name="test.outputFormat" value="xml"/>    
     
@@ -92,10 +91,6 @@ to http://www.xom.nu/
     </path>
     
   </target>
-
-  
-  <taskdef resource="clovertasks"/>
-
   
   <target name="help">
     <echo>
@@ -158,7 +153,6 @@ XOM Build file
     </jar>
   </target>
 
-  <!-- could add   noqualifier="java.lang:java.io" but this requires Ant 1.6 -->
   <target name="javadoc" depends="prepare"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
@@ -187,14 +181,44 @@ XOM Build file
   </target>
 
   
-  <target name="dist" depends="zip, tar.gz" />
-
   <!-- I can never remember the exact target name -->
-  <target name="javadocs" depends="javadoc" />
-  <target name="apidocs"  depends="javadoc"/>
-  <target name="apidoc"   depends="javadoc"/>
+  <target name="javadocs"   depends="javadoc" />
+  <target name="apidocs"    depends="javadoc"/>
+  <target name="apidoc"     depends="javadoc"/>
+  <target name="betterdocs" depends="betterdoc"/>
+
+  <!-- This task requires Ant 1.6 -->
+  <target name="betterdoc" depends="prepare"
+          description="Generate the API documentation">
+    <mkdir dir="${build.javadocs}"/>
+    <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
+             sourcepath="${build.src}"
+             destdir="${build.javadocs}"
+             author="true"
+             version="true"
+             overview="overview.html"
+             use="true"
+             splitindex="true"
+             noindex="false"
+             windowtitle="${Name} ${version}  API"
+             docencoding="UTF-8"
+             charset="UTF-8"
+             noqualifier="java.lang:java.io"
+             doctitle="${Name} ${version}"
+             bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
+			 &lt;br/&gt; &lt;a href='mailto:elharo@metalab.unc.edu?Subject=XOM'&gt;elharo@metalab.unc.edu&lt;/a&gt;">
+      <classpath refid="test.class.path"/>
+      
+    <fileset dir="${build.src}" defaultexcludes="yes">
+      <include name="nu/xom/tests/XOMTestCase.java" />
+    </fileset>
+      
+    </javadoc>
+  </target>
 
   
+  <target name="dist" depends="zip, tar.gz" />
+ 
   <target name="zip" depends="jar, javadoc" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." 
@@ -271,6 +295,9 @@ XOM Build file
   </target>
 
   
+  <!-- These tasks require Clover -->
+  <property name="ant-home" value="/opt/java/ant"/>
+
   <target name="clover.html" depends="with.clover">
     <clover-report>
        <current outfile="clover_html" title="${Name} ${version}">
@@ -297,7 +324,7 @@ XOM Build file
            <exclude name="**/EBCDICTest.java" />
          </fileset>
       </batchtest>
-   </junit>
+    </junit>
   </target>  
   
 </project>
