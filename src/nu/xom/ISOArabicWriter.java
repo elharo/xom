@@ -46,6 +46,17 @@ class ISOArabicWriter extends TextWriter {
             case 0x060C: return false; // ARABIC COMMA
             case 0x060D: return true;  // place holder to allow table lookup                        
             case 0x060E: return true;  // place holder to allow table lookup                        
+            case 0x060F: return true;  // place holder to allow table lookup                        
+            case 0x0610: return true;  // place holder to allow table lookup                        
+            case 0x0611: return true;  // place holder to allow table lookup                        
+            case 0x0612: return true;  // place holder to allow table lookup                        
+            case 0x0613: return true;  // place holder to allow table lookup                        
+            case 0x0614: return true;  // place holder to allow table lookup                        
+            case 0x0615: return true;  // place holder to allow table lookup                        
+            case 0x0616: return true;  // place holder to allow table lookup                        
+            case 0x0617: return true;  // place holder to allow table lookup                        
+            case 0x0618: return true;  // place holder to allow table lookup                        
+            case 0x0619: return true;  // place holder to allow table lookup                        
             case 0x061A: return true;  // place holder to allow table lookup                        
             case 0x061B: return false; // ARABIC SEMICOLON
             case 0x061C: return true;  // place holder to allow table lookup            
@@ -79,6 +90,11 @@ class ISOArabicWriter extends TextWriter {
             case 0x0638: return false; // ARABIC LETTER ZAH
             case 0x0639: return false; // ARABIC LETTER AIN
             case 0x063A: return false; // ARABIC LETTER GHAIN
+            case 0x063B: return true;  // place holder to allow table lookup                        
+            case 0x063C: return true;  // place holder to allow table lookup                        
+            case 0x063D: return true;  // place holder to allow table lookup                        
+            case 0x063E: return true;  // place holder to allow table lookup                        
+            case 0x063F: return true;  // place holder to allow table lookup                        
             case 0x0640: return false; // ARABIC TATWEEL
             case 0x0641: return false; // ARABIC LETTER FEH
             case 0x0642: return false; // ARABIC LETTER QAF
