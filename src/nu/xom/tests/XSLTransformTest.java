@@ -122,7 +122,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testTransform() 
-      throws ParseException, IOException {
+      throws ParseException, IOException, XSLException {
         
         File doc = new File("data/xslt/input/8-1.xml");
         File stylesheet = new File("data/xslt/input/8-8.xsl");
@@ -143,7 +143,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testTransform2() 
-      throws ParseException, IOException {
+      throws ParseException, IOException, XSLException {
         
         File doc = new File("data/xslt/input/8-1.xml");
         File stylesheet = new File("data/xslt/input/8-12.xsl");
@@ -164,7 +164,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testTransformWithNamespaces() 
-      throws ParseException, IOException {
+      throws ParseException, IOException, XSLException {
         
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/8-15.xsl");
