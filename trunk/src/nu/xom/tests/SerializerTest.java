@@ -111,6 +111,76 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(-1, result.indexOf(value2));            
     }
 
+
+    public void testXMLSpacePreserveWithIndenting() 
+      throws IOException {
+        Element root = new Element("test");
+        root.addAttribute(
+          new Attribute(
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "preserve"));
+        root.appendChild(new Element("sameline"));    
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "UTF-8");
+        serializer.setIndent(4);
+        serializer.write(new Document(root));
+        String result = out.toString("UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<test xml:space=\"preserve\"><sameline/></test>\r\n",
+           result);            
+    }
+
+    public void testXMLSpaceDefaultWithIndenting() throws IOException {
+        Element root = new Element("test");
+        root.addAttribute(
+          new Attribute(
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "preserve"));
+        Element child = new Element("child");
+        child.addAttribute(
+          new Attribute(
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "default"));
+        root.appendChild(child);    
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "UTF-8");
+        serializer.setIndent(4);
+        serializer.write(new Document(root));
+        String result = out.toString("UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<test xml:space=\"preserve\"><child xml:space=\"default\"/></test>\r\n",
+           result);                       
+    }
+
+    public void testXMLSpaceDefaultWithIndentingAndGrandchildren() throws IOException {
+        Element root = new Element("test");
+        root.addAttribute(
+          new Attribute(
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "preserve"));
+        Element child = new Element("child");
+        child.addAttribute(
+          new Attribute(
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "default"));
+        root.appendChild(child);
+        child.appendChild(new Element("differentLine"));    
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "UTF-8");
+        serializer.setIndent(2);
+        serializer.write(new Document(root));
+        String result = out.toString("UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<test xml:space=\"preserve\"><child xml:space=\"default\">\r\n    <differentLine/>\r\n  </child></test>\r\n",
+           result);                       
+    }
+
+
     public void testDontSerializeXMLNamespace() throws IOException {        
         Element root 
           = new Element("html", "http://www.w3.org/1999/xhtml");
@@ -840,8 +910,6 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("Tab not normalized to space", " ", result);
     }
     
-    // add test for negative max length????
-    // what should happen?
     public void testSetMaxLength() {
         Serializer serializer = new Serializer(System.out);
         
@@ -853,11 +921,11 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(1, serializer.getMaxLength());
         serializer.setMaxLength(0);
         assertEquals(0, serializer.getMaxLength());
+        serializer.setMaxLength(-1);
+        assertEquals(0, serializer.getMaxLength());
         
     }
 
-    // add test for negative indent????
-    // what should happen?
     public void testSetIndent() {
         Serializer serializer = new Serializer(System.out);
         
@@ -869,6 +937,13 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(1, serializer.getIndent());
         serializer.setIndent(0);
         assertEquals(0, serializer.getIndent());
+        try {
+            serializer.setIndent(-1);
+            fail("Allowed negative indent");
+        }
+        catch (IllegalArgumentException ex) {
+           // success    
+        }
         
     }
 
