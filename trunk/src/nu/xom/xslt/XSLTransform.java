@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -37,6 +37,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import nu.xom.Document;
+import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 
 /**
@@ -106,18 +107,19 @@ import nu.xom.Nodes;
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  */
 public final class XSLTransform {
 
-  /**
-   * <p>
-   * The compiled form of the XSLT stylesheet that this object
-   * represents. This can be safely used across multiple threads
-   * unlike a <code>Transformer</code> object.
-   * </p>
-   */
-    private Templates templates;  
+    /**
+     * <p>
+     * The compiled form of the XSLT stylesheet that this object
+     * represents. This can be safely used across multiple threads
+     * unlike a <code>Transformer</code> object.
+     * </p>
+     */
+    private Templates   templates;  
+    private NodeFactory factory = new NodeFactory();  
     
     // I could use one TransformerFactory field instead of local
     // variables but then I'd have to synchronize it; and it would
@@ -292,7 +294,7 @@ public final class XSLTransform {
      */ 
     private Nodes transform(Source in) throws XSLException {
         try {
-            XOMResult out = new XOMResult();
+            XOMResult out = new XOMResult(factory);
             Transformer transformer = templates.newTransformer();
             transformer.transform(in, out);
             return out.getResult();
@@ -300,6 +302,22 @@ public final class XSLTransform {
         catch (TransformerException ex) {
             throw new XSLException("XSLT Transformation failed", ex);
         }
+    }
+    
+    
+    
+    /**
+     * <p>
+     *   Sets the factory used to construct nodes in the output tree.
+     *   Passing null uses the default factory.
+     * </p>
+     * 
+     * @param factory the <code>NodeFactory</code> used to construct
+     *     nodes in the output tree
+     */
+    public void setNodeFactory(NodeFactory factory) {
+        if (factory == null) this.factory = new NodeFactory();
+        else this.factory = factory;
     }
   
     /**

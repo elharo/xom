@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -51,21 +51,12 @@ class XOMResult extends SAXResult {
    */
    public final static String XOM_FEATURE 
      = "http://nu.xom/XOMResultFeature";
-
-    /**
-     * Constructor for XOMResult.
-     */
-    public XOMResult() {
-        super(new XSLTHandler(new NodeFactory()));
+    
+    XOMResult(NodeFactory factory) {
+        super(new XSLTHandler(factory));
         this.setLexicalHandler((LexicalHandler) this.getHandler());
     }
     
-    // Currently the assumption is that only the standard NodeFactory
-    // class will be used. If we ever allow the XOMResult to have a 
-    // different subclass of NodeFactory (which might be a good idea
-    // on its own merits????) some changes will need to be made in 
-    // XSLTHandler as well as here
-
     public Nodes getResult() {
         XSLTHandler handler = (XSLTHandler) this.getHandler();
         return handler.getResult();   
