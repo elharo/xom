@@ -177,8 +177,14 @@ public class XIncluder {
      * by their referenced content. 
      * Resolution is recursive; that is, include elements
      * in the included documents are themselves resolved.
-     * The <code>Document</code> returned contains no
-     * include elements.
+     * The resolved <code>Document</code> contains no
+     * <code>xinclude:include</code> elements.
+     * </p>
+     * 
+     * <p>
+     * If the inclusion fails for any reason--XInclude syntax
+     * error, missing resource with no fallback, etc.--the document
+     * may be left in a partially resolved state.
      * </p>
      * 
      * @param in the <code>Document</code> in which include elements
@@ -221,8 +227,14 @@ public class XIncluder {
      * <code>xinclude:include</code> elements with their referenced 
      * content. Resolution is recursive; that is, include elements
      * in the included documents are themselves resolved.
-     * The <code>Document</code> returned contains no
-     * include elements.
+     * The resolved <code>Document</code> contains no
+     * <code>xinclude:include</code> elements.
+     * </p>
+     * 
+     * <p>
+     * If the inclusion fails for any reason--XInclude syntax
+     * error, missing resource with no fallback, etc.--the document
+     * may be left in a partially resolved state.
      * </p>
      * 
      * @param in the <code>Document</code> in which include elements
@@ -255,107 +267,22 @@ public class XIncluder {
     public static void resolveInPlace(Document in, Builder builder) 
       throws BadParseAttributeException, CircularIncludeException,  
              IOException, MissingHrefException, ParsingException, 
-             UnsupportedEncodingException, XIncludeException {        
-        resolveInPlace(in, builder, new Stack()); /**&&**/
-    }
-
-    /**
-     * <p>
-     * Modifies a <code>Nodes</code> object by replacing all 
-     * <code>xinclude:include</code> elements with their referenced 
-     * content. Resolution is recursive; that is, include elements
-     * in the included documents are themselves resolved.
-     * Furthermore, include elements that are children or 
-     * descendants of elements in this list are also resolved.
-     * The <code>Nodes</code> object returned contains no
-     * include elements.
-     * </p>
-     * 
-     * @param in the <code>Nodes</code> object in which include 
-     *     elements should be resolved.
-     * 
-     * @throws BadParseAttributeException if an <code>include</code>  
-     *     element has a <code>parse</code> attribute
-     *     with any value other than <code>text</code> 
-     *     or <code>parse</code>
-     * @throws CircularIncludeException if this <code>Element</code> 
-     *     contains an XInclude element that attempts to include a  
-     *     document in which this element is directly or indirectly 
-     *     included
-     * @throws IOException if an included document could not be loaded,
-     *     and no fallback was available
-     * @throws MissingHrefException if an <code>xinclude:include</code>
-     *     element does not have an <code>href</code> attribute.
-     * @throws ParsingException if an included XML document 
-     *     was malformed
-     * @throws UnsupportedEncodingException if an included document 
-     *     used an encoding this parser does not support, and no 
-     *     fallback was available
-     * @throws XIncludeException if the document violates the
-     *     syntax rules of XInclude
-     * @throws XMLException if resolving an include element would 
-     *     result in a malformed document
-     */
-    /* private static void resolveInPlace(Nodes in) 
-      throws IOException, ParsingException, XIncludeException { 
-        resolveInPlace(in, new Builder());
-    } */
-
-    /**
-     * <p>
-     * Modifies a <code>Nodes</code> object by replacing all 
-     * XInclude elements with their referenced content.
-     * Resolution is recursive; that is, include elements
-     * in the included documents are themselves resolved.
-     * Furthermore, include elements that are children or 
-     * descendants of elements in this list are also resolved.
-     * The <code>Nodes</code> object returned contains no
-     * include elements.
-     * </p>
-     * 
-     * @param in the <code>Nodes</code> object in which include 
-     *     elements should be resolved.
-     * 
-     * @throws BadParseAttributeException if an <code>include</code>  
-     *     element has a <code>parse</code> attribute
-     *     with any value other than <code>text</code> 
-     *     or <code>parse</code>
-     * @throws CircularIncludeException if this <code>Element</code> 
-     *     contains an XInclude element that attempts to include a  
-     *     document in which this element is directly or indirectly 
-     *     included
-     * @throws IOException if an included document could not be loaded,
-     *     and no fallback was available
-     * @throws MissingHrefException if an <code>xinclude:include</code>
-     *     element does not have an <code>href</code> attribute.
-     * @throws ParsingException if an included XML document 
-     *     was malformed
-     * @throws UnsupportedEncodingException if an included document 
-     *     used an encoding this parser does not support, and no 
-     *     fallback was available
-     * @throws XIncludeException if the document violates the
-     *     syntax rules of XInclude
-     * @throws XMLException if resolving an include element would 
-     *     result in a malformed document
-     */
-    /* private static void resolveInPlace(Nodes in, Builder builder) 
-      throws IOException, ParsingException, XIncludeException { 
-        for (int i = 0; i < in.size(); i++) {
-            Node child = in.get(i);
-            if (child instanceof Element) { 
-                if (isIncludeElement((Element) child)) {
-                    // Need to replace the old nodes with the result
-                    // of including this element????
-                }
-                else {
-                    resolve((Element) child, builder, new Stack());
-                }
-            }
-            else if (child instanceof Document) {
-                resolveInPlace((Document) child, builder,  new Stack());   
-            }
+             UnsupportedEncodingException, XIncludeException { 
+                 
+        try {       
+            resolveInPlace(in, builder, new Stack()); 
         }
-    } */
+        catch (StackOverflowError ex) {
+            // I need to detect this sooner and more directly,
+            // possibly by tagging each XInclude element with a checksum
+            // based on its XML form and its base URI, 
+            // and storing this in some sort of stack????
+            throw new CircularIncludeException(
+              "Circular include starting with document " 
+              + in.getBaseURI()
+            );   
+        }
+    }
 
     /**
      * <p>
@@ -673,10 +600,7 @@ public class XIncluder {
                             }
                             replacements.append(original.copy());        
                         }  
-                        replacements = resolve(replacements, builder);  
-                        // Write a unit test where an xpointer includes itself
-                        // indirectly through intermediary documents???? to make
-                        // sure it still throws CircularIncludeException                         
+                        replacements = resolve(replacements, builder);                           
                     }
                     return replacements; 
                 }  // end parse="xml"
@@ -807,9 +731,6 @@ public class XIncluder {
                             replacements.append(original.copy());        
                         }  
                         replacements = resolve(replacements, builder);  
-                        // Write a unit test where an xpointer includes itself
-                        // indirectly through intermediary documents???? to make
-                        // sure it still throws CircularIncludeException
                                                  
                     }
                       
