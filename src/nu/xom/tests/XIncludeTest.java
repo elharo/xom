@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -61,6 +61,7 @@ public class XIncludeTest extends XOMTestCase {
         builder = new Builder();       
     }
 
+    
     public void test1() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -75,6 +76,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
+    
     
     public void testBaseURIsPreservedINSameDocumentInclusion() 
       throws ParsingException, IOException, XIncludeException {
@@ -91,6 +93,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    
     // Tests that use XPointer to
     // grab a part of the document that contains an include element
     // and make sure that's fully resolved too
@@ -109,6 +112,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
     /* public void testResolveNodes() 
       throws IOException, ParsingException, XIncludeException {
         File dir = new File("data/xinclude/input/");
@@ -122,6 +126,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals("disclaimer",result.getQualifiedName());
     } */
 
+    
     private void dumpResult(File original, Document result)
       throws IOException {
         
@@ -132,6 +137,7 @@ public class XIncludeTest extends XOMTestCase {
         Serializer serializer = new Serializer(out);
         serializer.write(result);        
     }
+    
     
     // from the XInclude CR
     public void testC1() 
@@ -147,6 +153,7 @@ public class XIncludeTest extends XOMTestCase {
 
     }
 
+    
     public void testCirclePointer() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -161,6 +168,7 @@ public class XIncludeTest extends XOMTestCase {
         }
 
     }
+    
     
     // In this case the circle is OK because the XPointer
     // doesn't cover the whole xinclude:include element
@@ -178,6 +186,7 @@ public class XIncludeTest extends XOMTestCase {
 
     }
     
+    
     // from the XInclude CR
     public void testC2() 
       throws ParsingException, IOException, XIncludeException {
@@ -192,6 +201,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
     // from the XInclude CR
     public void testC3() 
       throws ParsingException, IOException, XIncludeException {
@@ -205,6 +215,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
+    
     
     // C4 skipped for the moment because it uses XPointers
     // that I don't yet support
@@ -222,6 +233,7 @@ public class XIncludeTest extends XOMTestCase {
         
     } */
     
+    
     public void testRecurseWithinSameDocument() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -234,6 +246,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
+    
     
     public void testSiblingIncludes() 
       throws ParsingException, IOException, XIncludeException {
@@ -248,6 +261,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
     public void testNamespaces() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -260,6 +274,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
+    
     
     public void testIncludeReferencesItItself() 
       throws ParsingException, IOException, XIncludeException {
@@ -276,6 +291,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
     public void testIncludeReferencesItsAncestor() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -291,6 +307,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
     public void testNoInclusions() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -303,6 +320,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
+    
     
     public void test2() 
       throws ParsingException, IOException, XIncludeException {
@@ -317,6 +335,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
     public void testReplaceRoot() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -328,6 +347,20 @@ public class XIncludeTest extends XOMTestCase {
         );
         assertEquals(expectedResult, result);
         
+    }
+
+    
+    public void testMultipleFallbacks() 
+      throws ParsingException, IOException, XIncludeException {
+        File input = new File("data/xinclude/input/multiplefallbacks.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("allowed multiple fallback elements`");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());          
+        }
     }
 
     
@@ -345,6 +378,7 @@ public class XIncludeTest extends XOMTestCase {
             assertEquals(input.toURL().toExternalForm(), ex.getURI());           
         }
     }
+
     
     public void testCircle2() 
       throws ParsingException, IOException, XIncludeException {
@@ -377,6 +411,7 @@ public class XIncludeTest extends XOMTestCase {
         }
     }
     
+    
     public void testBadParseAttribute() 
       throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/badparseattribute.xml");
@@ -394,6 +429,7 @@ public class XIncludeTest extends XOMTestCase {
         }
     }
     
+    
     public void testUnavailableResource() 
       throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/missingfile.xml");
@@ -407,6 +443,7 @@ public class XIncludeTest extends XOMTestCase {
         }
     }
     
+    
     public void testFallback() 
       throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/fallbacktest.xml");
@@ -417,6 +454,7 @@ public class XIncludeTest extends XOMTestCase {
         );
         assertEquals(expectedResult, result);
     }
+    
     
     public void testFallbackWithRecursiveInclude() 
       throws ParsingException, IOException, XIncludeException {
@@ -429,6 +467,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
     }
 
+    
     public void testEncodingAttribute() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -442,6 +481,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
     public void testXPointerBareNameID() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -454,6 +494,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
+    
     
     public void testShorthandXPointerMatchesNothing() 
       throws ParsingException, IOException {
@@ -499,6 +540,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    
     public void testUnrecognizedColonizedSchemeNameBackedUpByTumbler() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -512,6 +554,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    
     public void testXPointerSyntaxErrorInSecondPart() 
       throws ParsingException, IOException {
       
@@ -529,6 +572,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    
     public void testXPointerSyntaxErrorMissingFinalParenthesis() 
       throws ParsingException, IOException {
       
@@ -546,6 +590,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    
     // Test we can inlcude form same document using only an xpointer attribute
     public void testOnlyXPointer() 
       throws ParsingException, IOException, XIncludeException {
@@ -561,7 +606,6 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
-
 
 
     // Test with 3 element schemes in the XPointer.
@@ -580,6 +624,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    
     // Test with 2 element schemes in the XPointer.
     // The first one uses an ID that doesn't exist 
     // and points to nothing. The second one
@@ -617,6 +662,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    
     // Make sure XPointer syntax errors are treated as a resource 
     // error, not a fatal error per section 4.2 of XInclude CR
     /* Resources that are unavailable for any reason 
@@ -642,6 +688,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    
     // Test with 3 element schemes in the XPointer,
     // separated by white space.
     // The first one points to nothing. The third one
@@ -660,6 +707,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    
     public void testXPointerTumblerMatchesNothing() 
       throws ParsingException, IOException {
       
@@ -681,6 +729,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
     public void testMalformedXPointer() 
       throws ParsingException, IOException {   
         
@@ -699,6 +748,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         
     }
+    
     
     public void testAnotherMalformedXPointer() 
       throws ParsingException, IOException {
@@ -720,6 +770,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
     public void testMalformedXPointerWithFallback() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -732,6 +783,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
                 
     }
+    
     
     public void testIDAndTumbler() 
       throws ParsingException, IOException, XIncludeException {
@@ -748,6 +800,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
+    
     public void testAutoDetectUTF16BigEndianWithByteOrderMark() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -763,6 +816,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
+    
     public void testAutoDetectUTF16LittleEndianWithByteOrderMark() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -778,6 +832,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
+    
     public void testAutoDetectUTF8WithByteOrderMark() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -793,6 +848,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
+    
     public void testAutoDetectUnicodeBigUnmarked() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -808,6 +864,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
+    
     public void testUnicodeLittleUnmarked() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -823,6 +880,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
+    
 /*// Java doesn't yet support the UTF-32BE and UTF32LE encodings
     public void testUTF32BE() 
       throws ParsingException, IOException, XIncludeException {
@@ -869,6 +927,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
+    
     // This test requires files that I have not received permission
     // to distribute so for the moment you won't be able to run it.
     // For my own use it checks to see if the files are present
@@ -983,6 +1042,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     } 
 
+    
     public void testColonizedNameForIdValueInElementScheme() 
       throws ParsingException, IOException {
       
@@ -999,6 +1059,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     } 
 
+    
     public void testBadIdValueInElementScheme() 
       throws ParsingException, IOException {
       
@@ -1015,4 +1076,5 @@ public class XIncludeTest extends XOMTestCase {
                 
     } 
 
+    
 }
