@@ -191,6 +191,7 @@ class JaxenNavigator extends DefaultNavigator {
         catch (ClassCastException ex) {
             return Collections.EMPTY_LIST.iterator();
         }
+        
     }
     
     
@@ -239,6 +240,7 @@ class JaxenNavigator extends DefaultNavigator {
         
         if (o instanceof ParentNode) {
             return new ChildIterator((ParentNode) o);
+            // return getXPathChildren((ParentNode) o).iterator();
         }
         else {
             return Collections.EMPTY_LIST.iterator();
@@ -291,6 +293,39 @@ class JaxenNavigator extends DefaultNavigator {
                 children++;
             }
         }
+        return children;
+        
+    }
+    
+    
+    private static List getXPathChildren(ParentNode parent) {
+    
+        int childCount = parent.getChildCount();
+        ArrayList children = new ArrayList(childCount);
+        for (int i = 0; i < childCount; i++) {
+            Node child = parent.getChild(i);
+            if (child.isDocType()) continue;
+            else if (child.isText()) {
+                Text t = (Text) child;
+                if (t.data.length == 0) continue;
+                List texts = new ArrayList();
+                texts.add(child);
+                while (i + 1 < childCount) {
+                    Node next = parent.getChild(i+1);
+                    if (next.isText()) {
+                        i++;
+                        t = (Text) child;
+                        if (t.data.length > 0) texts.add(next);
+                    }
+                    else break;
+                }
+                children.add(texts);
+            }
+            else {
+                children.add(child);
+            }
+        }
+
         return children;
         
     }
@@ -387,20 +422,58 @@ class JaxenNavigator extends DefaultNavigator {
     
         private ParentNode parent;
 
-        private int index = 0;
+        private int xomIndex = 0;
+        private int xpathIndex = 0;
         private int end;
+        private int xomCount;
         
         ChildIterator(ParentNode parent) {
             this.parent = parent;
+            // ???? I still iterate through this twice;
+            // could this be eliminated somehow?
             this.end = getXPathChildCount(parent);
+            this.xomCount = parent.getChildCount();
+            
         }
         
         public boolean hasNext() {
-            return index < end;
+            return xpathIndex < end;
         }
-        
+
         public Object next() {
-            return getXPathChild(index++, parent);
+            
+            Object result;
+            Node next = parent.getChild(xomIndex++);
+            if (next.isText()) {
+                Text t = (Text) next;
+                boolean nonEmpty = t.data.length != 0;
+                List texts = new ArrayList();
+                texts.add(t);
+                while (xomIndex < xomCount) {
+                    Node nextText = parent.getChild(xomIndex);
+                    if (! nextText.isText()) break;
+                    xomIndex++;
+                    texts.add(nextText);
+                    if (!nonEmpty) {
+                        if (((Text) nextText).data.length != 0) nonEmpty = true;
+                    }
+                }
+                // need to make sure at least one of these texts is non-empty
+                if (nonEmpty) {
+                    result = texts;
+                }
+                else return next();
+                // XXX test a child that ends in several empty text nodes preceded by child elements
+            }
+            else if (next.isDocType()) {
+                return next();
+            }
+            else {
+                result = next;
+            }
+            xpathIndex++;
+            return result;
+            
         }
 
         public void remove() {
