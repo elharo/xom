@@ -576,8 +576,8 @@ public class XOMTestCase extends TestCase {
      * equal a <code>ComparisonFailure</code> is thrown with the given 
      * message. The subclass is not considered. The basic XOM class
      * is considered, but the subclass is not. For example,
-     * a <code>Text</code> object can be equal to an object that
-     * is an <code>HTMLText</code>, but it can never be equal to
+     * a <code>Text</code> object can be equal to an an 
+     * <code>HTMLText</code> object, but it can never be equal to
      * a <code>Comment</code>.
      * </p>
      * 
@@ -634,10 +634,12 @@ public class XOMTestCase extends TestCase {
                 ); 
             }
         }
-        catch (ClassCastException ex) {            
-            fail(message + "; Mismatched node types: " 
-             + expected.getClass().getName() + " != "
-             + actual.getClass().getName());
+        catch (ClassCastException ex) {
+            throw new ComparisonFailure(message 
+              + "; Mismatched node types: " 
+              + expected.getClass().getName() + " != "
+              + actual.getClass().getName(), 
+              expected.toXML(), actual.toXML());
         }
         
     }
