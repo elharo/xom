@@ -425,9 +425,25 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
+    // In this test the fallback is activated.
     public void testMultipleFallbacks() 
       throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/multiplefallbacks.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("allowed multiple fallback elements`");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());          
+        }
+    }
+
+    
+    // In this test the fallback is not needed.
+    public void testMultipleFallbacks2() 
+      throws ParsingException, IOException, XIncludeException {
+        File input = new File("data/xinclude/input/multiplefallbacks2.xml");
         Document doc = builder.build(input);
         try {
             XIncluder.resolve(doc);
