@@ -23,6 +23,7 @@
 
 package nu.xom.tests;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -32,6 +33,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import com.ibm.icu.text.Normalizer;
 
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -235,5 +238,113 @@ public class CanonicalizerTest extends XOMTestCase {
         }
         
     }
+    
+    public void testNFCFromISO88591() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-1");
+    }
+    
+    public void testNFCFromISO88592() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-2");
+    }
+    
+    public void testNFCFromISO88593() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-3");
+    }
+    
+    public void testNFCFromISO88594() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-4");
+    }
+    
+    public void testNFCFromISO88595() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-5");
+    }
+    
+    public void testNFCFromISO88596() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-6");
+    }
+    
+    public void testNFCFromISO88597() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-7");
+    }
+    
+    public void testNFCFromISO88598() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-8");
+    }
+    
+    public void testNFCFromISO88599() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-9");
+    }
+    
+    public void testNFCFromISO885913() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-13");
+    }
+
+    public void testNFCFromISO885915() 
+      throws ParsingException, IOException {
+        isoNormalizationTest("ISO-8859-15");
+    }
+    
+    // 14 and 16 aren't tested because Java doesn't support them yet
+    
+    private void isoNormalizationTest(String encoding)
+      throws ParsingException, IOException {
+        String prolog = "<?xml version='1.0' encoding='" 
+          + encoding + "'?>\r\n<root>";
+        byte[] prologData = prolog.getBytes(encoding);
+        String epilog = "</root>";
+        byte[] epilogData = epilog.getBytes(encoding);      
+        byte[] data = new byte[prologData.length + epilogData.length + 255 - 160 + 1];
+        System.arraycopy(prologData, 0, data, 0, prologData.length);
+        System.arraycopy(epilogData, 0, data, 
+          data.length - epilogData.length, epilogData.length);
+        for (int i = 160; i <= 255; i++) {
+            data[prologData.length + (i-160)] = (byte) i;   
+        }
+        InputStream in = new ByteArrayInputStream(data);
+        Document doc = builder.build(in);
+        String rawResult = doc.getValue();
+        String normalizedResult = Normalizer.normalize(rawResult, Normalizer.NFC);
+        assertEquals("Parser doesn't use NFC when converting from " + encoding, 
+          normalizedResult, rawResult);
+    }
+
+    public void testEBCDIC()
+      throws ParsingException, IOException {
+          
+        String encoding = "IBM037";
+        String prolog = "<?xml version='1.0' encoding='" 
+          + encoding + "'?>\r\n<root>";
+        byte[] prologData = prolog.getBytes(encoding);
+        String epilog = "</root>";
+        byte[] epilogData = epilog.getBytes(encoding);      
+        byte[] data = new byte[prologData.length + epilogData.length + 255 - 160 + 1];
+        System.arraycopy(prologData, 0, data, 0, prologData.length);
+        System.arraycopy(epilogData, 0, data, 
+          data.length - epilogData.length, epilogData.length);
+        StringBuffer buffer = new StringBuffer(255 - 160 + 1);
+        for (int i = 160; i <= 255; i++) {
+            buffer.append((char) i);   
+        }
+        byte[] temp = buffer.toString().getBytes(encoding);
+        System.arraycopy(temp, 0, data, prologData.length, temp.length);        
+        InputStream in = new ByteArrayInputStream(data);
+        Document doc = builder.build(in);
+        String rawResult = doc.getValue();
+        String normalizedResult = Normalizer.normalize(rawResult, Normalizer.NFC);
+        assertEquals("Parser doesn't use NFC when converting from " + encoding, 
+          normalizedResult, rawResult);
+    }
+
+
 
 }
