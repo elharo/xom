@@ -37,15 +37,18 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  *
  */
 public class ParsingException extends Exception {
 
+    
     private Throwable cause;
     private int lineNumber = -1;
     private int columnNumber = -1;
+    private String uri;
 
+    
     /**
      * <p>
      * Creates a new <code>ParsingException</code> with a detail message
@@ -60,6 +63,24 @@ public class ParsingException extends Exception {
         this.initCause(ex);
     }
 
+    
+    /**
+     * <p>
+     * Creates a new <code>ParsingException</code> with a detail message
+     * and an underlying root cause.
+     * </p>
+     * 
+     * @param message a string indicating the specific problem
+     * @param uri the URI of the document that caused this exception
+     * @param ex the original cause of this exception
+     */
+    public ParsingException(String message, String uri, Throwable ex) {
+        super(message);
+        this.uri = uri;
+        this.initCause(ex);
+    }
+
+    
     /**
      * <p>
      * Creates a new <code>ParsingException</code> with a detail message
@@ -72,19 +93,62 @@ public class ParsingException extends Exception {
      * @param columnNumber the approximate column number 
      *     where the problem occurs
      */
-    public ParsingException(
-        String message,
-        int lineNumber,
-        int columnNumber) {
-        this(message, lineNumber, columnNumber, null);
+    public ParsingException(String message, 
+      int lineNumber, int columnNumber) {
+        this(message, null, lineNumber, columnNumber, null);
     }
 
+    
+    /**
+     * <p>
+     * Creates a new <code>ParsingException</code> with a detail message
+     * and line and column numbers.
+     * </p>
+     * 
+     * @param message a string indicating the specific problem
+     * @param uri the URI of the document that caused this exception
+     * @param lineNumber the approximate line number 
+     *     where the problem occurs
+     * @param columnNumber the approximate column number 
+     *     where the problem occurs
+     */
+    public ParsingException(String message, String uri, 
+      int lineNumber, int columnNumber) {
+        this(message, uri, lineNumber, columnNumber, null);
+    }
+
+    
     /**
      * <p>
      * Creates a new <code>ParsingException</code> with a detail 
      * message, line and column numbers, and an underlying exception.
      * </p>
      * 
+     * @param message a string indicating the specific problem
+     * @param uri the URI of the document that caused this exception
+     * @param lineNumber the approximate line number 
+     *     where the problem occurs
+     * @param columnNumber the approximate column number 
+     *     where the problem occurs
+     * @param ex the original cause of this exception
+     */
+    public ParsingException(String message, String uri, int lineNumber,
+      int columnNumber, Throwable ex) {
+        super(message);
+        this.lineNumber = lineNumber;
+        this.columnNumber = columnNumber;
+        this.uri = uri;
+        this.initCause(ex);
+    }
+
+    
+    /**
+     * <p>
+     * Creates a new <code>ParsingException</code> with a detail 
+     * message, line and column numbers, and an underlying exception.
+     * </p>
+     * 
+     * @param message a string indicating the specific problem
      * @param message a string indicating the specific problem
      * @param lineNumber the approximate line number 
      *     where the problem occurs
@@ -100,6 +164,7 @@ public class ParsingException extends Exception {
         this.initCause(ex);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>ParsingException</code> with a detail message.
@@ -110,6 +175,7 @@ public class ParsingException extends Exception {
     public ParsingException(String message) {
         super(message);
     }
+    
     
     /**
      * <p>
@@ -135,6 +201,21 @@ public class ParsingException extends Exception {
      */
     public int getColumnNumber() {
         return this.columnNumber;  
+    }
+
+
+    /**
+     * <p>
+     * Returns the system ID (generally a URL) of the document that
+     * caused this exception. If this is not known, for instance 
+     * because the document was parsed from a raw input stream or from
+     * a string, it returns null. 
+     * </p>
+     * 
+     * @return the URI of the document that caused this exception
+     */
+    public String getURI() {
+        return this.uri;  
     }
 
 
@@ -164,6 +245,7 @@ public class ParsingException extends Exception {
      * @throws IllegalStateException if this method is called twice
      */
     public Throwable initCause(Throwable cause) {
+        
         if (causeSet) {
             throw new IllegalStateException("Can't overwrite cause");
         } 
@@ -173,8 +255,10 @@ public class ParsingException extends Exception {
         else this.cause = cause;
         causeSet = true;
         return this;
+        
     }
 
+    
     /**
      * <p>
      * Returns the underlying exception that caused this exception.
@@ -187,6 +271,7 @@ public class ParsingException extends Exception {
         return this.cause;  
     }
 
+    
     /**
      * <p>
      *   Returns a string suitable for display to the developer
@@ -194,8 +279,6 @@ public class ParsingException extends Exception {
      * </p>
      * 
      * @return an exception message suitable for display to a developer
-     * 
-     * @see java.lang.Object#toString()
      */
     public String toString() {
         return super.toString() + " at line " 

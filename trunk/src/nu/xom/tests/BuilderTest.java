@@ -240,7 +240,6 @@ public class BuilderTest extends XOMTestCase {
         Document doc = builder.build(document, null);
         DocType dt = doc.getDocType();
         String internalDTDSubset = dt.getInternalDTDSubset();
-        System.err.println(internalDTDSubset);
         assertTrue(internalDTDSubset.indexOf("#FIXED \"c\"") > 0);
         
     }
@@ -292,6 +291,20 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(Attribute.Type.NMTOKEN, att.getType());      
         assertEquals("1", att.getValue());
 
+    }
+    
+    
+    // I'm specifically worried about a Xerces runtime MalformedURIException here
+    public void testIllegalSystemIDThrowsRightException() {
+        
+        String document = "<!DOCTYPE root SYSTEM \"This is not a URI\"><root/>";
+        try{
+            builder.build(document, null);
+        }
+        catch (Exception ex) {
+            assertTrue(ex instanceof ParsingException);
+        }
+            
     }
     
     
@@ -875,7 +888,8 @@ public class BuilderTest extends XOMTestCase {
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
-            assertNotNull(ex.getMessage());   
+            assertNotNull(ex.getMessage()); 
+            assertEquals(base, ex.getURI());
             assertTrue(ex.getErrorCount() > 0);
             for (int i = 0; i < ex.getErrorCount(); i++) {
                 assertNotNull(ex.getValidityError(i));   
@@ -901,7 +915,8 @@ public class BuilderTest extends XOMTestCase {
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
-            assertNotNull(ex.getMessage());   
+            assertNotNull(ex.getMessage());  
+            assertEquals(base, ex.getURI());
             assertTrue(ex.getErrorCount() > 0);
             for (int i = 0; i < ex.getErrorCount(); i++) {
                 assertNotNull(ex.getValidityError(i));
@@ -952,7 +967,8 @@ public class BuilderTest extends XOMTestCase {
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
-            assertNotNull(ex.getMessage());   
+            assertNotNull(ex.getMessage()); 
+            assertEquals(base, ex.getURI());
             assertTrue(ex.getErrorCount() > 0);
             for (int i = 0; i < ex.getErrorCount(); i++) {
                 assertNotNull(ex.getValidityError(i));   
@@ -987,6 +1003,7 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (ValidityException ex) {
             assertTrue(ex.getErrorCount() > 0);
+            assertNull(ex.getURI());
             for (int i = 0; i < ex.getErrorCount(); i++) {
                 assertNotNull(ex.getValidityError(i));   
             }    
@@ -1004,6 +1021,7 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (ValidityException ex) {
             assertTrue(ex.getErrorCount() > 0);
+            assertNull(ex.getURI());
             for (int i = 0; i < ex.getErrorCount(); i++) {
                 assertNotNull(ex.getValidityError(i));   
             }   
@@ -1251,6 +1269,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testValidateMalformedDocument() 
       throws IOException {
+        
         Reader reader = new StringReader("<!DOCTYPE root [" +
                 "<!ELEMENT root (a, b)>" +
                 "<!ELEMENT a (EMPTY)>" +
@@ -1265,6 +1284,7 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (ParsingException ex) {
             assertNotNull(ex.getMessage());
+            assertNull(ex.getURI());
         }
     }    
 
@@ -1295,6 +1315,7 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (ParsingException success) {
             assertNotNull(success.getMessage());
+            assertNull(success.getURI());
         }
         
     }        
@@ -1313,6 +1334,7 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (ParsingException success) {
             assertNotNull(success.getMessage());
+            assertEquals("http://www.example.com/", success.getURI());
         }
         
     }
@@ -1321,7 +1343,8 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildMalformedDocumentWithBadUnicodeData() 
       throws IOException {
         
-        File f = new File("data/xmlconf/xmltest/not-wf/sa/170.xml");
+        String filename = "data/xmlconf/xmltest/not-wf/sa/170.xml";
+        File f = new File(filename);
         if (f.exists()) {
             try {
                 builder.build(f);   
@@ -1329,6 +1352,8 @@ public class BuilderTest extends XOMTestCase {
             }
             catch (ParsingException success) {
                 assertNotNull(success.getMessage());
+                assertTrue(success.getURI().endsWith(filename));
+                assertTrue(success.getURI().startsWith("file:/"));
             }
         }
         
@@ -1338,7 +1363,8 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildAnotherMalformedDocumentWithBadUnicodeData() 
       throws IOException {
         
-        File f = new File("data//oasis/p02fail30.xml");
+        String filename = "data//oasis/p02fail30.xml";
+        File f = new File(filename);
         if (f.exists()) {
             try {
                 builder.build(f);   
@@ -1346,6 +1372,8 @@ public class BuilderTest extends XOMTestCase {
             }
             catch (ParsingException success) {
                 assertNotNull(success.getMessage());
+                assertTrue(success.getURI().endsWith(filename));
+                assertTrue(success.getURI().startsWith("file:/"));
             }
         }
         
@@ -1393,6 +1421,7 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (ParsingException ex) {
             assertNotNull(ex.getMessage());
+            assertNull(ex.getURI());
         }
         
     }   
