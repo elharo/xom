@@ -589,4 +589,16 @@ public class DOMConverterTest extends XOMTestCase {
     }
  
     
+    public void testConvertXMLPrefixedElementFromXOMToDOM() 
+      throws SAXException, IOException {
+     
+        Element root = new Element("xml:element", "http://www.w3.org/XML/1998/namespace");
+        Document doc = new Document(root);
+        org.w3c.dom.Document domDoc = DOMConverter.convert(doc, impl);
+        org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
+        assertEquals(0, domRoot.getAttributes().getLength());
+         
+    }
+ 
+    
 }
