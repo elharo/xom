@@ -293,9 +293,16 @@ public class XIncluder {
         baseURLs.pop();
     }
 
-    
     private static void resolve(
       Element element, Builder builder, Stack baseURLs)
+      throws IOException, ParsingException, XIncludeException {
+        
+        resolve(element, builder, baseURLs, null);
+        
+    }
+    
+    private static void resolve(
+      Element element, Builder builder, Stack baseURLs, Document originalDoc)
       throws IOException, ParsingException, XIncludeException {
         
         if (isIncludeElement(element)) {
@@ -362,7 +369,11 @@ public class XIncluder {
                         }  
                     }
                     else {
-                        Nodes originals = XPointer.resolve(element.getDocument(), xpointer);
+                        Document parentDoc = element.getDocument();
+                        if (parentDoc == null) {
+                            parentDoc = originalDoc;
+                        }
+                        Nodes originals = XPointer.query(parentDoc, xpointer);
                         replacements = new Nodes(); 
                         for (int i = 0; i < originals.size(); i++) {
                             Node original = originals.get(i);
@@ -371,9 +382,14 @@ public class XIncluder {
                                     throw new CircularIncludeException("Element tried to include itself"); 
                                 }  
                             }
-                            replacements.append(original.copy());        
+                            Node copy = original.copy();
+                            if (copy instanceof Element) {
+                                Element copyElement = (Element) copy;
+                                copyElement.setBaseURI(original.getBaseURI());
+                            } 
+                            replacements.append(copy);        
                         }  
-                        replacements = resolve(replacements, builder);  
+                        replacements = resolveXPointerSelection(replacements, builder, baseURLs, parentDoc);  
                                                  
                     }
                       
@@ -514,75 +530,20 @@ public class XIncluder {
             }
         }
     }
-
-    /**
-     * <p>
-     * Returns a <code>Nodes</code> object in which all 
-     * <code>xinclude:include</code> elements have been replaced
-     * by their referenced content. Resolution is deep; that is, 
-     * include elements that are descendants of nodes in this list
-     * are replaced as well.
-     * </p>
-     * 
-     * @param in the <code>Nodes</code> object in which include 
-     *     elements should be resolved
-     * @param builder the <code>Builder</code> used to build the
-     *     nodes included from other documents
-     * 
-     * @return a new Nodes object which contains no 
-     *   <code>xinclude:include</code> elements
-     * 
-     * @throws BadParseAttributeException if an <code>include</code>  
-     *     element has a <code>parse</code> attribute
-     *     with any value other than <code>text</code> 
-     *     or <code>parse</code>
-     * @throws CircularIncludeException if this <code>Element</code> 
-     *     contains an XInclude element that attempts to include a  
-     *     document in which this element is directly or indirectly 
-     *     included
-     * @throws IOException if an included document could not be loaded,
-     *     and no fallback was available
-     * @throws MissingHrefException if an <code>xinclude:include</code>
-     *     element does not have an <code>href</code> attribute
-     * @throws ParsingException if an included XML document 
-     *     was malformed
-     * @throws UnsupportedEncodingException if an included document 
-     *     used an encoding this parser does not support, and no 
-     *     fallback was available
-     * @throws XIncludeException if the document violates the
-     *     syntax rules of XInclude
-     * @throws XMLException if resolving an include element would 
-     *     result in a malformed document
-     */
-    private static Nodes resolve(Nodes in, Builder builder) 
+    
+    
+    // This assumes current implementation of XPointer
+    // that always selects exactly zero or one element
+    private static Nodes resolveXPointerSelection(Nodes in, 
+      Builder builder, Stack baseURLs, Document original) 
       throws IOException, ParsingException, XIncludeException {
-          
-        Nodes result = new Nodes(); 
-        for (int i = 0; i < in.size(); i++) {
-            Node child = in.get(i).copy();
-            if (child instanceof Element) { 
-                Document doc = new Document((Element) child);
-                resolveInPlace(doc, builder, new Stack());
-                for (int j = 0; j < doc.getChildCount(); j++) {
-                    Node kid = doc.getChild(j);
-                    result.append(kid);
-                    if (kid instanceof Element) {
-                        doc.setRootElement(new Element("temp"));
-                    } 
-                    kid.detach();
-                }                  
-            }
-            else if (child instanceof Document) {
-                resolveInPlace((Document) child, builder,  new Stack());
-                result.append(child);  
-            }
-            else {
-                result.append(child);   
-            }
-            
-        }
-        return result;
+
+        if (in.size() == 0) return new Nodes();
+        Element preinclude = (Element) in.get(0);
+        return resolveSilently(preinclude, builder, baseURLs, original);
+        
     }
+    
 
     private static boolean contains(ParentNode ancestor, Node descendant) {
         
@@ -595,8 +556,15 @@ public class XIncluder {
         return false;   
     }
 
+    
     private static Nodes resolveSilently(
-      Element element, Builder builder, Stack baseURLs)
+      Element element, Builder builder, Stack baseURLs) 
+      throws IOException, ParsingException, XIncludeException {
+        return resolveSilently(element, builder, baseURLs, null);
+    }
+    
+    private static Nodes resolveSilently(
+      Element element, Builder builder, Stack baseURLs, Document originalDoc)
       throws IOException, ParsingException, XIncludeException {
         
         if (isIncludeElement(element)) {
@@ -615,7 +583,6 @@ public class XIncluder {
             
             testForForbiddenChildElements(element);
 
-            // ParentNode parent = element.getParent();
             String base = element.getBaseURI();
             URL baseURL = null;
             if (base != null) {
@@ -630,13 +597,12 @@ public class XIncluder {
             try {
                 // xml:base attributes added to maintain the 
                 // base URI should not have fragment IDs
-
                 if (baseURL != null && href != null) url = new URL(baseURL, href);
                 else if (href != null) url = new URL(href);                
                 if (parse.equals("xml")) {
                     Nodes replacements;
                     if (url != null) { 
-                        replacements  = downloadXMLDocument(url, xpointer, builder, baseURLs);
+                        replacements = downloadXMLDocument(url, xpointer, builder, baseURLs);
                         // Add base URIs. Base URIs added by XInclusion require
                         // the element to maintain the same base URI as it had  
                         // in the original document. Since its base URI in the 
@@ -663,7 +629,11 @@ public class XIncluder {
                         }  
                     }
                     else {
-                        Nodes originals = XPointer.resolve(element.getDocument(), xpointer);
+                        Document parentDoc = element.getDocument();
+                        if (parentDoc == null) {
+                            parentDoc = originalDoc;
+                        }
+                        Nodes originals = XPointer.query(parentDoc, xpointer);
                         replacements = new Nodes(); 
                         for (int i = 0; i < originals.size(); i++) {
                             Node original = originals.get(i);
@@ -674,7 +644,7 @@ public class XIncluder {
                             }
                             replacements.append(original.copy());        
                         }  
-                        replacements = resolve(replacements, builder);                           
+                        replacements = resolveXPointerSelection(replacements, builder, baseURLs, parentDoc);                           
                     }
                     return replacements; 
                 }  // end parse="xml"
@@ -713,7 +683,7 @@ public class XIncluder {
         else {
             Elements children = element.getChildElements();
             for (int i = 0; i < children.size(); i++) {
-                resolve(children.get(i), builder, baseURLs);   
+                resolve(children.get(i), builder, baseURLs, originalDoc);   
             } 
             return new Nodes(element);
         }
@@ -815,8 +785,8 @@ public class XIncluder {
           
         Nodes included;
         if (xpointer != null && xpointer.length() != 0) {
-            included = XPointer.resolve(doc, xpointer); 
-            resolveInPlace(included, builder, baseURLs); // ???? should baseURLs be passed here?
+            included = XPointer.query(doc, xpointer); 
+            resolveInPlace(included, builder, baseURLs); 
         }
         else {
             resolveInPlace(doc, builder, baseURLs); // remove include elements
