@@ -100,7 +100,7 @@ public class StreamingTextExtractor extends NodeFactory {
         return empty; 
     }    
     
-    public void endDocument(Document doc) {
+    public void finishMakingDocument(Document doc) {
         try {
             out.flush();
         }
