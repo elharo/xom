@@ -1890,20 +1890,8 @@ public class Element extends ParentNode {
         result.append(element.getQualifiedName());
         result.append(">");
     }
-
-    
- /*   private int getNextSibling(Node n) {
-    
-       ParentNode parent = n.getParent();
-       if (parent == null) return -2;
-       int index = parent.indexOf(n);
-       if (parent.getChildCount() - 1 == index) return -1;
-       return index+1;
-    
-    }    */
     
 
-    // could this be made non-recursive????
     /**
      * <p>
      * Returns the value of the element as defined by XPath 1.0.
@@ -1919,13 +1907,41 @@ public class Element extends ParentNode {
      */
     public final String getValue() {
 
-        StringBuffer result = new StringBuffer();
-        for (int i = 0; i < getChildCount(); i++) {
+        // recursive algorithm limited to Java stack size
+        /* for (int i = 0; i < getChildCount(); i++) {
            Node child = getChild(i);
            if (child.isText() || child.isElement()) {
                result.append(child.getValue());
            }
-        }
+        } */
+        // non-recursive algorithm
+        if (this.getChildCount() == 0) return "";
+        StringBuffer result = new StringBuffer();
+        Node current = this.getChild(0);
+        int index = 0;
+        boolean end = false;
+        while (true) {
+            if (!end && current.getChildCount() > 0) {
+               current = current.getChild(0);
+               index = 0;
+            }
+            else {
+                end = false;
+                if (current.isText()) result.append(current.getValue());
+                ParentNode parent = current.getParent();
+                if (parent.getChildCount() - 1 == index) {
+                    current = parent;
+                    if (current == this) break;
+                    index = current.getParent().indexOf(current);
+                    end = true;
+                }
+                else {
+                    index++;
+                    current = parent.getChild(index);
+                }
+            }
+        }        
+        
         return result.toString();
 
     }
