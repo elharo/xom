@@ -25,15 +25,18 @@ package nu.xom.samples;
 
 import nu.xom.Builder;
 import nu.xom.Document;
-import nu.xom.Serializer;
-import nu.xom.canonical.CanonicalXMLSerializer;
+import nu.xom.canonical.Canonicalizer;
 
 /**
+ * <p>
+ *   Demonstrates use of the Canonicalizer class.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d23
  *
  */
-public class Canonicalizer {
+public class CanonicalizerDriver {
 
     /**
       * <p>
@@ -47,7 +50,7 @@ public class Canonicalizer {
   
         Builder builder = new Builder();
         try {
-            Serializer outputter = new CanonicalXMLSerializer(System.out);
+            Canonicalizer outputter = new Canonicalizer(System.out);
             Document input = builder.build(args[0]);
             outputter.write(input);
         }

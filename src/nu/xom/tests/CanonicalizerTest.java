@@ -39,9 +39,8 @@ import com.ibm.icu.text.Normalizer;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
-import nu.xom.Serializer;
 import nu.xom.XMLException;
-import nu.xom.canonical.CanonicalXMLSerializer;
+import nu.xom.canonical.Canonicalizer;
 
 /**
  * <p>
@@ -49,7 +48,7 @@ import nu.xom.canonical.CanonicalXMLSerializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -72,19 +71,18 @@ public class CanonicalizerTest extends XOMTestCase {
             File input = new File(tests, inputs[i]);   
             Document doc = builder.build(input);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Serializer serializer = new CanonicalXMLSerializer(out);
+            Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(doc);
-            serializer.flush();
             
             byte[] actual = out.toByteArray();
             
             // for debugging
-            File debug = new File(
+            /* File debug = new File(
               "data/canonical/debug/" + input.getName() + ".dbg");
             OutputStream fout = new FileOutputStream(debug);
             fout.write(actual);
             fout.flush();
-            fout.close();      
+            fout.close();   */   
             
             File expected = new File(
               "data/canonical/output/" + input.getName() + ".out");
@@ -112,10 +110,9 @@ public class CanonicalizerTest extends XOMTestCase {
             File input = new File(tests, inputs[i]); 
             Document doc = builder.build(input);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Serializer serializer 
-              = new CanonicalXMLSerializer(out, false);
+            Canonicalizer serializer 
+              = new Canonicalizer(out, false);
             serializer.write(doc);
-            serializer.flush();
             
             byte[] actual = out.toByteArray();
             
@@ -147,8 +144,8 @@ public class CanonicalizerTest extends XOMTestCase {
             String data = "<test xmlns=\"relative\">data</test>";
             Document doc = builder.build(data, "http://www.ex.org/");
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Serializer serializer
-              = new CanonicalXMLSerializer(out, false);
+            Canonicalizer serializer
+              = new Canonicalizer(out, false);
             serializer.write(doc);
             fail("Canonicalized document with relative namespace URI");
         }
@@ -166,8 +163,8 @@ public class CanonicalizerTest extends XOMTestCase {
         Nodes nodes = new Nodes();
         nodes.append(element);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        CanonicalXMLSerializer serializer 
-          = new CanonicalXMLSerializer(out, false);
+        Canonicalizer serializer 
+          = new Canonicalizer(out, false);
         serializer.write(nodes);
         serializer.flush(); 
         byte[] data = out.toByteArray();
@@ -187,8 +184,8 @@ public class CanonicalizerTest extends XOMTestCase {
         Nodes nodes = new Nodes();
         nodes.append(element);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        CanonicalXMLSerializer serializer 
-          = new CanonicalXMLSerializer(out, false);
+        Canonicalizer serializer 
+          = new Canonicalizer(out, false);
         serializer.write(nodes);
         serializer.flush(); 
         byte[] data = out.toByteArray();
@@ -219,8 +216,8 @@ public class CanonicalizerTest extends XOMTestCase {
         Nodes nodes = new Nodes();
         nodes.append(element);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        CanonicalXMLSerializer serializer 
-          = new CanonicalXMLSerializer(out, false);
+        Canonicalizer serializer 
+          = new Canonicalizer(out, false);
         serializer.write(nodes);
         serializer.flush(); 
         byte[] data = out.toByteArray();
@@ -345,159 +342,5 @@ public class CanonicalizerTest extends XOMTestCase {
         assertEquals("Parser doesn't use NFC when converting from " + encoding, 
           normalizedResult, rawResult);
     }
-
-    public void testSetPreserveBaseURI() throws IOException {        
-        Serializer serializer = new CanonicalXMLSerializer(System.out);
-        
-        // false by default
-        assertFalse(serializer.getPreserveBaseURI());
-        
-        // doesn't throw an exception for setting false
-        serializer.setPreserveBaseURI(false);
-        
-        // can't set preserve base URI to true
-        try {
-            serializer.setPreserveBaseURI(true);
-            fail("Set preserve base URI to true");   
-        }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());   
-        }  
-        
-        // still false
-        assertFalse(serializer.getPreserveBaseURI());
-    } 
-
-    public void testSetIndent() throws IOException {
-                
-        Serializer serializer = new CanonicalXMLSerializer(System.out);
-        
-        // 0 by default
-        assertEquals(0, serializer.getIndent());
-        
-        // doesn't throw an exception for setting 0
-        serializer.setIndent(0);
-        
-        // can't set to positive
-        try {
-            serializer.setIndent(2);
-            fail("Set positive indent");   
-        }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());   
-        }  
-        
-        // can't set to negative
-        try {
-            serializer.setIndent(-1);
-            fail("Set negative indent");   
-        }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());   
-        }  
-        
-        // still 0
-        assertEquals(0, serializer.getIndent());
-
-    } 
-    
-    public void testSetMaxLength() throws IOException {
-                
-        Serializer serializer = new CanonicalXMLSerializer(System.out);
-        
-        // -1 by default
-        assertEquals(-1, serializer.getMaxLength());
-        
-        // doesn't throw an exception for setting 0
-        serializer.setIndent(0);
-        
-        // can't set to positive
-        try {
-            serializer.setMaxLength(200);
-            fail("Set positive max length");   
-        }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());   
-        }  
-        
-        // can set to negative
-        serializer.setMaxLength(-2); 
-        
-        // still -1
-        assertEquals(-1, serializer.getMaxLength());
-
-    } 
-
-    public void testSetLineSeparator() throws IOException {
-                
-        Serializer serializer = new CanonicalXMLSerializer(System.out);
-        
-        // \n by default
-        assertEquals("\n", serializer.getLineSeparator());
-        
-        // doesn't throw an exception for setting \n
-        serializer.setLineSeparator("\n");
-        
-        // can't set to \r
-        try {
-            serializer.setLineSeparator("\r");
-            fail("Set carriage return as line separator");   
-        }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());   
-        }  
-        
-        // can't set to \r\n
-        try {
-            serializer.setLineSeparator("\r\n");
-            fail("Set \r\n as line separator");   
-        }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());   
-        }  
-        
-        // can't set to empty string
-        try {
-            serializer.setLineSeparator("");
-            fail("Set empty string as line separator");   
-        }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());   
-        }  
-        
-        // still \n
-        assertEquals("\n", serializer.getLineSeparator());
-
-    } 
-   
-    public void testSetUnicodeNormalizationFormC() throws IOException {        
-        Serializer serializer = new CanonicalXMLSerializer(System.out);
-        
-        // false by default
-        assertFalse(serializer.getUnicodeNormalizationFormC());
-        
-        // doesn't throw an exception for setting false
-        serializer.setUnicodeNormalizationFormC(false);
-        
-        // can't set NFC to true
-        try {
-            serializer.setUnicodeNormalizationFormC(true);
-            fail("Set Unicode Normalization Form C to true");   
-        }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());   
-        }  
-        
-        // still false
-        assertFalse(serializer.getUnicodeNormalizationFormC());
-    } 
 
 }
