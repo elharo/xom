@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -24,6 +24,7 @@
 package nu.xom.xinclude;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -934,8 +935,9 @@ public class XIncluder {
                     in.reset();  
                 }
             }
-            // should buffer this????
-            Reader reader = new InputStreamReader(in, encoding);
+            Reader reader = new BufferedReader(
+              new InputStreamReader(in, encoding)
+            );
             int c;
             StringBuffer sb = new StringBuffer(contentLength);
             while ((c = reader.read()) != -1) {
@@ -953,6 +955,7 @@ public class XIncluder {
         }
       
     }
+    
     
     private static boolean isIncludeElement(Element element) {
      
@@ -1011,6 +1014,7 @@ URI reference by escaping all disallowed characters as follows: ]
         
     }
     
+    
     private static boolean needsEscaping(byte c) {
         
         // This first test includes high-byte characters
@@ -1032,6 +1036,7 @@ URI reference by escaping all disallowed characters as follows: ]
         return true;
         
     }
+    
     
     private static String hexEscape(byte c) {
         
