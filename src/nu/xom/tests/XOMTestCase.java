@@ -74,20 +74,12 @@ public class XOMTestCase extends TestCase {
         String value1 = expected.getValue();
         String value2 = actual.getValue();
         if ("xml:base".equals(expected.getQualifiedName())) {
-            // not 100% sure this is kosher but needed for the
-            // XInclude conformance tests????
-            // discuss with XInclude WG, can base URIs have
-            // fragment IDs?
-            if (value1.indexOf('#') >= 0) {
-                value1 = value1.substring(0, value1.indexOf('#')); 
-            }
-            if (value2.indexOf('#') >= 0) {
-                value2 = value2.substring(0, value2.indexOf('#')); 
-            }
+            // Using endsWith to handle possibility that one is relative
+            // and other is not
             assertTrue(value1 + " " + value2, 
               value1.endsWith(value2) || value2.endsWith(value1));
         } 
-        else {
+        else { 
             assertEquals(value1, value2);
             assertEquals(expected.getLocalName(), actual.getLocalName());
             assertEquals(
