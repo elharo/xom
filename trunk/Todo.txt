@@ -81,6 +81,8 @@ and escape all non-interoperable characters?
 Before 1.0:
 -----------
 
+Run Jester
+
 Update all versions to 1.0
 
 Look into a code beautifier for the line length
@@ -124,6 +126,30 @@ Do an exhaustive test and report bugs to Sun. Note especially
     
     
 Add a tools package for the character table generator
+
+Write 
+# Projects
+# Unit tests
+# Sample Programs
+for web site
+
+===============
+Done 1.0b5:
+===============
+
+XSLTransform.setNodeFactory is deprecated. Instead use 
+the new XSLTransform(Document, NodeFactory) constructor.
+
+XIncluder now resolves XPointers in xi:include elements 
+against the acquired infoset rather
+than the source infoset.
+
+Scheme specific errors in XPointers are treated as resource errors when
+xincluding rather than fatal errors.
+
+Much faster when building documents from File objects.
+
+Deprecated constructors have been removed from XSLTransform
 
 ===============
 Done 1.0b4:
