@@ -56,7 +56,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -66,6 +66,7 @@ public class DOMConverterTest extends XOMTestCase {
         super(name);   
     }
 
+    
     private String source = "<!DOCTYPE test [ ]>\r\n"
      + "<?xml-stylesheet href=\"file.css\" type=\"text/css\"?>" 
      + "<!-- test -->"
@@ -80,6 +81,7 @@ public class DOMConverterTest extends XOMTestCase {
      + "</test>\r\n"
      + "<!--epilog-->";
      
+    
     private Document xomDocument;
     private org.w3c.dom.Document domDocument;
     private DOMImplementation impl;
@@ -147,6 +149,7 @@ public class DOMConverterTest extends XOMTestCase {
             // shouldn't happen from known good doc 
             throw new RuntimeException("Ooops!");  
         }
+        
     }
 
     
@@ -192,30 +195,35 @@ public class DOMConverterTest extends XOMTestCase {
     
     public void testDefaultNamespacedElement() 
       throws SAXException, IOException, ParserConfigurationException {
+        
         byte[] data = "<root xmlns=\"http://www.example.com\"/>".getBytes();
         org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
         Document xomDoc = DOMConverter.convert(doc);
         
         Element root = xomDoc.getRootElement();
         assertEquals("root", root.getQualifiedName());
-        assertEquals("http://www.example.com", root.getNamespaceURI());         
+        assertEquals("http://www.example.com", root.getNamespaceURI());     
+        
     }
 
     
     public void testPrefixedElement() 
       throws SAXException, IOException, ParserConfigurationException {
+        
         byte[] data = "<pre:root xmlns:pre=\"http://www.example.com\"/>".getBytes();
         org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
         Document xomDoc = DOMConverter.convert(doc);
         
         Element root = xomDoc.getRootElement();
         assertEquals("pre:root", root.getQualifiedName());
-        assertEquals("http://www.example.com", root.getNamespaceURI());         
+        assertEquals("http://www.example.com", root.getNamespaceURI());  
+        
     }
 
     
     public void testConvertAttr() 
       throws SAXException, IOException, ParserConfigurationException {
+        
         byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();
         org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
@@ -341,6 +349,7 @@ public class DOMConverterTest extends XOMTestCase {
 
    
     public void testChildElementAddsNamespace() {
+        
         Element root = new Element("root");
         Element child = new Element("pre:child", "http://www.example.org/");
         child.addAttribute(new Attribute("xlink:type", "http://www.w3.org/1999/xlink", "simple"));
@@ -348,24 +357,29 @@ public class DOMConverterTest extends XOMTestCase {
         Document doc = new Document(root);  
         
         assertEquals(doc, DOMConverter.convert(DOMConverter.convert(doc, impl)));
+        
     }
     
     
     public void testChildElementUsesSameNamespace() {
+        
         Element root = new Element("pre:root", "http://www.example.org/");
         Element child = new Element("pre:child", "http://www.example.org/");
         root.appendChild(child);
         Document doc = new Document(root);  
         assertEquals(doc, DOMConverter.convert(DOMConverter.convert(doc, impl)));
+        
     }
     
     
     public void testPrefixMappingChanges() {
+        
         Element root = new Element("pre:root", "http://www.example.org/");
         Element child = new Element("pre:child", "http://www.example.net/");
         root.appendChild(child);
         Document doc = new Document(root);  
         assertEquals(doc, DOMConverter.convert(DOMConverter.convert(doc, impl)));
+        
     }
     
     

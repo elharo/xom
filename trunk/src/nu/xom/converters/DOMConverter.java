@@ -491,6 +491,51 @@ public class DOMConverter {
     private static org.w3c.dom.Element convert(
       Element element, org.w3c.dom.Document document) {
         
+        org.w3c.dom.Element result = makeElement(element, document);
+        org.w3c.dom.Element parent = result;
+        Node current = element;
+        int index = 0;
+        boolean end = false;
+        while (true) {
+            if (!end && current.getChildCount() > 0) {
+               current = current.getChild(0);
+               index = 0;
+            }
+            else {
+                end = false;
+                ParentNode parentNode = current.getParent();
+                if (parentNode.getChildCount() - 1 == index) {
+                    current = parentNode;
+                    if (current == element) break;
+                    index = current.getParent().indexOf(current);
+                    end = true;
+                    continue;
+                }
+                else {
+                    index++;
+                    current = parentNode.getChild(index);
+                }
+            }
+            
+            if (current instanceof Element) {
+                org.w3c.dom.Node child = makeElement((Element) current, document);
+                parent.appendChild(child);                
+            }
+            else {
+                org.w3c.dom.Node child = convert(current, document);
+                parent.appendChild(child);
+            }
+            
+        }
+        
+        return result;  
+        
+    }
+
+
+    private static org.w3c.dom.Element makeElement(
+      Element element, org.w3c.dom.Document document) {
+        
         org.w3c.dom.Element result;
         String namespace = element.getNamespaceURI();   
          
@@ -555,15 +600,7 @@ public class DOMConverter {
                 attr.setValue(uri);
             }
         }
-        
-        
-        // children ???? remove the recursion
-        for (int i = 0; i < element.getChildCount(); i++) {
-            result.appendChild(convert(element.getChild(i), document)); 
-        }
-        
-        return result;  
-        
+        return result;
     }
 
     
