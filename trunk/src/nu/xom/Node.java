@@ -409,8 +409,7 @@ public abstract class Node {
      * 
      * @throws XPathException if there's a syntax error in the 
      *     expression, the query returns something other than
-     *     a node-set, or the query returns a node-set containing
-     *     a namespace node
+     *     a node-set
      * 
      */
     public final Nodes query(String xpath, XPathContext namespaces) {
@@ -428,7 +427,10 @@ public abstract class Node {
         
         try {
             XPath xp = new JaxenConnector(xpath);
-            if (namespaces != null) {
+            if (namespaces == null) {
+                xp.setNamespaceContext((new XPathContext()).getJaxenContext());
+            }
+            else {
                 xp.setNamespaceContext(namespaces.getJaxenContext());
             }
             List results = xp.selectNodes(this);

@@ -33,7 +33,7 @@ import org.jaxen.NamespaceContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d6
  *
  */
 public final class XPathContext {
@@ -44,19 +44,34 @@ public final class XPathContext {
     
     /**
      * <p>
-     * Creates a new XPath context that bonds the prefix to the
-     * URI.
+     * Creates a new XPath context that binds the specified prefix to 
+     * the specified URI. The <code>xml</code> 
+     * prefix is also bound to the URI 
+     * <code>http://www.w3.org/XML/1998/namespace</code>.
      * </p>
      * 
      * @param prefix the prefix to bind
      * @param uri the namespace URI the prefix is bound to
      */
     public XPathContext(String prefix, String uri) {
+        this();
         addNamespace(prefix, uri);
     }
     
     
-    private XPathContext() {}
+    /**
+     * <p>
+     * Creates a new XPath context that binds the <code>xml</code> 
+     * prefix to the URI 
+     * <code>http://www.w3.org/XML/1998/namespace</code>.
+     * </p>
+     * 
+     * @param prefix the prefix to bind
+     * @param uri the namespace URI the prefix is bound to
+     */
+    public XPathContext() {
+        addNamespace("xml", Namespace.XML_NAMESPACE);
+    }
 
     
     /**
@@ -64,15 +79,28 @@ public final class XPathContext {
      * Binds the specified prefix to the specified namespace URI. 
      * If the prefix is already bound in this context, the new URI
      * replaces the old URI. Binding a prefix to null removes the
-     * declaration.
+     * declaration. The binding of the <code>xml</code> prefix
+     * may not be changed.
      * </p>
      * 
      * @param prefix the prefix to bind
      * @param uri the namespace URI the prefix is bound to
+     * 
+     * @throws NamesapceConflictException if the prefix is 
+     *     <code>xml</code> and the URI is not
+     *     <code>http://www.w3.org/XML/1998/namespace</code>
+     * 
      */
     public void addNamespace(String prefix, String uri) {
+        
+        if ("xml".equals(prefix) 
+          && !Namespace.XML_NAMESPACE.equals(uri)) {
+            throw new NamespaceConflictException(
+              "Wrong namespace URI for xml prefix: " + uri);
+        }
         if ("".equals(uri)) uri = null;
-        namespaces.put(prefix, uri);        
+        namespaces.put(prefix, uri);
+        
     }
 
     
