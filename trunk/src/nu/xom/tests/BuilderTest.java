@@ -858,6 +858,17 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("", doctype.getInternalDTDSubset());
     }
     
+    public void testIgnoreExternalParameterEntitiesInInternalDTDSubset()
+      throws IOException, ParsingException {
+        Builder builder = new Builder(false);
+        Document doc = builder.build("<!DOCTYPE root [" +
+                "<!ENTITY % name SYSTEM \"http://www.example.org/\">" +
+                "]><root/>", "http://www.example.com/");
+        assertEquals(2, doc.getChildCount());
+        DocType doctype = doc.getDocType();
+        assertEquals("", doctype.getInternalDTDSubset());
+    }
+    
     
     
     /* <?xml version="1.0"?>
