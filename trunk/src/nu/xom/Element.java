@@ -212,10 +212,8 @@ public class Element extends ParentNode {
                 else if (sourceParent.getChildCount() - 1 == index) {
                     sourceCurrent = sourceParent; 
                     if (sourceCurrent == sourceElement) break;
-                    if (sourceCurrent.isElement()) {
-                        // switch parent up
-                        resultParent = (Element) resultParent.getParent();
-                    }
+                    // switch parent up
+                    resultParent = (Element) resultParent.getParent();
                     index = sourceCurrent.getParent().indexOf(sourceCurrent);
                     end = true;
                     continue;
