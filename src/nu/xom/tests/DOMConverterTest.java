@@ -281,6 +281,7 @@ public class DOMConverterTest extends XOMTestCase {
                  
     }
 
+    
     public void testConvertText() 
       throws SAXException, IOException, ParserConfigurationException {
 
@@ -297,6 +298,7 @@ public class DOMConverterTest extends XOMTestCase {
                  
     }
 
+    
     public void testConvertCDATASection() 
       throws SAXException, IOException, ParserConfigurationException {
 
@@ -309,7 +311,11 @@ public class DOMConverterTest extends XOMTestCase {
         org.w3c.dom.Element root = doc.getDocumentElement();
         CDATASection node = (CDATASection) (root.getChildNodes().item(0));
         Text text = DOMConverter.convert(node);
-        assertEquals(node.getNodeValue(), text.getValue());
+        assertEquals(node.getNodeValue(), text.getValue());   
+        
+        // Now test indirect conversion
+        Document xomDoc = DOMConverter.convert(doc);
+        assertEquals(node.getNodeValue(), xomDoc.getValue());
                  
     }
 
