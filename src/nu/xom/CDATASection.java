@@ -33,7 +33,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 class CDATASection extends Text {
@@ -47,7 +47,6 @@ class CDATASection extends Text {
     }
     
     static Text build(String data) {
-        if (data == null) data = "";
         CDATASection result = new CDATASection(data);
         return result;
     }
