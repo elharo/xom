@@ -75,7 +75,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d4
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -2997,14 +2997,7 @@ public class BuilderTest extends XOMTestCase {
             InputStream in = new ByteArrayInputStream(actual);
             try {
                 Document roundTrip = builder.build(in, resolvedURI);
-                if (uri.equals("invalid/not-sa02.xml") || uri.equals("invalid/not-sa08.xml")) {
-                   //???? these cases fail because XOM doesn't use numeric character
-                   // references to escape linefeeds (\n) in attribute values;
-                   // consider whether it might be worth doing this.
-                }
-                else {
-                    assertEquals("Failed to roundtrip " + uri, doc, roundTrip);
-                }
+                assertEquals("Failed to roundtrip " + uri, doc, roundTrip);
             }
             catch (ParsingException ex) {
                 System.out.println(ex.getURI());

@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -50,7 +50,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d4
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -1009,6 +1009,21 @@ public class SerializerTest extends XOMTestCase {
           "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root>&#x0D;\n</root>\r\n", 
           result
         );
+        
+    }
+    
+    
+    public void testCRLFInAttributeValue() 
+      throws IOException, ParsingException {  
+
+        root.addAttribute(new Attribute("test", "a\r\na"));
+        Serializer serializer = new Serializer(out, "ISO-8859-1");
+        serializer.write(doc);
+        out.close();
+        InputStream in = new ByteArrayInputStream(out.toByteArray());
+        Document reparsed = parser.build(in);
+        String result = reparsed.getRootElement().getAttributeValue("test");
+        assertEquals("CRLF not escaped", "a\r\na", result);
         
     }
     
