@@ -53,7 +53,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a2
  *
  */
 public class BaseURITest extends XOMTestCase {
@@ -966,21 +966,82 @@ public class BaseURITest extends XOMTestCase {
     }
     
     
-    // Possible different behavior; don't return null when calling getBaseURI
-    // This is currently inconsistent with two other tests
-    /* public void testZ() {
-     
-        Element root = new Element("root");
-        Attribute baseAttribute = new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "file:///data/limit/test.xml");
-        root.addAttribute(baseAttribute);
-        Element child = new Element ("child");
-        child.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "://:89:90//:78child.xml"));
-        root.appendChild(child);
-        assertEquals("://:89:90//:78child.xml", child.getBaseURI());
+    // tests from RFC2396bis
+    public void testRFC2396NormalExamples() {
         
-    } */
+        String[] RFC2396bisCases = {
+           "g:h",  "g:h",
+           "g",   "http://a/b/c/g",
+           "./g", "http://a/b/c/g",
+           "g/",  "http://a/b/c/g/",
+           "/g",  "http://a/g",
+           "//g", "http://g",
+           "?y",  "http://a/b/c/d;p?y",
+           "g?y", "http://a/b/c/g?y",
+           "#s", "http://a/b/c/d;p?q#s",
+           "g#s", "http://a/b/c/g#s",
+           "g?y#s", "http://a/b/c/g?y#s",
+           ";x", "http://a/b/c/;x",
+           "g;x", "http://a/b/c/g;x",
+           "g;x?y#s", "http://a/b/c/g;x?y#s",
+           "", "http://a/b/c/d;p?q",
+           ".", "http://a/b/c/",
+           "./", "http://a/b/c/",
+           "..", "http://a/b/",
+           "../", "http://a/b/",
+           "../g", "http://a/b/g",
+           "../..", "http://a/",
+           "../../", "http://a/",
+           "../../g", "http://a/g"
+        };
     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://a/b/c/d;p?q");
+        Attribute base = new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", "g");
+        root.addAttribute(base);
+        for (int i = 0; i < RFC2396bisCases.length; i += 2) {
+            base.setValue(RFC2396bisCases[i]);
+            assertEquals(RFC2396bisCases[i], RFC2396bisCases[i+1], root.getBaseURI());
+        } 
+        
+    }
+    
+ 
+    public void testRFC2396AbnormalExamples() {
+        
+        String[] RFC2396bisCases = {
+            "../../../g", "http://a/g",
+            "../../../../g", "http://a/g",
+            "/./g", "http://a/g",
+            "/../g", "http://a/g",
+            "g.", "http://a/b/c/g.",
+            ".g", "http://a/b/c/.g",
+            "g..", "http://a/b/c/g..",
+            "..g", "http://a/b/c/..g",
+            "./../g", "http://a/b/g",
+            "./g/.", "http://a/b/c/g/",
+            "g/./h", "http://a/b/c/g/h",
+            "g/../h", "http://a/b/c/h",
+            "g;x=1/./y", "http://a/b/c/g;x=1/y",
+            "g;x=1/../y", "http://a/b/c/y",
+            "g?y/./x", "http://a/b/c/g?y/./x",
+            "g?y/../x", "http://a/b/c/g?y/../x",
+            "g#s/./x", "http://a/b/c/g#s/./x",
+            "g#s/../x", "http://a/b/c/g#s/../x",
+            "http:g", "http:g"
+        };
+    
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://a/b/c/d;p?q");
+        Attribute base = new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", "g");
+        root.addAttribute(base);
+        for (int i = 0; i < RFC2396bisCases.length; i += 2) {
+            base.setValue(RFC2396bisCases[i]);
+            assertEquals(RFC2396bisCases[i], RFC2396bisCases[i+1], root.getBaseURI());
+        } 
+        
+    }
     
 }
