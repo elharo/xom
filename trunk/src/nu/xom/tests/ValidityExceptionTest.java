@@ -28,29 +28,23 @@ import nu.xom.ValidityException;
 
 /**
  * <p>
- *   Unit tests for the <code>ParsingException</code> class.
+ *   Unit tests for the <code>ValidityException</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b6
  *
  */
 public class ValidityExceptionTest extends XOMTestCase {
     
     
-    private ValidityException ex;
-    private Exception cause;
+    private ValidityException ex = new ValidityException("message");
+    private Exception cause = new Exception();
     private String message = "testing 1-2-3";
     
     
     public ValidityExceptionTest(String name) {
         super(name);
-    }
-    
-    
-    protected void setUp() {
-        ex = new ValidityException("message");
-        cause = new Exception();
     }
 
     
@@ -61,12 +55,38 @@ public class ValidityExceptionTest extends XOMTestCase {
     }
     
     
+    public void testFourArgumentConstructor() {
+            
+        ParsingException ex = new ValidityException(message, 10000, 40000, cause);
+        assertEquals(message, ex.getMessage());
+        assertEquals(cause, ex.getCause()); 
+        assertEquals(10000, ex.getLineNumber()); 
+        assertEquals(40000, ex.getColumnNumber()); 
+
+    }
+    
+    
+    public void testAnotherFourArgumentConstructor() {
+            
+        ParsingException ex = new ValidityException(
+          message, "http://www.example.com/", 10000, 40000);
+        assertEquals(message, ex.getMessage());
+        assertNull(ex.getCause()); 
+        assertEquals(10000, ex.getLineNumber()); 
+        assertEquals(40000, ex.getColumnNumber()); 
+        assertEquals("http://www.example.com/", ex.getURI());
+        
+    }
+    
+    
     public void testLineAndColumnNumbers() {
+        
         ValidityException ex = new ValidityException(message, 10, 20);
         assertEquals(message, ex.getMessage());
         assertNull(ex.getCause());
         assertEquals(10, ex.getLineNumber()); 
         assertEquals(20, ex.getColumnNumber()); 
+        
     }
     
     
