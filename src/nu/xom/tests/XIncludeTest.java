@@ -2354,13 +2354,51 @@ public class XIncludeTest extends XOMTestCase {
             assertTrue(success.getURI().endsWith(input.getName()));
         }
                 
-    }        
+    }
+        
+    
+    // Test that a malformed parse attribute is not thrown when the
+    // fallback element containing it is not activated.
+    public void testHiddenError() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror.xml");
+        Document doc = builder.build(input);
+        XIncluder.resolve(doc);
+                
+    }
+        
+
+    // Test that an href attribute that has a fragment identifier
+    // is not a fatal error when the fallback element containing 
+    // it is not activated.
+    public void testHiddenError2() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror2.xml");
+        Document doc = builder.build(input);
+        XIncluder.resolve(doc);
+                
+    }
+
+    
+    // Test that a fallback element with a non-include parent is not a
+    // fatal error when the ancestor fallback element containing it is
+    // not activated.
+    public void testHiddenError3() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror3.xml");
+        Document doc = builder.build(input);
+        XIncluder.resolve(doc);
+                
+    }
 
    
     // Test that an xpointer attribute that uses percent escapes 
     // is a not a fatal error when the 
-    // fallback element containing it is not activated????
-    // See http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2004Oct/0007.html
+    // fallback element containing it is not activated. See
+    // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2004Oct/0008.html
     public void testXpointerAttributeContainsPercentEscapeInUnactivatedFallback() 
       throws ParsingException, IOException, XIncludeException {
       
