@@ -58,7 +58,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class Builder {
 
-    private XMLReader parser;
+    private XMLReader   parser;
+    private NodeFactory factory;
     
     /**
      * <p>
@@ -382,6 +383,7 @@ public class Builder {
     
     private void setHandlers(NodeFactory factory) {
         
+        this.factory = factory;
         XOMHandler handler = new XOMHandler(factory);
         parser.setContentHandler(handler);
         parser.setDTDHandler(handler);
@@ -752,6 +754,27 @@ public class Builder {
           throws SAXParseException {
             throw exception;            
         }        
+        
+    }
+
+    // I added this because XIncluder needed it.
+    // Note that this method is careful to not return an instance
+    // of NonVerifyingFactory.
+    /**
+     * <p>
+     *   If a custom <code>NodeFactory</code> was passed to the 
+     *   constructor, then this method returns a reference to it.
+     *   If no <code>NodeFactory</code> was passed to the 
+     *   constructor, then this method returns null.
+     * </p>
+     * 
+     * @return the node factory this builder uses, or null
+     *     if none was specified in the constructor
+     */
+    public NodeFactory getNodeFactory() {
+        
+        if (!(factory instanceof NonVerifyingFactory)) return factory;
+        else return null;
         
     }
 

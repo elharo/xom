@@ -35,6 +35,7 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.ValidityException;
@@ -514,20 +515,31 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("value", name.getValue());
     }
     
-   // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
-   // and possibly other parsers. I've reported the bug in Xerces,
-   // and it should be fixed in Xerces 2.6.
-   public void testBaseRelativeResolutionRemotelyWithDirectory()
+    // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
+    // and possibly other parsers. I've reported the bug in Xerces,
+    // and it should be fixed in Xerces 2.6.
+    public void testBaseRelativeResolutionRemotelyWithDirectory()
       throws IOException, ParsingException {
         builder.build("http://www.ibiblio.org/xml");
-   } 
+    } 
 
-   // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
-   // and possibly other parsers. I've reported the bug in Xerces,
-   // and it should be fixed in Xerces 2.6.
-   public void testRelativeURIResolutionAgainstARedirectedBase()
+    // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
+    // and possibly other parsers. I've reported the bug in Xerces,
+    // and it should be fixed in Xerces 2.6.
+    public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
         builder.build("http://www.cafeconleche.org/redirecttest.xml");
-   } 
+    } 
+
+    public void testDontGetNodeFactory() {
+        Builder builder = new Builder();   
+        assertNull(builder.getNodeFactory());
+    }
+    
+    public void testGetNodeFactory() {
+        NodeFactory factory = new NodeFactory();
+        Builder builder = new Builder(factory);   
+        assertEquals(factory, builder.getNodeFactory());
+    }
 
 }
