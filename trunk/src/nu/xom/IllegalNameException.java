@@ -34,21 +34,11 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  *
  */
 
 public class IllegalNameException extends WellformednessException {
-
-
-    /**
-     * <p>
-     * Creates a new <code>IllegalNameException</code>.
-     * </p>
-     */
-    public IllegalNameException() {
-        super();
-    }
 
     /**
      * <p>

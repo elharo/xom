@@ -37,21 +37,12 @@ import org.xml.sax.SAXParseException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class ValidityException extends ParsingException {
     
     private List saxExceptions = new ArrayList();
-
-    /**
-     * <p>
-     *   Creates a new <code>ValidityException</code>.
-     *  <p>
-     */
-    public ValidityException() {
-        super();
-    }
 
     /**
      * <p>

@@ -37,7 +37,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class ParsingException extends Exception {
@@ -45,15 +45,6 @@ public class ParsingException extends Exception {
     private Throwable cause;
     private int lineNumber = -1;
     private int columnNumber = -1;
-
-    /**
-     * <p>
-     * Creates a new <code>ParsingException</code>.
-     * </p>
-     */
-    public ParsingException() {
-        super();
-    }
 
     /**
      * <p>

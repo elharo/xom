@@ -45,7 +45,7 @@ public class XSLExceptionTest extends XOMTestCase {
     }
 
     protected void setUp() {
-        ex = new XSLException();
+        ex = new XSLException("message");
         cause = new Exception();
     }
     
@@ -119,11 +119,6 @@ public class XSLExceptionTest extends XOMTestCase {
     public void testGetMessage() {      
         Exception ex = new XSLException("testing");
         assertEquals("testing", ex.getMessage());
-    }
-
-    public void testGetNoMessage() {      
-        Exception ex = new XSLException();
-        assertNull(ex.getMessage());
     }
 
 }

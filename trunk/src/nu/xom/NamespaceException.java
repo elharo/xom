@@ -46,19 +46,10 @@ package nu.xom;
  * </p> 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  *
  */
 public class NamespaceException extends XMLException {
-
-    /**
-     * <p>
-     * Creates a new <code>NamespaceException</code>.
-     * </p>
-     */
-    public NamespaceException() {
-        super();
-    }
 
     /**
      * <p>

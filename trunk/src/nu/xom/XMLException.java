@@ -38,21 +38,12 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  *
  */
 public class XMLException extends RuntimeException {
 
     private Throwable cause;
-
-    /**
-     * <p>
-     * Creates a new <code>XMLException</code>.
-     * </p>
-     */
-    public XMLException() {
-        super();
-    }
 
     /**
      * <p>
@@ -94,7 +85,7 @@ public class XMLException extends RuntimeException {
         return this.cause;  
     }
 
-    // null is insufficient for detemrin unset cause.
+    // null is insufficient for detecting an unset cause.
     // The cause may be set to null whicn may not then be reset.
     private boolean causeSet = false;
 

@@ -37,15 +37,6 @@ package nu.xom;
 public class CycleException extends IllegalAddException {
 
     /**
-     * <p>
-     *  Creates a new <code>CycleException</code>.
-     * </p>
-     */
-    public CycleException() {
-        super();
-    }
-
-    /**
      * <p>Creates a new CycleException with a detail message.</p>
      * 
      * @param message indicates the specific problem
