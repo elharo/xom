@@ -42,7 +42,7 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.Text;
 import nu.xom.xinclude.BadParseAttributeException;
-import nu.xom.xinclude.CircularIncludeException;
+import nu.xom.xinclude.InclusionLoopException;
 import nu.xom.xinclude.MissingHrefException;
 import nu.xom.xinclude.XIncludeException;
 import nu.xom.xinclude.XIncluder;
@@ -408,7 +408,7 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("Allowed include element to reference itself");
         }
-        catch (CircularIncludeException success) {
+        catch (InclusionLoopException success) {
             assertNotNull(success.getMessage());   
         }
         
@@ -424,7 +424,7 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("Allowed include element to reference its own ancestor");
         }
-        catch (CircularIncludeException success) {
+        catch (InclusionLoopException success) {
             assertNotNull(success.getMessage());   
         }
         
@@ -567,7 +567,7 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("allowed parsed include of self");
         }
-        catch (CircularIncludeException ex) {
+        catch (InclusionLoopException ex) {
             // success   
             assertNotNull(ex.getMessage());
             assertEquals(input.toURL().toExternalForm(), ex.getURI());           
@@ -584,7 +584,7 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("allowed parsed include of self");
         }
-        catch (CircularIncludeException ex) {
+        catch (InclusionLoopException ex) {
             // success   
             assertNotNull(ex.getMessage());
             assertEquals(errorFile.toURL().toExternalForm(), ex.getURI());           
@@ -1284,7 +1284,7 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("Allowed circular reference via XPointer");
         }
-        catch (CircularIncludeException success) {
+        catch (InclusionLoopException success) {
             assertNotNull(success.getMessage());   
         }
 
