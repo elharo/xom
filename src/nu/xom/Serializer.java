@@ -337,8 +337,7 @@ public class Serializer {
             escaper.decrementIndent();
             if (escaper.getIndent() > 0 && !escaper.isPreserveSpace()) {
                 Node firstChild = element.getChild(0);
-                if (!(firstChild.isText()) 
-                  || firstChild.getValue().trim().equals("")) {
+                if (! firstChild.isText() ) {
                      escaper.breakLine();
                 }
             }
