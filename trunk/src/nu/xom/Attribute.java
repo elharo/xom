@@ -207,7 +207,7 @@ public class Attribute extends Node {
             localName = name.substring(name.indexOf(':') + 1);
             if ("xml:id".equals(name)) {
                 type = Attribute.Type.ID;
-                value = value.trim(); // ???? really shouldn't trim carrauge return and linefeed and tab here
+                value = normalize(value);
                 Verifier.checkNCName(value);
             }
         }        
@@ -219,6 +219,21 @@ public class Attribute extends Node {
         result.value = value;
         
         return result;
+        
+    }
+
+
+    private static String normalize(String s) {
+
+        int length = s.length();
+        int c = 0;
+        while (c < length && s.charAt(c) == ' ') c++;
+        s = s.substring(c);
+        int end = s.length()-1;
+        while (end > 0 && s.charAt(end) == ' ') end--;
+        s = s.substring(0, end+1);
+        
+        return s;
         
     }
 
