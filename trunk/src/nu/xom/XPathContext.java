@@ -39,6 +39,7 @@ import org.jaxen.NamespaceContext;
 public class XPathContext {
 
     
+    // ???? add JavaDoc
     Map namespaces = new HashMap();
     
     
@@ -60,16 +61,27 @@ public class XPathContext {
     }
 
     
-    public static void makeNamespaceContext(Element element) {
+    // should this be a Node rather than an Element????
+    /**
+     * <p>
+     * ????
+     * </p>
+     * 
+     * <p>
+     * Changing the prefixes on the element after the context is
+     * returned does not change the context.
+     * </p>
+     * 
+     * @param element the element whose namespace bindings are copied
+     * 
+     * @return all the namespace prefix mappings 
+     *     in scope on the element
+     */
+    public static XPathContext makeNamespaceContext(Element element) {
         
         XPathContext context = new XPathContext();
-        for (int i = 0; i < element.getNamespaceDeclarationCount(); i++) {
-            String prefix = element.getNamespacePrefix(i);
-            if (!"".equals(prefix)) {
-                context.addNamespace(prefix, element.getNamespaceURI(prefix));
-            }
-        }
-        // now add ancestors????
+        context.namespaces = element.getNamespacePrefixesInScope();
+        return context;
         
     }
     

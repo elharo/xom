@@ -22,8 +22,10 @@
 package nu.xom;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
@@ -46,7 +48,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public class Element extends ParentNode {
@@ -1195,7 +1197,7 @@ public class Element extends ParentNode {
         
         // This seems to be a hot spot for DOM conversion.
         // I'm trying to avoid the overhead of creating and adding
-        // to a HasSet for the simplest case of an element, none 
+        // to a HashSet for the simplest case of an element, none 
         // of whose attributes are in namespaces, and which has no
         // additional namespace declarations. In this case, the 
         // namespace count is exactly one, which is here indicated
@@ -1222,6 +1224,28 @@ public class Element extends ParentNode {
         
         if (allPrefixes == null) return 1; 
         return allPrefixes.size();
+        
+    }
+    
+    
+    // Used for XPath
+    Map getNamespacePrefixesInScope() {
+        
+        HashMap namespaces = new HashMap();
+        Element current = this;
+        while (current != null) {
+            for (int i = 0; i < current.getNamespaceDeclarationCount(); i++) {
+                String prefix = current.getNamespacePrefix(i);
+                if (!namespaces.containsKey(prefix)) {
+                    namespaces.put(prefix, current.getLocalNamespaceURI(prefix));
+                }
+            }
+            ParentNode parent = current.getParent();
+            if (parent == null || parent.isDocument()) break;
+            current = (Element) parent;
+        }
+
+        return namespaces;
         
     }
 
