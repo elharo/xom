@@ -47,7 +47,7 @@ import java.util.Locale;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b8
  * 
  */
 public class Serializer {
@@ -246,7 +246,8 @@ public class Serializer {
         // The OutputStreamWriter automatically inserts
         // the byte order mark if necessary.
         writeXMLDeclaration();
-        for (int i = 0; i < doc.getChildCount(); i++) {
+        int childCount = doc.getChildCount();
+        for (int i = 0; i < childCount; i++) {
             writeChild(doc.getChild(i)); 
             
             // Might want to remove this line break in a 
@@ -322,9 +323,13 @@ public class Serializer {
         
         // workaround for case where only children are empty text nodes
         boolean hasRealChildren = false;
-        for (int i = 0; i < element.getChildCount(); i++) {
+        int childCount = element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
             Node child = element.getChild(i);
-            if (child.isText() && "".equals(child.getValue())) continue;
+            if (child.isText()) {
+                // XXX add an isEmpty method to Text to avoid calling getValue here?
+                if ("".equals(child.getValue())) continue;
+            }
             else {
                 hasRealChildren = true;
                 break;
@@ -348,7 +353,7 @@ public class Serializer {
             
             escaper.incrementIndent();
             // children
-            for (int i = 0; i < element.getChildCount(); i++) {
+            for (int i = 0; i < childCount; i++) {
                 writeChild(element.getChild(i)); 
             }
             escaper.decrementIndent();
@@ -375,7 +380,9 @@ public class Serializer {
     
     private boolean hasNonTextChildren(Element element) {
         
-        for (int i = 0; i < element.getChildCount(); i++) {
+        // XXX pass in childCount?
+        int childCount = element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
             if (! element.getChild(i).isText()) return true;  
         }
         return false;
@@ -523,7 +530,8 @@ public class Serializer {
             }
         }
         
-        for (int i = 0; i < element.getAttributeCount(); i++) {
+        int attributeCount = element.getAttributeCount();
+        for (int i = 0; i < attributeCount; i++) {
             Attribute attribute = element.getAttribute(i);
             escaper.writeMarkup(' ');
             write(attribute);
@@ -550,18 +558,17 @@ public class Serializer {
      */
     protected void writeNamespaceDeclarations(Element element)
       throws IOException {
-        // Namespaces
+        
         ParentNode parent = element.getParent();
-        for (int i = 0; 
-             i < element.getNamespaceDeclarationCount(); 
-             i++) {
+        int count = element.getNamespaceDeclarationCount();
+        for (int i = 0; i < count; i++) {
             String additionalPrefix = element.getNamespacePrefix(i);
             String uri = element.getNamespaceURI(additionalPrefix);
             if (parent.isElement()) {
                Element parentElement = (Element) parent;   
                if (uri.equals(
                  parentElement.getNamespaceURI(additionalPrefix))) {
-                      continue;
+                   continue;
                } 
             }
             else if (uri.equals("")) {
@@ -594,6 +601,7 @@ public class Serializer {
      */
     protected void writeNamespaceDeclaration(String prefix, String uri)
       throws IOException {
+        
         if ("".equals(prefix)) {
             escaper.writeMarkup("xmlns"); 
         }
@@ -604,6 +612,7 @@ public class Serializer {
         escaper.writeMarkup("=\""); 
         escaper.writePCDATA(uri);   
         escaper.writeMarkup('\"');
+        
     }
 
     
@@ -626,7 +635,7 @@ public class Serializer {
         escaper.writeMarkup(attribute.getQualifiedName());
         escaper.writeMarkup("=\"");
         escaper.writeAttributeValue(attribute.getValue());
-        escaper.writeMarkup("\"");  
+        escaper.writeMarkup('\"');  
     }
     
     
@@ -713,9 +722,12 @@ public class Serializer {
      */
     protected void write(Text text) throws IOException {
         
+        // XXX Is there a shortcut that takes advantage of the
+        // data being stored in UTF-8 here? perhaps even if only
+        // when serializing to UTF-8?
         String value = text.getValue();
         if (text.isCDATASection() 
-          && text.getValue().indexOf("]]>") == -1) {
+          && value.indexOf("]]>") == -1) {
             if (!(escaper instanceof UnicodeWriter)) {
                 for (int i = 0; i < value.length(); i++) {
                    if (escaper.needsEscaping(value.charAt(i))) {
@@ -743,9 +755,14 @@ public class Serializer {
     private boolean isBoundaryWhitespace(Text text) {
         
         if (getIndent() <= 0) return false;
+        
+        // XXX check this without getValue
         if (!"".equals(text.getValue().trim())) return false;
         ParentNode parent = text.getParent();
+        
+        // XXX expensive, do I already have this in caller?
         int position = parent.indexOf(text);
+        
         if (position == 0 && parent.getChildCount() == 1) return false;
         Node previous = null;
         Node next = null;
