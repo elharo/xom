@@ -2570,9 +2570,17 @@ public class BuilderTest extends XOMTestCase {
     public void testCrimsonIgnoresWarning() 
       throws SAXException, ParsingException, IOException {
         
-        XMLReader parser = XMLReaderFactory.createXMLReader(
-          "org.apache.crimson.parser.XMLReaderImpl"
-        );
+        
+        XMLReader parser;
+        try {
+          parser = XMLReaderFactory.createXMLReader(
+            "org.apache.crimson.parser.XMLReaderImpl"
+          );
+        }
+        catch (SAXException ex) {
+            // Can't test Crimson if you can't load it
+            return;
+        }
         XMLFilter filter = new WarningFilter();
         filter.setParent(parser);
         Builder builder = new Builder(filter);
