@@ -24,19 +24,19 @@
 package nu.xom.xslt;
 
 /**
- * <p><code>XSLException</code>
- *   is thrown when an XSL stylesheet fails to compile
+ * <p>Thrown when an XSL stylesheet fails to compile
  *   or an XSL transform fails.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
- *
+ * @version 1.0a4
  */
 public class XSLException extends Exception {
 
+    
     private Throwable cause;
 
+    
     /**
      * <p>
      * Creates a new <code>XSLException</code> with the specified 
@@ -51,6 +51,7 @@ public class XSLException extends Exception {
         this.initCause(cause);
     }
     
+    
     /**
      * <p>
      * Creates a new <code>XSLException</code>
@@ -63,6 +64,7 @@ public class XSLException extends Exception {
         super(message);
     }
 
+    
     // null is insufficient for detecting an unset cause.
     // The cause may be set to null whicn may not then be reset.
     private boolean causeSet = false;
@@ -89,6 +91,7 @@ public class XSLException extends Exception {
      * @throws IllegalStateException if this method is called twice
      */
     public Throwable initCause(Throwable cause) {
+        
         if (causeSet) {
             throw new IllegalStateException("Can't overwrite cause");
         } 
@@ -99,8 +102,10 @@ public class XSLException extends Exception {
         else this.cause = cause;
         causeSet = true;
         return this;
+        
     }
 
+    
     /**
      * <p>
      * Returns the underlying exception that caused this exception.
@@ -113,4 +118,5 @@ public class XSLException extends Exception {
         return this.cause;  
     }
 
+    
 }

@@ -46,17 +46,11 @@ import nu.xom.XMLException;
 
 /**
  * <p>
- * This class serves as an interface to a 
- * TrAX aware XSLT processor such
- * as Xalan or Saxon.
- * </p>
- * 
- * <p>
- * The following example shows how to apply an XSL Transformation
- * to a XOM document and get the transformation result in the form
- * of a XOM <code>Nodes</code>:</p>
- * <blockquote><pre>
- * public static Nodes transform(Document in) 
+ * Serves as an interface to a TrAX aware XSLT processor such as Xalan
+ * or Saxon. The following example shows how to apply an XSL 
+ * Transformation to a XOM document and get the transformation result 
+ * in the form of a XOM <code>Nodes</code>:</p>
+ * <blockquote><pre>public static Nodes transform(Document in) 
  *   throws XSLException {
  *     XSLTransform stylesheet = new XSLTransform("mystylesheet.xsl");
  *     return stylesheet.transform(doc);
@@ -106,12 +100,13 @@ import nu.xom.XMLException;
  *   file in the JAR archives available to the runtime</li>
  *   <li>Finally, if all of the above options fail,
  *    a default implementation is chosen. In Sun's JDK 1.4.0 and 1.4.1,
- *    this is Xalan 2.2d10. In Java 1.4.2, this is Xalan 2.4. </li>
+ *    this is Xalan 2.2d10. In Java 1.4.2, this is Xalan 2.4. In 
+ *    JDK 1.5 beta 2 this is Xalan 2.6.0???? </li>
  *    </ol>
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  */
 public final class XSLTransform {
 
@@ -135,10 +130,10 @@ public final class XSLTransform {
     /**
      * <p>
      *  Creates a new <code>XSLTransform</code> by
-     *  reading the stylesheet from the specified <code>Source</code>.
+     *  reading the stylesheet from the specified source.
      * </p>
      *
-     * @param source TrAX <code>Source</code> from 
+     * @param source TrAX <code>Source</code> object from 
      *      which the input document is read
      * 
      * @throws XSLException when an IOException, format error, or
@@ -164,9 +159,8 @@ public final class XSLTransform {
     
     /**
      * <p>
-     *   Creates a new <code>XSLTransform</code> by
-     *   reading the stylesheet from the specified 
-     *   <code>InputStream</code>.
+     * Creates a new <code>XSLTransform</code> by reading the 
+     * stylesheet from the specified input stream.
      * </p>
      *
      * @param stylesheet input stream from 
@@ -181,9 +175,8 @@ public final class XSLTransform {
 
     /**
      * <p>
-     *   Creates a new <code>XSLTransform</code> by
-     *   reading the stylesheet from the specified 
-     *   <code>Reader</code>.
+     * Creates a new <code>XSLTransform</code> by reading the 
+     * stylesheet from the specified reader.
      * </p>
      *
      * @param stylesheet character stream from which the stylesheet
@@ -200,7 +193,7 @@ public final class XSLTransform {
     /**
      * <p>
      * Creates a new <code>XSLTransform</code> 
-     * by reading the stylesheet from the specified <code>File</code>.
+     * by reading the stylesheet from the specified file.
      * </p>
      *
      * @param stylesheet file from which the 
@@ -217,10 +210,10 @@ public final class XSLTransform {
     /**
      * <p>
      * Creates a new <code>XSLTransform</code> by
-     * reading the stylesheet from the specified <code>Document</code>.
+     * reading the stylesheet from the specified document.
      * </p>
      *
-     * @param stylesheet <code>Document</code> containing 
+     * @param stylesheet document containing 
      *      the stylesheet
      * 
      * @throws XSLException when the supplied <code>Document</code>
@@ -270,13 +263,13 @@ public final class XSLTransform {
     
     /**
      * <p>
-     * Creates a new <code>Nodes</code> from the
-     * input <code>Nodes</code> by applying this object's
-     * stylesheet. The original <code>Nodes</code> is not 
+     * Creates a new <code>Nodes</code> object from the
+     * input <code>Nodes</code> object by applying this object's
+     * stylesheet. The original <code>Nodes</code> object is not 
      * changed.
      * </p>
      *
-     * @param in <code>Document</code> to transform
+     * @param in document to transform
      * 
      * @return a <code>Nodes</code> containing the result of 
      *     the transformation
@@ -292,15 +285,14 @@ public final class XSLTransform {
     
     /**
      * <p>
-     * Creates a new <code>Nodes</code> from the
-     * input <code>Source</code> by applying this object's
-     * stylesheet. The original <code>Source</code> is not 
-     * changed.
+     * Creates a new <code>Nodes</code> object from the
+     * input <code>Source</code> object by applying this object's
+     * stylesheet. 
      * </p>
      *
      * @param in TrAX <code>Source</code> to transform
      * 
-     * @return a <code>Nodes</code> containing the result of 
+     * @return a <code>Nodes</code> object containing the result of 
      *     the transformation
      * 
      * @throws XSLException if the transformation fails, normally
@@ -337,11 +329,12 @@ public final class XSLTransform {
     
     /**
      * <p>
-     *   Sets the factory used to construct nodes in the output tree.
-     *   Passing null uses the default factory.
+     * Sets the factory used to construct nodes in the output tree.
+     * Passing null uses a 
+     * <code>{@link nu.xom.NodeFactory nu.xom.NodeFactory}</code>.
      * </p>
      * 
-     * @param factory the <code>NodeFactory</code> used to construct
+     * @param factory the node factory used to construct
      *     nodes in the output tree
      */
     public void setNodeFactory(NodeFactory factory) {
