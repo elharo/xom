@@ -75,6 +75,8 @@ import nu.xom.XMLException;
  */
 public class BuilderTest extends XOMTestCase {
 
+    
+    private File inputDir = new File("data");
 
     // Custom parser to test what happens when parser supplies 
     // malformed data
@@ -466,7 +468,8 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildWithoutLocator()
       throws IOException, ParsingException, SAXException {
         
-        XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        XMLReader xerces = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
         XMLReader filter = new NoLocator(xerces);
         
         Builder builder = new Builder(filter);
@@ -502,7 +505,8 @@ public class BuilderTest extends XOMTestCase {
     public void testWeirdAttributeTypes()
       throws IOException, ParsingException, SAXException {
         
-        XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        XMLReader xerces = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
         XMLReader filter = new WeirdAttributeTypes(xerces);
         
         Builder builder = new Builder(filter);
@@ -850,7 +854,8 @@ public class BuilderTest extends XOMTestCase {
         
         XMLReader crimson;
         try {
-            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
         } 
         catch (SAXException ex) {
             // can't test Crimson if you can't load it
@@ -871,7 +876,8 @@ public class BuilderTest extends XOMTestCase {
         
         XMLReader crimson;
         try {
-            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
         } 
         catch (SAXException ex) {
             // can't test Crimson if you can't load it
@@ -894,7 +900,8 @@ public class BuilderTest extends XOMTestCase {
         
         XMLReader xerces;
         try {
-            xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+            xerces = XMLReaderFactory.createXMLReader(
+              "org.apache.xerces.parsers.SAXParser");
         } 
         catch (SAXException ex) {
             // can't test Xerces if you can't load it
@@ -935,7 +942,8 @@ public class BuilderTest extends XOMTestCase {
     public void testSkippedEntityThrwosXMLException()
       throws IOException, ParsingException, SAXException {
         
-        XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        XMLReader xerces = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
         XMLReader filter = new EntitySkipper(xerces);
         
         Builder builder = new Builder(filter, true);
@@ -962,18 +970,21 @@ public class BuilderTest extends XOMTestCase {
 
     public void testCannotBuildNamespaceMalformedDocument()
       throws IOException {
+        
         try {
             builder.build("<root:root/>", null);
             fail("Builder allowed undeclared prefix");
         }
         catch (ParsingException success) {
             assertNotNull(success.getMessage());   
-        }        
+        }   
+        
     }
 
     
     public void testInvalidDocFromReader() 
       throws IOException, ParsingException {
+        
         Reader reader = new StringReader(source);
         try {
             validator.build(reader);   
@@ -993,11 +1004,13 @@ public class BuilderTest extends XOMTestCase {
                 assertEquals(doc, success.getDocument());
             }
         }
+        
     }
     
     
     public void testNamespaceMalformedDocumentWithCrimson() 
       throws IOException {
+        
         StringReader reader = new StringReader("<root:root/>");
         XMLReader crimson;
         try {
@@ -1022,6 +1035,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testValidateNamespaceMalformedInvalidDocumentWithCrimson() 
       throws IOException {
+        
         StringReader reader = new StringReader("<!DOCTYPE root [" +
                 "<!ELEMENT root (a)>\n" +
                 "<!ELEMENT a (#PCDATA)> \n" +
@@ -1096,7 +1110,9 @@ public class BuilderTest extends XOMTestCase {
                 assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
-                Document doc = builder.build(new ByteArrayInputStream(source.getBytes("UTF-8")), base); 
+                Document doc = builder.build(
+                  new ByteArrayInputStream(source.getBytes("UTF-8")), base
+                ); 
                 this.verify(ex.getDocument());
                 assertEquals(doc, ex.getDocument());
             }
@@ -1122,7 +1138,9 @@ public class BuilderTest extends XOMTestCase {
                 assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
-                Document doc = builder.build(new ByteArrayInputStream(source.getBytes("UTF-8"))); 
+                Document doc = builder.build(
+                  new ByteArrayInputStream(source.getBytes("UTF-8"))
+                ); 
                 this.verify(ex.getDocument());
                 assertEquals(doc, ex.getDocument());
             }
@@ -1162,7 +1180,8 @@ public class BuilderTest extends XOMTestCase {
         
         XMLReader crimson;
         try {
-            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
         } 
         catch (SAXException ex) {
             // can't test Crimson if you can't load it
@@ -1240,7 +1259,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testBaseRelativeResolution()
       throws IOException, ParsingException {
-        builder.build(new File("data/baserelative/test.xml"));
+        builder.build(new File(inputDir, "baserelative/test.xml"));
     }
     
     
@@ -1249,7 +1268,7 @@ public class BuilderTest extends XOMTestCase {
     public void testNFC()
       throws IOException, ParsingException {
         
-        Document doc = builder.build(new File("data/nfctest.xml"));
+        Document doc = builder.build(new File(inputDir, "nfctest.xml"));
         Element root = doc.getRootElement();
         String s = root.getValue();
         assertEquals(1, s.length());
@@ -1268,12 +1287,14 @@ public class BuilderTest extends XOMTestCase {
     
     public void testExternalEntityResolution()
       throws IOException, ParsingException {
-        File input = new File("data/entitytest.xml");
+        
+        File input = new File(inputDir, "entitytest.xml");
         Builder builder = new Builder(false);
         Document doc = builder.build(input);
         Element root = doc.getRootElement();
         Element external = root.getFirstChildElement("external");
         assertEquals("Hello from an entity!", external.getValue());
+        
     }
      
     
@@ -1284,7 +1305,8 @@ public class BuilderTest extends XOMTestCase {
     // reported.
     public void testExternalDTDSubset()
       throws IOException, ParsingException {
-        File input = new File("data/externalDTDtest.xml");
+        
+        File input = new File(inputDir, "externalDTDtest.xml");
         Builder builder = new Builder(false);
         Document doc = builder.build(input);
         assertEquals(2, doc.getChildCount());
@@ -1293,6 +1315,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("value", name.getValue());
         DocType doctype = doc.getDocType();
         assertEquals("", doctype.getInternalDTDSubset());
+        
     }
 
     
@@ -1302,6 +1325,7 @@ public class BuilderTest extends XOMTestCase {
     // DTD subset string
     public void testIgnoreInternalParameterEntitiesInInternalDTDSubset()
       throws IOException, ParsingException {
+        
         Builder builder = new Builder(false);
         Document doc = builder.build("<!DOCTYPE root [" +
                 "<!ENTITY % name \"PCDATA\">" +
@@ -1309,11 +1333,13 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(2, doc.getChildCount());
         DocType doctype = doc.getDocType();
         assertEquals("", doctype.getInternalDTDSubset());
+        
     }
     
     
     public void testIgnoreExternalParameterEntitiesInInternalDTDSubset()
       throws IOException, ParsingException {
+        
         Builder builder = new Builder(false);
         Document doc = builder.build("<!DOCTYPE root [" +
                 "<!ENTITY % name SYSTEM \"http://www.example.org/\">" +
@@ -1321,6 +1347,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(2, doc.getChildCount());
         DocType doctype = doc.getDocType();
         assertEquals("", doctype.getInternalDTDSubset());
+        
     }
     
     
@@ -1342,7 +1369,7 @@ public class BuilderTest extends XOMTestCase {
     public void testInternalDTDSubset() 
       throws ValidityException, ParsingException, IOException {
         
-        File input = new File("data/internaldtdsubsettest.xml");
+        File input = new File(inputDir, "internaldtdsubsettest.xml");
         Builder builder = new Builder(false);
         Document doc = builder.build(input);
         String internalSubset = doc.getDocType().getInternalDTDSubset();
@@ -1381,11 +1408,15 @@ public class BuilderTest extends XOMTestCase {
 
     
     public void testDontGetNodeFactory() {
+        
         Builder builder = new Builder();
         NodeFactory factory = builder.getNodeFactory();
         if (factory != null) {
-            assertFalse(factory.getClass().getName().endsWith("NonVerifyingFactory"));
+            assertFalse(
+              factory.getClass().getName().endsWith("NonVerifyingFactory")
+            );
         }
+        
     }
     
     
@@ -1405,7 +1436,11 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException, SAXException {
           
        XMLFilter filter = new OrderingFilter();
-       filter.setParent(XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser"));
+       filter.setParent(
+         XMLReaderFactory.createXMLReader(
+           "org.apache.xerces.parsers.SAXParser"
+         )
+       );
        Builder builder = new Builder(filter);
        String data ="<a/>"; 
        Document doc = builder.build(data, null);
@@ -1474,7 +1509,8 @@ public class BuilderTest extends XOMTestCase {
                 "]><root><a/><b></b>");
         XMLReader crimson;
         try {
-            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
         } 
         catch (SAXException ex) {
             // can't test Crimson if you can't load it
@@ -1518,8 +1554,11 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildMalformedDocumentWithBadUnicodeData() 
       throws IOException {
         
-        String filename = "data/xmlconf/xmltest/not-wf/sa/170.xml";
-        File f = new File(filename);
+        File f = new File(inputDir, "xmlconf");
+        f = new File(f, "xmltest");
+        f = new File(f, "not-wf");
+        f = new File(f, "sa");
+        f = new File(f, "170.xml");
         if (f.exists()) {
             try {
                 builder.build(f);   
@@ -1527,7 +1566,8 @@ public class BuilderTest extends XOMTestCase {
             }
             catch (ParsingException success) {
                 assertNotNull(success.getMessage());
-                assertTrue(success.getURI().endsWith(filename));
+                assertTrue(success.getURI().endsWith(
+                  "data/xmlconf/xmltest/not-wf/sa/170.xml"));
                 assertTrue(success.getURI().startsWith("file:/"));
             }
         }
@@ -1538,8 +1578,9 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildAnotherMalformedDocumentWithBadUnicodeData() 
       throws IOException {
         
-        String filename = "data//oasis/p02fail30.xml";
-        File f = new File(filename);
+        String filename = "data/oasis/p02fail30.xml";
+        File f = new File(inputDir, "oasis");
+        f = new File(f, "p02fail30.xml");
         if (f.exists()) {
             try {
                 builder.build(f);   
@@ -1580,7 +1621,8 @@ public class BuilderTest extends XOMTestCase {
                 "]><root><a/><b></b>");
         XMLReader crimson;
         try {
-            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
         } 
         catch (SAXException ex) {
             // can't test Crimson if you can't load it
@@ -1607,7 +1649,7 @@ public class BuilderTest extends XOMTestCase {
     public void testLineBreaksInInternalDTDSubset()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/097.xml"));
+        Document doc = builder.build(new File(inputDir, "097.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<!DOCTYPE doc [\n"
             + "  <!ELEMENT doc (#PCDATA)>\n"
@@ -1624,7 +1666,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildDocumentThatUndeclaresDefaultNamespace()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/undeclare.xml"));
+        Document doc = builder.build(new File(inputDir, "undeclare.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n" 
           + "<root xmlns=\"http://www.example.org\" " 
           + "xmlns:pre=\"http://www.red.com/\" test=\"test\" " 
@@ -1639,7 +1681,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsNonASCIICharacterInName()
       throws ParsingException, IOException {
         
-        File f = new File("data/resumé.xml");
+        File f = new File(inputDir, "resumé.xml");
         try {
             Writer out = new OutputStreamWriter(
               new FileOutputStream(f), "UTF8");
@@ -1668,7 +1710,7 @@ public class BuilderTest extends XOMTestCase {
         int gclef = 0x1D120;
         char high = (char) ((gclef - 0x10000)/0x400 + 0xD800);
         char low = (char) ((gclef - 0x10000) % 0x400 + 0xDC00); 
-        File f = new File("data/music" + high + "" + low + ".xml");
+        File f = new File(inputDir, "music" + high + "" + low + ".xml");
         try {
             Writer out = new OutputStreamWriter(
               new FileOutputStream(f), "UTF8");
@@ -1690,7 +1732,7 @@ public class BuilderTest extends XOMTestCase {
     
     private File makeFile(String name) throws IOException {
         
-        File f = new File("data/" + name);
+        File f = new File(inputDir, "" + name);
         Writer out = new OutputStreamWriter(
           new FileOutputStream(f), "UTF8");
         out.write("<data/>");
@@ -1721,7 +1763,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsSharpInName()
       throws ParsingException, IOException {
         
-        File f = new File("data/#file.xml");
+        File f = new File(inputDir, "#file.xml");
         try {
             Writer out = new OutputStreamWriter(
               new FileOutputStream(f), "UTF8");
@@ -1746,7 +1788,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsExclamationPointInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/!file.xml"));
+        Document doc = builder.build(new File(inputDir, "!file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1791,7 +1833,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsParenthesesInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/()file.xml"));
+        Document doc = builder.build(new File(inputDir, "()file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1805,7 +1847,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsCurlyBracesInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/{file}.xml"));
+        Document doc = builder.build(new File(inputDir, "{file}.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1821,7 +1863,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsSquareBracketsInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/[file].xml"));
+        Document doc = builder.build(new File(inputDir, "[file].xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1872,7 +1914,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsSemicolonInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/;file.xml"));
+        Document doc = builder.build(new File(inputDir, ";file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1886,7 +1928,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsPlusSignInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/+file.xml"));
+        Document doc = builder.build(new File(inputDir, "+file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1901,7 +1943,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsCommaInName()
       throws ParsingException, IOException {
         
-        File f = new File("data/,file.xml");
+        File f = new File(inputDir, ",file.xml");
         try {
             Writer out = new OutputStreamWriter(
               new FileOutputStream(f), "UTF8");
@@ -1926,9 +1968,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsBackslashInName()
       throws ParsingException, IOException {
         
-        // ???? I'm using forward slashes in file names here. I really
-        // should fix that. Use a data File field
-        File f = new File("data/\\file.xml");
+        File f = new File(inputDir, "\\file.xml");
         try {
             Writer out = new OutputStreamWriter(
               new FileOutputStream(f), "UTF8");
@@ -1953,7 +1993,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsTildeInName()
       throws ParsingException, IOException {
         
-        File f = new File("data/~file.xml");
+        File f = new File(inputDir, "~file.xml");
         try {
             Writer out = new OutputStreamWriter(
               new FileOutputStream(f), "UTF8");
@@ -1996,7 +2036,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsDollarSignInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/$file.xml"));
+        Document doc = builder.build(new File(inputDir, "$file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -2010,13 +2050,14 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsPercentSignInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/%file.xml"));
+        Document doc = builder.build(new File(inputDir, "%file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('%') + "file.xml"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" 
+          + Integer.toHexString('%') + "file.xml"));
         
     }
   
@@ -2041,13 +2082,14 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsAtSignInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/@file.xml"));
+        Document doc = builder.build(new File(inputDir, "@file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('@') + "file.xml"));
+        assertTrue(doc.getBaseURI().endsWith("data/%"
+          + Integer.toHexString('@') + "file.xml"));
         
     }
   
@@ -2055,7 +2097,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsEqualsSignInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/=file.xml"));
+        Document doc = builder.build(new File(inputDir, "=file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -2069,13 +2111,14 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsCaretInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/^file.xml"));
+        Document doc = builder.build(new File(inputDir, "^file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('^').toUpperCase() + "file.xml"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" 
+          + Integer.toHexString('^').toUpperCase() + "file.xml"));
         
     }
   
@@ -2083,7 +2126,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsAmpersandInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/&file.xml"));
+        Document doc = builder.build(new File(inputDir, "&file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -2097,13 +2140,14 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsBactickInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/`file.xml"));
+        Document doc = builder.build(new File(inputDir, "`file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('`') + "file.xml"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" 
+          + Integer.toHexString('`') + "file.xml"));
         
     }
   
