@@ -32,27 +32,31 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b8
  *
  */
 class CDATASection extends Text {
 
 
     CDATASection(Text text) {
-        super(text.getValue());
+        super(text);
     }
 
+    
     CDATASection(String data) {
         super(data);   
     }
 
+    
     boolean isCDATASection() {
         return true;
     }
+    
     
     static Text build(String data) {
         CDATASection result = new CDATASection(data);
         return result;
     }
 
+    
 }
