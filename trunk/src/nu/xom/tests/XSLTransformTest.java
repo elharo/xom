@@ -40,6 +40,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import nu.xom.IllegalAddException;
 import nu.xom.MalformedURIException;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -58,13 +59,13 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * <p>
- *   Many of the tests in this suite use an identity transformation.
- *   This is often done to make sure I get a particular content into
- *   the output tree in order to test the XSLTHandler.
+ * Many of the tests in this suite use an identity transformation.
+ * This is often done to make sure I get a particular content into
+ * the output tree in order to test the XSLTHandler.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a5
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -986,8 +987,11 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException {
         
         Builder builder = new Builder();
-        File base = new File("data/oasis_xslt_testsuite/TESTS/Xalan_Conformance_Tests/");
+        File base = new File("data/oasis-xslt-testsuite/TESTS/Xalan_Conformance_Tests/");
         File catalog = new File(base, "catalog.xml");
+        
+        // The test suite need to be installed separately. If we can't
+        // find the catalog, we just don't run these tests.
         if (catalog.exists()) {
             Document doc = builder.build(catalog);
             Element testsuite = doc.getRootElement();
@@ -997,6 +1001,13 @@ public class XSLTransformTest extends XOMTestCase {
                 Elements testcases = submitter.getChildElements("test-case");
                 for (int j = 0; j < testcases.size(); j++) {
                     Element testcase = testcases.get(j);
+                    String id = testcase.getAttributeValue("id");
+                    if (id.startsWith("output_")) {
+                        // These test cases are mostly about producing 
+                        // HTML and plain text output that isn't 
+                        // relevant to XOM
+                        continue;
+                    }
                     File root = new File(base, testcase.getFirstChildElement("file-path").getValue());
                     File input = null;
                     File style = null;
@@ -1006,14 +1017,25 @@ public class XSLTransformTest extends XOMTestCase {
                     for (int k = 0; k < inputs.size(); k++) {
                         Element file = inputs.get(k);
                         String role = file.getAttributeValue("role");
-                        if ("principal-data".equals(role)) input = new File(root, file.getValue());
-                        else if ("principal-stylesheet".equals(role)) style = new File(root, file.getValue());
+                        if ("principal-data".equals(role)) {
+                            input = new File(root, file.getValue());
+                        }
+                        else if ("principal-stylesheet".equals(role)) {
+                            style = new File(root, file.getValue());
+                        }
                     }
                     Elements outputs = scenario.getChildElements("output-file");
                     for (int k = 0; k < outputs.size(); k++) {
                         Element file = outputs.get(k);
                         String role = file.getAttributeValue("role");
-                        if ("principal".equals(role)) output = new File(root, file.getValue());
+                        if ("principal".equals(role)) {
+                            // Fix up OASIS catalog bugs
+                            File parent = new File(root.getParent());
+                            parent = new File(parent, "REF_OUT");
+                            parent = new File(parent, root.getName());
+                            String outputFileName = file.getValue();
+                            output = new File(parent, outputFileName);
+                        }
                     }
                     
                     try {
@@ -1025,15 +1047,96 @@ public class XSLTransformTest extends XOMTestCase {
                             // transform should have failed
                             fail("Transformed " + testcase.getAttributeValue("id"));
                         }
-                        // Should compare output here. However, the 
-                        // test suite doesn't include the sample output
+                        else { 
+                            try {
+                                Document expectedResult = builder.build(output);
+                                Document actualResult = XSLTransform.toDocument(result);
+                                // XXX Could check to see if indent="yes" in the stylesheet
+                                // and if so use a whitespace insensitive comparison
+                                
+                                if (id.equals("attribset_attribset40")) {
+                                    // This test does not necessarily 
+                                    // produce an identical infoset due
+                                    // to necessary remapping of 
+                                    // namespace prefixes.
+                                    continue;
+                                }
+                                else if (id.equals("axes_axes129")) {
+                                    // Xalan bug involving counting of namespace nodes
+                                    // starting from an attribute or a test suite bug;
+                                    // XXX diagnose and report
+                                }
+                                else if (id.equals("copy_copy56") 
+                                  || id.equals("copy_copy58")
+                                  || id.equals("copy_copy60")
+                                  || id.equals("copy_copy59")) {
+                                    // Xalan bug;
+                                    // XXX diagnose and report
+                                }
+                                else if (id.equals("idkey_idkey31")
+                                  || id.equals("idkey_idkey59")
+                                  || id.equals("idkey_idkey62")
+                                  || id.equals("idkey_idkey61")) {
+                                    // Xalan bug?;
+                                    // XXX diagnose and report
+                                }
+                                else if (id.equals("impincl_impincl11")) {
+                                    // Xalan bug?;
+                                    // XXX diagnose and report
+                                }
+                                else if (id.equals("math_math110")
+                                  || id.equals("math_math111")) {
+                                    // Xalan bug?;
+                                    // XXX diagnose and report
+                                }
+                                else if (id.equals("position_position104")) {
+                                    // probable test suite bug?;
+                                    // XXX diagnose and report
+                                }
+                                else if (id.equals("position_position106")
+                                  || id.equals("position_position107")
+                                  || id.equals("position_position109")) {
+                                    // probable Xalan bug?;
+                                    // XXX diagnose and report
+                                }
+                                else if (id.equals("whitespace_whitespace17")
+                                  || id.equals("position_position107")
+                                  || id.equals("position_position109")) {
+                                    // tests indent="yes" which is not
+                                    // not relevant within XOM
+                                }
+                                else {
+                                    assertEquals(
+                                      id + "\r\n" + actualResult.toXML(),
+                                      expectedResult, actualResult);
+                                }
+                            }
+                            catch (ParsingException ex) {  
+                                // a few of the test cases generate 
+                                // text or HTML output rather than 
+                                // well-formed XML. For the moment, I 
+                                // just skip these; but could I compare
+                                // the raw text to the value of the 
+                                // document object instead????
+                                continue;
+                            }
+                            catch (IllegalAddException ex) {
+                                // A few of the test cases generate 
+                                // incomplete documents so we can't
+                                // compare output. 
+                            }
+                            // XXX report issues in test suite with indent="yes" in stylesheets
+                            // where indenting is not specifically being tested
+                        }
+                        
                     }
                     catch (MalformedURIException ex) {
-                        // some of the test cases do contain relative namespace URIs
-                        // XOM does not support
+                        // Some of the test cases contain relative 
+                        // namespace URIs XOM does not support
                     }
                     catch (XSLException ex) {
-                        // if the output was null the transformation was expected to fail
+                        // If the output was null the transformation 
+                        // was expected to fail
                         if (output != null) {
                             // a few of the test cases use relative namespace URIs
                             // XOM doesn't support
@@ -1042,8 +1145,7 @@ public class XSLTransformTest extends XOMTestCase {
                                 continue;
                             }
                             
-                            String id = testcase.getAttributeValue("id");
-                            // known, reported bugs in Xalan
+                            // XXX try removing the special cases; known, reported bugs in Xalan
                             if ("axes_axes62".equals(id)) {  
                                 // Bug 12690
                                 // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12690
