@@ -286,11 +286,12 @@ public class NodeFactoryTest extends XOMTestCase {
     public void testValidateWithFactory() 
       throws ParsingException, IOException {
         Builder validator = new Builder(true, new MinimizingFactory());
-        Document doc = validator.build("<!DOCTYPE root [" +
+        Document doc = validator.build("<!-- a comment --><!DOCTYPE root [" +
                 "<!ELEMENT root EMPTY>" +
                 "]>" +
-                "<root/>", 
+                "<root/><?a processing instruction?>", 
                 "http://www.example.org/");
+        assertEquals(1, doc.getChildCount());
     }
 
     
