@@ -1209,6 +1209,48 @@ public class SerializerTest extends XOMTestCase {
         );
         
     }
+
+    public void testIndentAndBreakBeforeComment() throws IOException {
+        Element items = new Element("itemSet");
+        items.appendChild(new Comment("item1"));
+        Document doc = new Document(items);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<itemSet>\r\n    <!--item1-->\r\n"
+          + "</itemSet>\r\n", 
+          result
+        );
+        
+    }
+    
+    public void testIndentAndBreakBeforeProcessingInstruction() throws IOException {
+        Element items = new Element("itemSet");
+        items.appendChild(new ProcessingInstruction("target", "value"));
+        Document doc = new Document(items);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<itemSet>\r\n    <?target value?>\r\n"
+          + "</itemSet>\r\n", 
+          result
+        );
+        
+    }
+    
+    
     
     public void testDontBreakLineInElementWithSimpleContent() throws IOException {
         Element items = new Element("itemSet");
