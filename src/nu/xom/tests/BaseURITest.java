@@ -32,6 +32,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.MalformedURIException;
 import nu.xom.ParsingException;
+import nu.xom.Text;
 
 /**
  * <p>
@@ -40,7 +41,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class BaseURITest extends XOMTestCase {
@@ -273,9 +274,9 @@ public class BaseURITest extends XOMTestCase {
         element.setBaseURI("base.html");
         assertEquals("base.html", element.getBaseURI());
         
-     }
+    }
 
-   public void testRelativeURIResolutionAgainstARedirectedBase()
+    public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
         Builder builder = new Builder();
         Document doc = builder.build(
@@ -284,6 +285,15 @@ public class BaseURITest extends XOMTestCase {
           "http://www.ibiblio.org/xml/redirected/target.xml", 
           doc.getBaseURI()
         );
-   } 
+    } 
+   
+    public void testParentlessNodesHaveNullBaseURIs() {
+        Text t = new Text("data");   
+        assertNull(t.getBaseURI());
+        
+        Element e = new Element("a");
+        assertNull(e.getBaseURI());
+    }
+   
 
 }
