@@ -164,6 +164,12 @@ public class DocumentTest extends XOMTestCase {
         
     }
 
+    public void testReplaceRootWithItself() {
+        Element root = doc.getRootElement();
+        doc.setRootElement(root);
+        assertEquals(root, doc.getRootElement());
+    }
+
     public void testDetach() {
         Comment comment 
           = new Comment("This will be attached then detached");
