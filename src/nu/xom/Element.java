@@ -876,6 +876,7 @@ public class Element extends ParentNode {
      * 
      * @throws IllegalAddException if this node cannot 
      *     have children of this type
+     * @throws NullPointerException if <code>text</code> is null
      */
     public final void appendChild(String text) {
         insertChild(new Text(text), getChildCount());
@@ -1021,6 +1022,7 @@ public class Element extends ParentNode {
         if (namespaces != null) {
             namespaces.remove(prefix);
         }
+        
     }
 
     /**
@@ -1045,7 +1047,11 @@ public class Element extends ParentNode {
      * of each attribute, and each namespace added  
      * by <code>addNamespaceDeclaration</code>.
      * However, prefixes used multiple times are only counted 
-     * once. The return value is guaranteed to be positive.
+     * once, and the <code>xml</code> prefix used for 
+     * <code>xml:base</code>, <code>xml:lang</code>, and 
+     * <code>xml:space</code> is not counted even if one of these 
+     * attributes is present on the element.
+     * The return value is guaranteed to be positive.
      * </p>
      * 
      * @return the number of namespace declarations in this list
@@ -1062,7 +1068,7 @@ public class Element extends ParentNode {
         for (int i = 0; i < getAttributeCount(); i++) {
             Attribute att = getAttribute(i);
             String attPrefix = att.getNamespacePrefix();
-            if (attPrefix.length() != 0) {
+            if (attPrefix.length() != 0 && !"xml".equals(attPrefix)) {
                 allPrefixes.add(attPrefix);    
             }
         }
