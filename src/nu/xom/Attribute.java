@@ -282,7 +282,7 @@ public class Attribute extends Node {
      *     legal IRI
      */
     public final void setValue(String value) {
-        Verifier.checkCharacterData(value);
+        Verifier.checkPCDATA(value);
         checkValue(value);
         this.value = value;
     }

@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -112,7 +112,7 @@ public class Text extends LeafNode {
      */
     public final void setValue(String data) {
         if (data == null) data = "";
-        else Verifier.checkCharacterData(data);
+        else Verifier.checkPCDATA(data);
         checkValue(data);
         try {
             this.data = data.getBytes("UTF8");   
@@ -152,7 +152,8 @@ public class Text extends LeafNode {
     public final String getValue() {
         try {
             return new String(data, "UTF8");
-        } catch (UnsupportedEncodingException ex) {
+        } 
+        catch (UnsupportedEncodingException ex) {
             throw new RuntimeException(
               "Bad VM! Does not support UTF-8"
             );
