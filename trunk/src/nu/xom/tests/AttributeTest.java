@@ -168,6 +168,18 @@ public class AttributeTest extends XOMTestCase {
          }
 
     }
+    
+    
+    public void testInternLocalNameAndPrefix() {
+     
+        Attribute a1 = new Attribute("a1:b", "http://www.exmaple.com", "test");
+        Attribute a2 = new Attribute("a2:b", "http://www.exmaple.com", "test");
+        Attribute a3 = new Attribute("a1:c", "http://www.exmaple.com", "test");
+        
+        assertTrue(a1.getNamespacePrefix() == a3.getNamespacePrefix());
+        assertTrue(a1.getLocalName() == a2.getLocalName());
+        
+    }
 
 
     public void testXMLBase() {
