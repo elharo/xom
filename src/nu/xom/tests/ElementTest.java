@@ -51,7 +51,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b8
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -1345,7 +1345,6 @@ public class ElementTest extends XOMTestCase {
         Element grandchild = new Element("mv:child", "http://www.mauve.com");
         child2.insertChild(grandchild, 0);
   
-  
         assertEquals(child2, grandchild.getParent());
         assertEquals(parent, child1.getParent());
         assertEquals(parent, child2.getParent());
@@ -1365,6 +1364,19 @@ public class ElementTest extends XOMTestCase {
         assertEquals(child2, grandchild.getParent());
         
     }
+    
+    
+    public void testRemovedChildrenInheritBaseURI() {
+     
+        String base = "http://www.example.com/";
+        Element parent = new Element("parent");
+        Element child = new Element("child");
+        parent.setBaseURI(base);
+        parent.appendChild(child);
+        parent.removeChildren();
+        assertEquals(base, child.getBaseURI());
+        
+    }
 
     
     public void testRemoveNonElementChildren() {
@@ -1378,7 +1390,8 @@ public class ElementTest extends XOMTestCase {
         
         Node child1 = new Text("http://www.mauve.com");
         parent.appendChild(child1);
-        Node child2 = new ProcessingInstruction("child", "http://www.mauve.com");
+        Node child2 = new ProcessingInstruction(
+          "child", "http://www.mauve.com");
         parent.appendChild(child2);
         Node child3 = new Comment("http://www.mauve.com");
         parent.appendChild(child3);
