@@ -47,7 +47,8 @@ class UCSWriter extends TextWriter {
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
     boolean needsEscaping(char c) {
-        if (c >= 0xD800 && c <= 0xDFFF) return true;
+        if (c < 0xD800) return false;
+        if (c <= 0xDFFF) return true;
         return false;
     }
 
