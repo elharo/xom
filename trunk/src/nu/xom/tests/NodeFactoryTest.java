@@ -69,10 +69,13 @@ public class NodeFactoryTest extends XOMTestCase {
         Document doc = builder.build(data, "http://www.example.org/");
         Element root = doc.getRootElement();
         assertEquals("Skipped comment interrupted text node", 
-          1, root.getChildCount());
+          2, root.getChildCount());
         assertEquals("18", doc.getValue());
         Node first = root.getChild(0);
-        assertEquals(first.getValue(), "18");        
+        assertEquals(first.getValue(), "1");        
+        Node second = root.getChild(1);
+        assertEquals(second.getValue(), "8");   
+        
     }
 
     
@@ -94,7 +97,6 @@ public class NodeFactoryTest extends XOMTestCase {
             fail("Allowed one element in several places");
         }
         catch (CycleException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
                 
@@ -110,7 +112,6 @@ public class NodeFactoryTest extends XOMTestCase {
             fail("Allowed one attribute twice");
         }
         catch (IllegalAddException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
                 
@@ -193,11 +194,14 @@ public class NodeFactoryTest extends XOMTestCase {
         Element root = doc.getRootElement();
         assertEquals(
           "Skipped processing instruction interrupted text node", 
-          1, root.getChildCount()
+          2, root.getChildCount()
         );
         assertEquals("18", doc.getValue());
         Node first = root.getChild(0);
-        assertEquals(first.getValue(), "18");        
+        assertEquals(first.getValue(), "1");        
+        Node second = root.getChild(1);
+        assertEquals(second.getValue(), "8");   
+
     }
 
     
@@ -219,20 +223,20 @@ public class NodeFactoryTest extends XOMTestCase {
         Document doc = builder.build(data, "http://www.example.org/");
         Element root = doc.getRootElement();
         assertEquals("1234innermost5678", doc.getValue());
-        assertEquals(3, root.getChildCount());
+        assertEquals(5, root.getChildCount());
         Node first = root.getChild(0);
-        assertEquals("12", first.getValue());
-        Node middle = root.getChild(1);
+        assertEquals("1", first.getValue());
+        Node middle = root.getChild(2);
         assertEquals("34innermost56", middle.getValue());
-        Node last = root.getChild(2);
-        assertEquals("78", last.getValue());
+        Node last = root.getChild(4);
+        assertEquals("8", last.getValue());
         
-        Node innermost = middle.getChild(1);
+        Node innermost = middle.getChild(2);
         assertEquals("innermost", innermost.getValue());
         Node inner1 = middle.getChild(0);
-        assertEquals("34", inner1.getValue());
-        Node inner3 = middle.getChild(2);
-        assertEquals("56", inner3.getValue());
+        assertEquals("3", inner1.getValue());
+        Node inner3 = middle.getChild(4);
+        assertEquals("6", inner3.getValue());
         
     }
 
@@ -384,28 +388,30 @@ public class NodeFactoryTest extends XOMTestCase {
         Builder builder = new Builder(new BFilter());
         Document doc = builder.build(data, "http://www.example.org/");
         Element root = doc.getRootElement();
-        assertEquals(3, root.getChildCount());
+        assertEquals(5, root.getChildCount());
         assertEquals("datadatadatadatadata", root.getValue());
-        Element middle = (Element) root.getChild(1);
+        Element middle = (Element) root.getChild(2);
         assertEquals("data", middle.getValue());
         Node start = root.getChild(0);
-        Node end = root.getChild(2);
-        assertEquals("datadata", start.getValue());
-        assertEquals("datadata", end.getValue());      
+        Node end = root.getChild(4);
+        assertEquals("data", start.getValue());
+        assertEquals("data", end.getValue());      
         
     }
 
     
-    public void testCoalesceTextNodes() 
-      throws IOException, ParsingException {  
+    public void testDontCoalesceTextNodes() 
+      throws IOException, ParsingException {
+        
         String data = "<a>data<!-- comment--> data</a>";
         Builder builder = new Builder(new CommentFilter());
         Document doc = builder.build(data, "http://www.example.org/");
         Element root = doc.getRootElement();
-        assertEquals(1, root.getChildCount());
+        assertEquals(2, root.getChildCount());
         assertEquals("data data", root.getValue());
         Text text = (Text) root.getChild(0);
-        assertEquals("data data", text.getValue());      
+        assertEquals("data", text.getValue());  
+        
     }
 
     
@@ -851,6 +857,87 @@ public class NodeFactoryTest extends XOMTestCase {
             assertNotNull(success.getMessage()); 
         }            
 
+    }
+    
+    public void testOrderOfCalls() 
+      throws ParsingException, IOException {
+        
+        String data = "<root>1<child>2</child>3</root>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            String s = "";
+            
+            public Nodes makeText(String text) {
+                s += text;
+                return super.makeText(text);
+            }
+            
+            public Element startMakingElement(String name, String namespace) {
+                
+                if (name.equals("child")) assertEquals("1", s);
+                return super.startMakingElement(name, namespace);    
+            }
+            
+            public Nodes finishMakingElement(Element element) {
+                if (element.getLocalName().equals("child")) assertEquals("12", s);
+                if (element.getLocalName().equals("root")) assertEquals("123", s);
+                return super.finishMakingElement(element);    
+            }
+            
+        });
+        builder.build(data, null);
+    }
+ 
+    
+    public void testOrderOfCallsWithPI() 
+      throws ParsingException, IOException {
+        
+        String data = "<root>1<?data ?>2</root>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            String s = "";
+            
+            public Nodes makeText(String text) {
+                s += text;
+                return super.makeText(text);
+            }
+            
+            public Nodes makeProcessingInstruction(String target, String data) {
+                
+                assertEquals("1", s);
+                return new Nodes();    
+            }
+            
+        });
+        Document doc = builder.build(data, null);
+        assertEquals(2, doc.getRootElement().getChildCount());
+        
+    }
+ 
+    
+    public void testOrderOfCallsWithComment() 
+      throws ParsingException, IOException {
+        
+        String data = "<root>1<!-- test -->>2</root>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            String s = "";
+            
+            public Nodes makeText(String text) {
+                s += text;
+                return super.makeText(text);
+            }
+            
+            public Nodes makeComment(String data) {
+                
+                assertEquals("1", s);
+                return new Nodes();    
+            }
+            
+        });
+        Document doc = builder.build(data, null);
+        assertEquals(2, doc.getRootElement().getChildCount());
+        
     }
  
     

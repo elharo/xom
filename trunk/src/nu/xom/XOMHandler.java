@@ -94,6 +94,7 @@ class XOMHandler
     public void startElement(String namespaceURI, String localName, 
       String qualifiedName, org.xml.sax.Attributes attributes) {
         
+        flushText();
         Element element;
         if (parent != document) {
             element = factory.startMakingElement(qualifiedName, namespaceURI);
@@ -114,7 +115,6 @@ class XOMHandler
         parents.push(element);
         
         if (element != null) { // wasn't filtered out
-            flushText();
             if (parent != document) { 
                 // a.k.a. parent not instanceof Document
                 parent.appendChild(element);
@@ -197,9 +197,9 @@ class XOMHandler
         // If we're immediately inside a skipped element
         // we need to reset current to null, not to the parent
         current = (ParentNode) parents.pop();
+        flushText();
         
         if (current != null) {
-            flushText();
             parent = current.getParent();
             Nodes result = factory.finishMakingElement((Element) current);
             
@@ -314,10 +314,11 @@ class XOMHandler
     
     public void processingInstruction(String target, String data) {
         
+        if (!inDTD) flushText();
         Nodes result = factory.makeProcessingInstruction(target, data);
+        // should I report processing instructions and comments
+        // from the external DTD subset at all????
         if (inExternalSubset) return;
-
-        if (result.size() > 0 && !inDTD) flushText();
         
         for (int i = 0; i < result.size(); i++) {
             Node node = result.get(i);
@@ -413,10 +414,9 @@ class XOMHandler
 
     public void comment(char[] text, int start, int length) {
         
+        if (!inDTD) flushText();
         Nodes result = factory.makeComment(new String(text, start, length));
         if (inExternalSubset) return;
-
-        if (result.size() > 0 && !inDTD) flushText();
         
         for (int i = 0; i < result.size(); i++) {
             Node node = result.get(i);
