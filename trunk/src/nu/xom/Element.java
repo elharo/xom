@@ -1099,18 +1099,12 @@ public class Element extends ParentNode {
         if (prefix == null) prefix = "";
         if (uri == null) uri = "";
         
-        if (prefix.length() != 0) {
-            Verifier.checkNCName(prefix);
-            Verifier.checkAbsoluteURIReference(uri);
-        }
-        else if (uri.length() != 0) {
-            // Make sure we're not trying to undeclare 
-            // the default namespace; this is legal.
-            Verifier.checkAbsoluteURIReference(uri);
-        }
-        
         // check to see if this is the xmlns or xml prefix
         if (prefix.equals("xmlns")) {
+            if (uri.equals("")) {
+                // This is done automatically
+                return; 
+            }
             throw new NamespaceConflictException(
              "The xmlns prefix cannot bound to any URI");   
         }
@@ -1119,15 +1113,23 @@ public class Element extends ParentNode {
                 // This is done automatically
                 return; 
             }
-            else {
-                throw new NamespaceConflictException(
-                 "Wrong namespace URI for xml prefix: " + uri);
-            }   
+            throw new NamespaceConflictException(
+              "Wrong namespace URI for xml prefix: " + uri);
         }
         else if (uri.equals("http://www.w3.org/XML/1998/namespace")) {
             throw new NamespaceConflictException(
                "Wrong prefix for http://www.w3.org/XML/1998/namespace namespace: " 
                + prefix);  
+        }
+        
+        if (prefix.length() != 0) {
+            Verifier.checkNCName(prefix);
+            Verifier.checkAbsoluteURIReference(uri);
+        }
+        else if (uri.length() != 0) {
+            // Make sure we're not trying to undeclare 
+            // the default namespace; this is legal.
+            Verifier.checkAbsoluteURIReference(uri);
         }
         
         String currentBinding = getLocalNamespaceURI(prefix);
