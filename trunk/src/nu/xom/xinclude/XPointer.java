@@ -49,10 +49,13 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 class XPointer {
+    
+    // prevent instantiation
+    private XPointer();
     
     public static Nodes resolve(Document doc, String xptr) 
       throws XPointerSyntaxException, XPointerResourceException {    
