@@ -70,7 +70,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
-     * @throws ComparisonException if the <code>Text</code> nodes 
+     * @throws ComparisonFailure if the <code>Text</code> nodes 
      *     are not equal
      */
     public static void assertEquals(Text expected, Text actual) {
@@ -92,7 +92,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
-     * @throws ComparisonException if the <code>Text</code> nodes 
+     * @throws ComparisonFailure if the <code>Text</code> nodes 
      *     are not equal
      */
     public static void assertEquals(
@@ -137,7 +137,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
-     * @throws ComparisonException if the <code>Attribute</code> nodes 
+     * @throws ComparisonFailure if the <code>Attribute</code> nodes 
      *     are not equal
      */
     public static void assertEquals(
@@ -168,7 +168,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
-     * @throws ComparisonException if the <code>Attribute</code> nodes 
+     * @throws ComparisonFailure if the <code>Attribute</code> nodes 
      *     are not equal
      */
     public static void assertEquals(
@@ -214,7 +214,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the <code>DocType</code> nodes 
+     * @throws ComparisonFailure if the <code>DocType</code> nodes 
      *     are not equal
      */
     public static void assertEquals(DocType expected, DocType actual) {
@@ -237,7 +237,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the <code>DocType</code> nodes 
+     * @throws ComparisonFailure if the <code>DocType</code> nodes 
      *     are not equal
      *
      */
@@ -280,7 +280,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the <code>Elements</code> nodes 
+     * @throws ComparisonFailure if the <code>Elements</code> nodes 
      *     are not equal
      */
     public static void assertEquals(
@@ -306,7 +306,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the <code>Element</code> nodes 
+     * @throws ComparisonFailure if the <code>Element</code> nodes 
      *     are not equal
      */
     public static void assertEquals(String message,
@@ -423,7 +423,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the <code>Document</code> nodes 
+     * @throws ComparisonFailure if the <code>Document</code> nodes 
      *     are not equal
      */
     public static void assertEquals(
@@ -456,7 +456,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the <code>Document</code> nodes 
+     * @throws ComparisonFailure if the <code>Document</code> nodes 
      *     are not equal
      */
     public static void assertEquals(
@@ -479,7 +479,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the <code>Comment</code> nodes 
+     * @throws ComparisonFailure if the <code>Comment</code> nodes 
      *     are not equal
      */
     public static void assertEquals(
@@ -504,7 +504,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the <code>Comment</code> nodes 
+     * @throws ComparisonFailure if the <code>Comment</code> nodes 
      *     are not equal
      */
     public static void assertEquals(Comment expected, Comment actual) {
@@ -524,7 +524,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the 
+     * @throws ComparisonFailure if the 
      *     <code>ProcessingInstruction</code> nodes are not equal
      */
     public static void assertEquals(ProcessingInstruction expected, 
@@ -547,7 +547,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
-     * @throws ComparisonException if the 
+     * @throws ComparisonFailure if the 
      *     <code>ProcessingInstruction</code> nodes are not equal
      */
     public static void assertEquals(String message, 
@@ -577,7 +577,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
-     * @throws ComparisonException if the nodes are not equal
+     * @throws ComparisonFailure if the nodes are not equal
      */
     public static void assertEquals(Node expected, Node actual) {
         assertEquals(null, expected, actual);
@@ -599,7 +599,7 @@ public class XOMTestCase extends TestCase {
      * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
-     * @throws ComparisonException if the nodes are not equal
+     * @throws ComparisonFailure if the nodes are not equal
      */
     public static void assertEquals(
       String message, Node expected, Node actual) {
