@@ -52,8 +52,7 @@ public class VerifierTest extends XOMTestCase {
     public void testElementNames() {
         
         for (char c = 0; c < 65535; c++) {
-            
-            if (c % 100 == 0) System.err.println(c / 100);
+
             if (XMLChar.isNCNameStart(c)) {
                String name = String.valueOf(c);
                Element e = new Element(name);   
