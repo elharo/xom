@@ -24,12 +24,10 @@
 package nu.xom.tests;
 
 import nu.xom.ParsingException;
-import nu.xom.tests.XOMTestCase;
 
 /**
  * <p>
- *   This class provides unit tests for for the ParsingException
- *   class.
+ *   Unit tests for the <code>ParsingException</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -38,7 +36,7 @@ import nu.xom.tests.XOMTestCase;
  */
 public class ParsingExceptionTest extends XOMTestCase {
     
-    private Exception ex;
+    private ParsingException ex;
     private Exception cause;
     
     protected void setUp() {
@@ -73,7 +71,7 @@ public class ParsingExceptionTest extends XOMTestCase {
 
     public void testNullInitCause() {
         
-        Exception ex = new ParsingException(null, null);
+        ParsingException ex = new ParsingException(null, null);
         assertNull(ex.getCause());
         
         try {

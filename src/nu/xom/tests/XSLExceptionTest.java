@@ -28,17 +28,16 @@ import nu.xom.tests.XOMTestCase;
 
 /**
  * <p>
- *   This class provides unit tests for for the XSLException
- *   class.
+ *   Unit tests for the <code>XSLException</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class XSLExceptionTest extends XOMTestCase {
     
-    private Exception ex;
+    private XSLException ex;
     private Exception cause;
     
     protected void setUp() {
@@ -73,7 +72,7 @@ public class XSLExceptionTest extends XOMTestCase {
 
     public void testNullInitCause() {
         
-        Exception ex = new XSLException(null, null);
+        XSLException ex = new XSLException(null, null);
         assertNull(ex.getCause());
         
         try {
