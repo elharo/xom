@@ -35,7 +35,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 abstract class TextWriter {
@@ -60,7 +60,7 @@ abstract class TextWriter {
         this.encoding = encoding;
     }
     
-    public void reset() {
+    void reset() {
         column = 0; 
         fakeIndents = 0; 
         lastCharacterWasSpace = false;
@@ -340,14 +340,14 @@ abstract class TextWriter {
         return column >= maxLength - 10;   
     }
 
-    public final void breakLine() throws IOException {
+    final void breakLine() throws IOException {
         out.write(lineSeparator);
         out.write(indentString);
         column = indentString.length();
         lastCharacterWasSpace = true;
     }
     
-    public final void escapeBreakLine() throws IOException {
+    final void escapeBreakLine() throws IOException {
         if ("\n".equals(lineSeparator)) {
             out.write("&#x0A;");
             column += 6;
@@ -377,7 +377,7 @@ abstract class TextWriter {
 
     }
 
-    public final void writePCDATA(String s) throws IOException {
+    final void writePCDATA(String s) throws IOException {
         if (normalize) {
             s = Normalizer.normalize(s, Normalizer.NFC);   
         }
@@ -386,7 +386,7 @@ abstract class TextWriter {
         }   
     }
 
-    public final void writeAttributeValue(String s) 
+    final void writeAttributeValue(String s) 
       throws IOException {
         if (normalize) {
             s = Normalizer.normalize(s, Normalizer.NFC);   
@@ -396,7 +396,7 @@ abstract class TextWriter {
         }   
     }
 
-    public final void writeMarkup(String s) throws IOException {
+    final void writeMarkup(String s) throws IOException {
         if (normalize) {
             s = Normalizer.normalize(s, Normalizer.NFC);   
         }
@@ -405,14 +405,14 @@ abstract class TextWriter {
         }   
     }
     
-    public boolean isIndenting() {
+    boolean isIndenting() {
         return indentString.length() > 0;   
     }
 
 
     private int fakeIndents = 0;
     
-    public void incrementIndent() {
+    void incrementIndent() {
         
         StringBuffer newIndent = new StringBuffer(indentString);
         for (int i = 0; i < indent; i++) {
@@ -427,7 +427,7 @@ abstract class TextWriter {
         
     }
     
-    public void decrementIndent() {
+    void decrementIndent() {
         if (fakeIndents > 0) fakeIndents --;        
         else {
             indentString = indentString.substring(
@@ -437,7 +437,7 @@ abstract class TextWriter {
     }
 
 
-    public String getEncoding() {
+    String getEncoding() {
         return this.encoding;   
     }
 
@@ -449,7 +449,7 @@ abstract class TextWriter {
      * 
      * @return the line separator
      */
-    public String getLineSeparator() {
+    String getLineSeparator() {
         return lineSeparator;
     }
 
@@ -467,7 +467,7 @@ abstract class TextWriter {
      *      any line separator other than "\n", "\r", or "\r\n".
      * 
      */
-    public void setLineSeparator(String lineSeparator) {
+    void setLineSeparator(String lineSeparator) {
         if (lineSeparator.equals("\n") 
           || lineSeparator.equals("\r")
           || lineSeparator.equals("\r\n")) { 
@@ -480,7 +480,7 @@ abstract class TextWriter {
         }  
     }
 
-    public String getIndentString() {
+    String getIndentString() {
         return indentString;
     }
 
@@ -491,7 +491,7 @@ abstract class TextWriter {
      * 
      * @return the number of spaces this serializer indents
      */
-    public int getIndent() {
+    int getIndent() {
         return indent;
     }
 
@@ -503,7 +503,7 @@ abstract class TextWriter {
      * 
      * @return the maximum line length.
      */
-    public int getMaxLength() {
+    int getMaxLength() {
         return maxLength;
     }
 
@@ -515,7 +515,7 @@ abstract class TextWriter {
      * 
      * @param maxLength the maxLength to set
      */
-    public void setMaxLength(int maxLength) {
+    void setMaxLength(int maxLength) {
         if (maxLength < 0) maxLength = 0;
         this.maxLength = maxLength;
     }
@@ -529,7 +529,7 @@ abstract class TextWriter {
      * 
      * @param indent the indent to set
      */
-    public void setIndent(int indent) {
+    void setIndent(int indent) {
         this.indent = indent;
     }
 
@@ -541,11 +541,11 @@ abstract class TextWriter {
      * 
      * @throws IOException
      */
-    public void flush() throws IOException {
+    void flush() throws IOException {
         out.flush();    
     }
 
-    public abstract boolean needsEscaping(char c);
+    abstract boolean needsEscaping(char c);
 
     /**
      * <p>
@@ -560,21 +560,21 @@ abstract class TextWriter {
      * @return true if an <ocde>xml:space="true"</code> attribute 
      *      is in-scope
      */
-    public boolean isPreserveSpace() {
+    boolean isPreserveSpace() {
         return preserveSpace;
     }
 
     /**
      * @param preserveSpace whether to preserve all white space
      */
-    public void setPreserveSpace(boolean preserveSpace) {
+    void setPreserveSpace(boolean preserveSpace) {
         this.preserveSpace = preserveSpace;
     }
 
     /**
      * @return the current column number
      */
-    public int getColumnNumber() {
+    int getColumnNumber() {
         return this.column;
     }
 
@@ -595,7 +595,7 @@ abstract class TextWriter {
      * @param normalize true if normalization is performed; 
      *     false if it isn't.
      */
-    public void setNFC(boolean normalize) {
+    void setNFC(boolean normalize) {
         this.normalize = normalize;   
     }
 
@@ -610,7 +610,7 @@ abstract class TextWriter {
      * @return true if this serialization performs Unicode 
      *     normalization; false if it doesn't.
      */
-    public boolean getNFC() {
+    boolean getNFC() {
         return this.normalize;   
     }
 
