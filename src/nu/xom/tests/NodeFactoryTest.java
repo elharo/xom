@@ -267,7 +267,6 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
-        
     
     public void testMinimalizedDocument() 
       throws IOException, ParsingException {
@@ -283,6 +282,7 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals(0, root.getAttributeCount());
         
     }
+
     
     // Throws away everything except the document and the
     // root element
@@ -533,6 +533,55 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals("value", value.getQualifiedName());         
     }
 
+    
+    public void testInsertElementsInInternalDTDSubsetViaProcessingInstruction() 
+      throws ParsingException, IOException {
+        String data = "<!DOCTYPE a [<?target data?>]><a><b>data1</b><c>text</c></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes makeProcessingInstruction(String target, String data) {
+                Nodes result = new Nodes();
+                Element e = new Element(target);
+                e.appendChild(data);
+                result.append(e);
+                return result;
+            }
+            
+        });
+        try {
+           builder.build(data, "http://www.example.org/");
+           fail("Allowed element in internal DTD subset via processing instruction");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
+    
+    public void testInsertElementsInInternalDTDSubsetViaComment() 
+      throws ParsingException, IOException {
+        String data = "<!DOCTYPE a [<!--data-->]><a><b>data1</b><c>text</c></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes makeComment(String data) {
+                Nodes result = new Nodes();
+                Element e = new Element("comment");
+                e.appendChild(data);
+                result.append(e);
+                return result;
+            }
+            
+        });
+        try {
+           builder.build(data, "http://www.example.org/");
+           fail("Allowed element in internal DTD subset via comment");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
+    
+    
+    
     public void testChangeElementsToAttributes() 
       throws ParsingException, IOException {
         String data = "<a><b>data1</b><c>text</c></a>";
