@@ -415,6 +415,7 @@ public class XIncluder {
                         int position = parent.indexOf(element);
                         for (int i = 0; i < replacements.size(); i++) {
                             Node child = replacements.get(i);
+                            child.detach(); 
                             parent.insertChild(child, position+i); 
                         }
                         element.detach();
@@ -566,6 +567,8 @@ public class XIncluder {
     }
 
     
+    // resolveSilently seems to be primarily used for the resolving
+    // elements seelcted by an XPointer
     private static Nodes resolveSilently(
       Element element, Builder builder, Stack baseURLs) 
       throws IOException, ParsingException, XIncludeException {
@@ -675,10 +678,10 @@ public class XIncluder {
             
             }
             catch (IOException ex) {
-                return processFallback(element, builder, baseURLs, ex);
+                return processFallbackSilently(element, builder, baseURLs, ex);
             }
             catch (XPointerSyntaxException ex) {
-                return processFallback(element, builder, baseURLs, ex);
+                return processFallbackSilently(element, builder, baseURLs, ex);
             }
             catch (XPointerResourceException ex) {
                 // Process fallbacks;  I'm not sure this is correct 
@@ -686,7 +689,7 @@ public class XIncluder {
                 // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0000.html
                 // Daniel Veillard thinks this is correct. See
                 // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0001.html
-                return processFallback(element, builder, baseURLs, ex);
+                return processFallbackSilently(element, builder, baseURLs, ex);
             }
             
         }
@@ -759,7 +762,7 @@ public class XIncluder {
     }
 
     
-    private static Nodes processFallback(
+    private static Nodes processFallbackSilently(
       Element includeElement, Builder builder, Stack baseURLs, Exception ex)
         throws XIncludeException, IOException, ParsingException {
            Element fallback 
@@ -774,7 +777,7 @@ public class XIncluder {
 
            Nodes result = new Nodes();
            for (int i = 0; i < fallback.getChildCount(); i++) {
-                Node child = fallback.getChild(0);
+                Node child = fallback.getChild(i);
                 if (child instanceof Element) {
                     Nodes nodes = resolveSilently((Element) child, builder, baseURLs);
                     for (int j = 0; j < nodes.size(); j++) {
