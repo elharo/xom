@@ -42,7 +42,7 @@ import java.util.List;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d4
  *
  */
 public final class Nodes {
@@ -154,6 +154,21 @@ public final class Nodes {
      */
     public void append(Node node) {
         nodes.add(node);
+    }
+
+
+    /**
+     * <p>
+     * Determines whether a node is contained in this list.
+     * </p>
+     * 
+     * @param node the node to search for
+     * 
+     * @return true if this list contains the specified node;
+     *     false otherwise
+     */
+    public boolean contains(Node node) {
+        return nodes.contains(node);
     }
 
     
