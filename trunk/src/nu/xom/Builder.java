@@ -56,11 +56,12 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b2
+ * @version 1.0b3
  * 
  */
 public class Builder {
 
+    
     private XMLReader   parser;
     private NodeFactory factory;
     
@@ -166,7 +167,7 @@ public class Builder {
     // These are stored in the order of preference.
     private static String[] parsers = {
         "nu.xom.XML1_0Parser",
-        "nu.xom.JDK15XML1_0Parser" ,
+        "nu.xom.JDK15XML1_0Parser",
         "org.apache.xerces.parsers.SAXParser",
         "com.sun.org.apache.xerces.internal.parsers.SAXParser",
         "gnu.xml.aelfred2.XmlReader",
@@ -290,8 +291,11 @@ public class Builder {
         }
         
         // A couple of Xerces specific properties
-        if (parser.getClass().getName().equals("nu.xom.XML1_0Parser") 
-         || parser.getClass().getName().equals("org.apache.xerces.parsers.SAXParser")) {
+        String parserName = parser.getClass().getName();
+        if (parserName.equals("nu.xom.XML1_0Parser") 
+         || parserName.equals("nu.xom.JDK15XML1_0Parser")
+         || parserName.equals("org.apache.xerces.parsers.SAXParser")
+         || parserName.equals("com.sun.org.apache.xerces.internal.parsers.SAXParser")) {
             try {
                 parser.setFeature(
                  "http://apache.org/xml/features/allow-java-encodings", true);
@@ -485,7 +489,7 @@ public class Builder {
         catch (SAXException ex) {
             // This parser does not support lexical events.
             // We can live without them, though it does mean
-            // there won't be any comments or a doctype declaration 
+            // there won't be any comments or a DOCTYPE declaration 
             // in the tree.
         }
                 
