@@ -452,6 +452,64 @@ public class ParentNodeTest extends XOMTestCase {
     }
 
     
+    // Document that this behavior is intentional
+    // An element cannot be replaced by its sibling unless
+    // the sibling is first detached. 
+    public void testReplaceSibling() {
+        
+        Element parent = new Element("parent");
+        Element test1 = new Element("test");
+        Element test2 = new Element("test");
+        parent.appendChild(test1);
+        parent.appendChild(test2);
+        try {
+            parent.replaceChild(test1, test2);
+            fail("Replaced element without detaching first");
+        }   
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());   
+        } 
+        
+        assertEquals(2, parent.getChildCount());
+        assertEquals(parent, test1.getParent());
+        assertEquals(parent, test2.getParent());
+        
+    }
+
+    
+    // Similarly, this test documents the conscious decision
+    // that you cannot insert an existing child into its own parent,
+    // even at the same position
+    public void testCantInsertExisitngChild() {
+        
+        Element parent = new Element("parent");
+        Element test1 = new Element("test");
+        Element test2 = new Element("test");
+        parent.appendChild(test1);
+        parent.appendChild(test2);
+        try {
+            parent.insertChild(test2, 0);
+            fail("Inserted element without detaching first");
+        }   
+        catch (MultipleParentException success) {
+            assertNotNull(success.getMessage());   
+        } 
+        
+        try {
+            parent.insertChild(test2, 1);
+            fail("Inserted element without detaching first");
+        }   
+        catch (MultipleParentException success) {
+            assertNotNull(success.getMessage());   
+        } 
+        
+        assertEquals(2, parent.getChildCount());
+        assertEquals(parent, test1.getParent());
+        assertEquals(parent, test2.getParent());
+        
+    }
+
+    
     // can't remove when insertion is legal;
     // succeeed or fail as unit
     public void testReplaceChildAtomicity() {
