@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -22,7 +22,6 @@
 package nu.xom;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -43,7 +42,7 @@ import java.util.List;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public final class Nodes {
@@ -74,8 +73,6 @@ public final class Nodes {
     }
     
     
-    // XXX may not be an ArrayList
-    // FIXME may contain non-nodes objects
     Nodes(List results) {
         this.nodes = results;
     }
