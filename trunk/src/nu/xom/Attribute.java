@@ -150,8 +150,8 @@ public class Attribute extends Node {
         // without profiling. My current tests show doing this slows 
         // down the parse by about 7%. I can't explain it.
         if (name.indexOf(':') > 0) {
-            prefix = name.substring(0, name.indexOf(':'));   
-            localName = name.substring(name.indexOf(':') + 1);
+            prefix = name.substring(0, name.indexOf(':')).intern();   
+            localName = name.substring(name.indexOf(':') + 1).intern();
         }
 
         try {
@@ -203,8 +203,8 @@ public class Attribute extends Node {
         String prefix = "";
         String localName = name;
         if (name.indexOf(':') >= 0) {
-            prefix = name.substring(0, name.indexOf(':'));   
-            localName = name.substring(name.indexOf(':') + 1);
+            prefix = name.substring(0, name.indexOf(':')).intern();   
+            localName = name.substring(name.indexOf(':') + 1).intern();
             if ("xml:id".equals(name)) {
                 type = Attribute.Type.ID;
                 value = normalize(value);
@@ -449,6 +449,8 @@ public class Attribute extends Node {
      */
     public void setNamespace(String prefix, String URI) {
         
+        if (prefix != null) prefix = prefix.intern();
+        
         if ("xml".equals(prefix) && "id".equals(this.localName)) {
             Verifier.checkNCName(this.value);
             this.setType(Attribute.Type.ID);
@@ -463,6 +465,7 @@ public class Attribute extends Node {
         
         if (URI == null) URI = "";
         if (prefix == null) prefix = "";
+        else prefix = prefix.intern();
         
         if (prefix.equals("xmlns")) {
             throw new IllegalNameException(
