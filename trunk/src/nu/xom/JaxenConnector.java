@@ -40,7 +40,7 @@ class JaxenConnector extends BaseXPath {
     public List selectNodes(Object expression) throws JaxenException {
         
         List initial = super.selectNodes(expression);
-        List result = new ArrayList();
+        List result = new ArrayList(initial.size());
         Iterator iterator = initial.iterator();
         while (iterator.hasNext()) {
             Object next = iterator.next();
