@@ -46,7 +46,7 @@ import java.util.List;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public abstract class ParentNode extends Node {
@@ -107,7 +107,6 @@ public abstract class ParentNode extends Node {
      * @throws NullPointerException if <code>child</code> is null
      * @throws IndexOutOfBoundsException if the position is negative or 
      *     greater than the number of children of this node
-     * @throws XMLException if the concrete subclass rejects this child
      */
     public void insertChild(Node child, int position) {
         
@@ -133,7 +132,6 @@ public abstract class ParentNode extends Node {
      *     of this type
      * @throws MultipleParentException if child already has a parent
      * @throws NullPointerException if <code>child</code> is null
-     * @throws XMLException if the concrete subclass rejects this child
      * 
      */
     public void appendChild(Node child) {
@@ -199,7 +197,6 @@ public abstract class ParentNode extends Node {
      * 
      * @throws IndexOutOfBoundsException if the index is negative 
      *      or greater than the number of children of this node - 1
-     * @throws XMLException if the subclass rejects the removal
      */
     public Node removeChild(int position) {
         
@@ -226,7 +223,6 @@ public abstract class ParentNode extends Node {
      * 
      * @throws NoSuchChildException if <code>child</code> is 
      *     not in fact a child of this node
-     * @throws XMLException if the subclass rejects the removal
      */
     public Node removeChild(Node child) {
         
@@ -267,9 +263,6 @@ public abstract class ParentNode extends Node {
      * @throws NullPointerException if either argument is null
      * @throws IllegalAddException if this node cannot have children 
      *     of the type of <code>newChild</code>
-     * @throws XMLException if the subclass rejects the removal of
-     *     <code>oldChild</code> or the insertion of 
-     *     <code>newChild</code>
      */
     public void replaceChild(Node oldChild, Node newChild) {
         
@@ -297,8 +290,6 @@ public abstract class ParentNode extends Node {
         
         if (oldChild == newChild) return;
         
-        // must make sure insertion is legal before we remove
-        // atomicity???? what if remove fails and insert doesn't or vice versa
         insertionAllowed(newChild, position);
         removeChild(position);
         insertChild(newChild, position);
@@ -363,4 +354,5 @@ public abstract class ParentNode extends Node {
         actualBaseURI = uri;     
     }
 
+    
 }
