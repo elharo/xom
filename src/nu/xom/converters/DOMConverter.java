@@ -518,6 +518,8 @@ public class DOMConverter {
                 if (xomParent.getChildCount() - 1 == index) {
                     xomCurrent = xomParent;
                     if (xomCurrent == xomElement) break;
+                    ParentNode tp = xomCurrent.getParent();
+                    if (tp == null) break;
                     index = xomCurrent.getParent().indexOf(xomCurrent);
                     end = true;
                     continue;
