@@ -225,7 +225,7 @@ public class XPathTest extends XOMTestCase {
         
         Element test = new Element("Test");  
         
-        Nodes result = test.query("//");
+        Nodes result = test.query("//*");
         assertEquals(1, result.size());
         
     }
@@ -1833,6 +1833,44 @@ public class XPathTest extends XOMTestCase {
         try {
             Nodes nodes = doc.query("//");
             fail("Queried //");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+
+    public void testDoubleSlashIsIncorrect2() {
+        
+        Element root = new Element("root", "http://www.example.org");
+        Document doc = new Document(root);
+        root.appendChild(new Element("child"));
+        root.appendChild("test");
+        root.addAttribute(new Attribute("test", "test"));
+        
+        try {
+            Nodes nodes = doc.query("// ");
+            fail("Queried // ");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+
+    public void testDoubleSlashIsIncorrect3() {
+        
+        Element root = new Element("root", "http://www.example.org");
+        Document doc = new Document(root);
+        root.appendChild(new Element("child"));
+        root.appendChild("test");
+        root.addAttribute(new Attribute("test", "test"));
+        
+        try {
+            Nodes nodes = doc.query("// a");
+            fail("Queried // a");
         }
         catch (XPathException success) {
             assertNotNull(success.getMessage());
