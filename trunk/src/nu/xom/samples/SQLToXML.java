@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002-2004 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -36,7 +36,6 @@ import nu.xom.Serializer;
 
 
 /**
- * 
  * <p>
  * Demonstrates building a structured XML document,
  * from relational data using JDBC. A different version of this 
@@ -46,7 +45,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0b7
  *
  */
 public class SQLToXML {

@@ -33,7 +33,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0b7
  *
  */
 public class TextMerger {
@@ -61,5 +61,4 @@ public class TextMerger {
         
     }
     
-
 }
