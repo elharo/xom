@@ -365,19 +365,10 @@ public abstract class ParentNode extends Node {
      *   you can set the base URI to the empty string.
      * </p>
      * 
-     * <p>
-     *   The URI as specified is actually an IRI (once that spec
-     *   is finished). It is not necessary to hexadecimally escape 
-     *   URI illegal, non-ASCII Unicode characters such as &gamma; 
-     *   or &eacute;. In fact, you should not to do so.
-     *   It is necessary to escape reserved ASCII characters such as
-     *   /, %, and ? when they are not used in their normal URI sense.
-     * </p>
-     * 
      * @param URI the new base URI for this node
      *
      * @throws MalformedURIException if <code>URI</code> is 
-     *     not a legal RFC 2396 URI reference
+     *     not a legal RFC 2396 URI
      */
     public abstract void setBaseURI(String URI);
 
@@ -388,7 +379,7 @@ public abstract class ParentNode extends Node {
 
 
     void setActualBaseURI(String uri) {
-        Verifier.checkIRI(uri);
+        Verifier.checkURI(uri);
         actualBaseURI = uri;     
     }
 
