@@ -114,7 +114,7 @@ public class NodeFactory {
     // check that you can't use this method to bypass
     // add's checks on multiple parentage????
     
-    // should finishmakingElement be called for the root element????
+    // should finishMakingElement be called for the root element????
     
     /**
      * <p>
