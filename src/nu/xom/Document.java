@@ -31,7 +31,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  * 
  */
 public class Document extends ParentNode {
@@ -55,7 +55,7 @@ public class Document extends ParentNode {
     
     /**
      * <p>
-     * Creates a copy of the <code>Document</code>.
+     * Creates a copy of this document.
      * </p>
      * 
      * @param doc the document to copy
@@ -394,8 +394,6 @@ public class Document extends ParentNode {
      * 
      * @return  value of the root element of this document
      * 
-     * @see nu.xom.Node#getValue()
-     * 
      */
     public final String getValue() {
         return getRootElement().getValue();
@@ -413,8 +411,6 @@ public class Document extends ParentNode {
      * </p>
      * 
      * @return a string containing this entire XML document
-     * 
-     * @see nu.xom.Node#toXML()
      */
     public final String toXML() {
     
@@ -440,8 +436,6 @@ public class Document extends ParentNode {
      * </p>
      * 
      * @return a deep copy of this <code>Document</code> object
-     * 
-     * @see nu.xom.Node#copy()
      */
     public Node copy() {
         return new Document(this);
@@ -460,10 +454,7 @@ public class Document extends ParentNode {
      * the XML representation of this document.
      * </p>
      * 
-     * @return a non-XML string representation of this 
-     *     <code>Document</code> object
-     * 
-     * @see nu.xom.Node#toString()
+     * @return a non-XML string representation of this document
      */
     public final String toString() {
         return "[" + getClass().getName() + ": " 
