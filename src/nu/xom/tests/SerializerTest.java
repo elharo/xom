@@ -344,14 +344,31 @@ public class SerializerTest extends XOMTestCase {
         XOMTestCase.assertEquals(doc, resultDoc);    
     }
     
+    public void testComment() 
+      throws IOException, ParsingException {        
+        Element root = new Element("root");
+        String data = "  <>&amp;&entity; test   \n  hello again";
+        root.appendChild(new Comment(data));
+        Document doc = new Document(root);
+        serializeParseAndCompare(doc);     
+    }
+    
+    public void testProcessingInstruction() 
+      throws IOException, ParsingException {        
+        Element root = new Element("root");
+        String data = "<>&amp;&entity; test   \n  hello again";
+        root.appendChild(new ProcessingInstruction("target", data));
+        Document doc = new Document(root);
+        serializeParseAndCompare(doc);     
+    }
+    
     public void testBasicElementWithText() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
         String data = "   test   \n  hello again";
         root.appendChild(data);
         Document doc = new Document(root);
-        serializeParseAndCompare(doc);
-        
+        serializeParseAndCompare(doc);     
     }
     
     public void testAttributes() 
