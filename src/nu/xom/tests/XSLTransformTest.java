@@ -53,6 +53,12 @@ import nu.xom.xslt.XSLTransform;
  *  Unit tests for the XSLT engine.
  * </p>
  * 
+ * <p>
+ *   Many of the tests in this suite use an identity transformation.
+ *   This is often done to make sure I get a particular content into
+ *   the output tree in order to test the XSLTHandler.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  *
@@ -539,32 +545,28 @@ public class XSLTransformTest extends XOMTestCase {
         
     } 
     
-    // Not clear why this next test fails with an XSLException ????
-    // Possible bug in Xalan-Trax impl.
-    // compare with Saxon
-
-    private String doc = 
-     "<test>"
-      + "<em xmlns:none=\"http://www.example.com\" />"
-     + "<span xmlns:xlink='http://www.w3.org/TR/1999/xlink' xlink:type='simple' />"
-     + "</test>";    
-    
     
     public void testPrefixMappingIssues() 
       throws XSLException, ParsingException, IOException {
         
+         String doc = "<test>"
+           + "<span xmlns:a='http://www.example.com'/>"
+           + "<span xmlns:b='http://www.example.net'/>"
+           + "</test>"; 
         File stylesheet = new File("data/xslt/input/identity.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
         
         Builder builder = new Builder();
         Document input = builder.build(doc, "http://example.org/");
-        Nodes output = xform.transform(input);
+        Nodes result = xform.transform(input);
+        assertEquals(input.getRootElement(), result.get(0));
         
     }
     
     
     public void testTriple() 
-      throws IOException, ParsingException, XSLException {  
+      throws IOException, ParsingException, XSLException {
+        
         File stylesheet = new File("data/xslt/input/identity.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
         xform.setNodeFactory(new NodeFactoryTest.TripleElementFilter());
@@ -660,6 +662,24 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     
+    public void testRemapPrefixToSameURI() 
+      throws IOException, ParsingException, XSLException {  
+        File stylesheet = new File("data/xslt/input/identity.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+
+        String data = "<a xmlns:pre='http://www.example.org/'>" +
+                "<b xmlns:pre='http://www.example.org/'>in B</b></a>";
+        Builder builder = new Builder();
+        Document doc = builder.build(data, "http://www.example.org/");
+        
+        Nodes result = xform.transform(doc);
+        
+        assertEquals(doc.getRootElement(), result.get(0));
+        
+    }
+ 
+
+    
     public void testElementsToAttributes() 
       throws IOException, ParsingException, XSLException {  
         File stylesheet = new File("data/xslt/input/identity.xsl");
@@ -681,6 +701,7 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
  
+    
     private static class AttributeFactory extends NodeFactory {
 
         public Nodes finishMakingElement(Element element) {
@@ -764,9 +785,6 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     
-    // Possible bug in Xalan-Trax impl.
-    //not calling startPrefixMapping????
-    // compare with Saxon
     public void testAdditionalDefaultNamespace() 
       throws IOException, ParsingException, XSLException {  
         
