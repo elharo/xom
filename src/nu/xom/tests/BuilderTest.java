@@ -424,8 +424,8 @@ public class BuilderTest extends XOMTestCase {
             validator.build(reader);   
             fail("Allowed invalid doc");
         }
-        catch (ValidityException ex) {
-            // success   
+        catch (ValidityException success) {
+            assertNotNull(success.getMessage());   
         }  
         // now make sure validating a valid document doesn't
         // throw an exception
