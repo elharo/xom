@@ -36,7 +36,8 @@ import nu.xom.Element;
  * Demonstrates the building of a structured XML document,
  * from flat, tabular data. A different version of this 
  * example was originally developed for Chapter 4 of 
- * <cite><a href="http://www.cafeconleche.org/books/xmljava/">Processing 
+ * <cite><a target="_top"
+ * href="http://www.cafeconleche.org/books/xmljava/">Processing 
  * XML with Java</a></cite>.
  * </p>
  * 

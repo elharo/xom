@@ -24,8 +24,8 @@ package nu.xom.xinclude;
 /**
  * <p>
  * Thrown when no XPointer part identifies a subresource. This  
- * corresponds to 
- * <a href="http://www.w3.org/TR/xptr-framework/#scheme">section 3.3 
+ * corresponds to <a target="_top" 
+ * href="http://www.w3.org/TR/xptr-framework/#scheme">section 3.3 
  * of the XPointer Framework</a> which states, 
  * "If no pointer part identifies subresources, it is an error."
  * </p>

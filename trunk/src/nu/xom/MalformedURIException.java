@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -26,7 +26,8 @@ package nu.xom;
  *  Indicates that a string
  *  intended for use as a URI or URI reference (typically a namespace
  *  name or a base URI) is not syntactically correct  according to 
- *  <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>.
+ *  <a href="http://www.ietf.org/rfc/rfc2396.txt" 
+ *     target="_top">RFC 2396</a>.
  * </p>
 
  * @author Elliotte Rusty Harold
