@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -358,7 +358,7 @@ public class WrappingSerializer extends Serializer {
         }
         catch (IOException ex) { 
           System.out.println(
-           "Due to an IOException, the parser could not check " 
+           "Due to an IOException, the parser could not read " 
            + args[0]
           ); 
         }
