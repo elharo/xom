@@ -73,7 +73,7 @@ public class ValidityExceptionTest extends XOMTestCase {
             ex.initCause(null);   
             fail("Reinitialized cause over null");   
         }
-        catch (IllegalStateException result) {
+        catch (IllegalStateException success) {
             // success   
         }
         
@@ -81,7 +81,7 @@ public class ValidityExceptionTest extends XOMTestCase {
             ex.initCause(new Exception());   
             fail("Reinitialized cause over null");   
         }
-        catch (IllegalStateException result) {
+        catch (IllegalStateException success) {
             // success   
         }
         
