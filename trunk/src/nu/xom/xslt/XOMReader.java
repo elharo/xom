@@ -120,6 +120,8 @@ class XOMReader implements XMLReader {
     
     public void setContentHandler(ContentHandler handler) {
         converter = new SAXConverter(handler);
+        // warn the SAXConverter that we're using this for XSLT
+        converter.setContentHandler(new XSLTHandler(null));
     }
 
     

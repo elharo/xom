@@ -45,7 +45,7 @@ import org.xml.sax.helpers.LocatorImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4 
+ * @version 1.1a3 
  */
 public class SAXConverter {
 
@@ -53,6 +53,7 @@ public class SAXConverter {
     private ContentHandler contentHandler;
     private LexicalHandler lexicalHandler;
     private LocatorImpl    locator;
+    private boolean        stripBaseAttributes = true;
 
     
     /**
@@ -89,7 +90,16 @@ public class SAXConverter {
               "ContentHandler must be non-null."
             );
         }
-        this.contentHandler = handler;
+        // unbelievably skanky hack to allow xml:base attributes
+        // to be passed to XSL transforms without mucking with the 
+        // public API. This would be so much easier if Java had friend 
+        // functions.
+        else if ("nu.xom.xslt.XSLTHandler".equals(handler.getClass().getName())) {
+            this.stripBaseAttributes = false;
+        }
+        else {
+            this.contentHandler = handler;
+        }
         
     }
 
@@ -178,6 +188,7 @@ public class SAXConverter {
         else if (node instanceof ProcessingInstruction) {
             ProcessingInstruction instruction 
               = (ProcessingInstruction) node;
+            
             contentHandler.processingInstruction(
               instruction.getTarget(), instruction.getValue());
         }
@@ -294,7 +305,8 @@ public class SAXConverter {
             // also pass in xml:base attributes or some relative base 
             // URIs could be applied twice.
             if ("base".equals(attribute.getLocalName())
-              && "http://www.w3.org/XML/1998/namespace".equals(attribute.getNamespaceURI())) {
+              && "http://www.w3.org/XML/1998/namespace".equals(attribute.getNamespaceURI())
+              && stripBaseAttributes) {
                 continue;   
             }
             saxAttributes.addAttribute(attribute.getNamespaceURI(),
