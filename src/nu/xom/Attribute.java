@@ -61,6 +61,8 @@ public class Attribute extends Node {
      * 
      * @throws IllegalNameException if the local name is not 
      *     a namespace well-formed non-colonized name
+     * @throws NamespaceException if the local name is  
+     *     <code>xmlns</code>
      * @throws IllegalDataException if the value contains characters  
      *     which are not legal in XML such as vertical tab or a null.
      *     Characters such as " and &amp; are legal, but will be  
@@ -82,6 +84,8 @@ public class Attribute extends Node {
      * 
      * @throws IllegalNameException if the local name is 
      *     not a namespace well-formed non-colonized name
+     * @throws NamespaceException if the local name is  
+     *     <code>xmlns</code>
      * @throws IllegalDataException if the value contains 
      *     characters which are not legal in
      *     XML such as vertical tab or a null. Note that 
@@ -105,6 +109,8 @@ public class Attribute extends Node {
      * 
      * @throws IllegalNameException  if the name is not a namespace 
      *     well-formed prefixed name
+     * @throws NamespaceException if the name has the form  
+     *     <code>xmlns:<i>prefix</i></code>
      * @throws IllegalDataException if the value contains characters 
      *     which are not legal in XML such as vertical tab or a null. 
      *     Note that characters such as " and &amp; are legal, but will
@@ -129,6 +135,8 @@ public class Attribute extends Node {
      * 
      * @throws IllegalNameException if the name is not a namespace 
      *     well-formed prefixed name
+     * @throws NamespaceException if the name has the form  
+     *     <code>xmlns:<i>prefix</i></code>
      * @throws IllegalDataException if the value contains 
      *     characters which are not legal in XML such as 
      *     vertical tab or a null. Note that characters such as 
@@ -274,13 +282,7 @@ public class Attribute extends Node {
      *     legal IRI
      */
     public final void setValue(String value) {
-        // Need to check values of xml:base
-        if ("xml".equals(prefix) && "base".equals(localName)) {
-            Verifier.checkXMLBaseValue(value);
-        }
-        else {
-            Verifier.checkCharacterData(value);   
-        }
+        Verifier.checkCharacterData(value);
         checkValue(value);
         this.value = value;
     }
@@ -324,11 +326,16 @@ public class Attribute extends Node {
      * 
      */
     public final void setLocalName(String localName) {
-        Verifier.checkAttributeLocalName(localName);
+        Verifier.checkNCName(localName);
+        if (localName.equals("xmlns")) {
+            throw new NamespaceException("The Attribute class is not"
+              + " used for namespace declaration attributes.");
+        }
         checkLocalName(localName);
         this.localName = localName;
-    }
-
+    }   
+    
+    
     /**
      * <p>
      * Returns the qualified name of this attribute,
@@ -379,6 +386,7 @@ public class Attribute extends Node {
      * </p>
      * 
      * @param localName the proposed local name of the attribute
+     * 
      * @throws XMLException if the subclass rejects the name.
      */
     protected void checkLocalName(String localName) {}
