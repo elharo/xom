@@ -104,6 +104,8 @@ Must profile this.
 
 Add a Fetch task that loads code from CVS
 
+Use GET task to grab servlet.jar and tagsoup.jar if necessary
+
 XInclude:  In order to minimize encoding errors for parse="text" processing,
 please change the definition of the encoding attribute to include a
 requirement that if the attribute has a legal value and the encoding is
@@ -117,13 +119,29 @@ such that the server has a chance to provide a proper representation.
 
 would it make since to start with a larger size for attributes and children when building and trimToSize when done?
 
+Clean up classpaths in build.xml.
+
+could I set up JDK15Parser to compile as individual tasks
+that are only compiled when dependencies are satisfied?
+For 1.5 use ant.java.version property and an equals condition
 
 Before 1.0:
 -----------
 
 Add TM marks to XOM on the web page
 
+Add tools page to web site (Ant, tagSoup, Clover, etc.)
+
 Update all versions to 1.0
+
+===============
+Done 1.0b11/RC5:
+===============
+
+Servlet samples restored, but build file only
+compiles them if servlet.jar is present
+
+LGPL, license, and readme files added to distro
 
 ===============
 Done 1.0b8/RC2:
