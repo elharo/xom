@@ -30,7 +30,7 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 /**
  * <p>
@@ -40,7 +40,7 @@ import nu.xom.ParseException;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 class MemoryTest {
@@ -91,7 +91,7 @@ class MemoryTest {
     }
 
     public static void main(String[] args) 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
