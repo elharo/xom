@@ -53,7 +53,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  * 
  */
 public class Builder {
@@ -61,6 +61,13 @@ public class Builder {
     private XMLReader   parser;
     private NodeFactory factory;
     private boolean     validate = false;
+
+    static {    
+        // turn off XML 1.1
+        System.setProperty(
+          "org.apache.xerces.xni.parser.XMLParserConfiguration", 
+          "nu.xom.xerces.XML1_0ParserConfiguration");
+    }
     
     /**
      * <p>
@@ -136,7 +143,7 @@ public class Builder {
      *     is installed in the local class path
      */
     public Builder(boolean validate, NodeFactory factory) {     
-         this(findParser(validate), validate, factory); 
+        this(findParser(validate), validate, factory); 
     }
 
     // These are stored in the order of preference.
@@ -156,6 +163,7 @@ public class Builder {
         // XMLReaderFactory.createXMLReader never returns
         // null. If it can't locate the parser, it throws
         // a SAXException.
+        
         XMLReader parser = null;
         for (int i = 0; i < parsers.length; i++) {
             try { 
