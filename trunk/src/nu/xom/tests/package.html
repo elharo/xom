@@ -41,7 +41,7 @@ these tests depend on.)
 
 <p>
 The <code>XOMTests</code> class runs all the tests, except those that
-take an exceptionally long time to run (MegaTest).
+take an exceptionally long time to run (<code>MegaTest</code>).
 Some of the tests, especially the builder tests,
 depend on the underlying parser, and are known to fail 
 if the parser is buggy. Xerces 2.6.1 is the only parser which is currently
@@ -56,7 +56,7 @@ Sun VMs.
 There are numerous public classes and methods in this package because JUnit requires
 all test cases to be public. However, the only <em>published</em> class is
 <code>XOMTestCase</code> which provides methods for asserting the equality
-of Documents, Elements, ProcessingInstructions, and other Node types.
+of documents, elements, processing instructions, and other node types.
 This may be useful for your own tests. The remainder of this package
 should be treated as unstable and your code should not depend on it.
 </p>
