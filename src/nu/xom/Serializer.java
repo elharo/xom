@@ -342,7 +342,10 @@ public class Serializer {
             escaper.decrementIndent();
             if (escaper.getIndent() > 0 && !escaper.isPreserveSpace()) {
                 Node firstChild = element.getChild(0);
-                if (! firstChild.isText() || "".equals(firstChild.getValue().trim()) ) {
+                /* if (! firstChild.isText() || "".equals(firstChild.getValue().trim()) ) {
+                     escaper.breakLine();
+                } */
+                if (hasNonTextChildren(element)) {
                      escaper.breakLine();
                 }
             }
@@ -362,6 +365,16 @@ public class Serializer {
     }
 
     
+    private boolean hasNonTextChildren(Element element) {
+        
+        for (int i = 0; i < element.getChildCount(); i++) {
+            if (! element.getChild(i).isText()) return true;  
+        }
+        return false;
+        
+    }
+
+
     /**
      * <p>
      *   Writes the end-tag for an element in the form
