@@ -29,11 +29,11 @@ import nu.xom.NamespaceConflictException;
 
 /**
  * <p>
- *   Tests that namespace well-formedness is maintained.
+ * Tests that namespace well-formedness is maintained.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0b8
  *
  */
 public class NamespacesTest extends XOMTestCase {
@@ -117,7 +117,8 @@ public class NamespacesTest extends XOMTestCase {
     public void testWrongPrefixNotAllowedWithXMLURI() {
         
         try {
-            noNamespaces.addNamespaceDeclaration("pre", "http://www.w3.org/XML/1998/namespace");
+            noNamespaces.addNamespaceDeclaration("pre", 
+              "http://www.w3.org/XML/1998/namespace");
             fail("Allowed XML namespace to be associated with non-xml prefix");    
         }
         catch (NamespaceConflictException success) {
@@ -392,6 +393,30 @@ public class NamespacesTest extends XOMTestCase {
         e.addNamespaceDeclaration("", "http://www.example.net");
         e.removeNamespaceDeclaration(null);
         assertEquals("", e.getNamespaceURI(""));   
+    } 
+
+    
+    public void testBindXMLNSPrefix() {
+        
+        Element e = new Element("pre:test", "http://www.example.com/");
+        try {
+            e.addNamespaceDeclaration("xmlns", "http://www.example.net");
+            fail("Bound xmlns prefix to http://www.example.net");
+        }
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
+        }     
+        
+    } 
+
+    
+    public void testBindXMLNSPrefixToEmptyString() {
+        
+        Element e = new Element("pre:test", "http://www.example.com/");
+        assertEquals("", e.getNamespaceURI("xmlns"));
+        e.addNamespaceDeclaration("xmlns", "");
+        assertEquals("", e.getNamespaceURI("xmlns"));             
+        
     } 
 
     
