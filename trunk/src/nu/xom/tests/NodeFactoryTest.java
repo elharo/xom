@@ -316,7 +316,7 @@ public class NodeFactoryTest extends XOMTestCase {
     // This should cause an exception.
     static class NullDocumentFactory extends NodeFactory {
 
-        public Document makeDocument(Element root) {
+        public Document makeDocument() {
             return null;   
         }
 
