@@ -258,16 +258,18 @@ public class Builder {
             }
             // See http://nagoya.apache.org/bugzilla/show_bug.cgi?id=23768
             // if you care to know why this line breaks unit tests on 
-            // versions of Xerces prior to 2.7
-            try {
-                parser.setFeature(
-                 "http://apache.org/xml/features/standard-uri-conformant", 
-                 true);
-            }
-            catch (SAXException ex) {
-                // Possibly an earlier version of Xerces, or a 
-                // or a non-Xerces parser;  no big deal.
-                // We can live without this.   
+            // versions of Xerces prior to 2.6.1
+            if (!IBMVM14) {
+                try {
+                    parser.setFeature(
+                     "http://apache.org/xml/features/standard-uri-conformant", 
+                     true);
+                }
+                catch (SAXException ex) {
+                    // Possibly an earlier version of Xerces, or a 
+                    // or a non-Xerces parser;  no big deal.
+                    // We can live without this.   
+                } 
             }
         }
         
