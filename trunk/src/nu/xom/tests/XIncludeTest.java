@@ -57,7 +57,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -2068,5 +2068,25 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
+    public void testBadHTTPHeaderExceptionConstructor() {
+     
+        String message = "test";
+        XIncludeException ex = new BadHTTPHeaderException(
+           message, "http://www.example.com/");
+        assertEquals(message, ex.getMessage());
+        assertEquals("http://www.example.com/", ex.getURI());
+        
+    }
  
+    
+    public void testBadHrefAttributerExceptionConstructor() {
+     
+        String message = "test";
+        Exception ex = new BadHrefAttributeException(message);
+        assertEquals(message, ex.getMessage());
+        
+    }
+ 
+    
 }
