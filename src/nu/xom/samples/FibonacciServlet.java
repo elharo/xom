@@ -44,23 +44,25 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public class FibonacciServlet extends HttpServlet {
 
+    
     public void doGet(
       HttpServletRequest request, HttpServletResponse response)
       throws IOException {
     
         //read the query string
-        int numberOfGenerations = 10;
+        int numberOfGenerations;
         String generations = request.getParameter("generations");
         try {
             numberOfGenerations = Integer.parseInt(generations);
         }
         catch (Exception ex) { // NumberFormat or NullPointerException
             // use default value of 10 
+            numberOfGenerations = 10;
         }
      
         response.setContentType("text/xml; charset=UTF-8");               
