@@ -453,6 +453,34 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
+    public void testFallbackIsNotChildOfIncludeElement() 
+      throws ParsingException, IOException, XIncludeException {
+        File input = new File("data/xinclude/input/nakedfallback.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("allowed fallback that was not child of an include element");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());          
+        }
+    }
+
+    
+    public void testFallbackCantContainFallbackElement() 
+      throws ParsingException, IOException, XIncludeException {
+        File input = new File("data/xinclude/input/fallbackcontainsfallback.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("allowed fallback inside another fallback element");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());          
+        }
+    }
+
+    
     // In this test the fallback is activated.
     public void testMultipleFallbacks() 
       throws ParsingException, IOException, XIncludeException {
