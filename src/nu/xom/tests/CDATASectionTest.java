@@ -29,6 +29,11 @@ import java.io.IOException;
 import nu.xom.*;
 
 /**
+ * <p>
+ *   Test that CDATA sections are read and where possible
+ *   preserved upon serialization.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d22
  *
@@ -111,8 +116,24 @@ public class CDATASectionTest extends XOMTestCase {
         serializer.write(doc);
         byte[] output = out.toByteArray();
         String result = new String(output, "8859_1");
-        assertEquals(result.indexOf("<![CDATA[<&>]]>"), -1);
+        assertEquals(-1, result.indexOf("<![CDATA[<&>]]>"));
         assertTrue(result.indexOf("&#x298;") > 1);
+    }
+
+    public void testSerializeCDATASectionWithCDATASectionEndDelimiter() 
+      throws ValidityException, ParsingException, IOException {  
+          
+        String data = "<test><![CDATA[original data]]></test>";
+        doc = builder.build(data, "http://www.example.com");
+        Text content = (Text) (doc.getRootElement().getChild(0));
+        content.setValue("]]>");
+        ByteArrayOutputStream out = new ByteArrayOutputStream(); 
+        Serializer serializer = new Serializer(out);  
+        serializer.write(doc);
+        byte[] output = out.toByteArray();
+        String result = new String(output, "UTF8");
+        assertEquals(-1, result.indexOf("<![CDATA[]]>]]>"));
+        assertTrue(result.indexOf("]]&gt;") > 1);
     }
 
 
