@@ -580,7 +580,7 @@ class URIUtil {
     }
 
     
-    private static String percentEscape(char c) {
+    static String percentEscape(char c) {
         
         StringBuffer result = new StringBuffer(3);
         String s = String.valueOf(c);
@@ -588,7 +588,7 @@ class URIUtil {
             byte[] data = s.getBytes("UTF8");
             for (int i = 0; i < data.length; i++) {
                 result.append('%');
-                String hex = Integer.toHexString(data[i]);
+                String hex = Integer.toHexString(data[i]).toUpperCase();
                 result.append(hex.substring(hex.length()-2));
             }
             return result.toString();
