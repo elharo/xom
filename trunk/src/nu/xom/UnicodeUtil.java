@@ -131,12 +131,12 @@ final class UnicodeUtil {
     }
     
 
-    boolean isStarter(int character) {
+    static boolean isStarter(int character) {
         return getCombiningClass(character) == 0;
     }
 
     
-    int getCombiningClass(int c) {
+    static int getCombiningClass(int c) {
         // ???? optimize
         
         if (c >= 0x0000 && c <= 0x001F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
@@ -1443,22 +1443,6 @@ final class UnicodeUtil {
     }
     
     
-    boolean isBlocked(String s, int index) {
-      
-        int start = unicodeCharAt(s, 0);
-        // start must be a starter
-        int c = unicodeCharAt(s, index);
-        int combiningClass = getCombiningClass(c);
-        for (int i = 1; i < index; i++) {
-            int b = unicodeCharAt(s, i);
-            if (isStarter(b)) return true;
-            if (combiningClass == getCombiningClass(b)) return true;
-        }
-        
-        return false;
-    }
-
-
     static int unicodeCharAt(String s, int character) {
         
         int length = s.length();
@@ -1490,14 +1474,28 @@ final class UnicodeUtil {
     }
 
     
-    static int combineSurrogatePair(char highSurr, char lowSurrogate) {
+    static int combineSurrogatePair(char highSurrogate, char lowSurrogate) {
 
-        int high =  highSurr & 0x7FF;
-        int low = lowSurrogate - 0xDC00;
+        int high = highSurrogate & 0x7FF;
+        int low  = lowSurrogate - 0xDC00;
         int highShifted = high << 10;
         int combined = highShifted | low; 
-        int uchar = combined + 0x10000;
-        return uchar;
+        int codePoint = combined + 0x10000;
+        return codePoint;
+        
+    }
+
+    private static String makeSurrogatePair(int codePoint) {
+
+        StringBuffer s = new StringBuffer(2);
+        if (codePoint <= 0xFFFF) s.append((char) codePoint);
+        else {
+            char high = (char) (0xD800 - (0x10000 >> 10) + (codePoint >> 10));
+            char low = (char) (0xDC00 + (codePoint & 0x3FF));
+            s.append(high);
+            s.append(low);
+        }
+        return s.toString();
         
     }
 
@@ -1533,48 +1531,34 @@ final class UnicodeUtil {
         } 
         
         if (needsNormalizing) {
-            String decomposed = decompose(s); 
-            s = recompose(decomposed);
+            UnicodeString ustring = new UnicodeString(s);
+            UnicodeString decomposed = ustring.decompose(); 
+            UnicodeString recomposed = decomposed.compose();
+            String result = recomposed.toString();
+            return result;
         }
         
         return s;
         
     }
-    
-     
-    private static String recompose(String s) {
-        if (compositions == null) loadCompositions();
-        return com.ibm.icu.text.Normalizer.compose(s, false);
-    }
 
     
-    // return -1 if the character is not composite; otherwise
-    // return the composed character
+    // return -1 if the character cannot be combined with the starter; 
+    // otherwise return the composed character
     private static int composeCharacter(int starter, int c) {
         
-        return -1;
+        StringBuffer decomposed = new StringBuffer(4);
+        // FIXME encode in UTF-8
+        decomposed.append((char) starter);
+        decomposed.append((char) c);
+        String recomposed = (String) compositions.get(decomposed.toString());
+        if (recomposed == null) return -1;
+        else if (recomposed.length() == 1) return recomposed.charAt(0);
+        else return combineSurrogatePair(recomposed.charAt(0), recomposed.charAt(1));
+
     }
 
-    private static String decompose(String s) {
-        
-        int length = s.length();
-        StringBuffer result = new StringBuffer(length);
-        for (int i = 0; i < length; i++) {
-            char c = s.charAt(i);
-            if (isHighSurrogate(c)) {
-                i++;
-                char low = s.charAt(i);
-                result.append(decompose(UnicodeUtil.combineSurrogatePair(c, low)));
-            }
-            else {
-                result.append(decompose(c));
-            }
-        }
-        return s;
-        
-    }
-
-
+    
     // FIXME must recurse this
     private static String decompose(int character) {
         
@@ -8499,7 +8483,7 @@ final class UnicodeUtil {
         }
         else { // not decomposable
             if (character <= 0xFFFF) {
-                sb.append(character);
+                sb.append((char) character);
              }
              else {
                  sb.append(getHighSurrogate(character));
@@ -8541,6 +8525,151 @@ final class UnicodeUtil {
         return result.toString();
         
     }   
+    
+    
+    private static class UnicodeString {
+        
+        int[] data;
+        int length = 0; 
+        
+        UnicodeString(String s) {
+            
+            int length = s.length();
+            data = new int[length];
+            int index = 0;
+            for (int i = 0; i < length; i++) {
+                char c = s.charAt(i);
+                int codePoint = c;
+                if (isHighSurrogate(c)) {
+                    i++;
+                    codePoint = combineSurrogatePair(c, s.charAt(i));
+                }
+                data[index] = codePoint;
+                index++;
+            }
+            this.length = index;
+            
+        }
+        
+        
+        UnicodeString(int length) {
+            this.length = 0;
+            data = new int[length];
+        }
+        
+        
+        UnicodeString decompose() {
+            
+            UnicodeString result = new UnicodeString(length);
+            for (int i = 0; i < length; i++) {
+                int c = data[i];
+                String d = UnicodeUtil.decompose(c);
+                result.append(d); // FIXME appends as string not char or int
+            }    
+            return result;
+            
+        }
+        
+        
+        UnicodeString compose() {
+        
+            if (compositions == null) loadCompositions();
+            
+            UnicodeString composed = new UnicodeString(length);
+    
+            int index = 0;
+            int lastStarter = -1;
+            int lastStarterIndex = -1;
+            
+            for (int i = 0; i < length; i++) {
+                int c = data[i];
+                // assuming starters are never combined with preceding characters; true????
+                if (isStarter(c) ) {
+                    lastStarter = c;
+                    lastStarterIndex = i;
+                    composed.append(c);
+                }
+                else if (lastStarter == -1 || isBlocked(lastStarterIndex, i)) {
+                    composed.append(c);
+                }
+                else  {
+                    int composedChar = composeCharacter(lastStarter, c);
+                    if (composedChar == -1) {
+                        composed.append(c);
+                    }
+                    else {
+                        lastStarter = composedChar;
+                        // XXX dangerous side effect
+                        data[lastStarterIndex] = composedChar;
+                        composed.data[lastStarterIndex] = composedChar; 
+                    }
+                }
+                
+            }
+            
+            return composed;
+        
+        }
+
+    
+        void append(String s) {
+            
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if (isHighSurrogate(c)) {
+                    append(UnicodeUtil.combineSurrogatePair(c, s.charAt(i+1)));
+                    i++;
+                }
+                else {
+                    append(c);
+                }
+            }
+            
+        }
+        
+        
+        void append(int c) {
+            
+            if (length < data.length-1) {
+                data[length] = c;
+                length++;
+            }
+            else {
+                int[] array = new int[data.length+10];
+                System.arraycopy(data, 0, array, 0, length);
+                data = array;
+                append(c);
+            }
+            
+        }
+        
+        public String toString() {
+         
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < length; i++) {
+                int c = data[i];
+                if (c <= 0xFFFF) sb.append((char) c);
+                else {
+                    sb.append(makeSurrogatePair(c));
+                }
+            }
+            return sb.toString();
+            
+        }
+        
+        private boolean isBlocked(int lastStarterIndex, int index) {
+          
+            int combiningClass = getCombiningClass(data[index]);
+            for (int i = lastStarterIndex+1; i < index; i++) {
+                if (combiningClass == getCombiningClass(data[i])) {
+                    return true;
+                }
+            }
+            return false;
+            
+        }
+        
+    }
     
     
 }

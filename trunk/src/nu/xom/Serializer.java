@@ -38,15 +38,15 @@ import java.util.Locale;
  *  either the maximum line length or the indent size to a positive  
  *  value, then the serializer will not respect input white space. It 
  *  may trim leading and trailing space, condense runs of white 
- *  space to a single space, convert carriage  returns and line 
- *  feeds to spaces, add extra space where none was present before, 
+ *  space to a single space, convert carriage returns and linefeeds
+ *  to spaces, add extra space where none was present before, 
  *  and otherwise muck with the document's white space. 
  *  The defaults, however, preserve all significant white space
  *  including ignorable white space and boundary white space.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.1a3
  * 
  */
 public class Serializer {
