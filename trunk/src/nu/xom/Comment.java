@@ -34,7 +34,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d14
+ * @version 1.0d21
  * 
  */
 public class Comment extends LeafNode {
@@ -139,7 +139,7 @@ public class Comment extends LeafNode {
      *     that is not part of a document
      * 
      */
-    public final Node copy()  {
+    public Node copy()  {
         return new Comment(data);
     }
 

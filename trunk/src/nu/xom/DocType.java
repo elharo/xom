@@ -70,7 +70,7 @@ package nu.xom;
  * 
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d17
+ * @version 1.0d21
  * 
  */
 public class DocType extends LeafNode {
@@ -416,7 +416,7 @@ public class DocType extends LeafNode {
      * 
      * @see nu.xom.Node#copy()
      */
-    public final Node copy() {      
+    public Node copy() {      
         return new DocType(this);
     }
 
