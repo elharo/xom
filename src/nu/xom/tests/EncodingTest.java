@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -35,6 +35,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
+import com.ibm.icu.text.UTF16;
 
 /**
  * <p>
@@ -66,7 +67,6 @@ public class EncodingTest extends XOMTestCase {
         }
         
         // skip surrogates between 0xD800 and 0xDFFF
-        
         for (int i = 0xE000; i <= 0xFFFD; i++) {
             Element data = new Element("d");
             data.appendChild(String.valueOf(((char) i)));
@@ -77,50 +77,20 @@ public class EncodingTest extends XOMTestCase {
         // Test Plane-1 characters. These are tricky because Java 
         // strings  encode them as surrogate pairs. We'll test with
         // the characters from 1D100 to 1D1FF (the musical symbols)
-        /* ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(bout);
-        try {
-            for (int i = 0; i < 256; i++) {
-                // algorithm from RFC 2781
-                int u = 0x1D100 + i;
-                int uprime = u - 0x10000;
-                int W1 = 0xD800;
-                int W2 = 0xDC00;
-                W2 = W2 | (uprime & 0x7FF );
-                W1 = W1 | (uprime & 0xFF800);
-                out.writeShort(W1);
-                out.writeShort(W2);
-            }
-            out.flush();
-            byte[] music = bout.toByteArray();
-            InputStream in = new ByteArrayInputStream(music);
-            Reader r = new InputStreamReader(in, "UTF-16");
-            for (int i = 0; i < 256; i++) {
-                int c1 = r.read();
-                int c2 = r.read();
-                Element data = new Element("d");
-                data.appendChild( ((char) c1) + "" + ((char) c2) );
-                data.addAttribute(new Attribute("c", String.valueOf(c1)));
-                root.appendChild(data);
-            }
-            
-        }
-        catch (IOException ex) {
-            // shouldn't happen on a byte array 
-            ex.printStackTrace();
-            throw new RuntimeException("Ooops in setup"); 
-        } */
         for (int i = 0; i < 256; i++) {
-            // algorithm from RFC 2781
             int u = 0x1D100 + i;
-            int uprime = u - 0x10000;
+            // algorithm from RFC 2781
+            /* int uprime = u - 0x10000;
             int W1 = 0xD800;
             int W2 = 0xDC00;
             W2 = W2 | (uprime & 0x7FF );
-            W1 = W1 | (uprime & 0xFF800);
+            W1 = W1 | (uprime & 0xFF800); */
             Element data = new Element("d");
-            data.appendChild( String.valueOf(((char) W1)) + ((char) W2) );
-            data.addAttribute(new Attribute("c", String.valueOf(W1)));
+            // data.appendChild( String.valueOf(((char) W1)) + ((char) W2) );
+            String s = UTF16.valueOf(u);
+            data.appendChild( s );
+            data.addAttribute(new Attribute("c", String.valueOf(u)));
+            // data.addAttribute(new Attribute("c", String.valueOf(W1)));
             root.appendChild(data);
         }        
         
@@ -130,7 +100,7 @@ public class EncodingTest extends XOMTestCase {
       doc = null;
       System.gc();   
     } 
-    
+
     public void testUSASCII() throws ParsingException, IOException {
         checkAll("US-ASCII");
     }
@@ -191,47 +161,10 @@ public class EncodingTest extends XOMTestCase {
         checkAll("ISO-10646-UCS-2");
     }
     
-    // Test that with an encoding XOM does not specifically support
-    // but the VM does, everything still works.
-    public void testUnsupportedEncoding() 
-      throws ParsingException, IOException {
-        checkAll("Cp1252");
-    } 
+    public void testEBCDIC() throws ParsingException, IOException {
+        checkAll("Cp037");
+    }
     
-
-    // Sun's Java 1.4.2 and earlier has some nasty bugs in input for 
-    // EBCDIC. Specifically it maps NEL to linefeed. Therefore checkAll
-    // fails here. We can test everything except NEL.
-    public void testEBCDIC037() 
-      throws ParsingException, IOException {
-        Builder builder = new Builder();
-        byte[] data = null;
-        ByteArrayOutputStream out = new ByteArrayOutputStream(100000);    
-        // Write data into a byte array using encoding
-        Serializer serializer = new Serializer(out, "Cp037");
-        serializer.write(doc);
-        serializer.flush();
-        out.flush();
-        out.close();
-        data = out.toByteArray();
-        InputStream in = new ByteArrayInputStream(data);
-        Document reparsed = builder.build(in);
-        serializer = null;
-        
-        Element reparsedRoot = reparsed.getRootElement();
-        int childCount = reparsedRoot.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            Element test = (Element) reparsedRoot.getChild(i); 
-            String value = test.getValue();
-            int expected 
-             = Integer.parseInt(test.getAttributeValue("c"));
-            if (expected == 133 /* NEL */) continue;
-            int actual = value.charAt(0);
-            assertEquals(expected, actual);
-        } 
-        
-        in = null;    } 
-
     // These encodings are only available after Java 1.3
     private static boolean java14OrLater = false;
     
@@ -249,41 +182,48 @@ public class EncodingTest extends XOMTestCase {
     public void testLatin9() throws ParsingException, IOException {
         if (java14OrLater) checkAll("ISO-8859-15");
     } 
-        
-    private static boolean extendedCharsetsAvailable = false;
-    
-    static {
-        // hack to avoid using 1.4 classes
-        try {
-            "data".getBytes("ISO-8859-10");
-            extendedCharsetsAvailable = true;
-        }
-        catch (UnsupportedEncodingException ex) {
-            extendedCharsetsAvailable = false;   
-        }
-        
-    }
-       
-    // These encodings are not installed in all distributions by default 
-    // ???? could add my own writers to handle these? and UCS-4
-    // and Latin-10. They don't seem to be supported in the alpha of 1.5
-    // either.
+
+    // These encodings are not installed in all distributions by 
+    // default. They are only found currently in IBM's Java 1.4.1 VM. 
+    // They don't seem to be supported in the 1.5 alpha
+    // either.    
+    public void testUCS4() throws ParsingException, IOException {
+        if (charsetAvailable("ISO-10646-UCS-4")) checkAll("ISO-10646-UCS-4");
+    } 
+
     public void testLatin6() throws ParsingException, IOException {
-        if (extendedCharsetsAvailable) checkAll("ISO-8859-10");
+        if (charsetAvailable("ISO-8859-10")) checkAll("ISO-8859-10");
     } 
 
     public void testLatin8() throws ParsingException, IOException {
-        if (extendedCharsetsAvailable) checkAll("ISO-8859-14");
+        if (charsetAvailable("ISO-8859-14")) checkAll("ISO-8859-14");
     }
 
-    // Java 1.5 alpha and earlier do not support these encodings
-    /* public void testUCS4() throws ParsingException, IOException {
-        checkAll("ISO-10646-UCS-4");
-    } 
-
     public void testLatin10() throws ParsingException, IOException {
-        checkAll("ISO-8859-16");
-    } */
+        if (charsetAvailable("ISO-8859-16")) checkAll("ISO-8859-16");
+    }     
+        
+    
+    // Test that with an encoding XOM does not specifically support
+    // but the VM does, everything still works.
+    public void testUnsupportedEncoding() 
+      throws ParsingException, IOException {
+        checkAll("Cp1252");
+    } 
+    
+
+    private static boolean charsetAvailable(String name) {
+        // hack to avoid using 1.4 classes
+        try {
+            "d".getBytes(name);
+            return true;
+        }
+        catch (UnsupportedEncodingException ex) {
+            return false;   
+        }        
+        
+    }
+       
     
     private void checkAll(String encoding) 
       throws ParsingException, IOException {
@@ -309,8 +249,19 @@ public class EncodingTest extends XOMTestCase {
             String value = test.getValue();
             int expected 
              = Integer.parseInt(test.getAttributeValue("c"));
+            // workaround for EBCDIC bugs
+            if (expected == 133 && encoding.equalsIgnoreCase("Cp037")) {
+                continue;
+            }
             int actual = value.charAt(0);
-            assertEquals(expected, actual);
+            if (value.length() > 1) {
+                actual = UTF16.charAt(value, 0);
+            }
+            assertEquals("Expected 0x" 
+              + Integer.toHexString(expected).toUpperCase()
+              + " but was 0x" 
+              + Integer.toHexString(actual).toUpperCase(),
+              expected, actual);
         } 
         
         in = null;
