@@ -94,6 +94,7 @@ public class VerifierTest extends XOMTestCase {
         
     }
     
+    
     // From IRI draft:
     /* ucschar = %xA0-D7FF / %xF900-FDCF / %xFDF0-FFEF /
            / %x10000-1FFFD / %x20000-2FFFD / %x30000-3FFFD
@@ -101,22 +102,28 @@ public class VerifierTest extends XOMTestCase {
            / %x70000-7FFFD / %x80000-8FFFD / %x90000-9FFFD
            / %xA0000-AFFFD / %xB0000-BFFFD / %xC0000-CFFFD
            / %xD0000-DFFFD / %xE1000-EFFFD  */
-    
+  
+    // From RFC 2396 reallowed into IRIs
+    //   "{" | "}" | "|" | "\" | "^" | "[" | "]" | "`"
     public void testLegalIRIs() {
         
-        int[] legalChars = {0xA0, 0xD7FF, 0xF900, 0xFDCF, 0xFDF0, 
-            0xFFEF, 0x10000, 0x1FFFD, 0x20000, 0x2FFFD, 0x30000, 
-            0x3FFFD, 0x40000, 0x4FFFD, 0x50000, 0x5FFFD, 0x60000, 
-            0x6FFFD, 0x70000, 0x7FFFD, 0x80000, 0x8FFFD, 0x90000, 
-            0x9FFFD, 0xA0000, 0xAFFFD, 0xB0000, 0xBFFFD, 0xC0000, 
-            0xCFFFD, 0xD0000, 0xDFFFD, 0xE1000, 0xEFFFD, 0xCFFFD};
+        int[] legalChars = {
+          '{', '}', '<', '>', '"', '|', '\\', '^', '`', '\u007F', 
+          0xA0, 0xD7FF, 0xF900, 0xFDCF, 0xFDF0, 
+          0xFFEF, 0x10000, 0x1FFFD, 0x20000, 0x2FFFD, 0x30000, 
+          0x3FFFD, 0x40000, 0x4FFFD, 0x50000, 0x5FFFD, 0x60000, 
+          0x6FFFD, 0x70000, 0x7FFFD, 0x80000, 0x8FFFD, 0x90000, 
+          0x9FFFD, 0xA0000, 0xAFFFD, 0xB0000, 0xBFFFD, 0xC0000, 
+          0xCFFFD, 0xD0000, 0xDFFFD, 0xE1000, 0xEFFFD, 0xCFFFD};
         
         Element element = new Element("test");
         for (int i = 0; i < legalChars.length; i++) {
             String utf16 = convertToUTF16(legalChars[i]);
             String url = "http://www.example.com/" + utf16 + ".xml";
-            element.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", url));
-            assertEquals(url, element.getAttributeValue("base", "http://www.w3.org/XML/1998/namespace"));
+            element.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace", url));
+            assertEquals(url, element.getAttributeValue("base", 
+              "http://www.w3.org/XML/1998/namespace"));
         }    
         
     }
@@ -134,7 +141,8 @@ public class VerifierTest extends XOMTestCase {
             String utf16 = convertToUTF16(illegalChars[i]);
             String url = "http://www.example.com/" + utf16 + ".xml";
             try {
-                element.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", url));
+                element.addAttribute(new Attribute("xml:base",
+                  "http://www.w3.org/XML/1998/namespace", url));
                 fail("Allowed IRI containing 0x" + 
                   Integer.toHexString(illegalChars[i]).toUpperCase());
             }
