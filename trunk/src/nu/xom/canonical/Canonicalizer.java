@@ -905,15 +905,15 @@ public class Canonicalizer {
      * children, namespaces, attributes will not be output. 
      * </p>
      * 
-     * @param nodes the nodes to serialize
+     * @param documentSubset the nodes to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *     encounters an I/O error
      * @throws CanonicalizationException if the nodes come from more
      *     than one document; or if a detached node is in the list
      */
-    public final void write(Nodes nodes) throws IOException { 
-        this.write(nodes, null);
+    public final void write(Nodes documentSubset) throws IOException { 
+        this.write(documentSubset, null);
     }   
 
     
@@ -933,7 +933,7 @@ public class Canonicalizer {
      * children, namespaces, attributes will not be output. 
      * </p>
      * 
-     * @param nodes the nodes to serialize
+     * @param documentSubset the nodes to serialize
      * @param inclusiveNamespacePrefixes a whitespace separated list 
      *     of namespace prefixes that will always be included in the 
      *     output, even in exclusive canonicalization
@@ -943,7 +943,7 @@ public class Canonicalizer {
      * @throws CanonicalizationException if the nodes come from more
      *     than one document; or if a detached node is in the list
      */
-    public final void write(Nodes nodes, String inclusiveNamespacePrefixes) 
+    public final void write(Nodes documentSubset, String inclusiveNamespacePrefixes) 
       throws IOException {  
         
         
@@ -956,13 +956,13 @@ public class Canonicalizer {
             }
         }
         
-        if (nodes.size() > 0) {
-            Document doc = nodes.get(0).getDocument();
+        if (documentSubset.size() > 0) {
+            Document doc = documentSubset.get(0).getDocument();
             if (doc == null) {
                 throw new CanonicalizationException(
                   "Canonicalization is not defined for detached nodes");
             }
-            Nodes result = sort(nodes);
+            Nodes result = sort(documentSubset);
             serializer.nodes = result;
             serializer.write(doc);        
             serializer.flush();
