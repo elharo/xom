@@ -276,8 +276,8 @@ public class ProcessingInstructionTest extends XOMTestCase {
             new ProcessingInstruction("target", "data\rdata");
             fail("Allowed carriage return in processing instruction data");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
     }
 
@@ -293,30 +293,59 @@ public class ProcessingInstructionTest extends XOMTestCase {
             new ProcessingInstruction("target", "   initial spaces"); 
             fail("allowed processing instruction data with leading space");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }
         try {
             new ProcessingInstruction("target", "\tinitial tab"); 
             fail("allowed processing instruction data with leading space");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }
         try {
             new ProcessingInstruction("target", "\ninitial linefeed"); 
             fail("allowed processing instruction data with leading space");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }
         try {
             new ProcessingInstruction("target", "\r initial carriage return"); 
             fail("allowed processing instruction data with leading space");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }
+        
+    }
+    
+    public void testNoXMLTargets() {
+
+        try {
+            new ProcessingInstruction("xml", "data"); 
+            fail("allowed processing instruction with target xml");
+        }
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());   
+        }
+
+        try {
+            new ProcessingInstruction("XML", "data"); 
+            fail("allowed processing instruction with target XML");
+        }
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());   
+        }
+
+        try {
+            new ProcessingInstruction("Xml", "data"); 
+            fail("allowed processing instruction with target Xml");
+        }
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());   
+        }
+
         
     }
 
