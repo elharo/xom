@@ -1441,5 +1441,32 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testAcceptJIS() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/acceptjis.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/acceptjis.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testAcceptEUC() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/acceptascii.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/acceptascii.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    } 
+    
  
 }
