@@ -164,7 +164,7 @@ public class Element extends ParentNode {
             this.attributes = element.attributes.copy();
         } 
         
-        this.actualBaseURI = element.actualBaseURI;
+        this.actualBaseURI = element.findActualBaseURI();
         
         // non-recursive algorithm for filling in children
         // doesn't yet work
@@ -1382,65 +1382,6 @@ public class Element extends ParentNode {
      * @see nu.xom.Node#toXML()
      * 
      */
-/*    public final String toXML() {
-    
-        StringBuffer result = new StringBuffer();
-        
-        result.append("<");
-        result.append(getQualifiedName());
-
-        ParentNode parentNode = getParent();
-        for (int i = 0; i < getNamespaceDeclarationCount(); i++) {
-            String additionalPrefix = getNamespacePrefix(i);
-            String uri = getNamespaceURI(additionalPrefix);
-            if (parentNode != null && parentNode.isElement()) {
-               Element parentElement = (Element) parentNode;   
-               if (uri.equals(
-                 parentElement.getNamespaceURI(additionalPrefix))) {
-                      continue;
-               } 
-            }
-            else if (uri.length() == 0) {
-                continue; // no need to say xmlns=""   
-            }
-            
-            result.append(" xmlns"); 
-            if (additionalPrefix.length() > 0) {
-                result.append(':'); 
-                result.append(additionalPrefix); 
-            }
-            result.append("=\""); 
-            result.append(uri);   
-            result.append('"');
-        }
-        
-        // attributes
-        if (attributes != null) {
-            for (int i = 0; i < attributes.size(); i++) {
-                Attribute attribute = attributes.get(i);
-                result.append(' ');
-                result.append(attribute.toXML());   
-            }       
-        }
-        // children
-        if (this.getChildCount() > 0) {
-            result.append('>');
-            for (int i = 0; i < getChildCount(); i++) {
-                result.append(getChild(i).toXML()); 
-            }
-            
-            result.append("</");
-            result.append(getQualifiedName());
-            result.append(">");
-        }
-        else {
-            result.append(" />");               
-        }
-        
-        return result.toString();
-        
-    }*/
-    
     // XXX might optimize by caching index, as we're iterating through in order
     public final String toXML() {
         

@@ -386,5 +386,26 @@ public abstract class ParentNode extends Node {
         actualBaseURI = uri;     
     }
 
+
+    protected String findActualBaseURI() {
+        
+        // XXX remove recursion
+        String actualBase = getActualBaseURI();
+        ParentNode parent = getParent();
+    
+        if (parent == null) {
+            if (actualBase != null) return actualBase;
+            return null;
+        }
+               
+        if (actualBase == null || "".equals(actualBase)) return parent.findActualBaseURI();      
+               
+        // The parent is loaded from a different entity.
+        // Therefore just return the actual base.
+        if (actualBase != null) return actualBase;
+        return null;
+        
+    }
+
     
 }
