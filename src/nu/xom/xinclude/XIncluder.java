@@ -358,10 +358,16 @@ public class XIncluder {
                 checkHeader(acceptLanguage);
                 
                 if (parse.equals("xml")) {
+                    
+                    String parentLanguage = "";
+                    if (parent instanceof Element) {
+                        parentLanguage = getXMLLangValue((Element) parent);
+                    }
+                    
                     Nodes replacements;
                     if (url != null) { 
                         replacements = downloadXMLDocument(url, 
-                          xpointer, builder, baseURLs, accept, acceptLanguage);
+                          xpointer, builder, baseURLs, accept, acceptLanguage, parentLanguage);
                         // Add base URIs. Base URIs added by XInclusion require
                         // the element to maintain the same base URI as it had  
                         // in the original document. Since its base URI in the 
@@ -383,7 +389,8 @@ public class XIncluder {
                                   "http://www.w3.org/XML/1998/namespace", 
                                   noFragment 
                                 );
-                                baseless.addAttribute(baseAttribute);   
+                                baseless.addAttribute(baseAttribute);
+                                
                             }
                         }  
                     }
@@ -407,10 +414,12 @@ public class XIncluder {
                                 // XXX can I delete this or not? copyElement.setBaseURI(original.getBaseURI());
                                 // the copy actually sets the base URI to the original's actual base URI,
                                 // not always the same as getBaseURI
+                                
                             } 
                             replacements.append(copy);        
                         }  
-                        replacements = resolveXPointerSelection(replacements, builder, baseURLs, parentDoc);  
+                        replacements = resolveXPointerSelection(
+                          replacements, builder, baseURLs, parentDoc);  
                                                  
                     }
                       
@@ -510,6 +519,22 @@ public class XIncluder {
             for (int i = 0; i < children.size(); i++) {
                 resolve(children.get(i), builder, baseURLs);   
             } 
+        }
+        
+    }
+    
+    
+    private static String getXMLLangValue(Element element) {
+        
+        String value = "";
+        while (true) {
+           Attribute lang = element.getAttribute(
+             "lang", "http://www.w3.org/XML/1998/namespace");
+           if (lang != null) return lang.getValue();
+           ParentNode parent = element.getParent();
+           if (parent == null) return "";
+           else if (parent instanceof Document) return "";
+           else element = (Element) parent;
         }
         
     }
@@ -625,9 +650,14 @@ public class XIncluder {
                 else if (href != null) url = new URL(href);                
                 if (parse.equals("xml")) {
                     Nodes replacements;
-                    if (url != null) { 
+                    if (url != null) {
+                        ParentNode parent = element.getParent();
+                        String parentLanguage = "";
+                        if (parent != null && parent instanceof Element) {
+                            parentLanguage = getXMLLangValue((Element) parent);
+                        }
                         replacements = downloadXMLDocument(url, 
-                          xpointer, builder, baseURLs, accept, acceptLanguage);
+                          xpointer, builder, baseURLs, accept, acceptLanguage, parentLanguage);
                         // Add base URIs. Base URIs added by XInclusion require
                         // the element to maintain the same base URI as it had  
                         // in the original document. Since its base URI in the 
@@ -664,17 +694,20 @@ public class XIncluder {
                             Node original = originals.get(i);
                             if (original instanceof Element) {
                                 if (contains((Element) original, element)) {
-                                    throw new InclusionLoopException("Element tried to include itself"); 
+                                    throw new InclusionLoopException(
+                                      "Element tried to include itself"); 
                                 }  
                             }
                             replacements.append(original.copy());        
                         }  
-                        replacements = resolveXPointerSelection(replacements, builder, baseURLs, parentDoc);                           
+                        replacements = resolveXPointerSelection(
+                          replacements, builder, baseURLs, parentDoc);                           
                     }
                     return replacements; 
                 }  // end parse="xml"
                 else if (parse.equals("text")) {                   
-                    return downloadTextDocument(url, encoding, builder, accept, acceptLanguage);
+                    return downloadTextDocument(
+                      url, encoding, builder, accept, acceptLanguage);
                 }
                 else {
                    throw new BadParseAttributeException(
@@ -802,9 +835,9 @@ public class XIncluder {
 
     private static Nodes downloadXMLDocument(
       URL source, String xpointer, Builder builder, Stack baseURLs,
-      String accept, String language) 
+      String accept, String acceptLanguage, String parentLanguage) 
       throws IOException, ParsingException, XIncludeException, 
-             XPointerSyntaxException, XPointerResourceException {
+        XPointerSyntaxException, XPointerResourceException {
 
         String base = source.toExternalForm();
         if (xpointer == null && baseURLs.indexOf(base) != -1) {
@@ -814,13 +847,30 @@ public class XIncluder {
         }      
         
         URLConnection uc = source.openConnection();
-        setHeaders(uc, accept, language);
+        setHeaders(uc, accept, acceptLanguage);
         Document doc = builder.build(
           uc.getInputStream(), source.toExternalForm()); 
           
         Nodes included;
         if (xpointer != null && xpointer.length() != 0) {
             included = XPointer.query(doc, xpointer); 
+            // fill in lang attributes here
+            for (int i = 0; i < included.size(); i++) {
+                Node node = included.get(i);
+                if (node instanceof Element) {
+                    Element top = (Element) node;
+                    Attribute lang = top.getAttribute("lang", 
+                      "http://www.w3.org/XML/1998/namespace");
+                    if (lang == null) {
+                        String childLanguage = getXMLLangValue(top);
+                        if (!parentLanguage.equals(childLanguage)) {
+                            top.addAttribute(new Attribute("xml:lang", 
+                              "http://www.w3.org/XML/1998/namespace", 
+                              childLanguage));
+                        }
+                    }
+                }
+            }
             resolveInPlace(included, builder, baseURLs); 
         }
         else {
