@@ -28,17 +28,17 @@ import nu.xom.tests.XOMTestCase;
 
 /**
  * <p>
- *   This class provides unit tests for for the XMLException
+ *   This class provides unit tests for the <code>XMLException</code>
  *   class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class XMLExceptionTest extends XOMTestCase {
     
-    private Exception ex;
+    private XMLException ex;
     private Exception cause;
     
     protected void setUp() {
@@ -73,7 +73,7 @@ public class XMLExceptionTest extends XOMTestCase {
 
     public void testNullInitCause() {
         
-        Exception ex = new XMLException(null, null);
+        ex = new XMLException(null, null);
         assertNull(ex.getCause());
         
         try {
