@@ -532,6 +532,52 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals("name", name.getLocalName());         
         assertEquals("value", value.getQualifiedName());         
     }
+
+    public void testChangeElementsToAttributes() 
+      throws ParsingException, IOException {
+        String data = "<a><b>data1</b><c>text</c></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes finishMakingElement(Element element) {
+                Nodes result = new Nodes();
+                if (element.getParent() instanceof Document) {
+                    result.append(element);
+                }
+                else {
+                    result.append(new Attribute(element.getLocalName(), element.getValue()));
+                }
+                return result;
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        assertEquals(0, root.getChildCount());
+        assertEquals(2, root.getAttributeCount());
+        assertEquals("data1", root.getAttribute("b").getValue());         
+        assertEquals("text", root.getAttribute("c").getValue());                  
+    }
+    
+    public void testChangeRootElementsToAttribute() 
+      throws ParsingException, IOException {
+        String data = "<a><b>data1</b><c>text</c></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes finishMakingElement(Element element) {
+                Nodes result = new Nodes();
+                result.append(new Attribute(element.getLocalName(), element.getValue()));
+                return result;
+            }
+            
+        });
+        try {
+            builder.build(data, "http://www.example.org/");
+            fail("replaced root element with attribute");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
     
     public void testCantBypassMultipleParentChecks() 
       throws ParsingException, IOException {
