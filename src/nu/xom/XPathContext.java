@@ -65,9 +65,6 @@ public final class XPathContext {
      * prefix to the URI 
      * <code>http://www.w3.org/XML/1998/namespace</code>.
      * </p>
-     * 
-     * @param prefix the prefix to bind
-     * @param uri the namespace URI the prefix is bound to
      */
     public XPathContext() {
         addNamespace("xml", Namespace.XML_NAMESPACE);
