@@ -464,9 +464,9 @@ public class Element extends ParentNode {
         
         // Is there already an attribute with this local name
         // and namespace? If so, remove it.
-        Attribute oldAttribute = get(attribute.getLocalName(), 
+        Attribute oldAttribute = getAttribute(attribute.getLocalName(), 
           attribute.getNamespaceURI());
-        // remove directly from arraylist????
+        // XXX remove directly from arraylist????
         if (oldAttribute != null) remove(oldAttribute);
         
         attributes.add(attribute);
@@ -475,6 +475,7 @@ public class Element extends ParentNode {
     }
     
     
+    // XXX add initial size
     void fastAddAttribute(Attribute attribute) {
         if (attributes == null) attributes = new ArrayList(1);
         attributes.add(attribute);
@@ -552,9 +553,19 @@ public class Element extends ParentNode {
      */
     public final Attribute getAttribute(String localName,
       String namespaceURI) {
+        
         if (attributes == null) return null;
-        // XXX inline
-        return get(localName, namespaceURI);
+        int size = attributes.size();
+        for (int i = 0; i < size; i++) {
+            Attribute a = (Attribute) attributes.get(i);
+            if (a.getLocalName().equals(localName) 
+             && a.getNamespaceURI().equals(namespaceURI)) {
+                return a;
+            }   
+        }
+        
+        return null;
+        
     }
 
     
@@ -650,8 +661,7 @@ public class Element extends ParentNode {
     public final String getAttributeValue(String localName, 
                                           String namespaceURI) {
         
-        if (attributes == null) return null;                                      
-        Attribute attribute = get(localName, namespaceURI);
+        Attribute attribute = getAttribute(localName, namespaceURI);
         if (attribute == null) return null;
         else return attribute.getValue();
         
@@ -1702,37 +1712,5 @@ public class Element extends ParentNode {
         
     }
 
-    
-    /**
-     * <p>
-     * Retrieves the attribute with the specified local name 
-     * and namespace. The prefix is not considered when matching 
-     * attributes. 
-     * </p>
-     * 
-     * @param localName  the local name of the attribute to return
-     * @param namespaceURI the namespace URI of the attribute to 
-     *     return, or the empty string if this attribute is not in  
-     *     a namespace. (All unprefixed attributes are never in 
-     *     a namespace.)
-     * 
-     * @return the attribute with the specified name and URI, or null
-     *     if this <code>Attributes</code> object does not contain 
-     *     such an attribute
-     */
-    private Attribute get(String localName, String namespaceURI) {
-        
-        int size = attributes.size();
-        for (int i = 0; i < size; i++) {
-            Attribute a = (Attribute) attributes.get(i);
-            if (a.getLocalName().equals(localName) 
-             && a.getNamespaceURI().equals(namespaceURI)) {
-                return a;
-            }   
-        }
-        
-        return null;
-        
-    }
     
 }
