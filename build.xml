@@ -63,7 +63,7 @@ to http://www.xom.nu/
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
-    <property name="xslt.jar"       value="${lib.dir}/saxon-6.5.2.jar"/>
+    <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"    value="${lib.dir}/servlet.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
@@ -282,6 +282,7 @@ XOM Build file
        <batchtest fork="yes" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
+           <exclude name="**/pantry/*.java" />
            <exclude name="**/MegaTest.java" />
            <exclude name="**/benchmarks/*.java" />
            <exclude name="**/EBCDICTest.java" />
