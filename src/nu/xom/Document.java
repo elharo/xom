@@ -31,7 +31,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  * 
  */
 public class Document extends ParentNode {
@@ -186,9 +186,6 @@ public class Document extends ParentNode {
         if (oldDocType == null) insertChild(doctype, 0);
         else {
             int position = indexOf(oldDocType);
-            // how to make this atommic now????
-           /*heckInsertChild(doctype, position);
-            checkRemoveChild(oldDocType, position); */
             children.remove(position);
             children.add(position, doctype);
             oldDocType.setParent(null);
@@ -228,8 +225,6 @@ public class Document extends ParentNode {
      * @param root the new root element
      * 
      * @throws MultipleParentException if root has a parent
-     * @throws XMLException if root is not legal for this  
-     *      subclass of <code>Document</code>
      * @throws NullPointerException if root is null
      */
     public void setRootElement(Element root) {
@@ -245,9 +240,6 @@ public class Document extends ParentNode {
         }
         
         int index = indexOf(oldRoot);
-        // atomicity ????
-       /* checkRemoveChild(oldRoot, index);
-        checkInsertChild(root, index); */
         
         oldRoot.setParent(null);
         children.remove(index);
@@ -361,15 +353,14 @@ public class Document extends ParentNode {
      * @throws NoSuchChildException if <code>oldChild</code> 
      *     is not a child of this node
      * @throws NullPointerException if either argument is null
-     * @throws IllegalAddException if this node cannot have children 
-     *     of the type of <code>newChild</code>
-     * @throws XMLException if the subclass rejects the removal of
-     *     oldChild or the insertion of newChild
+     * @throws IllegalAddException if <code>newChild</code> is an
+     *     attribute
+     * @throws WellformednessException if <code>newChild</code> 
+     *     <code>oldChild</code> is an element and 
+     *     <code>newChild</code> is not
      */
     public void replaceChild(Node oldChild, Node newChild) {
           
-        // do I need to call insertionAllowed(newChild)????
-        // otherwise MultipleParent problem
         if (oldChild == getRootElement() 
           && newChild != null && newChild.isElement()) {
             setRootElement((Element) newChild);
