@@ -1311,6 +1311,21 @@ public class ElementTest extends XOMTestCase {
     }
 
     
+    public void testDeepCopy() {
+
+        Element top = new Element("e");
+        Element parent = top;
+        for (int i = 0; i < 100; i++) {
+            Element child = new Element("e" + i);
+            parent.appendChild(child);
+            parent = child;
+        }
+        Element copy = (Element) top.copy();
+        assertEquals(top, copy);
+        
+    }
+
+    
     public void testRemoveChildren() {
         
         String name = "red:sakjdhjhd";
