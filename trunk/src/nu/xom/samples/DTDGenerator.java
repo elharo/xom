@@ -64,7 +64,8 @@ public class DTDGenerator {
         private List names = new ArrayList();
         private String currentElement;
         
-        public Element startMakingElement(String name, String namespace) {
+        public Element startMakingElement(
+          String name, String namespace) {
             if (!names.contains(name)) {
                 System.out.println("<!ELEMENT " + name + " ANY>");   
                 names.add(name);
@@ -73,13 +74,16 @@ public class DTDGenerator {
             return super.startMakingElement(name, namespace);
         }
         
-        // It's permissible to redeclare attributes, though ideally
-        // you'd prefer not to. ????
         // will this handle enumerated types????
         public Attribute makeAttribute(String name, String URI, 
           String value, Attribute.Type type) {
-            System.out.println("<!ATTLIST " + currentElement + " "
-              + name + " " + type.toXML() + " #IMPLIED>");
+              
+            String comboName = currentElement + '#' + name;
+            if (!names.contains(comboName)) {
+                names.add(comboName);
+                System.out.println("<!ATTLIST " + currentElement + " "
+                  + name + " " + type.toXML() + " #IMPLIED>");
+            }
             return super.makeAttribute(name, URI, value, type);
         } 
     } 
