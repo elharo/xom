@@ -296,7 +296,7 @@ public class BaseURITest extends XOMTestCase {
     
     
     public void testBaseWithUnusualParts() {
-        String base = "HTTP://user@host:WWW.EXAMPLE.COM:65130/TEST-2+final.XML?name=value&name2=value2";
+        String base = "HTTP://user@WWW.EXAMPLE.COM:65130/TEST-2+final.XML?name=value&name2=value2";
         Element root = new Element("test");
         root.setBaseURI(base);
         assertEquals(base, root.getBaseURI());
