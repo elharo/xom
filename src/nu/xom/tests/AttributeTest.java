@@ -36,7 +36,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -100,7 +100,7 @@ public class AttributeTest extends XOMTestCase {
         assertEquals("test=\"value contains a &quot;\"", a1.toXML());
 
         Attribute a2 = new Attribute("test", "value contains a '");
-        assertEquals("test=\"value contains a &apos;\"", a2.toXML());
+        assertEquals("test=\"value contains a '\"", a2.toXML());
 
     }
 
@@ -311,7 +311,8 @@ public class AttributeTest extends XOMTestCase {
     }
 
     
-    public void testEscapingWithToXML() {          
+    public void testEscapingWithToXML() {
+        
         a1.setValue("<");     
         assertEquals("test=\"&lt;\"", a1.toXML());  
         a1.setValue(">");        
@@ -319,13 +320,15 @@ public class AttributeTest extends XOMTestCase {
         a1.setValue("\"");        
         assertEquals("test=\"&quot;\"", a1.toXML());  
         a1.setValue("\'");        
-        assertEquals("test=\"&apos;\"", a1.toXML());  
+        assertEquals("test=\"'\"", a1.toXML());  
         a1.setValue("&");        
         assertEquals("test=\"&amp;\"", a1.toXML());  
+        
     }
 
     
-    public void testWhiteSpaceEscapingWithToXML() {          
+    public void testWhiteSpaceEscapingWithToXML() {  
+        
         a1.setValue(" ");     
         assertEquals("test=\" \"", a1.toXML());  
         a1.setValue("\n");        
@@ -333,7 +336,8 @@ public class AttributeTest extends XOMTestCase {
         a1.setValue("\r");        
         assertEquals("test=\"&#x0D;\"", a1.toXML());  
         a1.setValue("\t");        
-        assertEquals("test=\"&#x09;\"", a1.toXML());  
+        assertEquals("test=\"&#x09;\"", a1.toXML());
+        
     }
 
 
