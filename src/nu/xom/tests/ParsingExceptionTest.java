@@ -143,4 +143,17 @@ public class ParsingExceptionTest extends XOMTestCase {
     }
 
     
+    public void testGetURI() { 
+        
+        ParsingException ex = new ParsingException("testing", "http://www.example.org/", 32, 24);
+        assertEquals("http://www.example.org/", ex.getURI());
+        
+        Exception cause = new Exception("test");
+        ex = new ParsingException("testing", "http://www.example.org/", 32, 24, cause);
+        assertEquals("http://www.example.org/", ex.getURI());
+        assertEquals(cause, ex.getCause());
+        
+    }
+
+    
 }
