@@ -25,17 +25,17 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * <code>XIncludeException</code> is the generic superclass
+ * <code>XPointerException</code> is the generic superclass
  * for all checked exceptions that may be thrown as a result
- * of a violation of XPointer grammar.
+ * of a violation of the XPointer grammar.
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d15
+ * @version 1.0d21
  */
 class XPointerSyntaxException extends Exception {
 
-    private Throwable rootCause = null;
+    private Throwable cause = null;
 
     /**
      * <p>
@@ -59,26 +59,11 @@ class XPointerSyntaxException extends Exception {
     }
 
     /**
-     * When an <code>StringIndexOutOfBoundsexception</code>,  
-     * or other generic exception 
-     * is thrown while processing an XML document
-     * for XIncludes, it is customarily replaced
-     * by some form of <code>XIncludeException</code>.  
-     * This method allows you to store the original exception.
-     *
-     * @param nestedException the underlying exception which 
-     *     caused the <code>XPointerSyntaxException</code> to be thrown
-     */
-    public void setRootCause(Throwable nestedException) {
-        this.rootCause = nestedException;     
-    }
-
-    /**
      * <p>
      * When an <code>IOException</code>,  
      * <code>MalformedURLException</code>, or other generic  
      * exception is thrown while processing an XML document
-     * for XIncludes, it is customarily replaced
+     * for XPointer, it is customarily replaced
      * by some form of <code>XPointerSyntaxException</code>.  
      * This method allows you to retrieve the original exception.
      * It returns null if no such exception caused this 
@@ -86,10 +71,44 @@ class XPointerSyntaxException extends Exception {
      *</p>
      * 
      * @return the underlying exception which 
-           caused the XIncludeException to be thrown
+           caused the XPointerSyntaxException to be thrown
      */
-    public Throwable getRootCause() {
-        return this.rootCause;     
+    public Throwable getCause() {
+        return this.cause;  
+    }
+
+    // null is insufficient for detemrin unset cause.
+    // The cause may be set to null whicn may not then be reset.
+    private boolean causeSet = false;
+
+    /**
+     * <p>
+     * When an <code>IOException</code>,  
+     * <code>MalformedURLException</code>, or other generic exception 
+     * is thrown while processing an XML document
+     * for XPointers, it is customarily replaced
+     * by some form of <code>XPointerSyntaxException</code>.  
+     * This method allows you to store the original exception.
+     * </p>
+     *
+     * @param cause the root cause of this exception
+     * 
+     * @return this <code>XMLException</code>
+     * 
+     * @throws IllegalArgumentException if the cause is this exception
+     *   (An exception cannot be its own cause.)
+     * @throws IllegalStateException if this method is called twice
+     */
+    public Throwable initCause(Throwable cause) {
+        if (causeSet) {
+            throw new IllegalStateException("Can't overwrite cause");
+        } 
+        else if (cause == this) {
+            throw new IllegalArgumentException("Self-causation not permitted"); 
+        }
+        else this.cause = cause;
+        causeSet = true;
+        return this;
     }
 
 }

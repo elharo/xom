@@ -391,7 +391,7 @@ public class XIncluder {
                     ex.printStackTrace();   
                 } */
                 XIncludeException ex2 = new XIncludeException(ex.getMessage());
-                ex2.setRootCause(ex);
+                ex2.initCause(ex);
                 throw ex2;
            }
            else if (fallbacks.size() > 1) {
