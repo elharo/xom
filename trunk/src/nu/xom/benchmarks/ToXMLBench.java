@@ -1,4 +1,4 @@
-/* Copyright 2004 Elliotte Rusty Harold
+/* Copyright 2004, 2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -35,7 +35,7 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d5
  *
  */
 class ToXMLBench {
@@ -84,7 +84,7 @@ class ToXMLBench {
         Thread.sleep(5000);
         
         long pre = System.currentTimeMillis(); 
-        String xml = doc.toXML();
+        doc.toXML();
         long post = System.currentTimeMillis();
         System.out.println((post - pre)/1000.0
           + "s to get XML for entire Document");
