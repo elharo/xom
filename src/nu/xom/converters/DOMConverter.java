@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -56,7 +56,7 @@ import org.w3c.dom.NodeList;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public class DOMConverter {
@@ -279,11 +279,9 @@ public class DOMConverter {
      * <p>
      * Translates a DOM <code>org.w3c.dom.DocumentType</code> 
      * object into an equivalent <code>nu.xom.DocType</code> object.
-     * The original DOM object is not changed. The internal DTD subset
-     * is not converted, but the root element name, system identifier,
-     * and public identifier are.  Some DOM <code>DocumentType</code> 
-     * objects cannot  be serialized as well-formed XML, and  
-     * thus cannot be converted to XOM.
+     * The original DOM object is not changed. Some DOM 
+     * <code>DocumentType</code> objects cannot  be serialized as   
+     * well-formed XML, and thus cannot be converted to XOM.
      * </p>
      * 
      * @param doctype the DOM <code>DocumentType</code> to convert
@@ -299,7 +297,8 @@ public class DOMConverter {
                 doctype.getName(),
                 doctype.getPublicId(),
                 doctype.getSystemId());
-
+        result.setInternalDTDSubset(doctype.getInternalSubset());
+        
         return result;
 
     }
