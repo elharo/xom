@@ -390,13 +390,14 @@ public class ElementTest extends XOMTestCase {
         }
     }
 
+    
     // a very weird case but legal
     public void testXMLPrefixOnElement() {
         Element e = new Element("xml:test", "http://www.w3.org/XML/1998/namespace");
         assertEquals(0, e.getNamespaceDeclarationCount());
         assertEquals("<xml:test />", e.toXML());
         try {
-            String prefix = e.getNamespacePrefix(0);
+            e.getNamespacePrefix(0);
             fail("Got prefix beyond bounds");
         }
         catch (IndexOutOfBoundsException success) {
@@ -404,8 +405,7 @@ public class ElementTest extends XOMTestCase {
         }        
     }
 
-    
-    
+        
     public void testNamespaceMappings() {
         
         String name = "red:sakjdhjhd";
