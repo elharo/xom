@@ -47,7 +47,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b5
  *
  */
 public class Element extends ParentNode {
@@ -1104,7 +1104,7 @@ public class Element extends ParentNode {
      * of each attribute, and each namespace added  
      * by <code>addNamespaceDeclaration</code>.
      * However, prefixes used multiple times are only counted 
-     * once, and the <code>xml</code> prefix used for 
+     * once; and the <code>xml</code> prefix used for 
      * <code>xml:base</code>, <code>xml:lang</code>, and 
      * <code>xml:space</code> is not counted even if one of these 
      * attributes is present on the element.
