@@ -36,7 +36,7 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 
@@ -49,7 +49,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class StreamingExampleExtractor extends NodeFactory {
@@ -173,7 +173,7 @@ public class StreamingExampleExtractor extends NodeFactory {
             // Read the document
             builder.build(args[0]);    
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
             System.out.println(ex);
         }
         catch (IOException ex) { 

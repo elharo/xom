@@ -31,7 +31,7 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
 /**
@@ -41,7 +41,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 public class RoundTripTest extends XOMTestCase {
@@ -57,7 +57,7 @@ public class RoundTripTest extends XOMTestCase {
     }
 
     public void testTabInAttributeValue() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Element test = new Element("test");
         test.addAttribute(new Attribute("tab", "\t"));
         Document doc = new Document(test);
@@ -74,7 +74,7 @@ public class RoundTripTest extends XOMTestCase {
     }
 
     public void testCarriageReturnInAttributeValue() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Element test = new Element("test");
         test.addAttribute(new Attribute("cr", "\r"));
         Document doc = new Document(test);
@@ -91,7 +91,7 @@ public class RoundTripTest extends XOMTestCase {
     }
 
     public void testCarriageReturnInText() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Element test = new Element("test");
         test.appendChild("\r");
         Document doc = new Document(test);
@@ -108,7 +108,7 @@ public class RoundTripTest extends XOMTestCase {
     }
 
     public void testLineFeedInAttributeValue() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Element test = new Element("test");
         test.addAttribute(new Attribute("lf", "\n"));
         Document doc = new Document(test);
@@ -125,7 +125,7 @@ public class RoundTripTest extends XOMTestCase {
     }
 
     public void testSpacesInAttributeValue() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         Element test = new Element("test");
         test.addAttribute(new Attribute("spaces", "    "));
         Document doc = new Document(test);

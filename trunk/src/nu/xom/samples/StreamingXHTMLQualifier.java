@@ -29,7 +29,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
 /**
@@ -40,6 +40,9 @@ import nu.xom.Serializer;
  *   namespace <code>http://www.w3.org/1999/xhtml</code> to all
  *   elements.
  * </p>
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.0d22
  * 
  */
 
@@ -71,7 +74,7 @@ public class StreamingXHTMLQualifier extends NodeFactory {
           Serializer out = new Serializer(System.out);
           out.write(doc);
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

@@ -31,7 +31,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.ParentNode;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 /**
  * <p>
@@ -40,7 +40,7 @@ import nu.xom.ParseException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class RDDLStripper {
@@ -64,7 +64,7 @@ public class RDDLStripper {
 
             System.out.println(doc.toXML());
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

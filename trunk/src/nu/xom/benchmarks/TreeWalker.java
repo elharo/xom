@@ -34,7 +34,7 @@ import java.net.URL;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Node;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
 
@@ -49,7 +49,7 @@ import nu.xom.ValidityException;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 class TreeWalker {
@@ -71,6 +71,9 @@ class TreeWalker {
             
             System.gc(); System.gc(); System.gc();
             
+            
+            // Can I separate out the I/O by storing document
+            // in byte array first????
             long prebuild = System.currentTimeMillis();         
             // Read the entire document into memory
             Document document = build(args[0], parser);
@@ -110,7 +113,7 @@ class TreeWalker {
         catch (IOException e) { 
           System.out.println(e); 
         }
-        catch (ParseException e) { 
+        catch (ParsingException e) { 
           System.out.println(e); 
         }
   
@@ -145,7 +148,7 @@ class TreeWalker {
     }
     
     private static Document build(String url, Builder parser)
-        throws ParseException, ValidityException, IOException {
+        throws ParsingException, ValidityException, IOException {
             
         InputStream in = new BufferedInputStream((new URL(url)).openStream());
         Document document = parser.build(in, url); 
@@ -153,7 +156,7 @@ class TreeWalker {
     } 
 
     private static void warmup(String url, Builder parser, TreeWalker iterator, int numPasses) 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         for (int i = 0; i < numPasses; i++) {
             Document doc = parser.build(url);
             walkTree(iterator, doc);

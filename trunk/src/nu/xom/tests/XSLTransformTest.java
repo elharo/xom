@@ -22,14 +22,25 @@
 // to http://www.xom.nu/
 package nu.xom.tests;
 
-import nu.xom.xslt.*;
-import nu.xom.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 
-import java.io.*;
+import nu.xom.Builder;
+import nu.xom.Comment;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.NodeList;
+import nu.xom.ParsingException;
+import nu.xom.ProcessingInstruction;
+import nu.xom.Text;
+import nu.xom.xslt.XSLException;
+import nu.xom.xslt.XSLTransform;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -76,7 +87,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testDocumentConstructor() 
-      throws ParseException, IOException {
+      throws ParsingException, IOException {
         
         try {
             Builder builder = new Builder();
@@ -92,7 +103,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testFileConstructor() 
-      throws ParseException, IOException {
+      throws ParsingException, IOException {
         
         try {
             File f = new File("data/schematest.xml");
@@ -106,7 +117,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testURLConstructor() 
-      throws ParseException, IOException {
+      throws ParsingException, IOException {
         
         try {
             File f = new File("data/schematest.xml");
@@ -130,7 +141,7 @@ public class XSLTransformTest extends XOMTestCase {
   </xsl:template> */
   
     public void testCreateDocumentFragment() 
-      throws ParseException, IOException, XSLException {
+      throws ParsingException, IOException, XSLException {
         
         Element element1 = new Element("element1");
         element1.appendChild("some data and ");
@@ -158,7 +169,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testTransform() 
-      throws ParseException, IOException, XSLException {
+      throws ParsingException, IOException, XSLException {
         
         File doc = new File("data/xslt/input/8-1.xml");
         File stylesheet = new File("data/xslt/input/8-8.xsl");
@@ -179,7 +190,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testTransform2() 
-      throws ParseException, IOException, XSLException {
+      throws ParsingException, IOException, XSLException {
         
         File doc = new File("data/xslt/input/8-1.xml");
         File stylesheet = new File("data/xslt/input/8-12.xsl");
@@ -200,7 +211,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testTransformWithNamespaces() 
-      throws ParseException, IOException, XSLException {
+      throws ParsingException, IOException, XSLException {
         
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/8-15.xsl");
@@ -222,7 +233,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testSingleTextNode() 
-      throws ParseException, IOException, XSLException {
+      throws ParsingException, IOException, XSLException {
         
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/singlestring.xsl");
@@ -239,7 +250,7 @@ public class XSLTransformTest extends XOMTestCase {
     // Make sure that method="text" doesn't affect what we get
     // since this is not a serialized transform
     public void testTextMethod() 
-      throws ParseException, IOException, XSLException {
+      throws ParsingException, IOException, XSLException {
         
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/textmethod.xsl");

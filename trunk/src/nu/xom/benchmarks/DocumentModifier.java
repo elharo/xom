@@ -31,7 +31,7 @@ import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ParentNode;
 import nu.xom.Text;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 
 /**
@@ -56,7 +56,7 @@ import nu.xom.ParseException;
  * </blockquote>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 class DocumentModifier {
@@ -69,9 +69,14 @@ class DocumentModifier {
           );
           return; 
         }
+        
+        
+        
          
         DocumentModifier iterator = new DocumentModifier();
         Builder parser = new Builder();
+        // Can I separate out the I/O by storing document
+        // in byte array first????
         try {    
             warmup(parser, iterator, args[0], 5);
             long prebuild = System.currentTimeMillis();
@@ -95,7 +100,7 @@ class DocumentModifier {
         catch (IOException ex) { 
             System.out.println(ex); 
         }
-        catch (ParseException ex) { 
+        catch (ParsingException ex) { 
             System.out.println(ex); 
         }
   
@@ -103,7 +108,7 @@ class DocumentModifier {
     
     private static void warmup(Builder parser, DocumentModifier iterator, 
       String url, int numPasses)
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         for (int i = 0; i < numPasses; i++) {
             Node document = parser.build(url); 
             iterator.followNode(document);        }

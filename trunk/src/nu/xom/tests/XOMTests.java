@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 public class XOMTests extends TestCase {
@@ -46,6 +46,7 @@ public class XOMTests extends TestCase {
 
     public static Test suite() {
         TestSuite result = new TestSuite();
+        result.addTest(new TestSuite(SubclassTest.class));
         result.addTest(new TestSuite(NodeFactoryTest.class));
         result.addTest(new TestSuite(ParentNodeTest.class));
         result.addTest(new TestSuite(LeafNodeTest.class));
@@ -56,7 +57,7 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(ProcessingInstructionTest.class));
         result.addTest(new TestSuite(DocumentTest.class));
         result.addTest(new TestSuite(DocTypeTest.class));
-        result.addTest(new TestSuite(DOMConverterTester.class));
+        result.addTest(new TestSuite(DOMConverterTest.class));
         result.addTest(new TestSuite(BuilderTest.class));
         result.addTest(new TestSuite(AttributesTest.class));
         result.addTest(new TestSuite(NamespacesTest.class));
@@ -72,7 +73,7 @@ public class XOMTests extends TestCase {
         // Too slow to run routinely
         // result.addTest(new TestSuite(MegaTest.class));
         result.addTest(new TestSuite(XMLExceptionTest.class));
-        result.addTest(new TestSuite(ParseExceptionTest.class));
+        result.addTest(new TestSuite(ParsingExceptionTest.class));
         result.addTest(new TestSuite(XSLExceptionTest.class));
         return result;
     }

@@ -29,7 +29,7 @@ import nu.xom.Builder;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 /**
  * <p>
@@ -38,7 +38,7 @@ import nu.xom.ParseException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class XHTMLValidator {
@@ -61,7 +61,7 @@ public class XHTMLValidator {
       try {
         document = builder.build(source); 
       }
-      catch (ParseException e) {  
+      catch (ParsingException e) {  
         System.out.println(source 
          + " is invalid XML, and thus not XHTML."); 
         return; 

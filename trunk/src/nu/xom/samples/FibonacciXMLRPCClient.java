@@ -34,7 +34,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
 
@@ -47,7 +47,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class FibonacciXMLRPCClient {
@@ -130,7 +130,7 @@ public class FibonacciXMLRPCClient {
         }
           
     }
-    catch (ParseException ex) {
+    catch (ParsingException ex) {
       System.err.println("Server sent malformed output"); 
       System.err.println(ex); 
     }

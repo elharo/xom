@@ -29,7 +29,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 
 /**
@@ -41,6 +41,7 @@ import nu.xom.ParseException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
+ * @version 1.0d22
  *
  */
 public class ExampleLister {
@@ -120,7 +121,7 @@ public class ExampleLister {
              list(document.getRootElement());
     
         }
-        catch (ParseException e) {
+        catch (ParsingException e) {
             System.out.println(e);
         }
         catch (IOException e) { 

@@ -33,7 +33,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.IllegalAddException;
 import nu.xom.NoSuchChildException;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.WellformednessException;
@@ -41,11 +41,11 @@ import nu.xom.WellformednessException;
 
 /**
  * <p>
- *  Various basic tests for thye <code>Document</code> class.
+ *  Various basic tests for the <code>Document</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 public class DocumentTest extends XOMTestCase {
@@ -387,7 +387,7 @@ public class DocumentTest extends XOMTestCase {
         
     }
 
-    public void testToXML() throws ParseException, IOException {
+    public void testToXML() throws ParsingException, IOException {
         Builder builder = new Builder();
         File f = new File("data/test.xml");   
         Document input = builder.build(f);

@@ -28,7 +28,7 @@ import java.io.IOException;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Node;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 
 
@@ -39,7 +39,7 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class ProcessingInstructionLister {
@@ -72,7 +72,7 @@ public class ProcessingInstructionLister {
           Document doc = parser.build(args[0]);
           list(doc);
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

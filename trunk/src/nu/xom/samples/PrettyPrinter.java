@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import nu.xom.Builder;
 import nu.xom.Document;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
 
@@ -39,7 +39,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class PrettyPrinter {
@@ -61,7 +61,7 @@ public class PrettyPrinter {
           serializer.write(doc);
           serializer.flush();
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

@@ -42,7 +42,7 @@ import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.NodeList;
 import nu.xom.ParentNode;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Text;
 
 /**
@@ -101,7 +101,7 @@ public class XIncluder {
      *     and no fallback was available
      * @throws MissingHrefException if an <code>xinclude:include</code> 
      *      element does not have an href attribute.
-     * @throws ParseException if an included XML document was malformed
+     * @throws ParsingException if an included XML document was malformed
      * @throws UnsupportedEncodingException if an included document 
      *     used an encoding this parser does not support, and no
      *     fallback was available
@@ -112,7 +112,7 @@ public class XIncluder {
      */
      public static Document resolve(Document in)  
       throws BadParseAttributeException, CircularIncludeException, 
-             IOException, MissingHrefException, ParseException, 
+             IOException, MissingHrefException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         Document copy = new Document(in);
         resolveInPlace(copy);
@@ -145,7 +145,7 @@ public class XIncluder {
      *     and no fallback was available
      * @throws MissingHrefException if an <code>xinclude:include</code>
      *     element does not have an <code>href</code> attribute.
-     * @throws ParseException if an included XML document was malformed
+     * @throws ParsingException if an included XML document was malformed
      * @throws UnsupportedEncodingException if an included document 
      *     used an encoding this parser does not support, and no 
      *     fallback was available
@@ -156,7 +156,7 @@ public class XIncluder {
      */
     public static void resolveInPlace(Document in) 
       throws BadParseAttributeException, CircularIncludeException,  
-             IOException, MissingHrefException, ParseException, 
+             IOException, MissingHrefException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         resolveInPlace(in, new Stack());
     }
@@ -188,7 +188,7 @@ public class XIncluder {
      *     and no fallback was available
      * @throws MissingHrefException if an <code>xinclude:include</code>
      *     element does not have an <code>href</code> attribute.
-     * @throws ParseException if an included XML document was malformed
+     * @throws ParsingException if an included XML document was malformed
      * @throws UnsupportedEncodingException if an included document 
      *     used an encoding this parser does not support, and no 
      *     fallback was available
@@ -198,7 +198,7 @@ public class XIncluder {
      *     result in a malformed document
      */
     public static void resolveInPlace(NodeList in) 
-      throws IOException, ParseException, XIncludeException { 
+      throws IOException, ParsingException, XIncludeException { 
         for (int i = 0; i < in.size(); i++) {
             Node child = in.get(i);
             if (child instanceof Element) {       
@@ -212,7 +212,7 @@ public class XIncluder {
 
 
     private static void resolveInPlace(Document in, Stack baseURLs) 
-      throws IOException, ParseException, XIncludeException {
+      throws IOException, ParsingException, XIncludeException {
         
         String base = in.getBaseURI();
         if (baseURLs.indexOf(base) != -1) {
@@ -224,7 +224,7 @@ public class XIncluder {
     }
 
     private static void resolve(Element element, Stack baseURLs)
-      throws IOException, ParseException, XIncludeException {
+      throws IOException, ParsingException, XIncludeException {
         
         if (isIncludeElement(element)) {
             String parse = element.getAttributeValue("parse");
@@ -398,7 +398,7 @@ public class XIncluder {
 
     private static void processFallback(
       Element element, Stack baseURLs, ParentNode parent, Exception ex)
-        throws XIncludeException, IOException, ParseException {
+        throws XIncludeException, IOException, ParsingException {
            Elements fallbacks 
               = element.getChildElements("fallback", XINCLUDE_NS);
            if (fallbacks.size() == 0) {
@@ -431,7 +431,7 @@ public class XIncluder {
 
     private static NodeList downloadXMLDocument(
       URL source, Stack baseURLs) 
-      throws IOException, ParseException, XIncludeException, 
+      throws IOException, ParsingException, XIncludeException, 
              XPointerSyntaxException, XPointerResourceException {
     
         Builder builder = new Builder();

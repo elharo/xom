@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import nu.xom.Builder;
 import nu.xom.Document;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 
 /**
@@ -37,7 +37,7 @@ import nu.xom.ParseException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class XMLPrinter {
@@ -54,7 +54,7 @@ public class XMLPrinter {
           Document doc = parser.build(args[0]);
           System.out.println(doc.toXML());
         }
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
           System.out.println(ex.getMessage());
         }

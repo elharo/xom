@@ -33,7 +33,7 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
 /**
@@ -43,7 +43,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 public class EncodingTest extends XOMTestCase {
@@ -132,7 +132,7 @@ public class EncodingTest extends XOMTestCase {
     }
     
     public void testUSASCII() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("US-ASCII");
     }
     
@@ -200,113 +200,113 @@ public class EncodingTest extends XOMTestCase {
     }
     
     public void testASCII() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ASCII");
     }
 
     public void testLatin1() 
-      throws ParseException, UnsupportedEncodingException {       
+      throws ParsingException, UnsupportedEncodingException {       
         checkAll("ISO-8859-1");        
     }
 
     public void testLatin2() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-2");
     }
     
     public void testLatin3() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-3");
     }
     
     public void testLatin4() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-4");
     }
     
     public void testCyrillic() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-5");
     }
     
     public void testArabic() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-6");
     }
     
     public void testGreek() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-7");
     }
     
     public void testHebrew() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-8");
     }
     
     public void testLatin5()  
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-9");
     }
 
     public void testUTF8() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("UTF-8");
     }
     
     public void testUTF16()  
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("UTF-16");
     } 
 
     public void testUCS2() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-10646-UCS-2");
     } 
 
     // This test fails to some as yet unworked around input bugs
     // in Java's handling of NEL with Cp037 encoding
     /* public void testEBCDIC037() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("CP037");
     } */
 
     // These encodings are only available after Java 1.3
    /* public void testLatin6()  
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-10");
     }
 
     public void testLatin7()  
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-13");
     }
         
     public void testLatin8()  
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-14");
     }
     
     public void testLatin10()  
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-16");
     }
     
     public void testLatin9()  
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-15");
     } */
 
 
 // Java 1.4 does not yet support these encodings
-/*    public void testUCS4() throws ParseException, UnsupportedEncodingException {
+/*    public void testUCS4() throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-10646-UCS-4");
     } 
 */
 
     
     private void checkAll(String encoding) 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         
         Builder builder = new Builder();
         byte[] data = null;
@@ -342,7 +342,7 @@ public class EncodingTest extends XOMTestCase {
         catch (IOException ex) {
             ex.printStackTrace();   
         }  
-        catch (ParseException ex) {
+        catch (ParsingException ex) {
             throw ex;  
         }  
             

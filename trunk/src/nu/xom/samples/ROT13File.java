@@ -26,11 +26,11 @@ package nu.xom.samples;
 import java.io.*;
 import nu.xom.Document;
 import nu.xom.Builder;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class ROT13File {
@@ -62,7 +62,7 @@ public class ROT13File {
       "Due to an IOException, the parser could not encode " + file
       ); 
     }
-    catch (ParseException e) { 
+    catch (ParsingException e) { 
       System.out.println(e); 
       e.printStackTrace(); 
     }

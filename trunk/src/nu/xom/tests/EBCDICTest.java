@@ -32,7 +32,7 @@ import java.io.UnsupportedEncodingException;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
 /**
@@ -47,7 +47,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 public class EBCDICTest extends XOMTestCase {
@@ -70,7 +70,7 @@ public class EBCDICTest extends XOMTestCase {
   
     // This test will only pass if Java's NEL handling is fixed
     public void testEBCDIC037() 
-      throws ParseException, UnsupportedEncodingException {
+      throws ParsingException, UnsupportedEncodingException {
         
         Builder builder = new Builder(); 
         ByteArrayOutputStream out = new ByteArrayOutputStream();    
@@ -102,7 +102,7 @@ public class EBCDICTest extends XOMTestCase {
         catch (IOException ex) {
             ex.printStackTrace();   
         }  
-        /* catch (ParseException ex) {
+        /* catch (ParsingException ex) {
             throw ex;  
         }  */
             
