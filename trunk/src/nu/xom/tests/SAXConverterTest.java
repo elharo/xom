@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -36,8 +36,10 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
+import nu.xom.ValidityException;
 import nu.xom.converters.SAXConverter;
 
+import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
@@ -49,29 +51,35 @@ import org.xml.sax.helpers.DefaultHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0b4
  *
  */
 public class SAXConverterTest extends XOMTestCase {
 
+    
     public SAXConverterTest(String name) {
         super(name);
     }
 
+    
     private DefaultHandler handler;
     private SAXConverter converter;
     private Builder builder = new Builder();
+    
     
     protected void setUp() {
         handler = new DefaultHandler();
         converter = new SAXConverter(handler);   
     }
 
+    
     public void testGetContentHandler() {
         assertEquals(handler, converter.getContentHandler());
     }
 
-    public void testSetContentHandler() {      
+    
+    public void testSetContentHandler() {   
+        
         handler = new DefaultHandler();
         converter.setContentHandler(handler);
         assertEquals(handler, converter.getContentHandler());
@@ -83,19 +91,24 @@ public class SAXConverterTest extends XOMTestCase {
         catch (NullPointerException ex) {
             // success   
         }
+        
     }
 
+    
     public void testSetAndGetLexicalHandler() {
+        
         LexicalHandler handler = new XMLWriter();
         converter.setLexicalHandler(handler);
         assertEquals(handler, converter.getLexicalHandler()); 
         
         converter.setLexicalHandler(null);
-        assertNull(converter.getLexicalHandler());     
+        assertNull(converter.getLexicalHandler()); 
+        
     }
     
     private void convertAndCompare(Document doc) 
       throws IOException, SAXException, ParsingException {
+        
         StringWriter result = new StringWriter();
         XMLWriter handler = new XMLWriter(result);
         converter.setContentHandler(handler);
@@ -106,12 +119,15 @@ public class SAXConverterTest extends XOMTestCase {
         String convertedDoc = result.toString();
         Document rebuiltDoc = builder.build(convertedDoc, doc.getBaseURI());
         assertEquals(doc, rebuiltDoc);
+        
     }
+    
     
     public void testSimplestDoc() throws Exception {
         Document doc = new Document(new Element("a"));  
         convertAndCompare(doc); 
     }
+    
     
     public void testDocType() throws Exception {
         Document doc = new Document(new Element("a")); 
@@ -119,12 +135,14 @@ public class SAXConverterTest extends XOMTestCase {
         convertAndCompare(doc); 
     }
     
+    
     public void testProcessingInstruction() throws Exception {
         Document doc = new Document(new Element("a"));
         doc.insertChild(new ProcessingInstruction(
           "xml-stylesheet", "type=\"application/xml\" href=\"stylesheet.xsl\""), 0);  
         convertAndCompare(doc); 
     }
+    
     
     public void testComment() throws Exception {
         Element root = new Element("root");
@@ -136,10 +154,12 @@ public class SAXConverterTest extends XOMTestCase {
         convertAndCompare(doc); 
     }
     
+    
     public void testDefaultNamespace() throws Exception {
         Document doc = new Document(new Element("a", "http://www.a.com/"));  
         convertAndCompare(doc); 
     }
+    
     
     public void testTextContent() throws Exception {
         Element root = new Element("root");
@@ -148,10 +168,12 @@ public class SAXConverterTest extends XOMTestCase {
         convertAndCompare(doc); 
     }
     
+    
     public void testPrefixedNamespace() throws Exception {
         Document doc = new Document(new Element("a:a", "http://www.a.com/"));  
         convertAndCompare(doc); 
     }
+    
     
     public void testAdditionalNamespace() throws Exception {
         Element root = new Element("root");
@@ -159,6 +181,7 @@ public class SAXConverterTest extends XOMTestCase {
         Document doc = new Document(root);  
         convertAndCompare(doc); 
     }
+    
     
     public void testChildElementAddsNamespace() throws Exception {
         Element root = new Element("root");
@@ -169,7 +192,9 @@ public class SAXConverterTest extends XOMTestCase {
         convertAndCompare(doc); 
     }
     
+    
     public void testAttributesTypes() throws Exception {
+        
         Element root = new Element("root");
         root.addAttribute(new Attribute("CDATA", "CDATA", Attribute.Type.CDATA));
         root.addAttribute(new Attribute("ID", "ID", Attribute.Type.ID));
@@ -184,7 +209,9 @@ public class SAXConverterTest extends XOMTestCase {
         root.addAttribute(new Attribute("ENUMERATION", "ENUMERATION", Attribute.Type.ENUMERATION));
         Document doc = new Document(root);  
         convertAndCompare(doc); 
+        
     }
+    
     
     public void testAttributes() throws Exception {
         Element root = new Element("root");
@@ -195,6 +222,7 @@ public class SAXConverterTest extends XOMTestCase {
         convertAndCompare(doc); 
     }
     
+    
     public void testExternalDTDSubset()
       throws IOException, SAXException, ParsingException {
         File input = new File("data/externalDTDtest.xml");
@@ -202,16 +230,49 @@ public class SAXConverterTest extends XOMTestCase {
         convertAndCompare(doc);
     }
    
+    
     public void testBigDoc()
       throws IOException, SAXException, ParsingException {
         Document doc = builder.build("http://www.cafeconleche.org/");
         convertAndCompare(doc);
     }
    
+    
     public void testAnotherBigDoc()
       throws IOException, SAXException, ParsingException {
         Document doc = builder.build("http://www.rddl.org/");
         convertAndCompare(doc);
     }
 
+    
+    public void testNoPrefixMappingEventsForXMLPrefix() 
+      throws ParsingException, IOException, SAXException {
+     
+        String data = "<root xml:space='preserve'/>";
+        Document doc = builder.build(data, null);
+        ContentHandler handler = new XMLPrefixTester();
+        SAXConverter converter = new SAXConverter(handler);
+        converter.convert(doc);
+        
+    }
+    
+    
+    private static class XMLPrefixTester extends DefaultHandler {
+        
+        public void startPrefixMapping(String prefix, String uri) 
+          throws SAXException {
+            if ("xml".equals(prefix)) {
+                throw new SAXException("start mapped prefix xml");
+            }
+        }
+        
+        public void endPrefixMapping(String prefix) 
+          throws SAXException {
+            if ("xml".equals(prefix)) {
+                throw new SAXException("end mapped prefix xml");
+            }
+        }
+        
+    }
+    
 }
