@@ -142,6 +142,11 @@ class XOMHandler
                     String namespacePrefix = qName.substring(6);
                     String currentValue
                        = element.getNamespaceURI(namespacePrefix); 
+                    // What if this is the prefix of an attribute
+                    // that hasn't been added yet?
+                    // Should all regular attributes be added first?
+                    // Then xmlns attributes? That would fix the problem;
+                    // Can this be unit tested????
                     if (!namespaceName.equals(currentValue)) {
                         element.addNamespaceDeclaration(
                           namespacePrefix, namespaceName);
@@ -166,7 +171,13 @@ class XOMHandler
                       value, 
                       convertStringToType(attributes.getType(i))
                     );
-                    if (attribute != null) element.fastAdd(attribute);
+                    // is it possible for a factory to return
+                    // an attribute with the same name twice?
+                    // if so then fastAdd may not be OK.
+                    // Need to write a unit test???? 
+                    // It might be OK for the regular NonVerifyingNodeFactory
+                    // to do the fastAdding itself, and then return null
+                    if (attribute != null) element.addAttribute(attribute);
                 }
             }
             

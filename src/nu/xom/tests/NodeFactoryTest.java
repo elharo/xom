@@ -34,6 +34,7 @@ import nu.xom.CycleException;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.IllegalAddException;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.ProcessingInstruction;
@@ -89,11 +90,38 @@ public class NodeFactoryTest extends XOMTestCase {
                 
     }
 
+    public void testCantAddOneAttributeMultipleTimes() 
+        throws IOException, ParsingException {
+        
+        String data = "<a test=\"value\" name=\"data\"></a>";
+        Builder builder = new Builder(new SingleAttributeFactory());
+        try {
+            Document doc = builder.build(data,
+              "http://www.example.org/");
+            fail("Allowed one attribute twice");
+        }
+        catch (IllegalAddException ex) {
+            // success   
+        }
+                
+    }
+
     private static class SingleElementFactory extends NodeFactory {
 
         private Element test = new Element("test");
 
         public Element startMakingElement(String name, String namespace) {
+            return test;
+        }
+
+    }
+    
+    private static class SingleAttributeFactory extends NodeFactory {
+
+        private Attribute test = new Attribute("limit", "none");
+
+        public Attribute makeAttribute(String name, String URI, 
+          String value, Attribute.Type type) {
             return test;
         }
 
