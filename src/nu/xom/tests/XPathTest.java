@@ -1594,6 +1594,19 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testEmptyTextFollowsNonEmptyText() {
+        
+        Element parent = new Element("parent");
+        Text empty = new Text("");
+        Text nonempty = new Text("value");
+        parent.appendChild(nonempty);
+        parent.appendChild(empty);
+        Nodes result = parent.query("node()");
+        assertEquals(2, result.size());
+        
+    }
+    
+    
     public void testBadXPathExpression() {
         
         Element parent = new Element("Test");
@@ -1758,6 +1771,25 @@ public class XPathTest extends XOMTestCase {
         for (int i = 1; i < 4; i++) {
             Attribute attribute = (Attribute) result.get(i); 
             assertEquals(parent, attribute.getParent());
+        }
+        
+    }
+    
+    
+    public void testDoubleSlashIsIncorrect() {
+        
+        Element root = new Element("root", "http://www.example.org");
+        Document doc = new Document(root);
+        root.appendChild(new Element("child"));
+        root.appendChild("test");
+        root.addAttribute(new Attribute("test", "test"));
+        
+        try {
+            Nodes nodes = doc.query("//");
+            fail("Queried //");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
