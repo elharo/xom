@@ -152,7 +152,7 @@ public class NodeFactory {
      * @return the nodes to be added to the tree
      * 
      */
-    protected Nodes finishMakingElement(Element element) {
+    public Nodes finishMakingElement(Element element) {
         return new Nodes(element);
     }
 
@@ -165,7 +165,7 @@ public class NodeFactory {
      * 
      * @param document the completed <code>Document</code>
      */
-    protected void endDocument(Document document) {}
+    public void endDocument(Document document) {}
 
     /**
      * <p>

@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -93,7 +93,7 @@ public class StreamingXHTMLPurifier extends NodeFactory {
         return null;
     }
     
-    protected Nodes finishMakingElement(Element element) {
+    public Nodes finishMakingElement(Element element) {
         namespaces.pop(); 
         int namespaceCount = element.getNamespaceDeclarationCount();
         for (int i = 0; i < namespaceCount; i++) {
