@@ -629,6 +629,30 @@ public class SerializerTest extends XOMTestCase {
         );
         
     } 
+
+    public void testPreserveBaseURIDoesntOverrideXMLBase() throws IOException {        
+        Element root = new Element("root");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", 
+          "http://www.cafeconleche.org/"));
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "UTF-8");
+        serializer.setPreserveBaseURI(true);
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertTrue(result.indexOf("<root") > 1);
+        doc.setBaseURI("http://www.example.com/index.xml");
+        serializer.write(doc);
+        result = out.toString("UTF-8");
+        assertTrue(result.indexOf("<root ") > 1);
+        assertTrue(result.indexOf("xml:base=") > 1);
+        assertTrue(result.indexOf("http://www.cafeconleche.org/") > 1);
+        assertEquals(-1, result.indexOf("http://www.example.com/index.xml"));
+        
+    } 
+    
+    
     
     public void testSetLineSeparator() {
         Serializer serializer = new Serializer(System.out);
