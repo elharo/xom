@@ -231,6 +231,27 @@ public class DocumentTest extends XOMTestCase {
     }
 
     
+    public void testInsertionAllowed() {
+        
+        Document doc = new Document(new Element("root"));
+        Comment original = new Comment("original");
+        doc.insertChild(original, 0);
+        
+        Element temp = new Element("temp");
+        Comment c2 = new Comment("new comment");
+        temp.appendChild(c2);
+        
+        try {
+            doc.replaceChild(original, c2);
+            fail("Missed multiple parent exception");
+        }
+        catch (MultipleParentException success) {
+            assertEquals(2, doc.getChildCount());
+        }
+        
+    }
+    
+    
     public void testReplaceDocTypeWithDifferentDocTypeUsingReplaceChild() {
         
         DocType newDocType = new DocType("new");
