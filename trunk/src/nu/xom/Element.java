@@ -350,12 +350,12 @@ public class Element extends ParentNode {
         
     }
     
-    // for use with parser only
-    final void fastAdd(Attribute attribute) {
+    // for use by parser only
+    /*final void fastAdd(Attribute attribute) {
         if (attributes == null) attributes = new Attributes();
         attributes.fastAdd(attribute);
         attribute.setParent(this);
-    }
+    }*/
     
 
     /**
@@ -605,7 +605,7 @@ public class Element extends ParentNode {
             Element parent = (Element) getParent();
             result = parent.getNamespaceURI(prefix);
         }
-        
+        if (result == null && "".equals(prefix)) result = ""; // ????
         return result;
     }
 
