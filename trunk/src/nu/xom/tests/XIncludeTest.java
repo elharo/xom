@@ -23,9 +23,11 @@
 
 package nu.xom.tests;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
@@ -65,15 +67,28 @@ import nu.xom.xinclude.XIncluder;
  */
 public class XIncludeTest extends XOMTestCase {
 
+    
     public XIncludeTest(String name) {
         super(name);
     }
 
-    private Builder builder;
     
-    protected void setUp() {        
-        builder = new Builder();       
+    private Builder builder = new Builder();
+    
+    // This class tests error conditions, which Xerces
+    // annoyingly logs to System.err. This hides System.err 
+    // before each test and restores it after each test.
+    private PrintStream systemErr = System.err;
+    
+    
+    protected void setUp() {
+        System.setErr(new PrintStream(new ByteArrayOutputStream()));
     }
+    
+    
+    protected void tearDown() {
+        System.setErr(systemErr);
+    }    
     
     
     private void dumpResult(File original, Document result)

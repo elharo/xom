@@ -23,8 +23,10 @@
 
 package nu.xom.tests;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.ByteArrayInputStream;
@@ -132,6 +134,24 @@ public class BuilderTest extends XOMTestCase {
     public BuilderTest(String name) {
         super(name);   
     }
+    
+    
+    // This class tests error conditions, which Xerces
+    // annoyingly logs to System.err. This hides System.err 
+    // before each test and restores it after each test.
+    private PrintStream systemErr = System.err;
+    
+    protected void setUp() {
+        System.setErr(new PrintStream(new ByteArrayOutputStream()));
+    }
+    
+    
+    protected void tearDown() {
+        System.setErr(systemErr);
+    }
+    
+
+    
     
     // flag to turn on and off tests based on 
     // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=24124
