@@ -8537,8 +8537,8 @@ final class UnicodeUtil {
     
     private static class UnicodeString {
         
-        int[] data;
-        int length = 0; 
+        private int[] data;
+        private int   size = 0; 
         
         UnicodeString(String s) {
             
@@ -8555,21 +8555,21 @@ final class UnicodeUtil {
                 data[index] = codePoint;
                 index++;
             }
-            this.length = index;
+            this.size = index;
             
         }
         
         
         UnicodeString(int length) {
-            this.length = 0;
+            this.size = 0;
             data = new int[length];
         }
         
         
         UnicodeString decompose() {
             
-            UnicodeString result = new UnicodeString(length);
-            for (int i = 0; i < length; i++) {
+            UnicodeString result = new UnicodeString(size);
+            for (int i = 0; i < size; i++) {
                 int c = data[i];
                 String d = UnicodeUtil.decompose(c);
                 result.append(d);
@@ -8577,7 +8577,7 @@ final class UnicodeUtil {
             
             /* now put into canonical order */
 
-            for (int i = 0; i < result.length-1; i++) {
+            for (int i = 0; i < result.size-1; i++) {
                 int first = result.data[i];
                 int second = result.data[i+1];
                 int secondClass = getCombiningClass(second);
@@ -8600,13 +8600,13 @@ final class UnicodeUtil {
         
             if (compositions == null) loadCompositions();
             
-            UnicodeString composed = new UnicodeString(length);
+            UnicodeString composed = new UnicodeString(size);
     
             int index = 0;
             int lastStarter = -1;
             int lastStarterIndex = -1;
             
-            for (int i = 0; i < length; i++) {
+            for (int i = 0; i < size; i++) {
                 int c = data[i];
                 // assuming starters are never combined with preceding characters; true????
                 // Kannada vowel sign OO may be counter example
@@ -8646,7 +8646,6 @@ final class UnicodeUtil {
                         if (isStarter(c) ) {
                             lastStarter = c;
                             lastStarterIndex = i;
-                            composed.append(c);
                         }
                     }
                     else {
@@ -8683,13 +8682,13 @@ final class UnicodeUtil {
         
         void append(int c) {
             
-            if (length < data.length-1) {
-                data[length] = c;
-                length++;
+            if (size < data.length-1) {
+                data[size] = c;
+                size++;
             }
             else {
                 int[] array = new int[data.length+10];
-                System.arraycopy(data, 0, array, 0, length);
+                System.arraycopy(data, 0, array, 0, size);
                 data = array;
                 append(c);
             }
@@ -8699,7 +8698,7 @@ final class UnicodeUtil {
         public String toString() {
          
             StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < length; i++) {
+            for (int i = 0; i < size; i++) {
                 int c = data[i];
                 if (c <= 0xFFFF) sb.append((char) c);
                 else {
