@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <test>
   <simple xml:base="simple.xml">
-<test xmlns:xinclude="http://www.w3.org/2003/XInclude">
+<test xmlns:xinclude="http://www.w3.org/2001/XInclude">
   <latin1>
     <firstElement/>
     trjsagdkasgdhasdgashgdhsadgashdg
@@ -12,7 +12,7 @@
     </another>
   </latin1>
   <test2>
-    <!-- comment before root --><red xml:base="test2.xml" xmlns:xinclude="http://www.w3.org/2003/XInclude">
+    <!-- comment before root --><red xml:base="test2.xml" xmlns:xinclude="http://www.w3.org/2001/XInclude">
   <blue>
     trjsagdkasgdhasdgashgdhsadgashdg
 

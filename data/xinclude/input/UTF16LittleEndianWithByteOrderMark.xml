@@ -1,2 +1,2 @@
 <?xml version='1.0'?>
-<root><xi:include href="utf16le.xml" parse="text" xmlns:xi="http://www.w3.org/2003/XInclude"/></root>
+<root><xi:include href="utf16le.xml" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></root>
