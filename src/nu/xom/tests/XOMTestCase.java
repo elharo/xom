@@ -132,7 +132,6 @@ public class XOMTestCase extends TestCase {
      * attribute. In order to faciliate comparison between relative and
      * absolute URIs, two <code>xml:base</code> attributes are 
      * considered equal if one might be a relative form of the other.
-     * ???? this test could be made more URI accurate
      * </p>
      * 
      * @param message printed if the nodes are not equal
@@ -164,7 +163,6 @@ public class XOMTestCase extends TestCase {
      * attribute. In order to faciliate comparison between relative and
      * absolute URIs, two <code>xml:base</code> attributes are 
      * considered equal if one might be a relative form of the other.
-     * ???? this test could be made more URI accurate
      * </p>
      * 
      * @param message printed if the nodes are not equal 
@@ -183,10 +181,12 @@ public class XOMTestCase extends TestCase {
         String value1 = expected.getValue();
         String value2 = actual.getValue();
         if ("xml:base".equals(expected.getQualifiedName())) {
-            // Using endsWith to handle possibility that one is relative
-            // and other is not
+            // handle possibility that one is relative and other is not
+            if (value1.equals(value2)) return;
+            if (value1.startsWith("/") && value2.endsWith(value1)) return;
+            if (value2.startsWith("/") && value1.endsWith(value2)) return;
             assertTrue(message, 
-              value1.endsWith(value2) || value2.endsWith(value1));
+              value1.endsWith('/' + value2) || value2.endsWith('/' + value1));
         } 
         else { 
             assertEquals(message, value1, value2);
