@@ -159,7 +159,7 @@ public class Element extends ParentNode {
         if (element.attributes != null) {
             for (int i = 0; i < element.attributes.size(); i++) {
                 Attribute a = element.attributes.get(i);
-                this.addAttribute(new Attribute(a)); 
+                this.addAttribute((Attribute) a.copy()); 
             }
         }
         
