@@ -1771,12 +1771,17 @@ public class XIncludeTest extends XOMTestCase {
                 for (int j = 0; j < cases.size(); j++) {
                     Element testcase = cases.get(j);
                     String id = testcase.getAttributeValue("id");
+                    String features = testcase.getAttributeValue("features");
+                    if (features != null) {
+                        if (features.indexOf("unexpanded-entities") >= 0) continue;
+                        if (features.indexOf("unparsed-entities") >= 0) continue;
+                        if (features.indexOf("xpointer-scheme") >= 0) continue;
+                    }
                     String description 
                       = testcase.getFirstChildElement("description").getValue();
                     File input = new File("data/XInclude-Test-Suite/" 
                       + basedir + '/' + testcase.getAttributeValue("href"));
                     Element output = testcase.getFirstChildElement("output");
-                    // System.err.println("Test case: " + input);
                     if (output == null) { // test failure   
                         try {
                             Document doc = builder.build(input);
