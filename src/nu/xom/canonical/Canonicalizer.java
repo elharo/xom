@@ -379,6 +379,7 @@ public class Canonicalizer {
                 writeRaw(element.getQualifiedName());
             }
             
+            SortedMap map = new TreeMap();
             if (nodes == null) {
                 ParentNode parent = element.getParent();
                 Element parentElement = null;
@@ -394,23 +395,30 @@ public class Canonicalizer {
                     if (uri.equals(inScope.getURI(prefix))) {
                         continue;
                     }
-                    
-                    if (uri.equals("")) {
+                    else if (exclusive) {
+                        if (visiblyUtilized(element, prefix, uri)) {
+                            map.put(prefix, uri);
+                        }
+                    }
+                    else if (uri.equals("")) {
                         // no need to say xmlns=""
                         if (parentElement == null) continue;    
                         if ("".equals(parentElement.getNamespaceURI())) {
                             continue;
                         }
+                        map.put(prefix, uri);
+                    }
+                    else {
+                        map.put(prefix, uri);
                     }
                     
-                    writeRaw(" ");
-                    writeNamespaceDeclaration(prefix, uri);
-                    inScope.declarePrefix(prefix, uri);
                 } 
+                
+                writeNamespaceDeclarations(map);
+                
             }
             else {
                 int position = indexOf(element);
-                SortedMap map = new TreeMap();
                 // do we need to undeclare a default namespace?
                 // You know, should I instead create an output tree and then just
                 // canonicalize that? probably not
@@ -418,7 +426,8 @@ public class Canonicalizer {
                     ParentNode parent = element.getParent();
                     // Here we have to check for the nearest default on parents in the
                     // output tree, not the input tree
-                    while (parent != null && parent instanceof Element && !(nodes.contains(parent))) {
+                    while (parent != null && parent instanceof Element 
+                      && !(nodes.contains(parent))) {
                         parent = parent.getParent();
                     }
                     if (parent != null && parent instanceof Element) {
@@ -440,7 +449,7 @@ public class Canonicalizer {
                         continue;
                     }
                     else if (exclusive) {
-                        if (visiblyUtilized(namespace)) {
+                        if (visiblyUtilized(element, prefix, uri)) {
                             map.put(prefix, uri);
                         }
                     }
@@ -450,14 +459,7 @@ public class Canonicalizer {
                     
                 } 
                 
-                Iterator prefixes = map.keySet().iterator();
-                while (prefixes.hasNext()) {
-                    String prefix = (String) prefixes.next();
-                    String uri = (String) map.get(prefix);
-                    writeRaw(" ");
-                    writeNamespaceDeclaration(prefix, uri);
-                    inScope.declarePrefix(prefix, uri);
-                }
+                writeNamespaceDeclarations(map);
                 
             }
             
@@ -475,14 +477,25 @@ public class Canonicalizer {
                 writeRaw(">");
             }
             
-        } 
-    
-        
-        private boolean visiblyUtilized(Namespace namespace) {
+        }
 
-            String uri = namespace.getValue();
-            String prefix = namespace.getPrefix();
-            Element parent = (Element) namespace.getParent();
+
+        private void writeNamespaceDeclarations(SortedMap map) throws IOException {
+
+            Iterator prefixes = map.keySet().iterator();
+            while (prefixes.hasNext()) {
+                String prefix = (String) prefixes.next();
+                String uri = (String) map.get(prefix);
+                writeRaw(" ");
+                writeNamespaceDeclaration(prefix, uri);
+                inScope.declarePrefix(prefix, uri);
+            }
+            
+        }
+
+
+        private boolean visiblyUtilized(Element parent, String prefix, String uri) {
+
             for (int i = 0; i < parent.getNamespaceDeclarationCount(); i++) {
                 String pfx = parent.getNamespacePrefix(i);
                 if (prefix.equals(pfx)) {
