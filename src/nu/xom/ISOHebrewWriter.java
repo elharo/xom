@@ -39,9 +39,9 @@ class ISOHebrewWriter extends TextWriter {
     /**
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
-    boolean needsEscaping(char c) {
+    boolean needsEscaping(char c) { 
         if (c <= 0xA0) return false;        
-        switch (c) {
+        switch (c) { // characters shared with Latin-1
             case 0x00A2: return false; // CENT SIGN
             case 0x00A3: return false; // POUND SIGN
             case 0x00A4: return false; // CURRENCY SIGN
@@ -50,7 +50,6 @@ class ISOHebrewWriter extends TextWriter {
             case 0x00A7: return false; // SECTION SIGN
             case 0x00A8: return false; // DIAERESIS
             case 0x00A9: return false; // COPYRIGHT SIGN
-            case 0x00D7: return false; // MULTIPLICATION SIGN
             case 0x00AB: return false; // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
             case 0x00AC: return false; // NOT SIGN
             case 0x00AD: return false; // SOFT HYPHEN
@@ -61,7 +60,13 @@ class ISOHebrewWriter extends TextWriter {
             // See JDC bug 4760496
             // http://developer.java.sun.com/developer/bugParade/bugs/4760496.html
             // They have marked this as fixed in Tiger (i.e. Java 1.5)
-            // case 0x00AF: return false; // MACRON
+            // I'm not going to fix it here yet though, because I'd 
+            // prefer XOM to work correctly with earlier versions of
+            // of Java; and it's not incorrect to output a character 
+            // reference even if you don't have to. It is an issue if a
+            // macron is used in a name, a comment, or a PI though.
+            // Is this a legal name character????
+            case 0x00AF: return true;  // MACRON
             case 0x00B0: return false; // DEGREE SIGN
             case 0x00B1: return false; // PLUS-MINUS SIGN
             case 0x00B2: return false; // SUPERSCRIPT TWO
@@ -72,12 +77,13 @@ class ISOHebrewWriter extends TextWriter {
             case 0x00B7: return false; // MIDDLE DOT
             case 0x00B8: return false; // CEDILLA
             case 0x00B9: return false; // SUPERSCRIPT ONE
-            case 0x00F7: return false; // DIVISION SIGN
+            case 0x00BA: return true;  // place holder to allow optimization of switch statement
             case 0x00BB: return false; // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
             case 0x00BC: return false; // VULGAR FRACTION ONE QUARTER
             case 0x00BD: return false; // VULGAR FRACTION ONE HALF
             case 0x00BE: return false; // VULGAR FRACTION THREE QUARTERS
-            case 0x2017: return false; // DOUBLE LOW LINE
+        }
+        switch (c) {  // Unicode Hebrew block
             case 0x05D0: return false; // HEBREW LETTER ALEF
             case 0x05D1: return false; // HEBREW LETTER BET
             case 0x05D2: return false; // HEBREW LETTER GIMEL
@@ -105,6 +111,11 @@ class ISOHebrewWriter extends TextWriter {
             case 0x05E8: return false; // HEBREW LETTER RESH
             case 0x05E9: return false; // HEBREW LETTER SHIN
             case 0x05EA: return false; // HEBREW LETTER TAV
+        }
+        
+        switch (c) {  // a few random, out of order characters
+            case 0x00D7: return false; // MULTIPLICATION SIGN
+            case 0x00F7: return false; // DIVISION SIGN
             // A bug in Java prevents a LEFT-TO-RIGHT MARK 
             // and RIGHT-TO-LEFT MARK from being correctly output
             // as the actual character in this encoding even
@@ -114,8 +125,11 @@ class ISOHebrewWriter extends TextWriter {
             // They have marked this as fixed in Tiger (i.e. Java 1.5)
             // case 0x200E: return false; // LEFT-TO-RIGHT MARK
             // case 0x200F: return false; // RIGHT-TO-LEFT MARK
+            case 0x2017: return false; // DOUBLE LOW LINE
         }
+        
         return true;
+        
     }
 
 }
