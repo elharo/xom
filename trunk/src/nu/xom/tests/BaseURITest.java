@@ -23,11 +23,15 @@
 
 package nu.xom.tests;
 
+import java.io.IOException;
+
 import nu.xom.Attribute;
+import nu.xom.Builder;
 import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.MalformedURIException;
+import nu.xom.ParsingException;
 
 /**
  * <p>
@@ -36,7 +40,7 @@ import nu.xom.MalformedURIException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class BaseURITest extends XOMTestCase {
@@ -103,17 +107,19 @@ public class BaseURITest extends XOMTestCase {
     }
 
     public void testIPv6Base() {
-        String ipv6 = "http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]:80/test.xml";
+        String ipv6 
+          = "http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]:80/test.xml";
         Element root = new Element("test");
         root.setBaseURI(ipv6);
         assertEquals(ipv6, root.getBaseURI());
     }
 
     public void testBadIPv6Base() {
-        String ipv6 = "http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]:80/test.xml";
         Element root = new Element("test");
         try {
-            root.setBaseURI("http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]/test.xml#xpointer(/*[1])");
+            root.setBaseURI(
+              "http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]/test.xml#xpointer(/*[1])"
+            );
             fail("allowed multiple brackets");
         }
         catch (MalformedURIException ex) {
@@ -121,7 +127,9 @@ public class BaseURITest extends XOMTestCase {
         }
 
         try {
-            root.setBaseURI("http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210/");
+            root.setBaseURI(
+              "http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210/"
+            );
             fail("allowed mismatched brackets");
         }
         catch (MalformedURIException ex) {
@@ -129,7 +137,9 @@ public class BaseURITest extends XOMTestCase {
         }
 
         try {
-            root.setBaseURI("http://]FEDC:BA98:7654:3210:FEDC:BA98:7654:3210[/");
+            root.setBaseURI(
+              "http://]FEDC:BA98:7654:3210:FEDC:BA98:7654:3210[/"
+            );
             fail("allowed right bracket before left bracket");
         }
         catch (MalformedURIException ex) {
@@ -217,8 +227,10 @@ public class BaseURITest extends XOMTestCase {
      }
 
     public void testLeafNode() {
-        assertEquals(doc.getRootElement().getChild(0).getBaseURI(), 
-          doc.getRootElement().getChild(0).getChild(0).getBaseURI());
+        assertEquals(
+          doc.getRootElement().getChild(0).getBaseURI(), 
+          doc.getRootElement().getChild(0).getChild(0).getBaseURI()
+        );
      }
 
     public void testLoadElementFromSameEntity() {
@@ -253,5 +265,16 @@ public class BaseURITest extends XOMTestCase {
         assertEquals("base.html", e.getBaseURI());
         
      }
+
+   public void testRelativeURIResolutionAgainstARedirectedBase()
+      throws IOException, ParsingException {
+        Builder builder = new Builder();
+        Document doc = builder.build(
+          "http://www.cafeconleche.org/redirecttest.xml");
+        assertEquals(
+          "http://cafeconleche.org/redirected/target.xml", 
+          doc.getBaseURI()
+        );
+   } 
 
 }
