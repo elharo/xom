@@ -378,8 +378,7 @@ public class XSLTransformTest extends XOMTestCase {
         assertTrue(output.get(5) instanceof ProcessingInstruction);
     }
 
-    public void testCommentWithParent() 
-      throws ParsingException, IOException, XSLException {
+    public void testCommentWithParent() throws XSLException {
         
         File stylesheet = new File("data/xslt/input/commentwithparent.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
@@ -394,7 +393,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     public void testProcessingInstructionWithParent() 
-      throws ParsingException, IOException, XSLException {
+      throws XSLException {
         
         File stylesheet = new File("data/xslt/input/piwithparent.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
@@ -411,8 +410,7 @@ public class XSLTransformTest extends XOMTestCase {
 
     // primarily this makes sure the XSLTHandler can handle various
     // edge cases
-    public void testIdentityTransform() 
-      throws ParsingException, IOException, XSLException {
+    public void testIdentityTransform() throws XSLException {
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
@@ -427,6 +425,21 @@ public class XSLTransformTest extends XOMTestCase {
         
     } 
     
+    public void testIllegalTransform() throws XSLException {
+        
+        File stylesheet = new File("data/xslt/input/illegaltransform.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Element root = new Element("root", "http://www.example.org");
+        Document input = new Document(root);
+        try {
+            xform.transform(input);
+            fail("Allowed illegal transform");
+        }
+        catch (XSLException ex) {
+            assertNotNull(ex.getMessage());
+        }
+        
+    }
     
     
 }
