@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -39,10 +39,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.DTDHandler;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -90,25 +86,13 @@ public class BuilderTest extends XOMTestCase {
     // malformed data
     private static class CustomReader extends XMLFilterImpl {
         
-        protected ContentHandler handler;
-     
-        public void parse(String url) {}
+        public void setFeature(String name, boolean value) {};
 
-        public void setFeature(String uri, boolean value) {}
-        
-        public ContentHandler getContentHandler() {
-            return handler;
-        }
-
-        public void setContentHandler(ContentHandler handler) {
-            this.handler = handler;
-        }
-        
         public void parse(InputSource in) throws SAXException  {
-            handler.startDocument();
-            handler.startElement("87", "87", "87", new AttributesImpl());
-            handler.endElement("87", "87", "87");
-            handler.endDocument();  
+            this.getContentHandler().startDocument();
+            this.getContentHandler().startElement("87", "87", "87", new AttributesImpl());
+            this.getContentHandler().endElement("87", "87", "87");
+            this.getContentHandler().endDocument();  
         }
         
     }
@@ -124,8 +108,8 @@ public class BuilderTest extends XOMTestCase {
     private static class StartAndEndReader extends CustomReader {
         
         public void parse(InputSource in) throws SAXException  {
-            handler.startDocument();
-            handler.endDocument();  
+            this.getContentHandler().startDocument();
+            this.getContentHandler().endDocument();  
         }
         
     }
@@ -134,7 +118,7 @@ public class BuilderTest extends XOMTestCase {
     private static class StartOnlyReader extends CustomReader {
         
         public void parse(InputSource in) throws SAXException  {
-            handler.startDocument();
+            this.getContentHandler().startDocument();
         }
         
     }
@@ -143,7 +127,7 @@ public class BuilderTest extends XOMTestCase {
     private static class EndOnlyReader extends CustomReader {
         
         public void parse(InputSource in) throws SAXException  {
-            handler.endDocument();  
+            this.getContentHandler().endDocument();  
         }
         
     }
