@@ -549,20 +549,6 @@ public class XIncluder {
         
     }
 
-    private static void testURISyntax(URL url, String href) 
-      throws BadHrefAttributeException {
-        
-        if (url == null) return;
-        try {
-            Element e = new Element("e");
-            e.setNamespaceURI(url.toExternalForm());
-        }
-        catch (MalformedURIException ex) {
-            throw new BadHrefAttributeException("Illegal IRI in href attribute", href);
-        }
-        
-    }
-
     
     private static void testURISyntax(String href) 
       throws BadHrefAttributeException {
@@ -902,8 +888,14 @@ public class XIncluder {
         
         URLConnection uc = source.openConnection();
         setHeaders(uc, accept, acceptLanguage);
-        Document doc = builder.build(
-          uc.getInputStream(), source.toExternalForm()); 
+        InputStream in = new BufferedInputStream(uc.getInputStream());
+        Document doc;
+        try {
+            doc = builder.build(in, source.toExternalForm());
+        }
+        finally {
+            in.close();
+        }
           
         Nodes included;
         if (xpointer != null && xpointer.length() != 0) {
@@ -949,7 +941,7 @@ public class XIncluder {
                 ((Element) node).setBaseURI(oldBase);
             }
         }  
-            
+          
         return included;
         
     }
