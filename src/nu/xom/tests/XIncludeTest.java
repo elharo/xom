@@ -1060,7 +1060,7 @@ public class XIncludeTest extends XOMTestCase {
             fail("allowed unresolvable resource");
         }
         catch (IOException success) {
-            // success   
+            assertNotNull(success.getMessage());  
         }
     }
     
