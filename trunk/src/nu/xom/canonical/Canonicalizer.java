@@ -212,11 +212,11 @@ public class Canonicalizer {
             for (int i = 0; 
                  i < element.getNamespaceDeclarationCount(); 
                  i++) {
-                String additionalPrefix = element.getNamespacePrefix(i);
-                String uri = element.getNamespaceURI(additionalPrefix);
+                String prefix = element.getNamespacePrefix(i);
+                String uri = element.getNamespaceURI(prefix);
                 if (parentElement != null) {
                    if (uri.equals(
-                     parentElement.getNamespaceURI(additionalPrefix))) {
+                     parentElement.getNamespaceURI(prefix))) {
                        continue; 
                    }
                 }
@@ -225,7 +225,7 @@ public class Canonicalizer {
                 }
                 
                 writeRaw(" ");
-                writeNamespaceDeclaration(additionalPrefix, uri);
+                writeNamespaceDeclaration(prefix, uri);
             } 
             
             Attribute[] sorted = sortAttributes(element);        
@@ -396,17 +396,6 @@ public class Canonicalizer {
         protected final void write(Comment comment) throws IOException {
             if (withComments) super.write(comment);
         }
-    
-        
-        /**
-         *  <p>
-         *   Does nothing because canonical XML does not
-         *   include XML declarations.
-         * </p>
-         * 
-         * @see nu.xom.Serializer#writeXMLDeclaration()
-         */
-        protected void writeXMLDeclaration() {}
         
         /**
          * <p>
