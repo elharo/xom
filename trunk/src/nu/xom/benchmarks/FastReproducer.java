@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -44,7 +44,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 class FastReproducer {
@@ -132,9 +132,6 @@ class FastReproducer {
 
         if (node instanceof Text) {
             return copy((Text) node);
-        }
-        else if (node instanceof Element) {
-            return copy((Element) node);
         }
         else if (node instanceof Comment) {
             return copy((Comment) node);
