@@ -150,7 +150,7 @@ public class Attribute extends Node {
         // and in build
         // without profiling. My current tests show doing this slows 
         // down the parse by about 7%. I can't explain it.
-        if (name.indexOf(':') >= 0) {
+        if (name.indexOf(':') > 0) {
             prefix = name.substring(0, name.indexOf(':'));   
             localName = name.substring(name.indexOf(':') + 1);
         }
