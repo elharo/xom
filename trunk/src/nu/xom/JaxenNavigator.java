@@ -150,15 +150,6 @@ class JaxenNavigator extends DefaultNavigator {
         return null; // ???? throw exception????
         
     }
-
-    
-     
-    public String translateNamespacePrefixToUri(String prefix, Object o) {
-        
-        Element element = (Element) o;
-        return element.getNamespaceURI(prefix);
-        
-    }
     
     
     public String getNamespaceStringValue(Object o) {
