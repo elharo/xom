@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002-2004 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -30,8 +30,8 @@ import nu.xom.Nodes;
 
 /**
  * <p>
- *   Demonstrates a custom <code>NodeFactory</code> that converts 
- *   adds ID attributes to all elements that don't already have one. 
+ *   Demonstrates a custom <code>NodeFactory</code> that adds 
+ *   ID attributes to all elements that don't already have one. 
  *   This is inspired by Example 8-12 in
  *   <cite>Processing XML with Java</cite>.
  *   In brief, it demonstrates that major modifications 
@@ -39,8 +39,10 @@ import nu.xom.Nodes;
  *   be effectively streamed.
  * </p>
  * 
+ * @author Elliotte Rusty Harold
+ * @version 1.0b7
+ *
  */
-
 public class IDFilter extends NodeFactory {
 
     private int counter = 0;
