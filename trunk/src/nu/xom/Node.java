@@ -182,7 +182,8 @@ public abstract class Node {
     /**
      * <p>
      * Removes this node from its parent so that it can be added 
-     * to a different parent node or document.
+     * to a different parent node or document. This method does nothing
+     * if the node does not have a parent.
      * </p>
      * 
      * @throws XMLException if the parent refuses to detach this node
