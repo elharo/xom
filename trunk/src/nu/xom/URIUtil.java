@@ -589,7 +589,16 @@ class URIUtil {
             for (int i = 0; i < data.length; i++) {
                 result.append('%');
                 String hex = Integer.toHexString(data[i]).toUpperCase();
-                result.append(hex.substring(hex.length()-2));
+                if (c < 16) {
+                    result.append('0');
+                    result.append(hex);
+                }
+                else {
+                    // When c is negative as a byte, (e.g. greater 
+                    // than 128) the hex strings come out as 8 
+                    // characters rather than 2. 
+                    result.append(hex.substring(hex.length()-2));
+                }
             }
             return result.toString();
         }
