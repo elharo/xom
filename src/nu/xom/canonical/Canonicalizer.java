@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -39,7 +39,6 @@ import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
 import nu.xom.Text;
 
-
 /**
  * <p>
  *   This class writes XML in the format specified by <a 
@@ -51,7 +50,6 @@ import nu.xom.Text;
  *   Only complete documents can be canonicalized.
  *   Document subset canonicalization is not yet supported.
  * </p>
- * 
  * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
@@ -88,6 +86,8 @@ public class Canonicalizer {
         }
 
     }
+    
+    
     /**
      * <p>
      *   Creates a <code>Serializer</code> that outputs a 
@@ -101,6 +101,7 @@ public class Canonicalizer {
         this(out, true);
     }
 
+    
     /**
      * <p>
      *   Creates a <code>Serializer</code> that outputs a 
@@ -138,6 +139,7 @@ public class Canonicalizer {
             setLineSeparator("\n");
         }
 
+        
         /**
          * <p>
          * Serializes a document onto the output 
@@ -175,6 +177,7 @@ public class Canonicalizer {
             flush();
         }  
      
+         
         /**
          * <p>
          * Serializes an element onto the output stream using the canonical
@@ -198,6 +201,7 @@ public class Canonicalizer {
             writeEndTag(element);
         } 
     
+        
         protected void writeStartTag(Element element, boolean isEmpty) throws IOException {
             writeRaw("<");
             writeRaw(element.getQualifiedName());
@@ -237,12 +241,14 @@ public class Canonicalizer {
             writeRaw(">");
         } 
     
+        
         protected void write(Attribute attribute) throws IOException {
             writeRaw(attribute.getQualifiedName());
             writeRaw("=\"");
             writeRaw(prepareAttributeValue(attribute));
             writeRaw("\"");
         }
+        
         
         protected void writeEndTag(Element element) throws IOException {
             writeRaw("</");
@@ -264,6 +270,7 @@ public class Canonicalizer {
             
         }
     
+        
         private String prepareAttributeValue(Attribute attribute) {
     
             String value = attribute.getValue();
@@ -314,7 +321,6 @@ public class Canonicalizer {
                         }
                         continue;
                     } 
-                    // should this go here or after tab, CR and LF????
                     seenFirstNonSpace = true;
                     if (data[i] == '\t') {
                         result.append("&#x9;");
@@ -384,6 +390,7 @@ public class Canonicalizer {
             writeRaw(result.toString());
         }   
     
+        
         /**
          * <p>
          * Serializes a <code>Comment</code> object
@@ -401,6 +408,7 @@ public class Canonicalizer {
             if (withComments) super.write(comment);
         }
         
+        
         /**
          * <p>
          * Does nothing because canonical XML does not include
@@ -412,9 +420,11 @@ public class Canonicalizer {
         protected final void write(DocType doctype) {
             // DocType is not serialized in canonical XML
         } 
-          
+       
+        
     }
 
+    
     /**
      * <p>
      * Serializes a document onto the output 
@@ -431,4 +441,5 @@ public class Canonicalizer {
         serializer.flush();
     }  
  
+    
 }
