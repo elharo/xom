@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,7 +33,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d7
  *
  */
 public class TextTest extends XOMTestCase {
@@ -229,9 +229,13 @@ public class TextTest extends XOMTestCase {
     
     public void testNonBMPText() {
         
+        StringBuffer sb = new StringBuffer(2);
         for (char high = '\uD800'; high <= '\uDB7F'; high++) {
             for (char low = '\uDC00'; low <= '\uDFFF'; low++) {
-                String s = high + "" + low;
+                sb.setLength(0);
+                sb.append(high);
+                sb.append(low);
+                String s = sb.toString();
                 Text t = new Text(s);
                 assertEquals(s, t.getValue());
             }
