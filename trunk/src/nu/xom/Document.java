@@ -76,6 +76,7 @@ public class Document extends ParentNode {
 
 
     final void insertionAllowed(Node child, int position) {
+        
         if (child.isComment() || child.isProcessingInstruction()) {
             return;
         }
@@ -113,6 +114,7 @@ public class Document extends ParentNode {
     
 
     private int getRootPosition() {
+        
         for (int i = 0; i < getChildCount(); i++) {
              Node child = getChild(i);
              if (child.isElement()) {
@@ -174,6 +176,7 @@ public class Document extends ParentNode {
      *
      */
     public final DocType getDocType() {
+        
         for (int i = 0; i < getChildCount(); i++) {
              Node child = getChild(i);
              if (child.isDocType()) {
@@ -181,8 +184,10 @@ public class Document extends ParentNode {
              }
          }
          return null;
+         
     }
 
+    
     /**
      * <p>
      * Sets this document's document type declaration.
@@ -209,10 +214,11 @@ public class Document extends ParentNode {
             throw new MultipleParentException("DocType belongs to another document");
         }
         
-        // checkInsertChild(????)
         if (oldDocType == null) insertChild(doctype, 0);
         else {
             int position = indexOf(oldDocType);
+            checkInsertChild(doctype, position);
+            checkRemoveChild(oldDocType, position);
             children.remove(position);
             children.add(position, doctype);
             oldDocType.setParent(null);
@@ -241,6 +247,7 @@ public class Document extends ParentNode {
          }
     }
 
+    
     /**
      * <p>
      * Replaces the current root element with a different root element.
@@ -277,6 +284,7 @@ public class Document extends ParentNode {
         
     }
 
+    
     /**
      * <p>
      * Subclasses can override this method to perform additional 
@@ -286,13 +294,14 @@ public class Document extends ParentNode {
      * an <code>html</code> element.
      * </p>
      * 
-     * @param root The new root element.
+     * @param root the new root element
      * 
      * @throws XMLException if the proposed root element 
      *     does not satisfy the local constraints
      */
     protected void checkRoot(Element root) {}
 
+    
     /**
      * <p>
      * Removes the child of this document at the specified position.
@@ -307,19 +316,22 @@ public class Document extends ParentNode {
      * @return the node which was removed
      * 
      * @throws IndexOutOfBoundsException if the index is negative or 
-     *    greater than the number of children of this document - 1.
+     *    greater than the number of children of this document - 1
      * @throws WellformednessException if the index points 
-     *     to the root element.
+     *     to the root element
      */
     public final Node removeChild(int position) {
+        
         if (position == getRootPosition()) {
             throw new WellformednessException(
               "Cannot remove the root element"
             );
         }
         return super.removeChild(position);
+        
     }
 
+    
     /**
      * <p>
      * Removes the specified child from this node.
@@ -335,17 +347,20 @@ public class Document extends ParentNode {
      * @return the node which was removed
      * 
      * @throws NoSuchChildException if the node is not a
-     *   child of this node.
-     * @throws WellformednessException if child is the root element.
+     *   child of this node
+     * @throws WellformednessException if child is the root element
      */
     public final Node removeChild(Node child) {
+        
         if (child == getRootElement()) {
             throw new WellformednessException(
               "Cannot remove the root element");
         }
         return super.removeChild(child);
+        
     }
 
+    
     /**
      * 
      * <p>
@@ -361,6 +376,7 @@ public class Document extends ParentNode {
     public final void setBaseURI(String URI) { 
         setActualBaseURI(URI);       
     }
+    
     
     /**
      * <p>
@@ -392,6 +408,7 @@ public class Document extends ParentNode {
         return getRootElement().getValue();
     }
 
+    
     /**
      * <p>
      * Returns the actual complete, well-formed XML document as a 
@@ -439,10 +456,12 @@ public class Document extends ParentNode {
         return new Document(this);
     }
 
+    
     boolean isDocument() {
         return true;   
     }
 
+    
     /**
      * <p>
      * Returns a string representation of this node suitable 
@@ -460,4 +479,5 @@ public class Document extends ParentNode {
           + getRootElement().getQualifiedName() + "]"; 
     }
 
+    
 }
