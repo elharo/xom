@@ -41,14 +41,16 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  * 
  */
 class GenericWriter extends TextWriter {
     
+    
     private ByteArrayOutputStream bout;
     private OutputStreamWriter wout;
 
+    
     GenericWriter(Writer out, String encoding) 
       throws UnsupportedEncodingException {
         super(out, encoding);
@@ -56,6 +58,7 @@ class GenericWriter extends TextWriter {
         wout = new OutputStreamWriter(bout, encoding);
     }
 
+    
     boolean needsEscaping(char c) {
        
         // assume everything has at least the ASCII characters
@@ -72,9 +75,11 @@ class GenericWriter extends TextWriter {
             else if (data[0] == '?') result = true;
         }
         catch (IOException ex) {
-            throw new RuntimeException(
-              "Impossible to have an IOException when writing to a byte array"
-            );
+            // There really shouldn't be any IOException here.
+            // However chaarcter conversion bugs in Java 1.2
+            // sometimes throw one. In this case, we just say
+            // escape it. 
+            return true;
         }
         catch (Error err) {
             // This appears to be a wrapper around an undocumented
@@ -88,5 +93,6 @@ class GenericWriter extends TextWriter {
         return result;
         
     }
+   
     
 }
