@@ -49,7 +49,7 @@ import nu.xom.XPathException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d7
+ * @version 1.1a1
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -589,6 +589,48 @@ public class XPathTest extends XOMTestCase {
         assertEquals(2, result.size());
         assertEquals(child1, result.get(0));   
         assertEquals(child2, result.get(1));
+        
+    }
+    
+
+    // This does not actually hit the method I was aiming at. 
+    // Apparently, Jaxen never actually invokes
+    // getElementStringValue()
+    public void testGetElementStringValue() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child1 = new Element("child");
+        child1.appendChild("foo");
+        Element child2 = new Element("child");
+        child2.appendChild("bar");
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        grandparent.appendChild(parent);
+        
+        Nodes result = doc.query("descendant::*[.='foo']");
+        assertEquals(1, result.size());
+        assertEquals(child1, result.get(0)); 
+        
+    }
+    
+
+    public void testGetNonExistentNode() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child1 = new Element("child");
+        child1.appendChild("foo");
+        Element child2 = new Element("child");
+        child2.appendChild("bar");
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        grandparent.appendChild(parent);
+        
+        Nodes result = doc.query("/Test/Test/*[12]");
+        assertEquals(0, result.size()); 
         
     }
     
