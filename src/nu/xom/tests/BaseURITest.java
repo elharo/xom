@@ -59,11 +59,13 @@ public class BaseURITest extends XOMTestCase {
         super(name);
     }
 
+    
     private Document doc;
     private String base1 = "http://www.base1.com/";
     private String base2 = "http://www.base2.com/";
     private String base3 = "base3.html";
 
+    
     protected void setUp() {
         Element root = new Element("root");
         doc = new Document(root);
@@ -150,6 +152,118 @@ public class BaseURITest extends XOMTestCase {
     }
 
     
+    public void testASCIILettersWithXMLBaseAttribute() {
+
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+        String base = "HTTP://WWW.EXAMPLE.COM/" + alphabet;
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI());
+        
+        base = "HTTP://WWW.EXAMPLE.COM/" + alphabet.toUpperCase();
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI()); 
+        
+    }
+
+    
+    public void testXMLBaseWithParameters() {
+        String base = "scheme://authority/data/name;v=1.1/test.db";
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI());
+    }
+    
+    
+    public void testXMLBaseWithCommaParameter() {
+        String base = "scheme://authority/data/name,1.1/test.db";
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI());
+    }
+    
+    
+    // This one appears to be mostly theoretical
+    public void testXMLBaseWithDollarSign() {
+        String base = "scheme://authority/data$important";
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI());
+    }
+    
+    
+    public void testFragmentIDWithXMLBaseAttribute() {
+
+        String base = "HTTP://WWW.EXAMPLE.COM/#test";
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI());
+        
+    }
+
+    
+    public void testQueryString() {
+
+        String base = "http://www.example.com/test?name=value&data=important";
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI());
+        
+    }
+
+    // -" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")"
+    public void testUnreserved() {
+
+        String unreserved = "-.!~*'()";
+        String base = "http://www.example.com/" + unreserved;
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI());
+        
+    }
+    
+    
+    public void testDelims() {
+
+        String[] delims = {"<", ">", "\""};
+        for (int i = 0; i < delims.length; i++) {
+            String base = "http://www.example.com/" + delims[i] + "/";
+            Element root = new Element("test");
+            root.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace", base));
+            assertEquals("http://www.example.com/%" 
+              + Integer.toHexString(delims[i].charAt(0)).toUpperCase() 
+              + "/", root.getBaseURI());
+        }
+        
+    }
+    
+    
+    public void testUnwise() {
+
+        char[] unwise = {'{', '}', '|', '\\', '^', '`'};
+        for (int i = 0; i < unwise.length; i++) {
+            String base = "http://www.example.com/" + unwise[i] + "/";
+            Element root = new Element("test");
+            root.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace", base));
+            assertEquals("http://www.example.com/%" 
+              + Integer.toHexString(unwise[i]).toUpperCase() 
+              + "/", root.getBaseURI());
+        }
+        
+    }
+    
+    
     public void testBaseWithUnusualParts() {
         String base = "HTTP://user@host:WWW.EXAMPLE.COM:65130/TEST-2+final.XML?name=value&name2=value2";
         Element root = new Element("test");
@@ -166,10 +280,29 @@ public class BaseURITest extends XOMTestCase {
     }
 
     
-    public void testBaseWithUnreservedCharacters() {
+    public void testXMLBaseWithPlus() {
+        String base = "http://www.example.com/test+test";
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI());
+    }
+
+    
+    public void testXMLBaseWithUserInfoWithXMLBaseAttribute() {
+        String base = "http://invited:test@www.example.com/";
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        assertEquals(base, root.getBaseURI());
+    }
+
+    
+    public void testXMLBaseWithUnreservedCharacters() {
         String base = "http://www.example.com/()-_.!~*'";
         Element root = new Element("test");
-        root.setBaseURI(base);
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
         assertEquals(base, root.getBaseURI());
     }
 
