@@ -30,6 +30,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 
+import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -68,6 +69,40 @@ public class XIncludeTest extends XOMTestCase {
     }
  
     
+    
+    
+    public void testMarsh() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/marshtest.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/marshtest.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testBaselessDocument() 
+      throws IOException, ParsingException, XIncludeException {
+        
+        Element root = new Element("root");
+        Element child1 = new Element("xi:include", XIncluder.XINCLUDE_NS);
+        child1.addAttribute(new Attribute("xpointer", "p1"));
+        Element child2 = new Element("child2");
+        root.appendChild(child1);
+        root.appendChild(child2);
+        child2.addAttribute(new Attribute("id", "p1", Attribute.Type.ID));
+        Document in = new Document(root);
+        Document out = XIncluder.resolve(in);
+        String result = out.toXML();
+        assertEquals("<?xml version=\"1.0\"?>\r\n" +
+           "<root><child2 id=\"p1\" /><child2 id=\"p1\" /></root>\r\n", result);
+    }
+    
+
     public void testIncludeTextWithCustomNodeFactory() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -104,7 +139,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
-    public void testBaseURIsPreservedINSameDocumentInclusion() 
+    public void testBaseURIsPreservedInSameDocumentInclusion() 
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/includefromsamedocumentwithbase.xml");
@@ -753,7 +788,8 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
-    // Test we can inlcude form same document using only an xpointer attribute
+    // Test we can include from same document using only 
+    // an xpointer attribute
     public void testOnlyXPointer() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -1254,5 +1290,5 @@ public class XIncludeTest extends XOMTestCase {
 
     }
     
-        
+ 
 }
