@@ -51,7 +51,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b1
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -793,8 +793,8 @@ public class XPathTest extends XOMTestCase {
         
         Nodes result = doc.query("descendant::*/attribute::*[name(.)='pre:attribute']");
         assertEquals(2, result.size());
-        assertEquals(a1, result.get(0));   
-        assertEquals(a2, result.get(1));
+        assertTrue(result.contains(a1));   
+        assertTrue(result.contains(a2));
         
     }
     
