@@ -26,8 +26,6 @@ package nu.xom.tests;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import nu.xom.Attribute;
@@ -53,7 +51,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0a5
  *
  */
 public class BaseURITest extends XOMTestCase {
@@ -358,7 +356,7 @@ public class BaseURITest extends XOMTestCase {
         child.addAttribute(new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", ""));
         root.appendChild(child);
-        Document doc = new Document(root);
+        new Document(root);
         assertEquals("", child.getBaseURI());        
         
     }
@@ -374,26 +372,26 @@ public class BaseURITest extends XOMTestCase {
 
     
     public void testXMLBaseWithNonASCIICharacters() 
-      throws UnsupportedEncodingException, URISyntaxException {
+      throws UnsupportedEncodingException {
       
         String omega = "\u03A9";
         // In UTF-8 %ce%a9
         String base = "http://www.example.com/" + omega;
         Element root = new Element("test");
-        root.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", base));
-        // This is a Java 1.4 dependence
-        URI uri = new URI(root.getBaseURI());
-        assertEquals("/" + omega, uri.getPath());
+        root.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", base));;
+        assertEquals("http://www.example.com/%ce%a9", root.getBaseURI());
         
     }
     
     
     public void testBaseWithNonASCIICharacters() 
-      throws UnsupportedEncodingException, URISyntaxException {
+      throws UnsupportedEncodingException {
+        
         String base = "http://www.example.com/%ce%a9";
         Element root = new Element("test");
         root.setBaseURI(base);
         assertEquals(base, root.getBaseURI());
+        
     }
     
     
@@ -658,6 +656,7 @@ public class BaseURITest extends XOMTestCase {
     
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
+        
         Builder builder = new Builder();
         Document doc = builder.build(
           "http://www.ibiblio.org/xml/redirecttest.xml");
@@ -665,6 +664,7 @@ public class BaseURITest extends XOMTestCase {
           "http://www.ibiblio.org/xml/redirected/target.xml", 
           doc.getBaseURI()
         );
+        
     } 
    
     
