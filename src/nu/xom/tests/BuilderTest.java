@@ -1720,13 +1720,24 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsSharpInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/# file.xml"));
-        String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<data />\n";
-        String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
-        assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%23%20file.xml"));
+        File f = new File("data/#file.xml");
+        try {
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("<data />");
+            out.flush();
+            out.close();
+            Document doc = builder.build(f);
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/%23file.xml"));
+        }
+        finally {
+            if (f.exists()) f.delete();
+        }
         
     }
   
@@ -1889,13 +1900,24 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsCommaInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/,file.xml"));
-        String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<data />\n";
-        String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
-        assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/,file.xml"));
+        File f = new File("data/,file.xml");
+        try {
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("<data />");
+            out.flush();
+            out.close();
+            Document doc = builder.build(f);
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/,file.xml"));
+        }
+        finally {
+            if (f.exists()) f.delete();
+        }
         
     }
   
