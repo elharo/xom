@@ -304,7 +304,8 @@ public class XPathTest extends XOMTestCase {
             // this query needs special comparison code due to 
             // adjacent text nodes
             if ("Q21".equals(id)) continue;
-            // XXX Q32 and Q42 might be a real bug in XOM/jaxen, investigate further
+            // test suite bug: missing white space in mailbox 
+            // element in item 3 in result
             else if ("Q32".equals(id)) continue;
             else if ("Q42".equals(id)) continue;
             // test suite bug relating to id() function
