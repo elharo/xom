@@ -495,7 +495,6 @@ public class BuilderTest extends XOMTestCase {
             
             AttributesImpl newAtts = new AttributesImpl(atts);
             for (int i = 0; i < newAtts.getLength(); i++) {
-                String type = newAtts.getType(i);
                 newAtts.setType(i, "WEIRD");
             }
             
@@ -536,7 +535,6 @@ public class BuilderTest extends XOMTestCase {
             
             AttributesImpl newAtts = new AttributesImpl(atts);
             for (int i = 0; i < newAtts.getLength(); i++) {
-                String type = newAtts.getType(i);
                 newAtts.setType(i, "(test, data, value)");
             }
             
