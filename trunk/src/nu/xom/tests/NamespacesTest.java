@@ -340,15 +340,37 @@ public class NamespacesTest extends XOMTestCase {
    } 
 
 
-   public void testUndeclareDefaultNamespace() {
-       Element parent = new Element("parent", "http://www.example.org/");
-       Element e2 = new Element("pre:test", "http://www.example.net");
-       parent.appendChild(e2);
-       e2.addNamespaceDeclaration("", "");
-       assertEquals("", e2.getNamespaceURI(""));      
-   } 
+    public void testUndeclareDefaultNamespace() {
+        Element parent = new Element("parent", "http://www.example.org/");
+        Element e2 = new Element("pre:test", "http://www.example.net");
+        parent.appendChild(e2);
+        e2.addNamespaceDeclaration("", "");
+        assertEquals("", e2.getNamespaceURI(""));      
+    } 
 
-   public void testAdding() {
+    public void testForConflictWithDefaultNamespace() {
+        Element e = new Element("test", "http://www.example.net");
+        try {
+            e.addNamespaceDeclaration("", "http://www.example.com");
+            fail("Conflicting default namespace");
+        }
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());   
+        }
+    } 
+
+    public void testConflictingUndeclarationOfDefaultNamespace() {
+        Element e = new Element("test", "http://www.example.net");
+        try {
+            e.addNamespaceDeclaration("", "");
+            fail("Conflicting undeclaration of default namespace");
+        }
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());   
+        }
+    } 
+
+    public void testAdding() {
     
         try {
             noNamespaces.addNamespaceDeclaration("", 
