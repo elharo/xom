@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -49,7 +49,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0a1
  *
  */
 public abstract class Node {
@@ -63,8 +63,9 @@ public abstract class Node {
      * the <code>nu.xom</code> package.
      * </p>
      */
-     Node() {}
+    Node() {}
 
+     
     /**
      * <p>
      * Returns the XPath 1.0 string-value of this node.
@@ -73,6 +74,7 @@ public abstract class Node {
      * @return the XPath 1.0 string-value of this node
      */
     public abstract String getValue();
+    
     
     /**
      * 
@@ -93,6 +95,7 @@ public abstract class Node {
         }
         return (Document) parent;
     }
+    
     
     /**
      * 
@@ -189,7 +192,7 @@ public abstract class Node {
 
         checkDetach();
         if (parent == null) return;
-        else if (this instanceof Attribute) {
+        else if (this.isAttribute()) {
             Element element = (Element) parent;
             element.removeAttribute((Attribute) this);
         }
@@ -199,6 +202,7 @@ public abstract class Node {
 
     }
  
+    
     /**
      * <p>
      * Subclasses can override this method to perform additional 
@@ -213,15 +217,7 @@ public abstract class Node {
     protected void checkDetach() {
     }
 
-    /**
-     * <p>
-     * Returns true if this node currently has children.
-     * </p>
-     * 
-     * @return true if this node contains child nodes
-     */
-    public abstract boolean hasChildren();
-    
+
     /**
      * <p>
      *  Returns the index<sup>th</sup>
@@ -236,6 +232,7 @@ public abstract class Node {
      */
     public abstract Node getChild(int position);
 
+    
     /**
      * <p>
      * Returns the number of children of this node.
@@ -246,6 +243,7 @@ public abstract class Node {
      */
     public abstract int getChildCount();
 
+    
     /**
      * <p>
      * Returns a deep copy of this node with no parent,
@@ -267,6 +265,7 @@ public abstract class Node {
      */
     public abstract Node copy();        
 
+    
     /**
      * <p>
      * Returns the actual XML form of this node, such as might be
@@ -276,6 +275,7 @@ public abstract class Node {
      * @return a String containing an XML representation of this node
      */
     public abstract String toXML(); 
+    
     
     /**
      * <p>
@@ -294,6 +294,7 @@ public abstract class Node {
         return this == o; 
     }       
 
+    
     /**
      * <p>
      * Returns a unique identifier for this node.
