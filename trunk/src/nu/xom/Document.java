@@ -123,43 +123,6 @@ public class Document extends ParentNode {
          }
         // It should not be possible to get here
         throw new WellformednessException("Missing root element");
-    }
-
-    
-    /**
-     * <p>
-     * Replaces an existing child with a new child node.
-     * If <code>oldChild</code> is not a child of this node, 
-     * then a <code>NoSuchChildException</code> is thrown. 
-     * The root element can only be replaced by another element.
-     * </p>
-     * 
-     * @param oldChild the node removed from the tree
-     * @param newChild the node inserted into the tree
-     * 
-     * @throws MultipleParentException if <code>newChild</code> already
-     *     has a parent
-     * @throws NoSuchChildException if <code>oldChild</code> 
-     *     is not a child of this node
-     * @throws NullPointerException if either argument is null
-     * @throws IllegalAddException if this node cannot have children 
-     *     of the type of <code>newChild</code>
-     * @throws XMLException if the subclass rejects the removal of
-     *     oldChild or the insertion of newChild
-     */
-    public final void replaceChild(Node oldChild, Node newChild) {
-          
-        if (oldChild == getRootElement() 
-          && newChild != null && newChild.isElement()) {
-            setRootElement((Element) newChild);
-        } 
-        else if (oldChild == getDocType() 
-          && newChild != null && newChild.isDocType()) {
-            setDocType((DocType) newChild);
-        }
-        else {
-            super.replaceChild(oldChild, newChild);
-        }
         
     }
     
@@ -237,6 +200,7 @@ public class Document extends ParentNode {
      * @return the root element
      */
     public final Element getRootElement() {
+        
         // This looks like an infinite loop but it isn't because
         // all documents have root elements.
         for (int i = 0; ; i++) {
@@ -245,6 +209,7 @@ public class Document extends ParentNode {
                 return (Element) child;
              }
          }
+        
     }
 
     
@@ -283,7 +248,36 @@ public class Document extends ParentNode {
         root.setParent(this);
         
     }
-
+    
+    
+    /**
+     * 
+     * <p>
+     * Sets the URI from which this node was loaded,
+     * and against which relative URLs in this node will be resolved.
+     * </p>
+     * 
+     * @param URI the base URI of this document 
+     * 
+     * @throws MalformedURIException if <code>URI</code> is 
+     *     not a legal IRI
+     */
+    public final void setBaseURI(String URI) { 
+        setActualBaseURI(URI);       
+    }
+    
+    
+    /**
+     * <p>
+     *   Returns the URI from which this document was loaded.
+     * </p>
+     * 
+     * @return the base URI of this document 
+     */
+    public final String getBaseURI() {       
+        return getActualBaseURI();       
+    }
+    
     
     /**
      * <p>
@@ -334,9 +328,7 @@ public class Document extends ParentNode {
     
     /**
      * <p>
-     * Removes the specified child from this node.
-     * It throws a <code>NoSuchChildException</code> 
-     * if the node is not a child of this node.  
+     * Removes the specified child from this document.
      * The root element cannot be removed.
      * Instead, use <code>setRootElement</code> to replace the
      * existing root element with a different element.
@@ -361,32 +353,43 @@ public class Document extends ParentNode {
     }
 
     
-    /**
-     * 
-     * <p>
-     * Sets the URI from which this node was loaded,
-     * and against which relative URLs in this node will be resolved.
-     * </p>
-     * 
-     * @param URI the base URI of this document 
-     * 
-     * @throws MalformedURIException if <code>URI</code> is 
-     *     not a legal IRI
-     */
-    public final void setBaseURI(String URI) { 
-        setActualBaseURI(URI);       
-    }
-    
+
     
     /**
      * <p>
-     *   Returns the URI from which this document was loaded.
+     * Replaces an existing child with a new child node.
+     * If <code>oldChild</code> is not a child of this node, 
+     * then a <code>NoSuchChildException</code> is thrown. 
+     * The root element can only be replaced by another element.
      * </p>
      * 
-     * @return the base URI of this document 
+     * @param oldChild the node removed from the tree
+     * @param newChild the node inserted into the tree
+     * 
+     * @throws MultipleParentException if <code>newChild</code> already
+     *     has a parent
+     * @throws NoSuchChildException if <code>oldChild</code> 
+     *     is not a child of this node
+     * @throws NullPointerException if either argument is null
+     * @throws IllegalAddException if this node cannot have children 
+     *     of the type of <code>newChild</code>
+     * @throws XMLException if the subclass rejects the removal of
+     *     oldChild or the insertion of newChild
      */
-    public final String getBaseURI() {       
-        return getActualBaseURI();       
+    public final void replaceChild(Node oldChild, Node newChild) {
+          
+        if (oldChild == getRootElement() 
+          && newChild != null && newChild.isElement()) {
+            setRootElement((Element) newChild);
+        } 
+        else if (oldChild == getDocType() 
+          && newChild != null && newChild.isDocType()) {
+            setDocType((DocType) newChild);
+        }
+        else {
+            super.replaceChild(oldChild, newChild);
+        }
+        
     }
 
 
@@ -464,7 +467,7 @@ public class Document extends ParentNode {
     
     /**
      * <p>
-     * Returns a string representation of this node suitable 
+     * Returns a string representation of this document suitable 
      * for debugging and diagnosis. This is <em>not</em>
      * the XML representation of this document.
      * </p>

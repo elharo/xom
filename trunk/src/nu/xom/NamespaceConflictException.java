@@ -27,8 +27,8 @@ package nu.xom;
  * 
  * <p>
  * A <code>NamespaceConflictException</code> signals an attempt 
- * to set a namespace in a way that conflicts with an exisitng 
- * namespace; for instance, assigning adding an attribute to
+ * to set a namespace in a way that conflicts with an existing 
+ * namespace; for instance, adding an attribute to
  * an element that has the same prefix as the element but maps it
  * to a different URI. 
  * </p>

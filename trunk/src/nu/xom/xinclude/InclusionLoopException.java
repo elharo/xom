@@ -31,17 +31,14 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  */
 public class InclusionLoopException extends XIncludeException {
 
     /**
      * <p>
      * Constructs an <code>InclusionLoopException</code> with  
-     * the specified detail message. The error message string 
-     * <code>message</code> can be retrieved by the 
-     * <code>{@link java.lang.Throwable#getMessage}</code>
-     * method of class <code>java.lang.Throwable</code>.
+     * the specified detail message. 
      * </p>
      * 
      * @param message the detail message

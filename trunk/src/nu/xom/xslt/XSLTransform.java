@@ -107,10 +107,11 @@ import nu.xom.Nodes;
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  */
 public final class XSLTransform {
 
+    
     /**
      * <p>
      * The compiled form of the XSLT stylesheet that this object
@@ -121,13 +122,15 @@ public final class XSLTransform {
     private Templates   templates;  
     private NodeFactory factory = new NodeFactory();  
     
+    
     // I could use one TransformerFactory field instead of local
     // variables but then I'd have to synchronize it; and it would
     // be hard to change the class used to transform
 
+    
     /**
      * <p>
-     *  This will create a new <code>XSLTransform</code> by
+     *  Creates a new <code>XSLTransform</code> by
      *  reading the stylesheet from the specified <code>Source</code>.
      * </p>
      *
@@ -157,12 +160,12 @@ public final class XSLTransform {
     
     /**
      * <p>
-     *   This will create a new <code>XSLTransform</code> by
+     *   Creates a new <code>XSLTransform</code> by
      *   reading the stylesheet from the specified 
      *   <code>InputStream</code>.
      * </p>
      *
-     * @param stylesheet <code>InputStream</code> from 
+     * @param stylesheet input stream from 
      *      which the stylesheet is read
      * 
      * @throws XSLException when an IOException, format error, or
@@ -174,12 +177,12 @@ public final class XSLTransform {
 
     /**
      * <p>
-     *   This will create a new <code>XSLTransform</code> by
+     *   Creates a new <code>XSLTransform</code> by
      *   reading the stylesheet from the specified 
      *   <code>Reader</code>.
      * </p>
      *
-     * @param stylesheet <code>Reader</code> from which the stylesheet
+     * @param stylesheet character stream from which the stylesheet
      *     is read
      * 
      * @throws XSLException when an IOException, format error, or
@@ -189,13 +192,14 @@ public final class XSLTransform {
         this(new StreamSource(stylesheet));
     }
   
+    
     /**
      * <p>
-     * This will create a new <code>XSLTransform</code> 
+     * Creates a new <code>XSLTransform</code> 
      * by reading the stylesheet from the specified <code>File</code>.
      * </p>
      *
-     * @param stylesheet <code>File</code> from which the 
+     * @param stylesheet file from which the 
      *      stylesheet is read
      * 
      * @throws XSLException when an IOException, format error, or
@@ -205,9 +209,10 @@ public final class XSLTransform {
         this(new StreamSource(stylesheet));
     }
   
+    
     /**
      * <p>
-     * This will create a new <code>XSLTransform</code> by
+     * Creates a new <code>XSLTransform</code> by
      * reading the stylesheet from the specified <code>Document</code>.
      * </p>
      *
@@ -221,9 +226,10 @@ public final class XSLTransform {
         this(new XOMSource(stylesheet));
     }
   
+    
     /**
      * <p>
-     * This will create a new <code>XSLTransform</code> by
+     * Creates a new <code>XSLTransform</code> by
      *  reading the stylesheet from the specified URL.
      * </p>
      *
@@ -236,15 +242,16 @@ public final class XSLTransform {
         this(new StreamSource(systemID));
     }
   
+    
     /**
      * <p>
-     * This will create a new <code>Nodes</code> from the
+     * Creates a new <code>Nodes</code> from the
      * input <code>Document</code> by applying this object's
      * stylesheet. The original <code>Document</code> is not 
      * changed.
      * </p>
      *
-     * @param in <code>Document</code> to transform
+     * @param in document to transform
      * 
      * @return a <code>Nodes</code> containing the result of the
      *     transformation
@@ -256,9 +263,10 @@ public final class XSLTransform {
         return transform(new XOMSource(in));
     }
   
+    
     /**
      * <p>
-     * This will create a new <code>Nodes</code> from the
+     * Creates a new <code>Nodes</code> from the
      * input <code>Nodes</code> by applying this object's
      * stylesheet. The original <code>Nodes</code> is not 
      * changed.
@@ -277,9 +285,10 @@ public final class XSLTransform {
         return transform(new XOMSource(in));
     }
 
+    
     /**
      * <p>
-     * This will create a new <code>Nodes</code> from the
+     * Creates a new <code>Nodes</code> from the
      * input <code>Source</code> by applying this object's
      * stylesheet. The original <code>Source</code> is not 
      * changed.
@@ -306,7 +315,6 @@ public final class XSLTransform {
     }
     
     
-    
     /**
      * <p>
      *   Sets the factory used to construct nodes in the output tree.
@@ -321,9 +329,10 @@ public final class XSLTransform {
         else this.factory = factory;
     }
   
+    
     /**
      * <p>
-     *  This returns a <code>String</code> form of this
+     *  Returns a string form of this
      *  <code>XSLTransform</code>, suitable for debugging.
      * </p>
      *
@@ -333,4 +342,5 @@ public final class XSLTransform {
         return "[" + getClass().getName() + ": " + templates + "]";   
     }
   
+    
 }

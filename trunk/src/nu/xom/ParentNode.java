@@ -32,7 +32,7 @@ import java.util.List;
  * <p>
  * This is the generic superclass for nodes 
  * that have children. Not counting subclasses,
- * there are exactly two such nodes in XOM:
+ * there are exactly two such classes in XOM:
  * </p>
  * 
  * <ul>
@@ -101,13 +101,13 @@ public abstract class ParentNode extends Node {
      * @param position where to insert the child
      * @param child the node to insert
      * 
-     * @throws IllegalAddException if this node cannot have child of
+     * @throws IllegalAddException if this node cannot have a child of
      *     the argument's type
      * @throws MultipleParentException if <code>child</code> already 
      *     has a parent
      * @throws NullPointerException if <code>child</code> is null
      * @throws IndexOutOfBoundsException if the position is negative or 
-     *       greater than the number of children of this node
+     *     greater than the number of children of this node
      * @throws XMLException if the concrete subclass rejects this child
      */
     public final void insertChild(Node child, int position) {
@@ -150,6 +150,7 @@ public abstract class ParentNode extends Node {
      *     of this type
      * @throws MultipleParentException if child already has a parent
      * @throws NullPointerException if <code>child</code> is null
+     * @throws XMLException if the concrete subclass rejects this child
      * 
      */
     public final void appendChild(Node child) {
@@ -242,7 +243,7 @@ public abstract class ParentNode extends Node {
      * @return the node which was removed
      * 
      * @throws NoSuchChildException if <code>child</code> is 
-     *     not in fact a child of this node.
+     *     not in fact a child of this node
      * @throws XMLException if the subclass rejects the removal
      */
     public Node removeChild(Node child) {
@@ -276,8 +277,8 @@ public abstract class ParentNode extends Node {
      *   they can prevent the child from being removed.
      * </p>
      * 
-     * @param position location of the node to be removed
      * @param child the node to be removed
+     * @param position location of the node to be removed
      *
      * @throws XMLException if the subclass rejects the removal
      */
@@ -302,7 +303,8 @@ public abstract class ParentNode extends Node {
      * @throws IllegalAddException if this node cannot have children 
      *     of the type of <code>newChild</code>
      * @throws XMLException if the subclass rejects the removal of
-     *     oldChild or the insertion of newChild
+     *     <code>oldChild</code> or the insertion of 
+     *     <code>newChild</code>
      */
     public void replaceChild(Node oldChild, Node newChild) {
         

@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -27,7 +27,7 @@ package nu.xom;
 /**
  * <p>
  *  This is the generic superclass for all the
- *  runtime exceptions thrown in nu.xom. The general
+ *  runtime exceptions thrown in <code>nu.xom</code>. The general
  *  principle followed is that anything that could
  *  plausibly be detected by testing such as 
  *  using spaces in an element name is a runtime exception.
@@ -38,13 +38,14 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class XMLException extends RuntimeException {
 
     private Throwable cause;
 
+    
     /**
      * <p>
      * Creates a new <code>XMLException</code> 
@@ -59,6 +60,7 @@ public class XMLException extends RuntimeException {
         super(message);
         this.initCause(cause);
     }
+    
     
     /**
      * <p>
@@ -85,10 +87,12 @@ public class XMLException extends RuntimeException {
         return this.cause;  
     }
 
+    
     // null is insufficient for detecting an unset cause.
     // The cause may be set to null whicn may not then be reset.
     private boolean causeSet = false;
 
+    
     /**
      * <p>
      * Sets the root cause of this exception. This may 
@@ -111,6 +115,7 @@ public class XMLException extends RuntimeException {
      * @throws IllegalStateException if this method is called twice
      */
     public Throwable initCause(Throwable cause) {
+        
         if (causeSet) {
             throw new IllegalStateException("Can't overwrite cause");
         } 
@@ -120,6 +125,8 @@ public class XMLException extends RuntimeException {
         else this.cause = cause;
         causeSet = true;
         return this;
+        
     }
 
+    
 }

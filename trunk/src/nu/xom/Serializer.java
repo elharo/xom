@@ -43,7 +43,7 @@ import java.io.Writer;
  *  feeds to spaces, add extra space where none was present before, 
  *  and otherwise muck with the document's white space. 
  *  The defaults, however, preserve all significant white space
- *  including ignorable white space, to the maximum extent possible.
+ *  including ignorable white space and boundary white space.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -151,15 +151,15 @@ public class Serializer {
     
     /**
      * <p>
-     * Flushes the previous <code>OutputStream</code> and sets
-     * redirects further output to the new <code>OutputStream</code>.
+     * Flushes the previous output stream and 
+     * redirects further output to the new output stream.
      * </p>
      * 
      * 
      * @param out the output stream to write the document on
 
      * @throws NullPointerException if <code>out</code> is null
-     * @throws IOException if the previous <code>OutputStream</code> 
+     * @throws IOException if the previous output stream 
      *     encounters an I/O error when flushed
      *  
      */
@@ -224,9 +224,12 @@ public class Serializer {
      * 
      * @param doc the <code>Document</code> to serialize
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *      encounters an I/O error
      * @throws NullPointerException if <code>doc</code> is null
+     * @throws XMLException if the document contains an unescapable
+     *     character (e.g. in an element name) that is not available 
+     *     in the current encoding
      */
     public void write(Document doc) throws IOException {
         
@@ -249,11 +252,11 @@ public class Serializer {
 
     /**
      * <p>
-     * This method writes the XML declaration onto the output stream,
+     * Writes the XML declaration onto the output stream,
      * followed by a line break.
      * </p>
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *      encounters an I/O error
      */
     protected void writeXMLDeclaration() throws IOException {
@@ -270,7 +273,7 @@ public class Serializer {
      * <p>
      * Serializes an element onto the output stream using the current
      * options. The result is guaranteed to be well-formed. If 
-     * <code>element</code> does not have a parent element, it  
+     * <code>element</code> does not have a parent element, the output  
      * will also be namespace well-formed.
      * </p>
      * 
@@ -294,8 +297,10 @@ public class Serializer {
      * 
      * @param element the <code>Element</code> to serialize
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
+     * @throws XMLException if the element name contains  
+     *     a character that is not available in the current encoding
      */
     protected void write(Element element) throws IOException {
 
@@ -359,14 +364,16 @@ public class Serializer {
     
     /**
      * <p>
-     *   This method writes the end-tag for an element in the form
+     *   Writes the end-tag for an element in the form
      *   <code>&lt;/<i>name</i>&gt;</code>.
      * </p>
      * 
      * @param element the element whose end-tag is written
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
+     * @throws XMLException if the element name contains  
+     *     a character that is not available in the current encoding
      */
     protected void writeEndTag(Element element) throws IOException {
         escaper.writeMarkup("</");
@@ -378,7 +385,7 @@ public class Serializer {
     /**
      * 
      * <p>
-     *  This method writes the start-tag for the element including
+     *  Writes the start-tag for the element including
      *  all its namespace declarations and attributes.
      * </p>
      * 
@@ -391,8 +398,11 @@ public class Serializer {
      * 
      * @param element the element whose start-tag is written
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
+     * @throws XMLException if the name of the element or the name of
+     *     any of its attributes contains a character that is not 
+     *     available in the current encoding
      */
     protected void writeStartTag(Element element) throws IOException {
         writeTagBeginning(element);
@@ -403,7 +413,7 @@ public class Serializer {
     /**
      * 
      * <p>
-     *  This method writes an empty-element tag for the element 
+     *  Writes an empty-element tag for the element 
      *  including all its namespace declarations and attributes.
      * </p>
      * 
@@ -423,8 +433,11 @@ public class Serializer {
      * 
      * @param element the element whose empty-element tag is written
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
+     * @throws XMLException if the name of the element or the name of
+     *     any of its attributes contains a character that is not 
+     *     available in the current encoding
      */
     protected void writeEmptyElementTag(Element element) 
       throws IOException {
@@ -446,7 +459,7 @@ public class Serializer {
 
     /**
      * <p>
-     *   This method writes all the attributes of the specified
+     *   Writes all the attributes of the specified
      *   element onto the output stream, one at a time, separated
      *   by white space. If preserveBaseURI is true, and it is
      *   necessary to add an <code>xml:base</code> attribute
@@ -458,8 +471,11 @@ public class Serializer {
      * 
      * @param element the <code>Element</code> whose attributes are 
      *     written
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
+     * @throws XMLException if the name of any of the element's 
+     *     attributes contains a character that is not 
+     *     available in the current encoding
      */
     protected void writeAttributes(Element element)
       throws IOException {
@@ -497,7 +513,7 @@ public class Serializer {
     
     /**
      * <p>
-     *   This method writes all the namespace declaration
+     *   Writes all the namespace declaration
      *   attributes of the specified element onto the output stream,
      *   one at a time, separated by white space. Each individual 
      *   declaration is written by invoking 
@@ -506,8 +522,11 @@ public class Serializer {
      * 
      * @param element the <code>Element</code> whose attributes are 
      *     written
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
+     * @throws XMLException if any of the element's namespace prefixes
+     *     contains a character that is not available in the current 
+     *     encoding
      */
     protected void writeNamespaceDeclarations(Element element)
       throws IOException {
@@ -537,19 +556,21 @@ public class Serializer {
 
     /**
      * <p>
-     *   This writes a namespace declaration in the form
+     *   Writes a namespace declaration in the form
      *   <code>xmlns:<i>prefix</i>="<i>uri</i>"</code> or 
      *   <code>xmlns="<i>uri</i>"</code>. It does not write
      *   the spaces on either side of the namespace declaration.
-     *   These are written by <code>writeStartTag</code>
+     *   These are written by <code>writeNamespaceDeclarations</code>.
      * </p>
      * 
      * @param prefix the namespace prefix; the empty string for the
      *     default namespace
      * @param uri the namespace URI
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
+     * @throws XMLException if the namespace prefix contains a 
+     *     character that is not available in the current encoding
      */
     protected void writeNamespaceDeclaration(String prefix, String uri)
       throws IOException {
@@ -568,15 +589,18 @@ public class Serializer {
     
     /**
      * <p>
-     *   This method writes an attribute in the form 
+     *   Writes an attribute in the form 
      *   <code><i>name</i>="<i>value</i>"</code>.
      *   Characters in the attribute value are escaped as necessary.
      * </p>
      * 
      * @param attribute the <code>Attribute</code> to write
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
+     * @throws XMLException if the attribute name contains a character 
+     *     that is not available in the current encoding
+     * 
      */
     protected void write(Attribute attribute) throws IOException {
         escaper.writeMarkup(attribute.getQualifiedName());
@@ -588,7 +612,7 @@ public class Serializer {
     
     /**
      * <p>
-     * Serializes a <code>Comment</code> object
+     * Writes a <code>Comment</code> object
      * onto the output stream using the current options.
      * </p>
      * 
@@ -601,8 +625,10 @@ public class Serializer {
      * 
      * @param comment the <code>Comment</code> to serialize
      * 
-     * @throws IOException if the underlying <code>OutputStream</code> 
+     * @throws IOException if the underlying output stream 
      *     encounters an I/O error
+     * @throws XMLException if the comment contains a character that is
+     *     not available in the current encoding
      */
     protected void write(Comment comment) throws IOException {
         if (escaper.isIndenting()) escaper.breakLine();
@@ -614,7 +640,7 @@ public class Serializer {
     
     /**
      * <p>
-     * Serializes a <code>ProcessingInstruction</code> object
+     * Writes a <code>ProcessingInstruction</code> object
      * onto the output stream using the current options.
      * </p>
      * 
@@ -629,8 +655,10 @@ public class Serializer {
      * @param instruction the <code>ProcessingInstruction</code> 
      *     to serialize
      * 
-     * @throws IOException  if the underlying <code>OutputStream</code>
+     * @throws IOException  if the underlying output stream
      *     encounters an I/O error
+     * @throws XMLException if the comment contains a character that is
+     *     not available in the current encoding
      */
     protected void write(ProcessingInstruction instruction) 
       throws IOException {
@@ -649,7 +677,7 @@ public class Serializer {
     
     /**
      * <p>
-     * Serializes a <code>Text</code> object
+     * Writes a <code>Text</code> object
      * onto the output stream using the current options.
      * Reserved characters such as &lt;, &gt; and "
      * are escaped using the standard entity references 
@@ -660,44 +688,13 @@ public class Serializer {
      * <p>
      *   Characters which cannot be encoded in the current character set
      *   (for example, &Omega; in ISO-8859-1) are encoded using 
-     *   character references.
-     * </p>
-     * 
-     * <p>
-     *   Unsupported character sets encode all non-ASCII characters.
-     *   Supported character sets currently include:
-     * </p>
-     * 
-     * <ul>
-     *   <li>Unicode in its various encodings</li>
-     *   <li>Latin-1 (ISO-8859-1)</li>
-     *   <li>Latin-2 (ISO-8859-2)</li>
-     *   <li>Latin-3 (ISO-8859-3)</li>
-     *   <li>Latin-4 (ISO-8859-4)</li>
-     *   <li>ISO-8859-5 (Cyrillic)</li>
-     *   <li>ISO-8859-6 (Arabic)</li>
-     *   <li>ISO-8859-7 (Greek)</li>
-     *   <li>ISO-8859-8 (Hebrew)</li>
-     *   <li>ISO-8859-9 (Latin-5)</li>
-     *   <li>ISO-8859-10 (Latin-6)</li>
-     *   <li>ISO-8859-11 Thai</li>
-     *   <li>ISO-8859-13 (Latin-7)</li>
-     *   <li>ISO-8859-14 (Latin-8)</li>
-     *   <li>ISO-8859-15 (Latin-9)</li>
-     *   <li>ISO-8859-16 (Latin-10)</li>
-     * </ul>
-     * 
-     * <p>
-     *   Non-ASCII characters from other character sets 
-     *   will probably be hexadecimally escaped.
-     *   even when they don't need to be. 
-     *   More standard character sets will be added in the future.
-     *   This will not require any changes to the public API.
+     *   character references. Unsupported character sets encode all
+     *   non-ASCII characters, even when they don't need to be. 
      * </p> 
      * 
      * @param text the <code>Text</code> to serialize
      * 
-     * @throws IOException  if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
      */
     protected void write(Text text) throws IOException {
@@ -725,14 +722,16 @@ public class Serializer {
     
     /**
      * <p>
-     * Serializes a <code>DocType</code> object
+     * Writes a <code>DocType</code> object
      * onto the output stream using the current options.
      * </p>
      * 
      * @param doctype the document type declaration to serialize
      * 
      * @throws IOException if the underlying 
-     *     <code>OutputStream</code> encounters an I/O error
+     *     output stream encounters an I/O error
+     * @throws XMLException if the document type declaration contains  
+     *     a character that is not available in the current encoding
      */
     protected void write(DocType doctype) throws IOException {
         escaper.writeMarkup("<!DOCTYPE ");
@@ -762,7 +761,7 @@ public class Serializer {
     
     /**
      * <p>
-     * Serializes a child node onto the output stream using the  
+     * Writes a child node onto the output stream using the  
      * current options. It is invoked when walking the tree to
      * serialize the entire document. It is not called, and indeed
      * should not be called, for either the <code>Document</code> 
@@ -771,7 +770,7 @@ public class Serializer {
      * 
      * @param node the <code>Node</code> to serialize
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error
      * @throws XMLException if an <code>Attribute</code> or a 
      *     <code>Document</code> is passed to this method
@@ -803,7 +802,7 @@ public class Serializer {
  
     
     /** <p>
-     *   Writes a string onto the underlying <code>OutputStream</code>.
+     *   Writes a string onto the underlying output stream.
      *   Non-ASCII characters that are not available in the
      *   current character set are hexadecimally escaped.
      *   The three reserved characters &lt;, &gt;, and &amp; 
@@ -815,7 +814,7 @@ public class Serializer {
      * 
      * @param text the <code>String</code> to serialize
      * 
-     * @throws IOException if the underlying <code>OutputStream</code> 
+     * @throws IOException if the underlying output stream 
      *     encounters an I/O error
      */
     protected final void writeEscaped(String text) throws IOException {
@@ -823,7 +822,7 @@ public class Serializer {
     }   
  
     /** <p>
-     *   Writes a string onto the underlying <code>OutputStream</code>.
+     *   Writes a string onto the underlying output stream.
      *   Non-ASCII characters that are not available in the
      *   current character set are escaped using hexadeicmal numeric
      *   character references.  Carriage returns, line feeds, and tabs
@@ -838,7 +837,7 @@ public class Serializer {
      * 
      * @param value the <code>String</code> to serialize
      * 
-     * @throws IOException if the underlying <code>OutputStream</code> 
+     * @throws IOException if the underlying output stream 
      *     encounters an I/O error
      */
     protected final void writeAttributeValue(String value)
@@ -848,7 +847,7 @@ public class Serializer {
  
     
     /** <p>
-     *   Writes a string onto the underlying <code>OutputStream</code>.
+     *   Writes a string onto the underlying output stream.
      *   without escaping any characters.
      *   Non-ASCII characters that are not available in the
      *   current character set cause an <code>IOException</code>.
@@ -856,7 +855,7 @@ public class Serializer {
      * 
      * @param text the <code>String</code> to serialize
      * 
-     * @throws IOException if the underlying <code>OutputStream</code>
+     * @throws IOException if the underlying output stream
      *     encounters an I/O error or <code>text</code> contains 
      *     characters not available in the current character set
      */
@@ -867,11 +866,11 @@ public class Serializer {
     
     /** <p>
      *   Writes the current line break string
-     *   onto the underlying <code>OutputStream</code> and indents
+     *   onto the underlying output stream and indents
      *   as specified by the current level and the indent property.
      * </p> 
      * 
-     * @throws IOException if the underlying <code>OutputStream</code> 
+     * @throws IOException if the underlying output stream 
      *     encounters an I/O error
      */
     protected final void breakLine() throws IOException {
@@ -881,7 +880,7 @@ public class Serializer {
     
     /**
      * <p>
-     * Flush the data onto the output stream.
+     * Flushes the data onto the output stream.
      * It is not enough to flush the output stream.
      * You must flush the serializer object itself because it
      * uses some internal buffering.
@@ -889,7 +888,7 @@ public class Serializer {
      * </p>
      * 
      * @throws IOException  if the underlying  
-     *     <code>OutputStream</code> encounters an I/O error
+     *     output stream encounters an I/O error
      */
     public void flush() throws IOException {
         escaper.flush();    
@@ -981,17 +980,17 @@ public class Serializer {
      * If this method is invoked, then 
      * line separators in the character data will be changed to this
      * string. Line separators in attribute values will be changed
-     * to the hexadecimal numerica character references corresponding
+     * to the hexadecimal numeric character references corresponding
      * to this string.
      * </p>
      * 
      * <p>
      *  The default line separator is <code>"\r\n"</code>. However, 
      *  line separators in character data and attribute values are not 
-     *  changed to this string, unless you explicitly call this method.
+     *  changed to this string, unless this method is called first.
      * </p>
      * 
-     * @param lineSeparator The lineSeparator to set
+     * @param lineSeparator the lineSeparator to set
      * 
      * @throws IllegalArgumentException if you attempt to use any line
      *    separator other than <code>"\n"</code>, <code>"\r"</code>, 
@@ -1159,11 +1158,10 @@ public class Serializer {
     
     /**
      * <p>
-     *   This method returns the current column number 
-     *   of the output stream, It's useful for subclasses that
-     *   wish to implement their own pretty printing strategies
-     *   by inserting white space and line breaks at appropriate 
-     *   points.
+     *   Returns the current column number of the output stream. This 
+     *   method useful for subclasses that implement their own pretty
+     *   printing strategies by inserting white space and line breaks 
+     *   at appropriate points.
      * </p>
      * 
      * <p>

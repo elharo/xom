@@ -81,10 +81,11 @@ public class DocType extends Node {
     // Internal DTD subset purely for parsing
     private String internalDTDSubset = "";
 
+    
     /**
      * <p>
-     * Creates a new document type declaration with a system ID
-     * and a public ID It has the general form 
+     * Creates a new document type declaration with a public ID
+     * and a system ID. It has the general form 
      * <code>&lt;!DOCTYPE rootElementName PUBLIC 
      * "publicID" "systemID"&gt;</code>.
      * </p>
@@ -128,11 +129,12 @@ public class DocType extends Node {
         setSystemID(systemID);  
     }
 
+    
     /**
      * <p>
      * Creates a new document type declaration with 
      * no public or system ID. It has the general form 
-     * <code>&lt;!DOCTYPE rootElementName &gt;</code>.
+     * <code>&lt;!DOCTYPE rootElementName&gt;</code>.
      * </p>
      * 
      * @param rootElementName the name specified for the root element
@@ -175,26 +177,6 @@ public class DocType extends Node {
 
     /**
      * <p>
-     * Sets the name the document type declaration specifies 
-     * for the  root element. In an invalid document, this may 
-     * not be the same as the actual root element name.
-     * </p>
-     * 
-     * @param name the root element name given by
-     *     the document type declaration
-     * 
-     * @throws IllegalNameException if the rootElementName is not 
-     *     a legal XML 1.0 name
-     */
-    public final void setRootElementName(String name) {
-        Verifier.checkXMLName(name);
-        checkRootElementName(name);
-        this.rootName = name;
-    }
-
-    
-    /**
-     * <p>
      * Returns the name the document type declaration specifies 
      * for the root element. In an invalid document, this may 
      * not be the same as the actual root element name.
@@ -206,9 +188,50 @@ public class DocType extends Node {
         return rootName;
     }
 
+    
     /**
      * <p>
-     * Returns complete internal DTD subset in a single string.
+     * Sets the name the document type declaration specifies 
+     * for the  root element. In an invalid document, this may 
+     * not be the same as the actual root element name.
+     * </p>
+     * 
+     * @param name the root element name given by
+     *     the document type declaration
+     * 
+     * @throws IllegalNameException if the root element name is not 
+     *     a legal XML 1.0 name
+     */
+    public final void setRootElementName(String name) {
+        Verifier.checkXMLName(name);
+        checkRootElementName(name);
+        this.rootName = name;
+    }
+
+    
+    /**
+     * <p>
+     * Subclasses can override this method to perform additional checks
+     * on the root element name beyond what XML 1.0 requires.
+     * For example, an <code>HTMLDocType</code> subclass might throw an
+     * exception if any name other than "html" were passed to this 
+     * method. However, this can only be used
+     * to add checks, not remove them. All document type declarations 
+     * must be potentially well-formed when serialized. 
+     * </p>
+     * 
+     * @param name the root element name specified 
+     *     by the document type declaration.
+     * 
+     * @throws XMLException if the proposed root element name 
+     *     does not satisfy the local constraints
+     */
+    protected void checkRootElementName(String name) {}
+
+    
+    /**
+     * <p>
+     * Returns the complete internal DTD subset in a single string.
      * White space may not be preserved completely accurately,
      * but all declarations should be in place. 
      * </p>
@@ -224,6 +247,19 @@ public class DocType extends Node {
         this.internalDTDSubset = internalSubset;   
     }
 
+    
+    /**
+     * <p>
+     * Returns the public ID of the external DTD subset. 
+     * This is null if there is no external DTD subset
+     * or if it does not have a public identifier.
+     * </p>
+     * 
+     * @return the public ID of the external DTD subset.
+     */
+    public final String getPublicID() { 
+        return publicID;
+    }
 
     /**
      * <p>
@@ -241,6 +277,7 @@ public class DocType extends Node {
      * @throws WellformednessException if no system ID has been set
      */
     public final void setPublicID(String id) {  
+        
         if (systemID == null && id != null) {
             throw new WellformednessException(
               "Cannot have a public ID without a system ID"
@@ -275,20 +312,40 @@ public class DocType extends Node {
         }
         checkPublicID(id);
         this.publicID = id;
-    }
+        
+    }   
 
     
     /**
      * <p>
-     * Returns the public ID of the external DTD subset. 
-     * This is null if there is no external DTD subset
-     * or if it does not have a public identifier.
+     * Subclasses can override this method to perform additional 
+     * checks on the public ID beyond what XML 1.0 requires.
+     * For example, an <code>HTMLDocType</code> subclass might 
+     * check that the public ID were one of the three IDs 
+     * defined by the XHTML 1.0 specification. However, this can only
+     * be used to add checks, not remove them. All document type 
+     * declarations must be potentially well-formed when serialized. 
      * </p>
      * 
-     * @return the public ID of the external DTD subset.
+     * @param publicID the proposed public ID for the external 
+     *     DTD subset
+     * 
+     * @throws XMLException if the proposed public ID 
+     *     does not satisfy the local constraints
      */
-    public final String getPublicID() { 
-        return publicID;
+    protected void checkPublicID(String publicID) {}
+
+    
+    /**
+     * <p>
+     * Returns the system ID of the external DTD subset. 
+     * This is a URL. It is null if there is no external DTD subset.
+     * </p>
+     * 
+     * @return the URL for the external DTD subset.
+     */
+    public final String getSystemID() { 
+        return systemID;
     }
 
     
@@ -309,6 +366,7 @@ public class DocType extends Node {
      *     and you attempt to remove the system ID
      */
     public final void setSystemID(String id) {
+        
         if (id == null && publicID != null) {
             throw new WellformednessException(
              "Cannot remove system ID without removing public ID first"
@@ -336,41 +394,9 @@ public class DocType extends Node {
         
         checkSystemID(id);
         this.systemID = id;
+        
     }
     
-    
-    /**
-     * <p>
-     * Returns the system ID of the external DTD subset. 
-     * This is a URL. It is null if there is no external DTD subset.
-     * </p>
-     * 
-     * @return the URL for the external DTD subset.
-     */
-    public final String getSystemID() { 
-        return systemID;
-    }
-
-
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional checks
-     * on the root element name beyond what XML 1.0 requires.
-     * For example, an HTMLDocType subclass might throw an exception
-     * if any name other than "html" were passed to this method.
-     * However, this can only be used
-     * to add checks, not remove them. All document type declarations 
-     * must be potentially well-formed when serialized. 
-     * </p>
-     * 
-     * @param name The root element name specified 
-     *     by the document type declaration.
-     * 
-     * @throws XMLException if the proposed root element name 
-     *     does not satisfy the local constraints
-     */
-    protected void checkRootElementName(String name) {}
-
     
     /**
      * <p>
@@ -383,32 +409,12 @@ public class DocType extends Node {
      * when serialized. 
      * </p>
      * 
-     * @param systemID The URL of the external DTD subset.
+     * @param systemID the URL of the external DTD subset.
      * 
      * @throws XMLException if the proposed system ID 
      *     does not satisfy the local constraints
      */
     protected void checkSystemID(String systemID) {}
-
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the system ID beyond what XML 1.0 requires.
-     * For example, an <code>HTMLDocType</code> subclass might 
-     * check that the public ID were one of the three IDs 
-     * defined by the XHTML 1.0 specification. However, this can only
-     * be used to add checks, not remove them. All document type 
-     * declarations must be potentially well-formed when serialized. 
-     * </p>
-     * 
-     * @param publicID The proposed public ID for the external 
-     *     DTD subset.
-     * 
-     * @throws XMLException if the proposed public ID 
-     *     does not satisfy the local constraints
-     */
-    protected void checkPublicID(String publicID) {}
 
     
     /**
@@ -430,15 +436,15 @@ public class DocType extends Node {
     /**
      * <p>
      * Throws <code>IndexOutOfBoundsException</code> because 
-     * leaf nodes do not have children.
+     * document type declarations do not have children.
      * </p>
      * 
-     * @return never returns because leaf nodes do not have children;
-     *     Always throws an exception.
+     * @return never returns because document type declarations do not 
+     *     have children. Always throws an exception.
      * 
      * @param position the index of the child node to return
      * 
-     * @throws IndexOutOfBoundsException because leaf nodes 
+     * @throws IndexOutOfBoundsException because document type declarations
      *     do not have children
      */
     public final Node getChild(int position) {
@@ -449,7 +455,8 @@ public class DocType extends Node {
     
     /**
      * <p>
-     * Returns 0 because leaf nodes do not have children.
+     * Returns 0 because document type declarations do not have 
+     * children.
      * </p>
      * 
      * @return zero
@@ -463,7 +470,7 @@ public class DocType extends Node {
     
     /**
      * <p>
-     * This method returns a string form of the 
+     * Returns a string form of the 
      * <code>DocType</code> suitable for debugging
      * and diagnosis. It deliberately does not return 
      * an actual XML document type declaration. 
@@ -480,7 +487,7 @@ public class DocType extends Node {
     
     /**
      * <p>
-     *   This method returns a copy of this <code>DocType</code> 
+     *   Returns a copy of this <code>DocType</code> 
      *   which has the same system ID, public ID, root element name,
      *   and internal DTD subset, but does not belong to a document.
      *   Thus, it can be inserted into a different document.
@@ -500,7 +507,7 @@ public class DocType extends Node {
      * <p>
      *  Returns a string containing the actual XML
      *  form of the document type declaration represented
-     *   by this  object; for example, 
+     *   by this object. For example, 
      *  <code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"></code>. 
      * </p>
      * 

@@ -25,7 +25,7 @@ package nu.xom;
 
 /**
  * <p>
- * <code>Builder</code>s use a <code>NodeFactory</code> object
+ * Builders use a <code>NodeFactory</code> object
  * to construct each <code>Node</code> object (<code>Element</code>,
  * <code>Text</code>, <code>Attribute</code>, etc.) they add to the
  * tree. The default implementation simply calls the relevant 
@@ -93,6 +93,7 @@ public class NodeFactory {
         return startMakingElement(name, namespace);    
     }
 
+    
     /**
      * <p>
      * Creates a new <code>Element</code> in the specified namespace 
@@ -121,6 +122,7 @@ public class NodeFactory {
         return new Element(name, namespace);    
     }
    
+    
     /**
      * <p>
      * The <code>Builder</code> calls this method to signal the 
@@ -136,7 +138,8 @@ public class NodeFactory {
      * course. For instance, the list should not contain a 
      * <code>DocType</code> object unless the element is the root 
      * element, and the document does not already have a 
-     * <code>DocType</code>). If this method returns an empty list,
+     * <code>DocType</code>). All of the nodes returned must be 
+     * parentless. If this method returns an empty list,
      * then the element (including all its contents) is not included 
      * in the finished document.
      * </p>
@@ -208,7 +211,7 @@ public class NodeFactory {
      * The <code>Builder</code> calls this method to signal the end 
      * of a document. The default implementation of this method  
      * does nothing. The <code>Builder</code> does not call this 
-     * method is an exception is thrown while building a 
+     * method if an exception is thrown while building a 
      * <code>Document</code>.
      * </p>
      * 
@@ -216,6 +219,7 @@ public class NodeFactory {
      */
     public void endDocument(Document document) {}
 
+    
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing an 
@@ -229,6 +233,7 @@ public class NodeFactory {
      * number of children and attributes which are appended and 
      * added to the current parent element. This <code>Nodes</code> 
      * object may not contain any <code>Document</code> objects.
+     * All of the nodes returned must be parentless.
      * Subclasses may return an empty <code>Nodes</code> to indicate  
      * the <code>Attribute</code> should not be created.
      * </p>
@@ -245,6 +250,7 @@ public class NodeFactory {
         return new Nodes(new Attribute(name, URI, value, type));
     }
 
+    
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing a 
@@ -273,6 +279,7 @@ public class NodeFactory {
         return new Nodes(new Comment(data));   
     }
 
+    
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing a 
@@ -303,7 +310,6 @@ public class NodeFactory {
      * 
      * @return the nodes to be added to the document
      */
-    // pass internal DTD subset as well????
     public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
         return new Nodes(new DocType(rootElementName, publicID, systemID));    
@@ -336,6 +342,7 @@ public class NodeFactory {
         return new Nodes(new Text(data));  
     }
 
+    
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing a 

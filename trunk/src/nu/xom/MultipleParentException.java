@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -26,11 +26,12 @@ package nu.xom;
 /**
  * <p>
  *  A <code>MultipleParentException</code> indicates an attempt to
- *  add an element that already has a parent to a node.
+ *  add a node that already has a parent to the same or a different
+ *  parent.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  *
  */
@@ -38,7 +39,8 @@ public class MultipleParentException extends IllegalAddException {
 
     /**
      * <p>
-     *   Creates a new MultipleParentException with a detail message.
+     * Creates a new <code>MultipleParentException</code> 
+     * with a detail message.
      * </p>
      * 
      * @param message indicates the specific problem
@@ -49,8 +51,8 @@ public class MultipleParentException extends IllegalAddException {
 
     /**
      * <p>
-     * Creates a new MultipleParentException with a detail message
-     * and an underlying root cause.
+     * Creates a new <code>MultipleParentException</code> 
+     * with a detail message and an underlying root cause.
      * </p>
      * 
      * @param message indicates the specific problem

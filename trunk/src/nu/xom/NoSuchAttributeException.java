@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -25,17 +25,19 @@ package nu.xom;
 
 /**
  * <p>
- * Indicates that an attribute with a certain name and/or namespace 
+ * A <code>NoSuchAttributeException</code>
+ * indicates that an attribute with a certain name and/or namespace 
  * does not exist. This is normally thrown after an attempt to remove
  * such a non-existent attribute.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class NoSuchAttributeException extends XMLException {
 
+    
     /**
      * <p>
      * Creates a new <code>NoSuchAttributeException</code> 
@@ -48,6 +50,7 @@ public class NoSuchAttributeException extends XMLException {
         super(message);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>NoSuchAttributeException</code> 
@@ -63,4 +66,5 @@ public class NoSuchAttributeException extends XMLException {
         this.initCause(cause);
     }
 
+    
 }

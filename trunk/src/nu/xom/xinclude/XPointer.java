@@ -276,6 +276,7 @@ class XPointer {
         return result;
     }
     
+    
     public static Element findByID(Element element, String id) {
          
         for (int i = 0; i < element.getAttributeCount(); i++) {
@@ -295,6 +296,7 @@ class XPointer {
         
         return null;
     }
+    
     
     private static String decode(String xptr) 
       throws XPointerSyntaxException {
@@ -339,6 +341,8 @@ class XPointer {
             throw ex2; 
         }
         return result.toString();
+        
     }  
 
+    
 }

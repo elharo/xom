@@ -1214,7 +1214,7 @@ public class Element extends ParentNode {
      * requires.
      * </p>
      * 
-     * @param prefix The prefix that will be removed.
+     * @param prefix the prefix that will be removed.
      * 
      * @throws XMLException if the prefix cannot be removed
      */
@@ -1283,7 +1283,7 @@ public class Element extends ParentNode {
      * </p>
      * 
      * <p>
-     *   If the namespaces on the element changes for any reason 
+     *   If the namespaces on the element change for any reason 
      *  (adding or removing an attribute in a namespace, adding 
      *   or removing a namespace declaration, changing the prefix 
      *   of an element, etc.) then then this method may skip or 

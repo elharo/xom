@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -25,16 +25,18 @@ package nu.xom;
 
 /**
  * <p>
- * Indicates that a child with a certain name and/or namespace does
+ * A <code>NoSuchChildException</code>
+ * indicates that a child with a certain name and/or namespace does
  * not exist.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class NoSuchChildException extends XMLException {
 
+    
     /**
      * <p>
      * Creates a new <code>NoSuchChildException</code> 
@@ -47,6 +49,7 @@ public class NoSuchChildException extends XMLException {
         super(message);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>NoSuchChildException</code> 
@@ -62,4 +65,5 @@ public class NoSuchChildException extends XMLException {
         this.initCause(cause);
     }
 
+    
 }

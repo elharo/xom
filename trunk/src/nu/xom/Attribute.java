@@ -25,8 +25,9 @@ package nu.xom;
 
 /**
  * <p>
- * Represents an attribute such as <code>class="empty"</code> 
- * or <code>xlink:href="http://www.example.com"</code>.
+ * This class represents an attribute such as 
+ * <code>type="empty"</code> or 
+ * <code>xlink:href="http://www.example.com"</code>.
  * </p>
  * 
  * <p>
@@ -88,7 +89,7 @@ public class Attribute extends Node {
      *     characters which are not legal in
      *     XML such as vertical tab or a null. Note that 
      *     characters such as " and &amp; are legal,
-     *      but will be automatically escaped when the 
+     *     but will be automatically escaped when the 
      *     attribute is serialized.
      */
     public Attribute(String localName, String value, Type type) {
@@ -123,7 +124,7 @@ public class Attribute extends Node {
     /**
      * <p>
      * Creates a new attribute in the specified namespace with the
-     * specified name and value and undeclared type.
+     * specified name, namespace, value, and type.
      * </p>
      * 
      * @param name  the prefixed attribute name
@@ -230,7 +231,7 @@ public class Attribute extends Node {
     /**
      * <p>
      * Sets the type of this attribute to one of the ten
-     * DTD types or Type.UNDECLARED. 
+     * DTD types or <code>Type.UNDECLARED</code>. 
      * </p>
      * 
      * @param type the DTD type of this attribute
@@ -260,7 +261,7 @@ public class Attribute extends Node {
     /**
      * <p>
      * Returns the attribute value. If the attribute was
-     * originally created by a parser then, it will have been
+     * originally created by a parser, it will have been
      * normalized according to its type.
      * However, attributes created in memory are not normalized.
      * </p>
@@ -318,7 +319,7 @@ public class Attribute extends Node {
      * not including the prefix.
      * </p>
      * 
-     * @return the attribute's qualified name
+     * @return the attribute's local name
      */
     public final String getLocalName() {
         return localName;
@@ -347,6 +348,23 @@ public class Attribute extends Node {
     }   
     
     
+    /**
+     * <p>
+     * This method is called before the specified 
+     * local name is assigned to this attribute.
+     * By default it does nothing. However,
+     * subclasses can override it and prevent certain
+     * local names from being assigned to the attribute 
+     * by throwing an <code>XMLException</code>.
+     * </p>
+     * 
+     * @param localName the proposed local name of the attribute
+     * 
+     * @throws XMLException if the subclass rejects the name.
+     */
+    protected void checkLocalName(String localName) {}
+
+
     /**
      * <p>
      * Returns the qualified name of this attribute,
@@ -390,25 +408,8 @@ public class Attribute extends Node {
     
     /**
      * <p>
-     * This method is called before the specified 
-     * local name is assigned to this attribute.
-     * By default it does nothing. However,
-     * subclasses can override it and prevent certain
-     * local names from being assigned to the attribute 
-     * by throwing an <code>XMLException</code>.
-     * </p>
-     * 
-     * @param localName the proposed local name of the attribute
-     * 
-     * @throws XMLException if the subclass rejects the name.
-     */
-    protected void checkLocalName(String localName) {}
-
-
-    /**
-     * <p>
-     * Sets the attribute's namespace URI and prefix.
-     * because attributes must be prefixed in order to have a  
+     * Sets the attribute's namespace prefix and URI.
+     * Because attributes must be prefixed in order to have a  
      * namespace URI (and vice versa) this must be done 
      * simultaneously.
      * </p>
@@ -420,14 +421,14 @@ public class Attribute extends Node {
      *     not an RFC2396 URI reference
      * @throws IllegalNameException if
      *  <ul>
-     *      <li>The prefix is xmlns</li>
+     *      <li>The prefix is <code>xmlns</code></li>
      *      <li>The prefix is null or the empty string.</li>
      *      <li>The URI is null or the empty string.</li>
      * </ul>
      * @throws NamespaceConflictException if
      *  <ul>
-     *      <li>The prefix is xml and the namespace URI is not 
-     *             http://www.w3.org/XML/1998/namespace</li>
+     *      <li>The prefix is <code>xml</code> and the namespace URI is
+     *          not <code>http://www.w3.org/XML/1998/namespace</code></li>
      *      <li>The prefix conflicts with an existing declaration
      *          on the attribute's parent element.</li>
      * </ul>
@@ -495,7 +496,7 @@ public class Attribute extends Node {
     /**
      * <p>
      * This method is called before the specified 
-     * local name is assigned to this attribute.
+     * prefix and URI are assigned to this attribute.
      * By default it does nothing. However,
      * subclasses can override it and prevent certain
      * namespace URIs from being assigned to the attribute 
@@ -525,7 +526,7 @@ public class Attribute extends Node {
     
     /**
      * <p>
-     * Throws <code>IndexOutOfBoundsException</code>s
+     *  Throws <code>IndexOutOfBoundsException</code>
      *  because attribute do not have children.
      * </p>
      *
@@ -662,15 +663,15 @@ public class Attribute extends Node {
      * 
      * <p>
      *   XOM enforces well-formedness, but it does not enforce 
-     *   validity. Thus it is possible to have multiple ID type 
-     *   attributes on a single element, or ID type attributes 
-     *   on different elements which have the same value, 
-     *   or NMTOKEN type attributes which do not contain legal 
+     *   validity. Thus it is possible fpr a single element to have 
+     *   multiple ID type attributest, or ID type attributes 
+     *   on different elements to have the same value, 
+     *   or NMTOKEN type attributes not to contain legal 
      *   XML name tokens, and so forth.
      * </p>
      * 
      * @author Elliotte Rusty Harold
-     * @version 1.0d13
+     * @version 1.0a1
      *
      */
     public static final class Type {

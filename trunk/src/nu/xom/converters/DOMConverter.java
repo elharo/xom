@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -55,13 +55,15 @@ import org.w3c.dom.NamedNodeMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class DOMConverter {
 
+    
     // prevent instantiation
     private DOMConverter() {}
+    
     
     /**
      * <p>
@@ -73,10 +75,11 @@ public class DOMConverter {
     private final static String XMLNS_NAMESPACE 
       = "http://www.w3.org/2000/xmlns/";
 
+    
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.Document</code> object 
-     * into an equivalent <code>nu.xom.Document</code>.
+     * into an equivalent <code>nu.xom.Document</code> object.
      * The original DOM document is not changed.
      * Some DOM <code>Document</code> objects cannot 
      * be serialized as namespace well-formed XML, and  
@@ -115,6 +118,7 @@ public class DOMConverter {
         return xomDocument;
     }
 
+    
     private static Node convert(org.w3c.dom.Node node) {
         
         int type = node.getNodeType();
@@ -138,10 +142,11 @@ public class DOMConverter {
         
     }
 
+    
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.Comment</code> object 
-     * into an equivalent <code>nu.xom.Comment</code>.
+     * into an equivalent <code>nu.xom.Comment</code> object.
      * The original DOM object is not changed.
      * Some DOM <code>Comment</code> objects cannot 
      * be serialized as well-formed XML, and  
@@ -179,10 +184,11 @@ public class DOMConverter {
         return new Text(text.getNodeValue());       
     }
 
+    
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.Attr</code> object 
-     * into an equivalent <code>nu.xom.Attribute</code>.
+     * into an equivalent <code>nu.xom.Attribute</code> object.
      * The original DOM object is not changed.
      * Some DOM <code>Attr</code> objects cannot 
      * be serialized as well-formed XML, and  
@@ -209,7 +215,6 @@ public class DOMConverter {
     }
 
 
-
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.ProcessingInstruction</code> 
@@ -234,6 +239,7 @@ public class DOMConverter {
           pi.getTarget(), pi.getNodeValue());
     }
 
+    
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.DocumentType</code> 
@@ -269,6 +275,7 @@ public class DOMConverter {
 
     }
 
+    
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.Element</code> 
@@ -285,6 +292,7 @@ public class DOMConverter {
      *     is not a well-formed XML element
      */
     public static Element convert(org.w3c.dom.Element element) {
+        
         String namespaceURI = element.getNamespaceURI();
         String tagName = element.getTagName();
         Element result = new Element(tagName, namespaceURI);
@@ -316,9 +324,11 @@ public class DOMConverter {
             result.appendChild(convert(current));
         }
         
-        return result;       
+        return result;  
+        
     }
  
+    
     /**
      * <p>
      * Translates a XOM <code>nu.xom.Document</code> object
@@ -372,6 +382,7 @@ public class DOMConverter {
         return domDoc;
     }
 
+    
     private static org.w3c.dom.Node convert(
       Node node, org.w3c.dom.Document document) {
         
@@ -395,22 +406,26 @@ public class DOMConverter {
          
     }
 
+    
     private static org.w3c.dom.Comment convert(
       Comment comment, org.w3c.dom.Document document) {
         return document.createComment(comment.getValue());   
     }
 
+    
     private static org.w3c.dom.Text convert(
       Text text, org.w3c.dom.Document document) {
         return document.createTextNode(text.getValue());        
     }
 
+    
     private static org.w3c.dom.ProcessingInstruction convert(
       ProcessingInstruction pi, org.w3c.dom.Document document) {
         return document.createProcessingInstruction(
           pi.getTarget(), pi.getValue());        
     }
 
+    
     private static org.w3c.dom.Element convert(
       Element element, org.w3c.dom.Document document) {
         
@@ -485,7 +500,9 @@ public class DOMConverter {
             result.appendChild(convert(element.getChild(i), document)); 
         }
         
-        return result;       
+        return result;  
+        
     }
 
+    
 }
