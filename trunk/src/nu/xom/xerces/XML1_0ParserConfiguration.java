@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -33,25 +33,14 @@ import org.apache.xerces.xni.XNIException;
  * <p>
  * This class is used by the <code>Builder</code> to prevent Xerces
  * from accepting XML 1.1 documents. You don't need to touch it
- * or use it. XOM will configure it on Xerces automatically.
- * The only reason it's public is that otherwise Xerces can't load it.
- * </p>
- * 
- * <p>
- *   XOM is not designed to handle XML 1.1. This is a feature, not a
- *   bug. You do not need to use XML 1.1 and should not use XML 1.1.
- *   If you have any questions about this see the 
- *   <a href="http://www.cafeconleche.org/XOM/faq.xhtml">FAQ</a> or
- *   <a href=
- *   "http://cafeconleche.org/books/effectivexml/chapters/03.html"
- *   >Item 3 of Effective XML</a>.
+ * or use it. 
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a2
  * 
  */
-public class XML1_0ParserConfiguration extends XML11Configuration { 
+class XML1_0ParserConfiguration extends XML11Configuration { 
 
     /** <p>
      *  Ensure that the parser is always configured to use 
@@ -60,8 +49,10 @@ public class XML1_0ParserConfiguration extends XML11Configuration {
      * 
      * @param complete true if the parser should finish parsing the
      *     rest of the document
+     * 
      * @return true if more of the document remains to be parsed, 
      *     false otherwise
+     * 
      * @see org.apache.xerces.xni.parser.XMLPullParserConfiguration#parse(boolean)
      */
     public boolean parse(boolean complete) 
