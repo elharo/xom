@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -36,18 +36,12 @@ class TextWriterFactory {
       Writer out, String encoding) {
     
         encoding = encoding.toUpperCase();
-        if (encoding.startsWith("UTF")) {
+        if (encoding.startsWith("UTF") || encoding.startsWith("UNICODE")) {
             return new UnicodeWriter(out, encoding);    
-        }   
-        else if (encoding.startsWith("UCS")) {
-            return new UnicodeWriter(out, encoding);    
-        }   
-        else if (encoding.startsWith("ISO-10646")) {
-            return new UnicodeWriter(out, encoding);    
-        }   
-        else if (encoding.startsWith("UNICODE")) {
-            return new UnicodeWriter(out, encoding);    
-        }   
+        }    
+        else if (encoding.startsWith("ISO-10646-UCS") || encoding.startsWith("UCS") ) {
+            return new UCSWriter(out, encoding);    
+        }    
         else if (encoding.equals("ISO-8859-1")) {
             return new Latin1Writer(out, encoding); 
         }           
@@ -111,7 +105,7 @@ class TextWriterFactory {
             // an OutputStream. Possibly requires some rejiggering of
             // internal interfaces, and when and where the writer is created
             return new Latin1Writer(out, encoding); 
-        }                      
+        }     
         else {
             // I'm assuming here that all character sets can
             // handle the ASCII character set; even if not at the
