@@ -241,4 +241,8 @@ public class Text extends LeafNode {
           
     }
 
+    boolean isCDATASection() {
+        return false;
+    }
+
 }

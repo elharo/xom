@@ -193,6 +193,19 @@ class NonVerifyingFactory extends NodeFactory {
 
     /**
      * <p>
+     * Creates a new <code>CDATASection</code> node.
+     * </p>
+     * 
+     * @param data the complete text content of the node
+     * 
+     * @return the new <code>Text</code>
+     */
+    Text makeCDATASection(String data) {
+        return CDATASection.build(data);  
+    }
+
+    /**
+     * <p>
      * Creates a new <code>ProcessingInstruction</code> with
      * the specified target and data.
      * </p>

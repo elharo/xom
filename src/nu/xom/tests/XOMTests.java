@@ -75,6 +75,7 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(XMLExceptionTest.class));
         result.addTest(new TestSuite(ParsingExceptionTest.class));
         result.addTest(new TestSuite(XSLExceptionTest.class));
+        result.addTest(new TestSuite(CDATASectionTest.class));
         return result;
     }
 

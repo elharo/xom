@@ -40,7 +40,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  * 
  */
 public class NodeFactory {
@@ -48,10 +48,6 @@ public class NodeFactory {
     // suppose you want to change comments to Text or PI to
     // Element? Should some of these methods just return a Node,
     // or even a NodeList instead????
-    // would need to get rid of fastAdd, but that might be doable
-    // now that insertChild no longer uses instanceof
-    // might also prevent SAX filters from adding wrong thing
-    // in wrong place
     
     // does nodefactory need an option to make an additional namespace????
 
@@ -271,6 +267,19 @@ public class NodeFactory {
      */
     public Text makeText(String data) {
         return new Text(data);  
+    }
+
+    /**
+     * <p>
+     * Creates a new <code>CDATASection</code> node.
+     * </p>
+     * 
+     * @param data the complete text content of the node
+     * 
+     * @return the new <code>CDATASection</code>
+     */
+    Text makeCDATASection(String data) {
+        return new CDATASection(data);  
     }
 
     /**
