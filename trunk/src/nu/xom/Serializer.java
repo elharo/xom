@@ -109,6 +109,7 @@ public class Serializer {
      *   <li>ISO-8859-16</li>
      *   <li>IBM037 (a.k.a. CP037, EBCDIC-CP-US, EBCDIC-CP-CA, 
      *         EBCDIC-CP-WA, EBCDIC-CP-NL, and CSIBM037)</li>
+     *   <li>GB18030</li>
      * </ul>
      * 
      * <p>
@@ -133,6 +134,7 @@ public class Serializer {
      */
     public Serializer(OutputStream out, String encoding)
       throws UnsupportedEncodingException {
+        
         if (out == null) {
             throw new NullPointerException("Null OutputStream");
         } 
@@ -141,6 +143,7 @@ public class Serializer {
         } 
         
         this.setOutputStream(out, encoding);
+        
     }
     
     /**
@@ -159,6 +162,7 @@ public class Serializer {
      */
     public void setOutputStream(OutputStream out) 
       throws IOException {
+        
         // flush any data onto the old output stream
         this.flush();
         int maxLength = getMaxLength();
@@ -171,11 +175,13 @@ public class Serializer {
         setMaxLength(maxLength);
         setUnicodeNormalizationFormC(nfc);
         setLineSeparator(lineSeparator); 
+        
     }
 
     
     private void setOutputStream(OutputStream out, String encoding)
         throws UnsupportedEncodingException {
+        
         Writer writer;  
         // Java's Cp037 encoding is broken, so we have to
         // provide our own.
@@ -203,6 +209,7 @@ public class Serializer {
         else writer = new OutputStreamWriter(out, encoding);
         writer = new BufferedWriter(writer);
         this.escaper = TextWriterFactory.getTextWriter(writer, encoding);
+        
     }
 
     
@@ -219,6 +226,7 @@ public class Serializer {
      * @throws NullPointerException if <code>doc</code> is null
      */
     public void write(Document doc) throws IOException {
+        
         escaper.reset();
         // The OutputStreamWriter automatically inserts
         // the byte order mark if necessary.
@@ -232,6 +240,7 @@ public class Serializer {
             escaper.breakLine();
         }       
         escaper.flush();
+        
     }
 
 
@@ -245,10 +254,12 @@ public class Serializer {
      *      encounters an I/O error
      */
     protected void writeXMLDeclaration() throws IOException {
+        
         escaper.writeMarkup("<?xml version=\"1.0\" encoding=\"");
         escaper.writeMarkup(escaper.getEncoding());
         escaper.writeMarkup("\"?>");
         escaper.breakLine();
+        
     }
     
     
