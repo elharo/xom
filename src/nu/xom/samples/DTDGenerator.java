@@ -88,11 +88,15 @@ public class DTDGenerator {
         public Nodes makeAttribute(String name, String URI, 
           String value, Attribute.Type type) {
               
+            if (type.equals(Attribute.Type.ENUMERATION) 
+              || type.equals(Attribute.Type.UNDECLARED)) {
+                type = Attribute.Type.CDATA;      
+            }
             String comboName = currentElement + '#' + name;
             if (!names.contains(comboName)) {
                 names.add(comboName);
                 System.out.println("<!ATTLIST " + currentElement + " "
-                  + name + " " + type.toXML() + " #IMPLIED>");
+                  + name + " " + type.getName() + " #IMPLIED>");
             }
             return super.makeAttribute(name, URI, value, type);
         } 
