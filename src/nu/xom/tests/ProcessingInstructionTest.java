@@ -30,7 +30,7 @@ import nu.xom.ProcessingInstruction;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d21
  *
  */
 public class ProcessingInstructionTest extends XOMTestCase {
@@ -89,7 +89,8 @@ public class ProcessingInstructionTest extends XOMTestCase {
         catch (IllegalTargetException success) {}
         
         // test empty data allowed
-        new ProcessingInstruction("test", "");
+        ProcessingInstruction pi = new ProcessingInstruction("test", "");
+        assertEquals("", pi.getValue());
         
         // what should happen with null data????
 
@@ -163,14 +164,47 @@ public class ProcessingInstructionTest extends XOMTestCase {
         assertNull(c2.getParent());
     }
 
-    // Check passing in a string with broken surrogate pairs
-    // and with correct surrogate pairs
-    public void testSurrogates() {
-
+    // Check passing in a string with correct surrogate pairs
+    public void testCorrectSurrogates() {
         String goodString = "test: \uD8F5\uDF80  ";
         c1.setValue(goodString);
-        assertEquals(goodString, c1.getValue());
-        // need to add broken surrogates????
+        assertEquals(goodString, c1.getValue());       
+    }
+
+    // Check passing in a string with broken surrogate pairs
+    public void testSurrogates() {
+
+        try {
+            c1.setValue("test \uD8F5\uD8F5 test");
+            fail("Allowed two high halves");
+        }
+        catch (IllegalDataException ex) {
+            // success   
+        }
+        
+        try {
+            c1.setValue("test \uDF80\uDF80 test");
+            fail("Allowed two low halves");
+        }
+        catch (IllegalDataException ex) {
+            // success   
+        }
+        
+        try {
+            c1.setValue("test \uD8F5 \uDF80 test");
+            fail("Allowed two halves split by space");
+        }
+        catch (IllegalDataException ex) {
+            // success   
+        }
+
+        try {
+            c1.setValue("test \uDF80\uD8F5 test");
+            fail("Allowed reversed pair");
+        }
+        catch (IllegalDataException ex) {
+            // success   
+        }        
         
     }
 
