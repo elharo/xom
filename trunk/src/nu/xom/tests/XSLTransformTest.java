@@ -25,6 +25,7 @@ package nu.xom.tests;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -38,6 +39,8 @@ import nu.xom.Builder;
 import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Elements;
+import nu.xom.MalformedURIException;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
@@ -45,6 +48,7 @@ import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
 import nu.xom.Text;
+import nu.xom.XMLException;
 import nu.xom.xslt.XSLException;
 import nu.xom.xslt.XSLTransform;
 
@@ -808,5 +812,129 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
 
+ 
+    public void testOASISXalanConformanceSuite()  
+      throws IOException, ParsingException, XSLException {
+        
+        Builder builder = new Builder();
+        File base = new File("data/oasis_xslt_testsuite/TESTS/Xalan_Conformance_Tests/");
+        File catalog = new File(base, "catalog.xml");
+        if (catalog.exists()) {
+            Document doc = builder.build(catalog);
+            Element testsuite = doc.getRootElement();
+            Elements submitters = testsuite.getChildElements("test-catalog");
+            for (int i = 0; i < submitters.size(); i++) {
+                Element submitter = submitters.get(i);
+                Elements testcases = submitter.getChildElements("test-case");
+                for (int j = 0; j < testcases.size(); j++) {
+                    Element testcase = testcases.get(j);
+                    File root = new File(base, testcase.getFirstChildElement("file-path").getValue());
+                    File input = null;
+                    File style = null;
+                    File output = null;
+                    // can there be more than one scenario????
+                    Element scenario = testcase.getFirstChildElement("scenario");
+                    Elements inputs = scenario.getChildElements("input-file");
+                    for (int k = 0; k < inputs.size(); k++) {
+                        Element file = inputs.get(k);
+                        String role = file.getAttributeValue("role");
+                        if ("principal-data".equals(role)) input = new File(root, file.getValue());
+                        else if ("principal-stylesheet".equals(role)) style = new File(root, file.getValue());
+                    }
+                    Elements outputs = scenario.getChildElements("output-file");
+                    for (int k = 0; k < outputs.size(); k++) {
+                        Element file = outputs.get(k);
+                        String role = file.getAttributeValue("role");
+                        if ("principal".equals(role)) output = new File(root, file.getValue());
+                    }
+                    
+                    try {
+                        Document inputDoc = builder.build(input);
+                        Document styleDoc = builder.build(style);
+                        XSLTransform xform = new XSLTransform(styleDoc);
+                    }
+                    catch (MalformedURIException ex) {
+                        // a few of the test cases use relative namespace URIs
+                        // XOM doesn't support
+                    }
+                    catch (XSLException ex) {
+                        System.err.println(testcase.getAttributeValue("id"));
+                        System.err.println(ex.getMessage());
+                        // throw ex;
+                    }
+                    
+                }
+            } 
+            
+        }
+     
+    }
+    
+    
+    public void testOASISMicrosoftConformanceSuite()  
+      throws IOException, ParsingException, XSLException {
+
+        /* ???? fix this after we find out what's up at Oasis
+        File base = new File("data/oasis_xslt_testsuite/TESTS/MSFT_Conformance_Tests/");
+        File catalog = new File(base, "xslt.xml");
+        if (catalog.exists()) {
+            Builder builder = new Builder();
+            Document doc = builder.build(catalog);
+            Element root = doc.getRootElement();
+            Elements testcases = root.getChildElements("testcase");
+            for (int i = 0; i < testcases.size(); i++) {
+                Element testcase = testcases.get(i);
+                String uri = testcase.getAttributeValue("uri");
+                File file = new File(base.toURL().getPath() + uri); 
+                Document testcaseDoc = builder.build(file);
+                Elements cases = testcaseDoc.getRootElement().getChildElements("variation");
+                for (int j = 0; j < cases.size(); j++) {
+                    Element variation = cases.get(j);
+                    String description = variation.getFirstChildElement("description").getValue();
+                    File dir = file.getParentFile();
+                    Element result = variation.getFirstChildElement("result");
+                    File resultFile = null;
+                    if (!("invalid".equals(result.getAttributeValue("expected")))) {
+                        resultFile = new File(dir, result.getValue());
+                    }
+                    Element data = variation.getFirstChildElement("data");
+                    File xml = new File(dir, data.getFirstChildElement("xml").getValue());
+                    File xsl = new File(dir, data.getFirstChildElement("xsl").getValue());
+                    
+                    if (resultFile != null) {
+                        try {
+                            Document input = builder.build(xml);
+                            XSLTransform style = new XSLTransform(builder.build(xsl));
+                            Nodes output = style.transform(input);
+                        }
+                        catch (MalformedURIException ex) {
+                            System.err.println("Malformed uri in " + xsl);
+                        }
+                        catch (XSLException ex) {
+                            System.err.println("Static XSL error in " + xsl);
+                        }
+                        catch (ParsingException ex) {
+                            System.err.println("XML error in " + xml);
+                            System.err.println(ex.getMessage());
+                        }
+                        catch (FileNotFoundException ex) {
+                            System.err.println("Missing file " + ex.getMessage());
+                        }
+                    }
+                    else {
+                        try {
+                            new XSLTransform(builder.build(xsl));
+                            fail("Built incorrect stylesheet " + xsl);
+                        }
+                        catch (Exception success) {
+                            
+                        }
+                    }
+                }
+            } 
+            
+        } */
+        
+    }
     
 }
