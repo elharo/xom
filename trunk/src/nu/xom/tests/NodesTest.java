@@ -81,8 +81,7 @@ public class NodesTest extends XOMTestCase {
         }
         catch (IndexOutOfBoundsException success) {
             assertNotNull(success.getMessage());   
-        }  
-        
+        }   
         
     }
 
@@ -98,4 +97,97 @@ public class NodesTest extends XOMTestCase {
         }     
     }
 
+    public void testInsert() {
+        Nodes nodes = new Nodes();
+        int length = 10;
+        for (int i = 0; i < length; i++) {
+            nodes.append(new Text(String.valueOf(i)));   
+        }
+        nodes.insert(new Comment("dTA"), 3);
+        nodes.insert(new Comment("dTA"), 5);
+        nodes.insert(new Comment("dTA"), 12);
+        assertEquals(length+3, nodes.size());
+        for (int i = 0; i < 3; i++) {
+            assertEquals(String.valueOf(i), nodes.get(i).getValue());   
+        }     
+        assertEquals("dTA", nodes.get(3).getValue());
+        assertEquals("dTA", nodes.get(5).getValue());
+        assertEquals("dTA", nodes.get(12).getValue());
+        for (int i = 6; i < length+2; i++) {
+            assertEquals(String.valueOf(i-2), nodes.get(i).getValue());   
+        } 
+        
+        try {
+            nodes.insert(new Text("data"), 14);   
+        }
+        catch (IndexOutOfBoundsException ex) {
+            assertNotNull(ex.getMessage());
+        }
+                 
+        try {
+            nodes.insert(new Text("data"), 140);   
+        }
+        catch (IndexOutOfBoundsException ex) {
+            assertNotNull(ex.getMessage());
+        }
+                 
+        try {
+            nodes.insert(new Text("data"), -14);   
+        }
+        catch (IndexOutOfBoundsException ex) {
+            assertNotNull(ex.getMessage());
+        }
+                 
+    }
+    
+    public void testDelete() {
+        
+        Nodes nodes = new Nodes();
+        int length = 10;
+        for (int i = 0; i < length; i++) {
+            nodes.append(new Text(String.valueOf(i)));   
+        }     
+        
+        nodes.remove(0);
+        assertEquals(length-1, nodes.size());
+        for (int i = 0; i < nodes.size(); i++) {
+            assertEquals(String.valueOf(i+1), nodes.get(i).getValue());   
+        }  
+        nodes.remove(nodes.size()-1);
+        assertEquals(length-2, nodes.size());
+        for (int i = 0; i < nodes.size(); i++) {
+            assertEquals(String.valueOf(i+1), nodes.get(i).getValue());   
+        }
+        nodes.remove(2); 
+        for (int i = 0; i < 2; i++) {
+            assertEquals(String.valueOf(i+1), nodes.get(i).getValue());   
+        }        
+        for (int i = 2; i < nodes.size(); i++) {
+            assertEquals(String.valueOf(i+2), nodes.get(i).getValue());   
+        }
+        assertEquals(length-3, nodes.size());        
+        
+        try {
+            nodes.remove(14);   
+        }
+        catch (IndexOutOfBoundsException ex) {
+            assertNotNull(ex.getMessage());
+        }
+                 
+        try {
+            nodes.remove(nodes.size());   
+        }
+        catch (IndexOutOfBoundsException ex) {
+            assertNotNull(ex.getMessage());
+        }
+                 
+        try {
+            nodes.remove(-14);   
+        }
+        catch (IndexOutOfBoundsException ex) {
+            assertNotNull(ex.getMessage());
+        }
+          
+    }
+    
 }
