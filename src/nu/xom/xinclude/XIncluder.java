@@ -536,14 +536,22 @@ public class XIncluder {
     
     // hack because URIUtil isn't public
     private static URL absolutize(URL baseURL, String href) 
-      throws MalformedURLException {
+      throws MalformedURLException, BadHrefAttributeException {
         
         Element parent = new Element("c");
         parent.setBaseURI(baseURL.toExternalForm());
         Element child = new Element("c");
         parent.appendChild(child);
-        child.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", href));
-        return new URL(child.getBaseURI());
+        child.addAttribute(new Attribute(
+          "xml:base", "http://www.w3.org/XML/1998/namespace", href));
+        URL result = new URL(child.getBaseURI());
+        if (!"".equals(href) && result.equals(baseURL)) {
+            if (! baseURL.toExternalForm().endsWith(href)) {
+                throw new BadHrefAttributeException(href 
+                  + " is not a syntactically correct IRI");
+            }
+        }
+        return result;
         
     }
 
