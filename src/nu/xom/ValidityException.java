@@ -32,7 +32,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d7
+ * @version 1.0d21
  *
  */
 public class ValidityException extends ParseException {
@@ -48,26 +48,28 @@ public class ValidityException extends ParseException {
 
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> with a detail message
-     * and an underlying root cause.
+     * Creates a new <code>ValidityException</code> 
+     * with a detail message and an underlying root cause.
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public ValidityException(String message, Throwable ex) {
-        super(message, ex);
+    public ValidityException(String message, Throwable cause) {
+        super(message, cause);
     }
 
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> with a detail message
-     * and line and column numbers.
+     * Creates a new <code>ValidityException</code> 
+     * with a detail message and line and column numbers.
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param lineNumber the approximate line number where the problem occurs
-     * @param columnNumber the approximate column number where the problem occurs
+     * @param lineNumber the approximate line number 
+     *     where the problem occurs
+     * @param columnNumber the approximate column number
+     *     where the problem occurs
      */
     public ValidityException(
         String message,
@@ -78,26 +80,30 @@ public class ValidityException extends ParseException {
 
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> with a detail message,
-     * line and column numbers, and an underlying exception.
+     * Creates a new <code>ValidityException</code> 
+     * with a detail message, line and column numbers, 
+     * and an underlying exception.
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param lineNumber the approximate line number where the problem occurs
-     * @param columnNumber the approximate column number where the problem occurs
-     * @param ex the original cause of this exception
+     * @param lineNumber the approximate line number 
+     *     where the problem occurs
+     * @param columnNumber the approximate column number 
+     *     where the problem occurs
+     * @param cause the original cause of this exception
      */
     public ValidityException(
         String message,
         int lineNumber,
         int columnNumber,
-        Throwable ex) {
-        super(message, lineNumber, columnNumber, ex);
+        Throwable cause) {
+        super(message, lineNumber, columnNumber, cause);
     }
 
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> with a detail message.
+     * Creates a new <code>ValidityException</code> 
+     * with a detail message.
      * </p>
      * 
      * @param message indicates the specific problem

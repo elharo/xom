@@ -33,7 +33,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d6
+ * @version 1.0d21
  * 
  *
  */
@@ -67,10 +67,10 @@ public class MalformedURIException extends IllegalDataException {
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public MalformedURIException(String message, Throwable ex) {
-        super(message, ex);
+    public MalformedURIException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

@@ -26,27 +26,27 @@ package nu.xom;
 /**
  * 
  * <p>
- * A <code>NamespaceException</code> indicates some violation of the rules
- * of Namespaces in XML. All namespace exceptions are not violations
- * of pure XML 1.0 without namespaces. For example, trying to set the name of an 
- * element to "98degrees" throws an <code>IllegalNameException</code> because it violates
- * XML 1.0 with or without namespaces. 
- * However, setting the same element's name to <code>test:test:degrees</code>
- * throws a <code>NamespaceException</code>
- * because <code>test:test:degrees</code> is a
- * legal name in XML 1.0 but not a legal name in XML 1.0 + namespaces.
+ * A <code>NamespaceException</code> indicates some violation of the 
+ * rules of Namespaces in XML. All namespace exceptions are not
+ * violations of pure XML 1.0 without namespaces. For example, 
+ * trying to set the name of an element to "98degrees" throws an 
+ * <code>IllegalNameException</code> because it violates XML 1.0 
+ * with or without namespaces. However, setting the same element's 
+ * name to <code>test:test:degrees</code> throws a 
+ * <code>NamespaceException</code> because 
+ * <code>test:test:degrees</code> is a legal name in XML 1.0 but not a 
+ * legal name in XML 1.0 + namespaces.
  * </p>
  * 
  * <p>
- * The <code>xml</code> prefix is not treated specially on attributes like 
- * <code>xml:base</code> and <code>xml:space</code>.
+ * The <code>xml</code> prefix is not treated specially on attributes  
+ * like <code>xml:base</code> and <code>xml:space</code>.
  * If used, these attributes must be specified 
  * like any other attribute in a namespace.
  * </p> 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d4
- * 
+ * @version 1.0d21
  *
  */
 public class NamespaceException extends XMLException {
@@ -62,7 +62,8 @@ public class NamespaceException extends XMLException {
 
     /**
      * <p>
-     * Creates a new <code>NamespaceException</code> with a detail message.
+     * Creates a new <code>NamespaceException</code> 
+     * with a detail message.
      * </p>
      * 
      * @param message indicates the specific problem
@@ -73,15 +74,15 @@ public class NamespaceException extends XMLException {
 
     /**
      * <p>
-     * Creates a new <code>NamespaceException</code> with a detail message
-     * and an underlying root cause.
+     * Creates a new <code>NamespaceException</code> 
+     * with a detail message and an underlying root cause.
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public NamespaceException(String message, Throwable ex) {
-        super(message, ex);
+    public NamespaceException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 

@@ -30,7 +30,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d7
+ * @version 1.0d21
  *
  */
 public class NoSuchChildException extends XMLException {
@@ -66,9 +66,9 @@ public class NoSuchChildException extends XMLException {
      * @param message explains the reason for the exception
      * @param ex the nested exception that caused this exception
      */
-    public NoSuchChildException(String message, Throwable ex) {
+    public NoSuchChildException(String message, Throwable cause) {
         super(message);
-        this.initCause(ex);
+        this.initCause(cause);
     }
 
 }
