@@ -35,7 +35,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  *
  */
 abstract class TextWriter {
@@ -59,6 +59,7 @@ abstract class TextWriter {
         this.out = out; 
         this.encoding = encoding;
     }
+    
     
     void reset() {
         column = 0; 
@@ -367,9 +368,11 @@ abstract class TextWriter {
     private boolean needsBreak() {
         
         if (maxLength <= 0 || preserveSpace) return false;
-        // XXX Better algorithm needed: Should look ahead in the 
+        // Better algorithm needed: Should look ahead in the 
         // stream, see if there's a white space character 
-        // between here and the maxLength
+        // between here and the maxLength, Then again, simple is good.
+        // Here we just assume there's probably space somewhere
+        // within the next ten characters 
         
         return column >= maxLength - 10; 
         
@@ -395,6 +398,7 @@ abstract class TextWriter {
     
     
     final void escapeBreakLine() throws IOException {
+        
         if ("\n".equals(lineSeparator)) {
             out.write("&#x0A;");
             column += 6;
@@ -408,7 +412,9 @@ abstract class TextWriter {
             column += 6;
         }
         lastCharacterWasSpace = true;
+        
     }
+    
     
     // Note that when this method is called directly, then 
     // normalization is not performed on c. Currently this is 
@@ -455,6 +461,7 @@ abstract class TextWriter {
             writeMarkup(s.charAt(i));
         }   
     }
+    
     
     boolean isIndenting() {
         return indentString.length() > 0;   
