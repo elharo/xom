@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -297,35 +297,6 @@ public final class XSLTransform {
             throw new XSLException(ex.getMessage(), cause);
         }  
         
-    }
-    
-    
-    /**
-     * <p>
-     * Sets the factory used to construct nodes in the output tree.
-     * Passing null uses a 
-     * <code>{@link nu.xom.NodeFactory nu.xom.NodeFactory}</code>.
-     * </p>
-     * 
-     * <p>
-     * Because an XSL transformation generates a list of nodes rather
-     * than a document, the factory's <code>startMakingDocument</code> 
-     * and <code>finishMakingDocument</code> methods are not called.
-     * </p>
-     * 
-     * @param factory the node factory used to construct
-     *     nodes in the output tree
-     * @deprecated As of beta 5, replaced by 
-     *     {@link #XSLTransform(Document,NodeFactory)}
-     */
-    public void setNodeFactory(NodeFactory factory) {
-        
-        // If at some point in the future it becomes necessary to 
-        // signal the start and end of each transform, I can add 
-        // begin() and end() methods to the NodeFactory that are
-        // do-nothing by default. 
-        if (factory == null) this.factory = new NodeFactory();
-        else this.factory = factory;
     }
     
     
