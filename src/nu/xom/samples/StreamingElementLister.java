@@ -43,8 +43,6 @@ import nu.xom.ParsingException;
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  *
- *
- * ???? seems not to be deindenting where it should?
  */
 public class StreamingElementLister extends NodeFactory{
 
@@ -87,13 +85,10 @@ public class StreamingElementLister extends NodeFactory{
     }    
 
     public Element startMakingElement(String name, String namespace) {
-        // We only need to create the root element
-        Element result = null;
-        if (depth == 0) result = new Element(name, namespace);
         depth++; 
         printSpaces();
         System.out.println(name);           
-        return result;
+        return new Element(name, namespace);
     }
     
     public Nodes finishMakingElement(Element element) {
