@@ -309,10 +309,10 @@ public class Builder {
      * </p>
      * 
      * @param parser the SAX2 <code>XMLReader</code> that parses
-     *               the document
+     *     the document
      * 
      * @param validate true if the parser should validate 
-     *   the document while parsing
+     *     the document while parsing
      * 
      */ 
     public Builder(XMLReader parser, boolean validate) {
@@ -369,12 +369,12 @@ public class Builder {
         if (factory != null) {
             setHandlers(factory);             
         }
-        else if (!(parser instanceof XMLFilter)) {
-            setHandlers(new NonVerifyingFactory()); 
+        else if (parser instanceof XMLFilter) {
+            setHandlers(new NodeFactory()); 
         }
-        else {
-            setHandlers(new NodeFactory());              
-        }  
+        else  {
+            setHandlers(new NonVerifyingFactory()); 
+        } 
 
     }
     
@@ -438,7 +438,7 @@ public class Builder {
      *     is only thrown if the builder has been instructed to validate.
      * @throws ParsingException if a well-formedness error is detected
      * @throws IOException if an I/O error such as a broken socket  
-     *     prevents the document from being fully read.
+     *     prevents the document from being fully read
      */
     public Document build(String systemID) 
       throws ParsingException, ValidityException, IOException {
@@ -455,12 +455,12 @@ public class Builder {
      * </p>
      * 
      * @param in the <code>InputStream</code> from which the 
-     *     document is read.
+     *     document is read
      * 
      * @return the parsed <code>Document</code>
      * 
      * @throws ValidityException if a validity error is detected; 
-     *     only thrown if the builder has been instructed to validate.
+     *     only thrown if the builder has been instructed to validate
      * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException  if an I/O error such as a broken 
      *     socket prevents the document from being fully read.
@@ -482,12 +482,12 @@ public class Builder {
      * 
      * @param in the <code>InputStream</code> from which the document
      *    is read.
-     * @param baseURI the base URI for this document.
+     * @param baseURI the base URI for this document
      * 
      * @return the parsed <code>Document</code>
      * 
      * @throws ValidityException if a validity error is detected; 
-     *     only thrown if the builder has been instructed to validate.
+     *     only thrown if the builder has been instructed to validate
      * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException  if an I/O error such as a broken
      *       socket prevents the document from being fully read.
@@ -522,12 +522,12 @@ public class Builder {
      * location of the file. 
      * </p>
      * 
-     * @param in the <code>File</code> from which the document is read.
+     * @param in the <code>File</code> from which the document is read
      * 
      * @return the parsed <code>Document</code>
      * 
-     * @throws ParsingException    if a well-formedness error is detected
-     * @throws IOException       if an I/O error such as a bad disk 
+     * @throws ParsingException if a well-formedness error is detected
+     * @throws IOException if an I/O error such as a bad disk 
      *     prevents the file from being read
      * @throws ValidityException if a validity error is detected. This 
      *   is only thrown if the builder has been instructed to validate.
@@ -559,12 +559,13 @@ public class Builder {
      * </p>
      * 
      * @param in the <code>Reader</code> from which the 
-     *   document is read. 
+     *   document is read
      * 
      * @return  the parsed <code>Document</code>
      * 
      * @throws ParsingException  if a well-formedness error is detected
-     * @throws IOException       if an I/O error such as a bad disk.
+     * @throws IOException       if an I/O error such as a bad disk
+     *     prevents the document from being fully read
      * @throws ValidityException if a validity error is detected. This 
      *   is only thrown if the builder has been instructed to validate.
      */
@@ -583,12 +584,12 @@ public class Builder {
      * </p>
      * 
      * @param in the <code>Reader</code> from which the document 
-     *   is read. 
-     * @param baseURI the base URI for this document.
+     *   is read
+     * @param baseURI the base URI for this document
      * 
      * @return  the parsed <code>Document</code>
      * 
-     * @throws ParsingException    if a well-formedness error is detected
+     * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk 
      *     prevents the document from being completely read
      * @throws ValidityException if a validity error is detected. This 
@@ -617,8 +618,8 @@ public class Builder {
      * @return  the parsed <code>Document</code>
      * 
      * @throws IOException       if an I/O error such as a bad disk 
-     *     prevents the doucment's external DTD subset from being read
-     * @throws ParsingException    if a well-formedness error is detected
+     *     prevents the document's external DTD subset from being read
+     * @throws ParsingException  if a well-formedness error is detected
      * @throws ValidityException if a validity error is detected. This 
      *     is only thrown if the builder has been instructed to 
      *     validate.
@@ -663,7 +664,7 @@ public class Builder {
      * 
      * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk
-     *     prevents the doucment from being read
+     *     prevents the document from being read
      * @throws ValidityException if a validity error is detected. This 
      *     is only thrown if the builder has been instructed to 
      *     validate.
@@ -777,8 +778,8 @@ public class Builder {
      */
     public NodeFactory getNodeFactory() {
         
-        if (!(factory instanceof NonVerifyingFactory)) return factory;
-        else return null;
+        if (factory instanceof NonVerifyingFactory) return null;
+        else return factory;
         
     }
 
