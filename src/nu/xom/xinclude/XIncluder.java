@@ -197,8 +197,6 @@ public class XIncluder {
      * 
      * @param in the <code>Document</code> in which include elements
      *     should be resolved
-     * @param builder the <code>Builder</code> used to build the
-     *     nodes included from other documents
      *
      * @throws BadParseAttributeException if an <code>include</code>  
      *     element has a <code>parse</code> attribute

@@ -43,7 +43,7 @@ import nu.xom.Text;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0d24
  *
  */
 public class XOMTestCase extends TestCase {
