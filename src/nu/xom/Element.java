@@ -99,7 +99,7 @@ public class Element extends ParentNode {
         int colon = name.indexOf(':');
         if (colon > 0) {
             prefix = name.substring(0, colon);   
-            localName = name.substring(colon + 1);   
+            localName = name.substring(colon + 1).intern();   
         }
         
         // The order of these next two calls
@@ -130,8 +130,8 @@ public class Element extends ParentNode {
             prefix = name.substring(0, colon);   
             localName = name.substring(colon + 1);   
         }
-        result.prefix = prefix;
-        result.localName = localName;
+        result.prefix = prefix.intern();
+        result.localName = localName.intern();
         // We do need to verify the URI here because parsers are 
         // allowing relative URIs which XOM forbids, for reasons
         // of canonical XML if nothing else. But we only have to verify
@@ -903,6 +903,8 @@ public class Element extends ParentNode {
     private void _setNamespacePrefix(String prefix) {
         
         if (prefix == null) prefix = "";
+        else prefix = prefix.intern(); 
+            
         if (prefix.length() != 0) Verifier.checkNCName(prefix);
 
         // Check how this affects or conflicts with
