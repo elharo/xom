@@ -333,8 +333,6 @@ public class XIncluder {
             if (href != null) {
                 href = convertToURI(href);
                 if (href.indexOf('#') > -1) {
-                    // XXX asked working group if it's OK for the href
-                    // attribute to end with # but not have a fragment ID
                     throw new BadHrefAttributeException(
                       "fragment identifier in URI " + href, 
                       (String) baseURLs.peek()
