@@ -39,7 +39,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  */
 public class Attribute extends Node {
@@ -50,6 +50,7 @@ public class Attribute extends Node {
     private String value = "";
     private Type   type;
 
+    
     /**
      * <p>
      * Creates a new attribute in no namespace with the
@@ -70,6 +71,7 @@ public class Attribute extends Node {
         this(localName, "", value, Type.UNDECLARED);
     }
 
+    
     /**
      * <p>
      * Creates a new attribute in no namespace with the
@@ -93,6 +95,7 @@ public class Attribute extends Node {
         this(localName, "", value, type);
     }
 
+    
     /**
      * <p>
      * Creates a new attribute in the specified namespace with the
@@ -116,6 +119,7 @@ public class Attribute extends Node {
         this(name, URI, value, Type.UNDECLARED);
     }
 
+    
     /**
      * <p>
      * Creates a new attribute in the specified namespace with the
@@ -151,13 +155,20 @@ public class Attribute extends Node {
             localName = name.substring(name.indexOf(':') + 1);
         }
 
-        setLocalName(localName);
+        try {
+            setLocalName(localName);
+        }
+        catch (IllegalNameException ex) {
+            ex.setData(name);
+            throw ex;
+        }
         setNamespace(prefix, URI);
         setValue(value);
         setType(type);
         
     }
 
+    
     /**
      * <p>
      * Creates a copy of the specified attribute.
@@ -177,6 +188,7 @@ public class Attribute extends Node {
         
     }
 
+    
     private Attribute() {}
     
     static Attribute build(
@@ -214,6 +226,7 @@ public class Attribute extends Node {
         return type;
     }
 
+    
     /**
      * <p>
      * Sets the type of this attribute to one of the ten
@@ -227,6 +240,7 @@ public class Attribute extends Node {
         this.type = type;
     }
 
+    
     /**
      * <p>
      * This method is called before the specified 
@@ -242,6 +256,7 @@ public class Attribute extends Node {
      */
     protected void checkType(Type type) {}
 
+    
     /**
      * <p>
      * Returns the attribute value. If the attribute was
@@ -258,6 +273,7 @@ public class Attribute extends Node {
         return value;
     }
 
+    
     /**
      * <p>
      * Sets the attribute's value to the specified string,
@@ -280,6 +296,7 @@ public class Attribute extends Node {
         this.value = value;
     }
 
+    
     /**
      * <p>
      * Subclasses can override this method to check the value for 
@@ -307,6 +324,7 @@ public class Attribute extends Node {
         return localName;
     }
 
+    
     /**
      * <p>
      * Sets the local name of the attribute.
@@ -355,6 +373,7 @@ public class Attribute extends Node {
         return URI;
     }
 
+    
     /**
      * <p>
      * Returns the prefix of this attribute,
@@ -368,6 +387,7 @@ public class Attribute extends Node {
         return prefix;
     }
 
+    
     /**
      * <p>
      * This method is called before the specified 
@@ -468,8 +488,10 @@ public class Attribute extends Node {
         
         this.URI = URI;
         this.prefix = prefix;
+        
     }
 
+    
     /**
      * <p>
      * This method is called before the specified 
@@ -487,6 +509,7 @@ public class Attribute extends Node {
      */
     protected void checkNamespace(String prefix, String URI) {}
 
+    
     /**
      * <p>
      * Returns false because attributes do not have children.
@@ -499,6 +522,7 @@ public class Attribute extends Node {
         return false;   
     }
     
+    
     /**
      * <p>
      * Throws <code>IndexOutOfBoundsException</code>s
@@ -510,7 +534,7 @@ public class Attribute extends Node {
      * @return nothing. This method always throws an exception.
      *
      * @throws IndexOutOfBoundsException because attributes do 
-     *     not have children.
+     *     not have children
      */
     public final Node getChild(int position) {
         throw new IndexOutOfBoundsException(
@@ -518,6 +542,7 @@ public class Attribute extends Node {
         );        
     }
 
+    
     /**
      * <p>
      * Returns 0 because attributes do not have children.
@@ -530,6 +555,7 @@ public class Attribute extends Node {
         return 0;   
     }
 
+    
     /**
      * <p>
      * Creates a deep copy of this attribute that   
@@ -543,6 +569,7 @@ public class Attribute extends Node {
         return new Attribute(this);
     }
 
+    
     /**
      * <p>
      * Returns a string representation of the attribute 
@@ -558,6 +585,7 @@ public class Attribute extends Node {
          + escapeText(value) + "\"";    
     }
 
+    
     /**
      * <p>
      * Returns a string representation of the attribute suitable for 
@@ -574,6 +602,7 @@ public class Attribute extends Node {
          + getQualifiedName() + "=\"" + getValue() + "\"]";
     }
 
+    
     private static String escapeText(String s) {
         
         StringBuffer result = new StringBuffer(s.length());
@@ -581,7 +610,9 @@ public class Attribute extends Node {
             result.append(escapeChar(s.charAt(i)));
         }
         return result.toString();
+        
     }
+    
     
     private static String escapeChar(char c) {
         
@@ -608,9 +639,11 @@ public class Attribute extends Node {
         
     }
  
+    
     boolean isAttribute() {
         return true;   
     } 
+    
     
     /**
      * <p>
@@ -824,6 +857,7 @@ public class Attribute extends Node {
           this.type = type;
         }
         
+        
         /**
          * <p>
          * Returns a unique identifier for this type.
@@ -836,6 +870,7 @@ public class Attribute extends Node {
         public int hashCode() {
             return this.type;   
         }
+        
         
         /**
          * <p>
@@ -865,6 +900,7 @@ public class Attribute extends Node {
             return true;        
         }          
         
+        
         /**
          * <p>
          * Returns a string representation of the type  
@@ -883,6 +919,8 @@ public class Attribute extends Node {
             return result.toString();           
         }         
 
+         
     }
 
+    
 }
