@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0b5"/>
+    <property name="version" value="1.0b6"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -60,7 +60,7 @@ to http://www.xom.nu/
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
-    <property name="tagsoup.jar"    value="${lib.dir}/tagsoup-0.9.7.jar"/>
+    <property name="tagsoup.jar"    value="${lib.dir}/tagsoup-0.10.2.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
