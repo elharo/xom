@@ -1381,5 +1381,37 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
     
+    
+    // These tests actually connect to IBiblio to load the included
+    // data. This is necessary because file URLs don't support
+    // content negotiation
+    public void testAcceptLanguageFrench() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/acceptfrench.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/acceptfrench.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testAcceptLanguageEnglish() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/acceptenglish.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/acceptenglish.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
  
 }

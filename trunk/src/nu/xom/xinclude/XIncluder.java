@@ -56,7 +56,9 @@ import nu.xom.Text;
  *   (XInclude) Version 1.0</cite></a>. Fallbacks are supported.
  *   The XPointer <code>element()</code> scheme and shorthand XPointers
  *   are also supported. The XPointer <code>xpointer()</code> scheme
- *   is not supported.
+ *   is not supported. The <code>accept</code>, 
+ *   <code>accept-language</code>, and <code>accept-charset</code>
+ *   attributes are supported.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -340,11 +342,18 @@ public class XIncluder {
                 // base URI should not have fragment IDs
 
                 if (baseURL != null && href != null) url = new URL(baseURL, href);
-                else if (href != null) url = new URL(href);                
+                else if (href != null) url = new URL(href);  
+                
+                String accept = element.getAttributeValue("accept");
+                String acceptCharset = element.getAttributeValue("accept-charset");
+                String acceptLanguage = element.getAttributeValue("accept-language"); 
+                
                 if (parse.equals("xml")) {
                     Nodes replacements;
                     if (url != null) { 
-                        replacements  = downloadXMLDocument(url, xpointer, builder, baseURLs);
+                        replacements  = downloadXMLDocument(url, 
+                          xpointer, builder, baseURLs, accept, 
+                          acceptCharset, acceptLanguage);
                         // Add base URIs. Base URIs added by XInclusion require
                         // the element to maintain the same base URI as it had  
                         // in the original document. Since its base URI in the 
@@ -445,7 +454,7 @@ public class XIncluder {
                 }
                 else if (parse.equals("text")) {                   
                     Nodes replacement 
-                      = downloadTextDocument(url, encoding, builder);
+                      = downloadTextDocument(url, encoding, builder, accept, acceptCharset, acceptLanguage); 
                     if (replacement.size() == 0) {  // need to test branch????
                         parent.removeChild(element);
                     }
@@ -575,6 +584,11 @@ public class XIncluder {
             String xpointer = element.getAttributeValue("xpointer");
             String encoding = element.getAttributeValue("encoding");
             String href = element.getAttributeValue("href");
+            String accept = element.getAttributeValue("accept");
+            String acceptCharset = element.getAttributeValue("accept-charset");
+            String acceptLanguage = element.getAttributeValue("accept-language"); 
+            
+            if ("".equals(href)) href = null;
             if (href == null && xpointer == null) {
                 throw new MissingHrefException(
                   "Missing href attribute", 
@@ -604,7 +618,9 @@ public class XIncluder {
                 if (parse.equals("xml")) {
                     Nodes replacements;
                     if (url != null) { 
-                        replacements = downloadXMLDocument(url, xpointer, builder, baseURLs);
+                        replacements = downloadXMLDocument(url, 
+                          xpointer, builder, baseURLs, accept, 
+                          acceptCharset, acceptLanguage);
                         // Add base URIs. Base URIs added by XInclusion require
                         // the element to maintain the same base URI as it had  
                         // in the original document. Since its base URI in the 
@@ -651,7 +667,7 @@ public class XIncluder {
                     return replacements; 
                 }  // end parse="xml"
                 else if (parse.equals("text")) {                   
-                    return downloadTextDocument(url, encoding, builder);
+                    return downloadTextDocument(url, encoding, builder, accept, acceptCharset, acceptLanguage); // ????
                 }
                 else {
                    throw new BadParseAttributeException(
@@ -778,12 +794,15 @@ public class XIncluder {
    
 
     private static Nodes downloadXMLDocument(
-      URL source, String xpointer, Builder builder, Stack baseURLs) 
+      URL source, String xpointer, Builder builder, Stack baseURLs,
+      String accept, String charset, String language) 
       throws IOException, ParsingException, XIncludeException, 
              XPointerSyntaxException, XPointerResourceException {
     
+        URLConnection uc = source.openConnection();
+        setHeaders(uc, accept, charset, language);
         Document doc = builder.build(
-          source.openStream(), source.toExternalForm()); 
+          uc.getInputStream(), source.toExternalForm()); 
           
         Nodes included;
         if (xpointer != null && xpointer.length() != 0) {
@@ -830,7 +849,8 @@ public class XIncluder {
     *     be read due to an I/O error
     */    
     private static Nodes downloadTextDocument(
-      URL source, String encoding, Builder builder) 
+      URL source, String encoding, Builder builder,
+      String accept, String charset, String language) 
       throws IOException {
          
         if (encoding == null || encoding.length() == 0) {
@@ -838,6 +858,8 @@ public class XIncluder {
         }
 
         URLConnection uc = source.openConnection();
+        setHeaders(uc, accept, charset, language);
+        
         String encodingFromHeader = uc.getContentEncoding();
         String contentType = uc.getContentType();
         int contentLength = uc.getContentLength();
@@ -891,6 +913,22 @@ public class XIncluder {
             in.close();   
         }
       
+    }
+    
+    
+    private static void setHeaders(URLConnection uc, String accept, 
+      String charset, String language) {
+      
+        if (accept != null) {
+            uc.setRequestProperty("accept", accept);
+        }
+        if (charset != null) {
+            uc.setRequestProperty("accept-charset", charset);
+        }
+        if (language != null) {
+            uc.setRequestProperty("accept-language", language);
+        }
+        
     }
     
     
