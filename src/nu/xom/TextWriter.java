@@ -35,7 +35,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b6
  *
  */
 abstract class TextWriter {
@@ -302,10 +302,10 @@ abstract class TextWriter {
 
     
     private void write(char c) throws IOException {
+        
       // Carriage returns are completely handled by
       // writePCDATA and writeAttributeValue. They never
       // enter this method.
-      // ???? Can they enter through the internalDTDSubset?
       if ((c == ' ' || c == '\n' || c == '\t')) {
             if (needsBreak()) {
                 breakLine();
