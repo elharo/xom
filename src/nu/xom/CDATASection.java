@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -28,12 +28,12 @@ package nu.xom;
  *   This class represents a CDATA section. 
  *   Builders will sometimes use this class to represent
  *   a CDATA section. However, they are not required to do so.
- *   This class is used solely for preservtion of CDATA sections
+ *   This class is used solely for preservation of CDATA sections
  *   from input to output. 
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0b3
  *
  */
 class CDATASection extends Text {
