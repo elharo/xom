@@ -454,7 +454,6 @@ public class Builder {
         // In general, a filter may violate the constraints of XML 1.0.
         // However, I specifically trust Norm Walsh not to do that, so 
         // if his filters are being used we look at the parent instead.
-        // XXX test this line; but be prepared for NoSuchClassDefError
         if (parserName.equals("org.apache.xml.resolver.tools.ResolvingXMLReader")
           || parserName.equals("org.apache.xml.resolver.tools.ResolvingXMLFilter")) {
             XMLFilter filter = (XMLFilter) parser;
@@ -1245,8 +1244,8 @@ public class Builder {
     // of NonVerifyingFactory.
     /**
      * <p>
-     * Returns this builder's <code>NodeFactory</code>, or null if
-     * a factory was not supplied when the builder was created.
+     * Returns this builder's <code>NodeFactory</code>. It may return
+     * null if a factory was not supplied when the builder was created.
      * </p>
      * 
      * @return the node factory that was specified in the constructor
