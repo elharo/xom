@@ -383,7 +383,7 @@ public abstract class Node {
      *     namespace node
      * 
      */
-    public Nodes query(String xpath, XPathContext namespaces) {
+    public final Nodes query(String xpath, XPathContext namespaces) {
         
         DocumentFragment frag = null;
         
@@ -447,7 +447,7 @@ public abstract class Node {
      *     expression; or the query returns something other than
      *     a node-set
      */
-    public Nodes query(String xpath) {
+    public final Nodes query(String xpath) {
         return query(xpath, null);
     }
     
