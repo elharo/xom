@@ -26,11 +26,11 @@ package nu.xom;
 /**
  * <p>
  * A simple class used to make the JAR archive do something sensible
- * when a user tries java -jar xom.jar.
+ * when a user tries <samp>java -jar xom.jar</samp>.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0b3
  * 
  */
 class Info {
