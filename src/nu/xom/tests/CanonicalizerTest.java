@@ -27,13 +27,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-
-import com.ibm.icu.text.Normalizer;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -46,6 +42,7 @@ import nu.xom.Namespace;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
+import nu.xom.Serializer;
 import nu.xom.Text;
 import nu.xom.XPathContext;
 import nu.xom.canonical.CanonicalizationException;
@@ -57,7 +54,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d7
+ * @version 1.1a3
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -428,7 +425,8 @@ public class CanonicalizerTest extends XOMTestCase {
         Element child = new Element("pre:test", "http://www.example.org/");
         pdu.appendChild(child);
         
-        String expected = "<tuck xmlns:pre=\"http://www.example.com/\" pre:foo=\"value\"><pre:test xmlns:pre=\"http://www.example.org/\"></pre:test></tuck>";
+        String expected = "<tuck xmlns:pre=\"http://www.example.com/\" "
+          + "pre:foo=\"value\"><pre:test xmlns:pre=\"http://www.example.org/\"></pre:test></tuck>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
@@ -485,11 +483,11 @@ public class CanonicalizerTest extends XOMTestCase {
             byte[] actual = out.toByteArray();
             
             // for debugging
-            File debug = new File(canonical, "debug/" 
+            /* File debug = new File(canonical, "debug/" 
               + input.getName() + ".dbg");
             OutputStream fout = new FileOutputStream(debug);
             fout.write(actual);
-            fout.close();
+            fout.close(); */
             
             File expected = new File(output, input.getName() + ".out");
             assertEquals(
@@ -532,11 +530,11 @@ public class CanonicalizerTest extends XOMTestCase {
             byte[] actual = out.toByteArray();
             
             // for debugging
-            File debug = new File(canonical, "debug/" 
+            /* File debug = new File(canonical, "debug/" 
               + input.getName() + ".dbg");
             OutputStream fout = new FileOutputStream(debug);
             fout.write(actual);
-            fout.close();
+            fout.close(); */
             
             File expected = new File(output, input.getName() + ".out");
             assertEquals(
@@ -937,7 +935,8 @@ public class CanonicalizerTest extends XOMTestCase {
             + " count(id(\"E3\")|ancestor-or-self::node()) = count(ancestor-or-self::node())\n"
             + "]";
         
-        String expected = "<e1 xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\"><e3 xmlns=\"\" id=\"E3\" xml:space=\"preserve\"></e3></e1>";
+        String expected = "<e1 xmlns=\"http://www.ietf.org\" "
+          + "xmlns:w3c=\"http://www.w3.org\"><e3 xmlns=\"\" id=\"E3\" xml:space=\"preserve\"></e3></e1>";
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
@@ -1053,7 +1052,8 @@ public class CanonicalizerTest extends XOMTestCase {
             + " count(id(\"E3\")|ancestor-or-self::node()) = count(ancestor-or-self::node())\n"
             + "]";
         
-        String expected = "<e1 xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\"><e3 xmlns=\"\" id=\"E3\" xml:space=\"preserve\"></e3></e1>";
+        String expected = "<e1 xmlns=\"http://www.ietf.org\" "
+          + "xmlns:w3c=\"http://www.w3.org\"><e3 xmlns=\"\" id=\"E3\" xml:space=\"preserve\"></e3></e1>";
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
@@ -1341,10 +1341,18 @@ public class CanonicalizerTest extends XOMTestCase {
         }
         InputStream in = new ByteArrayInputStream(data);
         Document doc = builder.build(in);
-        String rawResult = doc.getValue();
-        String normalizedResult = Normalizer.normalize(rawResult, Normalizer.NFC);
+        
+        // make a Unicode normalized version of the same document
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        byte[] temp = out.toByteArray();
+        in = new ByteArrayInputStream(temp);
+        Document nfcDoc = builder.build(in);
+        
         assertEquals("Parser doesn't use NFC when converting from " + encoding, 
-          normalizedResult, rawResult);
+          doc, nfcDoc);
         
     }
 
@@ -1370,10 +1378,19 @@ public class CanonicalizerTest extends XOMTestCase {
         System.arraycopy(temp, 0, data, prologData.length, temp.length);        
         InputStream in = new ByteArrayInputStream(data);
         Document doc = builder.build(in);
-        String rawResult = doc.getValue();
-        String normalizedResult = Normalizer.normalize(rawResult, Normalizer.NFC);
+        
+        // make a Unicode normalized version of the same document
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        temp = out.toByteArray();
+        in = new ByteArrayInputStream(temp);
+        Document nfcDoc = builder.build(in);
+        
+        // String normalizedResult = Normalizer.normalize(rawResult, Normalizer.NFC);
         assertEquals("Parser doesn't use NFC when converting from " + encoding, 
-          normalizedResult, rawResult);
+          doc, nfcDoc);
         
     }
 
@@ -1532,7 +1549,8 @@ public class CanonicalizerTest extends XOMTestCase {
         pdu.appendChild(elem1);
         elem1.addAttribute(new Attribute("pre:foo", "http://www.example.org/", "value"));
         
-        String expected = "<n1:elem1 xmlns:n1=\"http://b.example\" xmlns:pre=\"http://www.example.org/\" pre:foo=\"value\">content</n1:elem1>";
+        String expected = "<n1:elem1 xmlns:n1=\"http://b.example\" "
+          + "xmlns:pre=\"http://www.example.org/\" pre:foo=\"value\">content</n1:elem1>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
@@ -1657,7 +1675,9 @@ and expect to see
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         XPathContext context = new XPathContext("n1", "http://example.net");
-        canonicalizer.write(doc.query(" (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context));  
+        canonicalizer.write(doc.query(
+          " (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", 
+          context));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -1852,7 +1872,8 @@ and expect to see
             out.close();
         }           
         byte[] actual = out.toByteArray();
-        byte[] expected = " xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"".getBytes("UTF-8");
+        byte[] expected 
+          = " xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"".getBytes("UTF-8");
         assertEquals(expected, actual);  
         
     }
@@ -1871,7 +1892,9 @@ and expect to see
             out.close();
         }           
         byte[] actual = out.toByteArray();
-        byte[] expected = "<pre:foo xmlns:pre=\"http://www.example.org\">  value \n value</pre:foo>".getBytes("UTF-8");
+        byte[] expected = 
+          "<pre:foo xmlns:pre=\"http://www.example.org\">  value \n value</pre:foo>"
+          .getBytes("UTF-8");
         assertEquals(expected, actual);
         
     }
@@ -2008,20 +2031,31 @@ and expect to see
         }
         
     }
+       
     
-    
-    // ???? pull up into XOMTestCase?
-    public void assertEquals(byte[] expected, byte[] actual) {
+    /**
+     * <p>
+     * Asserts that two byte arrays are equal. If the two arrays are  
+     * not equal a <code>ComparisonFailure</code> is thrown. Two 
+     * arrays are equal if and only if they have the same length, 
+     * and each item in the expected array is equal to the 
+     * corresponding item in the actual array. 
+     * </p>
+     *
+     * @param expected the byte array the test should produce
+     * @param actual the byte array the test does produce
+     */
+    private void assertEquals(byte[] expected, byte[] actual) {
         
         if (expected == null && actual == null) {
             return;
         }
+        // what if one is null and the other isn't????
         assertEquals(expected.length, actual.length);
         for (int i = 0; i < actual.length; i++) {
             assertEquals(expected[i], actual[i]);
         }
         
     }
-
     
 }
