@@ -46,13 +46,14 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b8
  * 
  */
 class XHTMLJavaDoc {
     
     private static Builder builder 
-      = new Builder(new org.ccil.cowan.tagsoup.Parser(), false, new HTMLFixFactory());
+      = new Builder(new org.ccil.cowan.tagsoup.Parser(), 
+         false, new HTMLFixFactory());
 
 
     private static class HTMLFilter implements FileFilter {
