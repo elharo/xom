@@ -23,12 +23,14 @@
 
 package nu.xom;
 
+import java.io.CharConversionException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UTFDataFormatException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -748,9 +750,40 @@ public class Builder {
               = new ParsingException(ex.getMessage(), ex);
             throw pex;
         }
-        // put a catch arrayindexoutofboundsexception here to
-        // work better with Piccolo????
-
+        catch (ArrayIndexOutOfBoundsException ex) {
+            // Work-around for non-conformant parsers, especially Piccolo
+            ParsingException pex 
+              = new ParsingException(ex.getMessage(), ex);
+            throw pex;
+        }
+        catch (NegativeArraySizeException ex) {
+            // Work-around for non-conformant parsers, especially Piccolo
+            ParsingException pex 
+              = new ParsingException(ex.getMessage(), ex);
+            throw pex;
+        }
+        catch (NullPointerException ex) {
+            // Work-around for non-conformant parsers, especially Piccolo
+            // This also affects factories that return null where they shouldn't
+            ParsingException pex 
+              = new ParsingException(ex.getMessage(), ex);
+            throw pex;
+        }
+        catch (UTFDataFormatException ex) {
+            // Work-around for non-conformant parsers, especially Xerces
+            // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27583
+            ParsingException pex 
+              = new ParsingException(ex.getMessage(), ex);
+            throw pex;
+        }
+        catch (CharConversionException ex) {
+            // Work-around for non-conformant parsers, especially Xerces
+            // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27583
+            ParsingException pex 
+              = new ParsingException(ex.getMessage(), ex);
+            throw pex;
+        }
+        
         XOMHandler handler = (XOMHandler) (parser.getContentHandler());
         ErrorHandler errorHandler = parser.getErrorHandler();
         Document result = handler.getDocument();
