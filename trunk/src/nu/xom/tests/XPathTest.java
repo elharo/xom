@@ -146,6 +146,15 @@ public class XPathTest extends XOMTestCase {
 
     public void testUseRootNodeWhenQueryingDocumentLessElements2() {
         
+        Element test = new Element("Test");
+        Nodes result = test.query("/None");
+        assertEquals(0, result.size());
+        
+    }
+    
+
+    public void testUseRootNodeWhenQueryingDocumentLessElements3() {
+        
         Element test = new Element("Test");  
         
         Nodes result = test.query("//");
@@ -218,14 +227,38 @@ public class XPathTest extends XOMTestCase {
         Element child2 = new Element("child2");
         parent.appendChild(child2);
         
-        Nodes result = parent.query("*");
+        Nodes result = parent.query("node()");
         assertEquals(2, result.size());
         assertEquals(child1, result.get(0));   
         assertEquals(child2, result.get(1));   
         
-        result = parent.query("*[1]");
+        result = parent.query("node()[1]");
         assertEquals(1, result.size());
         assertEquals(child1, result.get(0));
+        
+    }
+    
+
+    public void testEmptyTextNodeNextToNonEmptyTextNode() {
+        
+        Element parent = new Element("Test");
+        Text empty = new Text("");
+        parent.appendChild(empty);
+        Text nonempty = new Text("value");
+        parent.appendChild(nonempty);
+        Element child1 = new Element("child1");
+        parent.appendChild(child1);
+        Element child2 = new Element("child2");
+        parent.appendChild(child2);
+        
+        Nodes result = parent.query("node()");
+        assertEquals(4, result.size());
+        assertEquals(empty, result.get(0));   
+        assertEquals(nonempty, result.get(1));   
+        
+        result = parent.query("node()[1]");
+        assertEquals(2, result.size());
+        assertEquals(empty, result.get(0));
         
     }
     
@@ -878,9 +911,9 @@ public class XPathTest extends XOMTestCase {
         child2.addAttribute(a2);
         child2.addAttribute(a3);
         
-        Nodes result = a2.query("preceding-sibling::*");
+        Nodes result = a2.query("preceding-sibling::node()");
         assertEquals(0, result.size());   
-        result = a2.query("following-sibling::*");
+        result = a2.query("following-sibling::node()");
         assertEquals(0, result.size());    
         
     }
