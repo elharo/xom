@@ -1263,8 +1263,6 @@ final class Verifier {
         if (c <= 0xBFFFD) return true;
         if (c <  0xC0000) return false;
         if (c <= 0xCFFFD) return true;
-        if (c <  0xC0000) return false;
-        if (c <= 0xCFFFD) return true;
         if (c <  0xD0000) return false;
         if (c <= 0xDFFFD) return true;
         if (c <  0xE1000) return false;
