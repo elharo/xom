@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -43,22 +43,27 @@ public class ProcessingInstructionTest extends XOMTestCase {
         super(name);
     }
     
+    
     private ProcessingInstruction pi;
+    
     
     protected void setUp() {
         pi = new ProcessingInstruction("test", "test");  
     }
 
+    
     public void testToXML() {
         assertEquals("<?test test?>", pi.toXML());
     }
 
+    
     public void testToString() {
         assertEquals(
           "[nu.xom.ProcessingInstruction: target=\"test\"; data=\"test\"]", 
           pi.toString());
     }
 
+    
     public void testConstructor() {
 
         assertEquals("test", pi.getValue());
@@ -70,6 +75,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         catch (IllegalTargetException success) {
             assertNotNull(success.getMessage());
+            assertEquals("test:test", success.getData());
         }
         
         try {
@@ -78,6 +84,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         catch (IllegalTargetException success) {
             assertNotNull(success.getMessage());
+            assertEquals("", success.getData());
         }
         
         try {
@@ -86,13 +93,16 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         catch (IllegalTargetException success) {
             assertNotNull(success.getMessage());
+            assertNull(success.getData());
         }
         
         try {
            new ProcessingInstruction("12345", "test");
            fail("Processing instruction targets must be NCNames");
         }
-        catch (IllegalTargetException success) {}
+        catch (IllegalTargetException success) {
+            assertEquals("12345", success.getData());            
+        }
         
         // test empty data allowed
         pi = new ProcessingInstruction("test", "");
@@ -101,7 +111,9 @@ public class ProcessingInstructionTest extends XOMTestCase {
 
     }
     
+    
     public void testCopyConstructor() {
+        
         ProcessingInstruction instruction1 = new ProcessingInstruction("target", "data");   
         ProcessingInstruction instruction2 = new ProcessingInstruction(instruction1);
         
@@ -111,40 +123,45 @@ public class ProcessingInstructionTest extends XOMTestCase {
            
     }
 
+    
     public void testSetter() {
 
         try {
           pi.setValue("kjsahdj ?>");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalDataException success) {
+            assertEquals("kjsahdj ?>", success.getData());
+            assertNotNull(success.getMessage());
         }
+        
         try {
           pi.setValue("?>");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalDataException success) {
+            assertEquals("?>", success.getData());
+            assertNotNull(success.getMessage());
         }
+        
         try {
           pi.setValue("kjsahdj ?> skhskjlhd");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalDataException success) {
+            assertEquals("kjsahdj ?> skhskjlhd", success.getData());
+            assertNotNull(success.getMessage());
         }
+        
         try {
             pi.setValue(null);
             fail("Allowed null data");   
         }
-        catch (IllegalDataException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalDataException success) {
+            assertNull(success.getData());
+            assertNotNull(success.getMessage());
         }
+        
         
         // These should all work
         String[] testData = {"<html></html>",
@@ -159,11 +176,12 @@ public class ProcessingInstructionTest extends XOMTestCase {
           assertEquals(testData[i], pi.getValue());
         }
 
-     }
+    }
 
+    
     public void testNames() {
         assertEquals("test", pi.getTarget());
-     }
+    }
 
 
     public void testEquals() {
@@ -185,6 +203,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         assertTrue(!pi2.equals(pi3));
     }
 
+    
     public void testCopy() {
         Element test = new Element("test");
         test.appendChild(pi);
@@ -196,6 +215,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         assertNull(c2.getParent());
     }
 
+    
     // Check passing in a string with correct surrogate pairs
     public void testCorrectSurrogates() {
         String goodString = "test: \uD8F5\uDF80  ";
@@ -203,6 +223,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         assertEquals(goodString, pi.getValue());       
     }
 
+    
     // Check passing in a string with broken surrogate pairs
     public void testSurrogates() {
 
@@ -211,7 +232,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
             fail("Allowed two high halves");
         }
         catch (IllegalDataException success) {
-            // success   
+            assertEquals("test \uD8F5\uD8F5 test", success.getData());
             assertNotNull(success.getMessage());
         }
         
@@ -220,7 +241,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
             fail("Allowed two low halves");
         }
         catch (IllegalDataException success) {
-            // success   
+            assertEquals("test \uDF80\uDF80 test", success.getData());
             assertNotNull(success.getMessage());
         }
         
@@ -229,7 +250,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
             fail("Allowed two halves split by space");
         }
         catch (IllegalDataException success) {
-            // success   
+            assertEquals("test \uD8F5 \uDF80 test", success.getData());
             assertNotNull(success.getMessage());
         }
 
@@ -238,12 +259,13 @@ public class ProcessingInstructionTest extends XOMTestCase {
             fail("Allowed reversed pair");
         }
         catch (IllegalDataException success) {
-            // success   
+            assertEquals("test \uDF80\uD8F5 test", success.getData());
             assertNotNull(success.getMessage());
-        }        
+        }
         
     }
 
+    
     public void testLeafNode() {
 
         assertEquals(0, pi.getChildCount());
@@ -269,57 +291,73 @@ public class ProcessingInstructionTest extends XOMTestCase {
 
     }
 
+    
     // This is a problem becuase it cannot be serialized
     // since character and entity references aren't
     // recognized in comment data
     public void testCarriageReturnInProcessingInstructionData() {
+        
         try {
             new ProcessingInstruction("target", "data\rdata");
             fail("Allowed carriage return in processing instruction data");
         }
         catch (IllegalDataException success) {
+            assertEquals("data\rdata", success.getData());
             assertNotNull(success.getMessage());   
         }   
+        
     }
 
+    
     public void testAllowReservedCharactersInData() {
         ProcessingInstruction pi = new ProcessingInstruction("target", "<test>&amp;&greater;");
         String xml = pi.toXML();
         assertEquals("<?target <test>&amp;&greater;?>", xml);  
     }
     
+    
     // This can't be round-tripped
     public void testNoInitialWhiteSpace() {
+        
         try {
             new ProcessingInstruction("target", "   initial spaces"); 
             fail("allowed processing instruction data with leading space");
         }
         catch (IllegalDataException success) {
+            assertEquals("   initial spaces", success.getData());
             assertNotNull(success.getMessage());   
-        }
+        }   
+        
         try {
             new ProcessingInstruction("target", "\tinitial tab"); 
             fail("allowed processing instruction data with leading space");
         }
         catch (IllegalDataException success) {
+            assertEquals("\tinitial tab", success.getData());
             assertNotNull(success.getMessage());   
-        }
+        }   
+        
         try {
             new ProcessingInstruction("target", "\ninitial linefeed"); 
             fail("allowed processing instruction data with leading space");
         }
         catch (IllegalDataException success) {
+            assertEquals("\ninitial linefeed", success.getData());
             assertNotNull(success.getMessage());   
-        }
+        }   
+        
         try {
             new ProcessingInstruction("target", "\r initial carriage return"); 
             fail("allowed processing instruction data with leading space");
         }
         catch (IllegalDataException success) {
+            assertEquals("\r initial carriage return", success.getData());
             assertNotNull(success.getMessage());   
-        }
+        }   
+        
         
     }
+    
     
     public void testNoXMLTargets() {
 
@@ -328,6 +366,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
             fail("allowed processing instruction with target xml");
         }
         catch (IllegalTargetException success) {
+            assertEquals("xml", success.getData());
             assertNotNull(success.getMessage());   
         }
 
@@ -336,6 +375,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
             fail("allowed processing instruction with target XML");
         }
         catch (IllegalTargetException success) {
+            assertEquals("XML", success.getData());
             assertNotNull(success.getMessage());   
         }
 
@@ -344,9 +384,9 @@ public class ProcessingInstructionTest extends XOMTestCase {
             fail("allowed processing instruction with target Xml");
         }
         catch (IllegalTargetException success) {
+            assertEquals("Xml", success.getData());
             assertNotNull(success.getMessage());   
         }
-
         
     }
 

@@ -52,6 +52,7 @@ import com.ibm.icu.text.UTF16;
  */
 public class VerifierTest extends XOMTestCase {
 
+    
     public VerifierTest(String name) {
         super(name);
     }
@@ -90,6 +91,7 @@ public class VerifierTest extends XOMTestCase {
                } 
                catch (IllegalNameException success) {
                    assertNotNull(success.getMessage());
+                   assertEquals(String.valueOf(c), success.getData());
                }
             }
             
@@ -145,11 +147,12 @@ public class VerifierTest extends XOMTestCase {
             String url = "http://www.example.com/" + utf16 + ".xml";
             try {
                 new DocType("root", url);
-                fail("Allowed IRI containing 0x" + 
+                fail("Allowed URL containing 0x" + 
                   Integer.toHexString(illegalChars[i]).toUpperCase());
             }
             catch (MalformedURIException success) {
                 assertNotNull(success.getMessage());
+                assertEquals(url, success.getData());
             }
         }    
         
@@ -224,6 +227,7 @@ public class VerifierTest extends XOMTestCase {
             }
             catch (MalformedURIException success) {
                 assertNotNull(success.getMessage());
+                assertTrue(success.getData().indexOf(addresses[i]) >= 0);
             }
         }    
         
@@ -258,6 +262,7 @@ public class VerifierTest extends XOMTestCase {
              }
              catch (IllegalDataException success) {
                  assertNotNull(success.getMessage());
+                 assertEquals(String.valueOf(c), success.getData());
              }  
          }
          

@@ -117,7 +117,7 @@ public class DocType extends LeafNode {
      * @param rootElementName the name specified for the root element
      * @param systemID the URL of the external DTD subset
      * 
-     * @throws IllegalNameException  if the rootElementName is not 
+     * @throws IllegalNameException if the rootElementName is not 
      *     a legal XML 1.0 name
      * @throws IllegalDataException if the system ID is not 
      *     a legal XML 1.0 system literal
@@ -135,6 +135,7 @@ public class DocType extends LeafNode {
      * </p>
      * 
      * @param rootElementName the name specified for the root element
+     * 
      * @throws IllegalNameException if the rootElementName is not 
      *      a legal XML 1.0 name
      */
@@ -179,7 +180,10 @@ public class DocType extends LeafNode {
      * </p>
      * 
      * @param name the root element name given by
-     *      the document type declaration.
+     *     the document type declaration
+     * 
+     * @throws IllegalNameException if the rootElementName is not 
+     *     a legal XML 1.0 name
      */
     public final void setRootElementName(String name) {
         Verifier.checkXMLName(name);
@@ -195,7 +199,7 @@ public class DocType extends LeafNode {
      * not be the same as the actual root element name.
      * </p>
      * 
-     * @return  the declared name of the root element
+     * @return the declared name of the root element
      */
     public final String getRootElementName() {
         return rootName;
@@ -280,7 +284,7 @@ public class DocType extends LeafNode {
      * or if it does not have a public identifier.
      * </p>
      * 
-     * @return  the public ID of the external DTD subset.
+     * @return the public ID of the external DTD subset.
      */
     public final String getPublicID() { 
         return publicID;
@@ -312,16 +316,20 @@ public class DocType extends LeafNode {
 
         if (id != null) {
             if (id.indexOf('"') != -1 && id.indexOf('\'') != -1) {
-                throw new IllegalDataException(
+                IllegalDataException ex = new IllegalDataException(
                  "System literal contains both single and double quotes");
+                ex.setData(id);
+                throw ex;
             }
             
             Verifier.checkURI(id);
             
             if (id.indexOf('#') != -1) {
-                throw new IllegalDataException(
-                  "System literals cannot contain fragment identifiers"
+                IllegalDataException ex = new IllegalDataException(
+                 "System literals cannot contain fragment identifiers"
                 );
+                ex.setData(id);
+                throw ex;
             }
         }
         
@@ -336,7 +344,7 @@ public class DocType extends LeafNode {
      * This is a URL. It is null if there is no external DTD subset.
      * </p>
      * 
-     * @return  the URL for the external DTD subset.
+     * @return the URL for the external DTD subset.
      */
     public final String getSystemID() { 
         return systemID;
@@ -601,6 +609,7 @@ public class DocType extends LeafNode {
         }
 
         return false;
+        
     }
 
     

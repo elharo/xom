@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -37,7 +37,7 @@ import nu.xom.IllegalAddException;
 import nu.xom.IllegalNameException;
 import nu.xom.MalformedURIException;
 import nu.xom.MultipleParentException;
-import nu.xom.NamespaceException;
+import nu.xom.NamespaceConflictException;
 import nu.xom.NoSuchAttributeException;
 import nu.xom.Node;
 import nu.xom.ParsingException;
@@ -97,9 +97,11 @@ public class ElementTest extends XOMTestCase {
 
     }
 
+    
     public ElementTest(String name) {
         super(name);
     }
+    
     
     public void testGetChildElementsNull() {
         Elements elements = element.getChildElements(
@@ -113,6 +115,7 @@ public class ElementTest extends XOMTestCase {
         elements = element.getChildElements("", null);
         assertEquals(1, elements.size());     
     }
+    
     
     public void testGetFirstChildElement() {
         Element first = element.getFirstChildElement("test");
@@ -131,6 +134,7 @@ public class ElementTest extends XOMTestCase {
         
     }
 
+    
     public void testConstructor1() {
         String name = "sakjdhjhd";
         Element e = new Element(name);
@@ -141,6 +145,7 @@ public class ElementTest extends XOMTestCase {
         assertEquals("",   e.getNamespaceURI());
     }
 
+    
     public void testConstructor2() {
         String name = "sakjdhjhd";
         String uri = "http://www.something.com/";
@@ -152,7 +157,8 @@ public class ElementTest extends XOMTestCase {
         assertEquals(uri,  e.getNamespaceURI());
     }
 
-   public void testConstructor3() {
+    
+    public void testConstructor3() {
         String name = "red:sakjdhjhd";
         String uri = "http://www.something.com/";
         Element e = new Element(name, uri);
@@ -163,6 +169,7 @@ public class ElementTest extends XOMTestCase {
         assertEquals(uri, e.getNamespaceURI());
     }
 
+   
     public void testAllowEmptyNamespace() {
         String name = "sakjdhjhd";
         String uri = "http://www.something.com/";
@@ -174,6 +181,7 @@ public class ElementTest extends XOMTestCase {
         
     }
 
+    
     public void testToString() {
         String name = "sakjdhjhd";
         String uri = "http://www.something.com/";
@@ -185,6 +193,7 @@ public class ElementTest extends XOMTestCase {
         assertTrue(s.indexOf(name) != -1);       
     }
 
+    
     public void testToXML() {
         String name = "sakjdhjhd";
         String uri = "http://www.something.com/";
@@ -197,6 +206,7 @@ public class ElementTest extends XOMTestCase {
         assertTrue(s.indexOf("xmlns=") != -1);       
     }
 
+    
     public void testToXML2() throws ParsingException, IOException {
         Builder builder = new Builder();
         File f = new File("data/soapresponse.xml");   
@@ -210,12 +220,14 @@ public class ElementTest extends XOMTestCase {
          
     }
     
+    
     public void testToXMLWithXMLLangAttribute() {
         Element e = new Element("e");
         e.addAttribute(new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "en"));
         assertEquals("<e xml:lang=\"en\" />", e.toXML());
     }    
 
+    
     public void testAllowNullNamespace() {
         String name = "sakjdhjhd";
         String uri = "http://www.something.com/";
@@ -244,6 +256,7 @@ public class ElementTest extends XOMTestCase {
         
     }
 
+    
     public void testXMLNamespace() {
         
         String name = "red:sakjdhjhd";
@@ -258,9 +271,8 @@ public class ElementTest extends XOMTestCase {
             e.addNamespaceDeclaration("xml", "http://www.yahoo.com/");
             fail("remapped xml prefix!");
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
         }
         assertEquals(e.getNamespaceURI("xml"), xmlNamespace);
         
@@ -271,6 +283,7 @@ public class ElementTest extends XOMTestCase {
         
     }
 
+    
     public void testUndeclareDefaultNamespace() {
         
         String name = "red:sakjdhjhd";
@@ -298,9 +311,8 @@ public class ElementTest extends XOMTestCase {
             child2.addNamespaceDeclaration("", "");
             fail("Illegally undeclared default namespace");
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
@@ -344,6 +356,7 @@ public class ElementTest extends XOMTestCase {
         
     }
 
+    
     public void testSameNamespaceForElementAndAttribute() {
         
         String name = "a";
@@ -360,6 +373,7 @@ public class ElementTest extends XOMTestCase {
         
     }
     
+    
     public void testToXMLWithXMLAttributes() {
         Element e = new Element("test");
         e.addAttribute(
@@ -372,6 +386,7 @@ public class ElementTest extends XOMTestCase {
         assertEquals("<test xmlns:zzz=\"http://www.example.org\" xml:space=\"preserve\" zzz:zzz=\"preserve\" />", result);
     }
 
+    
     public void testGetNamespacePrefixInt() {
         Element e = new Element("test");
         e.addAttribute(
@@ -462,9 +477,8 @@ public class ElementTest extends XOMTestCase {
             e.addNamespaceDeclaration("pre1", "http://www.blue2.com");
             fail("Added conflicting namespace");    
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceConflictException success) { 
+            assertNotNull(success.getMessage());
         }
         
         try {
@@ -473,9 +487,8 @@ public class ElementTest extends XOMTestCase {
             e.addAttribute(a4);
             fail("Added conflicting namespace");    
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceConflictException success) {   
+            assertNotNull(success.getMessage());
         }
         
         // can't add conflicting attribute from 
@@ -485,9 +498,8 @@ public class ElementTest extends XOMTestCase {
               "pre1:green", "http://www.example.com/", "data");
             e.addAttribute(a4);
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceConflictException success) { 
+            assertNotNull(success.getMessage());
         }
         
         e.removeNamespaceDeclaration("green");
@@ -524,7 +536,6 @@ public class ElementTest extends XOMTestCase {
         assertNull(a1.getParent());
         assertNull(e.getAttribute("name"));
         
-        
         e.removeAttribute(a2);
         assertNull(a2.getParent());
         assertNull( e.getAttribute("green", "http://www.green.com/"));
@@ -549,9 +560,8 @@ public class ElementTest extends XOMTestCase {
             e.removeAttribute(null);
             fail("Removed Null Attribute");
         }
-        catch (NullPointerException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NullPointerException success) { 
+            assertNotNull(success.getMessage());
         }
         
     }
@@ -568,13 +578,13 @@ public class ElementTest extends XOMTestCase {
             e.removeAttribute(a1);
             fail("Removed Attribute that didn't belong");
         }
-        catch (NoSuchAttributeException ex) {
-            // success   
-            assertTrue(ex.getMessage().indexOf(a1.getQualifiedName()) > 0);
+        catch (NoSuchAttributeException success) {  
+            assertTrue(success.getMessage().indexOf(a1.getQualifiedName()) > 0);
         }
         
     }
 
+    
     public void testRemoveAttributeFromElementWithDifferentAttributes() {
         
         String name = "red:sakjdhjhd";
@@ -587,13 +597,11 @@ public class ElementTest extends XOMTestCase {
             e.removeAttribute(a1);
             fail("Removed Attribute that didn't belong");
         }
-        catch (NoSuchAttributeException ex) {
-            // success   
-            assertTrue(ex.getMessage().indexOf(a1.getQualifiedName()) > 0);
+        catch (NoSuchAttributeException success) { 
+            assertTrue(success.getMessage().indexOf(a1.getQualifiedName()) > 0);
         }
         
     }
-
 
 
     public void testGetValue() {
@@ -644,37 +652,40 @@ public class ElementTest extends XOMTestCase {
             e.setLocalName("spaces ");
             fail("Local name allowed to contain spaces");   
         }
-        catch (IllegalNameException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+            assertEquals("spaces ", success.getData());
         }
+        
         try {
             e.setLocalName("digits:test");
             fail("Local name allowed to contain colon");    
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalNameException success) { 
+            assertNotNull(success.getMessage());
         }
+        
         try {
             e.setLocalName("digits!test");
             fail("Local name allowed to contain bang"); 
         }
-        catch (IllegalNameException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalNameException success) {  
+            assertNotNull(success.getMessage());
+            assertEquals("digits!test", success.getData());
         }
+        
         try {
             e.setLocalName("digits\u0000test");
             fail("Local name allowed to contain null"); 
         }
-        catch (IllegalNameException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalNameException success) { 
+            assertNotNull(success.getMessage());
+            assertEquals("digits\u0000test", success.getData());
         }
         
     }
 
+    
     public void testSetNamespacePrefix() {
         
         String name = "red:sakjdhjhd";
@@ -701,37 +712,40 @@ public class ElementTest extends XOMTestCase {
             e.setNamespacePrefix("spaces ");
             fail("namespace prefix allowed to contain spaces"); 
         }
-        catch (IllegalNameException ex) {
-             // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalNameException success) { 
+            assertNotNull(success.getMessage());
+            assertEquals("spaces ", success.getData());
         }
+        
         try {
             e.setNamespacePrefix("digits:test");
             fail("namespace prefix allowed to contain colon");  
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
         }
+        
         try {
             e.setNamespacePrefix("digits!test");
             fail("namespace prefix allowed to contain bang");   
         }
-        catch (IllegalNameException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalNameException success) { 
+            assertNotNull(success.getMessage());
+            assertEquals("digits!test", success.getData());
         }
+        
         try {
             e.setNamespacePrefix("digits\u0000test");
             fail("namespace prefix allowed to contain null");   
         }
-        catch (IllegalNameException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalNameException success) {  
+            assertNotNull(success.getMessage());
+            assertEquals("digits\u0000test", success.getData());
         }
         
     }
 
+    
     public void testSetNamespaceURI() {
         
         String name = "red:sakjdhjhd";
@@ -750,9 +764,8 @@ public class ElementTest extends XOMTestCase {
                 e.setNamespaceURI(illegal[i]);
                 fail("illegal namespace URI allowed");  
             }
-            catch (MalformedURIException ex) {
-                // success   
-                assertNotNull(ex.getMessage());
+            catch (MalformedURIException success) { 
+                assertNotNull(success.getMessage());
             }
         }
              
@@ -772,12 +785,12 @@ public class ElementTest extends XOMTestCase {
             e.setNamespaceURI("http://www.example.com");
             fail("illegal namespace conflict");  
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceConflictException success) { 
+            assertNotNull(success.getMessage());
         }
         
     }
+    
     
     public void testSetNamespaceURIConflictsWithAttributeNamespace() {
         
@@ -791,12 +804,12 @@ public class ElementTest extends XOMTestCase {
             e.setNamespaceURI("http://www.example.com");
             fail("illegal attribute namespace conflict");  
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
+    
     
     public void testChangePrefix() {
         
@@ -814,18 +827,16 @@ public class ElementTest extends XOMTestCase {
             element.setNamespacePrefix("blue");
             fail("Conflicting prefix allowed against additional " +                "namespace declaration");  
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceConflictException success) {  
+            assertNotNull(success.getMessage());
         }
         
         try {
             element.setNamespacePrefix("green");
             fail("Conflicting prefix allowed against attribute");  
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceConflictException success) { 
+            assertNotNull(success.getMessage());
         }
         
         element.setNamespacePrefix("purple");
@@ -861,6 +872,7 @@ public class ElementTest extends XOMTestCase {
         
     }
 
+    
     public void testInsertChildUsingString() {
         
         String name = "red:sakjdhjhd";
@@ -879,6 +891,7 @@ public class ElementTest extends XOMTestCase {
 
     }
 
+    
     public void testInsertNull() {
         
         String name = "red:sakjdhjhd";
@@ -894,6 +907,7 @@ public class ElementTest extends XOMTestCase {
         }
     }
 
+    
     public void appendNullChild() {
         
         String name = "red:sakjdhjhd";
@@ -909,6 +923,7 @@ public class ElementTest extends XOMTestCase {
         }
     }
 
+    
     public void testInsertChild() {
         
         String name = "red:sakjdhjhd";
@@ -1007,20 +1022,19 @@ public class ElementTest extends XOMTestCase {
             element.setNamespaceURI("");
             fail("Unset namespace");
         }
-        catch (NamespaceException success) {
-            // success   
+        catch (NamespaceConflictException success) {
             assertNotNull(success.getMessage());
         }
         try {
             element.setNamespaceURI(null);
             fail("Unset namespace");
         }
-        catch (NamespaceException success) {
-            // success   
+        catch (NamespaceConflictException success) {
             assertNotNull(success.getMessage());
         }
  
     }
+    
     
     public void testGetChildElements() {
         
@@ -1045,6 +1059,7 @@ public class ElementTest extends XOMTestCase {
         
     }
 
+    
     public void testAddAttribute() {
         
         Element element = new Element("name");
@@ -1064,7 +1079,6 @@ public class ElementTest extends XOMTestCase {
             fail("added attribute with existing parent");
         }
         catch (IllegalAddException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
         
@@ -1078,8 +1092,7 @@ public class ElementTest extends XOMTestCase {
             funky.addAttribute(a2); 
             fail("added conflicting namespace"); 
         }
-        catch (NamespaceException success) { 
-            // success   
+        catch (NamespaceConflictException success) { 
             assertNotNull(success.getMessage());
         }
         
@@ -1099,8 +1112,7 @@ public class ElementTest extends XOMTestCase {
             test.addAttribute(a4); 
             fail("added conflicting attributes"); 
         }
-        catch (NamespaceException success) { 
-            // success   
+        catch (NamespaceConflictException success) { 
             assertNotNull(success.getMessage());
         }
 
@@ -1114,8 +1126,7 @@ public class ElementTest extends XOMTestCase {
            test2.addAttribute(a6); 
            fail("added conflicting attributes"); 
         }
-        catch (NamespaceException success) { 
-            // success   
+        catch (NamespaceConflictException success) {
             assertNotNull(success.getMessage());
         }
         
@@ -1146,8 +1157,7 @@ public class ElementTest extends XOMTestCase {
             );
             fail("added attribute that conflicts with " +                "additional namespace declaration");
         }
-        catch (NamespaceException success) {
-            // success   
+        catch (NamespaceConflictException success) {
             assertNotNull(success.getMessage());
         }
 
@@ -1161,8 +1171,7 @@ public class ElementTest extends XOMTestCase {
               "ok", "http://www.example.net");
             fail("added namespace declaration that " +                "conflicts with attribute");
         }
-        catch (NamespaceException ex) {
-            // success   
+        catch (NamespaceConflictException ex) {
             assertNotNull(ex.getMessage());
         }
         
@@ -1178,6 +1187,7 @@ public class ElementTest extends XOMTestCase {
         
     }    
 
+    
     public void testCopy() {
 
         String name = "red:sakjdhjhd";
@@ -1221,6 +1231,7 @@ public class ElementTest extends XOMTestCase {
 
     }
 
+    
     public void testRemoveChildren() {
         String name = "red:sakjdhjhd";
         String uri = "http://www.red.com/";
@@ -1251,6 +1262,7 @@ public class ElementTest extends XOMTestCase {
         
     }
 
+    
     public void testGetAttributeValue() {
         String name = "sakjdhjhd";
         Element e = new Element(name);
@@ -1274,6 +1286,7 @@ public class ElementTest extends XOMTestCase {
         assertNull(e.getAttributeValue("test", 
           "http://www.w3.org/XML/1998/namespace"));
     }
+
 
     public void testGetAttribute() {
         String name = "sakjdhjhd";
@@ -1306,8 +1319,7 @@ public class ElementTest extends XOMTestCase {
             e.getAttribute(2);
             fail("Got attribute beyond bounds");
         }
-        catch (IndexOutOfBoundsException success) {
-            // success   
+        catch (IndexOutOfBoundsException success) {  
             assertNotNull(success.getMessage()); 
         }
   
@@ -1315,18 +1327,19 @@ public class ElementTest extends XOMTestCase {
             e.getAttribute(-1);
             fail("Got attribute with negative index");
         }
-        catch (IndexOutOfBoundsException success) {
-            // success   
+        catch (IndexOutOfBoundsException success) { 
             assertNotNull(success.getMessage()); 
         }
            
     }
 
+    
     public void testGetNamespacePrefix() {      
         Element html = new Element("html");
         assertEquals("", html.getNamespacePrefix());         
     }
 
+    
     public void testXMLPrefixAllowed() {
         Element test = new Element("xml:base",
               "http://www.w3.org/XML/1998/namespace");
@@ -1335,24 +1348,67 @@ public class ElementTest extends XOMTestCase {
         assertEquals("xml:base", test.getQualifiedName());
     }
 
+    
     public void testXMLPrefixNotAllowedWithWrongURI() {
         try {
             new Element("xml:base", "http://www.example.org/");
             fail("Allowed wrong namespace for xml prefix");    
         }
-        catch (NamespaceException success) {
+        catch (NamespaceConflictException success) {
             assertNotNull(success.getMessage());   
         }
         
     }
 
+    
     public void testWrongPrefixNotAllowedWithXMLURI() {
         try {
             new Element("test:base", "http://www.w3.org/XML/1998/namespace");
             fail("Allowed XML namespace to be associated with non-xml prefix");    
         }
-        catch (NamespaceException success) {
+        catch (NamespaceConflictException success) {
             assertNotNull(success.getMessage());   
+        }
+        
+    }
+    
+    
+    public void testEmptyName() {
+        
+        try {
+            new Element("");
+            fail("Allowed empty string for element name");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+            assertEquals("", success.getData());
+        }
+        
+    }
+    
+    
+    public void testBadNameStartCharacter() {
+        
+        try {
+            new Element("1Kelvin");
+            fail("Allowed element name to begin with digit");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+            assertEquals("1Kelvin", success.getData());
+        }
+        
+    }
+    
+    
+    public void testNullName() {
+        
+        try {
+            new Element((String) null);
+            fail("Allowed null for element name");
+        }
+        catch (NullPointerException success) {
+            // success
         }
         
     }

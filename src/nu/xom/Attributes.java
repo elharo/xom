@@ -111,7 +111,7 @@ final class Attributes {
             Attribute a = (Attribute) iterator.next();
             if (a.getNamespacePrefix().equals(prefix) 
               && !(a.getNamespaceURI().equals(namespaceURI))) {
-                throw new NamespaceException(
+                throw new NamespaceConflictException(
                  "Prefix of " + attribute.getQualifiedName() 
                  + " conflicts with " + a.getQualifiedName());
             }   

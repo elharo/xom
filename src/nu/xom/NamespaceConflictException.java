@@ -24,72 +24,59 @@
 package nu.xom;
 
 /**
+ * 
  * <p>
- *  An <code>IllegalDataException</code> indicates an attempt to
- *  set some value to malformed content; for instance
- *  by adding a string containing a null or a vertical tab
- *  to a text node, or using white space in an element name.
+ * A <code>NamespaceException</code> indicates some violation of the 
+ * rules of Namespaces in XML. All namespace exceptions are not
+ * violations of pure XML 1.0 without namespaces. For example, 
+ * trying to set the name of an element to "98degrees" throws an 
+ * <code>IllegalNameException</code> because it violates XML 1.0 
+ * with or without namespaces. However, setting the same element's 
+ * name to <code>test:test:degrees</code> throws a 
+ * <code>NamespaceException</code> because 
+ * <code>test:test:degrees</code> is a legal name in XML 1.0 but not a 
+ * legal name in XML 1.0 + namespaces.
  * </p>
-
+ * 
+ * <p>
+ * The <code>xml</code> prefix is not treated specially on attributes  
+ * like <code>xml:base</code> and <code>xml:space</code>.
+ * If used, these attributes must be specified 
+ * like any other attribute in a namespace.
+ * </p> 
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  *
  */
-public class IllegalDataException extends WellformednessException {
+public class NamespaceConflictException extends WellformednessException {
 
-    private String data;
-    
     
     /**
      * <p>
-     * Creates a new <code>IllegalDataException</code> 
+     * Creates a new <code>NamespaceException</code> 
      * with a detail message.
      * </p>
      * 
      * @param message indicates the specific problem
      */
-    public IllegalDataException(String message) {
+    public NamespaceConflictException(String message) {
         super(message);
     }
 
     
     /**
      * <p>
-     * Creates a new <code>IllegalDataException</code> 
+     * Creates a new <code>NamespaceException</code> 
      * with a detail message and an underlying root cause.
      * </p>
      * 
      * @param message indicates the specific problem
      * @param cause the original cause of this exception
      */
-    public IllegalDataException(String message, Throwable cause) {
+    public NamespaceConflictException(String message, Throwable cause) {
         super(message, cause);
     }
-    
-    
-    /**
-     * <p>
-     *   Stores the illegal text that caused this exception.
-     * </p>
-     * 
-     * @param data the illegal data that caused this exception
-     */
-    public void setData(String data) {
-        this.data = data;
-    }
 
-    
-    /**
-     * <p>
-     *   Returns a string containing the actual illegal text that 
-     *   caused this exception.
-     * </p>
-     * 
-     * @return the syntactically incorrect data that caused
-     *     this exception
-     */
-    public String getData() {
-        return data;
-    }
 
 }

@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -30,7 +30,7 @@ import nu.xom.IllegalNameException;
 import nu.xom.IllegalTargetException;
 import nu.xom.MalformedURIException;
 import nu.xom.MultipleParentException;
-import nu.xom.NamespaceException;
+import nu.xom.NamespaceConflictException;
 import nu.xom.NoSuchAttributeException;
 import nu.xom.NoSuchChildException;
 import nu.xom.XMLException;
@@ -55,16 +55,19 @@ public class XMLExceptionTest extends XOMTestCase {
         super(name);
     }
 
+    
     protected void setUp() {
         ex = new XMLException("message");
         cause = new Exception();
     }
 
+    
     public void testConstructor() {
         Exception ex = new XMLException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
+    
     
     public void testMalformedURIExceptionConstructor() {
         Exception ex = new MalformedURIException(message, cause);
@@ -72,17 +75,20 @@ public class XMLExceptionTest extends XOMTestCase {
         assertEquals(cause, ex.getCause()); 
     }
     
+    
     public void testValidityExceptionConstructor() {
         Exception ex = new MalformedURIException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
-    public void testNamespaceExceptionConstructor() {
-        Exception ex = new NamespaceException(message, cause);
+    
+    public void testNamespaceConflictExceptionConstructor() {
+        Exception ex = new NamespaceConflictException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
+    
     
     public void testMultipleParentExceptionConstructor() {
         Exception ex = new MultipleParentException(message, cause);
@@ -90,11 +96,13 @@ public class XMLExceptionTest extends XOMTestCase {
         assertEquals(cause, ex.getCause()); 
     }
     
+    
     public void testNoSuchAttributeExceptionConstructor() {
         Exception ex = new NoSuchAttributeException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
+    
     
     public void testNoSuchChildExceptionConstructor() {
         Exception ex = new NoSuchChildException(message, cause);
@@ -102,11 +110,13 @@ public class XMLExceptionTest extends XOMTestCase {
         assertEquals(cause, ex.getCause()); 
     }
     
+    
     public void testCycleExceptionConstructor() {
         Exception ex = new CycleException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
+    
     
     public void testIllegalNameExceptionConstructor() {
         Exception ex = new IllegalNameException(message, cause);
@@ -114,17 +124,20 @@ public class XMLExceptionTest extends XOMTestCase {
         assertEquals(cause, ex.getCause()); 
     }
     
+    
     public void testIllegalTargetExceptionConstructor() {
         Exception ex = new IllegalTargetException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
+    
     public void testIllegalAddExceptionConstructor() {
         Exception ex = new IllegalAddException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
+    
     
     public void testIllegalDataExceptionConstructor() {
         Exception ex = new IllegalDataException(message, cause);
@@ -180,6 +193,7 @@ public class XMLExceptionTest extends XOMTestCase {
         
     }
 
+    
     public void testSelfCause() {
         
         try {
@@ -192,9 +206,11 @@ public class XMLExceptionTest extends XOMTestCase {
         
     }
 
+    
     public void testGetMessage() {      
         Exception ex = new XMLException("testing");
         assertEquals("testing", ex.getMessage());
     }
 
+    
 }

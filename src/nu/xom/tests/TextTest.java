@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -24,7 +24,7 @@
 package nu.xom.tests;
 
 import nu.xom.Element;
-import nu.xom.IllegalDataException;
+import nu.xom.IllegalCharacterDataException;
 import nu.xom.Text;
 
 /**
@@ -78,14 +78,16 @@ public class TextTest extends XOMTestCase {
         
         try {
             a1.setValue("test \u0000 test ");
-            fail("Should raise an IllegalDataException");
+            fail("Should raise an IllegalCharacterDataException");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals("test \u0000 test ", success.getData());
             assertNotNull(success.getMessage());
         }
 
     }
 
+    
     public void testToXML() {
         
         String[] easyCases = {
@@ -116,6 +118,7 @@ public class TextTest extends XOMTestCase {
         
     }
 
+    
     public void testEquals() {
         Text c1 = new Text("test");
         Text c2 = new Text("test");
@@ -127,6 +130,7 @@ public class TextTest extends XOMTestCase {
         assertTrue(!c1.equals(c3));
     }
 
+    
     public void testCopy() {
         Text c1 = new Text("test");
         Text c2 = (Text) c1.copy();
@@ -137,6 +141,7 @@ public class TextTest extends XOMTestCase {
         assertNull(c2.getParent());
 
     }
+
 
     // Check passing in a string with broken surrogate pairs
     // and with correct surrogate pairs
@@ -149,51 +154,56 @@ public class TextTest extends XOMTestCase {
         // Two high-halves
         try {
           new Text("test: \uD8F5\uDBF0  ");
-          fail("Should raise an IllegalDataException");
+          fail("Should raise an IllegalCharacterDataException");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
             assertNotNull(success.getMessage());
+            assertEquals("test: \uD8F5\uDBF0  ", success.getData());
         }
-
 
         // Two high-halves
         try {
             new Text("test: \uD8F5\uD8F5  ");
-            fail("Should raise an IllegalDataException");
+            fail("Should raise an IllegalCharacterDataException");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals("test: \uD8F5\uD8F5  ", success.getData());
             assertNotNull(success.getMessage());
         }
 
         // One high-half
         try {
             new Text("test: \uD8F5  ");
-            fail("Should raise an IllegalDataException");
+            fail("Should raise an IllegalCharacterDataException");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
             assertNotNull(success.getMessage());
+            assertEquals("test: \uD8F5  ", success.getData());
         }
 
         // One low half
         try {
             new Text("test: \uDF80  ");
-            fail("Should raise an IllegalDataException");
+            fail("Should raise an IllegalCharacterDataException");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
             assertNotNull(success.getMessage());
+            assertEquals("test: \uDF80  ", success.getData());
         }
 
         // Low half before high half
         try {
             new Text("test: \uDCF5\uD8F5  ");
-            fail("Should raise an IllegalDataException");
+            fail("Should raise an IllegalCharacterDataException");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals("test: \uDCF5\uD8F5  ", success.getData());
             assertNotNull(success.getMessage());
         }
 
     }
 
+    
     public void testNonBMPText() {
         
         for (char high = '\uD800'; high <= '\uDB7F'; high++) {
@@ -206,25 +216,30 @@ public class TextTest extends XOMTestCase {
         
     }
     
+    
     public void testEndOfBMP() {
         
         try {
             new Text("\uFFFE");
             fail("allowed FFFE");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals("\uFFFE", success.getData());
             assertNotNull(success.getMessage());
         }
+        
         try {
             new Text("\uFFFF");
             fail("allowed FFFF");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals("\uFFFF", success.getData());
             assertNotNull(success.getMessage());
         }
         
     }
 
+    
     public void testLeafNode() {
 
         Text c1 = new Text("data");
@@ -234,7 +249,7 @@ public class TextTest extends XOMTestCase {
             c1.getChild(0);
             fail("Didn't throw IndexOutofBoundsException");
         }
-        catch (IndexOutOfBoundsException ex) {
+        catch (IndexOutOfBoundsException success) {
             // success   
         }
         
@@ -263,6 +278,7 @@ public class TextTest extends XOMTestCase {
         
     }
 
+    
     // Make sure carriage returns are escaped properly by toXML()
     public void testCarriageReturnInText() {
         Text text = new Text("data\rdata");
@@ -270,13 +286,15 @@ public class TextTest extends XOMTestCase {
         assertEquals("data&#x0D;data", xml);   
     }
     
+    
     public void testHighSurrogateWithNoLowSurrogate() {
         String data = Character.toString((char) 0xD800);
         try {
             new Text(data);
             fail("Allowed single high surrogate in text node");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals(data, success.getData());
             assertNotNull(success.getMessage());
         }
     }

@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -27,6 +27,8 @@ import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.IllegalDataException;
+import nu.xom.IllegalCharacterDataException;
+
 
 /**
  * <p>
@@ -43,21 +45,24 @@ public class CommentTest extends XOMTestCase {
         super(name);
     }
 
+    
     public void testConstructor() {
          Comment c1 = new Comment("test");
          assertEquals("test", c1.getValue());
          Comment c2 = new Comment("");
          assertEquals("", c2.getValue());
-     }
+    }
 
+    
     public void testCopyConstructor() {
          Comment c1 = new Comment("test");
          Comment c2 = new Comment(c1);
          assertEquals("test", c2.getValue());
          assertEquals(c1.getValue(), c2.getValue());
          assertTrue(c1 != c2);
-     }
+    }
 
+    
     public void testToString() {
         
         Comment c1 = new Comment("content");
@@ -70,6 +75,7 @@ public class CommentTest extends XOMTestCase {
         ); 
            
     }
+    
     
     public void testToXML() {
         
@@ -84,6 +90,7 @@ public class CommentTest extends XOMTestCase {
            
     }
     
+    
     // This is a problem becuase it cannot be serialized
     // since character and entity references aren't
     // recognized in comment data
@@ -93,6 +100,7 @@ public class CommentTest extends XOMTestCase {
             fail("Allowed carriage return in comment");
         }
         catch (IllegalDataException success) {
+            assertEquals("data\rdata", success.getData());
             assertNotNull(success.getMessage());   
         }   
     }
@@ -108,6 +116,7 @@ public class CommentTest extends XOMTestCase {
           fail("Should raise an IllegalDataException");
         }
         catch (IllegalDataException success) {
+            assertEquals("test -- test", success.getData());
             assertNotNull(success.getMessage());   
         }   
         try {
@@ -115,13 +124,16 @@ public class CommentTest extends XOMTestCase {
           fail("Should raise an IllegalDataException");
         }
         catch (IllegalDataException success) {
+            assertEquals("-test", success.getData());
             assertNotNull(success.getMessage());   
-        }   
+        }  
+        
         try {
           c1.setValue("test-");
           fail("Should raise an IllegalDataException");
         }
         catch (IllegalDataException success) {
+            assertEquals("test-", success.getData());
             assertNotNull(success.getMessage());   
         }   
 
@@ -143,6 +155,7 @@ public class CommentTest extends XOMTestCase {
     }
 
     public void testCopy() {
+        
         Comment c1 = new Comment("test");
         Comment c2 = (Comment) c1.copy();
 
@@ -163,46 +176,50 @@ public class CommentTest extends XOMTestCase {
         // Two high-halves
         try {
           new Comment("test: \uD8F5\uDBF0  ");
-          fail("Should raise an IllegalDataException");
+          fail("Should raise an IllegalCharacterDataException");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals("test: \uD8F5\uDBF0  ", success.getData());
             assertNotNull(success.getMessage());   
         }   
-
 
         // Two high-halves
         try {
           new Comment("test: \uD8F5\uD8F5  ");
-          fail("Should raise an IllegalDataException");
+          fail("Should raise an IllegalCharacterDataException");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals("test: \uD8F5\uD8F5  ", success.getData());
             assertNotNull(success.getMessage());   
         }   
 
         // One high-half
         try {
            new Comment("test: \uD8F5  ");
-           fail("Should raise an IllegalDataException");
+           fail("Should raise an IllegalCharacterDataException");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals("test: \uD8F5  ", success.getData());
             assertNotNull(success.getMessage());   
         }   
 
         // One low half
         try {
             new Comment("test: \uDF80  ");
-            fail("Should raise an IllegalDataException");
+            fail("Should raise an IllegalCharacterDataException");
          }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals("test: \uDF80  ", success.getData());
             assertNotNull(success.getMessage());   
         }   
 
         // Low half before high half
-         try {
+        try {
             new Comment("test: \uDCF5\uD8F5  ");
-            fail("Should raise an IllegalDataException");
-         }
-        catch (IllegalDataException success) {
+            fail("Should raise an IllegalCharacterDataException");
+        }
+        catch (IllegalCharacterDataException success) {
+            assertEquals("test: \uDCF5\uD8F5  ", success.getData());
             assertNotNull(success.getMessage());   
         }   
 
@@ -262,7 +279,8 @@ public class CommentTest extends XOMTestCase {
             new Comment(" \u0001 ");
             fail("Allowed C0 control in comment");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals(" \u0001 ", success.getData());
             assertNotNull(success.getMessage());
         }
           
@@ -275,7 +293,8 @@ public class CommentTest extends XOMTestCase {
             new Comment(" \uD800 ");
             fail("Allowed unmatched high surrogate in comment");
         }
-        catch (IllegalDataException success) {
+        catch (IllegalCharacterDataException success) {
+            assertEquals(" \uD800 ", success.getData());
             assertNotNull(success.getMessage());
         }
           

@@ -42,7 +42,7 @@ import java.util.TreeSet;
  * <ul>
  *   <li>Local name</li>
  *   <li>Prefix (which may be null or the empty string) </li>
- *   <li>Namespace URI (which may be null)</li>
+ *   <li>Namespace URI (which may be null or the empty string) </li>
  *   <li>A list of attributes</li>
  *   <li>A list of namespace declarations for this element
  *       (not including those inherited from its parent)</li>
@@ -87,8 +87,10 @@ public class Element extends ParentNode {
      * 
      * @throws IllegalNameException if <code>name</code>  
      *     is not a legal XML 1.0 non-colonized name
+     * @throws NamespaceConflictException if <code>name</code>'s prefix  
+     *     cannot be used with <code>uri</code>
      * @throws MalformedURIException if <code>uri</code>  
-     *     is not an RFC 2396 URI reference
+     *     is not an RFC 2396 absolute URI reference
      */
     public Element(String name, String uri) {
         
@@ -106,7 +108,13 @@ public class Element extends ParentNode {
         // matters a great deal.
         setNamespacePrefix(prefix);
         setNamespaceURI(uri);
-        setLocalName(localName);
+        try {
+            setLocalName(localName);
+        }
+        catch (IllegalNameException ex) {
+            ex.setData(name);
+            throw ex;
+        }
     }
 
     
@@ -263,9 +271,8 @@ public class Element extends ParentNode {
      * </p>
      * 
      * @param name the name of the element to return
-     * @return the first child element
-     *    with the specified local name in no namespace.
-     *    or null if there is no such element.
+     * @return the first child element with the specified local name 
+     *    in no namespace or null if there is no such element
      */
     public final Element getFirstChildElement(String name) {
         return getFirstChildElement(name, "");
@@ -283,7 +290,7 @@ public class Element extends ParentNode {
      * @param namespaceURI the namespace URI of the element to return
      * 
      * @return the first child with the specified local name in 
-     *      no namespace, or null if there is no such element.
+     *      no namespace, or null if there is no such element
      */
     public final Element getFirstChildElement(String localName, 
      String namespaceURI) {
@@ -332,7 +339,7 @@ public class Element extends ParentNode {
             if (prefix.equals(attribute.getNamespacePrefix())
               && !(getNamespaceURI()
                .equals(attribute.getNamespaceURI()))) {
-                throw new NamespaceException("Prefix of " 
+                throw new NamespaceConflictException("Prefix of " 
                   + attribute.getQualifiedName() 
                   + " conflicts with element prefix " + prefix);  
             }
@@ -342,7 +349,7 @@ public class Element extends ParentNode {
                  = namespaces.getURI(attribute.getNamespacePrefix());
                 if (existing != null 
                   && !existing.equals(attribute.getNamespaceURI())) {
-                    throw new NamespaceException("Attribute prefix  " 
+                    throw new NamespaceConflictException("Attribute prefix  " 
                       + attPrefix 
                       + " conflicts with namespace declaration.");            
                 }
@@ -503,11 +510,11 @@ public class Element extends ParentNode {
      * 
      * @param index the attribute to return
      * 
-     * @return the index<sup>th</sup> Attribute in this element.
+     * @return the index<sup>th</sup> Attribute in this element
      * 
      * @throws IndexOutofBoundsException if the index is negative 
      *   or greater than or equal to the number of attributes 
-     *   of this element. 
+     *   of this element
      * 
      */
     public final Attribute getAttribute(int index) {
@@ -667,6 +674,7 @@ public class Element extends ParentNode {
         this.localName = localName;
     }
 
+    
     /**
      * <p>
      * Subclasses can override this method to perform 
@@ -676,7 +684,7 @@ public class Element extends ParentNode {
      * other than <code>text</code>.
      * </p>
      * 
-     * @param localName the new local name for the element.
+     * @param localName the new local name for the element
      * 
      * @throws XMLException if the local name is disallowed
      */
@@ -695,7 +703,7 @@ public class Element extends ParentNode {
      * @throws NamespaceException if this element has a prefix 
      *     and <code>uri</code> is null or the empty string;
      *     or if the element's prefix is shared by an attribute
-     *     or additional namespace.
+     *     or additional namespace
      */
     public final void setNamespaceURI(String uri) {
         if (uri == null) uri = "";
@@ -704,7 +712,7 @@ public class Element extends ParentNode {
         if (uri.equals(this.URI)) return;
         if (uri.length() == 0) { // faster than "".equals(uri)
             if (prefix.length() != 0) {
-                throw new NamespaceException(
+                throw new NamespaceConflictException(
                  "Prefixed elements must have namespace URIs."
                 );  
             }
@@ -719,7 +727,7 @@ public class Element extends ParentNode {
         if (namespaces != null) {
         String result = namespaces.getURI(prefix);
             if (result != null) {  
-                throw new NamespaceException(
+                throw new NamespaceConflictException(
                   "new URI conflicts with existing prefix"
                 );
             }
@@ -731,7 +739,7 @@ public class Element extends ParentNode {
                 String attPrefix = a.getNamespacePrefix();
                 if (attPrefix.length() == 0) continue;
                 if (a.getNamespacePrefix().equals(prefix)) {
-                    throw new NamespaceException(
+                    throw new NamespaceConflictException(
                       "new element URI " + uri 
                       + " conflicts with attribute " 
                       + a.getQualifiedName()
@@ -742,14 +750,14 @@ public class Element extends ParentNode {
 
         if ("http://www.w3.org/XML/1998/namespace".equals(uri) 
           && ! "xml".equals(prefix)) {
-            throw new NamespaceException(
+            throw new NamespaceConflictException(
               "Wrong prefix " + prefix + 
               " for the http://www.w3.org/XML/1998/namespace namespace URI"
             );      
         }
         else if ("xml".equals(prefix) && 
           !"http://www.w3.org/XML/1998/namespace".equals(uri)) {
-            throw new NamespaceException(
+            throw new NamespaceConflictException(
               "Wrong namespace URI " + uri + " for the xml prefix"
             );      
         }
@@ -787,12 +795,13 @@ public class Element extends ParentNode {
      * 
      * @throws IllegalNameException if <code>prefix</code> is 
      *     not a legal XML non-colonized name
-     * @throws NamespaceException if <code>prefix</code> is 
-     *     already in use by an attribute or addiitonal
+     * @throws NamespaceConflictException if <code>prefix</code> is 
+     *     already in use by an attribute or additional
      *     namespace with a different URI than the element
-     *     itself.
+     *     itself
      */
     public final void setNamespacePrefix(String prefix) {
+        
         if (prefix == null) prefix = "";
         if (prefix.length() != 0) Verifier.checkNCName(prefix);
         
@@ -804,7 +813,7 @@ public class Element extends ParentNode {
         String uri = getLocalNamespaceURI(prefix);
         if (uri != null) {
             if (!uri.equals(this.URI) && !"xml".equals(prefix)) {
-                throw new NamespaceException(prefix 
+                throw new NamespaceConflictException(prefix 
                  + " conflicts with existing prefix");
             }   
         }
@@ -812,6 +821,7 @@ public class Element extends ParentNode {
         this.prefix = prefix;
 
     }
+
 
     /**
      * <p>
@@ -823,7 +833,7 @@ public class Element extends ParentNode {
      * an empty string.
      * </p>
      * 
-     * @param prefix the new prefix of the element.
+     * @param prefix the new prefix of the element
      * 
      * @throws XMLException if the namespace prefix is disallowed
      */
@@ -904,7 +914,7 @@ public class Element extends ParentNode {
      *      text child
      * @throws NullPointerException if text is null
      * @throws IndexOutOfBoundsException if the position is negative
-     *     or greater than the number of children of the node.
+     *     or greater than the number of children of the node
      */
     public final void insertChild(String text, int position) {
        if (text == null) {
@@ -914,14 +924,13 @@ public class Element extends ParentNode {
     } 
 
 
-
     /**
      * <p>
      * Converts a string to a text node
      * and appends that node to the children of this node.
      * </p>
      * 
-     * @param text String to add to this node.
+     * @param text String to add to this node
      * 
      * @throws IllegalAddException if this node cannot 
      *     have children of this type
@@ -944,6 +953,7 @@ public class Element extends ParentNode {
         }   
     }
 
+    
     /**
      * <p>
      * Declares a namespace prefix. This is only necessary when
@@ -967,7 +977,7 @@ public class Element extends ParentNode {
      *      is not an RFC2396 URI reference
      * @throws IllegalNameException  if <code>prefix</code> is not 
      *      a legal XML non-colonized name
-     * @throws NamespaceException if the mapping conflicts 
+     * @throws NamespaceConflictException if the mapping conflicts 
      *     with an existing element, attribute,
      *     or additional namespace declaration
      * @throws XMLException if the namespace prefix and/or URI 
@@ -991,7 +1001,7 @@ public class Element extends ParentNode {
         
         // check to see if this is the xmlns or xml prefix
         if (prefix.equals("xmlns")) {
-            throw new NamespaceException(
+            throw new NamespaceConflictException(
              "The xmlns prefix cannot bound to any URI");   
         }
         else if (prefix.equals("xml")) {
@@ -1000,19 +1010,19 @@ public class Element extends ParentNode {
                 return; 
             }
             else {
-                throw new NamespaceException(
+                throw new NamespaceConflictException(
                  "Wrong namespace URI for xml prefix: " + uri);
             }   
         }
         else if (uri.equals("http://www.w3.org/XML/1998/namespace")) {
-            throw new NamespaceException(
+            throw new NamespaceConflictException(
                "Wrong prefix for http://www.w3.org/XML/1998/namespace namespace: " 
                + prefix);  
         }
         
         String currentBinding = getLocalNamespaceURI(prefix);
         if (currentBinding != null && !currentBinding.equals(uri)) {
-            throw new NamespaceException(
+            throw new NamespaceConflictException(
               "Additional namespace " + uri 
               + " conflicts with existing namespace binding."
             );   
@@ -1035,14 +1045,14 @@ public class Element extends ParentNode {
      * requires.
      * </p>
      * 
-     * @param prefix The prefix to add.
-     * @param uri The URI to add.
+     * @param prefix the prefix to add
+     * @param uri the URI to add
      * 
      * @throws XMLException if the namespace prefix 
      *   and/or URI is disallowed
      */
     protected void checkAddNamespaceDeclaration(
-     String prefix, String uri) {}
+      String prefix, String uri) {}
 
 
     /**
@@ -1069,6 +1079,7 @@ public class Element extends ParentNode {
         
     }
 
+    
     /**
      * <p>
      * Subclasses can override this method to perform additional 
@@ -1083,6 +1094,7 @@ public class Element extends ParentNode {
      */
     protected void checkRemoveNamespaceDeclaration(String prefix) {}
 
+    
     /**
      * <p>
      * Returns the number of namespace declarations on this 
@@ -1128,6 +1140,7 @@ public class Element extends ParentNode {
         return allPrefixes.size();
     }
 
+    
     /**
      * <p>
      * Returns the index<sup>th</sup> namespace prefix declared on
@@ -1192,6 +1205,7 @@ public class Element extends ParentNode {
         }
     }    
 
+    
     /**
      * 
      * <p>
@@ -1209,6 +1223,7 @@ public class Element extends ParentNode {
     public final void setBaseURI(String URI) { 
         setActualBaseURI(URI);       
     }
+    
     
     /**
      * 
@@ -1689,7 +1704,6 @@ public class Element extends ParentNode {
     }
 
     
-
     /**
      * <p>
      * Returns the value of the element as defined by XPath 1.0.
@@ -1731,6 +1745,7 @@ public class Element extends ParentNode {
         return new Element(this);
     }
 
+    
     /**
      * <p>
      * Returns a string representation of this element suitable
@@ -1745,6 +1760,7 @@ public class Element extends ParentNode {
           "[" + getClass().getName() + ": " + getQualifiedName() + "]";
     }
 
+    
     boolean isElement() {
         return true;   
     } 
