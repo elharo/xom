@@ -244,6 +244,12 @@ class XOMHandler
                         doc.appendChild(node);   
                     }
                 }
+                if (beforeRoot) {
+                    // somebody tried to replace the root element with
+                    // no element at all. That's a no-no
+                    throw new WellformednessException(
+                      "Factory attempted to remove the root element");
+                }
             }
             parent = temp;
         }
