@@ -49,7 +49,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a2
  *
  */
 public abstract class Node {
@@ -196,6 +196,17 @@ public abstract class Node {
     final void setParent(ParentNode parent) {
         this.parent = parent;   
     }
+    
+    
+    Node getNextSibling() {
+        
+        if (parent == null) return null; 
+        int index = parent.indexOf(this);
+        if (index == parent.getChildCount()) return null;
+        return parent.getChild(index+1);
+        
+    }
+    
     
     /**
      * <p>
