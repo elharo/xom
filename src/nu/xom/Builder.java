@@ -65,7 +65,8 @@ public class Builder {
     
     private static boolean IBMVM14 = false;
 
-    static {    
+    static {  
+        
         String vendor = System.getProperty("java.vendor");
         String version = System.getProperty("java.version");
         String majorVersion = version.substring(0, 3);
@@ -81,7 +82,7 @@ public class Builder {
             // 2.6 or later 
         }
         catch (Error err) {
-            // xerces not installed, so none of this matters
+            // Xerces not installed, so none of this matters
         }
         
         
@@ -92,8 +93,9 @@ public class Builder {
         else if (xercesVersion >= 2.4) {
             System.setProperty(
               "org.apache.xerces.xni.parser.XMLParserConfiguration", 
-              "nu.xom.xerces.XML1_0ParserConfiguration");
+              "nu.xom.xerces.XML1_0ParserConfiguration"); 
         }
+        
     }
     
     
@@ -422,6 +424,12 @@ public class Builder {
     private static boolean knownGoodParser(XMLReader parser) {
          
         String parserName = parser.getClass().getName();
+        
+        // These two parsers are known to not make all the checks
+        // they're supposed to. :-(
+        if (parserName.equals("gnu.xml.aelfred2.XmlReader")) return false;
+        if (parserName.equals("net.sf.saxon.aelfred.SAXDriver")) return false;
+        
         for (int i = 0; i < parsers.length; i++) {
             if (parserName.equals(parsers[i])) return true;
         }
@@ -744,6 +752,8 @@ public class Builder {
               = new ParsingException(ex.getMessage(), ex);
             throw pex;
         }
+        // put a catch arrayindexoutofboundsexception here to
+        // work better with Piccolo????
 
         XOMHandler handler = (XOMHandler) (parser.getContentHandler());
         ErrorHandler errorHandler = parser.getErrorHandler();
