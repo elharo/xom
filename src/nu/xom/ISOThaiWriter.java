@@ -28,7 +28,6 @@ import java.io.Writer;
 /**
  * @author Elliotte Rusty Harold
  * @version 1.0d23
- * 
  *
  */
 class ISOThaiWriter extends TextWriter {
@@ -41,7 +40,22 @@ class ISOThaiWriter extends TextWriter {
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
     boolean needsEscaping(char c) {
-        if (c <= 0xA0) return false;        
+        
+        if (c < 128) return false;
+        // C1 controls do not appear to be assigned in this character set
+        // Also, according to 
+        // http://www.inet.co.th/cyberclub/trin/thairef/tis620-iso10646.html
+        // "Special attention should be paid on codepoint A0. Contrary 
+        // to many people's belief that TIS 620 defines codepoint A0
+        // as no-break space (U+00A0), the standard does not assign any
+        // character to this codepoint. Codepoints A0 as well as DB-DE 
+        // and FC-FF are not part of the standard. Interpretations of 
+        // these unassigned codepoints are implementation specific and 
+        // may vary from implementation to implementation. To ensure full 
+        // data interchangeability among various applications, it is 
+        // suggested that Thai software implementors follows the 
+        // TIS 620 standard strictly."
+        
         switch (c) {
             case 0x0E01: return false; // THAI CHARACTER KO KAI
             case 0x0E02: return false; // THAI CHARACTER KHO KHAI
@@ -101,7 +115,10 @@ class ISOThaiWriter extends TextWriter {
             case 0x0E38: return false; // THAI CHARACTER SARA U
             case 0x0E39: return false; // THAI CHARACTER SARA UU
             case 0x0E3A: return false; // THAI CHARACTER PHINTHU
-            
+        }
+        // optimize by splitting switch into contiguous blocks per
+        // Chapter 7 of Java Performance Tuning, Jack Shirazi
+        switch (c) { 
             case 0x0E3F: return false; // THAI CURRENCY SYMBOL BAHT
             case 0x0E40: return false; // THAI CHARACTER SARA E
             case 0x0E41: return false; // THAI CHARACTER SARA AE
@@ -133,6 +150,7 @@ class ISOThaiWriter extends TextWriter {
             case 0x0E5B: return false; // THAI CHARACTER KHOMUT
         }
         return true;
+        
     }
 
 }

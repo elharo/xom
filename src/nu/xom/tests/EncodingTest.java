@@ -167,6 +167,10 @@ public class EncodingTest extends XOMTestCase {
         checkAll("ISO-8859-7");
     }
     
+    public void testThai() throws ParsingException, IOException {
+        checkAll("TIS-620");
+    }
+    
     public void testHebrew() throws ParsingException, IOException {
         checkAll("ISO-8859-8");
     }
@@ -261,6 +265,9 @@ public class EncodingTest extends XOMTestCase {
     }
        
     // These encodings are not installed in all distributions by default 
+    // ???? could add my own writers to handle these? and UCS-4
+    // and Latin-10. They don't seem to be supported in the alpha of 1.5
+    // either.
     public void testLatin6() throws ParsingException, IOException {
         if (extendedCharsetsAvailable) checkAll("ISO-8859-10");
     } 
@@ -269,19 +276,14 @@ public class EncodingTest extends XOMTestCase {
         if (extendedCharsetsAvailable) checkAll("ISO-8859-14");
     }
 
-
-
-// Java 1.4 does not yet support these encodings
-/*  public void testUCS4() 
-      throws ParsingException, UnsupportedEncodingException {
+    // Java 1.5 alpha and earlier do not support these encodings
+    /* public void testUCS4() throws ParsingException, IOException {
         checkAll("ISO-10646-UCS-4");
     } 
 
-    public void testLatin10()  
-      throws ParsingException, UnsupportedEncodingException {
+    public void testLatin10() throws ParsingException, IOException {
         checkAll("ISO-8859-16");
     } */
-
     
     private void checkAll(String encoding) 
       throws ParsingException, IOException {

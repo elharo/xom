@@ -27,7 +27,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d13
+ * @version 1.0d23
  *
  */
 class TextWriterFactory {
@@ -78,7 +78,9 @@ class TextWriterFactory {
         else if (encoding.equals("ISO-8859-10")) {
             return new Latin6Writer(out, encoding); 
         }           
-        else if (encoding.equals("ISO-8859-11")) {
+        else if (encoding.equals("ISO-8859-11")
+                || encoding.equals("TIS-620")
+                || encoding.equals("TIS620")) {
             return new ISOThaiWriter(out, encoding); 
         }           
         // There's no such thing as ISO-8859-12
@@ -102,8 +104,13 @@ class TextWriterFactory {
               || encoding.equals("EBCDIC-CP-WA")
               || encoding.equals("EBCDIC-CP-NL")
               || encoding.equals("CSIBM037")) {
+            // EBCDIC-37 has same character set as ISO-8859-1;
+            // just at different code points.
+            // Need to fix this to use an EBCDICWriter instead????
+            // but tricky since that really need to start with
+            // an OutputStream. Possibly requires some rejiggering of
+            // internal interfaces, and when and where the writer is created
             return new Latin1Writer(out, encoding); 
-        //return new EBCDIC37Writer(out, encoding); 
         }                      
         else {
             // I'm assuming here that all character sets can
