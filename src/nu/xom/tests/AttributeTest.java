@@ -36,7 +36,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -60,6 +60,7 @@ public class AttributeTest extends XOMTestCase {
         assertEquals(0, a1.getChildCount());
     }
 
+    
     public void testHasChildren() {
         assertTrue(!a1.hasChildren());
     }
@@ -339,6 +340,7 @@ public class AttributeTest extends XOMTestCase {
         assertFalse(c1.equals(new Element("test")));
     }
 
+    
     public void testTypeEquals() {
         assertEquals(Attribute.Type.CDATA, Attribute.Type.CDATA);
         assertTrue(!Attribute.Type.CDATA.equals(Attribute.Type.NMTOKEN));
@@ -487,6 +489,28 @@ public class AttributeTest extends XOMTestCase {
             catch (IllegalNameException success) {
                assertNotNull(success.getMessage());   
             }
+        }
+        
+    }
+    
+    
+    public void testSetNamespace() {
+        
+        Attribute a = new Attribute("name", "value");
+        try {
+            a.setNamespace("pre", "");
+            fail("Allowed prefix with empty URI");
+        }
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+        try {
+            a.setNamespace("", "http://www.example.com");
+            fail("Allowed empty prefix with non-empty URI");
+        }
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
