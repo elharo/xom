@@ -22,17 +22,21 @@
 package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 
 import nu.xom.Attribute;
+import nu.xom.Builder;
 import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
+import nu.xom.ValidityException;
 import nu.xom.XPathContext;
 import nu.xom.XPathException;
 
@@ -1443,6 +1447,51 @@ public class XPathTest extends XOMTestCase {
          
      }
     
+    
+     public void testRootNodeValueIsNonEmpty() {
+      
+         Element root = new Element("html");
+         Document doc = new Document(root);
+         root.appendChild("test");
+         
+         Nodes result = doc.query("/*[string(/) != '']");
+         assertEquals(1, result.size());
+         assertEquals(root, result.get(0));
+         
+     }
+    
+    
+     public void testLastFunction() {
+      
+         Element root = new Element("html");
+         Element child1 = new Element("child1");
+         Element child2 = new Element("child2");
+         root.appendChild(child1);
+         root.appendChild(child2);
+         Document doc = new Document(root);
+         
+         Nodes result = child2.query("self::*[position()=last()]");
+         assertEquals(1, result.size());
+         assertEquals(child2, result.get(0));
+         
+     }
+     
+     
+     
+     public void testJaxen51() throws ParsingException, IOException {
+
+         String data = "<root>\n <servlet-mapping>\n" 
+             + "  <servlet-name>DeviceInfoServlet</servlet-name>\n"
+             + "  <url-pattern>/tools/*</url-pattern>\n"
+             + "</servlet-mapping>\n</root>";
+         
+         Builder builder = new Builder();
+         Document doc = builder.build(data, null);
+         
+         Nodes result = doc.query("//*[./../servlet-name = 'DeviceInfoServlet']");
+         assertEquals(2, result.size());
+       
+     }
     
 
 }
