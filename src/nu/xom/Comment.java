@@ -34,7 +34,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  * 
  */
 public class Comment extends Node {
@@ -54,7 +54,7 @@ public class Comment extends Node {
      * @param data the initial text of the comment
      */
     public Comment(String data) {
-        setValue(data);  
+        _setValue(data);  
     }
 
     
@@ -109,9 +109,14 @@ public class Comment extends Node {
      * (<code>--</code>) and may not end with a hyphen.
      * </p>
      * 
-     * @param data the text to install in the object
+     * @param data the text to install in the comment
      */
     public void setValue(String data) {
+        _setValue(data);
+    }
+
+
+    private void _setValue(String data) {
         if (data == null) data = "";
         else {
             Verifier.checkPCDATA(data);
@@ -146,7 +151,6 @@ public class Comment extends Node {
             
         } 
         this.data = data;
-        
     }
 
 

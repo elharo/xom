@@ -104,10 +104,10 @@ public class Element extends ParentNode {
         
         // The order of these next two calls
         // matters a great deal.
-        setNamespacePrefix(prefix);
-        setNamespaceURI(uri);
+        _setNamespacePrefix(prefix);
+        _setNamespaceURI(uri);
         try {
-            setLocalName(localName);
+            _setLocalName(localName);
         }
         catch (IllegalNameException ex) {
             ex.setData(name);
@@ -714,11 +714,14 @@ public class Element extends ParentNode {
      * @throws IllegalNameException if <code>localName</code> is not
      *     a legal, non-colonized name
      */
-    public void setLocalName(String localName) {
-        
+    public void setLocalName(String localName) {       
+        _setLocalName(localName);
+    }
+
+
+    private void _setLocalName(String localName) {
         Verifier.checkNCName(localName);
         this.localName = localName;
-        
     }
 
 
@@ -737,6 +740,11 @@ public class Element extends ParentNode {
      *     or additional namespace
      */
     public void setNamespaceURI(String uri) {
+        _setNamespaceURI(uri);
+    }
+
+    
+    private void _setNamespaceURI(String uri) {
         
         if (uri == null) uri = "";
         // Next line is needed to avoid unintentional
@@ -798,7 +806,7 @@ public class Element extends ParentNode {
         
     }
 
-    
+
     /**
      * <p>
      * Sets the namespace prefix of this element.
@@ -815,6 +823,11 @@ public class Element extends ParentNode {
      *     itself
      */
     public void setNamespacePrefix(String prefix) {
+        _setNamespacePrefix(prefix);
+    }
+
+
+    private void _setNamespacePrefix(String prefix) {
         
         if (prefix == null) prefix = "";
         if (prefix.length() != 0) Verifier.checkNCName(prefix);
@@ -835,7 +848,6 @@ public class Element extends ParentNode {
         } 
 
         this.prefix = prefix;
-
     }
 
 

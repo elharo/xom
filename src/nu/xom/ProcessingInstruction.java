@@ -41,7 +41,7 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public class ProcessingInstruction extends Node {
@@ -64,8 +64,8 @@ public class ProcessingInstruction extends Node {
      *   other illegal characters
      */
     public ProcessingInstruction(String target, String data) {
-        setTarget(target);  
-        setValue(data);  
+        _setTarget(target);  
+        _setValue(data);  
     }
 
     
@@ -117,6 +117,12 @@ public class ProcessingInstruction extends Node {
      */
     public void setTarget(String target) {
         
+        _setTarget(target);
+        
+    }  
+
+    
+    private void _setTarget(String target) {
         try {
             Verifier.checkNCName(target);
         }
@@ -134,10 +140,9 @@ public class ProcessingInstruction extends Node {
         }
         
         this.target = target;
-        
-    }  
+    }
 
-    
+
     /**
      * <p>
      * Sets the data.
@@ -149,7 +154,11 @@ public class ProcessingInstruction extends Node {
      *      or otherwise not legal XML processing instruction data
      */
     public void setValue(String data) {
-        
+        _setValue(data);
+    }
+
+    
+    private void _setValue(String data) {
         Verifier.checkPCDATA(data);
         if (data.length() != 0) {
             if (data.indexOf("?>") >= 0) {
@@ -178,10 +187,9 @@ public class ProcessingInstruction extends Node {
             }
         }
         this.data = data;
-        
     }
 
-    
+
     /**
      * <p>
      * Returns the processing instruction data.

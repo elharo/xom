@@ -69,7 +69,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  * 
  */
 public class DocType extends Node {
@@ -103,9 +103,9 @@ public class DocType extends Node {
      */
     public DocType(
       String rootElementName, String publicID, String systemID) {
-        setRootElementName(rootElementName);    
-        setSystemID(systemID);
-        setPublicID(publicID);
+        _setRootElementName(rootElementName);    
+        _setSystemID(systemID);
+        _setPublicID(publicID);
     }
 
     
@@ -125,8 +125,7 @@ public class DocType extends Node {
      *     a legal XML 1.0 system literal
      */
     public DocType(String rootElementName, String systemID) {
-        setRootElementName(rootElementName);    
-        setSystemID(systemID);  
+        this(rootElementName, null, systemID);  
     }
 
     
@@ -143,7 +142,7 @@ public class DocType extends Node {
      *      a legal XML 1.0 name
      */
     public DocType(String rootElementName) {
-        setRootElementName(rootElementName);    
+        this(rootElementName, null, null);    
     }
 
     
@@ -153,7 +152,7 @@ public class DocType extends Node {
      * argument. The copy has the same data but no parent document.
      * </p>
      * 
-     * @param doctype the DocType to copy
+     * @param doctype the <code>DocType</code> to copy
      */
     public DocType(DocType doctype) {
         this.internalDTDSubset = doctype.internalDTDSubset;
@@ -203,11 +202,16 @@ public class DocType extends Node {
      *     a legal XML 1.0 name
      */
     public void setRootElementName(String name) {
+        _setRootElementName(name);
+    }
+
+    
+    private void _setRootElementName(String name) {
         Verifier.checkXMLName(name);
         this.rootName = name;
     }
 
-    
+
     /**
      * <p>
      * Returns the complete internal DTD subset in a single string.
@@ -256,6 +260,11 @@ public class DocType extends Node {
      * @throws WellformednessException if no system ID has been set
      */
     public void setPublicID(String id) {  
+        _setPublicID(id);     
+    }   
+
+    
+    private void _setPublicID(String id) {
         
         if (systemID == null && id != null) {
             throw new WellformednessException(
@@ -291,9 +300,9 @@ public class DocType extends Node {
         }
         this.publicID = id;
         
-    }   
+    }
 
-    
+
     /**
      * <p>
      * Returns the system ID of the external DTD subset. 
@@ -324,7 +333,11 @@ public class DocType extends Node {
      *     and you attempt to remove the system ID
      */
     public void setSystemID(String id) {
-        
+        _setSystemID(id);
+    }
+
+    
+    private void _setSystemID(String id) {
         if (id == null && publicID != null) {
             throw new WellformednessException(
              "Cannot remove system ID without removing public ID first"
@@ -351,10 +364,9 @@ public class DocType extends Node {
         }
         
         this.systemID = id;
-        
     }
 
-    
+
     /**
      * <p>
      * Returns the empty string.

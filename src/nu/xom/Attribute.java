@@ -40,7 +40,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  * 
  */
 public class Attribute extends Node {
@@ -157,15 +157,15 @@ public class Attribute extends Node {
         }
 
         try {
-            setLocalName(localName);
+            _setLocalName(localName);
         }
         catch (IllegalNameException ex) {
             ex.setData(name);
             throw ex;
         }
-        setNamespace(prefix, URI);
-        setValue(value);
-        setType(type);
+        _setNamespace(prefix, URI);
+        _setValue(value);
+        _setType(type);
         
     }
 
@@ -238,10 +238,15 @@ public class Attribute extends Node {
      * @param type the DTD type of this attribute
      */
     public void setType(Type type) {
-        this.type = type;
+        _setType(type);
     }
 
     
+    private void _setType(Type type) {
+        this.type = type;
+    }
+
+
     /**
      * <p>
      * Returns the attribute value. If the attribute was
@@ -276,11 +281,16 @@ public class Attribute extends Node {
      *     legal IRI
      */
     public void setValue(String value) {
+        _setValue(value);
+    }
+
+    
+    private void _setValue(String value) {
         Verifier.checkPCDATA(value);
         this.value = value;
     }
 
-    
+
     /**
      * <p>
      * Returns the local name of this attribute,
@@ -306,17 +316,20 @@ public class Attribute extends Node {
      * 
      */
     public void setLocalName(String localName) {
-        
+        _setLocalName(localName);
+    }   
+    
+    
+    private void _setLocalName(String localName) {
         Verifier.checkNCName(localName);
         if (localName.equals("xmlns")) {
             throw new IllegalNameException("The Attribute class is not"
               + " used for namespace declaration attributes.");
         }
         this.localName = localName;
-        
-    }   
-    
-    
+    }
+
+
     /**
      * <p>
      * Returns the qualified name of this attribute,
@@ -386,6 +399,11 @@ public class Attribute extends Node {
      * </ul>
      */
     public void setNamespace(String prefix, String URI) {
+        _setNamespace(prefix, URI);
+    }
+
+    
+    private void _setNamespace(String prefix, String URI) {
         
         if (URI == null) URI = "";
         if (prefix == null) prefix = "";
@@ -442,6 +460,7 @@ public class Attribute extends Node {
         this.prefix = prefix;
         
     }
+    
     
     
     /**

@@ -33,7 +33,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public class Text extends Node {
@@ -58,7 +58,7 @@ public class Text extends Node {
      *     null, vertical tab, or unmatched halves of surrogate pairs
      */
     public Text(String data) {
-        setValue(data);
+        _setValue(data);
     }
 
     /**
@@ -110,7 +110,11 @@ public class Text extends Node {
      *     null, vertical tab, or unmatched halves of surrogate pairs
      */
     public void setValue(String data) {
-        
+        _setValue(data);
+    }
+
+    
+    private void _setValue(String data) {
         if (data == null) data = "";
         else Verifier.checkPCDATA(data);
         try {
@@ -121,10 +125,8 @@ public class Text extends Node {
               "Bad VM! Does not support UTF-8"
             );
         }
-        
     }
 
-    
     /**
      * <p>
      * Returns the XPath 1.0 string-value of this <code>Text</code> 
@@ -281,4 +283,5 @@ public class Text extends Node {
         return false;
     }
 
+    
 }
