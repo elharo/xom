@@ -40,7 +40,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b6
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -632,5 +632,146 @@ public class DocTypeTest extends XOMTestCase {
 
     }
 
+        
+    public void testCarriageReturnInEntityReplacementTextInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root ["
+          + "<!ENTITY CR '&#13;'>" 
+          + "]><root/>";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset(); 
+        assertTrue(internalDTDSubset.indexOf("<!ENTITY CR \"&#x0D;\">") > 1);
+        
+    }
+
+    
+    public void testCarriageReturnInAttributeDefaultValueInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root ["
+          + "<!ATTLIST root attribute CDATA '&#13;'>" 
+          + "]><root/>";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset(); 
+        assertTrue(internalDTDSubset.indexOf("<!ATTLIST root attribute CDATA \"&#x0D;\">") > 1);
+        
+    }
+
+    
+    public void testAmpersandInEntityReplacementTextInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root ["
+          + "<!ENTITY amp2 '&amp;'>" 
+          + "]><root/>";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalDTDSubset.indexOf("<!ENTITY amp2 \"&amp;\">") > 1);
+        
+    }
+
+    
+    public void testAmpersandInAttributeDefaultValueInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root ["
+          + "<!ATTLIST root attribute CDATA '&amp;'>" 
+          + "]><root/>";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset(); 
+        assertTrue(internalDTDSubset.indexOf(
+          "<!ATTLIST root attribute CDATA \"&amp;\">") > 1
+        );
+        
+    }
+    
+    
+    public void testDoubleQuoteInAttributeDefaultValueInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root ["
+          + "<!ATTLIST root attribute CDATA '&quot;'>" 
+          + "]><root/>";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset(); 
+        assertTrue(internalDTDSubset.indexOf(
+          "<!ATTLIST root attribute CDATA \"&quot;\">") > 1
+        );
+        
+    }
+    
+    
+    public void testSingleQuoteInAttributeDefaultValueInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root ["
+          + "<!ATTLIST root attribute CDATA '&apos;'>" 
+          + "]><root/>";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset(); 
+        assertTrue(internalDTDSubset.indexOf(
+          "<!ATTLIST root attribute CDATA \"'\">") > 1
+        );
+        
+    }
+    
+    
+    public void testLessThanSignInAttributeDefaultValueInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root ["
+          + "<!ATTLIST root attribute CDATA '&lt;'>" 
+          + "]><root/>";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalDTDSubset.indexOf(
+          "<!ATTLIST root attribute CDATA \"&lt;\">") > 1
+        );
+        
+    }
+    
+    
+    public void testGreaterThanSignInAttributeDefaultValueInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root ["
+          + "<!ATTLIST root attribute CDATA '>'>" 
+          + "]><root/>";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalDTDSubset.indexOf(
+          "<!ATTLIST root attribute CDATA \">\">") > 1
+        );
+        
+    }
+    
+    
+    public void testDoubleQuoteInEntityReplacementTextInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root ["
+          + "<!ENTITY q2 '&quot;'>" 
+          + "]><root/>";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalDTDSubset.indexOf("<!ENTITY q2 \"&quot;\">") > 1);
+        
+    }
+
+    // greater than????
+
+    
+    
+    
     
 }

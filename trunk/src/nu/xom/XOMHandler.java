@@ -510,7 +510,7 @@ class XOMHandler
             if (defaultValue != null) {
                 internalDTDSubset.append(' ');
                 internalDTDSubset.append('"');
-                internalDTDSubset.append(defaultValue);
+                internalDTDSubset.append(escapeReservedCharacters(defaultValue));
                 internalDTDSubset.append("\"");         
             }
             internalDTDSubset.append(">\n");   
@@ -527,7 +527,7 @@ class XOMHandler
                 internalDTDSubset.append("  <!ENTITY ");
                 internalDTDSubset.append(name); 
                 internalDTDSubset.append(" \""); 
-                internalDTDSubset.append(value); 
+                internalDTDSubset.append(escapeCarriageReturns(value)); 
                 internalDTDSubset.append("\">\n"); 
             }
         }
@@ -612,6 +612,61 @@ class XOMHandler
         }
         
     }
- 
+    
+    
+    /* It's really weird that SAX needs two different escape methods
+       here, but it does. We need to escape the carriage returns (and 
+       only the carriage returns for entity replacement text,
+       because those do not resolve general entities. However, 
+       general entities are resolved in attribute default values.
+     */
+    private static String escapeCarriageReturns(String s) {
+        
+        int length = s.length();
+        StringBuffer result = new StringBuffer(length);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '\r': 
+                    result.append("&#x0D;");
+                    break;
+                default:
+                    result.append(c);
+            }
+        }
+        
+        return result.toString();
+        
+    }
+
+    
+    private static String escapeReservedCharacters(String s) {
+        
+        int length = s.length();
+        StringBuffer result = new StringBuffer(length);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '\r': 
+                    result.append("&#x0D;");
+                    break;
+                case '&': 
+                    result.append("&amp;");
+                    break;
+                case '"': 
+                    result.append("&quot;");
+                    break;
+                case '<': 
+                    result.append("&lt;");
+                    break;
+                default:
+                    result.append(c);
+            }
+        }
+        
+        return result.toString();
+        
+    }
+
     
 }
