@@ -31,9 +31,9 @@ import nu.xom.ValidityException;
 
 /**
  * <p>
- *   Demonstrates validation via the <code>Builder</code> class
- *   that does not build mch of a document, and thus does not have
- *   a lot fo extra overhead.
+ * Demonstrates validation via the <code>Builder</code> class
+ * that does not build much of a document, and thus does not 
+ * have a lot of overhead.
  * </p>
  * 
  * @author Elliotte Rusty Harold
