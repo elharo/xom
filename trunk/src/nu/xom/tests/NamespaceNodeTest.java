@@ -32,7 +32,7 @@ public class NamespaceNodeTest extends XOMTestCase {
     }
     
     
-    public void testCopy() {
+    public void testGetters() {
      
         Element root = new Element("pre:root", "http://www.example.org/");
         Nodes result = root.query("namespace::pre");
@@ -42,13 +42,25 @@ public class NamespaceNodeTest extends XOMTestCase {
         assertEquals("http://www.example.org/", namespace.getValue());
         assertEquals(root, namespace.getParent());
         
+    }
+
+    
+    public void testCopy() {
+     
+        Element root = new Element("pre:root", "http://www.example.org/");
+        Nodes result = root.query("namespace::pre");
+        assertEquals(1, result.size());
+        Namespace namespace = (Namespace) result.get(0);
+        
         Namespace copy = (Namespace) namespace.copy();
+        assertEquals(namespace, copy);
         assertEquals("pre", copy.getPrefix());
         assertEquals("http://www.example.org/", copy.getValue());
         assertEquals(null, copy.getParent());
         
     }
 
+    
     public void testToXML() {
      
         Element root = new Element("pre:root", "http://www.example.org/");
