@@ -41,12 +41,10 @@ import nu.xom.xinclude.XIncluder;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d21
  *
  */
 public class XIncludeTest extends XOMTestCase {
-
-    // might want to test encoding heuristics on files in different encodings????
 
     public XIncludeTest(String name) {
         super(name);
@@ -95,7 +93,7 @@ public class XIncludeTest extends XOMTestCase {
           new File("data/xinclude/output/c1.xml")
         );
         assertEquals(expectedResult, result);
-        
+
     }
     
     // from the XInclude CR
@@ -570,6 +568,82 @@ public class XIncludeTest extends XOMTestCase {
           new File("data/xinclude/output/UTF8WithByteOrderMark.xml")
         );
         assertEquals(expectedResult, result);
+                
+    }
+
+    public void testAutoDetectUnicodeBigUnmarked() 
+      throws ParseException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/UnicodeBigUnmarked.xml"
+        );
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/UnicodeBigUnmarked.xml")
+        );
+        assertEquals(expectedResult, result);
+                
+    }
+
+    public void testUnicodeLittleUnmarked() 
+      throws ParseException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/UnicodeLittleUnmarked.xml"
+        );
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/UnicodeLittleUnmarked.xml")
+        );
+        assertEquals(expectedResult, result);
+                
+    }
+
+/*// Java doesn't yet support the UTF-32BE and UTF32LE encodings
+    public void testUTF32BE() 
+      throws ParseException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/UTF32BE.xml"
+        );
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/UTF32BE.xml")
+        );
+        assertEquals(expectedResult, result);
+                
+    }
+
+    public void testUTF32LE() 
+      throws ParseException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/UTF32LE.xml"
+        );
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/UTF32LE.xml")
+        );
+        assertEquals(expectedResult, result);
+                
+    }
+*/
+    public void testEBCDIC() 
+      throws ParseException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/EBCDIC.xml"
+        );
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expected = builder.build(
+          new File("data/xinclude/output/EBCDIC.xml")
+        );
+        assertEquals(expected, result);
                 
     }
 
