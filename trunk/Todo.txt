@@ -15,8 +15,25 @@ catalog support????
 
 RELAX NG?
 
+add an XPath based NodeFactory that only instantiates nodes that
+satisfy a certain pattern
+
 1.1:
 -------
+
+add a NodeFactory section to the tutorial for processing big documents
+
+
+could/should I strip the junit.jar of clases XOM doesn't use?
+
+should I bundle a minimized version of Junit into xom.jar?
+
+Make a build target for non-LGPL, closed source version
+
+Sign up on Kagi or somewhere for software sales
+
+Add a Buy XOM option to the main XOM sidebar, the unstable sidebar. and the
+license page
 
 Profile AllTests (or maybe FastTests). 
 
@@ -67,8 +84,6 @@ Should/could the TrAX source and result, Jaxen adapter and so forth go public in
 
 1.0.1:
 --------
-
-Remove dependence on ICU
 
 Could DOMConversion be done in parallel in two separate threads?
 
@@ -131,9 +146,12 @@ Add tools page to web site (Ant, tagSoup, Clover, etc.)
 
 Backport Fixes to make in 1.0.1
 
-TextWriter.java
+TextWriter.java 1.1a2
 XOMTestCase.java
 XOMHandler.java for internal DTD subset
+Serializer for NFC in consecutive text nodes
+XIncluder for base URLs and better exception messages
+XOMReader and SAXConverter to allow XSL to work with xml:base attributes
 
 ~/projects/1.0.1$ cvs -d :pserver:elharo@cvs.dev.java.net:/cvs rtag -r XOM_10  -b BR_1_0 xom
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
@@ -141,6 +159,34 @@ cvs [rtag aborted]: received abort signal
 cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
+
+===============
+Done 1.1a3:
+===============
+
+Normalization form C serialization is now correct
+even when the characters that need to be combined cross the
+boundaries of consecutive text nodes
+
+In addition, Serializer does its own normalization. There is no longer any dependence on ICU.
+
+XInclude sometimes generates relative URLs when doing base URI fixup.
+
+XSLT can now operate on xml:base attributes
+
+===============
+Done 1.1a2:
+===============
+
+XPath is an order of magnitude faster
+
+XPathTypeException class
+
+XPathDriver sample program
+
+Small bug fix in XOMTestCase
+
+Various bug fixes in Jaxen
 
 ===============
 Done 1.1a1:
