@@ -48,7 +48,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d5
  *
  */
 public class Element extends ParentNode {
@@ -989,7 +989,6 @@ public class Element extends ParentNode {
                   "Cannot add an ancestor as a child");
             }
         }
-        return;
         
     }
 
