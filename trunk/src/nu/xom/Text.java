@@ -38,7 +38,7 @@ import java.io.UnsupportedEncodingException;
 public class Text extends Node {
 
     
-    byte[] data;
+    private byte[] data;
     
     
     /**

@@ -79,6 +79,7 @@ class JaxenNavigator extends DefaultNavigator {
         List l = new ArrayList(1);
         l.add(contextNode);
         return l.iterator();
+        
     }
     
     
@@ -283,7 +284,7 @@ class JaxenNavigator extends DefaultNavigator {
                 if (previousWasText) {
                     continue;
                 }
-                else if (((Text) child).data.length != 0) {
+                else if (! ((Text) child).isEmpty()) {
                     children++;
                     previousWasText = true;
                 }
@@ -293,39 +294,6 @@ class JaxenNavigator extends DefaultNavigator {
                 children++;
             }
         }
-        return children;
-        
-    }
-    
-    
-    private static List getXPathChildren(ParentNode parent) {
-    
-        int childCount = parent.getChildCount();
-        ArrayList children = new ArrayList(childCount);
-        for (int i = 0; i < childCount; i++) {
-            Node child = parent.getChild(i);
-            if (child.isDocType()) continue;
-            else if (child.isText()) {
-                Text t = (Text) child;
-                if (t.data.length == 0) continue;
-                List texts = new ArrayList();
-                texts.add(child);
-                while (i + 1 < childCount) {
-                    Node next = parent.getChild(i+1);
-                    if (next.isText()) {
-                        i++;
-                        t = (Text) child;
-                        if (t.data.length > 0) texts.add(next);
-                    }
-                    else break;
-                }
-                children.add(texts);
-            }
-            else {
-                children.add(child);
-            }
-        }
-
         return children;
         
     }
@@ -401,7 +369,7 @@ class JaxenNavigator extends DefaultNavigator {
             }
             else {
                 if (child.isText() && !previousWasText) {
-                    if (((Text) child).data.length != 0) {
+                    if (! ((Text) child).isEmpty()) {
                       childCount++;
                       previousWasText = true;
                     }
@@ -446,7 +414,8 @@ class JaxenNavigator extends DefaultNavigator {
             Node next = parent.getChild(xomIndex++);
             if (next.isText()) {
                 Text t = (Text) next;
-                boolean nonEmpty = t.data.length != 0;
+                // Is this an empty text node?
+                boolean empty = t.isEmpty();
                 List texts = new ArrayList();
                 texts.add(t);
                 while (xomIndex < xomCount) {
@@ -454,15 +423,13 @@ class JaxenNavigator extends DefaultNavigator {
                     if (! nextText.isText()) break;
                     xomIndex++;
                     texts.add(nextText);
-                    if (!nonEmpty) {
-                        if (((Text) nextText).data.length != 0) nonEmpty = true;
+                    if (empty) {
+                        if (! ((Text) nextText).isEmpty()) empty = false;
                     }
                 }
                 // need to make sure at least one of these texts is non-empty
-                if (nonEmpty) {
-                    result = texts;
-                }
-                else return next();
+                if (empty) return next();
+                else result = texts;
                 // XXX test a child that ends in several empty text nodes preceded by child elements
             }
             else if (next.isDocType()) {
