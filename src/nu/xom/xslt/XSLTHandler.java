@@ -260,6 +260,13 @@ class XSLTHandler
         }
         
         flushText();
+        // Xalan fails to split the ?> before passing such data to 
+        // this method, so we have to do it
+        int position = data.indexOf("?>");
+        while (position != -1) {
+            data = data.substring(0, position) + "? >" + data.substring(position+2);
+            position = data.indexOf("?>");
+        }
         Nodes nodes = factory.makeProcessingInstruction(target, data);
         addToResultTree(nodes);
 
