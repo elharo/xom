@@ -24,6 +24,7 @@ package nu.xom.tests;
 
 import nu.xom.Element;
 import nu.xom.IllegalCharacterDataException;
+import nu.xom.Node;
 import nu.xom.Text;
 
 /**
@@ -33,7 +34,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b8
  *
  */
 public class TextTest extends XOMTestCase {
@@ -153,6 +154,15 @@ public class TextTest extends XOMTestCase {
         assertEquals(c1, c2);
         assertTrue(!c1.equals(c2));
         assertNull(c2.getParent());
+
+    }
+
+
+    public void testCopyisNotACDATASection() {
+        
+        Text c1 = new Text("test");
+        Node c2 = c1.copy();
+        assertEquals(Text.class, c2.getClass());
 
     }
 
