@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 class MemoryTest {
@@ -113,7 +113,7 @@ class MemoryTest {
           + format.format(usage) + "M");
         System.gc(); System.gc(); System.gc();
         long postGC = r.totalMemory() - r.freeMemory();
-        usage = (after - before)/(1024.0*1024.0);
+        usage = (postGC - before)/(1024.0*1024.0);
         System.out.println("Memory used after garbage collection: " 
           + format.format(usage) + "M");
        
