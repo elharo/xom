@@ -328,7 +328,8 @@ public class Serializer {
             Node child = element.getChild(i);
             if (child.isText()) {
                 // XXX add an isEmpty method to Text to avoid calling getValue here?
-                if ("".equals(child.getValue())) continue;
+                Text t = (Text) child;
+                if (t.isEmpty()) continue;
             }
             hasRealChildren = true;
             break;
