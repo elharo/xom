@@ -288,6 +288,24 @@ public class DocTypeTest extends XOMTestCase {
         }
 
         try {
+            new DocType("test", "http://www.example.com/\u00A9.html#");
+            fail("Allowed non-ASCII character in system ID");
+        }
+        catch (IllegalDataException success) {
+            // successfully detected bad system ID    
+            assertNotNull(success.getMessage());
+        }
+
+        try {
+            new DocType("test", "http://www.example.com/\u0007.html#");
+            fail("Allowed C0 control character in system ID");
+        }
+        catch (IllegalDataException success) {
+            // successfully detected bad system ID    
+            assertNotNull(success.getMessage());
+        }
+
+        try {
             new DocType("test", "test\" and ' in the same ID");
             fail("Allowed both \" and ' in system ID");
         }
@@ -296,8 +314,8 @@ public class DocTypeTest extends XOMTestCase {
             assertNotNull(success.getMessage());
         }
 
-
     }
+    
     
     void checkPublicIDCharacter(String publicID) {
         String name = "MyName";
@@ -306,6 +324,7 @@ public class DocTypeTest extends XOMTestCase {
         assertEquals(publicID, doctype.getPublicID());
     }
 
+    
     public void testClone() {
 
         String name = "MyName";
@@ -328,6 +347,7 @@ public class DocTypeTest extends XOMTestCase {
 
     }
 
+    
     public void testGetters() {
 
         String name = "MyName";
@@ -339,6 +359,7 @@ public class DocTypeTest extends XOMTestCase {
 
     }
 
+    
     public void testSystemIDRequiredForPublicID() {
 
         String name = "MyName";
@@ -355,6 +376,7 @@ public class DocTypeTest extends XOMTestCase {
 
     }
 
+    
     public void testRemove() {
 
         String name = "MyName";
