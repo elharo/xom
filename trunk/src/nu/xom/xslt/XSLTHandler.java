@@ -140,9 +140,7 @@ class XSLTHandler
             String newURI 
               = (String) ((Stack) prefixes.get(prefix)).peek(); 
             if (!newURI.equals(currentURI)) {
-                if (!prefix.equals("")) {
-                    element.addNamespaceDeclaration(prefix, newURI);
-                }
+                element.addNamespaceDeclaration(prefix, newURI);
             }
         }
     }
