@@ -42,10 +42,6 @@ public class NamespacesTest extends XOMTestCase {
         super("Namespaces tests");
     }
 
-    public NamespacesTest(String name) {
-        super(name);
-    }
-
     private Element someNamespaces;
     private Element noNamespaces;
     private Element severalNamespaces;

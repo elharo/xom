@@ -39,10 +39,6 @@ import nu.xom.IllegalDataException;
  */
 public class CommentTest extends XOMTestCase {
 
-    public CommentTest() {
-        super("Comment tests");
-    }
-
     public CommentTest(String name) {
         super(name);
     }

@@ -40,10 +40,6 @@ import nu.xom.*;
  */
 public class CDATASectionTest extends XOMTestCase {
 
-    public CDATASectionTest() {
-        super("CDATA tests");
-    }
-
     public CDATASectionTest(String name) {
         super(name);
     }

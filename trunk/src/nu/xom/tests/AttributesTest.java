@@ -33,14 +33,10 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d23
  *
  */
 public class AttributesTest extends XOMTestCase {
-
-    public AttributesTest() {
-        super("Attribute tests");
-    }
 
     public AttributesTest(String name) {
         super(name);

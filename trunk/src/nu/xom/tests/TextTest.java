@@ -34,14 +34,10 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d2`3
+ * @version 1.0d23
  *
  */
 public class TextTest extends XOMTestCase {
-
-    public TextTest() {
-        super("Text tests");
-    }
 
     public TextTest(String name) {
         super(name);
