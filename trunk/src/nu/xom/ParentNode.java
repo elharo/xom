@@ -47,7 +47,7 @@ import java.util.List;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public abstract class ParentNode extends Node {
@@ -174,12 +174,7 @@ public abstract class ParentNode extends Node {
     public final void appendChild(Node child) {
         insertChild(child, getChildCount());
     }
-    
-    // strictly for use with Builder; avoids expensive instanceof tests
-    void fastAppend(Node child) {
-        insertChild(child, getChildCount());        
-    }
-    
+
     /**
      *<p>
      * Returns the child of this node at the specified position.
