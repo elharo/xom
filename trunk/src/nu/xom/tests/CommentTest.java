@@ -36,7 +36,7 @@ import nu.xom.IllegalCharacterDataException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class CommentTest extends XOMTestCase {
@@ -105,6 +105,7 @@ public class CommentTest extends XOMTestCase {
         }   
     }
     
+    
     public void testSetter() {
 
         Comment c1 = new Comment("test");
@@ -154,6 +155,7 @@ public class CommentTest extends XOMTestCase {
         assertTrue(!c1.equals(c3));
     }
 
+    
     public void testCopy() {
         
         Comment c1 = new Comment("test");
@@ -165,6 +167,7 @@ public class CommentTest extends XOMTestCase {
 
     }
 
+    
     // Check passing in a string with broken surrogate pairs
     // and with correct surrogate pairs
     public void testSurrogates() {
@@ -226,17 +229,16 @@ public class CommentTest extends XOMTestCase {
 
     }
 
+    
     public void testLeafNode() {
 
         Comment c1 = new Comment("data");
         assertEquals(0, c1.getChildCount());
-        assertTrue(!c1.hasChildren());
         try {
             c1.getChild(0);
             fail("Didn't throw IndexOutofBoundsException");
         }
         catch (IndexOutOfBoundsException success) {
-            // success  
             assertNotNull(success.getMessage()); 
         }
         
@@ -248,7 +250,7 @@ public class CommentTest extends XOMTestCase {
         assertEquals(element.getChild(0), c1);
 
         element.removeChild(c1);
-        assertTrue(!element.hasChildren());
+        assertTrue(element.getChildCount() == 0);
 
     }
 

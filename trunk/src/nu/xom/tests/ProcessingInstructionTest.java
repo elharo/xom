@@ -34,7 +34,7 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class ProcessingInstructionTest extends XOMTestCase {
@@ -269,13 +269,11 @@ public class ProcessingInstructionTest extends XOMTestCase {
     public void testLeafNode() {
 
         assertEquals(0, pi.getChildCount());
-        assertTrue(!pi.hasChildren());
         try {
             pi.getChild(0);
             fail("Didn't throw IndexOutofBoundsException");
         }
         catch (IndexOutOfBoundsException success) {
-            // success  
             assertNotNull(success.getMessage()); 
         }
         
@@ -287,7 +285,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         assertEquals(pi, element.getChild(0));
 
         element.removeChild(pi);
-        assertTrue(!element.hasChildren());
+        assertEquals(0, element.getChildCount());
 
     }
 
@@ -353,8 +351,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         catch (IllegalDataException success) {
             assertEquals("\r initial carriage return", success.getData());
             assertNotNull(success.getMessage());   
-        }   
-        
+        }    
         
     }
     

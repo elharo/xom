@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -47,7 +47,7 @@ import java.util.List;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0a1
  *
  */
 public abstract class ParentNode extends Node {
@@ -64,22 +64,6 @@ public abstract class ParentNode extends Node {
      * 
      */
     ParentNode() {}
-     
-    /**
-     * <p>
-     * This method returns true if and only if this node has child 
-     * nodes. This is not the same question as whether this node 
-     * contains child <i>elements</i>. This method may return true 
-     * even if this node contains only comments, text nodes,
-     * and processing instructions.
-     * </p>
-     * 
-     * @return true if this node has children, false otherwise
-     */
-    public boolean hasChildren() {
-        if (children == null) return false;
-        return !children.isEmpty(); 
-    }
 
 
     /**
@@ -95,6 +79,7 @@ public abstract class ParentNode extends Node {
         return children.size(); 
     }
 
+    
     /**
      * <p>
      * Inserts a child node at the specified position.
@@ -143,6 +128,7 @@ public abstract class ParentNode extends Node {
 
     }
 
+    
     /**
      * <p>
      *   Subclasses can override this method to allow
@@ -158,6 +144,7 @@ public abstract class ParentNode extends Node {
      */
     protected void checkInsertChild(Node child, int position) {}
 
+    
     /**
      * <p>
      * Appends a node to the children of this node.
@@ -175,6 +162,7 @@ public abstract class ParentNode extends Node {
         insertChild(child, getChildCount());
     }
 
+    
     /**
      *<p>
      * Returns the child of this node at the specified position.
@@ -198,6 +186,7 @@ public abstract class ParentNode extends Node {
         return (Node) children.get(position); 
     }
 
+    
     /**
      *<p>
      * Returns the position of a node within the children of this
@@ -216,6 +205,7 @@ public abstract class ParentNode extends Node {
         return children.indexOf(child);  
     }
 
+    
     /**
      * <p>
      * Removes the child of this node at the specified position.
@@ -245,6 +235,7 @@ public abstract class ParentNode extends Node {
         return removed;    
     }
 
+    
     /**
      * <p>
      * Removes the specified child of this node.
@@ -279,6 +270,7 @@ public abstract class ParentNode extends Node {
         return child;
     }
 
+    
     /**
      * <p>
      *   Subclasses can override this method to allow
@@ -294,6 +286,7 @@ public abstract class ParentNode extends Node {
      */
     protected void checkRemoveChild(Node child, int position) {}
 
+    
     /**
      * <p>
      * Replaces an existing child with a new child node.
@@ -326,6 +319,7 @@ public abstract class ParentNode extends Node {
         insertChild(newChild, position);
     }
 
+    
     /**
      * 
      * <p>
