@@ -78,9 +78,13 @@ public class CanonicalizerTest extends XOMTestCase {
             File input = new File(tests, inputs[i]);   
             Document doc = builder.build(input);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Canonicalizer serializer = new Canonicalizer(out);
-            serializer.write(doc);
-            
+            try {
+                Canonicalizer serializer = new Canonicalizer(out);
+                serializer.write(doc);
+            }
+            finally {
+                out.close();
+            }            
             byte[] actual = out.toByteArray();
             
             // for debugging
@@ -98,13 +102,17 @@ public class CanonicalizerTest extends XOMTestCase {
             byte[] expectedBytes = new byte[actual.length];
             InputStream fin = new FileInputStream(expected);
             DataInputStream in = new DataInputStream(fin);
-            in.readFully(expectedBytes);
+            try {
+                in.readFully(expectedBytes);
+            }
+            finally {
+                in.close();
+            }
             for (int j = 0; j < expectedBytes.length; j++) {
                 assertEquals(expectedBytes[i], actual[i]);   
             }
             
         }
-      
         
     }
     
@@ -117,10 +125,16 @@ public class CanonicalizerTest extends XOMTestCase {
         for (int i = 0; i < inputs.length; i++) {
             File input = new File(tests, inputs[i]); 
             Document doc = builder.build(input);
+           
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Canonicalizer serializer 
-              = new Canonicalizer(out, false);
-            serializer.write(doc);
+            try {
+                Canonicalizer serializer 
+                  = new Canonicalizer(out, false);
+                serializer.write(doc);
+            }
+            finally {
+                out.close();
+            }
             
             byte[] actual = out.toByteArray();
             
@@ -136,11 +150,17 @@ public class CanonicalizerTest extends XOMTestCase {
             byte[] expectedBytes = new byte[actual.length];
             InputStream fin = new FileInputStream(expected);
             DataInputStream in =  new DataInputStream(fin);
-            in.readFully(expectedBytes);
+            try {
+                in.readFully(expectedBytes);
+            }
+            finally {
+                in.close();
+            }
             for (int j = 0; j < expectedBytes.length; j++) {
                 assertEquals(expectedBytes[i], actual[i]);   
             }
-            
+            out.close();
+
         }
         
     }    
@@ -445,21 +465,30 @@ public class CanonicalizerTest extends XOMTestCase {
               
             Document doc = builder.build(testURI.toString());
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Canonicalizer serializer = new Canonicalizer(out);
-            serializer.write(doc);
-            out.flush();
-            out.close();
+            try {
+                Canonicalizer serializer = new Canonicalizer(out);
+                serializer.write(doc);
+            }
+            finally {
+                out.close();
+            }           
             byte[] actual = out.toByteArray();
             
             File input = new File(testURI.toString().substring(5) + ".can");
             assertEquals(testURI.toString(), input.length(), actual.length);
             byte[] expected = new byte[actual.length];
             DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(input)));
-            in.readFully(expected);
+            try {
+                in.readFully(expected);
+            }
+            finally {
+                in.close();
+            }
             for (int j = 0; j < expected.length; j++) {
                 assertEquals(testURI + " at byte " + j, expected[j], actual[j]);
             }
             //System.out.println(testURI);
+            
           }
         
     }
