@@ -28,13 +28,15 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
+import nu.xom.DocType;
+import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ParentNode;
+import nu.xom.Serializer;
 import nu.xom.Text;
 import nu.xom.ParsingException;
 
@@ -61,7 +63,7 @@ import nu.xom.ParsingException;
  * </blockquote>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 class DocumentModifier {
@@ -78,19 +80,21 @@ class DocumentModifier {
         DocumentModifier iterator = new DocumentModifier();
         Builder parser = new Builder();
         try {    
-            // Separate out the basic I/O by storing document
-            // in byte array first. However, this only caches the
-            // document itself. Any DTD the document references will
-            // still need to be read from the actual file.
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            URL u = new URL(args[0]);
-            InputStream in = u.openStream();
-            for (int c = in.read(); c != -1; c = in.read()) {
-                out.write(c);   
+            // Separate out the basic I/O by parsing document,
+            // and then reserializing into a byte array.
+            // This caches the and removes any dependence on the DTD.
+            Document doc = parser.build(args[0]);
+            DocType type = doc.getDocType();
+            if (type != null) {
+                doc.removeChild(type);   
             }
-            out.flush();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            Serializer serializer = new Serializer(out);
+            serializer.write(doc);
+            serializer.flush();
             out.close();
-            byte[] data = out.toByteArray();            
+            byte[] data = out.toByteArray();
+             
             warmup(parser, iterator, data, 5, args[0]);
             InputStream raw = new BufferedInputStream(
               new ByteArrayInputStream(data)
@@ -102,14 +106,14 @@ class DocumentModifier {
             long prebuild = System.currentTimeMillis();
           
             // Read the entire document into memory
-            Node document = parser.build(args[0]); 
+            Document document = parser.build(raw); 
             long postbuild = System.currentTimeMillis();
             
             System.out.println((postbuild - prebuild) 
               + "ms to build the document");
 
             long prewalk = System.currentTimeMillis();
-            performTask(parser, iterator, raw, args[0]);;
+            performTask(parser, iterator, document);;
             long postwalk = System.currentTimeMillis();
             
             System.out.println((postwalk - prewalk) 
@@ -129,19 +133,19 @@ class DocumentModifier {
       DocumentModifier iterator, byte[] data, 
       int numPasses, String base)
       throws IOException, ParsingException {
+          
+        InputStream in = new BufferedInputStream(
+          new ByteArrayInputStream(data));
+        Builder builder = new Builder();
+        Document doc = builder.build(in);  
         for (int i = 0; i < numPasses; i++) {
-            InputStream raw = new BufferedInputStream(
-              new ByteArrayInputStream(data)
-            );    
-            Node document;
-            performTask(parser, iterator, raw, base);
+            performTask(parser, iterator, doc);
         }
     }
 
     private static void performTask(Builder parser,
-      DocumentModifier iterator, InputStream raw, String base)
-        throws ParsingException, IOException {
-        Node document = parser.build(raw, base); 
+      DocumentModifier iterator, Document document)
+        throws ParsingException, IOException { 
         iterator.followNode(document); 
     }
 
