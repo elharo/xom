@@ -460,13 +460,15 @@ public class Builder {
             parserName = filter.getParent().getClass().getName();
         }
         
-        // These two parsers are known to not make all the checks
+        // These parsers are known to not make all the checks
         // they're supposed to. :-(
         // XXX test this line
         if (parserName.equals("gnu.xml.aelfred2.XmlReader")) return false;
         if (parserName.equals("net.sf.saxon.aelfred.SAXDriver")) return false;
         if (parserName.equals("com.icl.saxon.aelfred.SAXDriver")) return false;
-        
+        // XXX test this line
+        if (parserName.equals("org.dom4j.io.aelfred.SAXDriver")) return false;     
+    
         if (parserName.equals("org.apache.xerces.parsers.SAXParser")
             && xercesVersion >= 2.4) {
             return false;
