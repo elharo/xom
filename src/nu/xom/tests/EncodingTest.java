@@ -108,6 +108,13 @@ public class EncodingTest extends XOMTestCase {
     }
     
 
+    // Main purpose here is to test a character set whose name is 
+    // case dependent
+    public void testMacRoman() throws ParsingException, IOException {
+        checkAll("MacRoman");
+    }
+    
+
     public void testBig5() throws ParsingException, IOException {
         checkAll("Big5");
     } 

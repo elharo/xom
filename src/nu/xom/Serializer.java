@@ -197,25 +197,25 @@ public class Serializer {
         throws UnsupportedEncodingException {
         
         Writer writer;  
+        String encodingUpperCase = encoding.toUpperCase();
         // Java's Cp037 encoding is broken, so we have to
         // provide our own.
-        encoding = encoding.toUpperCase();
-        if (encoding.equals("IBM037")
-          || encoding.equals("CP037")
-          || encoding.equals("EBCDIC-CP-US")
-          || encoding.equals("EBCDIC-CP-CA")
-          || encoding.equals("EBCDIC-CP-WA")
-          || encoding.equals("EBCDIC-CP-NL")
-          || encoding.equals("CSIBM037")) {
+        if (encodingUpperCase.equals("IBM037")
+          || encodingUpperCase.equals("CP037")
+          || encodingUpperCase.equals("EBCDIC-CP-US")
+          || encodingUpperCase.equals("EBCDIC-CP-CA")
+          || encodingUpperCase.equals("EBCDIC-CP-WA")
+          || encodingUpperCase.equals("EBCDIC-CP-NL")
+          || encodingUpperCase.equals("CSIBM037")) {
             writer = new EBCDICWriter(out);
         }
-        else if (encoding.equals("UTF-16") 
-          || encoding.equals("ISO-10646-UCS-2")) {
+        else if (encodingUpperCase.equals("UTF-16") 
+          || encodingUpperCase.equals("ISO-10646-UCS-2")) {
            // For compatibility with Java 1.2 and earlier
            writer = new OutputStreamWriter(out, "UnicodeBig");  
         }
-        else if (encoding.equals("ISO-8859-11") 
-          || encoding.equals("TIS-620")) {
+        else if (encodingUpperCase.equals("ISO-8859-11") 
+          || encodingUpperCase.equals("TIS-620")) {
            // Java doesn't recognize the name ISO-8859-11 and 
            // Java 1.3 and earlier don't recognize TIS-620
            writer = new OutputStreamWriter(out, "TIS620");  
