@@ -674,7 +674,7 @@ public class Builder {
                         url.append("%25");
                         break;
                     case '&':  
-                        url.append(c);
+                        url.append("%26");
                         break;
                     case '\'':  
                         url.append(c);
@@ -689,7 +689,7 @@ public class Builder {
                         url.append(c);
                         break;
                     case '+':  
-                        url.append(c);
+                        url.append("%2B");
                         break;
                     case ',':  
                         url.append(c);
@@ -701,7 +701,7 @@ public class Builder {
                         url.append(c);
                         break;
                     case '/':  
-                        url.append(c);
+                        url.append("%2F");
                         break;
                     case '0':  
                         url.append(c);
@@ -749,10 +749,10 @@ public class Builder {
                         url.append("%3E");
                         break;
                     case '?':  
-                        url.append(c);
+                        url.append("%3F");
                         break;
                     case '@':  
-                        url.append(c);
+                        url.append("%40");
                         break;
                     case 'A':  
                         url.append(c);
@@ -833,13 +833,13 @@ public class Builder {
                         url.append(c);
                         break;
                     case '[':  
-                        url.append(c);
+                        url.append("%5B");
                         break;
                     case '\\':  
                         url.append("%5C");
                         break;
                     case ']':  
-                        url.append(c);
+                        url.append("%5D");
                         break;
                     case '^':  
                         url.append("%5E");
