@@ -152,7 +152,7 @@ public class CanonicalizerTest extends XOMTestCase {
     }
 
     
-    public void testCanonicalizeOnlyPrefixedNamespacees() 
+    public void testCanonicalizeOnlyPrefixedNamespaces() 
       throws IOException {
         
         Element pdu = new Element("pre:doc", "http://www.example.com");
@@ -168,6 +168,21 @@ public class CanonicalizerTest extends XOMTestCase {
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
+        
+    }
+
+    
+    public void testCanonicalizeWithNullAlgorithm() 
+      throws IOException {
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            new Canonicalizer(out, null);
+            fail("Allowed null algorithm");
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
 
@@ -220,7 +235,8 @@ public class CanonicalizerTest extends XOMTestCase {
     }
 
     
-    public void testCanonicalizeOnlyAttributesOnDifferentElements() throws IOException {
+    public void testCanonicalizeOnlyAttributesOnDifferentElements() 
+      throws IOException {
         
         Element pdu = new Element("doc");
         pdu.addAttribute(new Attribute("a2", "v1"));
@@ -243,7 +259,8 @@ public class CanonicalizerTest extends XOMTestCase {
     }
 
     
-    public void testCanonicalizeAttributesWithFunkyCharacters() throws IOException {
+    public void testCanonicalizeAttributesWithFunkyCharacters() 
+      throws IOException {
         
         Element pdu = new Element("doc");
         pdu.addAttribute(new Attribute("a2", "v1&<>\"\t\r\n"));
@@ -307,7 +324,8 @@ public class CanonicalizerTest extends XOMTestCase {
     }
         
 
-    public void testExclusiveDoesntRenderUnusedPrefix() throws IOException {
+    public void testExclusiveDoesntRenderUnusedPrefix() 
+      throws IOException {
      
         Element pdu = new Element("n0:tuck", "http://a.example");
         pdu.addNamespaceDeclaration("pre", "http://www.example.org/");
@@ -328,7 +346,8 @@ public class CanonicalizerTest extends XOMTestCase {
     }
         
 
-    public void testExclusiveDoesntRenderUnusedPrefixFromUnincludedAttribute() throws IOException {
+    public void testExclusiveDoesntRenderUnusedPrefixFromUnincludedAttribute() 
+      throws IOException {
      
         Element pdu = new Element("n0:tuck", "http://a.example");
         pdu.addAttribute(new Attribute("pre:foo", "http://www.example.org/", "test"));
@@ -349,7 +368,8 @@ public class CanonicalizerTest extends XOMTestCase {
     }
         
 
-    public void testWithComments() throws ParsingException, IOException {
+    public void testWithComments() 
+      throws ParsingException, IOException {
       
         File tests = input;
         String[] inputs = tests.list(new XMLFilter());
