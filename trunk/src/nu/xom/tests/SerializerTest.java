@@ -56,6 +56,17 @@ public class SerializerTest extends XOMTestCase {
     protected void setUp() {
        parser = new Builder();  
     }
+    
+    public void testCDATASectionEndDelimiter() throws IOException {
+        Element root = new Element("test");
+        root.appendChild("]]>");    
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "UTF-8");
+        serializer.setMaxLength(20);
+        serializer.write(new Document(root));
+        String result = out.toString("UTF-8");
+        assertTrue(result.indexOf("]]&gt;") > 0);
+    }
 
     public void testXMLSpacePreserve() throws IOException {
         Element root = new Element("test");
