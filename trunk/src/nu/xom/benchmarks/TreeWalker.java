@@ -30,9 +30,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 
 import nu.xom.Builder;
+import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Node;
 import nu.xom.ParsingException;
@@ -42,13 +42,12 @@ import nu.xom.ValidityException;
 /**
  * 
  * <p>
- * Benchmark perofmrance against a specified URL for
+ * Benchmark performance against a specified URL for
  * building, tree-walking, and serializing.
  * </p>
  * 
- * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 class TreeWalker {
@@ -65,19 +64,21 @@ class TreeWalker {
         TreeWalker iterator = new TreeWalker();
         Builder parser = new Builder();
         try {
-            // Separate out the basic I/O by storing document
-            // in byte array first. However, this only caches the
-            // document itself. Any DTD the document references will
-            // still need to be read from the actual file.
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            URL u = new URL(args[0]);
-            InputStream in = u.openStream();
-            for (int c = in.read(); c != -1; c = in.read()) {
-                out.write(c);   
+            // Separate out the basic I/O by parsing document,
+            // and then reserializing into a byte array.
+            // This caches the and removes any dependence on the DTD.
+            Document doc = parser.build(args[0]);
+            DocType type = doc.getDocType();
+            if (type != null) {
+                doc.removeChild(type);   
             }
-            out.flush();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            Serializer serializer = new Serializer(out);
+            serializer.write(doc);
+            serializer.flush();
             out.close();
-            byte[] data = out.toByteArray();            
+            byte[] data = out.toByteArray(); 
+                       
             warmup(data, parser, iterator, 5, args[0]);
             InputStream raw = new BufferedInputStream(
               new ByteArrayInputStream(data)
