@@ -204,7 +204,7 @@ class NonVerifyingHandler extends XOMHandler {
         if (inExternalSubset) return;
 
         Comment result = Comment.build(new String(text, start, length));
-        ;
+
         if (!inDTD) {
             if (inProlog) {
                 parent.insertChild(result, position);
