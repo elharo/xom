@@ -41,6 +41,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * <p> 
@@ -53,7 +54,7 @@ import org.xml.sax.ext.LexicalHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a5
  *
  */
 class XSLTHandler 
@@ -91,6 +92,19 @@ class XSLTHandler
      String qualifiedName, Attributes attributes) {
         
         flushText();
+        
+        // mix namespaceDeclarations into attributes
+        for (int i = 0; i < attributes.getLength(); i++) {
+            namespaceDeclarations.addAttribute(
+              attributes.getURI(i),
+              attributes.getLocalName(i),
+              attributes.getQName(i),
+              attributes.getType(i),
+              attributes.getValue(i)
+            );
+        }
+        attributes = namespaceDeclarations;
+        
         Element element 
           = factory.startMakingElement(qualifiedName, namespaceURI);
         
@@ -197,8 +211,11 @@ class XSLTHandler
                     }
                 }                
             }             
-        }        
-
+        }  
+        
+        // reset namespaceDeclarations
+        namespaceDeclarations = new AttributesImpl();
+        
     }
   
     
@@ -298,37 +315,20 @@ class XSLTHandler
     }
 
     
-    public void endPrefixMapping(String prefix) {
-        
-        Stack uris = (Stack) prefixes.get(prefix);
-        // The if statement works around Bug 27937 in Xalan
-        // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27937
-        // Xalan somtimes use the XML namespace 
-        // http://www.w3.org/XML/1998/namespace where it
-        // should use the empty string
-        // Without this bug we could pop without the check
-        if (uris.isEmpty()) return;
-        uris.pop();
-        
-    }
+    public void endPrefixMapping(String prefix) {}
     
+    
+    private AttributesImpl namespaceDeclarations = new AttributesImpl();
     
     public void startPrefixMapping(String prefix, String uri) {
         
-        if (uri == null) uri = "";
-        Stack uris = (Stack) prefixes.get(prefix);
-        if (uris == null) {
-            uris = new Stack();
-            prefixes.put(prefix, uris);
-        }
-        
-        if (uris.isEmpty()) {
-            uris.push(uri);   
-        }
-        else {
-             String current = (String) uris.peek();
-             if (!uri.equals(current)) uris.push(uri);
-        }
+       
+       if ("".equals(prefix)) {
+           namespaceDeclarations.addAttribute("", "xmlns", "xmlns", "CDATA", uri);
+       }
+       else {
+           namespaceDeclarations.addAttribute("", "xmlns:" + prefix, "xmlns:" + prefix, "CDATA", uri);           
+       }
         
     }
 
