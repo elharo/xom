@@ -27,7 +27,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1a2
  *
  */
 import nu.xom.Attribute;
@@ -327,21 +327,22 @@ class JaxenNavigator extends DefaultNavigator {
 
     private static Object getXPathChild(int request, ParentNode parent) {
     
-        if (parent instanceof Document) {
+        if (parent.isDocument()) {
             return getXPathChild(request, (Document) parent);
         }
         
         int childCount = 0;
         
         boolean previousWasText = false;
-        for (int i = 0; i < parent.getChildCount(); i++) {
+        int parentCount = parent.getChildCount();
+        for (int i = 0; i < parentCount; i++) {
             Node child = parent.getChild(i);
             
             // check to see if previous was text and if so go to next
-            if (child instanceof Text && previousWasText) continue;
+            if (child.isText() && previousWasText) continue;
             
             if (request == childCount) {
-                if (child instanceof Text) {
+                if (child.isText()) {
                     StringBuffer sb = new StringBuffer();
                     List list = new ArrayList();
                     int textCount = i;
@@ -350,9 +351,9 @@ class JaxenNavigator extends DefaultNavigator {
                         list.add(temp);
                         sb.append(child.getValue());
                         textCount++;
-                        if (textCount == parent.getChildCount()) break;
+                        if (textCount == parentCount) break;
                         child = parent.getChild(textCount);
-                    } while (child instanceof Text);
+                    } while (child.isText());
                      
                     
                     if (sb.length() != 0) return list;
@@ -362,7 +363,7 @@ class JaxenNavigator extends DefaultNavigator {
                 }
             }
             else {
-                if (child instanceof Text && !previousWasText) {
+                if (child.isText() && !previousWasText) {
                     if (child.getValue().length() != 0) {
                       childCount++;
                       previousWasText = true;
