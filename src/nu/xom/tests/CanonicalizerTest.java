@@ -34,8 +34,10 @@ import java.io.InputStream;
 
 import com.ibm.icu.text.Normalizer;
 
+import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.XMLException;
 import nu.xom.canonical.Canonicalizer;
@@ -345,9 +347,9 @@ public class CanonicalizerTest extends XOMTestCase {
     public void testNullDocument() 
       throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer serializer = new Canonicalizer(out);
+        Canonicalizer canonicalizer = new Canonicalizer(out);
         try {
-            serializer.write(null);  
+            canonicalizer.write(null);  
             fail("Wrote null document"); 
         }   
         catch (NullPointerException success) {
@@ -356,6 +358,21 @@ public class CanonicalizerTest extends XOMTestCase {
         byte[] result = out.toByteArray();
         assertEquals(0, result.length);
         
+    }
+    
+    public void testWhiteSpaceTrimmingInNonCDATAAttribute() 
+      throws IOException {
+        Attribute attribute = new Attribute("name", "  value1  value2  ");
+        attribute.setType(Attribute.Type.NMTOKENS);
+        Element root = new Element("root");
+        root.addAttribute(attribute);
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        canonicalizer.write(doc);
+        out.close();
+        String result = new String(out.toByteArray(), "UTF8");
+        assertEquals("<root name=\"value1 value2\"></root>", result);
     }
 
 }
