@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1a3
  *
  */
 public class XIncluder {
@@ -349,8 +349,19 @@ public class XIncluder {
                     url = absolutize(baseURL, href);
                 }
                 else if (href != null) {
-                    testURISyntax(href);
-                    url = new URL(href); 
+                    try {
+                        testURISyntax(href);
+                        url = new URL(href); 
+                    }
+                    catch (MalformedURIException ex) {
+                        if (baseURL == null) {
+                            throw new BadHrefAttributeException(
+                              "Could not resolve relative URI " + href
+                              + " because the xi:include element does" 
+                              + " not have a base URI.", href);    
+                        }
+                        throw new BadHrefAttributeException("Illegal IRI in href attribute", href);
+                    }
                 }
                 
                 String accept = element.getAttributeValue("accept");
@@ -611,17 +622,9 @@ public class XIncluder {
     }
 
     
-    private static void testURISyntax(String href) 
-      throws BadHrefAttributeException {
-        
-        try {
-            Element e = new Element("e");
-            e.setNamespaceURI(href);
-        }
-        catch (MalformedURIException ex) {
-            throw new BadHrefAttributeException("Illegal IRI in href attribute", href);
-        }
-        
+    private static void testURISyntax(String href) {       
+        Element e = new Element("e");
+        e.setNamespaceURI(href);
     }
 
     
