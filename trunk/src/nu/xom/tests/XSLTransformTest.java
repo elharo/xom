@@ -44,10 +44,14 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class XSLTransformTest extends XOMTestCase {
+
+    public XSLTransformTest(String name) {
+        super(name);   
+    }
 
     // not a literal result element as stylesheet 
     // because it's missing the xsl:version attribute

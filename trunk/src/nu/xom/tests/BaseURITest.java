@@ -46,10 +46,6 @@ import nu.xom.Text;
  */
 public class BaseURITest extends XOMTestCase {
 
-    public BaseURITest() {
-        super("Base URI tests");
-    }
-
     public BaseURITest(String name) {
         super(name);
     }

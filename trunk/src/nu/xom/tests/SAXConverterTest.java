@@ -49,10 +49,14 @@ import org.xml.sax.helpers.DefaultHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class SAXConverterTest extends XOMTestCase {
+
+    public SAXConverterTest(String name) {
+        super(name);
+    }
 
     private DefaultHandler handler;
     private SAXConverter converter;

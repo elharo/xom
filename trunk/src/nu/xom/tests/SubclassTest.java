@@ -48,6 +48,10 @@ public class SubclassTest extends XOMTestCase {
     private Element root;
     private Document doc;
     
+    public SubclassTest(String name) {
+        super(name);
+    }
+
     protected void setUp() {
         root = new Element("root");
         doc = new Document(new ElementSubclass("root"));   

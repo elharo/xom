@@ -41,6 +41,10 @@ public class XMLExceptionTest extends XOMTestCase {
     private XMLException ex;
     private Exception cause;
     
+    public XMLExceptionTest(String name) {
+        super(name);
+    }
+
     protected void setUp() {
         ex = new XMLException();
         cause = new Exception();

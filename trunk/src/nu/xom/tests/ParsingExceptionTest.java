@@ -39,6 +39,10 @@ public class ParsingExceptionTest extends XOMTestCase {
     private ParsingException ex;
     private Exception cause;
     
+    public ParsingExceptionTest(String name) {
+        super(name);
+    }
+    
     protected void setUp() {
         ex = new ParsingException();
         cause = new Exception();

@@ -40,6 +40,10 @@ import nu.xom.Text;
  */
 public class NodesTest extends XOMTestCase {
 
+    public NodesTest(String name) {
+        super(name);
+    }
+    
     public void testNoArgsConstructor() {
         Nodes nodes = new Nodes();
         assertEquals(0, nodes.size());   

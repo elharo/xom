@@ -56,8 +56,12 @@ public class MegaTest extends XOMTestCase {
     private int actualResult = 0;
     private Thread generator;
     
+    public MegaTest(String name) {
+        super(name);
+    }
+    
     public static void main(String[] args) throws Exception {
-        MegaTest test = new MegaTest();
+        MegaTest test = new MegaTest("MegaTest");
         test.setUp();
         test.testMegaFile();
     }

@@ -32,7 +32,7 @@ import nu.xom.tests.XOMTestCase;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class XIncludeExceptionTest extends XOMTestCase {
@@ -40,6 +40,10 @@ public class XIncludeExceptionTest extends XOMTestCase {
     private XIncludeException ex;
     private Exception cause;
     
+    public XIncludeExceptionTest(String name) {
+        super(name);
+    }
+
     protected void setUp() {
         ex = new XIncludeException();
         cause = new Exception();

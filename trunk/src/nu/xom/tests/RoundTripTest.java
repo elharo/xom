@@ -41,7 +41,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class RoundTripTest extends XOMTestCase {
@@ -49,6 +49,10 @@ public class RoundTripTest extends XOMTestCase {
     private Builder builder; 
     private Serializer serializer;
     private ByteArrayOutputStream out;
+
+    public RoundTripTest(String name) {
+        super(name);
+    }
 
     protected void setUp() {
         builder = new Builder();
