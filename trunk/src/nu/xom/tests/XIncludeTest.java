@@ -54,7 +54,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -433,7 +433,7 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/disclaimer.xml");
-        String data = "<document xmlns:xi='http://www.w3.org/2003/XInclude'>"
+        String data = "<document xmlns:xi='http://www.w3.org/2001/XInclude'>"
           + "\n  <p>120 Mz is adequate for an average home user.</p>"
           + "\n  <xi:include href='" + input.toURL() + "'/>\n</document>";
         Reader reader = new StringReader(data);
