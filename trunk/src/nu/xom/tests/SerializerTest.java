@@ -220,6 +220,27 @@ public class SerializerTest extends XOMTestCase {
            result);            
     }
 
+    public void testXMLSpaceUnspecifiedValueWithIndenting() 
+      throws IOException {
+        Element root = new Element("test");
+        root.addAttribute(
+          new Attribute(
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "undefined"));
+        root.appendChild(new Element("sameline"));    
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "UTF-8");
+        serializer.setIndent(4);
+        serializer.write(new Document(root));
+        String result = out.toString("UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<test xml:space=\"undefined\">\r\n    <sameline/>\r\n</test>\r\n",
+           result);            
+    }
+
+    
+    
     public void testXMLSpaceDefaultWithIndenting() throws IOException {
         Element root = new Element("test");
         root.addAttribute(
