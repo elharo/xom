@@ -62,11 +62,11 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.IllegalNameException;
 import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.ValidityException;
+import nu.xom.WellformednessException;
 import nu.xom.XMLException;
 
 
@@ -77,7 +77,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -89,14 +89,9 @@ public class BuilderTest extends XOMTestCase {
     // malformed data
     private static class CustomReader implements XMLReader {
         
-        private ContentHandler handler;
+        protected ContentHandler handler;
      
-        public void parse(String data) throws SAXException {
-            handler.startDocument();
-            handler.startElement("87", "87", "87", new AttributesImpl());
-            handler.endElement("87", "87", "87");
-            handler.endDocument();
-        }
+        public void parse(String url) throws SAXException {}
 
         public boolean getFeature(String uri) {
             return false;
@@ -131,14 +126,53 @@ public class BuilderTest extends XOMTestCase {
 
         public void setErrorHandler(ErrorHandler handler) {}
 
-        public void parse(InputSource arg0) throws IOException,
-                SAXException {}
+        public void parse(InputSource in) throws SAXException  {
+            handler.startDocument();
+            handler.startElement("87", "87", "87", new AttributesImpl());
+            handler.endElement("87", "87", "87");
+            handler.endDocument();  
+        }
 
         public Object getProperty(String uri) {
             return null;
         }
 
         public void setProperty(String uri, Object value) {}
+        
+    }
+    
+    
+    private static class DoNothingReader extends CustomReader {
+        
+        public void parse(InputSource in) throws SAXException  {}
+        
+    }
+    
+
+    private static class StartAndEndReader extends CustomReader {
+        
+        public void parse(InputSource in) throws SAXException  {
+            handler.startDocument();
+            handler.endDocument();  
+        }
+        
+    }
+    
+
+    private static class StartOnlyReader extends CustomReader {
+        
+        public void parse(InputSource in) throws SAXException  {
+            handler.startDocument();
+        }
+        
+    }
+    
+
+    private static class EndOnlyReader extends CustomReader {
+        
+        public void parse(InputSource in) throws SAXException  {
+            handler.endDocument();  
+        }
         
     }
     
@@ -161,8 +195,6 @@ public class BuilderTest extends XOMTestCase {
     protected void tearDown() {
         System.setErr(systemErr);
     }
-    
-
     
     
     // flag to turn on and off tests based on 
@@ -254,20 +286,65 @@ public class BuilderTest extends XOMTestCase {
      + "<!ATTLIST test idrefsatt IDREFS \" p1 p2 \">\n" 
      + "]>\r\n"
      + "<test>Hello dear</test>";
-
-
-    public void testNotationAttributeType() 
-      throws IOException, ParsingException {
-        
-        Reader reader = new StringReader(attributeDoc);
-        Document document = builder.build(reader);
-        Element root = document.getRootElement();
-        Attribute att = root.getAttribute("notationatt"); 
-        assertEquals(Attribute.Type.NOTATION, att.getType()); 
-        
-    }
     
     
+    public void testDoNothingParser() 
+      throws ParsingException, IOException {
+        
+        try {
+            XMLReader parser = new DoNothingReader();
+            Builder builder = new Builder(parser);
+            Document doc = builder.build("http://www.example.org/");
+            System.err.println(doc.toXML());
+            fail("built from bad data");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+            assertEquals("http://www.example.org/", success.getURI());
+        }      
+        
+    }    
+
+
+    public void testStartAndEndParser() 
+      throws ParsingException, IOException {
+        
+        XMLReader parser = new StartAndEndReader();
+        Builder builder = new Builder(parser);
+        Document doc = builder.build("http://www.example.org/");
+        assertNotNull(doc.getRootElement());
+        
+    }    
+
+
+    public void testStartOnlyParser() 
+      throws ParsingException, IOException {
+        
+        XMLReader parser = new StartOnlyReader();
+        Builder builder = new Builder(parser);
+        Document doc = builder.build("http://www.example.org/");
+        assertNotNull(doc.getRootElement());
+        
+    }    
+
+
+    public void testEndOnlyParser() 
+      throws ParsingException, IOException {
+        
+        try {
+            XMLReader parser = new EndOnlyReader();
+            Builder builder = new Builder(parser);
+            Document doc = builder.build("http://www.example.org/");
+            System.out.println(doc.toXML());
+            fail("built from bad data");
+        }
+        catch (ParsingException success) {
+            assertTrue(success.getCause() instanceof NullPointerException);
+        }      
+        
+    }    
+
+
     public void testBuildInternalDTDSubsetWithFixedDefaultAttributeValue() 
       throws ParsingException, IOException {
         
@@ -279,6 +356,18 @@ public class BuilderTest extends XOMTestCase {
         DocType dt = doc.getDocType();
         String internalDTDSubset = dt.getInternalDTDSubset();
         assertTrue(internalDTDSubset.indexOf("#FIXED \"c\"") > 0);
+        
+    }
+    
+    
+    public void testNotationAttributeType() 
+      throws IOException, ParsingException {
+        
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
+        Element root = document.getRootElement();
+        Attribute att = root.getAttribute("notationatt"); 
+        assertEquals(Attribute.Type.NOTATION, att.getType()); 
         
     }
     
@@ -1612,10 +1701,12 @@ public class BuilderTest extends XOMTestCase {
         try {
             XMLReader parser = new CustomReader();
             Builder builder = new Builder(parser);
-            builder.build("data doesn't matter");
+            builder.build("http://www.example.org/");
+            fail("built from bad data");
         }
-        catch (IllegalNameException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());
+            assertTrue(success.getCause() instanceof WellformednessException);
         }      
         
     }
