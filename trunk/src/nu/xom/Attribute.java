@@ -828,7 +828,8 @@ public class Attribute extends Node {
          *
          * @see java.lang.Object#toString()
          */
-        public String getName() {        
+        public String getName() {  
+            
             switch (type) {
               case 0:
                 return "UNDECLARED";   
@@ -856,6 +857,7 @@ public class Attribute extends Node {
                 throw new RuntimeException(
                   "Bug in XOM: unexpected attribute type: " + type); 
             }
+            
         }   
 
 
@@ -894,18 +896,16 @@ public class Attribute extends Node {
          * 
          * @see java.lang.Object#equals(Object)
          */
-        public boolean equals(Object o) { 
+        public boolean equals(Object o) {
+            
             if (o == this) return true; 
             if (o == null) return false;      
             if (this.hashCode() != o.hashCode()) return false;           
-            if (!o.getClass().getName().equals("Attribute.Type")) {
+            if (!o.getClass().getName().equals("nu.xom.Attribute.Type")) {
                 return false;
-            }  
-            if (!o.getClass().getPackage().getName()
-                  .equals("nu.xom")) {
-                return false;
-            }  
-            return true;        
+            }
+            return true;   
+            
         }          
         
         
@@ -919,12 +919,14 @@ public class Attribute extends Node {
          *
          * @see java.lang.Object#toString()
          */
-         public String toString() {        
+         public String toString() {    
+             
             StringBuffer result 
               = new StringBuffer("[Attribute.Type: ");
             result.append(getName()); 
             result.append("]");
-            return result.toString();           
+            return result.toString();    
+            
         }         
 
          
