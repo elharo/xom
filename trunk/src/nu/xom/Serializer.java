@@ -69,7 +69,7 @@ public class Serializer {
             throw new NullPointerException("Null OutputStream");
         } 
         try {
-            Writer writer = new OutputStreamWriter(out, "UTF-8");
+            Writer writer = new OutputStreamWriter(out, "UTF8");
             writer = new BufferedWriter(writer);
             escaper = TextWriterFactory.getTextWriter(writer, "UTF-8");
         }
