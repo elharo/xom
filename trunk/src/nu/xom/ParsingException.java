@@ -37,7 +37,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b6
  *
  */
 public class ParsingException extends Exception {
@@ -56,11 +56,11 @@ public class ParsingException extends Exception {
      * </p>
      * 
      * @param message a string indicating the specific problem
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public ParsingException(String message, Throwable ex) {
+    public ParsingException(String message, Throwable cause) {
         super(message);
-        this.initCause(ex);
+        this.initCause(cause);
     }
 
     
@@ -72,12 +72,12 @@ public class ParsingException extends Exception {
      * 
      * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
-    public ParsingException(String message, String uri, Throwable ex) {
+    public ParsingException(String message, String uri, Throwable cause) {
         super(message);
         this.uri = uri;
-        this.initCause(ex);
+        this.initCause(cause);
     }
 
     
@@ -130,15 +130,15 @@ public class ParsingException extends Exception {
      *     where the problem occurs
      * @param columnNumber the approximate column number 
      *     where the problem occurs
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
     public ParsingException(String message, String uri, int lineNumber,
-      int columnNumber, Throwable ex) {
+      int columnNumber, Throwable cause) {
         super(message);
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
         this.uri = uri;
-        this.initCause(ex);
+        this.initCause(cause);
     }
 
     
@@ -153,14 +153,14 @@ public class ParsingException extends Exception {
      *     where the problem occurs
      * @param columnNumber the approximate column number 
      *     where the problem occurs
-     * @param ex the original cause of this exception
+     * @param cause the original cause of this exception
      */
     public ParsingException(String message, int lineNumber,
-      int columnNumber, Throwable ex) {
+      int columnNumber, Throwable cause) {
         super(message);
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
-        this.initCause(ex);
+        this.initCause(cause);
     }
 
     
