@@ -1269,18 +1269,13 @@ public class Element extends ParentNode {
         
         while (true) {
             String currentEntity = current.getActualBaseURI();
-            if (sourceEntity != null && sourceEntity.length() != 0 
-              && sourceEntity != currentEntity) {
-                if (sourceEntity != null) {
-                    baseURI = URIUtil.absolutize(sourceEntity, baseURI);
-                }
+            if (sourceEntity.length() != 0 && sourceEntity != currentEntity) {
+                baseURI = URIUtil.absolutize(sourceEntity, baseURI);
                 break;
             }
             
             if (current.isDocument()) {
-                if (currentEntity != null) {
-                    baseURI = URIUtil.absolutize(currentEntity, baseURI);
-                }
+                baseURI = URIUtil.absolutize(currentEntity, baseURI);
                 break;
             }
             Attribute baseAttribute = ((Element) current).getAttribute("base", 
@@ -1304,9 +1299,7 @@ public class Element extends ParentNode {
             }
             current = current.getParent();
             if (current == null) {
-                if (currentEntity != null) {
-                    baseURI = URIUtil.absolutize(currentEntity, baseURI);
-                }
+                baseURI = URIUtil.absolutize(currentEntity, baseURI);
                 break;
             }
         }
