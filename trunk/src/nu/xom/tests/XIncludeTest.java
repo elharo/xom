@@ -883,7 +883,7 @@ public class XIncludeTest extends XOMTestCase {
                     File input = new File("data/XInclude-Test-Suite/" 
                       + basedir + '/' + testcase.getAttributeValue("href"));
                     Element output = testcase.getFirstChildElement("output");
-                    System.out.println("Test case: " + input);
+                    // System.out.println("Test case: " + input);
                     if (output == null) { // test failure   
                         try {
                             Document doc = builder.build(input);
