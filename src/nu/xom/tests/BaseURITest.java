@@ -52,11 +52,12 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class BaseURITest extends XOMTestCase {
 
+    
     public BaseURITest(String name) {
         super(name);
     }
@@ -66,7 +67,8 @@ public class BaseURITest extends XOMTestCase {
     private String base1 = "http://www.base1.com/";
     private String base2 = "http://www.base2.com/";
     private String base3 = "base3.html";
-
+    private Builder builder = new Builder();
+    
     
     protected void setUp() {
         Element root = new Element("root");
@@ -182,21 +184,25 @@ public class BaseURITest extends XOMTestCase {
     
     
     public void testXMLBaseWithCommaParameter() {
+        
         String base = "scheme://authority/data/name,1.1/test.db";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", base));
         assertEquals(base, root.getBaseURI());
+        
     }
     
     
     // This one appears to be mostly theoretical
     public void testXMLBaseWithDollarSign() {
+        
         String base = "scheme://authority/data$important";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", base));
         assertEquals(base, root.getBaseURI());
+        
     }
     
     
@@ -717,7 +723,6 @@ public class BaseURITest extends XOMTestCase {
       throws ParsingException, IOException {
       
         File input = new File("data/xmlbasetest.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Element root = doc.getRootElement();
         String base = root.getBaseURI();
@@ -729,6 +734,132 @@ public class BaseURITest extends XOMTestCase {
         assertTrue(base.startsWith("file:/"));
                 
     } 
+    
+    
+    public void testBuildElementFromSeveralEntities() 
+      throws ParsingException, IOException {
+      
+        File input = new File("data/BaseURIWithEntitiesTest.xml");
+        Document doc = builder.build(input);
+        Element root = doc.getRootElement();
+        String rootBase = root.getBaseURI();
+        String childBase = root.getChild(0).getBaseURI();
+        assertFalse(rootBase.equals(childBase));
+        assertTrue(childBase.indexOf("entities") > 0);
+                
+    } 
+    
+    
+    public void testReplacedRootRetainsBaseURI() {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com");
+        doc.setRootElement(new Element("data"));
+        assertEquals("http://www.example.com", root.getBaseURI());
+        
+    }
+    
+    
+    public void testDetachedElementRetainsBaseURI() {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com");
+        Element child = new Element("child");
+        root.appendChild(child);
+        child.detach();
+        assertEquals("http://www.example.com", child.getBaseURI());
+        
+    }
+    
+    
+    public void testElementRemovedByIndexRetainsBaseURI() {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com");
+        Element child = new Element("child");
+        root.appendChild(child);
+        root.removeChild(0);
+        assertEquals("http://www.example.com", child.getBaseURI());
+        
+    }
+    
+    
+    public void testElementRemovedByReferenceRetainsBaseURI() {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com");
+        Element child = new Element("child");
+        root.appendChild(child);
+        root.removeChild(child);
+        assertEquals("http://www.example.com", child.getBaseURI());
+        
+    }
+    
+    
+    public void testRemovedChildrenRetainBaseURI() {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com");
+        Element child = new Element("child");
+        root.appendChild(child);
+        root.removeChildren();
+        assertEquals("http://www.example.com", child.getBaseURI());
+        
+    }
+    
+    
+    public void testXMLBaseAttributesAreOnlyUsedIfTheyreInTheSameEntity() {
+     
+        Element top = new Element("top");
+        top.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", 
+          "http://www.example.com/"));
+        top.setBaseURI("http://www.w3.org");
+        Element bottom = new Element("bottom");
+        bottom.setBaseURI("http://www.example.net");
+        top.appendChild(bottom);
+        assertEquals("http://www.example.net", bottom.getBaseURI());
+        
+        top.setBaseURI(null);
+        assertEquals("http://www.example.net", bottom.getBaseURI());               
+        
+    }
+    
+    
+    public void testRelativeBaseURIsAreNotResolvedAgainstXMLBaseAttributesFromADifferentEntity() {
+     
+        Element top = new Element("top");
+        top.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", 
+          "http://www.example.com/"));
+        top.setBaseURI("http://www.w3.org");
+        Element bottom = new Element("bottom");
+        top.appendChild(bottom);
+
+        bottom.setBaseURI("index.xml");
+        assertEquals("index.xml", bottom.getBaseURI());                
+        
+    }
+    
+    
+    public void testXMLBaseAttributesInTheSameEntityOverrideActualBaseURI() {
+     
+        Element top = new Element("top");
+        top.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", 
+          "http://www.example.com/"));
+        top.setBaseURI("http://www.w3.org");
+        Element bottom = new Element("bottom");
+        bottom.setBaseURI("http://www.w3.org");
+        top.appendChild(bottom);
+        assertEquals("http://www.example.com/", bottom.getBaseURI());        
+        
+    }
     
     
 }
