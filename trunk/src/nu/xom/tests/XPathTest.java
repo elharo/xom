@@ -33,6 +33,7 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Namespace;
 import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
@@ -154,6 +155,19 @@ public class XPathTest extends XOMTestCase {
         Nodes result = doc.query("/root/*/namespace::*/parent::*");
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));
+        
+    }
+    
+
+    public void testNamespaceNodeChild() {
+        
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        Element child = new Element("pre:child", "http://www.ietf.org");
+        root.appendChild(child);
+        
+        Nodes result = doc.query("/root/*/namespace::*/child::*");
+        assertEquals(0, result.size());
         
     }
     
@@ -1115,25 +1129,16 @@ public class XPathTest extends XOMTestCase {
         
         Element parent = new Element("Test", "http://www.example.org");
         
-        try {
-            parent.query("namespace::*");
-            fail("returned namespace nodes");
-        }
-        catch (XPathException success) {
-            assertNotNull(success.getMessage());
-        } 
-        
-        // even an element in no namespace has a mapping for the 
-        // xml prefix
-        Element nonamespace = new Element("Test");
-        
-        try {
-             nonamespace.query("namespace::*");
-             fail("returned namespace nodes");
-         }
-         catch (XPathException success) {
-             assertNotNull(success.getMessage());
-         }
+        Nodes result = parent.query("namespace::*");
+        assertEquals(2, result.size());
+        Namespace n1 = (Namespace) result.get(0);
+        Namespace n2 = (Namespace) result.get(1);
+        assertTrue(n1.getPrefix().equals("") || n2.getPrefix().equals(""));
+        assertTrue(n1.getPrefix().equals("xml") || n2.getPrefix().equals("xml"));
+        assertTrue(n1.getValue().equals("http://www.example.org") 
+          || n2.getValue().equals("http://www.example.org"));
+        assertTrue(n1.getValue().equals(Namespace.XML_NAMESPACE) 
+          || n2.getValue().equals(Namespace.XML_NAMESPACE));
         
     }
     
