@@ -707,17 +707,16 @@ public class XIncluder {
             // fill in lang attributes here
             for (int i = 0; i < included.size(); i++) {
                 Node node = included.get(i);
-                if (node instanceof Element) {
-                    Element top = (Element) node;
-                    Attribute lang = top.getAttribute("lang", 
-                      "http://www.w3.org/XML/1998/namespace");
-                    if (lang == null) {
-                        String childLanguage = getXMLLangValue(top);
-                        if (!parentLanguage.equals(childLanguage)) {
-                            top.addAttribute(new Attribute("xml:lang", 
-                              "http://www.w3.org/XML/1998/namespace", 
-                              childLanguage));
-                        }
+                // Current implementation can only select elements
+                Element top = (Element) node;
+                Attribute lang = top.getAttribute("lang", 
+                  "http://www.w3.org/XML/1998/namespace");
+                if (lang == null) {
+                    String childLanguage = getXMLLangValue(top);
+                    if (!parentLanguage.equals(childLanguage)) {
+                        top.addAttribute(new Attribute("xml:lang", 
+                          "http://www.w3.org/XML/1998/namespace", 
+                          childLanguage));
                     }
                 }
             }
