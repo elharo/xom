@@ -462,7 +462,6 @@ public class Attribute extends Node {
     }
     
     
-    
     /**
      * <p>
      *  Throws <code>IndexOutOfBoundsException</code>
@@ -518,8 +517,14 @@ public class Attribute extends Node {
      * @return a string containing the XML form of this attribute
      */
     public final String toXML() {
-        return getQualifiedName() + "=\"" 
-         + escapeText(value) + "\"";    
+        // It's a common belief that methods like this one should be
+        // implemented using StringBuffers rather than String 
+        // concatenation for maximum performance. However, 
+        // disassembling the code shows that today's compilers are 
+        // smart enough to figure this out for themselves. The compiled
+        // version of this class only uses a single StringBuffer. No 
+        // benefit would be gained by making the code more opaque here. 
+        return getQualifiedName() + "=\"" + escapeText(value) + "\"";    
     }
 
     
