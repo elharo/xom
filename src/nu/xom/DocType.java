@@ -44,18 +44,17 @@ package nu.xom;
  * </p>
  * 
  * <p>
- * Each <code>DocType</code> object has four properties, 
- * some of which may be null:
+ * Each <code>DocType</code> object has four <Code>String</code> 
+ * properties, some of which may be null:
  * </p>
  * 
  * <ul>
  *   <li>The declared name of the root element (which 
  * does not necessarily match the actual root element name
- *  in an invalid document.)</li>
+ *  in an invalid document)</li>
  *   <li>The public identifier (which may be null)</li>
  *   <li>The system identifier (which may be null)</li>
- *   <li>The internal DTD subset as a <code>String</code>
- *       (which may be null).</li>
+ *   <li>The internal DTD subset (which may be null)</li>
  * 
  * </ul>
  * 
@@ -69,7 +68,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0a4
  * 
  */
 public class DocType extends Node {
@@ -214,7 +213,7 @@ public class DocType extends Node {
 
     /**
      * <p>
-     * Returns the complete internal DTD subset in a single string.
+     * Returns the complete internal DTD subset.
      * White space may not be preserved completely accurately,
      * but all declarations should be in place. 
      * </p>
@@ -338,6 +337,7 @@ public class DocType extends Node {
 
     
     private void _setSystemID(String id) {
+        
         if (id == null && publicID != null) {
             throw new WellformednessException(
              "Cannot remove system ID without removing public ID first"
@@ -345,12 +345,6 @@ public class DocType extends Node {
         }
 
         if (id != null) {
-            if (id.indexOf('"') != -1 && id.indexOf('\'') != -1) {
-                IllegalDataException ex = new IllegalDataException(
-                 "System literal contains both single and double quotes");
-                ex.setData(id);
-                throw ex;
-            }
             
             Verifier.checkURIReference(id);
             
@@ -364,6 +358,7 @@ public class DocType extends Node {
         }
         
         this.systemID = id;
+        
     }
 
 
