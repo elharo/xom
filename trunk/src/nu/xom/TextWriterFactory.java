@@ -28,7 +28,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  *
  */
 class TextWriterFactory {
@@ -93,12 +93,6 @@ class TextWriterFactory {
         else if (encodingUpperCase.equals("ISO-8859-15")) {
             return new Latin9Writer(out, encodingUpperCase); 
         }   
-        else if (encodingUpperCase.equals("BIG5")) {
-            return new Big5Writer(out, encodingUpperCase); 
-        }
-        else if (encodingUpperCase.equals("EUC-JP")) {
-            return new EUCJPWriter(out, encodingUpperCase); 
-        }
         else if (encodingUpperCase.endsWith("ASCII")) {
             return new ASCIIWriter(out, encodingUpperCase); 
         }
