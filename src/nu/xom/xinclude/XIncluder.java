@@ -27,6 +27,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -62,6 +63,10 @@ import nu.xom.Text;
  *
  */
 public class XIncluder {
+    
+    // rewrite this to handle only elements in documents (no parentless
+    // elements) and then add code to handle Nodes and parentless elements
+    // by sticking each one in a Document????
 
     // prevent instantiation
     private XIncluder() {}
@@ -274,9 +279,7 @@ public class XIncluder {
         }
         catch (StackOverflowError ex) {
             // I need to detect this sooner and more directly,
-            // possibly by tagging each XInclude element with a checksum
-            // based on its XML form and its base URI, 
-            // and storing this in some sort of stack????
+            // by storing a stack of IRIs????
             throw new CircularIncludeException(
               "Circular include starting with document " 
               + in.getBaseURI()
@@ -284,6 +287,209 @@ public class XIncluder {
         }
     }
 
+    
+    private static void resolveInPlace(
+      Document in, Builder builder, Stack baseURLs) 
+      throws IOException, ParsingException, XIncludeException {
+        
+        String base = in.getBaseURI();
+        if (baseURLs.indexOf(base) != -1) {
+            throw new CircularIncludeException(
+              "Tried to include the already included document" + base +
+              " from " + in.getBaseURI(), in.getBaseURI());
+        } 
+        baseURLs.push(base);       
+        resolve(in.getRootElement(), builder, baseURLs);
+        baseURLs.pop();
+    }
+
+    
+    private static void resolve(
+      Element element, Builder builder, Stack baseURLs)
+      throws IOException, ParsingException, XIncludeException {
+        
+        if (isIncludeElement(element)) {
+            String parse = element.getAttributeValue("parse");
+            if (parse == null) parse = "xml";
+            String xpointer = element.getAttributeValue("xpointer");
+            String encoding = element.getAttributeValue("encoding");
+            String href = element.getAttributeValue("href");
+            if (href == null && xpointer == null) {
+                throw new MissingHrefException(
+                  "Missing href attribute", 
+                  element.getDocument().getBaseURI()
+                );   
+            }
+            if (href != null) href = convertToURI(href);
+            
+            testForMultipleFallbacks(element);
+
+            ParentNode parent = element.getParent();
+            String base = element.getBaseURI();
+            URL baseURL = null;
+            if (base != null) {
+                try {
+                    baseURL = new URL(base);     
+                }
+                catch (MalformedURLException ex) {
+                   // don't use base   
+                }
+            }
+            URL url = null;
+            try {
+                // xml:base attributes added to maintain the 
+                // base URI should not have fragment IDs
+
+                if (baseURL != null && href != null) url = new URL(baseURL, href);
+                else if (href != null) url = new URL(href);                
+                if (parse.equals("xml")) {
+                    Nodes replacements;
+                    if (url != null) { 
+                        replacements  = downloadXMLDocument(url, xpointer, builder, baseURLs);
+                        // Add base URIs. Base URIs added by XInclusion require
+                        // the element to maintain the same base URI as it had  
+                        // in the original document. Since its base URI in the 
+                        // original document does not contain a fragment ID,
+                        // therefore its base URI after inclusion shouldn't, 
+                        // and this special case is unnecessary. Base URI fixup
+                        // should not add the fragment ID. 
+                        for (int i = 0; i < replacements.size(); i++) {
+                            Node child = replacements.get(i);
+                            if (child instanceof Element) {
+                                String noFragment = url.toExternalForm();
+                                if (noFragment.indexOf('#') >= 0) {
+                                    noFragment = noFragment.substring(
+                                      0, noFragment.indexOf('#'));
+                                }
+                                Element baseless = (Element) child;
+                                Attribute baseAttribute = new Attribute(
+                                  "xml:base", 
+                                  "http://www.w3.org/XML/1998/namespace", 
+                                  noFragment 
+                                );
+                                baseless.addAttribute(baseAttribute);   
+                            }
+                        }  
+                    }
+                    else {
+                        Nodes originals = XPointer.resolve(element.getDocument(), xpointer);
+                        replacements = new Nodes(); 
+                        for (int i = 0; i < originals.size(); i++) {
+                            Node original = originals.get(i);
+                            if (original instanceof Element) {
+                                if (contains((Element) original, element)) {
+                                    throw new CircularIncludeException("Element tried to include itself"); 
+                                }  
+                            }
+                            replacements.append(original.copy());        
+                        }  
+                        replacements = resolve(replacements, builder);  
+                                                 
+                    }
+                      
+                    // Will fail if we're replacing the root element with 
+                    // a node list containing zero or multiple elements,
+                    // but that should fail. However, I may wish to 
+                    // adjust the type of exception thrown. This is only
+                    // relevant if I add support for the xpointer scheme
+                    // since otherwise you can only point at one element
+                    // or document.
+                    if (parent instanceof Element) {
+                        int position = parent.indexOf(element);
+                        for (int i = 0; i < replacements.size(); i++) {
+                            Node child = replacements.get(i);
+                            parent.insertChild(child, position+i); 
+                        }
+                        element.detach();
+                    }
+                    else {  // root element needs special treatment
+                        // I am assuming here that it is not possible 
+                        // for parent to be null. I think this is true 
+                        // in the current version, but it could change 
+                        // if I made it possible to directly resolve an
+                        // element or a Nodes.
+                        Document doc = (Document) parent;
+                        int i = 0;
+                        // prolog and root
+                        while (true) {
+                            Node child = replacements.get(i);
+                            i++;
+                            if (child instanceof Element) {
+                                doc.setRootElement((Element) child);
+                                break;   
+                            }
+                            else {
+                                doc.insertChild(
+                                  child, doc.indexOf(element)
+                                ); 
+                            }
+
+                        }
+                        // epilog
+                        Element root = doc.getRootElement();
+                        int position = doc.indexOf(root);
+                        for (int j=i; j < replacements.size(); j++) {
+                            doc.insertChild(
+                              replacements.get(j), position+1+j-i
+                            );                             
+                        }
+                    }
+                }
+                else if (parse.equals("text")) {                   
+                    Nodes replacement 
+                      = downloadTextDocument(url, encoding, builder);
+                    if (replacement.size() == 0) {  // need to test branch????
+                        parent.removeChild(element);
+                    }
+                    else {
+                        parent.replaceChild(element, replacement.get(0));
+                    }
+                    if (replacement.size() > 1) { // need to test branch????
+                        int position = parent.indexOf(replacement.get(0));
+                        for (int j = 1; j < replacement.size(); j++) {
+                            parent.insertChild(replacement.get(j), position+j);
+                        }
+                    }
+                }
+                else {
+                   throw new BadParseAttributeException(
+                     "Bad value for parse attribute: " + parse, 
+                     element.getDocument().getBaseURI());   
+                }
+            
+            }
+            catch (IOException ex) {
+                processFallback(element, builder, baseURLs, parent, ex);
+            }
+            catch (XPointerSyntaxException ex) {
+                processFallback(element, builder, baseURLs, parent, ex);
+            }
+            catch (XPointerResourceException ex) {
+                // Process fallbacks;  I'm not sure this is correct 
+                // behavior. Possibly this should include nothing. See
+                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0000.html
+                // Daniel Veillard thinks this is correct. See
+                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0001.html
+                processFallback(element, builder, baseURLs, parent, ex);
+            }
+            
+        }
+        else if (isFallbackElement(element)) {
+            throw new MisplacedFallbackException(
+              "Fallback element outside include element", 
+              element.getDocument().getBaseURI()
+            );
+        }
+        else {
+            Elements children = element.getChildElements();
+            for (int i = 0; i < children.size(); i++) {
+                resolve(children.get(i), builder, baseURLs);   
+            } 
+        }
+        
+    }
+    
+    
     /**
      * <p>
      * Modifies a <code>Nodes</code> object by replacing all 
@@ -424,21 +630,6 @@ public class XIncluder {
         return false;   
     }
 
-    private static void resolveInPlace(
-      Document in, Builder builder, Stack baseURLs) 
-      throws IOException, ParsingException, XIncludeException {
-        
-        String base = in.getBaseURI();
-        if (baseURLs.indexOf(base) != -1) {
-            throw new CircularIncludeException(
-              "Tried to include the already included document" + base +
-              " from " + in.getBaseURI(), in.getBaseURI());
-        } 
-        baseURLs.push(base);       
-        resolve(in.getRootElement(), builder, baseURLs);
-        baseURLs.pop();
-    }
-
     private static Nodes resolveSilently(Element element, Builder builder, Stack baseURLs)
       throws IOException, ParsingException, XIncludeException {
         
@@ -522,9 +713,7 @@ public class XIncluder {
                     return replacements; 
                 }  // end parse="xml"
                 else if (parse.equals("text")) {                   
-                    Text replacement 
-                      = downloadTextDocument(url, encoding, builder);
-                    return new Nodes(replacement);
+                    return downloadTextDocument(url, encoding, builder);
                 }
                 else {
                    throw new BadParseAttributeException(
@@ -565,182 +754,7 @@ public class XIncluder {
         
     }
 
-    // Should this method simply return a Nodes and not do any
-    // of the detaching and adding and so forth???? leaving that
-    // till higher in the call chain? In other words, replace this
-    // with resolveSilently?
-    private static void resolve(
-      Element element, Builder builder, Stack baseURLs)
-      throws IOException, ParsingException, XIncludeException {
-        
-        if (isIncludeElement(element)) {
-            String parse = element.getAttributeValue("parse");
-            if (parse == null) parse = "xml";
-            String xpointer = element.getAttributeValue("xpointer");
-            String encoding = element.getAttributeValue("encoding");
-            String href = element.getAttributeValue("href");
-            if (href == null && xpointer == null) {
-                throw new MissingHrefException(
-                  "Missing href attribute", 
-                  element.getDocument().getBaseURI()
-                );   
-            }
-            if (href != null) href = convertToURI(href);
-            
-            testForMultipleFallbacks(element);
-
-            ParentNode parent = element.getParent();
-            String base = element.getBaseURI();
-            URL baseURL = null;
-            if (base != null) {
-                try {
-                    baseURL = new URL(base);     
-                }
-                catch (MalformedURLException ex) {
-                   // don't use base   
-                }
-            }
-            URL url = null;
-            try {
-                // xml:base attributes added to maintain the 
-                // base URI should not have fragment IDs
-
-                if (baseURL != null && href != null) url = new URL(baseURL, href);
-                else if (href != null) url = new URL(href);                
-                if (parse.equals("xml")) {
-                    Nodes replacements;
-                    if (url != null) { 
-                        replacements  = downloadXMLDocument(url, xpointer, builder, baseURLs);
-                        // Add base URIs. Base URIs added by XInclusion require
-                        // the element to maintain the same base URI as it had  
-                        // in the original document. Since its base URI in the 
-                        // original document does not contain a fragment ID,
-                        // therefore its base URI after inclusion shouldn't, 
-                        // and this special case is unnecessary. Base URI fixup
-                        // should not add the fragment ID. 
-                        for (int i = 0; i < replacements.size(); i++) {
-                            Node child = replacements.get(i);
-                            if (child instanceof Element) {
-                                String noFragment = url.toExternalForm();
-                                if (noFragment.indexOf('#') >= 0) {
-                                    noFragment = noFragment.substring(
-                                      0, noFragment.indexOf('#'));
-                                }
-                                Element baseless = (Element) child;
-                                Attribute baseAttribute = new Attribute(
-                                  "xml:base", 
-                                  "http://www.w3.org/XML/1998/namespace", 
-                                  noFragment 
-                                );
-                                baseless.addAttribute(baseAttribute);   
-                            }
-                        }  
-                    }
-                    else {
-                        Nodes originals = XPointer.resolve(element.getDocument(), xpointer);
-                        replacements = new Nodes(); 
-                        for (int i = 0; i < originals.size(); i++) {
-                            Node original = originals.get(i);
-                            if (original instanceof Element) {
-                                if (contains((Element) original, element)) {
-                                    throw new CircularIncludeException("Element tried to include itself"); 
-                                }  
-                            }
-                            replacements.append(original.copy());        
-                        }  
-                        replacements = resolve(replacements, builder);  
-                                                 
-                    }
-                      
-                    // Will fail if we're replacing the root element with 
-                    // a node list containing zero or multiple elements,
-                    // but that should fail. However, I may wish to 
-                    // adjust the type of exception thrown. This is only
-                    // relevant if I add support for the xpointer scheme
-                    // since otherwise you can only point at one element
-                    // or document.
-                    if (parent instanceof Element) {
-                        int position = parent.indexOf(element);
-                        for (int i = 0; i < replacements.size(); i++) {
-                            Node child = replacements.get(i);
-                            parent.insertChild(child, position+i); 
-                        }
-                        element.detach();
-                    }
-                    else if (parent == null) {
-                        // what to do????   
-                    }
-                    else {  // root element needs special treatment
-                        Document doc = (Document) parent;
-                        int i = 0;
-                        // prolog and root
-                        while (true) {
-                            Node child = replacements.get(i);
-                            i++;
-                            if (child instanceof Element) {
-                                doc.setRootElement((Element) child);
-                                break;   
-                            }
-                            else {
-                                doc.insertChild(
-                                  child, doc.indexOf(element)
-                                ); 
-                            }
-
-                        }
-                        // epilog
-                        Element root = doc.getRootElement();
-                        int position = doc.indexOf(root);
-                        for (int j=i; j < replacements.size(); j++) {
-                            doc.insertChild(
-                              replacements.get(j), position+1+j-i
-                            );                             
-                        }
-                    }
-                }
-                else if (parse.equals("text")) {                   
-                    Text replacement 
-                      = downloadTextDocument(url, encoding, builder);
-                    parent.replaceChild(element, replacement);
-                }
-                else {
-                   throw new BadParseAttributeException(
-                     "Bad value for parse attribute: " + parse, 
-                     element.getDocument().getBaseURI());   
-                }
-            
-            }
-            catch (IOException ex) {
-                processFallback(element, builder, baseURLs, parent, ex);
-            }
-            catch (XPointerSyntaxException ex) {
-                processFallback(element, builder, baseURLs, parent, ex);
-            }
-            catch (XPointerResourceException ex) {
-                // Process fallbacks;  I'm not sure this is correct 
-                // behavior. Possibly this should include nothing. See
-                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0000.html
-                // Daniel Veillard thinks this is correct. See
-                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0001.html
-                processFallback(element, builder, baseURLs, parent, ex);
-            }
-            
-        }
-        else if (isFallbackElement(element)) {
-            throw new MisplacedFallbackException(
-              "Fallback element outside include element", 
-              element.getDocument().getBaseURI()
-            );
-        }
-        else {
-            Elements children = element.getChildElements();
-            for (int i = 0; i < children.size(); i++) {
-                resolve(children.get(i), builder, baseURLs);   
-            } 
-        }
-        
-    }
-
+    
     /*
      * <p>
      *   This is a controversial test. NIST test case 12 
@@ -802,6 +816,7 @@ public class XIncluder {
            includeElement.detach();
     }
 
+    
     private static Nodes processFallback(
       Element includeElement, Builder builder, Stack baseURLs, Exception ex)
         throws XIncludeException, IOException, ParsingException {
@@ -890,12 +905,10 @@ public class XIncluder {
     * 
     * @throws IOException if the remote document cannot
     *     be read due to an I/O error
-    * @throws XIncludeException if the NodeFactory 
-    *     misbehaves
     */    
-    private static Text downloadTextDocument(
+    private static Nodes downloadTextDocument(
       URL source, String encoding, Builder builder) 
-      throws IOException, XIncludeException {
+      throws IOException {
          
         if (encoding == null || encoding.length() == 0) {
             encoding = "UTF-8"; 
@@ -936,7 +949,8 @@ public class XIncluder {
                     in.reset();  
                 }
             }
-            InputStreamReader reader = new InputStreamReader(in, encoding);
+            // should buffer this????
+            Reader reader = new InputStreamReader(in, encoding);
             int c;
             StringBuffer sb = new StringBuffer(contentLength);
             while ((c = reader.read()) != -1) {
@@ -945,20 +959,9 @@ public class XIncluder {
             
             NodeFactory factory = builder.getNodeFactory();
             if (factory != null) {
-                Nodes results = factory.makeText(sb.toString());
-                sb = new StringBuffer(sb.length());
-                for (int i = 0; i < results.size(); i++) {
-                    try {
-                        sb.append((results.get(i))); 
-                    }
-                    catch (ClassCastException ex) {
-                        throw new XIncludeException(
-                          "Factory made a non-text node when parse=\"text\"");   
-                    }
-                }
-                
+                return factory.makeText(sb.toString());
             }
-            return new Text(sb.toString());
+            else return new Nodes(new Text(sb.toString()));
         }
         finally {
             in.close();   
