@@ -602,13 +602,11 @@ public class XIncluder {
 
             String base = element.getBaseURI();
             URL baseURL = null;
-            if (base != null) {
-                try {
-                    baseURL = new URL(base);     
-                }
-                catch (MalformedURLException ex) {
-                   // don't use base   
-                }
+            try {
+                baseURL = new URL(base);     
+            }
+            catch (Exception ex) {
+               // don't use base   
             }
             URL url = null;
             try {
