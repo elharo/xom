@@ -105,6 +105,29 @@ public abstract class Node {
     /**
      * 
      * <p>
+     * Returns the root of the subtree in which this node is found,
+     * whether that's a document or an element.
+     * </p>
+     * 
+     * @return the document this node is a part of
+     */
+    final Node getRoot() {
+        
+        Node parent = this.getParent();
+        if (parent == null) {
+            return this;
+        }
+        while (parent.getParent() != null) {
+            parent = parent.getParent();
+        }
+        return parent;
+        
+    }
+    
+    
+    /**
+     * 
+     * <p>
      * Returns the base URI of this node as specified by 
      * <a href="http://www.w3.org/TR/xmlbase/" target="_top">XML 
      * Base</a>, or the empty string if this is not known. In most  
@@ -334,6 +357,13 @@ public abstract class Node {
      * </p>
      * 
      * <p>
+     * You can use XPath expressions that use the namespace axis.
+     * However, namespace nodes are never returned. If an XPath 
+     * expression only selects namespace nodes, then this method will
+     * return an empty list.
+     * </p>
+     * 
+     * <p>
      * No variables are bound. 
      * </p>
      * 
@@ -348,11 +378,20 @@ public abstract class Node {
      * @return a list of all matched nodes; possibly empty
      * 
      * @throws XPathException if there's a syntax error in the 
-     *     expression; or the query returns something other than
-     *     a node-set
+     *     expression, the query returns something other than
+     *     a node-set, or the query returns a node-set containing a
+     *     namespace node
      * 
      */
     public Nodes query(String xpath, XPathContext namespaces) {
+        
+        DocumentFragment frag = null;
+        
+        Node root = getRoot();
+        if (! root.isDocument()) {
+            frag = new DocumentFragment();
+            frag.appendChild(root);
+        }
         
         try {
             XPath xp = new JaxenConnector(xpath);
@@ -363,20 +402,27 @@ public abstract class Node {
             Iterator iterator = results.iterator();
             while (iterator.hasNext()) {
                 Object o = iterator.next();
-                if (!(o instanceof Node)) {
+                if (o instanceof JaxenNavigator.NamespaceNode || o instanceof DocumentFragment) {
+                    iterator.remove();
+                }
+                else if (!(o instanceof Node)) {
                     throw new XPathException("XPath expression " 
                       + xpath + " did not return a node-set.");
                 }
             }
+            
             return new Nodes(results);
         }
         catch (JaxenException ex) {
             throw new XPathException("XPath error: " + ex.getMessage(), ex);
         }
+        finally {
+            if (frag != null) frag.removeChild(0);
+        }
         
     }
 
-    
+
     /**
      * <p>
      * Returns the nodes selected by the XPath expression in the 

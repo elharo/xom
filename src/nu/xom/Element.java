@@ -1241,7 +1241,9 @@ public class Element extends ParentNode {
                 }
             }
             ParentNode parent = current.getParent();
-            if (parent == null || parent.isDocument()) break;
+            if (parent == null || parent.isDocument() || parent instanceof DocumentFragment) {
+                break;
+            }
             current = (Element) parent;
         }
 

@@ -46,8 +46,6 @@ import nu.xom.XPathException;
  */
 public class XPathTest extends XOMTestCase {
     
-    // ???? add test for query that uses root such as /* and / but does not have a Document
-    
     public XPathTest(String name) {
         super(name);
     }
@@ -77,6 +75,20 @@ public class XPathTest extends XOMTestCase {
         Nodes result = parent.query("*");
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
+        
+    }
+    
+
+    public void testUseRootNodeWhenQueryingDocumentLessElements() {
+        
+        Element test = new Element("Test");
+        
+        Nodes result = test.query("/*");
+        assertEquals(1, result.size());
+        assertEquals(test, result.get(0));   
+        
+        result = test.query("/");
+        assertEquals(0, result.size());  
         
     }
     
@@ -772,13 +784,18 @@ public class XPathTest extends XOMTestCase {
         
         Element parent = new Element("Test", "http://www.example.org");
         
-        try {
-            Nodes nodes = parent.query("namespace::*");
-            fail("Allowed return of namespace nodes");
-        }
-        catch (XPathException success) {
-            assertNotNull(success.getMessage());
-        }   
+        Nodes results = parent.query("namespace::*");
+        assertEquals(0, results.size());  
+        
+    }
+    
+    
+    public void testNamespaceAxisFromNonElement() {
+        
+        Text text = new Text("test");
+        
+        Nodes result = text.query("namespace::*");
+        assertEquals(0, result.size()); 
         
     }
     
