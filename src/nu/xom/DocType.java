@@ -495,7 +495,7 @@ public class DocType extends LeafNode {
         if (internalDTDSubset.length() != 0) {
             result.append(" [\r\n");    
             result.append(internalDTDSubset);   
-            result.append("]"); 
+            result.append("\r\n]"); 
         }
         
         result.append(">");
