@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -112,7 +113,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  */
 public final class XSLTransform {
 
@@ -240,7 +241,7 @@ public final class XSLTransform {
      * @param systemID URL from which the stylesheet is read
      * 
      * @throws XSLException when an IOException, format error, or
-     *      something else prevents the stylesheet from being compiled
+     *     something else prevents the stylesheet from being compiled
      */ 
     public XSLTransform(String systemID) throws XSLException {
         this(new StreamSource(systemID));
@@ -310,6 +311,8 @@ public final class XSLTransform {
         try {
             XOMResult out = new XOMResult(factory);
             Transformer transformer = templates.newTransformer();
+            // work around Xalan bug
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
             transformer.transform(in, out);
             return out.getResult();
         }
@@ -327,9 +330,8 @@ public final class XSLTransform {
                     }
                 }
             }
-            
             throw new XSLException(ex.getMessage(), cause);
-        }
+        }  
         
     }
     
