@@ -36,80 +36,82 @@ class TextWriterFactory {
     public static TextWriter getTextWriter(
       Writer out, String encoding) {
     
-        encoding = encoding.toUpperCase();
-        if (encoding.startsWith("UTF") 
-          || encoding.startsWith("UNICODE")
+        // Not all encoding names are case-insensitive in Java, even
+        // though they should be. For instance, MacRoman isn't. 
+        String encodingUpperCase = encoding.toUpperCase();
+        if (encodingUpperCase.startsWith("UTF") 
+          || encodingUpperCase.startsWith("UNICODE")
           ) {  
             return new UnicodeWriter(out, encoding);    
         }    
-        else if (encoding.startsWith("ISO-10646-UCS") 
-          || encoding.startsWith("UCS") 
-          || encoding.equals("GB18030")) {
+        else if (encodingUpperCase.startsWith("ISO-10646-UCS") 
+          || encodingUpperCase.startsWith("UCS") 
+          || encodingUpperCase.equals("GB18030")) {
           // GB18030 has a 1-1 mapping to Unicode. However, the Sun
           // GB18030 VM is buggy with non-BMP characters. The IBM VM
           // gets this right, but for safety we'll escape all non-BMP
           // characters.
             return new UCSWriter(out, encoding);    
         }    
-        else if (encoding.equals("ISO-8859-1")) {
+        else if (encodingUpperCase.equals("ISO-8859-1")) {
             return new Latin1Writer(out, encoding); 
         }           
-        else if (encoding.equals("ISO-8859-2")) {
-            return new Latin2Writer(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-2")) {
+            return new Latin2Writer(out, encodingUpperCase); 
         }           
-        else if (encoding.equals("ISO-8859-3")) {
-            return new Latin3Writer(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-3")) {
+            return new Latin3Writer(out, encodingUpperCase); 
         }           
-        else if (encoding.equals("ISO-8859-4")) {
-            return new Latin4Writer(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-4")) {
+            return new Latin4Writer(out, encodingUpperCase); 
         }           
-        else if (encoding.equals("ISO-8859-5")) {
-            return new ISOCyrillicWriter(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-5")) {
+            return new ISOCyrillicWriter(out, encodingUpperCase); 
         }           
-        else if (encoding.equals("ISO-8859-6")) {
-            return new ISOArabicWriter(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-6")) {
+            return new ISOArabicWriter(out, encodingUpperCase); 
         }           
-        else if (encoding.equals("ISO-8859-7")) {
-            return new ISOGreekWriter(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-7")) {
+            return new ISOGreekWriter(out, encodingUpperCase); 
         }           
-        else if (encoding.equals("ISO-8859-8")) {
-            return new ISOHebrewWriter(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-8")) {
+            return new ISOHebrewWriter(out, encodingUpperCase); 
         }           
-        else if (encoding.equals("ISO-8859-9")) {
-            return new Latin5Writer(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-9")) {
+            return new Latin5Writer(out, encodingUpperCase); 
         }         
-        else if (encoding.equals("ISO-8859-11")
-                || encoding.equals("TIS-620")
-                || encoding.equals("TIS620")) {
-            return new ISOThaiWriter(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-11")
+                || encodingUpperCase.equals("TIS-620")
+                || encodingUpperCase.equals("TIS620")) {
+            return new ISOThaiWriter(out, encodingUpperCase); 
         }           
         // There's no such thing as ISO-8859-12
         // nor is there likely to be one in the future.        
-        else if (encoding.equals("ISO-8859-13")) {
-            return new Latin7Writer(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-13")) {
+            return new Latin7Writer(out, encodingUpperCase); 
         }           
-        else if (encoding.equals("ISO-8859-15")) {
-            return new Latin9Writer(out, encoding); 
+        else if (encodingUpperCase.equals("ISO-8859-15")) {
+            return new Latin9Writer(out, encodingUpperCase); 
         }   
-        else if (encoding.equals("BIG5")) {
-            return new Big5Writer(out, encoding); 
+        else if (encodingUpperCase.equals("BIG5")) {
+            return new Big5Writer(out, encodingUpperCase); 
         }
-        else if (encoding.equals("EUC-JP")) {
-            return new EUCJPWriter(out, encoding); 
+        else if (encodingUpperCase.equals("EUC-JP")) {
+            return new EUCJPWriter(out, encodingUpperCase); 
         }
-        else if (encoding.endsWith("ASCII")) {
-            return new ASCIIWriter(out, encoding); 
+        else if (encodingUpperCase.endsWith("ASCII")) {
+            return new ASCIIWriter(out, encodingUpperCase); 
         }
-        else if (encoding.equals("IBM037")
-              || encoding.equals("CP037")
-              || encoding.equals("EBCDIC-CP-US")
-              || encoding.equals("EBCDIC-CP-CA")
-              || encoding.equals("EBCDIC-CP-WA")
-              || encoding.equals("EBCDIC-CP-NL")
-              || encoding.equals("CSIBM037")) {
+        else if (encodingUpperCase.equals("IBM037")
+              || encodingUpperCase.equals("CP037")
+              || encodingUpperCase.equals("EBCDIC-CP-US")
+              || encodingUpperCase.equals("EBCDIC-CP-CA")
+              || encodingUpperCase.equals("EBCDIC-CP-WA")
+              || encodingUpperCase.equals("EBCDIC-CP-NL")
+              || encodingUpperCase.equals("CSIBM037")) {
             // EBCDIC-37 has same character set as ISO-8859-1;
             // just at different code points.
-            return new Latin1Writer(out, encoding); 
+            return new Latin1Writer(out, encodingUpperCase); 
         }     
         else {
             try {
