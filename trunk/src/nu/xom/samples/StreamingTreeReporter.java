@@ -24,8 +24,6 @@
 package nu.xom.samples;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 
 import nu.xom.Builder;
 import nu.xom.Element;
@@ -47,19 +45,7 @@ import nu.xom.ParsingException;
  */
 public class StreamingTreeReporter extends NodeFactory {
 
-    private Writer out;
     private Nodes empty = new Nodes();
-    
-    public StreamingTreeReporter(Writer out) {
-      if (out == null) {
-      throw new NullPointerException("Writer must be non-null.");
-      }
-      this.out = out;
-    }
-    
-    public StreamingTreeReporter() {
-      this(new OutputStreamWriter(System.out));
-    }
 
     // We don't really need the comments.     
     public Nodes makeComment(String data) {
@@ -74,7 +60,6 @@ public class StreamingTreeReporter extends NodeFactory {
         TreePrinter.inspect(element);
         return new Nodes(element);
     }
-
 
     public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
