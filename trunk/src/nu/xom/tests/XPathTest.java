@@ -46,10 +46,10 @@ import nu.xom.XPathException;
  */
 public class XPathTest extends XOMTestCase {
     
-    // need to test for expressions that don't return node-sets????
-    // FIXME don't use Map for namespaces, use a custom class
-    // for 1.1 compatibility
-
+    // ???? add tests that return namespace nodes
+    // ???? add tests that use namespace axis in predicate but do not return namespace nodes
+    
+    
     public XPathTest(String name) {
         super(name);
     }
@@ -79,6 +79,23 @@ public class XPathTest extends XOMTestCase {
         Nodes result = parent.query("*");
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
+        
+    }
+    
+
+    public void testQueryThatReturnsNumber() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        
+        try {
+            parent.query("count(*)");
+            fail("Allowed query to return number");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
     
@@ -707,6 +724,248 @@ public class XPathTest extends XOMTestCase {
         parent.appendChild(child);
         
         XPathContext context = new XPathContext("pre", "http://www.example.org");
+        Nodes result = parent.query("child::pre:child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testNamespaceQueryWithNullPrefix() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        XPathContext context = new XPathContext("pre", "http://www.example.org");
+        context.addNamespace(null, "http://www.w3.org");
+        Nodes result = parent.query("child::pre:child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testNamespaceQueryWithNullPrefix2() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        
+        XPathContext context = new XPathContext(null, "http://www.example.org");
+        Nodes result = parent.query("child::child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testNamespaceQueryWithEmptyPrefix() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        XPathContext context = new XPathContext("pre", "http://www.example.org");
+        context.addNamespace("", "http://www.w3.org");
+        Nodes result = parent.query("child::pre:child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testNamespaceQueryWithEmptyPrefix2() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        
+        XPathContext context = new XPathContext("", "http://www.example.org");
+        Nodes result = parent.query("child::child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testNamespaceQueryWithNullURI() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        XPathContext context = new XPathContext("pre", null);
+        try {
+            parent.query("child::pre:child", context);
+            fail("Allowed null URI");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getCause());
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testNamespaceQueryWithEmptyURI() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        XPathContext context = new XPathContext("pre", "");
+        try {
+            parent.query("child::pre:child", context);
+            fail("Allowed empty string as namespace URI");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getCause());
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testNamespaceQueryWithReboundPrefix() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        XPathContext context = new XPathContext("pre", "http://www.example.com");
+        Nodes result = parent.query("child::pre:child", context);
+        assertEquals(0, result.size());
+        
+        context.addNamespace("pre", "http://www.example.org");
+        result = parent.query("child::pre:child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testNamespaceQueryWithUnboundPrefix() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        XPathContext context = new XPathContext("not", "http://www.example.com");
+        try {
+            parent.query("child::pre:child", context);
+            fail("Queried with unbound prefix");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+            assertNotNull(success.getCause());
+        }
+        
+        try {
+            parent.query("child::pre:child");
+            fail("Queried with unbound prefix");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+            assertNotNull(success.getCause());
+        }
+        
+    }
+    
+    
+    public void testElementBasedNamespaceContext() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        Element test = new Element("pre:test", "http://www.example.org");
+        XPathContext context = XPathContext.makeNamespaceContext(test);
+        Nodes result = parent.query("child::pre:child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testAttributeBasedNamespaceContext() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        Element test = new Element("test");
+        test.addAttribute(new Attribute("pre:test", "http://www.example.org", "value"));
+        XPathContext context = XPathContext.makeNamespaceContext(test);
+        Nodes result = parent.query("child::pre:child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testAdditionalNamespaceBasedNamespaceContext() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        Element test = new Element("test");
+        test.addNamespaceDeclaration("pre", "http://www.example.org");
+        XPathContext context = XPathContext.makeNamespaceContext(test);
+        Nodes result = parent.query("child::pre:child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testAncestorElementBasedNamespaceContext() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        Element test = new Element("pre:test", "http://www.example.org");
+        Element testChild = new Element("testchild");
+        test.appendChild(testChild);
+        XPathContext context = XPathContext.makeNamespaceContext(testChild);
+        Nodes result = parent.query("child::pre:child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testAncestorAttributeBasedNamespaceContext() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        Element test = new Element("test");
+        test.addAttribute(new Attribute("pre:test", "http://www.example.org", "value"));
+        Element testChild = new Element("testchild");
+        test.appendChild(testChild);
+        XPathContext context = XPathContext.makeNamespaceContext(testChild);
+        Nodes result = parent.query("child::pre:child", context);
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testAncestorAdditionalNamespaceBasedNamespaceContext() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        
+        Element test = new Element("test");
+        test.addNamespaceDeclaration("pre", "http://www.example.org");
+        Element testChild = new Element("testchild");
+        test.appendChild(testChild);
+        XPathContext context = XPathContext.makeNamespaceContext(testChild);
         Nodes result = parent.query("child::pre:child", context);
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
