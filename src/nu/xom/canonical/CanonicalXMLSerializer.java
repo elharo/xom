@@ -25,10 +25,8 @@ package nu.xom.canonical;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 import nu.xom.Attribute;
 import nu.xom.Comment;
@@ -36,7 +34,6 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
-import nu.xom.NodeList;
 import nu.xom.ParentNode;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
@@ -61,12 +58,12 @@ import nu.xom.Text;
  * input is required (by the Data Model) to use Normalization Form C 
  * [NFC, NFC-Corrigendum] when converting an XML document to the UCS  
  * character domain from any encoding that is not UCS-based".
- * Is Xerces 2.1 using NFC????
+ * Is Xerces using NFC????
  * </p>
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d21
  *
  */
 public class CanonicalXMLSerializer extends Serializer {
@@ -80,7 +77,7 @@ public class CanonicalXMLSerializer extends Serializer {
      * </p>
      * 
      * @param out the <code>OutputStream</code> the document
-     *     is written onto.
+     *     is written onto
      */
     public CanonicalXMLSerializer(OutputStream out) {
         this(out, true);
@@ -141,134 +138,6 @@ public class CanonicalXMLSerializer extends Serializer {
         flush();
     }   
  
-    /**
-     * <p>
-     * Serializes a document subset (in XOM terms, a 
-     * <code>NodeList</code>) onto the output stream 
-     * using the canonical XML algorithm. Element nodes
-     * in this list may pick up additional namespace
-     * declarations and attributes in the 
-     * <code>http://www.w3.org/XML/1998/namespace</code>
-     * namespace (<code>xml:lang</code>, <code>xml:base</code>,
-     * <code>xml:space</code>) from their ancestor elements.  
-     * </p>
-     * 
-     * @param nodes the <code>NodeList</code> to serialize
-     * 
-     * @throws IOException if the underlying <code>OutputStream</code>
-     *      encounters an I/O error
-     */
-    // mark this non-private once questions are resolved????
-    private final void write(NodeList nodes) throws IOException {
-        
-        // Can you write a document in the subset????
-        // Can a subset include nodes from multiple documents????
-        for (int i = 0; i < nodes.size(); i++) {
-            Node child = nodes.get(i);
-            if (child instanceof Element) {
-                // This is not streaming. A streaming solution
-                // might be faster????
-                Element copy = resolveInherits((Element) child);
-                write(copy);
-            }
-            else write(child);
-        }
-        
-        flush();
-    }   
-    
-    private static String XML_NS = 
-      "http://www.w3.org/XML/1998/namespace";
-    
-    private Element resolveInherits(Element element) {
-        ParentNode parent = element.getParent();
-        if (parent == null || parent instanceof Document) return element;
-        
-        Element copy = (Element) element.copy();
-        addInheritedNamespaces(element, copy);
-        addXMLAttributes(element, copy);
-        
-        return copy;
-        
-    }
-
-
-    private static void addInheritedNamespaces(Element original, Element copy) {
-        
-        List prefixes = new ArrayList();
-        for (int i = 0; i < copy.getNamespaceDeclarationCount(); i++) {
-            String prefix = copy.getNamespacePrefix(i);
-            prefixes.add(prefix);
-        }
-        checkAncestors(prefixes, original, copy);
-        
-    }
-
-    private static void checkAncestors(List seen, Element original, Element copy) {
-        ParentNode parent = original.getParent();
-        if (parent == null || parent instanceof Document) return;
-        Element parentElement = (Element) parent;
-        for (int i = 0; i < parentElement.getNamespaceDeclarationCount(); i++) {
-            String prefix = parentElement.getNamespacePrefix(i);
-            if (!(seen.contains(prefix))) {
-                seen.add(prefix);
-                copy.addNamespaceDeclaration(prefix, parentElement.getNamespaceURI(prefix));
-            }   
-        }
-        checkParents(seen, parentElement, copy);
-        
-    }    
-
-    
-    private static void addXMLAttributes(Element original, Element copy) {
-        
-        List names = new ArrayList();
-        for (int i = 0; i < copy.getAttributeCount(); i++) {
-            Attribute a = copy.getAttribute(i);
-            if (XML_NS.equals(a.getNamespaceURI())) {
-                names.add(a.getLocalName());
-            }   
-        }
-        checkParents(names, original, copy);
-        
-    }
-    
-    private static void checkParents(List seen, Element original, Element copy) {
-        ParentNode parent = original.getParent();
-        if (parent == null || parent instanceof Document) return;
-        Element parentElement = (Element) parent;
-        for (int i = 0; i < parentElement.getAttributeCount(); i++) {
-            Attribute a = parentElement.getAttribute(i);
-            if (XML_NS.equals(a.getNamespaceURI())) {
-                if (!(seen.contains(a.getLocalName()))) {
-                    seen.add(a.getLocalName());
-                    copy.addAttribute((Attribute) a.copy());
-                }
-            }   
-        }
-        checkParents(seen, parentElement, copy);
-        
-    }
-
-    // need to search for all attribute in XML_NS,
-    // not just known ones????
-    private static Attribute getNearestValue(
-      Element element, String localName, String namespace) {
-          
-        Attribute value = element.getAttribute(localName, namespace);
-        if (value != null) return value;  
-        else {
-            ParentNode parent = element.getParent();
-            if (parent == null || parent instanceof Document) {
-                return null;
-            }
-            else {
-                return getNearestValue(
-                  (Element) parent, localName, namespace);
-            }
-        }
-    }
-    
     /**
      * <p>
      * Serializes an element onto the output stream using the canonical
@@ -592,7 +461,7 @@ public class CanonicalXMLSerializer extends Serializer {
      * feed, but are never inserted or deleted.
      * </p>
      * 
-     * @param lineSeparator The character(s) used to break lines
+     * @param lineSeparator the character(s) used to break lines
      */
     public final void setLineSeparator(String lineSeparator) {
         super.setLineSeparator("\n");  
@@ -617,7 +486,7 @@ public class CanonicalXMLSerializer extends Serializer {
      * handling, this method does nothing.
      * </p>
      * 
-     * @param maxLength The suggested maximum line length
+     * @param maxLength the suggested maximum line length
      */
     public final void setMaxLength(int maxLength) {
        // do nothing because canonical XML does not adjust white space
@@ -646,9 +515,8 @@ public class CanonicalXMLSerializer extends Serializer {
      * part of the document's infoset are still output. 
      * </p>
      * 
-     * @param preserve true if <code>xml:base</code> 
-     *     attributes should be added as necessary
-     *     to preserve base URI information 
+     * @param preserve argument is ignored. It is present only for
+     *     compatibility with the superclass 
      */
     public final void preserveBaseURI(boolean preserve) {
        // do nothing because canonical XML 
