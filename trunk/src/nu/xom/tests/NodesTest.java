@@ -35,7 +35,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b3
  *
  */
 public class NodesTest extends XOMTestCase {
@@ -81,7 +81,7 @@ public class NodesTest extends XOMTestCase {
         }  
         try {
             nodes.get(1);
-            fail("Didn't throw IndexOutOfBoundsException for fencepost");
+            fail("Didn't throw IndexOutOfBoundsException for fence post");
         }
         catch (IndexOutOfBoundsException success) {
             assertNotNull(success.getMessage());   

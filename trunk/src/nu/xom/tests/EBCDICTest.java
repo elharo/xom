@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -37,8 +37,8 @@ import nu.xom.Serializer;
 
 /**
  * <p>
- *    Tests suport for the typical U.S. EBCDIC encoding.
- *    Unfortuantley this test exposes a bug in the handling
+ *    Tests support for the typical U.S. EBCDIC encoding.
+ *    Unfortunately this test exposes a bug in the handling
  *    of NEL, character 0x85, in Sun's JDK. Specifically
  *    InputStreamReader maps 0x85 to a line feed rather than 
  *    NEL. I've reported the bug to the Java Developer Connection,
@@ -47,7 +47,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0b3
  *
  */
 public class EBCDICTest extends XOMTestCase {

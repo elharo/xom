@@ -36,7 +36,7 @@ import nu.xom.IllegalCharacterDataException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0b3
  *
  */
 public class CommentTest extends XOMTestCase {
@@ -91,7 +91,7 @@ public class CommentTest extends XOMTestCase {
     }
     
     
-    // This is a problem becuase it cannot be serialized
+    // This is a problem because it cannot be serialized
     // since character and entity references aren't
     // recognized in comment data
     public void testCarriageReturnInCommentData() {

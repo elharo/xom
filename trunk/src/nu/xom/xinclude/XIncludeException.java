@@ -30,7 +30,7 @@ package nu.xom.xinclude;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b3
  */
 public class XIncludeException extends Exception {
 
@@ -120,8 +120,8 @@ public class XIncludeException extends Exception {
     }
 
     
-    // null is insufficient for detecting an unset cause.
-    // The cause may be set to null whicn may not then be reset.
+    // null is insufficient for detecting an uninitialized cause.
+    // The cause may be set to null which may not then be reset.
     private boolean causeSet = false;
 
     

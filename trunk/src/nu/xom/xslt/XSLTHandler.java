@@ -50,11 +50,11 @@ import org.xml.sax.helpers.AttributesImpl;
  * Therefore we do not actually need to reset. This is important
  * because some XSLT processors call startDocument() and 
  * endDocument() and some don't, especially when the output
- * of a transform is a document frgament.
+ * of a transform is a document fragment.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b1
+ * @version 1.0b3
  *
  */
 class XSLTHandler 

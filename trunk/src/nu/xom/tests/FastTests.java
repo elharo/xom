@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -29,14 +29,14 @@ import junit.framework.TestSuite;
 
 /**
  * <p>
- *   Collect the faster of XOM's test cases into a single class.
- *   This is faster first check on sanity. Alone this is not enough to
- *   gurantee that the implementation is correct, but may quickly prove
- *   that it's incorrect.
+ *  Collect the faster of XOM's test cases into a single class.
+ *  This is a faster first check on sanity. Alone this is not enough to
+ *  guarantee that the implementation is correct, but may quickly prove
+ *  that it's incorrect.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0b3
  *
  */
 public class FastTests extends TestCase {
@@ -83,6 +83,7 @@ public class FastTests extends TestCase {
         result.addTest(new TestSuite(BaseURITest.class));
         result.addTest(new TestSuite(EncodingTest.class)); */
         return result;
+        
     }
 
 }
