@@ -126,7 +126,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
-    // According to RFC 2396 empty string URI laways refers to the 
+    // According to RFC 2396 empty string URI always refers to the 
     // current document irrespective of base URI
     public void testXMLBaseNotUsedToResolveMissingHref() 
       throws ParsingException, IOException, XIncludeException {
@@ -192,6 +192,67 @@ public class XIncludeTest extends XOMTestCase {
                 assertTrue(node instanceof TextSubclass);
             }
         }
+        
+    }
+    
+    
+    public void testIncludeTextWithCustomNodeFactoryThatChangesElementNames() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/c1.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc, new Builder(new NodeFactoryTest.CFactory()));
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c1a.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testIncludeTextWithCustomNodeFactoryThatOnlyReturnsRoot() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/c1.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc, new Builder(new NodeFactoryTest.MinimizingFactory()));
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c1b.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testIncludeTextWithCustomNodeFactoryThatFiltersElementsNamedB() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/d1.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc, new Builder(new NodeFactoryTest.BFilter()));
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/d1.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testIncludeTextWithCustomNodeFactoryThatReturnsEachNonRootElementThreeTimes() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/c1.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc, 
+          new Builder(new NodeFactoryTest.TripleElementFilter()));
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/triple.xml")
+        );
+        assertEquals(expectedResult, result);
         
     }
     
@@ -390,7 +451,7 @@ public class XIncludeTest extends XOMTestCase {
     
     
     // C4 skipped for the moment because it uses XPointers
-    // that I don't yet support
+    // that XOM doesn't yet support
 
     // from the XInclude CR
     // Don't use this one yet, because there appear to be 
