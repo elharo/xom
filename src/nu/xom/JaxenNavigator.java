@@ -51,7 +51,7 @@ class JaxenNavigator extends DefaultNavigator {
         if (contextNode instanceof Text) {
             // wrap text nodes in a list
             Text node = (Text) contextNode;
-            XOMList temp = new XOMList();
+            ArrayList temp = new ArrayList();
             ParentNode parent = node.getParent();
             // parent is never null here due to DocumentFragment
             int index = parent.indexOf(node);
@@ -209,7 +209,6 @@ class JaxenNavigator extends DefaultNavigator {
     public Object getDocumentNode(Object o) {
     
         Node node = (Node) o;
-        //return node.getDocument();
         return node.getRoot();
         
     }
@@ -294,11 +293,6 @@ class JaxenNavigator extends DefaultNavigator {
     }
     
     
-    // seems to be necessary to avoid some reflection based
-    // issues inside Jaxen; double check if we still need this????
-    private static class XOMList extends ArrayList {}
-
-    
     // Need to make sure we don't count DocType in children when 
     // working with XPath
     private static Object getXPathChild(int request, Document parent) {
@@ -334,7 +328,7 @@ class JaxenNavigator extends DefaultNavigator {
             if (request == childCount) {
                 if (child instanceof Text) {
                     StringBuffer sb = new StringBuffer();
-                    List list = new XOMList();
+                    List list = new ArrayList();
                     int textCount = i;
                     do {
                         Text temp = (Text) child;
@@ -469,7 +463,7 @@ class JaxenNavigator extends DefaultNavigator {
 
     
     public boolean isText(Object object) {
-        return object instanceof XOMList;
+        return object instanceof ArrayList;
     }
 
     
