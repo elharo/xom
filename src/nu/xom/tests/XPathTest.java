@@ -1607,6 +1607,52 @@ public class XPathTest extends XOMTestCase {
     }
     
     
+    public void testCountAdjacentEmptyAndNonEmptyTextNodes() {
+        
+        Element parent = new Element("parent");
+        Text empty = new Text("");
+        Text nonempty = new Text("value");
+        parent.appendChild(nonempty);
+        parent.appendChild(empty);
+
+        Nodes result2 = parent.query("/*[count(node())=1]");
+        assertEquals(1, result2.size());
+        assertEquals(parent, result2.get(0));
+        
+        Nodes nodes1 = parent.query("node()[1]");
+        assertEquals(2, nodes1.size());
+        Nodes nodes2 = parent.query("node()[2]");
+        assertEquals(0, nodes2.size());
+        
+    }
+    
+    
+    public void testAdjacentEmptyAndNonEmptyTextNodes() {
+        
+        Element parent = new Element("parent");
+        Text empty = new Text("");
+        Text nonempty = new Text("value");
+        Text nonempty2 = new Text("value2");
+        parent.appendChild(empty);
+        parent.appendChild(nonempty);
+        parent.appendChild(nonempty2);
+        
+        Nodes result = parent.query("node()");
+        assertEquals(3, result.size());
+
+        Nodes result2 = parent.query("/*[count(node())=1]");
+        assertEquals(1, result2.size());
+        assertEquals(parent, result2.get(0));
+        
+        Nodes nodes1 = parent.query("node()[1]");
+        assertEquals(3, nodes1.size());
+        
+        Nodes nodes2 = parent.query("node()[2]");
+        assertEquals(0, nodes2.size());
+        
+    }
+
+
     public void testBadXPathExpression() {
         
         Element parent = new Element("Test");
