@@ -443,7 +443,6 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildWithoutLocator()
       throws IOException, ParsingException, SAXException {
         
-        
         XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
         XMLReader filter = new NoLocator(xerces);
         
@@ -451,6 +450,85 @@ public class BuilderTest extends XOMTestCase {
         Document document = builder.build(source, "http://www.example.org/");
         verify(document);
         assertEquals("http://www.example.org/", document.getBaseURI());
+        
+    }
+
+    
+    private static class WeirdAttributeTypes extends XMLFilterImpl {
+
+        public WeirdAttributeTypes(XMLReader reader) {
+            super(reader);
+        }
+        
+        public void startElement(String uri, String localName,
+          String qualifiedName, Attributes atts) throws SAXException {
+            
+            AttributesImpl newAtts = new AttributesImpl(atts);
+            for (int i = 0; i < newAtts.getLength(); i++) {
+                String type = newAtts.getType(i);
+                newAtts.setType(i, "WEIRD");
+            }
+            
+            super.startElement(uri, localName, qualifiedName, newAtts);
+            
+        }
+        
+    }    
+
+    
+    public void testWeirdAttributeTypes()
+      throws IOException, ParsingException, SAXException {
+        
+        XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        XMLReader filter = new WeirdAttributeTypes(xerces);
+        
+        Builder builder = new Builder(filter);
+        Document document = builder.build(attributeDoc, "http://www.example.org/");
+        Element root = document.getRootElement();
+        assertTrue(root.getAttributeCount() > 0);
+        for (int i = 0; i < root.getAttributeCount(); i++) {
+            assertEquals(Attribute.Type.UNDECLARED, root.getAttribute(i).getType());
+        }
+        
+    }
+    
+    
+    // Here we're faking the non-standard behavior of some older parsers
+    private static class ParenthesizedEnumeratedAttributeTypes extends XMLFilterImpl {
+
+        public ParenthesizedEnumeratedAttributeTypes(XMLReader reader) {
+            super(reader);
+        }
+        
+        public void startElement(String uri, String localName,
+          String qualifiedName, Attributes atts) throws SAXException {
+            
+            AttributesImpl newAtts = new AttributesImpl(atts);
+            for (int i = 0; i < newAtts.getLength(); i++) {
+                String type = newAtts.getType(i);
+                newAtts.setType(i, "(test, data, value)");
+            }
+            
+            super.startElement(uri, localName, qualifiedName, newAtts);
+            
+        }
+        
+    }    
+
+    
+    public void testParenthesizedEnumeratedAttributeTypes()
+      throws IOException, ParsingException, SAXException {
+        
+        XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        XMLReader filter = new ParenthesizedEnumeratedAttributeTypes(xerces);
+        
+        Builder builder = new Builder(filter);
+        Document document = builder.build(attributeDoc, "http://www.example.org/");
+        Element root = document.getRootElement();
+        assertTrue(root.getAttributeCount() > 0);
+        for (int i = 0; i < root.getAttributeCount(); i++) {
+            assertEquals(Attribute.Type.ENUMERATION, root.getAttribute(i).getType());
+        }
         
     }
     
