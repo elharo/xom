@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -25,7 +25,7 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * A <code>CircularIncludeException</code> is thrown when
+ * An <code>InclusionLoopException</code> is thrown when
  * an included document attempts to include itself or 
  * one of its ancestor documents.
  * </p>
@@ -33,11 +33,11 @@ package nu.xom.xinclude;
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  */
-public class CircularIncludeException extends XIncludeException {
+public class InclusionLoopException extends XIncludeException {
 
     /**
      * <p>
-     * Constructs a <code>CircularIncludeException</code> with  
+     * Constructs an <code>InclusionLoopException</code> with  
      * the specified detail message. The error message string 
      * <code>message</code> can be retrieved by the 
      * <code>{@link java.lang.Throwable#getMessage}</code>
@@ -46,13 +46,13 @@ public class CircularIncludeException extends XIncludeException {
      * 
      * @param message the detail message
      */
-    public CircularIncludeException(String message) {
+    public InclusionLoopException(String message) {
         super(message);
     }
 
     /**
      * <p>
-     * Creates a new <code>CircularIncludeException</code> with a detail 
+     * Creates a new <code>InclusionLoopException</code> with a detail 
      * message, line and column numbers, and a URI of the document
      * that caused the exception.
      * </p>
@@ -60,7 +60,7 @@ public class CircularIncludeException extends XIncludeException {
      * @param message indicates the specific problem
      * @param uri the URI of the document that caused this exception
      */
-    public CircularIncludeException(String message, String uri) {
+    public InclusionLoopException(String message, String uri) {
         super(message, uri);
     }
 

@@ -101,7 +101,7 @@ public class XIncluder {
      * @throws BadParseAttributeException if an <code>include</code>  
      *     element has a <code>parse</code> attribute with any value 
      *     other than <code>text</code> or <code>parse</code>
-     * @throws CircularIncludeException if this <code>Element</code>  
+     * @throws InclusionLoopException if this <code>Element</code>  
      *     contains an XInclude element that attempts to include 
      *     a document in which this element is directly or indirectly 
      *     included.
@@ -120,7 +120,7 @@ public class XIncluder {
      *      result in a malformed document,
      */
      public static Document resolve(Document in)  
-       throws BadParseAttributeException, CircularIncludeException, 
+       throws BadParseAttributeException, InclusionLoopException, 
              IOException, MissingHrefException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         return resolve(in, new Builder());   
@@ -149,7 +149,7 @@ public class XIncluder {
      * @throws BadParseAttributeException if an <code>include</code>  
      *     element has a <code>parse</code> attribute with any value 
      *     other than <code>text</code> or <code>parse</code>
-     * @throws CircularIncludeException if this <code>Element</code>  
+     * @throws InclusionLoopException if this <code>Element</code>  
      *     contains an XInclude element that attempts to include 
      *     a document in which this element is directly or indirectly 
      *     included.
@@ -168,7 +168,7 @@ public class XIncluder {
      *      result in a malformed document,
      */
      public static Document resolve(Document in, Builder builder)  
-       throws BadParseAttributeException, CircularIncludeException, 
+       throws BadParseAttributeException, InclusionLoopException, 
              IOException, MissingHrefException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         Document copy = new Document(in);
@@ -202,7 +202,7 @@ public class XIncluder {
      *     element has a <code>parse</code> attribute
      *     with any value other than <code>text</code> 
      *     or <code>parse</code>
-     * @throws CircularIncludeException if this <code>Element</code> 
+     * @throws InclusionLoopException if this <code>Element</code> 
      *     contains an XInclude element that attempts to include a  
      *     document in which this element is directly or indirectly 
      *     included
@@ -221,7 +221,7 @@ public class XIncluder {
      *     result in a malformed document
      */
     public static void resolveInPlace(Document in) 
-      throws BadParseAttributeException, CircularIncludeException,  
+      throws BadParseAttributeException, InclusionLoopException,  
              IOException, MissingHrefException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         resolveInPlace(in, new Builder());
@@ -252,7 +252,7 @@ public class XIncluder {
      *     element has a <code>parse</code> attribute
      *     with any value other than <code>text</code> 
      *     or <code>parse</code>
-     * @throws CircularIncludeException if this <code>Element</code> 
+     * @throws InclusionLoopException if this <code>Element</code> 
      *     contains an XInclude element that attempts to include a  
      *     document in which this element is directly or indirectly 
      *     included
@@ -271,7 +271,7 @@ public class XIncluder {
      *     result in a malformed document
      */
     public static void resolveInPlace(Document in, Builder builder) 
-      throws BadParseAttributeException, CircularIncludeException,  
+      throws BadParseAttributeException, InclusionLoopException,  
              IOException, MissingHrefException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {       
         resolveInPlace(in, builder, new Stack()); 
@@ -284,7 +284,7 @@ public class XIncluder {
         
         String base = in.getBaseURI();
         if (baseURLs.indexOf(base) != -1) {
-            throw new CircularIncludeException(
+            throw new InclusionLoopException(
               "Tried to include the already included document" + base +
               " from " + in.getBaseURI(), in.getBaseURI());
         } 
@@ -379,7 +379,7 @@ public class XIncluder {
                             Node original = originals.get(i);
                             if (original instanceof Element) {
                                 if (contains((Element) original, element)) {
-                                    throw new CircularIncludeException("Element tried to include itself"); 
+                                    throw new InclusionLoopException("Element tried to include itself"); 
                                 }  
                             }
                             Node copy = original.copy();
@@ -639,7 +639,7 @@ public class XIncluder {
                             Node original = originals.get(i);
                             if (original instanceof Element) {
                                 if (contains((Element) original, element)) {
-                                    throw new CircularIncludeException("Element tried to include itself"); 
+                                    throw new InclusionLoopException("Element tried to include itself"); 
                                 }  
                             }
                             replacements.append(original.copy());        
