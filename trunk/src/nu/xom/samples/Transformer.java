@@ -25,7 +25,7 @@ package nu.xom.samples;
 
 import nu.xom.Builder;
 import nu.xom.Document;
-import nu.xom.NodeList;
+import nu.xom.Nodes;
 import nu.xom.xslt.XSLTransform;
 
 /**
@@ -60,7 +60,7 @@ public class Transformer {
             Document stylesheet = builder.build(args[1]);
             XSLTransform transform = new XSLTransform(stylesheet);           
             
-            NodeList output = transform.transform(doc);
+            Nodes output = transform.transform(doc);
             
             for (int i = 0; i < output.size(); i++) {
                 System.out.print(output.get(i).toXML());                

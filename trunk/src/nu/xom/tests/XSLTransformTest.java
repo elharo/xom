@@ -31,7 +31,7 @@ import nu.xom.Builder;
 import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.NodeList;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
@@ -157,7 +157,7 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         XSLTransform xform = new XSLTransform(stylesheet);
         Document input = builder.build(doc);
-        NodeList output = xform.transform(input);
+        Nodes output = xform.transform(input);
         assertEquals(6, output.size());
         assertEquals(element1, output.get(0));
         assertEquals(element2, output.get(1));
@@ -175,7 +175,7 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/8-8.xsl");
         Builder builder = new Builder();
         XSLTransform xform = new XSLTransform(stylesheet);
-        NodeList output = xform.transform(builder.build(doc));
+        Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Document result = new Document((Element) (output.get(0)));
         // For debugging
@@ -196,7 +196,7 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/8-12.xsl");
         Builder builder = new Builder();
         XSLTransform xform = new XSLTransform(stylesheet);
-        NodeList output = xform.transform(builder.build(doc));
+        Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Document result = new Document((Element) (output.get(0)));
         // For debugging
@@ -218,7 +218,7 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         XSLTransform xform = new XSLTransform(stylesheet);
         Document input = builder.build(doc);
-        NodeList output = xform.transform(input);
+        Nodes output = xform.transform(input);
         assertEquals(1, output.size());
         Document result = new Document((Element) (output.get(0)));
         // For debugging
@@ -240,7 +240,7 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         XSLTransform xform = new XSLTransform(stylesheet);
         Document input = builder.build(doc);
-        NodeList output = xform.transform(input);
+        Nodes output = xform.transform(input);
         assertEquals(1, output.size());
         Text data = (Text) (output.get(0));
         assertEquals("Data", data.getValue());
@@ -257,7 +257,7 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         XSLTransform xform = new XSLTransform(stylesheet);
         Document input = builder.build(doc);
-        NodeList output = xform.transform(input);
+        Nodes output = xform.transform(input);
         assertEquals(6, output.size());
         assertEquals("12345", output.get(0).getValue());
         assertEquals("67890", output.get(1).getValue());

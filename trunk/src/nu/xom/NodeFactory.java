@@ -47,7 +47,7 @@ public class NodeFactory {
 
     // suppose you want to change comments to Text or PI to
     // Element? Should some of these methods just return a Node,
-    // or even a NodeList instead????
+    // or even a Nodes instead????
     
     // does nodefactory need an option to make an additional namespace????
 

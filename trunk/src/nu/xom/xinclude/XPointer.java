@@ -36,7 +36,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.IllegalNameException;
 import nu.xom.Node;
-import nu.xom.NodeList;
+import nu.xom.Nodes;
 import nu.xom.ParentNode;
 
 /**
@@ -53,10 +53,10 @@ import nu.xom.ParentNode;
  */
 class XPointer {
     
-    public static NodeList resolve(Document doc, String xptr) 
+    public static Nodes resolve(Document doc, String xptr) 
       throws XPointerSyntaxException, XPointerResourceException {    
             
-        NodeList result = new NodeList();
+        Nodes result = new Nodes();
         xptr = decode(xptr);
         try { // Is this a shorthand XPointer
             new Element(xptr);

@@ -37,7 +37,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import nu.xom.Document;
-import nu.xom.NodeList;
+import nu.xom.Nodes;
 
 /**
  * <p>
@@ -49,9 +49,9 @@ import nu.xom.NodeList;
  * <p>
  * The following example shows how to apply an XSL Transformation
  * to a XOM document and get the transformation result in the form
- * of a XOM <code>NodeList</code>:</p>
+ * of a XOM <code>Nodes</code>:</p>
  * <blockquote><pre>
- * public static NodeList transform(Document in) 
+ * public static Nodes transform(Document in) 
  *   throws XSLException {
  *     XSLTransform stylesheet = new XSLTransform("mystylesheet.xsl");
  *     return stylesheet.transform(doc);
@@ -106,7 +106,7 @@ import nu.xom.NodeList;
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  */
 public final class XSLTransform {
 
@@ -236,7 +236,7 @@ public final class XSLTransform {
   
     /**
      * <p>
-     * This will create a new <code>NodeList</code> from the
+     * This will create a new <code>Nodes</code> from the
      * input <code>Document</code> by applying this object's
      * stylesheet. The original <code>Document</code> is not 
      * changed.
@@ -244,39 +244,39 @@ public final class XSLTransform {
      *
      * @param in <code>Document</code> to transform
      * 
-     * @return a <code>NodeList</code> containing the result of the
+     * @return a <code>Nodes</code> containing the result of the
      *     transformation
      * 
      * @throws XSLException if the transformation fails, normally
      *     due to an XSLT error
      */ 
-    public NodeList transform(Document in) throws XSLException {
+    public Nodes transform(Document in) throws XSLException {
         return transform(new XOMSource(in));
     }
   
     /**
      * <p>
-     * This will create a new <code>NodeList</code> from the
-     * input <code>NodeList</code> by applying this object's
-     * stylesheet. The original <code>NodeList</code> is not 
+     * This will create a new <code>Nodes</code> from the
+     * input <code>Nodes</code> by applying this object's
+     * stylesheet. The original <code>Nodes</code> is not 
      * changed.
      * </p>
      *
      * @param in <code>Document</code> to transform
      * 
-     * @return a <code>NodeList</code> containing the result of 
+     * @return a <code>Nodes</code> containing the result of 
      *     the transformation
      * 
      * @throws XSLException if the transformation fails, normally
      *     due to an XSLT error
      */ 
-    public NodeList transform(NodeList in) throws XSLException {
+    public Nodes transform(Nodes in) throws XSLException {
         return transform(new XOMSource(in));
     }
 
     /**
      * <p>
-     * This will create a new <code>NodeList</code> from the
+     * This will create a new <code>Nodes</code> from the
      * input <code>Source</code> by applying this object's
      * stylesheet. The original <code>Source</code> is not 
      * changed.
@@ -284,13 +284,13 @@ public final class XSLTransform {
      *
      * @param in TrAX <code>Source</code> to transform
      * 
-     * @return a <code>NodeList</code> containing the result of 
+     * @return a <code>Nodes</code> containing the result of 
      *     the transformation
      * 
      * @throws XSLException if the transformation fails, normally
      *     due to an XSLT error
      */ 
-    private NodeList transform(Source in) throws XSLException {
+    private Nodes transform(Source in) throws XSLException {
         try {
             XOMResult out = new XOMResult();
             Transformer transformer = templates.newTransformer();
