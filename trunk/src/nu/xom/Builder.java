@@ -53,7 +53,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d20
+ * @version 1.0d22
  * 
  */
 public class Builder {
@@ -74,7 +74,7 @@ public class Builder {
      * <li>Oracle</li>
      * <li>Crimson</li>
      * <li>The platform default specified by the 
-     *     org.xml.sax.driver system property</li>
+     *     <code>org.xml.sax.driver</code> system property</li>
      * </ol>
      * 
      * <p>
@@ -134,7 +134,7 @@ public class Builder {
          this(findParser(validate), validate, factory); 
     }
 
-
+    // These are stored in the order of preference.
     private static String[] parsers = {
         "org.apache.xerces.parsers.SAXParser",
         "com.bluecast.xml.Piccolo",
