@@ -415,7 +415,6 @@ public class XIncluder {
                         int position = parent.indexOf(element);
                         for (int i = 0; i < replacements.size(); i++) {
                             Node child = replacements.get(i);
-                            child.detach(); 
                             parent.insertChild(child, position+i); 
                         }
                         element.detach();
@@ -567,13 +566,14 @@ public class XIncluder {
     }
 
     
-    // resolveSilently seems to be primarily used for the resolving
-    // elements seelcted by an XPointer
+    // resolveSilently seems to be primarily used for resolving
+    // elements selected by an XPointer
     private static Nodes resolveSilently(
       Element element, Builder builder, Stack baseURLs) 
       throws IOException, ParsingException, XIncludeException {
         return resolveSilently(element, builder, baseURLs, null);
     }
+    
     
     private static Nodes resolveSilently(
       Element element, Builder builder, Stack baseURLs, Document originalDoc)
@@ -668,7 +668,7 @@ public class XIncluder {
                     return replacements; 
                 }  // end parse="xml"
                 else if (parse.equals("text")) {                   
-                    return downloadTextDocument(url, encoding, builder, accept, acceptCharset, acceptLanguage); // ????
+                    return downloadTextDocument(url, encoding, builder, accept, acceptCharset, acceptLanguage);
                 }
                 else {
                    throw new BadParseAttributeException(
