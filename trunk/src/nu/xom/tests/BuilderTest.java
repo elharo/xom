@@ -33,6 +33,7 @@ import java.io.InputStream;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -452,6 +453,24 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(document2, document);     
     }
     
+    public void testValidateWithCrimson()
+      throws IOException, ParsingException {
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        Builder validator = new Builder(crimson, true);
+        Document document = validator.build(validDoc, base);        
+        assertEquals(base, document.getBaseURI());  
+        Reader reader2 = new StringReader(validDoc);
+        Document document2 = builder.build(reader2);  
+        assertEquals(document2, document);     
+    }
+    
     public void testValidateFromStringWithNullBase()
       throws IOException, ParsingException {
         Document document = validator.build(validDoc, null);    
@@ -494,6 +513,29 @@ public class BuilderTest extends XOMTestCase {
                 assertEquals(doc, ex.getDocument());
             }
         }
+    }
+    
+    public void testNamespaceMalformedDocumentWithCrimson() 
+      throws IOException {
+        StringReader reader = new StringReader("<root:root/>");
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        }
+        catch (SAXException ex) {
+           // No Crimson in classpath; therefore can't test it
+           return;
+        }
+        Builder builder = new Builder(crimson);
+        try {
+            builder.build(reader);   
+            fail("Crimson allowed namespace malformed doc");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }      
+        
     }
     
     public void testInvalidDocFromReaderWithBase()
@@ -588,6 +630,31 @@ public class BuilderTest extends XOMTestCase {
         }
     }
     
+
+    public void testInvalidDocWithCrimson()
+      throws IOException, ParsingException {
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        Builder validator = new Builder(crimson, true);
+        try {
+            validator.build(source, null);    
+            fail("Allowed invalid doc");
+        }
+        catch (ValidityException ex) {
+            assertTrue(ex.getErrorCount() > 0);
+            for (int i = 0; i < ex.getErrorCount(); i++) {
+                assertNotNull(ex.getValidityError(i));   
+            }    
+        }
+    }   
+        
+        
     public void testInvalidDocFromStringWithNullBase()
       throws IOException, ParsingException {
         try {
@@ -721,7 +788,7 @@ public class BuilderTest extends XOMTestCase {
     
     // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
     // and possibly other parsers. I've reported the bug in Xerces,
-    // and it should be fixed in Xerces 2.6.
+    // and it is fixed in Xerces 2.6.
     public void testBaseRelativeResolutionRemotelyWithDirectory()
       throws IOException, ParsingException {
         builder.build("http://www.ibiblio.org/xml");
@@ -806,5 +873,33 @@ public class BuilderTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
     }    
+
+    public void testValidateMalformedDocumentWithCrimson() 
+      throws IOException {
+        Reader reader = new StringReader("<!DOCTYPE root [" +
+                "<!ELEMENT root (a, b)>" +
+                "<!ELEMENT a (EMPTY)>" +
+                "<!ELEMENT b (PCDATA)>" +
+                "]><root><a/><b></b>");
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        Builder validator = new Builder(crimson, true);
+        try {
+            validator.build(reader);   
+            fail("Allowed malformed doc");
+        }
+        catch (ValidityException ex) {
+            fail("Crimson threw validity error instead of well-formedness error");
+        }
+        catch (ParsingException ex) {
+            assertNotNull(ex.getMessage());
+        }
+    }        
     
 }
