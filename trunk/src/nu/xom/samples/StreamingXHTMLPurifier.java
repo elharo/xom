@@ -55,8 +55,6 @@ import nu.xom.Text;
  *   <cite>Processing XML with Java</cite>.
  * </p>
  * 
- * needs testing????
- * 
  */
 
 public class StreamingXHTMLPurifier extends NodeFactory {
@@ -78,6 +76,7 @@ public class StreamingXHTMLPurifier extends NodeFactory {
 
     
     private boolean inXHTML() {
+        if (namespaces.isEmpty()) return true; // document prolog
         String currentNamespace = (String) (namespaces.peek());
         if (XHTML_NAMESPACE.equals(XHTML_NAMESPACE)) return true;
         return false;
@@ -94,6 +93,15 @@ public class StreamingXHTMLPurifier extends NodeFactory {
     
     protected Element finishMakingElement(Element element) {
         namespaces.pop(); 
+        int namespaceCount = element.getNamespaceDeclarationCount();
+        for (int i = 0; i < namespaceCount; i++) {
+            String prefix = element.getNamespacePrefix(i);
+            element.removeNamespaceDeclaration(prefix);
+            if (element.getNamespaceDeclarationCount() < namespaceCount) {
+                i--;
+                namespaceCount--;   
+            }
+        }
         return element;      
     }
 
@@ -142,6 +150,7 @@ public class StreamingXHTMLPurifier extends NodeFactory {
         catch (ParseException ex) { 
             System.out.println(args[0] + " is not well-formed.");
             System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }  
         catch (IOException ex) { 
             System.out.println(ex);
