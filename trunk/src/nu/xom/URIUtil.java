@@ -281,8 +281,8 @@ class URIUtil {
 
     static String toURI(String iri) {
     
-        StringBuffer uri = new StringBuffer(iri.length());
         int length = iri.length();
+        StringBuffer uri = new StringBuffer(length);
         for (int i = 0; i < length; i++) {
             char c = iri.charAt(i);
             switch(c) {
