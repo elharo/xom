@@ -112,10 +112,26 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
-    public void testMarshWithXMLBase() 
+    // According to RFC 2396 empty string URI laways refers to the 
+    // current document irrespective of base URI
+    public void testXMLBaseNotUsedToResolveMissingHref() 
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/marshtestwithxmlbase.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/marshtestwithxmlbase.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testEmptyHrefTreatedSameAsMissingHref() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/marshtestwithxmlbaseandemptyhref.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
