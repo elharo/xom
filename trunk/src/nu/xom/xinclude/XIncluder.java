@@ -896,57 +896,62 @@ public class XIncluder {
         int contentLength = uc.getContentLength();
         if (contentLength < 0) contentLength = 1024;
         InputStream in = new BufferedInputStream(uc.getInputStream());
-        if (encodingFromHeader != null) encoding = encodingFromHeader;
-        else {
-            if (contentType != null) {
-                contentType = contentType.toLowerCase();
-                if (contentType.equals("text/xml") 
-                  || contentType.equals("application/xml")   
-                  || (contentType.startsWith("text/") 
-                        && contentType.endsWith("+xml") ) 
-                  || (contentType.startsWith("application/") 
-                        && contentType.endsWith("+xml"))) {
-                     encoding 
-                       = EncodingHeuristics.readEncodingFromStream(in);
+        try {
+            if (encodingFromHeader != null) encoding = encodingFromHeader;
+            else {
+                if (contentType != null) {
+                    contentType = contentType.toLowerCase();
+                    if (contentType.equals("text/xml") 
+                      || contentType.equals("application/xml")   
+                      || (contentType.startsWith("text/") 
+                            && contentType.endsWith("+xml") ) 
+                      || (contentType.startsWith("application/") 
+                            && contentType.endsWith("+xml"))) {
+                         encoding 
+                           = EncodingHeuristics.readEncodingFromStream(in);
+                    }
                 }
             }
-        }
-        // workaround for pre-1.3 VMs that don't recognize UTF-16
-        if (encoding.equalsIgnoreCase("UTF-16")) {
-            String version = System.getProperty("java.version");   
-            if (version.startsWith("1.2") 
-              || version.startsWith("1.1")) {
-                // is it  big-endian or little-endian?
-                in.mark(2);
-                int first = in.read();
-                if (first == 0xFF) encoding = "UnicodeLittle";
-                else encoding="UnicodeBig";
-                in.reset();  
+            // workaround for pre-1.3 VMs that don't recognize UTF-16
+            if (encoding.equalsIgnoreCase("UTF-16")) {
+                String version = System.getProperty("java.version");   
+                if (version.startsWith("1.2") 
+                  || version.startsWith("1.1")) {
+                    // is it  big-endian or little-endian?
+                    in.mark(2);
+                    int first = in.read();
+                    if (first == 0xFF) encoding = "UnicodeLittle";
+                    else encoding="UnicodeBig";
+                    in.reset();  
+                }
             }
-        }
-        InputStreamReader reader = new InputStreamReader(in, encoding);
-        int c;
-        StringBuffer sb = new StringBuffer(contentLength);
-        while ((c = reader.read()) != -1) {
-          sb.append((char) c);
-        }
-        
-        NodeFactory factory = builder.getNodeFactory();
-        if (factory != null) {
-            Nodes results = factory.makeText(sb.toString());
-            sb = new StringBuffer(sb.length());
-            for (int i = 0; i < results.size(); i++) {
-                try {
-                    sb.append((Text) (results.get(i))); 
-                }
-                catch (ClassCastException ex) {
-                    throw new XIncludeException(
-                      "Factory made a non-text node when parse=\"text\"");   
-                }
+            InputStreamReader reader = new InputStreamReader(in, encoding);
+            int c;
+            StringBuffer sb = new StringBuffer(contentLength);
+            while ((c = reader.read()) != -1) {
+              sb.append((char) c);
             }
             
+            NodeFactory factory = builder.getNodeFactory();
+            if (factory != null) {
+                Nodes results = factory.makeText(sb.toString());
+                sb = new StringBuffer(sb.length());
+                for (int i = 0; i < results.size(); i++) {
+                    try {
+                        sb.append((Text) (results.get(i))); 
+                    }
+                    catch (ClassCastException ex) {
+                        throw new XIncludeException(
+                          "Factory made a non-text node when parse=\"text\"");   
+                    }
+                }
+                
+            }
+            return new Text(sb.toString());
         }
-        return new Text(sb.toString());
+        finally {
+            in.close();   
+        }
       
     }
     
