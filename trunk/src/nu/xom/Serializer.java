@@ -64,7 +64,7 @@ public class Serializer {
      * 
      * @param out the output stream to write the document on
      * 
-     * @throws NullPointerException if out is null
+     * @throws NullPointerException if <code>out</code> is null
      */
     public Serializer(OutputStream out) {
         if (out == null) {
@@ -76,7 +76,7 @@ public class Serializer {
             escaper = TextWriterFactory.getTextWriter(writer, "UTF-8");
         }
         catch (UnsupportedEncodingException ex) {
-            throw new XMLException(
+            throw new RuntimeException(
               "The VM is broken. It does not understand UTF-8.");
         }
     }
@@ -141,6 +141,42 @@ public class Serializer {
             throw new NullPointerException("Null encoding");
         } 
         
+        this.setOutputStream(out, encoding);
+    }
+    
+    /**
+     * <p>
+     * Flushes the previous <code>OutputStream</code> and sets
+     * redirects further output to the new <code>OutputStream</code>.
+     * </p>
+     * 
+     * 
+     * @param out the output stream to write the document on
+     * @param encoding the character encoding for the serialization
+
+     * @throws NullPointerException if <code>out</code> is null
+     * @throws IOException if the previous <code>OutputStream</code> 
+     *     encounters an I/O error when flushed
+     *  
+     */
+    public void setOutputStream(OutputStream out) 
+      throws IOException {
+        // flush any data onto the old output stream
+        this.flush();
+        int maxLength = getMaxLength();
+        int indent = this.getIndent();
+        String lineSeparator = getLineSeparator();
+        boolean nfc = getUnicodeNormalizationFormC(); 
+        String encoding = escaper.getEncoding();
+        setOutputStream(out, encoding);   
+        setIndent(indent);
+        setMaxLength(maxLength);
+        setUnicodeNormalizationFormC(nfc);
+        setLineSeparator(lineSeparator); 
+    }
+
+    private void setOutputStream(OutputStream out, String encoding)
+        throws UnsupportedEncodingException {
         Writer writer;  
         // Java's Cp037 encoding is broken, so we have to
         // provide our own.   
@@ -161,7 +197,7 @@ public class Serializer {
         }
         else writer = new OutputStreamWriter(out, encoding);
         writer = new BufferedWriter(writer);
-        escaper = TextWriterFactory.getTextWriter(writer, encoding);
+        this.escaper = TextWriterFactory.getTextWriter(writer, encoding);  
     }
 
     
@@ -171,10 +207,11 @@ public class Serializer {
      * stream using the current options.
      * </p>
      * 
-     * @param doc the <code>Document</code> to serialize.
+     * @param doc the <code>Document</code> to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *      encounters an I/O error
+     * @throws NullPointerException if <code>doc</code> is null
      */
     public void write(Document doc) throws IOException {
         escaper.reset();
@@ -190,6 +227,26 @@ public class Serializer {
             escaper.breakLine();
         }       
         escaper.flush();
+    }
+    
+    /**
+     * <p>
+     * Serializes a document onto the output 
+     * stream in UTF-8 with no pretty printing.
+     * </p>
+     * 
+     * @param doc the <code>Document</code> to serialize
+     * @param out the <code>OutputStream</code> on which the document
+     *     is written
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     * @throws NullPointerException if <code>doc</code> is null
+     */
+    public static void write(Document doc, OutputStream out) 
+      throws IOException {
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
     }
 
     /**
