@@ -95,6 +95,10 @@ class DocumentModifier {
             InputStream raw = new BufferedInputStream(
               new ByteArrayInputStream(data)
             );    
+            
+            // Try to avoid garrbage collection pauses     
+            System.gc(); System.gc(); System.gc();
+            
             long prebuild = System.currentTimeMillis();
           
             // Read the entire document into memory
@@ -121,8 +125,9 @@ class DocumentModifier {
   
     } // end main
     
-    private static void warmup(Builder parser, DocumentModifier iterator, 
-      byte[] data, int numPasses, String base)
+    private static void warmup(Builder parser, 
+      DocumentModifier iterator, byte[] data, 
+      int numPasses, String base)
       throws IOException, ParsingException {
         for (int i = 0; i < numPasses; i++) {
             InputStream raw = new BufferedInputStream(
