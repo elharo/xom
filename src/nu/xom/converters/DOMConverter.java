@@ -446,6 +446,7 @@ public class DOMConverter {
         } 
         
         return domDoc;
+        
     }
 
     
@@ -455,15 +456,14 @@ public class DOMConverter {
         if (node instanceof Text) {
             return convert((Text) node, document);
         }
-        else if (node instanceof Element) {
-            return convert((Element) node, document);
-        }
         else if (node instanceof Comment) {
             return convert((Comment) node, document);
         }
         else if (node instanceof ProcessingInstruction) {
             return convert((ProcessingInstruction) node, document);
         }
+        // The non-recursive algorithm converts elements directly.
+        // It does not pass through this method.
         else {
             throw new XMLException(
               "Unexpected node type: " + node.getClass().getName()
@@ -607,7 +607,9 @@ public class DOMConverter {
                 attr.setValue(uri);
             }
         }
+        
         return result;
+        
     }
 
     
