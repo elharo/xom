@@ -41,7 +41,7 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  *
  */
 public class ProcessingInstruction extends Node {
@@ -117,13 +117,12 @@ public class ProcessingInstruction extends Node {
      *     "xml" in any case
      */
     public void setTarget(String target) {
-        
         _setTarget(target);
-        
     }  
 
     
     private void _setTarget(String target) {
+        
         try {
             Verifier.checkNCName(target);
         }
@@ -135,12 +134,14 @@ public class ProcessingInstruction extends Node {
         
         if (target.equalsIgnoreCase("xml")) {
             IllegalTargetException tex = new IllegalTargetException(
-              "Processing instructions targets cannot be XML better message????.");
+              target + " is not a legal processing instruction target."
+            );
             tex.setData(target);
             throw tex;
         }
         
         this.target = target;
+        
     }
 
 
@@ -160,6 +161,7 @@ public class ProcessingInstruction extends Node {
 
     
     private void _setValue(String data) {
+        
         Verifier.checkPCDATA(data);
         if (data.length() != 0) {
             if (data.indexOf("?>") >= 0) {
@@ -188,6 +190,7 @@ public class ProcessingInstruction extends Node {
             }
         }
         this.data = data;
+        
     }
 
 
@@ -254,7 +257,8 @@ public class ProcessingInstruction extends Node {
             result.append(data);
         }
         result.append("?>");
-        return result.toString();   
+        return result.toString(); 
+        
     }
 
     
