@@ -54,8 +54,3 @@
  * on the Apache Software Foundation, please see <http://www.apache.org/>.   *
  *                                                                           *
  * ========================================================================= */
-
-/* CVS information: $Revision$ $Date$
- * $Source$
- * $Author$
- */
