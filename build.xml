@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0d25"/>
+    <property name="version" value="1.0a1"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -143,8 +143,8 @@ XOM Build file
   <target name="jar" depends="compile" description="Create xom.jar">
     <jar jarfile="${build.dir}/${name}-${version}.jar"
          basedir="${build.dest}"
-         index="yes"
-		 compress="no"
+         index="no"
+		 compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/xerces/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/*">
       <manifest>
@@ -180,19 +180,6 @@ XOM Build file
 		 compress="no"
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
          excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/xerces/* nu/xom/canonical/* nu/xom/pantry/* nu/xom/pantry">
-      <manifest>
-        <attribute name="Built-By" value="${user.name}"/>
-        <attribute name="Name"     value="nu/xom"/>
-        <attribute name="Sealed"   value="true"/>
-        <attribute name="Name"     value="nu/xom/xslt"/>
-        <attribute name="Sealed"   value="true"/>
-        <attribute name="Name"     value="nu/xom/xinclude"/>
-        <attribute name="Sealed"   value="true"/>
-        <attribute name="Name"     value="nu/xom/converters"/>
-        <attribute name="Sealed"   value="true"/>
-        <attribute name="Name"     value="nu/xom/canonical"/>
-        <attribute name="Sealed"   value="true"/>
-      </manifest>
     </jar>
   </target>
 
