@@ -48,7 +48,6 @@ import nu.xom.Text;
  * 
  *  ????needs more testing for prolog and epilog content and additional namespace
  *  declarations
- * ????need to test by compiling resulting code
  * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
@@ -74,8 +73,6 @@ public class SourceCodeSerializer extends Serializer {
         Element root = doc.getRootElement();
         write(root);
         breakLine();
-        writeRaw("Document doc = new Document(root);");
-        breakLine();
         
         for (int i = 0; i < doc.indexOf(root); i++) {
             writeChild(doc.getChild(i)); 
@@ -94,34 +91,51 @@ public class SourceCodeSerializer extends Serializer {
     protected void writeStartTag(Element element) 
       throws IOException {
         
-        String name = "e" + count++;
+        String name = "e" + count;
         writeRaw("Element " + name + " = new Element(\"" 
            + element.getQualifiedName() + "\", \"" + element.getNamespaceURI() + "\");");
         breakLine();
-        writeRaw(parents.peek() + ".appendChild(" + name + ");");
+        if (count == 1) {
+            writeRaw("Document doc = new Document(e1);");
+        }
+        else {
+            writeRaw(parents.peek() + ".appendChild(" + name + ");");
+        }
         breakLine();
         parents.push(name);
         writeAttributes(element);           
         writeNamespaceDeclarations(element);
+        count++;
+        
     }
 
-    public void writeEndTag(Element element) throws IOException {
+    protected void writeEndTag(Element element) throws IOException {
         parents.pop();
     }
 
 
-    public void writeEmptyElementTag(Element element) throws IOException {
+    protected void writeEmptyElementTag(Element element) throws IOException {
         writeStartTag(element);
         writeEndTag(element);
     }
 
+    protected void writeAttributes(Element element)
+      throws IOException {
+        
+        for (int i = 0; i < element.getAttributeCount(); i++) {
+            Attribute attribute = element.getAttribute(i);
+            write(attribute);
+        }  
+        
+    }
+    
 
     protected void write(Attribute attribute) throws IOException {
         
         String parent = (String) parents.peek();
-        writeRaw(parent + ".addAttribute(\"" + attribute.getQualifiedName() + "\", "
+        writeRaw(parent + ".addAttribute(new Attribute(\"" + attribute.getQualifiedName() + "\", "
           + "\"" + attribute.getNamespaceURI() + "\", \"" 
-          + escapeText(attribute.getValue()) + "\");");
+          + escapeText(attribute.getValue()) + "\"));");
         breakLine(); 
         
     }
