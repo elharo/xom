@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -36,7 +36,7 @@ import org.xml.sax.InputSource;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 class XOMSource extends SAXSource {
@@ -62,6 +62,8 @@ class XOMSource extends SAXSource {
      * <code>Document</code>. The <code>Document</code> object 
      * is read but not changed by any method in this class.
      * </p>
+     * 
+     * @param source 
      */
     public XOMSource(Document source) {
         this.source = new Nodes();
@@ -73,6 +75,8 @@ class XOMSource extends SAXSource {
      * Creates a new <code>XOMSource</code> object 
      * from a <code>Nodes</code>.
      * </p>
+     * 
+     * @param source
      */
     public XOMSource(Nodes source) {
         this.source = source;
