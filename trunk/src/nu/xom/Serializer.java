@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -47,7 +47,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  * 
  */
 public class Serializer {
@@ -198,7 +198,6 @@ public class Serializer {
           || encoding.equals("TIS-620")) {
            // Java doesn't recognize the name ISO-8859-11 and 
            // Java 1.3 and earlier don't recognize TIS-620
-           // file a bug on this at JDC????
            writer = new OutputStreamWriter(out, "TIS620");  
         }
         else writer = new OutputStreamWriter(out, encoding);
@@ -234,31 +233,7 @@ public class Serializer {
         }       
         escaper.flush();
     }
-    
-    /**
-     * <p>
-     * Serializes a document onto the output 
-     * stream in UTF-8 with no pretty printing.
-     * </p>
-     * 
-     * @param doc the <code>Document</code> to serialize
-     * @param out the <code>OutputStream</code> on which the document
-     *     is written
-     * 
-     * @throws IOException if the underlying <code>OutputStream</code>
-     *     encounters an I/O error
-     * @throws NullPointerException if <code>doc</code> is null
-     */
-    public static void write(Document doc, OutputStream out) 
-      throws IOException {
-        Serializer serializer = new Serializer(out);
-        serializer.write(doc);
-        serializer.flush();
-    }
-    
-    // Does it make sense to add encoding and indented variations 
-    // here? Or perhaps move this and those potential methods 
-    // into a separate util, contrib, or samples package???? 
+
 
     /**
      * <p>
@@ -1145,6 +1120,17 @@ public class Serializer {
      *   wish to implement their own pretty printing strategies
      *   by inserting white space and line breaks at appropriate 
      *   points.
+     * </p>
+     * 
+     * <p>
+     *   Columns are counted based on Unicode characters, not Java
+     *   chars. A surrogate pair counts as one character in this 
+     *   context, not two. However, a character followed by a 
+     *   combining character (e.g. e followed by combining accent
+     *   acute) counts as two characters. This latter choice
+     *   (treating combining characters like regular characters)
+     *   is under review, and may change in the future if it's not
+     *   too big a performance hit.
      * </p>
      * 
      * @return the current column number
