@@ -33,7 +33,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  *
  */
 public class Text extends Node {
@@ -61,6 +61,7 @@ public class Text extends Node {
         _setValue(data);
     }
 
+    
     /**
      * <p>
      * Creates a copy of the specified <code>Text</code> object.
@@ -94,7 +95,7 @@ public class Text extends Node {
 
     /**
      * <p>
-     * This sets the content of the <code>Text</code> object 
+     * Sets the content of the <code>Text</code> object 
      * to the specified data. The data is checked for 
      * legality according to XML 1.0 rules. Characters that 
      * can be serialized such as &lt; and &amp; are allowed.   
@@ -115,6 +116,7 @@ public class Text extends Node {
 
     
     private void _setValue(String data) {
+        
         if (data == null) data = "";
         else Verifier.checkPCDATA(data);
         try {
@@ -125,6 +127,7 @@ public class Text extends Node {
               "Bad VM! Does not support UTF-8"
             );
         }
+        
     }
 
     /**
@@ -135,8 +138,6 @@ public class Text extends Node {
      * </p>
      *  
      * @return The content of the node.
-     * 
-     * @see nu.xom.Node#getValue()
      */
     public final String getValue() {
         
@@ -148,6 +149,7 @@ public class Text extends Node {
               "Bad VM! Does not support UTF-8"
             );
         }
+        
     }
 
     
@@ -177,8 +179,6 @@ public class Text extends Node {
      * </p>
      * 
      * @return zero
-     * 
-     * @see nu.xom.Node#getChildCount()
      */
     public final int getChildCount() {
         return 0;   
@@ -192,8 +192,6 @@ public class Text extends Node {
      * </p>
      *
      * @return a deep copy of this text node with no parent
-     *
-     * @see nu.xom.Node#copy()
      */
     public Node copy() {
         if (isCDATASection()) {
@@ -215,8 +213,6 @@ public class Text extends Node {
      * </p>
      * 
      * @return the string form of this text node
-     * 
-     * @see nu.xom.Node#toXML()
      */
     public final String toXML() {
         return escapeText(getValue());    
@@ -246,6 +242,7 @@ public class Text extends Node {
             }  
         }
         return result.toString();
+        
     }
     
     
@@ -263,8 +260,6 @@ public class Text extends Node {
      * </p>
      * 
      * @return a non-XML string representation of this node
-     *
-     * @see java.lang.Object#toString()
      */
     public final String toString() {
         

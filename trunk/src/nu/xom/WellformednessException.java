@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -32,7 +32,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a4
  *
  */
 public class WellformednessException extends XMLException {
@@ -43,23 +43,25 @@ public class WellformednessException extends XMLException {
      * with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public WellformednessException(String message) {
         super(message);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>WellformednessException</code> 
      * with a detail message and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
     public WellformednessException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    
 }

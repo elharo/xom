@@ -36,7 +36,6 @@ package nu.xom;
  * @version 1.0a4
  *
  */
-
 public class IllegalNameException extends IllegalDataException {
     
     /**
@@ -45,7 +44,7 @@ public class IllegalNameException extends IllegalDataException {
      * with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public IllegalNameException(String message) {
         super(message);
@@ -58,7 +57,7 @@ public class IllegalNameException extends IllegalDataException {
      * with a detail message and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
     public IllegalNameException(String message, Throwable cause) {

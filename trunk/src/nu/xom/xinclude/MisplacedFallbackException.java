@@ -31,22 +31,24 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  */
 public class MisplacedFallbackException extends XIncludeException {
 
+    
     /**
      * <p>
      * Constructs a <code>MisplacedFallbackException</code> with  
      * the specified detail message. 
      * </p>
      * 
-     * @param message the detail message
+     * @param message a string indicating the specific problem
      */
     public MisplacedFallbackException(String message) {
         super(message);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>MisplacedFallbackException</code> with a detail 
@@ -54,7 +56,7 @@ public class MisplacedFallbackException extends XIncludeException {
      * that caused the exception.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
      */
     public MisplacedFallbackException(String message, String uri) {

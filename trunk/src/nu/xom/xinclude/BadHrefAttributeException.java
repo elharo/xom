@@ -32,7 +32,7 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  */
 public class BadHrefAttributeException extends XIncludeException {
 
@@ -57,7 +57,7 @@ public class BadHrefAttributeException extends XIncludeException {
      * the exception.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
      */
     public BadHrefAttributeException(String message, String uri) {

@@ -25,15 +25,15 @@ package nu.xom;
 
 /**
  * <p>
- * An <code>UnavailableCharacterException</code> is thrown when
- * serializing documents that contain characters not available
- * in the current encoding, and which cannot be escaped (for instance,
- * because they're in an element name or processing instruction data).
- * This can never happen if the encoding is UTF-8 or UTF-16.
+ * Thrown when serializing documents that contain characters not 
+ * available in the current encoding, and which cannot be escaped 
+ * (for instance, because they're in an element name or processing
+ * instruction data). This can never happen if the encoding is UTF-8 
+ * or UTF-16.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  *
  */
 public class UnavailableCharacterException extends XMLException {

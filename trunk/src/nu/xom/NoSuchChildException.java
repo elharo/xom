@@ -25,13 +25,14 @@ package nu.xom;
 
 /**
  * <p>
- * A <code>NoSuchChildException</code>
- * indicates that a child with a certain name and/or namespace does
- * not exist.
+ * Indicates that a child with a certain name and/or namespace does
+ * not exist. This is thrown when you attempt to remove a node from
+ * a parent that does not actually have that node as a child.  
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
+ * @see ParentNode#removeChild(Node)
  *
  */
 public class NoSuchChildException extends XMLException {

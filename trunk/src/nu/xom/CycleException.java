@@ -36,29 +36,32 @@ package nu.xom;
  */
 public class CycleException extends IllegalAddException {
 
+    
     /**
      * <p>
      *  Creates a new <code>CycleException</code>
      *  with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public CycleException(String message) {
         super(message);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>CycleException</code> with a detail message
      * and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
     public CycleException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    
 }

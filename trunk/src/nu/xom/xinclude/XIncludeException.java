@@ -25,16 +25,16 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * <code>XIncludeException</code> is the generic superclass
- * for all checked exceptions that may be thrown as a result
- * of a violation of XInclude's rules.
+ * The generic superclass for all checked exceptions that may be thrown 
+ * as a result of a violation of XInclude's rules.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  */
 public class XIncludeException extends Exception {
 
+    
     private String uri;
 
     /**
@@ -49,6 +49,7 @@ public class XIncludeException extends Exception {
         super(message);
     }
 
+    
     /**
      * <p>
      * Constructs an <code>XIncludeException</code> with the specified 
@@ -66,6 +67,7 @@ public class XIncludeException extends Exception {
         initCause(cause);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>XIncludeException</code> with a detail 
@@ -73,7 +75,7 @@ public class XIncludeException extends Exception {
      * that caused the exception.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
      */
     public XIncludeException(String message, String uri) {
@@ -81,6 +83,7 @@ public class XIncludeException extends Exception {
         this.uri = uri;
     }
 
+    
     /**
      * <p>
      * Returns the URI of the document that caused this exception. 
@@ -93,8 +96,10 @@ public class XIncludeException extends Exception {
         return this.uri;  
     }
 
+    
     private Throwable cause;
 
+    
     /**
      * <p>
      * When an <code>IOException</code>,  
@@ -108,16 +113,18 @@ public class XIncludeException extends Exception {
      *</p>
      * 
      * @return the underlying exception which 
-           caused the XIncludeException to be thrown
+     *     caused this XIncludeException to be thrown
      */
     public Throwable getCause() {
         return this.cause;  
     }
 
+    
     // null is insufficient for detecting an unset cause.
     // The cause may be set to null whicn may not then be reset.
     private boolean causeSet = false;
 
+    
     /**
      * <p>
      * When an <code>IOException</code>,  
@@ -148,4 +155,5 @@ public class XIncludeException extends Exception {
         return this;
     }
 
+    
 }

@@ -25,14 +25,14 @@ package nu.xom;
 
 /**
  * <p>
- * A <code>NoSuchAttributeException</code>
- * indicates that an attribute with a certain name and/or namespace 
+ * Indicates that an attribute with a certain name and/or namespace 
  * does not exist. This is normally thrown after an attempt to remove
  * such a non-existent attribute.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
+ * @see Element#removeAttribute(Attribute)
  *
  */
 public class NoSuchAttributeException extends XMLException {

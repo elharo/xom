@@ -25,7 +25,7 @@ package nu.xom;
 
 /**
  * <p>
- *  A <code>MalformedURIException</code> signals that a string
+ *  Indicates that a string
  *  intended for use as a URI or URI reference (typically a namespace
  *  name or a base URI) is not syntactically correct  according to 
  *  <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>.
@@ -33,7 +33,6 @@ package nu.xom;
 
  * @author Elliotte Rusty Harold
  * @version 1.0a4
- * 
  *
  */
 public class MalformedURIException extends IllegalDataException {
@@ -45,7 +44,7 @@ public class MalformedURIException extends IllegalDataException {
      * with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public MalformedURIException(String message) {
         super(message);
@@ -58,7 +57,7 @@ public class MalformedURIException extends IllegalDataException {
      * with a detail message and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
     public MalformedURIException(String message, Throwable cause) {

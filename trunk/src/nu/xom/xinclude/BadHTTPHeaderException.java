@@ -32,7 +32,7 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  */
 public class BadHTTPHeaderException extends XIncludeException {
 
@@ -43,7 +43,7 @@ public class BadHTTPHeaderException extends XIncludeException {
      * the specified detail message. 
      * </p>
      *
-     * @param message the detail message
+     * @param message a string indicating the specific problem
      */
     public BadHTTPHeaderException(String message) {
         super(message);
@@ -57,7 +57,7 @@ public class BadHTTPHeaderException extends XIncludeException {
      * that caused the exception.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
      */
     public BadHTTPHeaderException(String message, String uri) {

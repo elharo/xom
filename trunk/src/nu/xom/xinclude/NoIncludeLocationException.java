@@ -25,13 +25,12 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * A <code>NoIncludeLocationException</code> is thrown when
- * an <code>xinclude:include</code> element has neither an 
+ * Thrown when an <code>xinclude:include</code> element has neither an 
  * <code>href</code> nor an <code>xpointer</code> attribute.
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  */
 public class NoIncludeLocationException extends XIncludeException {
 
@@ -42,7 +41,7 @@ public class NoIncludeLocationException extends XIncludeException {
      * specified message.
      * </p>
      *
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public NoIncludeLocationException(String message) {
        super(message);
@@ -55,7 +54,7 @@ public class NoIncludeLocationException extends XIncludeException {
      * specified detail message and root cause. 
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param cause the initial exception that caused this 
      *     <code>NoIncludeLocationException</code>
      */
@@ -72,7 +71,7 @@ public class NoIncludeLocationException extends XIncludeException {
      * document that caused the exception.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
      */
     public NoIncludeLocationException(String message, String uri) {
