@@ -42,6 +42,7 @@ import nu.xom.Text;
 import nu.xom.XMLException;
 import nu.xom.converters.DOMConverter;
 
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMImplementation;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -291,6 +292,22 @@ public class DOMConverterTest extends XOMTestCase {
           
         org.w3c.dom.Element root = doc.getDocumentElement();
         org.w3c.dom.Text node = (org.w3c.dom.Text) (root.getChildNodes().item(0));
+        Text text = DOMConverter.convert(node);
+        assertEquals(node.getNodeValue(), text.getValue());
+                 
+    }
+
+    public void testConvertCDATASection() 
+      throws SAXException, IOException, ParserConfigurationException {
+
+        byte[] data = "<element><![CDATA[ here's the text ]]></element>".getBytes();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        org.w3c.dom.Document doc = factory.newDocumentBuilder()
+          .parse(new ByteArrayInputStream(data));
+          
+        org.w3c.dom.Element root = doc.getDocumentElement();
+        CDATASection node = (CDATASection) (root.getChildNodes().item(0));
         Text text = DOMConverter.convert(node);
         assertEquals(node.getNodeValue(), text.getValue());
                  
