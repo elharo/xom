@@ -35,6 +35,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.IllegalAddException;
+import nu.xom.MultipleParentException;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -530,5 +531,52 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals("value", value.getQualifiedName());         
     }
     
+    public void testCantBypassMultipleParentChecks() 
+      throws ParsingException, IOException {
+        String doc = "<root><a/><a/></root>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            private Element a = new Element("a");
+            
+            public Element startMakingElement(String name, String namespace) {
+                if (name.equals("a")) return a;
+                return new Element(name, namespace);    
+            }
+            
+        });
+        try {
+            builder.build(doc, "http://www.example.org/");
+            fail("built with multiple parents");
+        }
+        catch (MultipleParentException success) {
+            assertNotNull(success.getMessage());   
+        }            
+
+    }
+
+    public void testCantBypassMultipleParentChecksFromFinishMakingElement() 
+      throws ParsingException, IOException {
+        String doc = "<root><a/><a/></root>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            private Element a = new Element("a");
+            
+            public Nodes finishMakingElement(Element element) {
+                if (element.getLocalName().equals("a")) return new Nodes(a);
+                else return new Nodes(element);    
+            }
+            
+        });
+        try {
+            builder.build(doc, "http://www.example.org/");
+            fail("built with multiple parents");
+        }
+        catch (MultipleParentException success) {
+            assertNotNull(success.getMessage());   
+        }            
+
+    }
+ 
+
  
 }

@@ -111,9 +111,6 @@ public class NodeFactory {
         return new Element(name, namespace);    
     }
     
-    // check that you can't use this method to bypass
-    // add's checks on multiple parentage????
-    
     // should finishMakingElement be called for the root element????
     
     /**
