@@ -34,7 +34,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 class XOMHandler 
@@ -121,7 +121,7 @@ class XOMHandler
             flushText();
             if (parent != document) { 
                 // a.k.a. parent not instanceof Document
-                parent.fastAppend(element);
+                parent.appendChild(element);
             }
             // This is optimized for the very common case where 
             // everything in the document has the same actual base URI. 
@@ -236,7 +236,7 @@ class XOMHandler
             else data = factory.makeWhiteSpaceInElementContent(
               buffer.toString()
             );
-            if (data != null) parent.fastAppend(data);
+            if (data != null) parent.appendChild(data);
             buffer = new StringBuffer();
         }
         isIgnorable = false;
@@ -261,7 +261,7 @@ class XOMHandler
                     position++;
                 }
                 else {
-                    parent.fastAppend(instruction);
+                    parent.appendChild(instruction);
                 }
             }
             else if (!inExternalSubset) {
@@ -333,7 +333,7 @@ class XOMHandler
                     position++;
                 }
                 else {
-                    parent.fastAppend(comment);
+                    parent.appendChild(comment);
                 }
             }
             else if (inDTD) {
