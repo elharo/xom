@@ -65,16 +65,18 @@ public class XSLExceptionTest extends XOMTestCase {
             ex.initCause(null);   
             fail("Reinitialized cause over null");   
         }
-        catch (IllegalStateException result) {
+        catch (IllegalStateException success) {
             // success   
+            assertNotNull(success.getMessage()); 
         }
         
         try {
             ex.initCause(new Exception());   
             fail("Reinitialized cause over null");   
         }
-        catch (IllegalStateException result) {
-            // success   
+        catch (IllegalStateException success) {
+            // success  
+            assertNotNull(success.getMessage()); 
         }
         
     }
