@@ -28,6 +28,7 @@ import java.io.IOException;
 import nu.xom.Builder;
 import nu.xom.DocType;
 import nu.xom.Document;
+import nu.xom.IllegalDataException;
 import nu.xom.IllegalNameException;
 import nu.xom.ParsingException;
 import nu.xom.WellformednessException;
@@ -205,9 +206,9 @@ public class DocTypeTest extends XOMTestCase {
                 fail("Allowed bad public ID character " 
                   + Integer.toHexString(c));
             }
-            catch (WellformednessException ex) {
+            catch (WellformednessException success) {
                 // successfully detected bad public ID    
-                assertNotNull(ex.getMessage());
+                assertNotNull(success.getMessage());
             }
         } 
         for (char c = 0xE; c < 0x20; c++) {
@@ -227,9 +228,9 @@ public class DocTypeTest extends XOMTestCase {
                 fail("Allowed bad public ID character " 
                   + Integer.toHexString(c));
             }
-            catch (WellformednessException ex) {
+            catch (WellformednessException success) {
                 // successfully detected bad public ID    
-                assertNotNull(ex.getMessage());
+                assertNotNull(success.getMessage());
             }
         } 
 
@@ -258,17 +259,27 @@ public class DocTypeTest extends XOMTestCase {
             new DocType("test", "http://www.example.com/index.html#test");
             fail("Allowed system ID with fragment identifier");
         }
-        catch (WellformednessException ex) {
+        catch (IllegalDataException success) {
             // successfully detected bad system ID    
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
+        
         try {
             new DocType("test", "http://www.example.com/index.html#");
             fail("Allowed # in system ID");
         }
-        catch (WellformednessException ex) {
+        catch (IllegalDataException success) {
             // successfully detected bad system ID    
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
+        }
+
+        try {
+            new DocType("test", "test\" and ' in the same ID");
+            fail("Allowed both \" and ' in system ID");
+        }
+        catch (IllegalDataException success) {
+            // successfully detected bad system ID    
+            assertNotNull(success.getMessage());
         }
 
 
