@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -31,8 +31,6 @@ import nu.xom.Text;
 
 import org.apache.xerces.util.XMLChar;
 
-import com.ibm.icu.text.UTF16;
-
 /**
  * <p>
  *  Tests to make sure name and character rules are enforced.
@@ -45,7 +43,7 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d7
  *
  */
 public class VerifierTest extends XOMTestCase {
@@ -64,6 +62,9 @@ public class VerifierTest extends XOMTestCase {
         
         for (char c = 0; c < 65535; c++) {
 
+            // XXX remove dependence on this class by providing 
+            // your own table of name characters as a config file for
+            // the tests
             if (XMLChar.isNCNameStart(c)) {
                String name = String.valueOf(c);
                Element e = new Element(name);   
@@ -965,11 +966,16 @@ public class VerifierTest extends XOMTestCase {
     }
     
     
+    // from Unicode FAQ
+    // http://www.unicode.org/faq/utf_bom.html#35
+    private static int LEAD_OFFSET = 0xD800 - (0x10000 >> 10);
+    private static int SURROGATE_OFFSET = 0x10000 - (0xD800 << 10) - 0xDC00;
+    
     private static String convertToUTF16(int c) {
         
-        if (c <= 0xFFFF) return "" + (char) c;
-        char high = UTF16.getLeadSurrogate(c);
-        char low = UTF16.getTrailSurrogate(c);
+        if (c <= 0xFFFF) return String.valueOf((char) c);
+        char high = (char) (LEAD_OFFSET + (c >> 10));
+        char low = (char) (0xDC00 + (c & 0x3FF));
         StringBuffer sb = new StringBuffer(2);
         sb.append(high);
         sb.append(low);
