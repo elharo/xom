@@ -650,4 +650,15 @@ public class NamespacesTest extends XOMTestCase {
         }
     }
 
+    public void testUnescapedPercentSign() {
+        String namespace = "http://www.example.org/%ce%";
+        try {
+            new Element("test", namespace);
+            fail("Allowed path to contain only percent");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
+
 }
