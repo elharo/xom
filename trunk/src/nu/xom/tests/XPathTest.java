@@ -1490,6 +1490,28 @@ public class XPathTest extends XOMTestCase {
      }
     
     
+     public void testContextPositionForParaentlessNodeIs1() {
+      
+         Element root = new Element("html");
+         
+         Nodes result = root.query("self::*[1]");
+         assertEquals(1, result.size());
+         assertEquals(root, result.get(0));
+         
+     }
+    
+    
+     public void testContextSizeForParaentlessNodeIs1() {
+      
+         Element root = new Element("html");
+         
+         Nodes result = root.query("self::*[last()=1]");
+         assertEquals(1, result.size());
+         assertEquals(root, result.get(0));
+         
+     }
+    
+    
      public void testLastFunction() {
       
          Element root = new Element("html");
