@@ -28,11 +28,15 @@ import nu.xom.Element;
  * Represents a namespace in scope. It is used by XOM's 
  * XPath implementation for the namespace axis. However, it is not 
  * really part of the XOM data model. Namespace objects are only
- * created as needed when evaluating XPath.
+ * created as needed when evaluating XPath. While a namespace node has
+ * a parent element (which may be null), that element does not know 
+ * about these namespace nodes and cannot remove them. (This is an
+ * inconsistency in the XPath data model, and is shared with attributes
+ * which also have parents but are not children.) 
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.1d6
  *
  */
 public final class Namespace extends Node {
@@ -47,9 +51,71 @@ public final class Namespace extends Node {
       = "http://www.w3.org/XML/1998/namespace";
 
     
-    Namespace(String prefix, String uri, Element parent) {
+    /**
+     * <p>
+     * Create a new namespace node.
+     * </p>
+     * 
+     * @param prefix the prefix for the namespace; may be the empty 
+     *     string or a non-colonized name
+     * @param URI the namespace URI
+     * @param parent the element that possesses this namespace node
+     * 
+     * @throws MalformedURIException if <code>URI</code> is 
+     *     not an RFC 3986 URI reference
+     * @throws IllegalNameException if
+     *  <ul>
+     *      <li>The prefix is <code>xmlns</code>.</li>
+     *      <li>The prefix is not the empty string, and the URI is 
+     *          null or the empty string.</li>
+     * </ul>
+     * @throws NamespaceConflictException if
+     *  <ul>
+     *      <li>The prefix is the empty string, and the URI is 
+     *          null or the empty string.</li>
+     *      <li>The prefix is <code>xml</code>, and the URI is not
+     *          <code>http://www.w3.org/XML/1998/namespace</code>.</li>
+     *      <li>The prefix is not <code>xml</code>, and the URI is
+     *          <code>http://www.w3.org/XML/1998/namespace</code>.</li>
+     * </ul>
+     */
+    public Namespace(String prefix, String URI, Element parent) {
+        
+        if (prefix == null) prefix = "";
+        else if ("xmlns".equals(prefix)) {
+            throw new IllegalNameException(
+              "The xmlns prefix may not be bound to a URI.");
+        }
+        else if ("xml".equals(prefix)) {
+            if (! XML_NAMESPACE.equals(URI) ) {
+                throw new NamespaceConflictException(
+                  "The prefix xml can only be bound to the URI "
+                  + "http://www.w3.org/XML/1998/namespace");
+            }
+        }
+        
+        if (prefix.length() != 0) Verifier.checkNCName(prefix);
+        
+        if (URI == null) URI = "";
+        else if (URI.equals(XML_NAMESPACE)) {
+            if (! "xml".equals(prefix)) {
+                throw new NamespaceConflictException(
+                  "The URI http://www.w3.org/XML/1998/namespace can "
+                  + "only be bound to the prefix xml");    
+            }
+        }
+        
+        if (URI.length() == 0) { // faster than "".equals(uri)
+            if (prefix.length() != 0) {
+                throw new NamespaceConflictException(
+                 "Prefixed elements must have namespace URIs."
+                );  
+            }
+        }
+        else Verifier.checkAbsoluteURIReference(URI);
+        
         this.prefix = prefix;
-        this.uri = uri;
+        this.uri = URI;
         super.setParent(parent);
     }
     
@@ -118,7 +184,7 @@ public final class Namespace extends Node {
      *   the same prefix and URI, but no parent.
      * </p>
      * 
-     * @return a deep copy of this <code>Namespace</code> 
+     * @return a copy of this <code>Namespace</code> 
      *     that is not part of a document
      */
     public Node copy() {
@@ -126,6 +192,18 @@ public final class Namespace extends Node {
     }
 
 
+    /** 
+     * <p>
+     * Removes this namespace node from its parent.  
+     * </p>
+     * 
+     * @see nu.xom.Node#detach()
+     */
+    public void detach() {
+        super.setParent(null);
+    }
+    
+    
     /**
      * <p>
      *  Returns a string containing the actual XML
