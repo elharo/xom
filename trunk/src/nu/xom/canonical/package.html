@@ -5,7 +5,7 @@
 
   @(#)package.html	
 
-   Copyright © 2002 Elliotte Rusty Harold
+   Copyright © 2002, 2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of version 2.1 of 
@@ -23,9 +23,7 @@
    
    You can contact Elliotte Rusty Harold by sending e-mail to
    elharo@metalab.unc.edu. Please include the word "XOM" in the
-   subject line. The XOM home page is temporarily located at
-   http://www.cafeconleche.org/XOM/  but will eventually move
-   to http://www.xom.nu/  
+   subject line. The XOM home page is http://www.xom.nu/  
 
 
 -->
@@ -37,9 +35,8 @@
 supports the output of 
 <a target="_top"
 href="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical XML</a>
-from XOM by writing 
-<code>Document</code> objects onto an <code>OutputStream</code>.
-For simple conversion of existing documents, this (or any other tree-based
+from XOM.
+For basic canonicalization of existing documents, this (or any other tree-based
 solution) is likely not as efficient as a streaming, SAX-based solution.
 However, this is useful for output from XOM in canonical form.
 </p>
