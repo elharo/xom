@@ -112,7 +112,8 @@ class URIUtil {
     
     private static String merge(ParsedURI base, String relativePath) {
     
-        if (base.authority != null && "".equals(base.path) && !"".equals(base.authority)) {
+        if (base.authority != null && "".equals(base.path) 
+          && !"".equals(base.authority)) {
             return "/" + relativePath;
         }
     
@@ -186,9 +187,16 @@ class URIUtil {
         ParsedURI(String spec) {
             
             int colon = spec.indexOf(':');
-            int question = spec.indexOf('?');
-            int sharp = spec.indexOf('#');
+            int question = -1;
             
+            // URIs can only contain one sharp sign
+            int sharp = spec.lastIndexOf('#'); 
+            
+            // Fragment IDs can contain question marks so we only read 
+            // the question mark before the fragment ID, if any
+            if (sharp == -1) question = spec.indexOf('?');
+            else question = spec.substring(0, sharp).indexOf('?');
+
             if (colon != -1) scheme = spec.substring(0, colon);
             
             if (question == -1 && sharp == -1) {
@@ -204,7 +212,8 @@ class URIUtil {
             }
             else {
                 if (sharp < colon) {
-                    MalformedURIException ex = new MalformedURIException("Unparseable URI");
+                    MalformedURIException ex 
+                      = new MalformedURIException("Unparseable URI");
                     ex.setData(spec);
                     throw ex;
                 }
@@ -254,7 +263,7 @@ class URIUtil {
             else {
                 result.append("//");
                 if (authority != null) result.append(authority);
-                if (path != null) result.append(path);
+                result.append(path);
             }
             
             if (query != null) result.append('?' + query);
