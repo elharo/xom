@@ -22,6 +22,7 @@ package nu.xom.tests;
 
 import junit.framework.ComparisonFailure;
 import nu.xom.Attribute;
+import nu.xom.Comment;
 import nu.xom.Element;
 import nu.xom.Namespace;
 import nu.xom.Node;
@@ -34,7 +35,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d7
+ * @version 1.1a2
  *
  */
 public class XOMTestCaseTest extends XOMTestCase {
@@ -205,6 +206,23 @@ public class XOMTestCaseTest extends XOMTestCase {
         Node a1 = new Attribute("xml:base", Namespace.XML_NAMESPACE, "value.xml");
         Node a2 = new Attribute("xml:base", Namespace.XML_NAMESPACE, "./value.xml");
         assertEquals(a1, a2);
+        
+    }
+    
+    
+    public void testCompareChildren() {
+     
+        Element e1 = new Element("e");
+        Element e2 = new Element("e");
+        e1.appendChild(new Comment("a"));
+        e2.appendChild(new Comment("b"));
+        try {
+            assertEquals("BOO!", e1, e2);
+            fail("didn't check children");
+        }
+        catch (ComparisonFailure ex) {
+            assertTrue(ex.getMessage().indexOf("BOO!") >= 0 );
+        }
         
     }
     
