@@ -182,7 +182,10 @@ final class Verifier {
 
     }
 
-
+    // This seems to be allowing URIs with framgent IDs.
+    // Make sure this is OK everywhere it's used. It's
+    // definitiely needed in somple palce; might need separate
+    // check URI and checkURIReference methods????
     /**
      * <p>
      * Checks a string to see if it is a syntactically correct 
@@ -196,6 +199,12 @@ final class Verifier {
      */
     static void checkURI(String uri) {
         
+        // Are there any verifiable are loosened rules for framgent
+        // IDs? i.e. can they contain characters that the rest of the URI
+        // can't such as [ and ]? e.g. in XPointer?
+        // Same question for query strings?
+        // Do I need to divide URI into base, query, and fragment and check each
+        // separately????
         if ((uri == null) || uri.length() == 0) return;
 
         int leftBrackets = 0;
@@ -659,7 +668,7 @@ final class Verifier {
             case 'X': return true;
             case 'Y': return true;
             case 'Z': return true;
-            case '[': return true;
+            case '[': return false;
             case '\\': return false;
             case ']': return false;
             case '^': return false;
@@ -700,6 +709,7 @@ final class Verifier {
         switch(c) {
             case '!': return true;
             case '"': return false;
+            // really checking for URI references
             case '#': return true;
             case '$': return true;
             case '%': return true;
