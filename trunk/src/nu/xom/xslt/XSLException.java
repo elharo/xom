@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -28,7 +28,7 @@ package nu.xom.xslt;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d5
  */
 public class XSLException extends Exception {
 
@@ -89,7 +89,7 @@ public class XSLException extends Exception {
      *   (An exception cannot be its own cause.)
      * @throws IllegalStateException if this method is called twice
      */
-    public Throwable initCause(Throwable cause) {
+    public final Throwable initCause(Throwable cause) {
         
         if (causeSet) {
             throw new IllegalStateException("Can't overwrite cause");
