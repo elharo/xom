@@ -30,19 +30,10 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  *
  */
 public class NoSuchChildException extends XMLException {
-
-    /**
-     * <p>
-     * Creates a new <code>NoSuchChildException</code>.
-     * </p>
-     */
-    public NoSuchChildException() {
-        super();
-    }
 
     /**
      * <p>
