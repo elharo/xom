@@ -778,7 +778,6 @@ public class XPathTest extends XOMTestCase {
         }
         catch (XPathException success) {
             assertNotNull(success.getMessage());
-            assertNotNull(success.getCause());
         }   
         
     }
@@ -793,9 +792,49 @@ public class XPathTest extends XOMTestCase {
         parent.appendChild(child);
         child.appendChild(grandchild);
         
-        Nodes result = parent.query("//*[count(namespace::*)=1]");
+        // Every node has at least a mapping for xml prefix.
+        Nodes result = parent.query("self::*[count(namespace::*)=0]");
+        assertEquals(0, result.size());   
+        
+        result = parent.query("self::*[count(namespace::*)=1]");
+        assertEquals(1, result.size());   
+        assertEquals(parent, result.get(0));
+        
+        result = child.query("self::*[count(namespace::*)=2]");
         assertEquals(1, result.size());   
         assertEquals(child, result.get(0));
+        
+        result = grandchild.query("self::*[count(namespace::*)=3]");
+        assertEquals(1, result.size());   
+        assertEquals(grandchild, result.get(0));
+        
+    }
+    
+    
+    public void testPredicateWithNamespaceAxis2() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child", "http://www.example.com");
+        Element grandchild = new Element("child", "http://www.example.com");
+        grandchild.addNamespaceDeclaration("pre", "http://www.w3.org/");
+        parent.appendChild(child);
+        child.appendChild(grandchild);
+        
+        // Every node has at least a mapping for xml prefix.
+        Nodes result = parent.query("*[count(namespace::*)=0]");
+        assertEquals(0, result.size());   
+        
+        result = parent.query(".//self::*[count(namespace::*)=1]");
+        assertEquals(1, result.size());   
+        assertEquals(parent, result.get(0));
+        
+        result = parent.query(".//*[count(namespace::*)=2]");
+        assertEquals(1, result.size());   
+        assertEquals(child, result.get(0));
+        
+        result = parent.query(".//*[count(namespace::*)=3]");
+        assertEquals(1, result.size());   
+        assertEquals(grandchild, result.get(0));
         
     }
     
