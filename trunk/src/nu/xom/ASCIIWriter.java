@@ -27,7 +27,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d7
+ * @version 1.0d23
  * 
  */
 class ASCIIWriter extends TextWriter {
@@ -40,7 +40,7 @@ class ASCIIWriter extends TextWriter {
      * @param out the <code>Writer</code> to write to
      * @param encoding the encoding the writer uses
      */
-    public ASCIIWriter(Writer out, String encoding) {
+    ASCIIWriter(Writer out, String encoding) {
         super(out, encoding);
     }
 
@@ -53,7 +53,7 @@ class ASCIIWriter extends TextWriter {
      * 
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
-    public boolean needsEscaping(char c) {
+    boolean needsEscaping(char c) {
         return c > 127;
     }
 

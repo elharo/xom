@@ -27,7 +27,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d23
  *
  */
 class UnicodeWriter extends TextWriter {
@@ -39,7 +39,7 @@ class UnicodeWriter extends TextWriter {
     /**
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
-    public boolean needsEscaping(char c) {
+    boolean needsEscaping(char c) {
         return false;
     }
 

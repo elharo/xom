@@ -27,7 +27,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d13
+ * @version 1.0d23
  * 
  *
  */
@@ -39,14 +39,14 @@ class EBCDIC37Writer extends TextWriter {
      * @param out
      * @param encoding
      */
-    public EBCDIC37Writer(Writer out, String encoding) {
+    EBCDIC37Writer(Writer out, String encoding) {
         super(out, encoding);
     }
 
     /**
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
-    public boolean needsEscaping(char c) {
+    boolean needsEscaping(char c) {
         return c > 255;
     }
 
