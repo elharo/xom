@@ -118,6 +118,17 @@ abstract class TextWriter {
                 skipFollowingLinefeed = false;
             }
         }
+        // Handle most characters that don't need to be specially 
+        // treated. This is a minor optimization to short circuit   
+        // several per character tests. The assumption is it is much  
+        // more likely the character doesn't need to be escaped than 
+        // does.
+        else if (c > '>') {
+            out.write(c);
+            column++;
+            lastCharacterWasSpace = false;
+            skipFollowingLinefeed = false;
+        }
         else if (c == '&') {
             out.write("&amp;");
             column += 5;
@@ -194,6 +205,15 @@ abstract class TextWriter {
                 skipFollowingLinefeed = false;
             }
         }
+        // Handle most characters that don't need to be specially treated.
+        // This is a minor optimization to short circuit a bunch of 
+        // per character tests.
+        else if (c > '>') {
+            out.write(c);
+            column++;
+            lastCharacterWasSpace = false;
+            skipFollowingLinefeed = false;
+        }
         // Handle white space that the parser might normalize
         // on roundtrip. We only escape them if the serializer
         // is not adjusting white space; that is indent is 0
@@ -209,11 +229,7 @@ abstract class TextWriter {
                 skipFollowingLinefeed = false;
                 return;
             }
-            if (adjustingWhiteSpace()) {
-                if (skipFollowingLinefeed) {
-                    skipFollowingLinefeed = false;
-                    return;
-                }
+            else if (adjustingWhiteSpace()) {
                 out.write(" ");
                 lastCharacterWasSpace = true;                
             }
@@ -227,6 +243,12 @@ abstract class TextWriter {
                 }
                 lastCharacterWasSpace = true;
             }
+        }
+        else if (c == '"') {
+            out.write("&quot;");
+            column += 6;
+            lastCharacterWasSpace = false;
+            skipFollowingLinefeed = false;
         }
         else if (c == '\r') {
             if (adjustingWhiteSpace()) {
@@ -244,12 +266,6 @@ abstract class TextWriter {
                 }
                 skipFollowingLinefeed = true; 
             }
-        }
-        else if (c == '"') {
-            out.write("&quot;");
-            column += 6;
-            lastCharacterWasSpace = false;
-            skipFollowingLinefeed = false;
         }
         // Handle characters that are illegal in attribute values
         else if (c == '&') {
@@ -321,8 +337,7 @@ abstract class TextWriter {
         
         if (!lineSeparatorSet || preserveSpace) out.write(c);
         else if (lineSeparator.equals("\r\n")) {
-            out.write('\r');    
-            out.write('\n');    
+            out.write("\r\n");    
         } 
         else if (lineSeparator.equals("\n")) {
             out.write('\n');    
