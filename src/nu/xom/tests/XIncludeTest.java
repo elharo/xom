@@ -2130,7 +2130,7 @@ public class XIncludeTest extends XOMTestCase {
     
     
     public void testMiddlePunctuationError() 
-      throws ParsingException, IOException {
+      throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/middlepunctuationerror.xml");
         Document doc = builder.build(input);
@@ -2138,7 +2138,7 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("Allowed illegal IRI with right square bracket ]");
         }
-        catch (XIncludeException success) {
+        catch (BadHrefAttributeException success) {
             assertNotNull(success.getMessage());
         }
         
