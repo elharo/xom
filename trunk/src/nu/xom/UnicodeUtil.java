@@ -8575,17 +8575,7 @@ final class UnicodeUtil {
                 result.append(d);
             }    
             
-            /* FIXME now put into canonical order
-               A string is put into canonical order by repeatedly replacing 
-               any exchangeable pair by the pair in reversed order. When there 
-               are no remaining exchangeable pairs, then the string is in 
-               canonical order. Note that the replacements can be done in any order.
-
-               A sequence of two adjacent characters in a string is an exchangeable 
-               pair if the combining class (from the Unicode Character Database) 
-               for the first character is greater than the combining class for the 
-               second, and the second is not a starter; that is, 
-               if combiningClass(first) > combiningClass(second) > 0. */
+            /* now put into canonical order */
 
             for (int i = 0; i < result.length-1; i++) {
                 int first = result.data[i];
@@ -8596,7 +8586,8 @@ final class UnicodeUtil {
                 if (firstClass > secondClass ) {
                     result.data[i] = second;
                     result.data[i+1] = first;
-                    // FIXME do we now need to start over from the last starter?
+                    i -= 2;
+                    if (i == -2) i = -1;
                 }
             }
             
@@ -8697,8 +8688,6 @@ final class UnicodeUtil {
           
             int combiningClass = getCombiningClass(data[index]);
             for (int i = lastStarterIndex+1; i < index; i++) {
-                // FIXME here we're testing against something we may have already combined;
-                // need to start from after that point or at least skip that point
                 if (data[i] !=0 && combiningClass == getCombiningClass(data[i])) {
                     return true;
                 }
