@@ -185,11 +185,14 @@ public class Builder {
         // so we can't load it with the XMLReaderFactory
         XMLReader parser; 
         try {
+            // XXX test with Xerces not available
             parser = new XML1_0Parser();
             setupParser(parser, validate);
             return parser;
         } 
-        catch (SAXException ex) {
+        catch (Throwable ex) {
+            // If Xerces is not available, this will be a 
+            // NoClassDefError or some such;
             // look for next one
         }
         
