@@ -43,7 +43,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0d25
  *
  */
 public class MegaTest extends XOMTestCase {
@@ -51,7 +51,7 @@ public class MegaTest extends XOMTestCase {
     private Reader in;
     private Writer out;
     private Builder builder;
-    private final int expectedResult = 200000000;
+    private final static int expectedResult = 200000000;
     private int actualResult = 0;
     private Thread generator;
     
@@ -59,12 +59,14 @@ public class MegaTest extends XOMTestCase {
         super(name);
     }
     
+    
     public static void main(String[] args) throws Exception {
         MegaTest test = new MegaTest("MegaTest");
         test.setUp();
         test.testMegaFile();
     }
 
+    
     protected void setUp() throws IOException {
         PipedReader pin = new PipedReader();
         out = new PipedWriter(pin);
@@ -74,6 +76,7 @@ public class MegaTest extends XOMTestCase {
         generator = new Generator();
         generator.start();
     }
+    
     
     class Generator extends Thread {
         
@@ -99,6 +102,7 @@ public class MegaTest extends XOMTestCase {
         
     }
     
+    
     public void testMegaFile() 
       throws IOException, ParsingException {
 
@@ -107,6 +111,7 @@ public class MegaTest extends XOMTestCase {
 
     } 
 
+    
     private class MinimizingFactory extends NodeFactory {
 
         private Nodes empty = new Nodes();
