@@ -51,7 +51,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -62,12 +62,14 @@ public class ElementTest extends XOMTestCase {
     private Comment child3;
     private Element child4;
     private Element child5;
-    private String[] legal = {"http://www.is.edu/sakdsk#sjadh",
+    private String[] legal = {
+        "http://www.is.edu/sakdsk#sjadh",
         "http://www.is.edu/sakdsk?name=value&name=head",
         "uri:isbn:0832473864",
         "http://www.examples.com:80",
         "http://www.examples.com:80/",
-        "http://www.is.edu/%20sakdsk#sjadh"};
+        "http://www.is.edu/%20sakdsk#sjadh"
+       };
          
     private String[] illegal = {
           "http://www.is.edu/%sakdsk#sjadh",
@@ -512,6 +514,7 @@ public class ElementTest extends XOMTestCase {
          
     }
 
+    
     public void testAttributes() {
         
         String name = "red:sakjdhjhd";
@@ -537,8 +540,9 @@ public class ElementTest extends XOMTestCase {
         assertNull(a1.getParent());
         assertNull(e.getAttribute("name"));
         
-        e.removeAttribute(a2);
+        Attribute removed = e.removeAttribute(a2);
         assertNull(a2.getParent());
+        assertEquals(a2, removed);
         assertNull( e.getAttribute("green", "http://www.green.com/"));
         
     }
@@ -631,6 +635,7 @@ public class ElementTest extends XOMTestCase {
         
     }
 
+    
     public void testSetLocalName() {
         
         String name = "red:sakjdhjhd";
@@ -647,7 +652,6 @@ public class ElementTest extends XOMTestCase {
         assertEquals("digits1234", e.getLocalName());
         e.setLocalName("digits-z");
         assertEquals("digits-z", e.getLocalName());
-        
         
         try {
             e.setLocalName("spaces ");
