@@ -34,7 +34,7 @@ import nu.xom.IllegalDataException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d23
  *
  */
 public class CommentTest extends XOMTestCase {
@@ -103,17 +103,23 @@ public class CommentTest extends XOMTestCase {
           c1.setValue("test -- test");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
         try {
           c1.setValue("-test");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
         try {
           c1.setValue("test-");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
 
         c1.setValue(null);
         assertEquals("", c1.getValue());
@@ -155,7 +161,9 @@ public class CommentTest extends XOMTestCase {
           new Comment("test: \uD8F5\uDBF0  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
 
 
         // Two high-halves
@@ -163,28 +171,36 @@ public class CommentTest extends XOMTestCase {
           new Comment("test: \uD8F5\uD8F5  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
 
         // One high-half
         try {
            new Comment("test: \uD8F5  ");
            fail("Should raise an IllegalDataException");
-         }
-         catch (IllegalDataException success) {}
+        }
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
 
         // One low half
-         try {
+        try {
             new Comment("test: \uDF80  ");
             fail("Should raise an IllegalDataException");
-          }
-          catch (IllegalDataException success) {}
+         }
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
 
         // Low half before high half
          try {
             new Comment("test: \uDCF5\uD8F5  ");
             fail("Should raise an IllegalDataException");
-          }
-          catch (IllegalDataException success) {}
+         }
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
 
 
     }
@@ -199,7 +215,8 @@ public class CommentTest extends XOMTestCase {
             fail("Didn't throw IndexOutofBoundsException");
         }
         catch (IndexOutOfBoundsException ex) {
-            // success   
+            // success  
+            assertNotNull(ex.getMessage()); 
         }
         
         assertNull(c1.getParent());

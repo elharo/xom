@@ -34,7 +34,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d2`3
  *
  */
 public class TextTest extends XOMTestCase {
@@ -84,7 +84,9 @@ public class TextTest extends XOMTestCase {
           a1.setValue("test \u0000 test ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
 
     }
 
@@ -161,28 +163,36 @@ public class TextTest extends XOMTestCase {
           new Text("test: \uD8F5\uD8F5  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
 
         // One high-half
         try {
            new Text("test: \uD8F5  ");
            fail("Should raise an IllegalDataException");
          }
-         catch (IllegalDataException success) {}
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
 
         // One low half
          try {
             new Text("test: \uDF80  ");
             fail("Should raise an IllegalDataException");
           }
-          catch (IllegalDataException success) {}
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
 
         // Low half before high half
          try {
             new Text("test: \uDCF5\uD8F5  ");
             fail("Should raise an IllegalDataException");
           }
-          catch (IllegalDataException success) {}
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
 
     }
 

@@ -35,7 +35,7 @@ import nu.xom.NamespaceException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -317,7 +317,10 @@ public class AttributeTest extends XOMTestCase {
           a1.setValue("test \u0000 test ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
+        }
 
      }
 
