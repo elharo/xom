@@ -56,7 +56,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b6
  * 
  */
 public class Builder {
@@ -665,7 +665,7 @@ public class Builder {
                         url.append("%22");
                         break;
                     case '#':  
-                        url.append(c);
+                        url.append("%23");
                         break;
                     case '$':  
                         url.append(c);

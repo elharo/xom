@@ -24,6 +24,7 @@
 package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
+import java.io.CharConversionException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -1636,6 +1637,30 @@ public class BuilderTest extends XOMTestCase {
         Document doc = builder.build(new File("data/resumé.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<resumé />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsSpaceInFileName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/space file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsSharpInFileName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/# file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         
