@@ -566,13 +566,7 @@ final class Verifier {
         
         if (c <= 0xD7FF)  {
             if (c >= 0x20) return true;
-            else {
-                return C0Table[c];
-                 /* if (c == '\n') return true;
-                 if (c == '\r') return true;
-                 if (c == '\t') return true;
-                 return false; */
-            }
+            else return C0Table[c];
         }
 
         if (c < 0xE000) return false;  if (c <= 0xFFFD) return true;
@@ -1221,6 +1215,7 @@ final class Verifier {
         if (c == '\'') return true;
         if (c == '(') return true;
         if (c == ')') return true;
+        if (c == ';') return true;
         // These next two were reallowed by RFC 2732
         // for IPv6 addresses
         if (c == '[') return true;
