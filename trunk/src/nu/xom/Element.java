@@ -459,8 +459,17 @@ public class Element extends ParentNode {
             
         }
         
-        // XXX inline?
-        add(attribute);
+        if (attributes == null) attributes = new ArrayList(1);
+        checkPrefixConflict(attribute);
+        
+        // Is there already an attribute with this local name
+        // and namespace? If so, remove it.
+        Attribute oldAttribute = get(attribute.getLocalName(), 
+          attribute.getNamespaceURI());
+        // remove directly from arraylist????
+        if (oldAttribute != null) remove(oldAttribute);
+        
+        attributes.add(attribute);
         attribute.setParent(this);
         
     }
@@ -1653,24 +1662,6 @@ public class Element extends ParentNode {
     boolean isElement() {
         return true;   
     } 
-
-
-    
-    private void add(Attribute attribute) {
-
-        if (attributes == null) attributes = new ArrayList(1);
-        checkPrefixConflict(attribute);
-        
-        // Is there already an attribute with this local name
-        // and namespace? If so, remove it.
-        Attribute oldAttribute = get(attribute.getLocalName(), 
-          attribute.getNamespaceURI());
-        // remove directly from arraylist????
-        if (oldAttribute != null) remove(oldAttribute);
-        
-        attributes.add(attribute);
-        
-    }
     
     
     private void checkPrefixConflict(Attribute attribute) {
