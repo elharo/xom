@@ -26,14 +26,13 @@ package nu.xom;
 /**
  * <p>
  *  A <code>MalformedURIException</code> signals that a string
- *  intended for use as a URI reference (typically a namespace
- *  name or a base URI) is not a syntactically correct URI
- *  according to 
+ *  intended for use as a URI or URI reference (typically a namespace
+ *  name or a base URI) is not syntactically correct  according to 
  *  <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a4
  * 
  *
  */
