@@ -1248,8 +1248,6 @@ public class Element extends ParentNode {
             return base;
         }
         
-        
-        
         // This element does not have an xml:base attribute
         // 2. If this node doesn't have a parent,
         //    then return its own base URI.
@@ -1285,6 +1283,7 @@ public class Element extends ParentNode {
             else if (c == '/') uri.append(c);
             else if (c == '-') uri.append(c);
             else if (c == '.') uri.append(c);
+            else if (c == '%') uri.append(c);
             else if (c == '?') uri.append(c);
             else if (c == ':') uri.append(c);
             else if (c == '@') uri.append(c);

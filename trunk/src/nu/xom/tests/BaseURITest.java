@@ -373,10 +373,20 @@ public class BaseURITest extends XOMTestCase {
 
     }
     
+
+    public void testXMLBaseValuesCanContainPercentEscapes() {
+        Attribute base = new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", "base.html");
+        Element e = new Element("test");
+        e.addAttribute(base);
+        base.setValue("http://www.w3.org/%20testing");
+        String baseURI = e.getBaseURI();
+        assertEquals("http://www.w3.org/%20testing", baseURI);
+    }
     
     public void testInheritBaseFromDoc() {
         assertEquals(base1, doc.getRootElement().getBaseURI());
-     }
+    }
 
     public void testLoadElementFromDifferentEntity() {
         assertEquals(base2, 
