@@ -27,10 +27,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.xml.sax.helpers.NamespaceSupport;
 
@@ -417,7 +415,7 @@ public class Canonicalizer {
         private Attribute[] sortAttributes(Element element) {
     
             Map nearest = new TreeMap();
-            // ???? add in any inherited xml: attributes 
+            // add in any inherited xml: attributes 
             if (nodes != null && indexOf(element) != -1) {
                 // grab all xml: attributes
                 Nodes attributes = element.query("ancestor::*/@xml:*", xmlcontext);
@@ -435,7 +433,7 @@ public class Canonicalizer {
                                 nearest.put(name, a);
                             }
                             else {
-                                nearest.put(name, null); // ???? allowed null values?
+                                nearest.put(name, null);
                             }
                         }
                     }
