@@ -436,7 +436,6 @@ final class Verifier {
         if (c == '%') return true;
         if (c == '\n') return true;
         if (c == '\r') return true;
-        if (c == '\t') return true;
 
         return false;
     }

@@ -188,7 +188,7 @@ public class DocTypeTest extends XOMTestCase {
     public void testIllegalPublicIDs() {
 
         // PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
-        for (char c = 0; c < 0x9; c++) {
+        for (char c = 0; c <= 0x9; c++) {
             try {
                 checkPublicIDCharacter(c + "");
                 fail("Allowed bad public ID character " 
@@ -238,6 +238,7 @@ public class DocTypeTest extends XOMTestCase {
     public void testLegalPublicIDs() {
 
         // PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
+        // should public IDs allow initial and trailing space????
         checkPublicIDCharacter(" ");
         checkPublicIDCharacter("\r");
         checkPublicIDCharacter("\n");
