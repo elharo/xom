@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0a4"/>
+    <property name="version" value="1.0a5"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -134,8 +134,11 @@ XOM Build file
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
-           optimize="${optimize}">
-      <classpath refid="compile.class.path"/>
+           optimize="${optimize}"
+           target="1.2"
+           source="1.3"
+           excludes="nu/xom/pantry/CatalogTest.java">
+       <classpath refid="compile.class.path"/>
     </javac>
     <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
   </target>
@@ -342,6 +345,9 @@ XOM Build file
   <target name="with.clover" depends="init">
     <clover-setup initString="clover/xom_coverage.db">
        <files>
+	       <exclude name="nu/xom/Latin6Writer.java"/>
+	       <exclude name="nu/xom/Latin8Writer.java"/>
+	       <exclude name="nu/xom/Latin10Writer.java"/>
 	       <exclude name="nu/xom/samples/**"/>
 	       <exclude name="nu/xom/pantry/**"/>
 	       <exclude name="nu/xom/benchmarks/**"/>
