@@ -1,4 +1,4 @@
-/* Copyright 2004 Elliotte Rusty Harold
+/* Copyright 2004, 2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -35,7 +35,7 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d5
  *
  */
 class ElementCopyBench {
@@ -83,23 +83,21 @@ class ElementCopyBench {
         System.out.println((post - pre)/1000.0 + "s to build document by copying");
           
         pre = System.currentTimeMillis(); 
-        Document copy = (Document) doc.copy();
+        doc.copy();
         post = System.currentTimeMillis();
         System.out.println((post - pre)/1000.0 + "s to copy entire Document");
           
-        copy = null;
         System.gc(); System.gc(); System.gc();
 
         pre = System.currentTimeMillis(); 
-        String value = doc.getValue();
+        doc.getValue();
         post = System.currentTimeMillis();
         System.out.println((post - pre)/1000.0 + "s to get value of entire Document");
-          
-        value = null;
+
         System.gc(); System.gc(); System.gc();
         
         pre = System.currentTimeMillis(); 
-        String xml = doc.toXML();
+        doc.toXML();
         post = System.currentTimeMillis();
         System.out.println((post - pre)/1000.0 + "s to get XML for entire Document");
                   
