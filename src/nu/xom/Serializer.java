@@ -46,7 +46,7 @@ import java.util.Locale;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1a2
  * 
  */
 public class Serializer {
@@ -544,8 +544,8 @@ public class Serializer {
      *   <code>writeNamespaceDeclaration</code>.
      * </p>
      * 
-     * @param element the <code>Element</code> whose attributes are 
-     *     written
+     * @param element the <code>Element</code> whose namespace
+     *     declarations are written
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
      * @throws UnavailableCharacterException if any of the element's 
