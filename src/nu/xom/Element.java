@@ -113,6 +113,7 @@ public class Element extends ParentNode {
             ex.setData(name);
             throw ex;
         }
+        
     }
 
     
@@ -134,6 +135,7 @@ public class Element extends ParentNode {
         // of canonical XML if nothing else
         result.setNamespaceURI(uri);
         return result;
+        
     }
 
 
@@ -153,19 +155,9 @@ public class Element extends ParentNode {
         this.localName = element.localName;
         this.URI = element.URI;
         
-        for (int i = 0; i < element.getChildCount(); i++) {
-           Node child = element.getChild(i);
-           this.appendChild(child.copy());
-        }
-        
         // Attach additional namespaces
         if (element.namespaces != null) {
             this.namespaces = element.namespaces.copy();
-            /* for (int i = 0; i < element.namespaces.size(); i++) {
-                String prefix = element.namespaces.getPrefix(i);
-                String uri = element.namespaces.getURI(prefix);
-                this.addNamespaceDeclaration(prefix, uri);
-            } */
         }
         
         // Attach clones of attributes
@@ -174,6 +166,82 @@ public class Element extends ParentNode {
         } 
         
         this.setActualBaseURI(element.getActualBaseURI());
+        
+        // non-recursive algorithm for filling in children
+        // doesn't yet work
+        /*
+        Node current = element;
+        Node newNode = this;
+        ParentNode copyParent = this;
+        boolean end = false;
+        int index = -1;
+        while (true) {
+            
+            // 1. Append a copy of the current node to the current parent
+            if (index != -1 && !end) {
+                if (current.isElement()) {
+                    copyParent.appendChild(copyTag((Element) current));
+                }
+                else {
+                    copyParent.appendChild(current.copy());
+                }
+            }
+            
+            
+            // 2. Select next following node
+            if (!end && current.getChildCount() > 0) {
+               current = current.getChild(0);
+               index = 0;
+            }
+            else  if (current == element) break;
+            else {
+              end = false;
+              ParentNode parent = current.getParent();
+              if (parent.getChildCount() - 1 == index) {
+                current = parent;
+                if (current != element) {
+                    parent = current.getParent();
+                    index = parent.indexOf(current);
+                }
+                end = true;
+              }
+              else {
+                 index++;
+                 current = parent.getChild(index);
+              }
+              
+            }
+
+        }        
+        */
+        
+        for (int i = 0; i < element.getChildCount(); i++) {
+           Node child = element.getChild(i);
+           this.appendChild(child.copy());
+        }
+        
+    }
+
+
+    private static Element copyTag(Element original) {
+    
+        Element copy = new Element();
+        copy.prefix = original.prefix;
+        copy.localName = original.localName;
+        copy.URI = original.URI;
+        
+        // Attach additional namespaces
+        if (original.namespaces != null) {
+            copy.namespaces = original.namespaces.copy();
+        }
+        
+        // Attach clones of attributes
+        if (original.attributes != null) {
+            copy.attributes = original.attributes.copy();
+        } 
+        
+        copy.setActualBaseURI(original.getActualBaseURI());
+        return copy;
         
     }
 
@@ -1721,7 +1789,7 @@ public class Element extends ParentNode {
      * declarations for namespaces inherited from ancestor elements.
      * </p>
      * 
-     * @return the String form of this element
+     * @return the XML representation of this element
      * 
      * @see nu.xom.Node#toXML()
      * 
@@ -1899,7 +1967,7 @@ public class Element extends ParentNode {
      * entity and character references have been resolved.
      * </p>
      * 
-     * @return  value of the root element of this document
+     * @return XPath string value of this element
      * 
      * @see nu.xom.Node#getValue()
      * 
@@ -1952,7 +2020,6 @@ public class Element extends ParentNode {
      * </p>
      * 
      * @return a deep copy of this element with no parent
-     *    and that is not attached to any document
      * 
      * @see nu.xom.Node#copy()
      */
