@@ -40,7 +40,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  * 
  */
 public class NodeFactory {
@@ -56,11 +56,12 @@ public class NodeFactory {
      * Subclasses may change the name, namespace, content, or other 
      * characteristics of the <code>Element</code> returned.
      * The default implementation merely calls 
-     * <code>makeElement</code>. However, when subclassing it is often
-     * useful to be able to easily distinguish between the root element
-     * and a non-root element because the root element cannot be 
-     * detached. Therefore, subclasses must not return null from this 
-     * method. Doing so will cause a <code>NullPointerException</code>.
+     * <code>startMakingElement</code>. However, when subclassing it is 
+     * often useful to be able to easily distinguish between the root 
+     * element and a non-root element because the root element cannot  
+     * be detached. Therefore, subclasses must not return null from  
+     * this method. Doing so will cause a 
+     * <code>NullPointerException</code>.
      * </p>
      * 
      * @param name the qualified name of the element
@@ -87,8 +88,8 @@ public class NodeFactory {
      * end-tag from the result tree. Any content inside the element  
      * will be attached to the element's parent by default, unless it
      * too is filtered. To remove an entire element, invoke
-     * <code>element.detach()</code> from the <code>endElement()</code>
-     * method.
+     * <code>element.detach()</code> from the 
+     * <code>finishMakingElement()</code> method.
      * </p>
      * 
      * @param name the qualified name of the element
