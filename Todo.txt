@@ -138,6 +138,21 @@ are escaped)
 
 check into class loading issues reported on the mailing list
 
+Run Clover on latest code
+
+===============
+Done 1.0a2:
+===============
+
+URI verification and base URI resolution are now performed 
+according to the RFC2396bids algorithm, rather than by using the 
+Xerces and java.net URI classes.
+
+The Builder no longer sets any System properties for more compatibility
+with applets and multiclassloader environments.
+
+Fixed bug in DOMConverter
+
 
 ===============
 Done 1.0a1:
