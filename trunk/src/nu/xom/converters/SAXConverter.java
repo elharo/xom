@@ -46,7 +46,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
   * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  * 
  */
 public class SAXConverter {
@@ -107,8 +107,8 @@ public class SAXConverter {
 
     /**
      * <p>
-     * Sets the optional lexical handler for this 
-     * converter. The only lexical events the converter supplies 
+     * Sets the optional lexical handler for this converter.
+     * The only lexical events the converter supplies 
      * are comments.
      * </p>
      * 
@@ -134,11 +134,11 @@ public class SAXConverter {
     }
     
     
-    // Not necessary to woory about parser exceptions passed to
-    // fatal error because we're starting with a known good document.
-    // Only excepitons that can arise are thrown by 
+    // Not necessary to worry about parser exceptions passed to
+    // fatalError() because we're starting with a known good document.
+    // Only exceptions that can arise are thrown by 
     // the supplied ContentHandler, and we don't want to pass those
-    // to the ErrorHandler, or call endDocument if such ane exception
+    // to the ErrorHandler, or call endDocument() if such an exception
     // is thrown
     /**
      * <p>
