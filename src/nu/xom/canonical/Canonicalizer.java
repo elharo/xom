@@ -441,9 +441,7 @@ public class Canonicalizer {
      * @throws IOException if the underlying <code>OutputStream</code>
      *      encounters an I/O error
      */
-    public final void write(Document doc) throws IOException { 
-        // check for null here and in serializer, to make sure
-        // we don't write something then throw NullPointerexception????    
+    public final void write(Document doc) throws IOException {  
         serializer.write(doc);        
         serializer.flush();
     }  
