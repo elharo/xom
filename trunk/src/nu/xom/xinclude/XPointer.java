@@ -57,7 +57,7 @@ class XPointer {
     // prevent instantiation
     private XPointer() {}
     
-    public static Nodes resolve(Document doc, String xptr) 
+    public static Nodes query(Document doc, String xptr) 
       throws XPointerSyntaxException, XPointerResourceException {    
             
         Nodes result = new Nodes();
@@ -171,6 +171,7 @@ class XPointer {
         }
         return null;
     }
+    
     
     private static int[] split(String tumbler)
       throws XPointerSyntaxException {
