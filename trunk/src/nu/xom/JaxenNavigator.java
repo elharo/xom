@@ -306,7 +306,7 @@ class JaxenNavigator extends DefaultNavigator {
     
     
     // seems to be necessary to avoid some reflection based
-    // issues inside jaxen; double check if we still need this????
+    // issues inside Jaxen; double check if we still need this????
     private static class XOMList extends ArrayList {}
 
 
@@ -453,7 +453,7 @@ class JaxenNavigator extends DefaultNavigator {
 
     
     public boolean isNamespace(Object object) {
-        return false;
+        return object instanceof NamespaceNode;
     }
 
     
