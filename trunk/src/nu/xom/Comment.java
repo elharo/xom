@@ -92,11 +92,33 @@ public class Comment extends LeafNode {
      */
     public final void setValue(String data) {
         if (data == null) data = "";
-        else Verifier.checkCommentData(data);
+        else {
+            Verifier.checkCharacterData(data);
+            if (data.indexOf("--") != -1) {
+                throw new IllegalDataException(
+                 "Comment data contains a double hyphen (--).");
+            }
+    
+            if (data.indexOf('\r') != -1) {
+                throw new IllegalDataException(
+                 "Comment data cannot contain carriage returns.");
+            }
+    
+            if (data.startsWith("-")) {
+                throw new IllegalDataException(
+                 "Comment data starts with a hyphen.");
+            }
+    
+            if (data.endsWith("-")) {
+                throw new IllegalDataException(
+                 "Comment data ends with a hyphen.");
+            }              
+        }
         checkValue(data);
         // Is <!----> a legal comment? Yes it is. 
         this.data = data;
     }
+
 
     /**
      * <p>
