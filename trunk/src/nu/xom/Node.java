@@ -416,7 +416,13 @@ public abstract class Node {
             
             return new Nodes(results);
         }
+        catch (XPathException ex) {
+            throw ex;
+        }
         catch (JaxenException ex) {
+            throw new XPathException("XPath error: " + ex.getMessage(), ex);
+        }
+        catch (RuntimeException ex) {
             throw new XPathException("XPath error: " + ex.getMessage(), ex);
         }
         finally {
