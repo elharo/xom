@@ -18,9 +18,7 @@ Boston, MA  02111-1307  USA
 
 You can contact Elliotte Rusty Harold by sending e-mail to
 elharo@metalab.unc.edu. Please include the word "XOM" in the
-subject line. The XOM home page is temporarily located at
-http://www.cafeconleche.org/XOM/  but will eventually move
-to http://www.xom.nu/
+subject line. The XOM home page is http://www.xom.nu/
 -->
 <project name="XOM" default="help" basedir=".">
 
@@ -121,12 +119,14 @@ to http://www.xom.nu/
       <pathelement location="${tagsoup.jar}"/>
     </path>
 
-<echo>test</echo>
-   <available property="tagsoup.installed" classname="org.ccil.cowan.tagsoup.Parser">
-  <classpath>
-    <pathelement location="lib2/tagsoup-1.0rc1.jar" />
-  </classpath>
-  </available>
+    <available property="tagsoup.installed" classname="org.ccil.cowan.tagsoup.Parser">
+      <classpath>
+        <pathelement location="${tagsoup.jar}" />
+      </classpath>
+    </available>
+    
+    <available property="clover.installed" 
+               file="clover.jar" filepath="${ant-home}/lib/clover.jar" />
     
   </target>
   
@@ -320,6 +320,14 @@ XOM Build file
     </echo>
   </target>
 
+  <target name="-checkForClover" unless="clover.installed">
+    <echo>
+    The task you are trying to run requires Clover to be installed 
+    in the $ANT_HOME/lib directory. You can purchase Clover from
+    http://www.cenqua.com/clover/
+    </echo>
+  </target>
+
   <!-- This task requires Ant 1.6 and TagSoup -->
   <target name="betterdoc" depends="compile, -checkForTagSoup" if="tagsoup.installed"
           description="Generate the API documentation">
@@ -454,7 +462,7 @@ XOM Build file
       <arg value="nu.xom.tests.XOMTests"/> 
     </java>
   </target>
-    
+  
     
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
@@ -469,7 +477,7 @@ XOM Build file
   <!-- These tasks require Clover -->
   <taskdef resource="clovertasks"/>
   
-  <target name="with.clover" depends="init">
+  <target name="with.clover" depends="init, -checkForClover">
     <mkdir dir="${clover.dir}"/>
     <clover-setup initString="${clover.dir}/xom_coverage.db">
        <files>
@@ -498,8 +506,8 @@ XOM Build file
   </target>
   
  
-  <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib-->
-  <target name="clovertest" depends="compile" description="Run JUnit tests with clover.jar in classpath">
+  <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
+  <target name="clovertest" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
     <junit printsummary="on" fork="no">
        <classpath refid="test.class.path" />
         <classpath>
