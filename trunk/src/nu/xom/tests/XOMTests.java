@@ -58,6 +58,7 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(DocumentTest.class));
         result.addTest(new TestSuite(DocTypeTest.class));
         result.addTest(new TestSuite(DOMConverterTest.class));
+        result.addTest(new TestSuite(SAXConverterTest.class));
         result.addTest(new TestSuite(BuilderTest.class));
         result.addTest(new TestSuite(AttributesTest.class));
         result.addTest(new TestSuite(NamespacesTest.class));
