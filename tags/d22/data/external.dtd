@@ -1,0 +1,4 @@
+<!ELEMENT test (#PCDATA)>
+<!-- comment should not be here -->
+<?processing instruction should not be here?>
+<!ATTLIST test name (CDATA) #FIXED "value">
