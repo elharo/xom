@@ -611,8 +611,10 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.indexOf(breaksEscaped) > 0);        
         
     }
+ 
     
     public void testPreserveBaseURI() throws IOException {        
+
         Element root = new Element("root");
         Document doc = new Document(root);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -632,6 +634,27 @@ public class SerializerTest extends XOMTestCase {
         
     } 
 
+    
+    public void testPreserveBaseURIWithChildren() throws IOException {        
+
+        String base = "http://www.example.com/index.xml";
+        Element root = new Element("root");
+        root.setBaseURI(base);
+        Element child = new Element("child");
+        child.setBaseURI(base);
+        root.appendChild(child);
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "UTF-8");
+        serializer.setPreserveBaseURI(true);
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<root xml:base=\"" + base + "\"><child/></root>\r\n", result);
+        
+    } 
+
+    
     public void testPreserveBaseURIDoesntOverrideXMLBase() throws IOException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("xml:base", 
