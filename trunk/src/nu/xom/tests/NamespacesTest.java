@@ -33,7 +33,7 @@ import nu.xom.NamespaceException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d21
  *
  */
 public class NamespacesTest extends XOMTestCase {
@@ -126,7 +126,8 @@ public class NamespacesTest extends XOMTestCase {
             // success   
         }
         try {
-            noNamespaces.addNamespaceDeclaration("xmlns", "http://www.example.com");
+            noNamespaces.addNamespaceDeclaration("xmlns",
+              "http://www.example.com");
             fail("added xmlns prefix");  
         }  
         catch (NamespaceException ex) {
@@ -207,9 +208,11 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals(1, test.getNamespaceDeclarationCount());
         test.addAttribute(new Attribute("test", "test"));
         assertEquals(1, test.getNamespaceDeclarationCount());
-        test.addAttribute(new Attribute("xlink:type", "http://www.w3.org/2001/xlink", "value"));
+        test.addAttribute(new Attribute("xlink:type", 
+          "http://www.w3.org/2001/xlink", "value"));
         assertEquals(2, test.getNamespaceDeclarationCount());
-        test.addAttribute(new Attribute("xlink:href", "http://www.w3.org/2001/xlink", "value"));
+        test.addAttribute(new Attribute("xlink:href", 
+          "http://www.w3.org/2001/xlink", "value"));
         assertEquals(2, test.getNamespaceDeclarationCount());
         test.addNamespaceDeclaration("xlink", "http://www.w3.org/2001/xlink");
         assertEquals(2, test.getNamespaceDeclarationCount());
@@ -281,7 +284,8 @@ public class NamespacesTest extends XOMTestCase {
        Element e = new Element("test");
        
        try {
-           e.addNamespaceDeclaration(null, "http://www.example.com");
+           e.addNamespaceDeclaration(null, 
+             "http://www.example.com");
            fail("added null prefix");   
        }
        catch (NamespaceException ex) {
@@ -307,40 +311,46 @@ public class NamespacesTest extends XOMTestCase {
    public void testAdding() {
     
         try {
-           noNamespaces.addNamespaceDeclaration("", "http://www.example.com/");
-           fail("added conflicting default namespace");
+            noNamespaces.addNamespaceDeclaration("", 
+              "http://www.example.com/");
+            fail("added conflicting default namespace");
         }
         catch (NamespaceException ex) {
            // success   
         }
 
         try {
-           severalNamespaces.addNamespaceDeclaration(
-             "xlink", "http://www.example.com/");
-           fail("added conflicting attribute prefix namespace");
+            severalNamespaces.addNamespaceDeclaration(
+              "xlink", "http://www.example.com/");
+            fail("added conflicting attribute prefix namespace");
         }
         catch (NamespaceException ex) {
            // success   
         }
 
         try {
-           someNamespaces.addNamespaceDeclaration("xsl", "http://www.example.com/");
-           fail("added conflicting additional prefix namespace");
+            someNamespaces.addNamespaceDeclaration("xsl", 
+              "http://www.example.com/");
+            fail("added conflicting additional prefix namespace");
         }
         catch (NamespaceException ex) {
            // success   
         }
 
-        someNamespaces.addNamespaceDeclaration("foo", "http://www.example.com/");
-        assertEquals("http://www.example.com/", someNamespaces.getNamespaceURI("foo"));
+        someNamespaces.addNamespaceDeclaration("foo", 
+          "http://www.example.com/");
+        assertEquals("http://www.example.com/",
+          someNamespaces.getNamespaceURI("foo"));
 
    }
 
    public void testReplacingNamespaceDeclaration() {
     
-        assertEquals("http://www.w3.org/2001/xlink", someNamespaces.getNamespaceURI("xlink"));
+        assertEquals("http://www.w3.org/2001/xlink", 
+          someNamespaces.getNamespaceURI("xlink"));
         try {
-            someNamespaces.addNamespaceDeclaration("xlink", "http://www.example.com/");
+            someNamespaces.addNamespaceDeclaration("xlink", 
+              "http://www.example.com/");
             fail("Redeclared without removal");   
         }
         catch (NamespaceException ex) {
@@ -348,8 +358,10 @@ public class NamespacesTest extends XOMTestCase {
         }
         someNamespaces.removeNamespaceDeclaration("xlink");
         assertNull(someNamespaces.getNamespaceURI("xlink"));
-        someNamespaces.addNamespaceDeclaration("xlink", "http://www.example.com/");
-        assertEquals("http://www.example.com/", someNamespaces.getNamespaceURI("xlink"));
+        someNamespaces.addNamespaceDeclaration("xlink", 
+          "http://www.example.com/");
+        assertEquals("http://www.example.com/", 
+          someNamespaces.getNamespaceURI("xlink"));
         
 
    }
@@ -370,8 +382,10 @@ public class NamespacesTest extends XOMTestCase {
 
    public void testElementConflict() {
     
-        Element element = new Element("pre:test", "http://www.example.com/");
-        element.addNamespaceDeclaration("pre", "http://www.example.com/");
+        Element element = new Element("pre:test", 
+          "http://www.example.com/");
+        element.addNamespaceDeclaration("pre", 
+          "http://www.example.com/");
         try {
            element.setNamespaceURI("http://www.yahoo.com");
            fail("changed to conflicting element namespace");
@@ -385,8 +399,10 @@ public class NamespacesTest extends XOMTestCase {
    public void testAttributeConflict() {
     
         Element element = new Element("test");
-        element.addNamespaceDeclaration("pre", "http://www.example.com/");
-        Attribute a = new Attribute("pre:test", "http://www.example.com/", "value");
+        element.addNamespaceDeclaration("pre", 
+          "http://www.example.com/");
+        Attribute a = new Attribute("pre:test", 
+          "http://www.example.com/", "value");
         element.addAttribute(a);
         try {
            a.setNamespace("pre", "http://www.yahoo.com/");
@@ -442,19 +458,21 @@ public class NamespacesTest extends XOMTestCase {
      
    }
 
-    // ????
     public void testCountNamespaces() {
         Element html = new Element("html");
         assertEquals(1, html.getNamespaceDeclarationCount());
         html.setNamespaceURI("http://www.w3.org/1999/xhtml");
         assertEquals(1, html.getNamespaceDeclarationCount());
-        html.addAttribute(new Attribute("pre:test", "http://www.examnple.org/", "value"));
+        html.addAttribute(new Attribute("pre:test", 
+          "http://www.examnple.org/", "value"));
         assertEquals(2, html.getNamespaceDeclarationCount());
         html.addNamespaceDeclaration("rddl", "http://www.rddl.org");
         assertEquals(3, html.getNamespaceDeclarationCount());
-        html.addNamespaceDeclaration("xlink", "http://www.w3.org/2001/xlink");
+        html.addNamespaceDeclaration("xlink", 
+          "http://www.w3.org/2001/xlink");
         assertEquals(4, html.getNamespaceDeclarationCount());
-        html.addAttribute(new Attribute("xml:space", "http://www.w3.org/XML/1998/namespace", "default"));
+        html.addAttribute(new Attribute("xml:space", 
+          "http://www.w3.org/XML/1998/namespace", "default"));
         assertEquals(4, html.getNamespaceDeclarationCount());        
     }
 
