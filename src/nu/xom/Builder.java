@@ -56,7 +56,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b1
  * 
  */
 public class Builder {
@@ -93,9 +93,9 @@ public class Builder {
      * 
      * <ol>
      * <li>Xerces 2.x (a.k.a. IBM XML parser for Java)</li>
+     * <li>GNU &AElig;lfred</li>
      * <li>Crimson</li>
      * <li>Piccolo</li>
-     * <li>GNU &AElig;lfred</li>
      * <li>Oracle</li>
      * <li>XP</li>
      * <li>Saxon's &AElig;lfred</li>
@@ -167,6 +167,7 @@ public class Builder {
     private static String[] parsers = {
         "nu.xom.XML1_0Parser",
         "org.apache.xerces.parsers.SAXParser",
+        "com.sun.org.apache.xerces.internal.parsers.SAXParser",
         "gnu.xml.aelfred2.XmlReader",
         "org.apache.crimson.parser.XMLReaderImpl",
         "com.bluecast.xml.Piccolo", 
