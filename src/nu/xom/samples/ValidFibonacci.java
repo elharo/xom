@@ -38,7 +38,7 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class ValidFibonacci {
@@ -61,7 +61,8 @@ public class ValidFibonacci {
         low = temp;
       }
       Document doc = new Document(root);
-      DocType doctype = new DocType("Fibonacci_Numbers", "fibonacci.dtd");
+      DocType doctype
+        = new DocType("Fibonacci_Numbers", "fibonacci.dtd");
       doc.insertChild(doctype, 0);
       System.out.println(doc.toXML());  
 
