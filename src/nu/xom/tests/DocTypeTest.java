@@ -91,6 +91,32 @@ public class DocTypeTest extends XOMTestCase {
     }  
     
     
+    public void testToXMLWithCommentsInInternalDTDSubset() 
+      throws ValidityException, ParsingException, IOException {
+        String data = "<?xml version=\"1.0\"?>\r\n" 
+          + "<!DOCTYPE root [\r\n" +
+                "  <!--comment-->\r\n  <!ELEMENT test (#PCDATA)>" +
+            "\r\n  <!--comment-->\r\n]>"
+          + "\r\n<test />\r\n";  
+        Document doc = (new Builder()).build(data, null);
+        String result = doc.toXML();
+        assertEquals(data, result);    
+    }  
+    
+    
+    public void testToXMLWithProcessingInstructionsInInternalDTDSubset() 
+      throws ValidityException, ParsingException, IOException {
+        String data = "<?xml version=\"1.0\"?>\r\n" 
+          + "<!DOCTYPE root [\r\n" +
+                "  <?target data?>\r\n  <!ELEMENT test (#PCDATA)>" +
+            "\r\n  <?target?>\r\n]>"
+          + "\r\n<test />\r\n";  
+        Document doc = (new Builder()).build(data, null);
+        String result = doc.toXML();
+        assertEquals(data, result);    
+    }  
+    
+    
     public void testInternalDTDSubset() 
       throws ParsingException, IOException {
         String data = "<!DOCTYPE root [ <!ELEMENT root EMPTY> ]><test/>";   

@@ -345,8 +345,9 @@ class XOMHandler
             }
             else {
                 if (node.isProcessingInstruction() || node.isComment()) {
+                    internalDTDSubset.append("  ");            
                     internalDTDSubset.append(node.toXML());            
-                    internalDTDSubset.append('\n');            
+                    internalDTDSubset.append("\r\n");            
                 }
                 else {
                     throw new XMLException("Factory tried to put a " 
@@ -451,8 +452,9 @@ class XOMHandler
             }
             else {
                 if (node.isComment() || node.isProcessingInstruction()) {
+                    internalDTDSubset.append("  ");            
                     internalDTDSubset.append(node.toXML());            
-                    internalDTDSubset.append('\n');            
+                    internalDTDSubset.append("\r\n");            
                 }
                 else {
                     throw new XMLException("Factory tried to put a " 
