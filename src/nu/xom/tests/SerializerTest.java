@@ -261,6 +261,22 @@ public class SerializerTest extends XOMTestCase {
           result);    
     }    
     
+    public void testStaticElementWithText() 
+      throws IOException, ParsingException {        
+        Element root = new Element("root");
+        String data = "   test   \n\n   \n  \n hello again";
+        root.appendChild(data);
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer.write(doc, out);
+        String result = out.toString("UTF-8");
+        
+        assertEquals( 
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<root>"
+          + data + "</root>\r\n",
+          result);    
+    }    
+    
     public void testElementWithTextAndCarriageReturns() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -285,6 +301,33 @@ public class SerializerTest extends XOMTestCase {
         Serializer serializer = new Serializer(out, "UTF-8");
         serializer.write(doc);
         String result = out.toString("UTF-8");
+        
+        Document resultDoc = parser.build(result, null);
+        XOMTestCase.assertEquals(doc, resultDoc);
+        
+        staticSerializeParseAndCompare(doc);    
+        setOutputStreamSerializeParseAndCompare(doc);    
+    }
+    
+    private void staticSerializeParseAndCompare(Document doc) 
+      throws IOException, ParsingException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer.write(doc, out);
+        String result = out.toString("UTF-8");
+        
+        Document resultDoc = parser.build(result, null);
+        XOMTestCase.assertEquals(doc, resultDoc);    
+    }
+    
+    private void setOutputStreamSerializeParseAndCompare(Document doc) 
+      throws IOException, ParsingException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
+        ByteArrayOutputStream out2 = new ByteArrayOutputStream();
+        serializer.setOutputStream(out2);
+        serializer.write(doc);
+        String result = out2.toString("UTF-8");
         
         Document resultDoc = parser.build(result, null);
         XOMTestCase.assertEquals(doc, resultDoc);    
@@ -1003,6 +1046,37 @@ public class SerializerTest extends XOMTestCase {
               line.length() <= length);    
         }
     }
+
+    public void testLineLengthWithSetOutputStream() 
+      throws IOException, ParsingException {
+          
+        int length = 40;        
+        Element root = new Element("root");
+        String data = "This is a really long string that does not "
+         + "contain any line breaks.  However, there is lots of " 
+         + "white space so there shouldn't be any trouble wrapping it"
+         + " into 40 characters or less per line. ";
+        root.appendChild(data);
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(new ByteArrayOutputStream(), "UTF-8");
+        serializer.setMaxLength(length);
+        serializer.write(doc);
+        serializer.setOutputStream(out);
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        
+        BufferedReader reader 
+          = new BufferedReader(new StringReader(result)); 
+        for (String line = reader.readLine(); 
+             line != null;
+             line = reader.readLine()) {
+            assertTrue(line.length() + ": " + line, 
+              line.length() <= length);    
+        }
+    }
+    
+
     
     public void testPrettyXML() throws IOException {
         Element items = new Element("itemSet");
@@ -1020,6 +1094,30 @@ public class SerializerTest extends XOMTestCase {
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
           + "<itemSet>\r\n    <item1/>\r\n    <item2/>\r\n"
           + "</itemSet>\r\n", 
+          result
+        );
+        
+    }
+    
+    public void testPrettyXMLWithSetOutputStream() throws IOException {
+        Element items = new Element("itemSet");
+        items.appendChild(new Element("item1"));
+        items.appendChild(new Element("item2"));
+        Document doc = new Document(items);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(new ByteArrayOutputStream());
+        serializer.setIndent(4);
+        serializer.setLineSeparator("\n");
+        serializer.write(doc);
+        serializer.setOutputStream(out);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+          + "<itemSet>\n    <item1/>\n    <item2/>\n"
+          + "</itemSet>\n", 
           result
         );
         
@@ -1187,6 +1285,27 @@ public class SerializerTest extends XOMTestCase {
         Serializer serializer = new Serializer(out, "ISO-8859-5");
         serializer.setUnicodeNormalizationFormC(true);
         serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "ISO-8859-5");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"ISO-8859-5\"?>\r\n"
+          + "<a>&#xE7;</a>\r\n", 
+          result
+        );       
+    }
+
+    public void testNFCWithSetOutputStream() 
+      throws IOException {
+        Element root = new Element("a");
+        root.appendChild("c\u0327"); // c with combining cedilla
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(new ByteArrayOutputStream(), "ISO-8859-5");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.setOutputStream(out);
+        serializer.write(doc);          
         serializer.flush();
         out.close();
         String result = new String(out.toByteArray(), "ISO-8859-5");
