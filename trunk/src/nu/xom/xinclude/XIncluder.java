@@ -344,6 +344,8 @@ public class XIncluder {
 
             }
             
+            verifyEncoding(encoding, element.getBaseURI());
+            
             testForForbiddenChildElements(element);
 
             ParentNode parent = element.getParent();
@@ -534,6 +536,37 @@ public class XIncluder {
     }
     
     
+    private static void verifyEncoding(String encoding, String url) 
+      throws BadEncodingAttributeException {
+
+        if (encoding == null) return;
+        // production 81 of XML spec
+        // EncName :=[A-Za-z] ([A-Za-z0-9._] | '-')*
+        char[] text = encoding.toCharArray();
+        if (text.length == 0) {
+            throw new BadEncodingAttributeException(
+              "Empty encoding attribute", url);
+        }
+        char c = text[0];
+        if (!((c >= 'A' &&  c <= 'Z') || (c >= 'a' &&  c <= 'z'))) {
+            throw new BadEncodingAttributeException(
+              "Illegal value for encoding attribute: " + encoding, url
+            );
+        }
+        for (int i = 1; i < text.length; i++) {
+            c = text[i];
+            if ((c >= 'A' &&  c <= 'Z') || (c >= 'a' &&  c <= 'z')
+              || (c >= '0' &&  c <= '9') || c == '-' || c == '_' || c == '.') {
+                continue;
+            }
+            throw new BadEncodingAttributeException(
+              "Illegal value for encoding attribute: " + encoding, url
+            );
+        }
+        
+    }
+
+    
     // hack because URIUtil isn't public
     private static URL absolutize(URL baseURL, String href) 
       throws MalformedURLException, BadHrefAttributeException {
@@ -606,6 +639,7 @@ public class XIncluder {
         }    
         
         return false;   
+        
     }
 
     
