@@ -553,7 +553,7 @@ final class Verifier {
     }
 
     
-    private static boolean isAlpha(char c) {
+    static boolean isAlpha(char c) {
         switch(c) {
             case 'A': return true;
             case 'B': return true;
@@ -618,7 +618,7 @@ final class Verifier {
     } 
     
     
-    private static boolean isSchemeCharacter(char c) {
+    static boolean isSchemeCharacter(char c) {
         switch(c) {
             case '+': return true;
             case ',': return false;
