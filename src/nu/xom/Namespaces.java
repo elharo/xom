@@ -36,7 +36,7 @@ import java.util.HashMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d13
+ * @version 1.0d23
  */
 class Namespaces {
     
@@ -101,16 +101,6 @@ class Namespaces {
      */
     public String getPrefix(int index) {
         return (String) prefixes.get(index);
-    }
-
-    // Make a shallow copy that has the same namespaces in the list
-    // but a different actual list. Thus removing namespaces from
-    // element will not change this list.
-    Namespaces copy() {
-        Namespaces copy = new Namespaces();
-        copy.namespaces = (HashMap) namespaces.clone(); 
-        copy.prefixes = (ArrayList) prefixes.clone(); 
-        return copy;
     }
     
     // This violates encapsulation. Don't change the 
