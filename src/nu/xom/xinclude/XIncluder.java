@@ -396,6 +396,16 @@ public class XIncluder {
                                       0, noFragment.indexOf('#'));
                                 }
                                 Element baseless = (Element) child;
+                                
+                                // parent is null here; need to get real parent
+                                String parentBase = parent.getBaseURI();
+                                if (parentBase != null && ! "".equals(parentBase)) {
+                                    parentBase = getDirectoryBase(parentBase);
+                                }
+                                
+                                if (noFragment.startsWith(parentBase)) {
+                                    noFragment = noFragment.substring(parentBase.length());
+                                }
                                 Attribute baseAttribute = new Attribute(
                                   "xml:base", 
                                   "http://www.w3.org/XML/1998/namespace", 
@@ -528,6 +538,15 @@ public class XIncluder {
         }
         
     }
+    
+    
+    // ???? Move this into URIUtil when it goes public
+    private static String getDirectoryBase(String parentBase) {
+        if (parentBase.endsWith("/")) return parentBase;
+        int lastSlash = parentBase.lastIndexOf('/');
+        return parentBase.substring(0, lastSlash+1);
+    }
+    
     
     
     private static void verifyIncludeElement(Element element) 

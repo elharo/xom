@@ -42,6 +42,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import nu.xom.Namespace;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -570,6 +571,17 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testBaseURIsPreservedInResultDocument() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        Document doc = new Document(new Element("root"));
+        doc.setBaseURI("http://www.example.org/");
+        Document result = XIncluder.resolve(doc);
+        assertEquals("http://www.example.org/", result.getBaseURI());
+        
+    }
+    
+    
     /* public void testResolveNodes() 
       throws IOException, ParsingException, XIncludeException {
         File dir = new File(inputDir, "");
@@ -923,6 +935,25 @@ public class XIncludeTest extends XOMTestCase {
           new File(outputDir, "c1.xml")
         );
         assertEquals(expectedResult, result);
+
+    }
+
+    
+    public void testRelativeURLBaseURIFixup() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "relative.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        assertEquals(doc.getBaseURI(), result.getBaseURI());
+        Document expectedResult = builder.build(
+          new File(outputDir, "relative.xml")
+        );
+        assertEquals(expectedResult, result);
+        Element root = result.getRootElement();
+        Element red = root.getFirstChildElement("red");
+        String base = red.getAttributeValue("base", Namespace.XML_NAMESPACE);
+        assertEquals("basedata/red.xml", base);
 
     }
 
