@@ -131,8 +131,11 @@ public class DOMConverter {
                 return convert((org.w3c.dom.Text) node);
             case org.w3c.dom.Node.PROCESSING_INSTRUCTION_NODE:
                 return convert((org.w3c.dom.ProcessingInstruction) node);
+            case org.w3c.dom.Node.DOCUMENT_NODE:
+                return convert((org.w3c.dom.Document) node);
             default:   
-                return null;
+                throw new XMLException(
+                  "Unexpected DOM node type: " + type);
         }
         
     }
