@@ -45,7 +45,7 @@ import java.util.List;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b7
  *
  */
 public abstract class ParentNode extends Node {
@@ -182,6 +182,12 @@ public abstract class ParentNode extends Node {
      * node. This is a number between 0 and one less than the number of
      * children of this node. It returns -1 if <code>child</code>
      * does not have this node as a parent.
+     * </p>
+     * 
+     * <p>
+     * This method does a linear search through the node's children. 
+     * On average, it executes in O(N) where N is the number of 
+     * children of the node.
      * </p>
      * 
      * @param child the node whose position is desired
