@@ -455,11 +455,11 @@ public class Serializer {
     protected void writeAttributes(Element element)
       throws IOException {
           
-        ParentNode parent = element.getParent();
         // check to see if we need an xml:base attribute
         if (preserveBaseURI) {
+            ParentNode parent = element.getParent();
             if (element.getAttribute("base", 
-             "http://www.w3.org/XML/1998/namespace") == null) {
+              "http://www.w3.org/XML/1998/namespace") == null) {
                 String baseValue = element.getBaseURI();
                 if (baseValue != null) {
                     if (parent == null 
@@ -759,11 +759,11 @@ public class Serializer {
      */
     protected void write(Node node) throws IOException {
         
-        if (node.isText()) {
-            write((Text) node);
-        }
-        else if (node.isElement()) {
+        if (node.isElement()) {
             write((Element) node);
+        }
+        else if (node.isText()) {
+            write((Text) node);
         }
         else if (node.isComment()) {
             write((Comment) node);
@@ -771,11 +771,11 @@ public class Serializer {
         else if (node.isProcessingInstruction()) {
             write((ProcessingInstruction) node);
         }
-        else if (node.isDocument()) {
-            write((Document) node);
-        }
         else if (node.isDocType()) {
             write((DocType) node);
+        }
+        else if (node.isDocument()) {
+            write((Document) node);
         }
         else {
             throw new XMLException(
