@@ -1989,7 +1989,6 @@ public class SerializerTest extends XOMTestCase {
       Document doc = builder.build(f);
       serializer.write(doc);
       String result = out.toString("UTF-8");
-      System.out.println(result);
       assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n" +
 "<html a=\"AReallyLongNameWithNoOpportunitiesToBreakToPutUsPastTheMaxLineLengthAndForceABreak\">\r\n" +    
 "    <head> </head>\r\n" + 
