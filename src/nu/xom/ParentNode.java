@@ -294,17 +294,17 @@ public abstract class ParentNode extends Node {
      * @param oldChild the node removed from the tree
      * @param newChild the node inserted into the tree
      * 
-     * @throws MultipleParentException if <code>newChild</code> already 
+     * @throws MultipleParentException if <code>newChild</code> already
      *     has a parent
      * @throws NoSuchChildException if <code>oldChild</code> 
-     *      is not a child of this node
+     *     is not a child of this node
      * @throws NullPointerException if either argument is null
      * @throws IllegalAddException if this node cannot have children 
-     *      of the type of <code>newChild</code>
+     *     of the type of <code>newChild</code>
      * @throws XMLException if the subclass rejects the removal of
      *     oldChild or the insertion of newChild
      */
-    public final void replaceChild(Node oldChild, Node newChild) {
+    public void replaceChild(Node oldChild, Node newChild) {
         
         if (oldChild == null) {
             throw new NullPointerException(
