@@ -488,6 +488,38 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testFallbackInIncludedDocumentIncludesADocumentWithParseEqualsText() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/metafallbacktest2.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        dumpResult(input, result);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/metafallbacktest2.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }
+
+        
+    
+    public void testFallbackInIncludedDocumentWithBadParseAttribute() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/metafallbacktest3.xml");
+        Document doc = builder.build(input);
+        try {
+            Document result = XIncluder.resolve(doc);
+            fail("Allowed bad parse attribute");
+        }
+        catch (BadParseAttributeException success) {
+            assertNotNull(success.getMessage());
+        }
+
+    }
+        
+    
     public void testFallbackInIncludedDocumentWithFragmentID() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -546,7 +578,41 @@ public class XIncludeTest extends XOMTestCase {
 
     }
     
+
+    public void testNoFallbackInIncludedDocumentWithXPointer() 
+      throws ParsingException, IOException, XIncludeException {
+        
+        // This test case activates processFallbackSilently
+        File input = new File("data/xinclude/input/metamissingfallbacktestwithxpointer.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Should have thrown IOException");
+        }
+        catch (IOException success) {
+            assertNotNull(success.getMessage());
+        }
+
+    }
     
+    
+    public void testFallbackInIncludedDocumentHasBadXPointer() 
+      throws ParsingException, IOException, XIncludeException {
+        // This test case activates processFallbackSilently
+        File input = new File("data/xinclude/input/metafallbackwithbadxpointertest.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Should have thrown XIncludeException");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());
+            assertNotNull(success.getCause());
+        }
+
+    }
+    
+        
     // from the XInclude CR
     public void testC1() 
       throws ParsingException, IOException, XIncludeException {
