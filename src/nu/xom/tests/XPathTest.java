@@ -1101,13 +1101,27 @@ public class XPathTest extends XOMTestCase {
     }
     
 
-    public void testAdjacentTextNodes() {
+    public void testAdjacentTextObjects() {
         
         Element parent = new Element("Test");
         parent.appendChild("test");
         parent.appendChild("again");
         
         Nodes result = parent.query("text()");
+        assertEquals(2, result.size());
+        assertEquals("test", result.get(0).getValue());   
+        assertEquals("again", result.get(1).getValue());   
+        
+    }
+    
+
+    public void testQueryCrossesAdjacentTextObjects() {
+        
+        Element parent = new Element("Test");
+        parent.appendChild("test");
+        parent.appendChild("again");
+        
+        Nodes result = parent.query("node()[contains(., 'tag')]");
         assertEquals(2, result.size());
         assertEquals("test", result.get(0).getValue());   
         assertEquals("again", result.get(1).getValue());   
