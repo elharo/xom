@@ -48,7 +48,7 @@ import org.xml.sax.helpers.LocatorImpl;
  * </p>
   * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b6
  * 
  */
 public class SAXConverter {
@@ -226,7 +226,6 @@ public class SAXConverter {
     
     private void convertElement(Element element) throws SAXException {
         
-        // Does this need to be the actual base URI, unaffected by xml:base????
         locator.setSystemId(element.getBaseURI());
         
         ParentNode parentNode = element.getParent();
@@ -294,6 +293,14 @@ public class SAXConverter {
         AttributesImpl saxAttributes = new AttributesImpl();
         for (int i = 0; i < element.getAttributeCount(); i++) {
             Attribute attribute = element.getAttribute(i);
+            // The base URIs provided by the locator have already 
+            // accounted for any xml:base attributes. We do not
+            // also pass in xml:base attributes or some relative base 
+            // URIs could be applied twice.
+            if ("base".equals(attribute.getLocalName())
+              && "http://www.w3.org/XML/1998/namespace".equals(attribute.getNamespaceURI())) {
+                continue;   
+            }
             saxAttributes.addAttribute(attribute.getNamespaceURI(),
               attribute.getLocalName(),
               attribute.getQualifiedName(),

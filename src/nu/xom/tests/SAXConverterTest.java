@@ -38,7 +38,9 @@ import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.converters.SAXConverter;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
@@ -50,7 +52,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b6
  *
  */
 public class SAXConverterTest extends XOMTestCase {
@@ -87,7 +89,7 @@ public class SAXConverterTest extends XOMTestCase {
             converter.setContentHandler(null);
             fail("Allowed null ContentHandler");
         }
-        catch (NullPointerException ex) {
+        catch (NullPointerException success) {
             // success   
         }
         
@@ -123,28 +125,86 @@ public class SAXConverterTest extends XOMTestCase {
     }
     
     
-    public void testSimplestDoc() throws Exception {
+    public void testSimplestDoc()  
+      throws IOException, SAXException, ParsingException {
         Document doc = new Document(new Element("a"));  
         convertAndCompare(doc); 
     }
     
     
-    public void testDocType() throws Exception {
+    public void testXMLBaseAttributesAreThrownAway() 
+      throws SAXException {
+        
+        Element root = new Element("root");
+        Element child = new Element("child");
+        Attribute base = new Attribute("xml:base",
+          "http://www.w3.org/XML/1998/namespace", "data");
+        child.addAttribute(base);
+        root.appendChild(child);
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com/");
+        converter.setContentHandler(new BaseChecker());
+        converter.convert(doc);
+        
+    }
+
+    
+    private static class BaseChecker extends DefaultHandler {
+        
+        private Locator locator;
+        
+        public void setDocumentLocator(Locator locator) {
+            this.locator = locator;
+        }
+        
+        public void startElement(String localName, String qualifiedName, 
+          String namespaceURI, Attributes attributes) 
+          throws SAXException {
+            
+            if (localName.equals("root")) {
+                assertEquals("http://www.example.com/", locator.getSystemId());
+            }
+            else if (localName.equals("child")) {
+                assertEquals("http://www.example.com/data", locator.getSystemId());
+            }
+            
+            for (int i=0; i < attributes.getLength(); i++) {
+                String name = attributes.getLocalName(i);
+                String uri  = attributes.getURI(i);
+                if ("base".equals(name) 
+                  && "http://www.w3.org/XML/1998/namespace".equals(uri)) {
+                    fail("Passed xml:base attribute into SAXConverter");   
+                }
+            } 
+            
+        }
+        
+    }
+    
+    
+    
+    public void testDocType()  
+      throws IOException, SAXException, ParsingException {
         Document doc = new Document(new Element("a")); 
         doc.setDocType(new DocType("root")); 
         convertAndCompare(doc); 
     }
     
     
-    public void testProcessingInstruction() throws Exception {
+    public void testProcessingInstruction() 
+      throws IOException, SAXException, ParsingException {
+        
         Document doc = new Document(new Element("a"));
         doc.insertChild(new ProcessingInstruction(
           "xml-stylesheet", "type=\"application/xml\" href=\"stylesheet.xsl\""), 0);  
         convertAndCompare(doc); 
+        
     }
     
     
-    public void testComment() throws Exception {
+    public void testComment() 
+      throws IOException, SAXException, ParsingException {
+        
         Element root = new Element("root");
         root.appendChild("   Lots of random text\n\n\n  ");
         Document doc = new Document(root);
@@ -152,16 +212,19 @@ public class SAXConverterTest extends XOMTestCase {
         root.insertChild(new Comment("some comment data"), 0);  
         doc.appendChild(new Comment("some comment data"));  
         convertAndCompare(doc); 
+        
     }
     
     
-    public void testDefaultNamespace() throws Exception {
+    public void testDefaultNamespace()  
+      throws IOException, SAXException, ParsingException {
         Document doc = new Document(new Element("a", "http://www.a.com/"));  
         convertAndCompare(doc); 
     }
     
     
-    public void testTextContent() throws Exception {
+    public void testTextContent()  
+      throws IOException, SAXException, ParsingException {
         Element root = new Element("root");
         root.appendChild("   Lots of random text\n\n\n  ");
         Document doc = new Document(root);  
@@ -169,31 +232,39 @@ public class SAXConverterTest extends XOMTestCase {
     }
     
     
-    public void testPrefixedNamespace() throws Exception {
+    public void testPrefixedNamespace()  
+      throws IOException, SAXException, ParsingException {
         Document doc = new Document(new Element("a:a", "http://www.a.com/"));  
         convertAndCompare(doc); 
     }
     
     
-    public void testAdditionalNamespace() throws Exception {
+    public void testAdditionalNamespace()  
+      throws IOException, SAXException, ParsingException {
+        
         Element root = new Element("root");
         root.addNamespaceDeclaration("xsl", "http://www.w3.org/1999/XSL/Transform");
         Document doc = new Document(root);  
         convertAndCompare(doc); 
+        
     }
     
     
-    public void testChildElementAddsNamespace() throws Exception {
+    public void testChildElementAddsNamespace()  
+      throws IOException, SAXException, ParsingException {
+        
         Element root = new Element("root");
         Element child = new Element("pre:child", "http://www.example.org/");
         child.addAttribute(new Attribute("xlink:type", "http://www.w3.org/1999/xlink", "simple"));
         root.appendChild(child);
         Document doc = new Document(root);  
         convertAndCompare(doc); 
+        
     }
     
     
-    public void testAttributesTypes() throws Exception {
+    public void testAttributesTypes()  
+      throws IOException, SAXException, ParsingException {
         
         Element root = new Element("root");
         root.addAttribute(new Attribute("CDATA", "CDATA", Attribute.Type.CDATA));
@@ -213,13 +284,16 @@ public class SAXConverterTest extends XOMTestCase {
     }
     
     
-    public void testAttributes() throws Exception {
+    public void testAttributes()  
+      throws IOException, SAXException, ParsingException {
+        
         Element root = new Element("root");
         root.addAttribute(new Attribute("a", "test"));
         root.addAttribute(new Attribute("xlink:type", 
           "http://www.w3.org/1999/xlink", "simple"));
         Document doc = new Document(root);  
         convertAndCompare(doc); 
+        
     }
     
     
@@ -234,13 +308,6 @@ public class SAXConverterTest extends XOMTestCase {
     public void testBigDoc()
       throws IOException, SAXException, ParsingException {
         Document doc = builder.build("http://www.cafeconleche.org/");
-        convertAndCompare(doc);
-    }
-   
-    
-    public void testAnotherBigDoc()
-      throws IOException, SAXException, ParsingException {
-        Document doc = builder.build("http://www.rddl.org/");
         convertAndCompare(doc);
     }
 
@@ -283,17 +350,15 @@ public class SAXConverterTest extends XOMTestCase {
  
     private static class XMLPrefixTester extends DefaultHandler {
         
-        public void startPrefixMapping(String prefix, String uri) 
-          throws SAXException {
+        public void startPrefixMapping(String prefix, String uri) {
             if ("xml".equals(prefix)) {
-                throw new SAXException("start mapped prefix xml");
+                fail("start mapped prefix xml");
             }
         }
         
-        public void endPrefixMapping(String prefix) 
-          throws SAXException {
+        public void endPrefixMapping(String prefix) {
             if ("xml".equals(prefix)) {
-                throw new SAXException("end mapped prefix xml");
+                fail("end mapped prefix xml");
             }
         }
         
@@ -302,14 +367,12 @@ public class SAXConverterTest extends XOMTestCase {
     
     private static class XMLPrefixTester2 extends DefaultHandler {
         
-        public void startPrefixMapping(String prefix, String uri) 
-          throws SAXException {
-            throw new SAXException("start mapped prefix " + prefix);
+        public void startPrefixMapping(String prefix, String uri) {
+            fail("start mapped prefix " + prefix);
         }
         
-        public void endPrefixMapping(String prefix) 
-          throws SAXException {
-            throw new SAXException("end mapped prefix " + prefix);
+        public void endPrefixMapping(String prefix) {
+            fail("end mapped prefix " + prefix);
         }
         
     }
@@ -334,13 +397,11 @@ public class SAXConverterTest extends XOMTestCase {
         private int starts = 0;
         private int ends = 0;
         
-        public void startPrefixMapping(String prefix, String uri) 
-          throws SAXException {
+        public void startPrefixMapping(String prefix, String uri) {
             starts++;
         }
         
-        public void endPrefixMapping(String prefix) 
-          throws SAXException {
+        public void endPrefixMapping(String prefix) {
             ends++;
         }
         
