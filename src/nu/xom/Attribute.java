@@ -593,20 +593,20 @@ public class Attribute extends Node {
      * <p>
      * Uses the type-safe enumeration 
      * design pattern to represent attribute types,
-     * as used in XML DTDs. 
+     * as specified by XML DTDs. 
      * </p>
      * 
      * <p>
      *   XOM enforces well-formedness, but it does not enforce 
-     *   validity. Thus it is possible fpr a single element to have 
-     *   multiple ID type attributest, or ID type attributes 
+     *   validity. Thus it is possible for a single element to have 
+     *   multiple ID type attributes, or ID type attributes 
      *   on different elements to have the same value, 
-     *   or NMTOKEN type attributes not to contain legal 
+     *   or NMTOKEN type attributes that don't contain legal 
      *   XML name tokens, and so forth.
      * </p>
      * 
      * @author Elliotte Rusty Harold
-     * @version 1.0d25
+     * @version 1.0a4
      *
      */
     public static final class Type {
@@ -653,7 +653,7 @@ public class Attribute extends Node {
          *   must contain a white space separated list of
          *   XML names, each of which is also the value of  
          *   ID type attribute of some element in the document. 
-         *   However,XOM does not enforce such validity constraints.
+         *   However, XOM does not enforce such validity constraints.
          * </p>
          *
          */
@@ -761,8 +761,6 @@ public class Attribute extends Node {
          * </p>
          * 
          *  @return an XML string representation of this type
-         *
-         * @see java.lang.Object#toString()
          */
         public String getName() {  
             
