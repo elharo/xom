@@ -941,15 +941,35 @@ public class Builder {
                         url.append(c);
                         break;
                     default: 
-                        // XXX This doesn't really work with characters
-                        // from beyond the BMP.
-                        url.append(URLEncoder.encode(String.valueOf(c)));
+                        if (c < 0xD800 || c > 0xDFFF) {
+                            url.append(URLEncoder.encode(String.valueOf(c)));
+                        }
+                        else if (c <= 0xDBFF) {
+                            // high surrogate; therefore we need to 
+                            // grab the next half before encoding
+                            i++;
+                            try {
+                                char low = absolute.charAt(i);
+                                url.append(URLEncoder.encode(String.valueOf(c)+String.valueOf(low)));
+                            }
+                            catch (IndexOutOfBoundsException ex) {
+                                // file name contains a high half and not a low half
+                                url = new StringBuffer();
+                                break;
+                            }
+                        }
+                        else {
+                            url = new StringBuffer();
+                            break;
+                        }
                 }
             }
         }
         
         String base = url.toString();
-        return build(fin, base);
+        Document doc = build(fin, base);
+        fin.close();
+        return doc;
         
     }
 
