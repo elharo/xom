@@ -32,6 +32,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.IllegalAddException;
+import nu.xom.MultipleParentException;
 import nu.xom.NoSuchChildException;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
@@ -116,6 +117,31 @@ public class DocumentTest extends XOMTestCase {
         assertEquals(1, doc.indexOf(type2));
         assertNull(type1.getParent());
         assertEquals(doc, type2.getParent());
+        
+        // set same doctype
+        doc.setDocType(type2);
+        assertEquals(type2, doc.getDocType());
+        assertEquals(1, doc.indexOf(type2));
+        assertEquals(doc, type2.getParent());
+        
+        try {
+            doc.setDocType(null); 
+            fail("Allowed null doctype");   
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
+            assertEquals(type2, doc.getDocType());   
+        }
+        
+        try {
+            Document doc2 = new Document(new Element("root"));
+            doc2.setDocType(type2); 
+            fail("Allowed multiple parents for doctype");   
+        }
+        catch (MultipleParentException success) {
+            assertNotNull(success.getMessage());   
+        }
+        
     }
 
     public void testBaseURI() {
