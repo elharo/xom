@@ -469,7 +469,8 @@ public class Serializer {
      */
     protected void write(Text text) throws IOException {
         String value = text.getValue();
-        if (text.isCDATASection()) {
+        if (text.isCDATASection() 
+          && text.getValue().indexOf("]]>") == -1) {
            for (int i = 0; i < value.length(); i++) {
                if (escaper.needsEscaping(value.charAt(i))) {
                     // can't use CDATA section
