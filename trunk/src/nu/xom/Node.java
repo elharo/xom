@@ -55,7 +55,7 @@ import org.jaxen.XPath;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1a1
  *
  */
 public abstract class Node {
@@ -482,6 +482,7 @@ public abstract class Node {
     }
 
 
+    // XXX remove recursion
     // recursively descend through document; in document
     // order, and add results as they are found
     private Nodes sortResults(List in, List namespaces) {
