@@ -398,7 +398,7 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Replaced child with null");
         }
         catch (NullPointerException success) {
-            // success  ????
+            assertNotNull(success.getMessage());
         }
 
         try {
