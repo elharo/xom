@@ -21,6 +21,9 @@
 
 package nu.xom.tests;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Document;
@@ -49,6 +52,21 @@ public class XPathTest extends XOMTestCase {
 
     public XPathTest(String name) {
         super(name);
+    }
+    
+    
+    // This class tests error conditions, which Xerces
+    // annoyingly logs to System.err. This hides System.err 
+    // before each test and restores it after each test.
+    private PrintStream systemErr = System.err;
+    
+    protected void setUp() {
+        System.setErr(new PrintStream(new ByteArrayOutputStream()));
+    }
+    
+    
+    protected void tearDown() {
+        System.setErr(systemErr);
     }
     
     
