@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.util.Locale;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -51,7 +52,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b6
  *
  */
 public class BaseURITest extends XOMTestCase {
@@ -187,7 +188,7 @@ public class BaseURITest extends XOMTestCase {
           "http://www.w3.org/XML/1998/namespace", base));
         assertEquals(base, root.getBaseURI());
         
-        base = "HTTP://WWW.EXAMPLE.COM/" + alphabet.toUpperCase();
+        base = "HTTP://WWW.EXAMPLE.COM/" + alphabet.toUpperCase(Locale.ENGLISH);
         root.addAttribute(new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", base));
         assertEquals(base, root.getBaseURI()); 

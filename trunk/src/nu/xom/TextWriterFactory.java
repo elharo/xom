@@ -25,11 +25,11 @@ package nu.xom;
 
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.Locale;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0a4
- *
+ * @version 1.0b6
  */
 class TextWriterFactory {
 
@@ -38,7 +38,7 @@ class TextWriterFactory {
     
         // Not all encoding names are case-insensitive in Java, even
         // though they should be. For instance, MacRoman isn't. 
-        String encodingUpperCase = encoding.toUpperCase();
+        String encodingUpperCase = encoding.toUpperCase(Locale.ENGLISH);
         if (encodingUpperCase.startsWith("UTF") 
           || encodingUpperCase.startsWith("UNICODE")
           ) {  

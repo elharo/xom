@@ -47,7 +47,7 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0b6
  *
  */
 public class VerifierTest extends XOMTestCase {
@@ -968,6 +968,7 @@ public class VerifierTest extends XOMTestCase {
     
     
     private static String convertToUTF16(int c) {
+        
         if (c <= 0xFFFF) return "" + (char) c;
         char high = UTF16.getLeadSurrogate(c);
         char low = UTF16.getTrailSurrogate(c);
@@ -975,6 +976,7 @@ public class VerifierTest extends XOMTestCase {
         sb.append(high);
         sb.append(low);
         return sb.toString().toLowerCase();
+        
     }
     
     

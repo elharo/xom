@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.Locale;
 
 /**
  * <p>
@@ -195,7 +196,7 @@ public class Serializer {
         throws UnsupportedEncodingException {
         
         Writer writer;  
-        String encodingUpperCase = encoding.toUpperCase();
+        String encodingUpperCase = encoding.toUpperCase(Locale.ENGLISH);
         // Java's Cp037 encoding is broken, so we have to
         // provide our own.
         if (encodingUpperCase.equals("IBM037")
