@@ -61,7 +61,7 @@ public class LeafNodeTest extends XOMTestCase {
             parent.getChild(0);
             fail("No index exception");   
         }
-        catch (IndexOutOfBoundsException ex) {
+        catch (IndexOutOfBoundsException success) {
             // success
         }
 

@@ -153,7 +153,7 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/circlepointer1.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Allowed circular reference via XPointer");
         }
         catch (CircularIncludeException success) {
@@ -461,16 +461,16 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/xptridtest2.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Resolved a document with an XPointer " +              "that selects no subresource");
         }
-        catch (XIncludeException ex) {
+        catch (XIncludeException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
             // Must compare URLs instead of strings here to avoid 
             // issues of whether a file URL begins file:/ or file:///
             URL u1 = input.toURL();
-            URL u2 = new URL(ex.getURI());
+            URL u2 = new URL(success.getURI());
             assertEquals(u1, u2);  
         }
         
@@ -505,13 +505,13 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/laterfailure.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Didn't find syntax error in 2nd XPointer part" +
                 " when the first part resolved successfully");
         }
-        catch (XIncludeException ex) {
+        catch (XIncludeException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }  
         
     }
@@ -522,13 +522,13 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/laterfailure2.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Didn't find syntax error in 2nd XPointer part" +
                 " when the first part resolved successfully");
         }
-        catch (XIncludeException ex) {
+        catch (XIncludeException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }  
         
     }
@@ -655,7 +655,7 @@ public class XIncludeTest extends XOMTestCase {
         );
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Did not error on XPointer matching nothing");
         }
         catch (XIncludeException ex) {
@@ -873,7 +873,6 @@ public class XIncludeTest extends XOMTestCase {
             Elements testcases = testsuite.getChildElements("testcases");
             for (int i = 0; i < testcases.size(); i++) {
                 Element group = testcases.get(i);   
-                String creator = group.getAttributeValue("creator");
                 String basedir = group.getAttributeValue("basedir");
                 Elements cases = group.getChildElements("testcase");
                 for (int j = 0; j < cases.size(); j++) {
@@ -895,8 +894,9 @@ public class XIncludeTest extends XOMTestCase {
                             // success   
                             assertNotNull(ex.getMessage());
                         }
-                        catch (IOException ex) {
-                           // success   
+                        catch (IOException success) {
+                           // success 
+                           assertNotNull(success.getMessage());  
                         }
                         catch (ParsingException ex) {
                             // success   
@@ -955,7 +955,7 @@ public class XIncludeTest extends XOMTestCase {
         File error = new File("data/xinclude/input/onedown.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Missing HREF not detected");
         }
         catch (MissingHrefException ex) {

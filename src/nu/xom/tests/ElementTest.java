@@ -848,7 +848,7 @@ public class ElementTest extends XOMTestCase {
             e.insertChild(data, 0);
             fail("Inserted null");
         }
-        catch (NullPointerException ex) {
+        catch (NullPointerException success) {
             // success;   
         }
     }
@@ -863,7 +863,7 @@ public class ElementTest extends XOMTestCase {
             e.appendChild(data);
             fail("Appended null");
         }
-        catch (NullPointerException ex) {
+        catch (NullPointerException success) {
             // success;   
         }
     }
@@ -913,24 +913,24 @@ public class ElementTest extends XOMTestCase {
             e.insertChild((Node) null, 0);
             fail("Added null child");  
         }
-        catch (NullPointerException ex) {
+        catch (NullPointerException success) {
             // success   
         }
         try {
             e.insertChild(new Comment("test"), 20);
             fail("Added comment after end");    
         }
-        catch (IndexOutOfBoundsException ex) {
+        catch (IndexOutOfBoundsException success) {
             // success    
-            assertNotNull(ex.getMessage()); 
+            assertNotNull(success.getMessage()); 
         }
         try {
             e.insertChild(new Comment("test"), -20);
             fail("Added comment before start"); 
         }
-        catch (IndexOutOfBoundsException ex) {
+        catch (IndexOutOfBoundsException success) {
             // success   
-            assertNotNull(ex.getMessage()); 
+            assertNotNull(success.getMessage()); 
         }     
         
     }
@@ -946,7 +946,7 @@ public class ElementTest extends XOMTestCase {
             element.insertChild(s, 0);
             fail("Inserted string as null");
         }
-        catch (NullPointerException ex) {
+        catch (NullPointerException success) {
             // success
         }
         
@@ -966,17 +966,17 @@ public class ElementTest extends XOMTestCase {
             element.setNamespaceURI("");
             fail("Unset namespace");
         }
-        catch (NamespaceException ex) {
+        catch (NamespaceException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
         try {
             element.setNamespaceURI(null);
             fail("Unset namespace");
         }
-        catch (NamespaceException ex) {
+        catch (NamespaceException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
  
     }
@@ -1022,9 +1022,9 @@ public class ElementTest extends XOMTestCase {
             element2.addAttribute(a1);
             fail("added attribute with existing parent");
         }
-        catch (IllegalAddException ex) {
+        catch (IllegalAddException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
         
         a1.detach();
@@ -1037,9 +1037,9 @@ public class ElementTest extends XOMTestCase {
             funky.addAttribute(a2); 
             fail("added conflicting namespace"); 
         }
-        catch (NamespaceException ex) { 
+        catch (NamespaceException success) { 
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
         
         a2.detach();
@@ -1058,9 +1058,9 @@ public class ElementTest extends XOMTestCase {
             test.addAttribute(a4); 
             fail("added conflicting attributes"); 
         }
-        catch (NamespaceException ex) { 
+        catch (NamespaceException success) { 
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
 
         Attribute a5 = new Attribute(
@@ -1073,9 +1073,9 @@ public class ElementTest extends XOMTestCase {
            test2.addAttribute(a6); 
            fail("added conflicting attributes"); 
         }
-        catch (NamespaceException ex) { 
+        catch (NamespaceException success) { 
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
         
     }
@@ -1105,9 +1105,9 @@ public class ElementTest extends XOMTestCase {
             );
             fail("added attribute that conflicts with " +                "additional namespace declaration");
         }
-        catch (NamespaceException ex) {
+        catch (NamespaceException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
 
         element.addAttribute(
@@ -1245,7 +1245,7 @@ public class ElementTest extends XOMTestCase {
         try {
             e.getAttribute(0);
         }
-        catch (IndexOutOfBoundsException ex) {
+        catch (IndexOutOfBoundsException success) {
             // success
         }
         
@@ -1263,18 +1263,20 @@ public class ElementTest extends XOMTestCase {
           
         try {
             e.getAttribute(2);
+            fail("Got attribute beyond bounds");
         }
-        catch (IndexOutOfBoundsException ex) {
+        catch (IndexOutOfBoundsException success) {
             // success   
-            assertNotNull(ex.getMessage()); 
+            assertNotNull(success.getMessage()); 
         }
   
         try {
             e.getAttribute(-1);
+            fail("Got attribute with negative index");
         }
-        catch (IndexOutOfBoundsException ex) {
+        catch (IndexOutOfBoundsException success) {
             // success   
-            assertNotNull(ex.getMessage()); 
+            assertNotNull(success.getMessage()); 
         }
            
     }

@@ -206,7 +206,6 @@ class XPointer {
         
         List result = new ArrayList(1);
         
-        String firstElementSchemeData = null;
         StringBuffer xptr = new StringBuffer(xpointer.trim());
         StringBuffer scheme = new StringBuffer();
         int i = 0;

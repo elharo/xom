@@ -25,7 +25,6 @@ package nu.xom.tests;
 
 import nu.xom.Comment;
 import nu.xom.Element;
-import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.Text;
 
@@ -60,7 +59,7 @@ public class NodesTest extends XOMTestCase {
     public void testIndexOutofBoundsException() {
         Nodes nodes = new Nodes();
         try {
-            Node stored = nodes.get(0);
+            nodes.get(0);
             fail("Didn't throw IndexOutOfBoundsException for empty list");
         }
         catch (IndexOutOfBoundsException success) {
@@ -69,14 +68,14 @@ public class NodesTest extends XOMTestCase {
         
         nodes.append(new Comment("data"));
         try {
-            Node stored = nodes.get(-1);
+            nodes.get(-1);
             fail("Didn't throw IndexOutOfBoundsException for -1");
         }
         catch (IndexOutOfBoundsException success) {
             assertNotNull(success.getMessage());   
         }  
         try {
-            Node stored = nodes.get(1);
+            nodes.get(1);
             fail("Didn't throw IndexOutOfBoundsException for fencepost");
         }
         catch (IndexOutOfBoundsException success) {

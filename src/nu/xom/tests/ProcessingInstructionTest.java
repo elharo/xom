@@ -209,36 +209,36 @@ public class ProcessingInstructionTest extends XOMTestCase {
             pi.setValue("test \uD8F5\uD8F5 test");
             fail("Allowed two high halves");
         }
-        catch (IllegalDataException ex) {
+        catch (IllegalDataException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
         
         try {
             pi.setValue("test \uDF80\uDF80 test");
             fail("Allowed two low halves");
         }
-        catch (IllegalDataException ex) {
+        catch (IllegalDataException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
         
         try {
             pi.setValue("test \uD8F5 \uDF80 test");
             fail("Allowed two halves split by space");
         }
-        catch (IllegalDataException ex) {
+        catch (IllegalDataException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
 
         try {
             pi.setValue("test \uDF80\uD8F5 test");
             fail("Allowed reversed pair");
         }
-        catch (IllegalDataException ex) {
+        catch (IllegalDataException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }        
         
     }
@@ -251,8 +251,9 @@ public class ProcessingInstructionTest extends XOMTestCase {
             pi.getChild(0);
             fail("Didn't throw IndexOutofBoundsException");
         }
-        catch (IndexOutOfBoundsException ex) {
-            // success   
+        catch (IndexOutOfBoundsException success) {
+            // success  
+            assertNotNull(success.getMessage()); 
         }
         
         assertNull(pi.getParent());
@@ -272,7 +273,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
     // recognized in comment data
     public void testCarriageReturnInProcessingInstructionData() {
         try {
-            ProcessingInstruction pi = new ProcessingInstruction("target", "data\rdata");
+            new ProcessingInstruction("target", "data\rdata");
             fail("Allowed carriage return in processing instruction data");
         }
         catch (IllegalDataException ex) {

@@ -430,7 +430,7 @@ public class BuilderTest extends XOMTestCase {
         // now make sure validating a valid document doesn't
         // throw an exception
         InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
-        Document document = validator.build(in, base);       
+        validator.build(in, base);       
     }
     
     public void testValidateFromInputStreamWithoutBase()
