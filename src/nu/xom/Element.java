@@ -76,6 +76,7 @@ public class Element extends ParentNode {
         this(name, "");
     }
 
+    
     /**
      * <p>
      * Creates a new element in a namespace.
@@ -108,6 +109,7 @@ public class Element extends ParentNode {
         setLocalName(localName);
     }
 
+    
     private Element() {}
 
     static Element build(String name, String uri) {
@@ -187,6 +189,7 @@ public class Element extends ParentNode {
         return getChildElements(name, "");
     }
 
+    
     /**
      * <p>
      * Returns a list of the immediate child elements of this 
@@ -227,6 +230,7 @@ public class Element extends ParentNode {
         
     }
 
+    
     /**
      * <p>
      * Returns a list of all the immediate child elements 
@@ -250,6 +254,7 @@ public class Element extends ParentNode {
         
     }
 
+    
     /**
      * <p>
      * Returns the first child
@@ -266,6 +271,7 @@ public class Element extends ParentNode {
         return getFirstChildElement(name, "");
     }
 
+    
     /**
      * <p>
      * Returns the first child
@@ -295,7 +301,6 @@ public class Element extends ParentNode {
         return null;    
         
     }
-
 
 
     /**
@@ -353,13 +358,6 @@ public class Element extends ParentNode {
         
     }
     
-    // for use by parser only
-    /*final void fastAdd(Attribute attribute) {
-        if (attributes == null) attributes = new Attributes();
-        attributes.fastAdd(attribute);
-        attribute.setParent(this);
-    }*/
-    
 
     /**
      * <p>
@@ -378,6 +376,7 @@ public class Element extends ParentNode {
      */
     protected void checkAddAttribute(Attribute attribute) {}
 
+    
     /**
      * <p>
      * Removes an attribute from this element.
@@ -402,6 +401,7 @@ public class Element extends ParentNode {
         attribute.setParent(null);
     }
 
+    
     /**
      * <p>
      * Subclasses can override this method to perform additional 
@@ -419,7 +419,6 @@ public class Element extends ParentNode {
     protected void checkRemoveAttribute(Attribute attribute) {}
 
 
-
     /**
      * <p>
      * Returns the attribute with the specified name in no namespace,
@@ -435,6 +434,7 @@ public class Element extends ParentNode {
         return getAttribute(name, "");
     }
 
+    
     /**
      * <p>
      * Returns the attribute with the specified name and namespace URI,
@@ -454,6 +454,7 @@ public class Element extends ParentNode {
         return attributes.get(localName, namespaceURI);
     }
 
+    
     /**
      * <p>
      * Returns the value of the attribute with the specified 
@@ -471,6 +472,7 @@ public class Element extends ParentNode {
         return getAttributeValue(name, "");
     } 
 
+    
     /**
      * 
      * <p>
@@ -485,6 +487,7 @@ public class Element extends ParentNode {
         if (attributes == null) return 0;
         return attributes.size();   
     }
+    
     
     /**
      * 
@@ -517,7 +520,6 @@ public class Element extends ParentNode {
     }
 
 
-
     /**
      * <p>
      * Returns the value of the attribute with the 
@@ -539,6 +541,7 @@ public class Element extends ParentNode {
         else return attribute.getValue();
     }
     
+    
     /**
      * <p>
      * Returns the local name of this element, not including the 
@@ -551,6 +554,7 @@ public class Element extends ParentNode {
         return localName;
     }
 
+    
     /**
      * <p>
      * Returns the complete name of this element, including the 
@@ -564,6 +568,7 @@ public class Element extends ParentNode {
         else return prefix + ":" + localName;
     }
 
+    
     /**
      * <p>
      * Returns the prefix of this element, or the empty string
@@ -576,6 +581,7 @@ public class Element extends ParentNode {
         return prefix;
     }
 
+    
     /**
      * <p>
      * Returns the namespace URI of this element,
@@ -589,6 +595,7 @@ public class Element extends ParentNode {
         return URI;
     }
 
+    
     /**
      * <p>
      * Returns the namespace URI mapped to the specified
@@ -612,7 +619,8 @@ public class Element extends ParentNode {
         return result;
     }
 
-   String getLocalNamespaceURI(String prefix) {
+    
+    String getLocalNamespaceURI(String prefix) {
         
         if (prefix.equals(this.prefix)) return this.URI;
         
@@ -642,6 +650,7 @@ public class Element extends ParentNode {
         
     }
 
+   
     /**
      * <p>
      * Sets the local name of this element.
@@ -750,6 +759,7 @@ public class Element extends ParentNode {
         
     }
     
+    
     /**
      * <p>
      * Subclasses can override this method to perform additional 
@@ -766,6 +776,7 @@ public class Element extends ParentNode {
      */
     protected void checkNamespaceURI(String URI) {}
 
+    
     /**
      * <p>
      * Sets the namespace prefix of this element.
@@ -817,7 +828,6 @@ public class Element extends ParentNode {
      * @throws XMLException if the namespace prefix is disallowed
      */
     protected void checkNamespacePrefix(String prefix) {}
-
 
 
     /**
@@ -873,12 +883,14 @@ public class Element extends ParentNode {
 
     }
     
+    
     private static boolean isAncestor(Node parent, Node child) {       
         if (child == parent) return true;
         if (parent == null) return false;
         else return isAncestor(parent.getParent(), child);
     }
 
+    
     /**
      * <p>
      * Converts a string to a text node and inserts that
@@ -1281,43 +1293,306 @@ public class Element extends ParentNode {
     }
     
 
-    // There's lots of room to optimize this method,
-    // but I doubt it's worth it.????
     private static String toURI(String iri) {
     
         StringBuffer uri = new StringBuffer(iri.length());
-        for (int i = 0; i < iri.length(); i++) {
+        int length = iri.length();
+        for (int i = 0; i < length; i++) {
             char c = iri.charAt(i);
-            if (c >= 'a' && c <= 'z') uri.append(c);
-            else if (c >= 'A' && c <= 'Z') uri.append(c);
-            else if (c >= '0' && c <= '9') uri.append(c);
-            else if (c == '/') uri.append(c);
-            else if (c == '-') uri.append(c);
-            else if (c == '.') uri.append(c);
-            else if (c == '%') uri.append(c);
-            else if (c == '?') uri.append(c);
-            else if (c == ':') uri.append(c);
-            else if (c == '@') uri.append(c);
-            else if (c == '&') uri.append(c);
-            else if (c == '=') uri.append(c);
-            else if (c == '+') uri.append(c);
-            else if (c == '$') uri.append(c);
-            else if (c == ',') uri.append(c);
-            else if (c == ';') uri.append(c);
-            else if (c == '_') uri.append(c);
-            else if (c == '!') uri.append(c);
-            else if (c == '~') uri.append(c);
-            else if (c == '*') uri.append(c);
-            else if (c == '\'')uri.append(c);
-            else if (c == '(') uri.append(c);
-            else if (c == ')') uri.append(c);
-            else if (c == '[') uri.append(c);
-            else if (c == ']') uri.append(c);
-            else uri.append(percentEscape(c));
+            switch(c) {
+                case ' ':  
+                    uri.append("%20");
+                    break;
+                case '!': 
+                    uri.append(c);
+                    break;
+                case '"': 
+                    uri.append("%22");
+                    break;
+                case '#':  
+                    uri.append(c);
+                    break;
+                case '$':  
+                    uri.append(c);
+                    break;
+                case '%':  
+                    uri.append(c);
+                    break;
+                case '&':  
+                    uri.append(c);
+                    break;
+                case '\'':  
+                    uri.append(c);
+                    break;
+                case '(':  
+                    uri.append(c);
+                    break;
+                case ')':  
+                    uri.append(c);
+                    break;
+                case '*':  
+                    uri.append(c);
+                    break;
+                case '+':  
+                    uri.append(c);
+                    break;
+                case ',':  
+                    uri.append(c);
+                    break;
+                case '-':  
+                    uri.append(c);
+                    break;
+                case '.':  
+                    uri.append(c);
+                    break;
+                case '/':  
+                    uri.append(c);
+                    break;
+                case '0':  
+                    uri.append(c);
+                    break;
+                case '1':  
+                    uri.append(c);
+                    break;
+                case '2':  
+                    uri.append(c);
+                    break;
+                case '3':  
+                    uri.append(c);
+                    break;
+                case '4':  
+                    uri.append(c);
+                    break;
+                case '5':  
+                    uri.append(c);
+                    break;
+                case '6':  
+                    uri.append(c);
+                    break;
+                case '7':  
+                    uri.append(c);
+                    break;
+                case '8':  
+                    uri.append(c);
+                    break;
+                case '9':  
+                    uri.append(c);
+                    break;
+                case ':':  
+                    uri.append(c);
+                    break;
+                case ';':  
+                    uri.append(c);
+                    break;
+                case '<':  
+                    uri.append("%3C");
+                    break;
+                case '=':  
+                    uri.append(c);
+                    break;
+                case '>':  
+                    uri.append("%3E");
+                    break;
+                case '?':  
+                    uri.append(c);
+                    break;
+                case '@':  
+                    uri.append(c);
+                    break;
+                case 'A':  
+                    uri.append(c);
+                    break;
+                case 'B':  
+                    uri.append(c);
+                    break;
+                case 'C':  
+                    uri.append(c);
+                    break;
+                case 'D':  
+                    uri.append(c);
+                    break;
+                case 'E':  
+                    uri.append(c);
+                    break;
+                case 'F':  
+                    uri.append(c);
+                    break;
+                case 'G':  
+                    uri.append(c);
+                    break;
+                case 'H':  
+                    uri.append(c);
+                    break;
+                case 'I':  
+                    uri.append(c);
+                    break;
+                case 'J':  
+                    uri.append(c);
+                    break;
+                case 'K':  
+                    uri.append(c);
+                    break;
+                case 'L':  
+                    uri.append(c);
+                    break;
+                case 'M':  
+                    uri.append(c);
+                    break;
+                case 'N':  
+                    uri.append(c);
+                    break;
+                case 'O':  
+                    uri.append(c);
+                    break;
+                case 'P':  
+                    uri.append(c);
+                    break;
+                case 'Q':  
+                    uri.append(c);
+                    break;
+                case 'R':  
+                    uri.append(c);
+                    break;
+                case 'S':  
+                    uri.append(c);
+                    break;
+                case 'T':  
+                    uri.append(c);
+                    break;
+                case 'U':  
+                    uri.append(c);
+                    break;
+                case 'V':  
+                    uri.append(c);
+                    break;
+                case 'W':  
+                    uri.append(c);
+                    break;
+                case 'X':  
+                    uri.append(c);
+                    break;
+                case 'Y':  
+                    uri.append(c);
+                    break;
+                case 'Z':  
+                    uri.append(c);
+                    break;
+                case '[':  
+                    uri.append(c);
+                    break;
+                case '\\':  
+                    uri.append("%5C");
+                    break;
+                case ']':  
+                    uri.append(c);
+                    break;
+                case '^':  
+                    uri.append("%5E");
+                    break;
+                case '_':  
+                    uri.append(c);
+                    break;
+                case '`':  
+                    uri.append("%60");
+                    break;
+                case 'a':  
+                    uri.append(c);
+                    break;
+                case 'b':  
+                    uri.append(c);
+                    break;
+                case 'c':  
+                    uri.append(c);
+                    break;
+                case 'd':  
+                    uri.append(c);
+                    break;
+                case 'e':  
+                    uri.append(c);
+                    break;
+                case 'f':  
+                    uri.append(c);
+                    break;
+                case 'g':  
+                    uri.append(c);
+                    break;
+                case 'h':  
+                    uri.append(c);
+                    break;
+                case 'i':  
+                    uri.append(c);
+                    break;
+                case 'j':  
+                    uri.append(c);
+                    break;
+                case 'k':  
+                    uri.append(c);
+                    break;
+                case 'l':  
+                    uri.append(c);
+                    break;
+                case 'm':  
+                    uri.append(c);
+                    break;
+                case 'n':  
+                    uri.append(c);
+                    break;
+                case 'o':  
+                    uri.append(c);
+                    break;
+                case 'p':  
+                    uri.append(c);
+                    break;
+                case 'q':  
+                    uri.append(c);
+                    break;
+                case 'r':  
+                    uri.append(c);
+                    break;
+                case 's':  
+                    uri.append(c);
+                    break;
+                case 't':  
+                    uri.append(c);
+                    break;
+                case 'u':  
+                    uri.append(c);
+                    break;
+                case 'v':  
+                    uri.append(c);
+                    break;
+                case 'w':  
+                    uri.append(c);
+                    break;
+                case 'x':  
+                    uri.append(c);
+                    break;
+                case 'y':  
+                    uri.append(c);
+                    break;
+                case 'z':  
+                    uri.append(c);
+                    break;
+                case '{':  
+                    uri.append("%7B");
+                    break;
+                case '|':  
+                    uri.append("%7C");
+                    break;
+                case '}':  
+                    uri.append("%7D");
+                    break;
+                case '~':  
+                    uri.append(c);
+                    break;
+                default: 
+                    uri.append(percentEscape(c));
+            }
         }    
         return uri.toString();
         
     }
+    
     
     private static String percentEscape(char c) {
         StringBuffer result = new StringBuffer(3);

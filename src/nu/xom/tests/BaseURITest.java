@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -88,10 +88,12 @@ public class BaseURITest extends XOMTestCase {
  
     }
 
+    
     public void testDocBase() {
         assertEquals(base1, doc.getBaseURI());
     }
 
+    
     public void testUnsetBase() {
         Element root = new Element("test");
         root.setBaseURI(base1);
@@ -99,12 +101,14 @@ public class BaseURITest extends XOMTestCase {
         assertNull(root.getBaseURI());
     }
 
+    
     public void testInheritBaseFromDocument() {
         Element root = doc.getRootElement();
         root.setBaseURI("");
         assertEquals("", root.getBaseURI());
     }
 
+    
     public void testAllowEmptyBase() {
         Element root = new Element("test");
         root.setBaseURI(base1);
@@ -112,6 +116,7 @@ public class BaseURITest extends XOMTestCase {
         assertEquals("", root.getBaseURI());
     }
 
+    
     public void testIPv6Base() {
         String ipv6 
           = "http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]:80/test.xml";
@@ -119,6 +124,7 @@ public class BaseURITest extends XOMTestCase {
         root.setBaseURI(ipv6);
         assertEquals(ipv6, root.getBaseURI());
     }
+    
     
     public void testBaseWithNonASCIICharacter() {
         String uri = "http://www.w3.org/\u00A9testing";
@@ -135,6 +141,7 @@ public class BaseURITest extends XOMTestCase {
         assertEquals("http://www.example.org/D%C3%BCrst", root.getBaseURI());
     }
 
+    
     public void testUppercaseBase() {
         String base = "HTTP://WWW.EXAMPLE.COM/TEST.XML";
         Element root = new Element("test");
@@ -142,6 +149,7 @@ public class BaseURITest extends XOMTestCase {
         assertEquals(base, root.getBaseURI());
     }
 
+    
     public void testBaseWithUnusualParts() {
         String base = "HTTP://user@host:WWW.EXAMPLE.COM:65130/TEST-2+final.XML?name=value&name2=value2";
         Element root = new Element("test");
@@ -149,6 +157,7 @@ public class BaseURITest extends XOMTestCase {
         assertEquals(base, root.getBaseURI());
     }
 
+    
     public void testBaseWithEscapedParts() {
         String base = "http://www.example.com/test%20test";
         Element root = new Element("test");
@@ -156,6 +165,7 @@ public class BaseURITest extends XOMTestCase {
         assertEquals(base, root.getBaseURI());
     }
 
+    
     public void testBaseWithUnreservedCharacters() {
         String base = "http://www.example.com/()-_.!~*'";
         Element root = new Element("test");
@@ -163,6 +173,7 @@ public class BaseURITest extends XOMTestCase {
         assertEquals(base, root.getBaseURI());
     }
 
+    
     public void testXMLBaseWithNonASCIICharacters() 
       throws UnsupportedEncodingException, URISyntaxException {
         String omega = "\u03A9";
@@ -175,6 +186,7 @@ public class BaseURITest extends XOMTestCase {
         assertEquals("/" + omega, uri.getPath());
     }
     
+    
     public void testBaseWithNonASCIICharacters() 
       throws UnsupportedEncodingException, URISyntaxException {
         String base = "http://www.example.com/%ce%a9";
@@ -182,6 +194,7 @@ public class BaseURITest extends XOMTestCase {
         root.setBaseURI(base);
         assertEquals(base, root.getBaseURI());
     }
+    
     
     public void testBadIPv6Base() {
         Element root = new Element("test");
@@ -219,6 +232,7 @@ public class BaseURITest extends XOMTestCase {
 
     }
 
+    
     public void testAllowEmptyXMLBase() {
         Element root = doc.getRootElement();
         root.setBaseURI(base1);
@@ -227,7 +241,9 @@ public class BaseURITest extends XOMTestCase {
         assertEquals(base1, root.getBaseURI());
     }
 
+    
     public void testFailures() {
+        
         Element root = doc.getRootElement();
         
         try {
@@ -304,6 +320,7 @@ public class BaseURITest extends XOMTestCase {
 
     }
 
+    
     // Note that the xml:base attribute can contain an IRI,
     // not a URI, so this is a little different than the failures
     // on setBaseURI
@@ -330,6 +347,7 @@ public class BaseURITest extends XOMTestCase {
 
     }
     
+    
     // Note that the xml:base attribute can contain an IRI,
     // not a URI. It may also contain unescaped characters that
     // need to be escaped. This tests for unescaped values.
@@ -343,10 +361,10 @@ public class BaseURITest extends XOMTestCase {
         assertEquals("http://www.w3.org/%20testing", element.getBaseURI());
 
         base.setValue("http://www.w3.org/^testing");
-        assertEquals("http://www.w3.org/%5etesting", element.getBaseURI());
+        assertEquals("http://www.w3.org/%5Etesting", element.getBaseURI());
 
         base.setValue("http://www.w3.org/<testing");
-        assertEquals("http://www.w3.org/%3ctesting", element.getBaseURI());
+        assertEquals("http://www.w3.org/%3Ctesting", element.getBaseURI());
 
     }
     
@@ -366,39 +384,45 @@ public class BaseURITest extends XOMTestCase {
         assertEquals(base1, doc.getRootElement().getBaseURI());
     }
 
+    
     public void testLoadElementFromDifferentEntity() {
         assertEquals(base2, 
           doc.getRootElement().getChild(0).getBaseURI());
-     }
+    }
 
+    
     public void testLeafNode() {
         assertEquals(
           doc.getRootElement().getChild(0).getBaseURI(), 
           doc.getRootElement().getChild(0).getChild(0).getBaseURI()
         );
-     }
+    }
 
+    
     public void testLoadElementFromSameEntity() {
         assertEquals(
           base1, 
           doc.getRootElement().getFirstChildElement("child2").getBaseURI()
         );
-     }
+    }
 
+    
     public void testXMLBaseAbsolute() {
         assertEquals(
           base2, 
           doc.getRootElement().getFirstChildElement("child3").getBaseURI()
         );
-     }
+    }
 
+    
     public void testXMLBaseRelative() {
         assertEquals(
           "http://www.base1.com/base3.html", 
           doc.getRootElement().getFirstChildElement("child4").getBaseURI()
         );
-     }
+    }
 
+    
     public void testXMLBaseRelativeWithNoRoot() {
         Element element = new Element("test");
         element.addAttribute(new Attribute("xml:base", 
@@ -411,6 +435,7 @@ public class BaseURITest extends XOMTestCase {
         
     }
 
+    
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
         Builder builder = new Builder();
@@ -422,6 +447,7 @@ public class BaseURITest extends XOMTestCase {
         );
     } 
    
+    
     public void testParentlessNodesHaveNullBaseURIs() {
         Text t = new Text("data");   
         assertNull(t.getBaseURI());
