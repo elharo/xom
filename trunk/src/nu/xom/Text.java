@@ -39,7 +39,7 @@ import java.io.UnsupportedEncodingException;
 public class Text extends LeafNode {
 
     private byte[] data;
-
+    
     /**
      * <p>
      * This constructor creates a new <code>Text</code> object. 
@@ -51,12 +51,11 @@ public class Text extends LeafNode {
      * and 0xFFFE and 0xFFFF are not allowed.
      * </p>
      * 
-     * @param data The initial text of the object
+     * @param data the initial text of the object
      *
-     * @throws IllegalDataException if data contains any 
-     *   characters which are illegal
-     *  in well-formed XML 1.0 such as null, vertical tab, or 
-     *  unmatched halves of surrogate pairs.
+     * @throws IllegalCharacterDataException if data contains any 
+     *     characters which are illegal in well-formed XML 1.0 such as 
+     *     null, vertical tab, or unmatched halves of surrogate pairs
      */
     public Text(String data) {
         setValue(data);
@@ -74,11 +73,11 @@ public class Text extends LeafNode {
         // If this ever changes, e.g. by adding an append method,
         // this method needs to change too.
         this.data = text.data;
-        /* this.data = new byte[text.data.length];
-        System.arraycopy(text.data, 0, this.data, 0, text.data.length);*/
     }
 
+    
     private Text() {}
+    
     
     static Text build(String data) {
         Text result = new Text();
@@ -89,7 +88,7 @@ public class Text extends LeafNode {
             throw new RuntimeException(
               "Bad VM! Does not support UTF-8"
             );
-        }
+        } 
         return result;
     }
 
@@ -106,9 +105,9 @@ public class Text extends LeafNode {
      * 
      * @param data the text to install in the object
      * 
-     * @throws IllegalDataException if data contains any characters
-     *  which are illegal in well-formed XML 1.0 such as null, 
-     *  vertical tab, or unmatched halves of surrogate pairs.
+     * @throws IllegalCharacterDataException if data contains any 
+     *     characters which are illegal in well-formed XML 1.0 such as 
+     *     null, vertical tab, or unmatched halves of surrogate pairs
      */
     public final void setValue(String data) {
         if (data == null) data = "";
@@ -138,6 +137,7 @@ public class Text extends LeafNode {
      */
     protected void checkValue(String data) {}
 
+    
     /**
      * <p>
      * Returns the XPath 1.0 string-value of this <code>Text</code> 
@@ -150,6 +150,7 @@ public class Text extends LeafNode {
      * @see nu.xom.Node#getValue()
      */
     public final String getValue() {
+        
         try {
             return new String(data, "UTF8");
         } 
@@ -196,6 +197,7 @@ public class Text extends LeafNode {
         return escapeText(getValue());    
     }
 
+    
     private static String escapeText(String s) {
         
         StringBuffer result = new StringBuffer(s.length());
@@ -220,6 +222,7 @@ public class Text extends LeafNode {
         }
         return result.toString();
     }
+    
     
     boolean isText() {
         return true;   
@@ -250,6 +253,7 @@ public class Text extends LeafNode {
           
     }
 
+    
     boolean isCDATASection() {
         return false;
     }

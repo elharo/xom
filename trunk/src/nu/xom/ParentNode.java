@@ -52,7 +52,7 @@ import java.util.List;
  */
 public abstract class ParentNode extends Node {
 
-    private List children; 
+    private List   children; 
     private String actualBaseURI;
 
     /**
@@ -358,7 +358,7 @@ public abstract class ParentNode extends Node {
      *   If the base URI is null and there is no
      *   <code>xml:base</code> attribute, then the 
      *   base URI is determined by the nearest ancestor node
-     *   which does have a base URI. Moving such a node form one
+     *   which does have a base URI. Moving such a node from one
      *   location to another can change its base URI.
      *   To indicate that a node has a persistent lack of base
      *   URI, even if one of its ancestors does have a base URI,
