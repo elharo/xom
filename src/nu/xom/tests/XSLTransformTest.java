@@ -25,7 +25,6 @@ package nu.xom.tests;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -37,6 +36,7 @@ import java.io.StringReader;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Comment;
+import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -937,4 +937,169 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
     
+    
+    public void testToDocumentWithEmptyNodes() {
+     
+        try {
+            XSLTransform.toDocument(new Nodes());
+            fail("Converted empty nodes to document");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testToDocumentWithNoRoot() {
+     
+        Nodes input = new Nodes();
+        input.append(new Comment("data"));
+        try {
+            XSLTransform.toDocument(new Nodes());
+            fail("Converted comment to document");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testToDocumentWithText() {
+     
+        Nodes input = new Nodes();
+        Element root = new Element("root");
+        Comment comment = new Comment("data");
+        ProcessingInstruction pi = new ProcessingInstruction("target", "data");
+        input.append(comment);
+        input.append(root);
+        input.append(pi);
+        input.append(new Text("text"));
+        try {
+            XSLTransform.toDocument(new Nodes());
+            fail("Converted text to document");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testToDocumentWithAttribute() {
+     
+        Nodes input = new Nodes();
+        Element root = new Element("root");
+        Comment comment = new Comment("data");
+        ProcessingInstruction pi = new ProcessingInstruction("target", "data");
+        input.append(comment);
+        input.append(root);
+        input.append(pi);
+        input.append(new Attribute("name", "text"));
+        try {
+            XSLTransform.toDocument(new Nodes());
+            fail("Converted text to document");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testToDocumentWithDocType() {
+     
+        Nodes input = new Nodes();
+        Element root = new Element("root");
+        DocType doctype = new DocType("root");
+        Comment comment = new Comment("data");
+        ProcessingInstruction pi = new ProcessingInstruction("target", "data");
+        input.append(comment);
+        input.append(doctype);
+        input.append(root);
+        input.append(pi);
+        Document output = XSLTransform.toDocument(input);
+        assertEquals(root, output.getRootElement());
+        assertEquals(comment, output.getChild(0));
+        assertEquals(doctype, output.getChild(1));
+        assertEquals(pi, output.getChild(3));
+        assertEquals(input.size(), output.getChildCount());
+        
+    }
+    
+    
+    public void testToDocumentWithDocTypeInEpilog() {
+     
+        Nodes input = new Nodes();
+        Element root = new Element("root");
+        DocType doctype = new DocType("root");
+        Comment comment = new Comment("data");
+        ProcessingInstruction pi = new ProcessingInstruction("target", "data");
+        input.append(comment);
+        input.append(root);
+        input.append(doctype);
+        input.append(pi);
+        try {
+            XSLTransform.toDocument(input);
+            fail("Allowed doctype in epilog");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testToDocumentWithDoubleRoot() {
+     
+        Nodes input = new Nodes();
+        Element root = new Element("root");
+        DocType doctype = new DocType("root");
+        Comment comment = new Comment("data");
+        ProcessingInstruction pi = new ProcessingInstruction("target", "data");
+        input.append(comment);
+        input.append(root);
+        input.append(new Element("root2"));
+        try {
+            XSLTransform.toDocument(input);
+            fail("Allowed two root elements");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testToDocumentWithSingleRoot() {
+     
+        Nodes input = new Nodes();
+        Element root = new Element("root");
+        input.append(root);
+        Document output = XSLTransform.toDocument(input);
+        assertEquals(root, output.getRootElement());
+        assertEquals(input.size(), output.getChildCount());
+        
+    }
+    
+
+    public void testToDocumentWithPrologAndEpilog() {
+     
+        Nodes input = new Nodes();
+        Element root = new Element("root");
+        Comment comment = new Comment("data");
+        ProcessingInstruction pi = new ProcessingInstruction("target", "data");
+        input.append(comment);
+        input.append(root);
+        input.append(pi);
+        Document output = XSLTransform.toDocument(input);
+        assertEquals(root, output.getRootElement());
+        assertEquals(comment, output.getChild(0));
+        assertEquals(pi, output.getChild(2));
+        assertEquals(input.size(), output.getChildCount());
+        
+    }
+ 
+
 }
