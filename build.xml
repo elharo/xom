@@ -182,6 +182,16 @@ XOM Build file
          excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/xerces/* nu/xom/canonical/* nu/xom/pantry/* nu/xom/pantry">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Name"     value="nu/xom"/>
+        <attribute name="Sealed"   value="true"/>
+        <attribute name="Name"     value="nu/xom/xslt"/>
+        <attribute name="Sealed"   value="true"/>
+        <attribute name="Name"     value="nu/xom/xinclude"/>
+        <attribute name="Sealed"   value="true"/>
+        <attribute name="Name"     value="nu/xom/converters"/>
+        <attribute name="Sealed"   value="true"/>
+        <attribute name="Name"     value="nu/xom/canonical"/>
+        <attribute name="Sealed"   value="true"/>
       </manifest>
     </jar>
   </target>
