@@ -32,7 +32,7 @@ import nu.xom.tests.XOMTestCase;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class XSLExceptionTest extends XOMTestCase {
@@ -43,6 +43,13 @@ public class XSLExceptionTest extends XOMTestCase {
     protected void setUp() {
         ex = new XSLException();
         cause = new Exception();
+    }
+    
+    public void testConstructor() {
+        String message = "testing 1-2-3";
+        Exception ex = new XSLException(message, cause);
+        assertEquals(message, ex.getMessage());
+        assertEquals(cause, ex.getCause()); 
     }
 
     public void testInitCause() {
