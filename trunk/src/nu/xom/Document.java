@@ -44,11 +44,13 @@ public class Document extends ParentNode {
      * 
      * @param root the root element of this document
      * 
-     * @throws NullPointerException if root is null
-     * 
+     * @throws NullPointerException if <code>root</code> is null
+     * @throws MultipleParentException if <code>root</code> already 
+     *     has a parent
+     * @throws NullPointerException if <code>child</code> is null
      */
     public Document(Element root) {
-        insertChild(root, 0);
+        _insertChild(root, 0);
     }
 
     /**
