@@ -80,7 +80,7 @@ final class Verifier {
      * @param name <code>String</code> name to check
      * @throws IllegalNameException if this is not a legal NCName
      */
-    public static void checkNCName(String name) {
+    static void checkNCName(String name) {
         // Check basic XML name rules first
         checkXMLName(name);
 
@@ -104,7 +104,7 @@ final class Verifier {
      * @throws IllegalNameException if this is not a legal 
      *     attribute name
      */
-    public static void checkAttributeLocalName(String name) {
+    static void checkAttributeLocalName(String name) {
 
         checkNCName(name);
 
@@ -140,7 +140,7 @@ final class Verifier {
      * @throws IllegalDataException if <code>text</code> is not 
      *     legal PCDATA
      */
-    public static void checkCharacterData(String text) {
+    static void checkCharacterData(String text) {
         if (text == null) {
             throw new IllegalDataException(
               "A null is not a legal XML value"
@@ -196,7 +196,7 @@ final class Verifier {
      * @param uri <code>String</code> to check
      * @throws MalformedURIException if this is not a legal URI
      */
-    public static void checkURI(String uri) {
+    private static void checkURI(String uri) {
         // URIs can be null or empty
         if (uri == null) return;
         int uriLength =  uri.length();
@@ -267,12 +267,14 @@ final class Verifier {
      * @param iri <code>String</code> to check
      * @throws MalformedURIException if this is not a legal IRI
      */
-    public static void checkIRI(String iri) {
+    static void checkIRI(String iri) {
         // IRIs can be null or empty
         if ((iri == null) || iri.length() == 0) {
             return;
         }
 
+        int leftBrackets = 0;
+        int rightBrackets = 0;
         for (int i = 0; i < iri.length(); i++) {
             char test = iri.charAt(i);
             if (!isIRICharacter(test)) {
@@ -302,8 +304,29 @@ final class Verifier {
                         + "exactly two hexadecimal digits.");    
                    }
             }
+            else if (test == '[') {
+                leftBrackets++;  
+                if (rightBrackets >= leftBrackets) {
+                    throw new MalformedURIException(
+                        "Mismatched square brackets"
+                    );                                       
+                } 
+            }
+            else if (test == ']') {
+                rightBrackets++;   
+            }
         } // end for
 
+        if (leftBrackets != rightBrackets) {
+            throw new MalformedURIException(
+                "Mismatched square brackets"
+            );                   
+        }
+        if (leftBrackets > 1) {
+            throw new MalformedURIException(
+                "Multiple square brackets"
+            );                   
+        }
         // If we got here, everything is OK
         return;
     }
@@ -318,7 +341,7 @@ final class Verifier {
      * 
      * @throws IllegalTargetException if this is not a legal target
      */
-    public static void checkProcessingInstructionTarget(
+    static void checkProcessingInstructionTarget(
       String target) {
         // Check basic XML name rules first
         try {
@@ -358,7 +381,7 @@ final class Verifier {
      * @param data <code>String</code> data to check
      * @throws IllegalDataException if this is not legal data
      */
-    public static void checkProcessingInstructionData(String data) {
+    static void checkProcessingInstructionData(String data) {
         
         // Check basic XML character rules first
         checkCharacterData(data);
@@ -393,7 +416,7 @@ final class Verifier {
      * 
      * @param data <code>String</code> data to check
      */
-    public static void checkCommentData(String data) {
+    static void checkCommentData(String data) {
         checkCharacterData(data);
 
         if (data.indexOf("--") != -1) {
@@ -448,7 +471,7 @@ final class Verifier {
      * 
      * @param publicID <code>String</code> public ID to check
      */
-    public static void checkPublicID(String publicID) {
+    static void checkPublicID(String publicID) {
 
         if (publicID == null) return;
         // This indicates there is no public ID
@@ -473,7 +496,7 @@ final class Verifier {
      * 
      * @param systemLiteral <code>String</code> system literal to check
      */
-    public static void checkSystemLiteral(String systemLiteral) {
+    static void checkSystemLiteral(String systemLiteral) {
 
         if (systemLiteral == null) return;
         // This indicates there is no system ID
@@ -504,7 +527,7 @@ final class Verifier {
      * 
      * @param name <code>String</code> to check for XML name compliance
      */
-    public static void checkXMLName(String name) {
+    static void checkXMLName(String name) {
         
         if (name == null) {
             throw new IllegalNameException(
@@ -569,8 +592,10 @@ final class Verifier {
             else return C0Table[c];
         }
 
-        if (c < 0xE000) return false;  if (c <= 0xFFFD) return true;
-        if (c < 0x10000) return false;  if (c <= 0x10FFFF) return true;
+        if (c < 0xE000) return false;  
+        if (c <= 0xFFFD) return true;
+        if (c < 0x10000) return false;  
+        if (c <= 0x10FFFF) return true;
         
         return false;
     }
@@ -587,7 +612,7 @@ final class Verifier {
      * @return true if <code>c</code> is a name character, 
      *     false otherwise
      */
-    public static boolean isXMLNameCharacter(char c) {
+    static boolean isXMLNameCharacter(char c) {
     
       return (isXMLLetter(c) || isXMLDigit(c) || c == '.' || c == '-' 
                              || c == '_' || c == ':' || isXMLCombiningChar(c) 
@@ -607,7 +632,7 @@ final class Verifier {
      * @return true if <code>c</code> is a name start character, 
      *     false otherwise
      */
-    public static boolean isXMLNameStartCharacter(char c) {
+    static boolean isXMLNameStartCharacter(char c) {
     
       return (isXMLLetter(c) || c == '_' || c ==':');
     
@@ -623,7 +648,7 @@ final class Verifier {
      * @param c <code>char</code> to check for XML name compliance
      * @return <code>String</code> - true if it's a letter, false otherwise
      */
-    public static boolean isXMLLetter(char c) {
+    static boolean isXMLLetter(char c) {
         // Note that order is very important here.  The search proceeds 
         // from lowest to highest values, so that no searching occurs 
         // above the character's value.  BTW, the first line is equivalent to:
@@ -849,7 +874,7 @@ final class Verifier {
      * @param c <code>char</code> to check
      * @return true if <code>c</code> is a combining character, false otherwise
      */
-    public static boolean isXMLCombiningChar(char c) {
+    static boolean isXMLCombiningChar(char c) {
         // CombiningChar
         if (c < 0x0300) return false;  if (c <= 0x0345) return true;
         if (c < 0x0360) return false;  if (c <= 0x0361) return true;
@@ -985,7 +1010,7 @@ final class Verifier {
      * @param c <code>char</code> to check
      * @return true if it's an extender, false otherwise
      */
-    public static boolean isXMLExtender(char c) {
+    static boolean isXMLExtender(char c) {
 
         if (c < 0x00B6) return false;  // quick short circuit
 
@@ -999,9 +1024,12 @@ final class Verifier {
         if (c == 0x0EC6) return true;
         if (c == 0x3005) return true;
                                        
-        if (c < 0x3031) return false;  if (c <= 0x3035) return true;
-        if (c < 0x309D) return false;  if (c <= 0x309E) return true;
-        if (c < 0x30FC) return false;  if (c <= 0x30FE) return true;
+        if (c < 0x3031)  return false;  
+        if (c <= 0x3035) return true;
+        if (c < 0x309D)  return false;  
+        if (c <= 0x309E) return true;
+        if (c < 0x30FC)  return false;  
+        if (c <= 0x30FE) return true;
         
         return false;
         
@@ -1017,7 +1045,7 @@ final class Verifier {
      * @param c <code>char</code> to check for XML digit compliance.
      * @return true if it's a digit, false otherwise
      */
-    public static boolean isXMLDigit(char c) {
+    static boolean isXMLDigit(char c) {
       
         if (c < 0x0030) return false;  if (c <= 0x0039) return true;
         if (c < 0x0660) return false;  if (c <= 0x0669) return true;
@@ -1042,21 +1070,6 @@ final class Verifier {
         return false;
     }
 
-    // old version of code
-/*    public static boolean isURICharacter(char c) {
-
-        if (c <= 0x0020) return false;  if (c <= 0x0021) return true;
-        if (c <= 0x0022) return false;  if (c <= 0x003B) return true;
-        if (c <= 0x003C) return false;  if (c <= 0x003D) return true;
-
-        if (c <= 0x003E) return false;  if (c <= 0x005A) return true;
-        if (c <= 0x005E) return false;  if (c <= 0x005F) return true;
-        if (c <= 0x0060) return false;  if (c <= 0x007A) return true;
-
-        if (c < 0x007D) return false;  if (c <= 0x007E) return true;
-
-        return false;
-    } */
 
     /**
      * <p>
@@ -1068,7 +1081,7 @@ final class Verifier {
      * @param c  to check for hex digit.
      * @return  true if it's allowed, false otherwise.
      */
-    public static boolean isHexDigit(char c) {
+    static boolean isHexDigit(char c) {
 
     // I suspect most characters passed to this method will be
     // correct hexadecimal digits, so I test for the true cases
@@ -1093,7 +1106,7 @@ final class Verifier {
      * @throws MalformedURIException if this is not a legal 
      *     URI reference
      */
-    public static void checkAbsoluteURIReference(String uri) {
+    static void checkAbsoluteURIReference(String uri) {
         
         // Next test is necessary if we're really testing URI 
         // references but not for namespace URIs
