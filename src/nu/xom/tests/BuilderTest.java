@@ -1661,6 +1661,32 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
+    public void testBuildFromFileThatContainsPlane1CharacterInName()
+      throws ParsingException, IOException { // ????
+        
+        int gclef = 0x1D120;
+        char high = (char) ((gclef - 0x10000)/0x400 + 0xD800);
+        char low = (char) ((gclef - 0x10000) % 0x400 + 0xDC00); 
+        File f = new File("data/music" + high + "" + low + ".xml");
+        try {
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("<resumé />");
+            out.flush();
+            out.close();
+            Document doc = builder.build(f);
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<resumé />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+        }
+        finally {
+            if (f.exists()) f.delete();
+        }
+        
+    }
+    
+    
     private File makeFile(String name) throws IOException {
         
         File f = new File("data/" + name);
