@@ -86,7 +86,10 @@ public class Serializer {
     /**
      * <p>
      * Create a new serializer that uses a specified encoding.
-     * The encoding must be recognized by the Java virtual machine.
+     * The encoding must be recognized by the Java virtual machine. If 
+     * you attempt to use an encoding that the local Java virtual 
+     * machine does not support, the constructor will throw an 
+     * <code>UnsupportedEncodingException</code>.
      * Currently the following encodings are recognized by XOM:
      * </p>
      * 
@@ -115,17 +118,22 @@ public class Serializer {
      *         EBCDIC-CP-WA, EBCDIC-CP-NL, and CSIBM037)</li>
      *   <li>GB18030</li>
      *   <li>Big5</li>
+     *   <li>EUC-JP</li>
      * </ul>
      * 
      * <p>
-     *   More will be added in the future. You can use 
-     *   encodings not in this list as long as the local virtual
-     *   machine supports them. However, characters may unnecessarily
-     *   be output as character references. Conversely, not all  
-     *   versions of Java support all of these encodings. If you 
-     *   attempt to use an encoding that the local Java virtual 
-     *   machine does not support, the constructor will throw an 
-     *   <code>UnsupportedEncodingException</code>.
+     *   You can use encodings not in this list if the virtual
+     *   machine supports them. However, they are likely to be
+     *   significntly slower than the encodings in this list 
+     * </p>
+     * 
+     * <p>
+     * I've noticed Java has significant bugs in its handling of some
+     * of these encodings. In some cases such as 0x80 in Big5, XOM
+     * will escape a character that should not need to be escaped
+     * because Java can't output that character in the specified 
+     * encoding, even though the output character set does contain it.
+     * :-(
      * </p>
      * 
      * @param out the output stream to write the document on
