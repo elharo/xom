@@ -480,7 +480,8 @@ public class DOMConverterTest extends XOMTestCase {
      */
     public void testFullHoschek() throws ParsingException, IOException {
         
-        File f = new File("data/hoschektest.xml");
+        File f = new File("data");
+        f = new File(f, "hoschektest.xml");
         Builder builder = new Builder();
         Document xomDocIn = builder.build(f);
         org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
@@ -496,8 +497,9 @@ public class DOMConverterTest extends XOMTestCase {
      */
     public void testSimplifiedHoschekDOMToXOM() 
       throws SAXException, IOException {
-         
-        File f = new File("data/simplehoschektest.xml");
+        
+        File f = new File("data");
+        f = new File(f, "simplehoschektest.xml");
         org.w3c.dom.Document domDocIn = builder.parse(f);
         int domRootNumber = domDocIn.getDocumentElement().getChildNodes().getLength(); 
         Document xomDoc = DOMConverter.convert(domDocIn);

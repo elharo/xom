@@ -579,6 +579,7 @@ public class BaseURITest extends XOMTestCase {
     
     
     public void testXMLBaseValuesCanContainPercentEscapes() {
+        
         Attribute base = new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", "base.html");
         Element e = new Element("test");
@@ -586,6 +587,7 @@ public class BaseURITest extends XOMTestCase {
         base.setValue("http://www.w3.org/%20testing");
         String baseURI = e.getBaseURI();
         assertEquals("http://www.w3.org/%20testing", baseURI);
+        
     }
     
     
@@ -814,7 +816,8 @@ public class BaseURITest extends XOMTestCase {
     public void testXMLBaseUsedToResolveHref() 
       throws ParsingException, IOException {
       
-        File input = new File("data/xmlbasetest.xml");
+        File input = new File("data");
+        input = new File(input, "xmlbasetest.xml");
         Document doc = builder.build(input);
         Element root = doc.getRootElement();
         String base = root.getBaseURI();
@@ -831,7 +834,8 @@ public class BaseURITest extends XOMTestCase {
     public void testBuildElementFromSeveralEntities() 
       throws ParsingException, IOException {
       
-        File input = new File("data/BaseURIWithEntitiesTest.xml");
+        File input = new File("data");
+        input = new File(input, "BaseURIWithEntitiesTest.xml");
         Document doc = builder.build(input);
         Element root = doc.getRootElement();
         String rootBase = root.getBaseURI();

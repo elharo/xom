@@ -52,7 +52,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -2092,7 +2092,8 @@ public class SerializerTest extends XOMTestCase {
         serializer.setPreserveBaseURI(true);
         serializer.flush();
     
-        File f = new File("data/prettyxml.xml");
+        File f = new File("data");
+        f = new File(f, "prettyxml.xml");
         Builder builder = new Builder();
         Document doc = builder.build(f);
         serializer.write(doc);
@@ -2109,7 +2110,8 @@ public class SerializerTest extends XOMTestCase {
         serializer.setIndent(4);
         serializer.setMaxLength(64);
 
-        File f = new File("data/prettytest.xml");
+        File f = new File("data");
+        f = new File(f, "prettytest.xml");
         Builder builder = new Builder();
         Document doc = builder.build(f);
         serializer.write(doc);
