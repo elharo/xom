@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -39,7 +39,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0a2
  *
  */
 public class HelloXMLBase {
@@ -60,7 +60,7 @@ public class HelloXMLBase {
     child.appendChild(new Comment("here I am"));
     
     Element child2 = new Element("child2");
-        root.appendChild(child2);
+    root.appendChild(child2);
  
     Element child3 = new Element("child3");
     root.appendChild(child3);
@@ -83,7 +83,7 @@ public class HelloXMLBase {
         serializer.flush();
     }
     catch (IOException ex) { 
-        // shoudln't happen on System.out
+        // shouldn't happen on System.out
         ex.printStackTrace();
     }
     
