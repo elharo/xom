@@ -63,7 +63,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b8
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -2354,63 +2354,7 @@ public class XIncludeTest extends XOMTestCase {
             assertTrue(success.getURI().endsWith(input.getName()));
         }
                 
-    }
-        
-    
-    // Test that a malformed parse attribute is thrown even when the
-    // fallback element containing it is not activated.
-    public void testHiddenError() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File(inputDir, "hiddenerror.xml");
-        Document doc = builder.build(input);
-        try {
-            XIncluder.resolve(doc);
-            fail("Allowed bad parse attribute in unactivated fallback");
-        }
-        catch (BadParseAttributeException success) {
-            assertNotNull(success.getMessage());
-        }
-                
-    }
-        
-
-    // Test that an href attribute that has a fragment identifier
-    // is a fatal error even when the
-    // fallback element containing it is not activated.????
-    public void testHiddenError2() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File(inputDir, "hiddenerror2.xml");
-        Document doc = builder.build(input);
-        try {
-            XIncluder.resolve(doc);
-            fail("Allowed fragment identifier in href attribute in unactivated fallback");
-        }
-        catch (BadParseAttributeException success) {
-            assertNotNull(success.getMessage());
-        }
-                
-    }
-
-    
-    // Test that a fallback element with a non-include parent is a
-    // fatal error even when the ancestor
-    // fallback element containing it is not activated.????
-    public void testHiddenError3() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File(inputDir, "hiddenerror3.xml");
-        Document doc = builder.build(input);
-        try {
-            XIncluder.resolve(doc);
-            fail("Allowed fallback with non-include parent hidden by successful include element");
-        }
-        catch (XIncludeException success) {
-            assertNotNull(success.getMessage());
-        }
-                
-    }
+    }        
 
    
     // Test that an xpointer attribute that uses percent escapes 
