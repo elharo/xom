@@ -27,9 +27,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
+import nu.xom.Builder;
+import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.ParentNode;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
 
@@ -40,10 +43,8 @@ import nu.xom.Serializer;
  * size and can process arbitrarily deep documents.
  * </p>
  * 
- * test this????
- * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public final class NonRecursiveSerializer extends Serializer {
@@ -104,6 +105,36 @@ public final class NonRecursiveSerializer extends Serializer {
         }
         
     }     
+
     
+    public static void main(String[] args) {
+  
+        if (args.length <= 0) {
+          System.out.println("Usage: java nu.xom.samples.PrettyPrinter URL");
+          return;
+        }
+        
+        try {
+          Builder parser = new Builder();
+          Document doc = parser.build(args[0]);
+          Serializer serializer = new Serializer(System.out, "ISO-8859-1");
+          serializer.setIndent(4);
+          serializer.setMaxLength(64);
+          serializer.setPreserveBaseURI(true);
+          serializer.write(doc);
+          serializer.flush();
+        }
+        catch (ParsingException ex) {
+          System.out.println(args[0] + " is not well-formed.");
+          System.out.println(ex.getMessage());
+        }
+        catch (IOException ex) { 
+          System.out.println(
+           "Due to an IOException, the parser could not check " 
+           + args[0]
+          ); 
+        }
+  
+    }
     
 }
