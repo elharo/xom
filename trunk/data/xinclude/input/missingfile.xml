@@ -2,5 +2,5 @@
 <test>
   This file is just for making sure my XIncluder can detect 
   missing links.
-  <xi:include href="missing.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/>
+  <xi:include href="missing.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </test>
