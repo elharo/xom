@@ -67,8 +67,6 @@ public class XIncludeTest extends XOMTestCase {
     protected void setUp() {        
         builder = new Builder();       
     }
- 
-    
     
     
     public void testMarsh() 
@@ -283,7 +281,6 @@ public class XIncludeTest extends XOMTestCase {
         Document expectedResult = builder.build(
           new File("data/xinclude/output/legalcircle.xml")
         );
-        dumpResult(input, result);
         assertEquals(expectedResult, result);        
 
     }
@@ -567,10 +564,9 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("allowed parsed include of self");
         }
-        catch (InclusionLoopException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
-            assertEquals(input.toURL().toExternalForm(), ex.getURI());           
+        catch (InclusionLoopException success) {
+            assertNotNull(success.getMessage());
+            assertEquals(input.toURL().toExternalForm(), success.getURI());           
         }
     }
 
@@ -584,10 +580,9 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("allowed parsed include of self");
         }
-        catch (InclusionLoopException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
-            assertEquals(errorFile.toURL().toExternalForm(), ex.getURI());           
+        catch (InclusionLoopException success) {
+            assertNotNull(success.getMessage());
+            assertEquals(errorFile.toURL().toExternalForm(), success.getURI());           
         }
     }
     
@@ -616,11 +611,10 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("allowed bad parse attribute");
         }
-        catch (BadParseAttributeException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (BadParseAttributeException success) {
+            assertNotNull(success.getMessage());
             URL u1 = input.toURL();
-            URL u2 = new URL(ex.getURI());
+            URL u2 = new URL(success.getURI());
             assertEquals(u1, u2);
         }
     }
@@ -634,7 +628,7 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("allowed unresolvable resource");
         }
-        catch (IOException ex) {
+        catch (IOException success) {
             // success   
         }
     }
@@ -654,6 +648,7 @@ public class XIncludeTest extends XOMTestCase {
     
     public void testFallbackWithRecursiveInclude() 
       throws ParsingException, IOException, XIncludeException {
+        
         File input = new File("data/xinclude/input/fallbacktest2.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
@@ -661,6 +656,7 @@ public class XIncludeTest extends XOMTestCase {
           new File("data/xinclude/output/fallbacktest2.xml")
         );
         assertEquals(expectedResult, result);
+        
     }
 
     
@@ -702,7 +698,6 @@ public class XIncludeTest extends XOMTestCase {
             fail("Resolved a document with an XPointer " +              "that selects no subresource");
         }
         catch (XIncludeException success) {
-            // success   
             assertNotNull(success.getMessage());
             // Must compare URLs instead of strings here to avoid 
             // issues of whether a file URL begins file:/ or file:///
@@ -763,7 +758,6 @@ public class XIncludeTest extends XOMTestCase {
                 " when the first part resolved successfully");
         }
         catch (XIncludeException success) {
-            // success   
             assertNotNull(success.getMessage());
         }  
         
@@ -781,7 +775,6 @@ public class XIncludeTest extends XOMTestCase {
                 " when the first part resolved successfully");
         }
         catch (XIncludeException success) {
-            // success   
             assertNotNull(success.getMessage());
         }  
         
@@ -917,11 +910,10 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("Did not error on XPointer matching nothing");
         }
-        catch (XIncludeException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());
             URL u1 = input.toURL();
-            URL u2 = new URL(ex.getURI());
+            URL u2 = new URL(success.getURI());
             assertEquals(u1, u2);            
         }
         
@@ -937,11 +929,10 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("Allowed malformed XPointer");
         }
-        catch (XIncludeException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());
             URL u1 = input.toURL();
-            URL u2 = new URL(ex.getURI());
+            URL u2 = new URL(success.getURI());
             assertEquals(u1, u2);            
         }
         
@@ -958,11 +949,10 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("Allowed another malformed XPointer");
         }
-        catch (XIncludeException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());
             URL u1 = input.toURL();
-            URL u2 = new URL(ex.getURI());
+            URL u2 = new URL(success.getURI());
             assertEquals(u1, u2);            
         }
         
@@ -1162,17 +1152,14 @@ public class XIncludeTest extends XOMTestCase {
                             XIncluder.resolveInPlace(doc);
                             fail("Failed test " + id + ": " + description);
                         }
-                        catch (XIncludeException ex) {
-                            // success   
-                            assertNotNull(ex.getMessage());
+                        catch (XIncludeException success) {
+                            assertNotNull(success.getMessage());
                         }
                         catch (IOException success) {
-                           // success 
                            assertNotNull(success.getMessage());  
                         }
-                        catch (ParsingException ex) {
-                            // success   
-                            assertNotNull(ex.getMessage());
+                        catch (ParsingException success) {
+                            assertNotNull(success.getMessage());
                         }
                     }
                     else {
@@ -1230,11 +1217,10 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("Missing HREF not detected");
         }
-        catch (MissingHrefException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (MissingHrefException success) {
+            assertNotNull(success.getMessage());
             URL u1 = error.toURL();
-            URL u2 = new URL(ex.getURI());
+            URL u2 = new URL(success.getURI());
             assertEquals(u1, u2);            
         }
                 
@@ -1251,7 +1237,6 @@ public class XIncludeTest extends XOMTestCase {
             fail("Bad ID in element not detected");
         }
         catch (XIncludeException success) {
-            // success   
             assertNotNull(success.getMessage());   
         }
                 
@@ -1268,7 +1253,6 @@ public class XIncludeTest extends XOMTestCase {
             fail("Bad ID in element not detected");
         }
         catch (XIncludeException success) {
-            // success   
             assertNotNull(success.getMessage());   
         }
                 
@@ -1288,6 +1272,37 @@ public class XIncludeTest extends XOMTestCase {
             assertNotNull(success.getMessage());   
         }
 
+    }
+    
+    
+    public void testXPointerOverridesFragmentID() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/xpointeroverridesfragmentid.xml"
+        );
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expected = builder.build(
+          new File("data/xinclude/output/xpointeroverridesfragmentid.xml")
+        );
+        assertEquals(expected, result);
+                
+    }
+    
+ 
+    public void testIgnoresFragmentID() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/ignoresfragmentid.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expected = builder.build(
+          new File("data/xinclude/output/ignoresfragmentid.xml")
+        );
+        assertEquals(expected, result);
+                
     }
     
  
