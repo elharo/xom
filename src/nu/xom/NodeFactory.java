@@ -50,8 +50,10 @@ public class NodeFactory {
     // or even a NodeList instead????
     // would need to get rid of fastAdd, but that might be doable
     // now that insertChild no longer uses instanceof
-    // might also prevent sax filters from adding wrong thing
+    // might also prevent SAX filters from adding wrong thing
     // in wrong place
+    
+    // does nodefactory need an option to make an additional namespace????
 
     /**
      * <p>
@@ -248,8 +250,8 @@ public class NodeFactory {
      * 
      * @return the newly created <code>Document</code>
      */
-    public Document makeDocument(Element root) {
-        return new Document(root);  
+    public Document makeDocument() {
+        return new Document(new Element("fauxRoot"));  
     }
 
     /**
