@@ -41,7 +41,7 @@ import nu.xom.Text;
 
 /**
  * <p>
- *   This class writes XML in the format specified by <a 
+ *   Writes XML in the format specified by <a 
  *   href="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical
  *   XML Version 1.0</a>.
  * </p>
@@ -52,7 +52,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  *
  */
 public class Canonicalizer {
@@ -94,7 +94,7 @@ public class Canonicalizer {
      *   canonical XML document with comments.
      * </p>
      * 
-     * @param out the <code>OutputStream</code> the document
+     * @param out the output stream the document
      *     is written onto
      */
     public Canonicalizer(OutputStream out) {
@@ -108,7 +108,7 @@ public class Canonicalizer {
      *   canonical XML document with or without comments.
      * </p>
      * 
-     * @param out the <code>OutputStream</code> the document
+     * @param out the output stream the document
      *     is written onto
      * @param withComments true if comments should be included 
      *     in the output, false otherwise
@@ -469,7 +469,7 @@ public class Canonicalizer {
      * stream using the canonical XML algorithm.
      * </p>
      * 
-     * @param doc the <code>Document</code> to serialize
+     * @param doc the document to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *      encounters an I/O error
