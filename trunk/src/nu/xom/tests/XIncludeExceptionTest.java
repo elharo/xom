@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -25,7 +25,7 @@ package nu.xom.tests;
 
 import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.MisplacedFallbackException;
-import nu.xom.xinclude.MissingHrefException;
+import nu.xom.xinclude.NoIncludeLocationException;
 import nu.xom.xinclude.XIncludeException;
 
 /**
@@ -42,14 +42,17 @@ public class XIncludeExceptionTest extends XOMTestCase {
     private XIncludeException ex;
     private Exception cause;
     
+    
     public XIncludeExceptionTest(String name) {
         super(name);
     }
 
+    
     protected void setUp() {
         ex = new XIncludeException("message");
         cause = new Exception();
     }
+    
     
     public void testConstructor() {
         ex = new XIncludeException("test", "http://ex.com/");
@@ -57,6 +60,7 @@ public class XIncludeExceptionTest extends XOMTestCase {
         assertEquals("http://ex.com/", ex.getURI());
     }
 
+    
     public void testInitCause() {
         
         assertNull(ex.getCause());
@@ -106,22 +110,25 @@ public class XIncludeExceptionTest extends XOMTestCase {
         
     }
 
+    
     public void testSelfCause() {
         
         try {
             ex.initCause(ex);   
             fail("Allowed self-causation");   
         }
-        catch (IllegalArgumentException result) {
+        catch (IllegalArgumentException success) {
             // success   
         }
         
     }
 
+    
     public void testGetMessage() {      
         Exception ex = new XIncludeException("testing");
         assertEquals("testing", ex.getMessage());
     }
+    
     
     public void testMisplacedFallbackException() {
         String message = "message";
@@ -129,20 +136,24 @@ public class XIncludeExceptionTest extends XOMTestCase {
         assertEquals(message, ex.getMessage());
     }
 
+    
     public void testBadParseAttributeException() {
+        
         String message = "message";
         Exception ex = new BadParseAttributeException(message);
         assertEquals(message, ex.getMessage());
+        
     }
 
-    public void testMissingHrefException() {
+    
+    public void testNoIncludeLocationException() {
         String message = "message";
-        XIncludeException ex = new MissingHrefException(message);
+        XIncludeException ex = new NoIncludeLocationException(message);
         assertEquals(message, ex.getMessage());
         assertNull(ex.getCause());
         
         Exception cause = new Exception();
-        ex = new MissingHrefException(message, cause);
+        ex = new NoIncludeLocationException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause());
         
