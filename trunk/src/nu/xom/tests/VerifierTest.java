@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -24,9 +24,12 @@
 package nu.xom.tests;
 
 import nu.xom.Attribute;
+import nu.xom.DocType;
 import nu.xom.Element;
+import nu.xom.IllegalDataException;
 import nu.xom.IllegalNameException;
 import nu.xom.MalformedURIException;
+import nu.xom.Text;
 
 import org.apache.xerces.util.XMLChar;
 
@@ -141,8 +144,7 @@ public class VerifierTest extends XOMTestCase {
             String utf16 = convertToUTF16(illegalChars[i]);
             String url = "http://www.example.com/" + utf16 + ".xml";
             try {
-                element.addAttribute(new Attribute("xml:base",
-                  "http://www.w3.org/XML/1998/namespace", url));
+                new DocType("root", url);
                 fail("Allowed IRI containing 0x" + 
                   Integer.toHexString(illegalChars[i]).toUpperCase());
             }
@@ -217,8 +219,7 @@ public class VerifierTest extends XOMTestCase {
         for (int i = 0; i < addresses.length; i++) {
             String url = "http://[" + addresses[i] + "]/";
             try {
-                element.addAttribute(new Attribute("xml:base", 
-                  "http://www.w3.org/XML/1998/namespace", url));
+                DocType doctype = new DocType("root", url);
                 fail("Allowed illegal IPv6 address: " +  addresses[i] );
             }
             catch (MalformedURIException success) {
@@ -239,5 +240,28 @@ public class VerifierTest extends XOMTestCase {
         return sb.toString().toLowerCase();
     }
     
+    
+    public void testC0Controls() {   
+        
+         for (char c = 0; c < '\t'; c++) {
+             try {
+                 new Text(String.valueOf(c));
+             }
+             catch (IllegalDataException success) {
+                 assertNotNull(success.getMessage());
+             }  
+         }
+         
+         for (char c = '\r'+1; c < ' '; c++) {
+             try {
+                 new Text(String.valueOf(c));
+             }
+             catch (IllegalDataException success) {
+                 assertNotNull(success.getMessage());
+             }  
+         }
+         
+    }
+
 
 }
