@@ -54,6 +54,14 @@ public class CommentTest extends XOMTestCase {
          assertEquals("", c2.getValue());
      }
 
+    public void testCopyConstructor() {
+         Comment c1 = new Comment("test");
+         Comment c2 = new Comment(c1);
+         assertEquals("test", c2.getValue());
+         assertEquals(c1.getValue(), c2.getValue());
+         assertTrue(c1 != c2);
+     }
+
     public void testToString() {
         
         Comment c1 = new Comment("content");
