@@ -507,7 +507,6 @@ public class Serializer {
              i < element.getNamespaceDeclarationCount(); 
              i++) {
             String additionalPrefix = element.getNamespacePrefix(i);
-            if ("xml".equals(additionalPrefix)) continue;
             String uri = element.getNamespaceURI(additionalPrefix);
             if (parent.isElement()) {
                Element parentElement = (Element) parent;   
