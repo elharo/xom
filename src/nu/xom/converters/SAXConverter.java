@@ -46,14 +46,16 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
   * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  */
 public class SAXConverter {
 
+    
     private ContentHandler contentHandler;
     private LexicalHandler lexicalHandler;
 
+    
     /**
      * <p>
      * Creates a new <code>SAXConverter</code>.
@@ -69,6 +71,7 @@ public class SAXConverter {
         setContentHandler(handler);
     }
 
+    
     /**
      * <p>
      * Set the <code>ContentHandler</code> for this converter.
@@ -89,6 +92,7 @@ public class SAXConverter {
         this.contentHandler = handler;
     }
 
+    
     /**
      * <p>
      * Returns the <code>ContentHandler</code>.
@@ -115,6 +119,7 @@ public class SAXConverter {
         this.lexicalHandler = handler;
     }
 
+    
     /**
      * <p>
      * Returns the <code>LexicalHandler</code> for this
@@ -128,6 +133,13 @@ public class SAXConverter {
         return this.lexicalHandler;
     }
     
+    
+    // Not necessary to woory about parser exceptions passed to
+    // fatal error because we're starting with a known good document.
+    // Only excepitons that can arise are thrown by 
+    // the supplied ContentHandler, and we don't want to pass those
+    // to the ErrorHandler, or call endDocument if such ane exception
+    // is thrown
     /**
      * <p>
      * Feed a document through this converter.
@@ -139,13 +151,14 @@ public class SAXConverter {
      */
     public void convert(Document doc) throws SAXException {
         
-        contentHandler.startDocument();        
+        contentHandler.startDocument();
         for (int i = 0; i < doc.getChildCount(); i++) {
-            process(doc.getChild(i));
-        }        
+             process(doc.getChild(i));
+        }                 
         contentHandler.endDocument();
         
     }
+    
     
     private void process(Node node) throws SAXException {
         
@@ -177,6 +190,7 @@ public class SAXConverter {
         
     }
 
+    
     private void convertElement(Element element) throws SAXException {
         // start prefix mapping
         for (int i = 0; 
@@ -301,21 +315,23 @@ public class SAXConverter {
         }
     }
     
+    
     private static String getSAXType(Attribute attribute) {
 
         Attribute.Type type = attribute.getType();
-        if (type.equals(Attribute.Type.UNDECLARED)) return "CDATA";
-        if (type.equals(Attribute.Type.CDATA))      return "CDATA";
-        if (type.equals(Attribute.Type.ID))         return "ID";
-        if (type.equals(Attribute.Type.IDREF))      return "IDREF";
-        if (type.equals(Attribute.Type.IDREFS))     return "IDREFS";
-        if (type.equals(Attribute.Type.NMTOKEN))    return "NMTOKEN";
-        if (type.equals(Attribute.Type.NMTOKENS))   return "NMTOKENS";
-        if (type.equals(Attribute.Type.ENTITY))     return "ENTITY";
-        if (type.equals(Attribute.Type.ENTITIES))   return "ENTITIES";
-        if (type.equals(Attribute.Type.NOTATION))   return "NOTATION";
+        if (type.equals(Attribute.Type.UNDECLARED))  return "CDATA";
+        if (type.equals(Attribute.Type.CDATA))       return "CDATA";
+        if (type.equals(Attribute.Type.ID))          return "ID";
+        if (type.equals(Attribute.Type.IDREF))       return "IDREF";
+        if (type.equals(Attribute.Type.IDREFS))      return "IDREFS";
+        if (type.equals(Attribute.Type.NMTOKEN))     return "NMTOKEN";
+        if (type.equals(Attribute.Type.NMTOKENS))    return "NMTOKENS";
+        if (type.equals(Attribute.Type.ENTITY))      return "ENTITY";
+        if (type.equals(Attribute.Type.ENTITIES))    return "ENTITIES";
+        if (type.equals(Attribute.Type.NOTATION))    return "NOTATION";
+        return "NMTOKEN"; // ENUMERATED
         
-        return "CDATA";
     }
 
+    
 }
