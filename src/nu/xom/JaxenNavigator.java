@@ -27,7 +27,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.1a3
  *
  */
 import nu.xom.Attribute;
@@ -41,6 +41,7 @@ import nu.xom.ParentNode;
 
 import org.jaxen.DefaultNavigator;
 import org.jaxen.FunctionCallException;
+import org.jaxen.JaxenConstants;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 
@@ -51,9 +52,6 @@ import java.util.Map;
 
 
 class JaxenNavigator extends DefaultNavigator {
-    
-    private static Iterator emptyIterator = new EmptyIterator(); 
-
     
     public Iterator getSelfAxisIterator(Object contextNode) {
         
@@ -191,7 +189,7 @@ class JaxenNavigator extends DefaultNavigator {
             return result.iterator();
         }
         catch (ClassCastException ex) {
-            return emptyIterator;
+            return JaxenConstants.EMPTY_ITERATOR;
         }
         
     }
@@ -200,7 +198,7 @@ class JaxenNavigator extends DefaultNavigator {
     public Iterator getParentAxisIterator(Object contextNode)  {
         
         Node parent = (Node) getParentNode(contextNode);
-        if (parent == null) return emptyIterator;
+        if (parent == null) return JaxenConstants.EMPTY_ITERATOR;
         else {
             List l = new ArrayList(1);
             l.add(parent);
@@ -227,12 +225,12 @@ class JaxenNavigator extends DefaultNavigator {
         try {
             Element element = (Element) contextNode;
             if (element.attributes == null) {
-                return emptyIterator;
+                return JaxenConstants.EMPTY_ITERATOR;
             }
             else return element.attributes.iterator();
         }
         catch (ClassCastException ex) {
-            return emptyIterator;
+            return JaxenConstants.EMPTY_ITERATOR;
         }
         
     }
@@ -244,7 +242,7 @@ class JaxenNavigator extends DefaultNavigator {
             return new ChildIterator((ParentNode) o);
         }
         else {
-            return emptyIterator;
+            return JaxenConstants.EMPTY_ITERATOR;
         }
         
     }
