@@ -26,7 +26,15 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
 
-
+/**
+ * <p>
+ *   
+ * </p>
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.1a3
+ *
+ */
 final class UnicodeUtil {
     
     
@@ -8564,8 +8572,34 @@ final class UnicodeUtil {
             for (int i = 0; i < length; i++) {
                 int c = data[i];
                 String d = UnicodeUtil.decompose(c);
-                result.append(d); // FIXME appends as string not char or int
+                result.append(d);
             }    
+            
+            /* FIXME now put into canonical order
+               A string is put into canonical order by repeatedly replacing 
+               any exchangeable pair by the pair in reversed order. When there 
+               are no remaining exchangeable pairs, then the string is in 
+               canonical order. Note that the replacements can be done in any order.
+
+               A sequence of two adjacent characters in a string is an exchangeable 
+               pair if the combining class (from the Unicode Character Database) 
+               for the first character is greater than the combining class for the 
+               second, and the second is not a starter; that is, 
+               if combiningClass(first) > combiningClass(second) > 0. */
+
+            for (int i = 0; i < result.length-1; i++) {
+                int first = result.data[i];
+                int second = result.data[i+1];
+                int secondClass = getCombiningClass(second);
+                if (secondClass == 0) continue;
+                int firstClass = getCombiningClass(first);
+                if (firstClass > secondClass ) {
+                    result.data[i] = second;
+                    result.data[i+1] = first;
+                    // FIXME do we now need to start over from the last starter?
+                }
+            }
+            
             return result;
             
         }
