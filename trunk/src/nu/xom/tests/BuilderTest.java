@@ -31,6 +31,11 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.DTDHandler;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
@@ -44,6 +49,7 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.IllegalNameException;
 import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
@@ -62,6 +68,65 @@ import nu.xom.ValidityException;
  */
 public class BuilderTest extends XOMTestCase {
 
+
+    // Cusotm parser to test what happens when parser supplies 
+    // malformed data
+    private static class CustomReader implements XMLReader {
+        
+        private ContentHandler handler;
+     
+        public void parse(String data) throws SAXException {
+            handler.startDocument();
+            handler.startElement("87", "87", "87", new AttributesImpl());
+            handler.endElement("87", "87", "87");
+            handler.endDocument();
+        }
+
+        public boolean getFeature(String uri) {
+            return false;
+        }
+
+        public void setFeature(String uri, boolean value) {}
+        
+        public ContentHandler getContentHandler() {
+            return handler;
+        }
+
+        public void setContentHandler(ContentHandler handler) {
+            this.handler = handler;
+        }
+        
+        public DTDHandler getDTDHandler() {
+            return null;
+        }
+
+        public void setDTDHandler(DTDHandler handler) {
+        }
+
+        public EntityResolver getEntityResolver() {
+            return null;
+        }
+        
+        public void setEntityResolver(EntityResolver resolver) {}
+
+        public ErrorHandler getErrorHandler() {
+            return null;
+        }
+
+        public void setErrorHandler(ErrorHandler handler) {}
+
+        public void parse(InputSource arg0) throws IOException,
+                SAXException {}
+
+        public Object getProperty(String uri) {
+            return null;
+        }
+
+        public void setProperty(String uri, Object value) {}
+        
+    }
+    
+    
     public BuilderTest(String name) {
         super(name);   
     }
@@ -1068,7 +1133,7 @@ public class BuilderTest extends XOMTestCase {
         Builder builder = new Builder();
         NodeFactory factory = builder.getNodeFactory();
         if (factory != null) {
-            assertFalse(factory.getClass().getName().equals("NonVerifyingFactory"));
+            assertFalse(factory.getClass().getName().endsWith("NonVerifyingFactory"));
         }
     }
     
@@ -1078,6 +1143,7 @@ public class BuilderTest extends XOMTestCase {
         Builder builder = new Builder(factory);   
         assertEquals(factory, builder.getNodeFactory());
     }
+    
     
     // Make sure additional namespaces aren't added for 
     // attributes. This test is flaky because it assumes 
@@ -1173,6 +1239,21 @@ public class BuilderTest extends XOMTestCase {
         }
         
     }        
+
+    public void testBuildMalformedDocumentWithBadParser() 
+      throws ParsingException, IOException {
+        
+        try {
+            XMLReader parser = new CustomReader();
+            Builder builder = new Builder(parser);
+            builder.build("data doesn't matter");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+            
+        
+    }
 
     
     public void testBuildMalformedDocumentWithCrimson() 

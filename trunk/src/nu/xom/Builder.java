@@ -409,13 +409,27 @@ public class Builder {
         else if (parser instanceof XMLFilter || IBMVM14) {
             setHandlers(new NodeFactory()); 
         }
-        else  {
+        else if (knownGoodParser(parser)) {
             setHandlers(new NonVerifyingFactory()); 
         } 
+        else {
+            setHandlers(new NodeFactory());             
+        }
 
     }
     
     
+    private static boolean knownGoodParser(XMLReader parser) {
+         
+        String parserName = parser.getClass().getName();
+        for (int i = 0; i < parsers.length; i++) {
+            if (parserName.equals(parsers[i])) return true;
+        }
+        return false;
+        
+    }
+
+
     private void setHandlers(NodeFactory factory) {
         
         this.factory = factory;
