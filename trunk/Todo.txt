@@ -14,7 +14,7 @@ DTD API?
 1.1:
 -------
 
-Add XPath samples based on XOM
+Add more XPath samples based on XOM
 
 A util package with the most useful samples and contribs
 
@@ -22,12 +22,10 @@ Figure out a way to allow users to configure different text storage algorithms,
 all stored as byte arrays.
 Possibilities:
 
-System property (though that's VM wide, which is really, realy bad)
+System property (though that's VM wide, which is really, really bad)
 Method in text class and Builder
 
 StAX Builder and converter sample to test API and implementation
-
-a method to insert a Nodes in a Nodes
 
 Add separate implementations optimized for speed and size.
 The current implementation is mostly optimized for size. The speedy version
@@ -37,16 +35,11 @@ methods that could be overridden instead.
 
 catalog support????
 
-document subset canonicalization (does this depend on XPath????)
-
-exclusive XML canonicalization 
-
 Should XSLTransform have a constructor that takes a TrAX 
 Templates or Transformer object to allow
 additional properties to be configured
 
 should Builder have an option to cache all external entities so it doesn't keep reloading them, perhaps via a SAX EntityResolver.
-
 
 A getAttributeValueInScope() method that searches up the tree for the nearest 
 ancestor element with the specified attribute. This would be useful for xml:lang, xml:space, and many other cases!!!!
@@ -57,6 +50,15 @@ Should Builder/NodeFactory have a build(Document) method that allows one to pass
 
 A FastSerializer that does no indenting, no line-breaking, no character sets
 except UTF-8 and UTF-16, no normalization, and does not use TextWriter
+
+Combine jaxen into minimal jar
+
+consider using a WeakHashMap to hold all mappings of nodes to base URIs
+
+Could Builder hold a cache of interned strings to use while building?
+Does NUX BinaryXMLCODEC do something like this?
+
+Can a Nodes object contain null? Should it be able to?
 
 1.0.1:
 --------
