@@ -45,6 +45,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.IllegalAddException;
 import nu.xom.MalformedURIException;
+import nu.xom.NamespaceConflictException;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
@@ -841,6 +842,222 @@ public class XSLTransformTest extends XOMTestCase {
     }
     
   
+
+
+
+    private static boolean indentYes(Document styleDoc) {
+        
+        Element output = styleDoc
+          .getRootElement()
+          .getFirstChildElement("output", 
+             "http://www.w3.org/1999/XSL/Transform");
+        if (output == null) return false;
+        
+        String indent = output.getAttributeValue("indent"); // trim????
+        if ("yes".equals(indent)) return true;
+        else return false;
+        
+    }
+
+
+    public void testOASISXalanConformanceSuite()  
+      throws IOException, ParsingException, XSLException {
+        
+        Builder builder = new Builder();
+        File base = new File("data/oasis-xslt-testsuite/TESTS/Xalan_Conformance_Tests/");
+        File catalog = new File(base, "catalog.xml");
+        
+        // The test suite need to be installed separately. If we can't
+        // find the catalog, we just don't run these tests.
+        if (catalog.exists()) {
+            Document doc = builder.build(catalog);
+            Element testsuite = doc.getRootElement();
+            Elements submitters = testsuite.getChildElements("test-catalog");
+            for (int i = 0; i < submitters.size(); i++) {
+                Element submitter = submitters.get(i);
+                Elements testcases = submitter.getChildElements("test-case");
+                for (int j = 0; j < testcases.size(); j++) {
+                    Element testcase = testcases.get(j);
+                    String id = testcase.getAttributeValue("id");
+                    if (id.startsWith("output_")) {
+                        // These test cases are mostly about producing 
+                        // HTML and plain text output that isn't 
+                        // relevant to XOM
+                        continue;
+                    }
+                    File root = new File(base, testcase.getFirstChildElement("file-path").getValue());
+                    File input = null;
+                    File style = null;
+                    File output = null;
+                    Element scenario = testcase.getFirstChildElement("scenario");
+                    Elements inputs = scenario.getChildElements("input-file");
+                    for (int k = 0; k < inputs.size(); k++) {
+                        Element file = inputs.get(k);
+                        String role = file.getAttributeValue("role");
+                        if ("principal-data".equals(role)) {
+                            input = new File(root, file.getValue());
+                        }
+                        else if ("principal-stylesheet".equals(role)) {
+                            style = new File(root, file.getValue());
+                        }
+                    }
+                    Elements outputs = scenario.getChildElements("output-file");
+                    for (int k = 0; k < outputs.size(); k++) {
+                        Element file = outputs.get(k);
+                        String role = file.getAttributeValue("role");
+                        if ("principal".equals(role)) {
+                            // Fix up OASIS catalog bugs
+                            File parent = new File(root.getParent());
+                            parent = new File(parent, "REF_OUT");
+                            parent = new File(parent, root.getName());
+                            String outputFileName = file.getValue();
+                            output = new File(parent, outputFileName);
+                        }
+                    }
+                    
+                    try {
+                        Document inputDoc = builder.build(input);
+                        Document styleDoc = builder.build(style);
+                        // XXX For the moment let's just skip all tests
+                        // that specify indent="yes" for the output;
+                        // we can fix this with special comparison later.
+                        if (indentYes(styleDoc)) continue;
+                        XSLTransform xform = new XSLTransform(styleDoc);
+                        Nodes result = xform.transform(inputDoc);
+                        if (output == null) {
+                            // transform should have failed
+                            fail("Transformed " + testcase.getAttributeValue("id"));
+                        }
+                        else { 
+                            try {
+                                Document expectedResult = builder.build(output);
+                                Document actualResult = XSLTransform.toDocument(result);
+                                
+                                if (id.equals("attribset_attribset40")) {
+                                    // This test does not necessarily 
+                                    // produce an identical infoset due
+                                    // to necessary remapping of 
+                                    // namespace prefixes.
+                                    continue;
+                                }
+                                else if (id.equals("copy_copy56") 
+                                  || id.equals("copy_copy58")
+                                  || id.equals("copy_copy60")
+                                  || id.equals("copy_copy59")) {
+                                    // Xalan bug;
+                                    // XXX diagnose and report
+                                } 
+                                else if (id.equals("idkey_idkey31")
+                                  || id.equals("idkey_idkey59")
+                                  || id.equals("idkey_idkey61")
+                                  || id.equals("idkey_idkey62")) {
+                                    // Xalan bug?;
+                                    // XXX diagnose and report
+                                } 
+                                else if (id.equals("impincl_impincl11")) {
+                                    // Xalan bug?;
+                                    // XXX diagnose and report
+                                }
+                                else if (id.equals("math_math110")
+                                  || id.equals("math_math111")) {
+                                    // Xalan or test suite bug?;
+                                    // XXX diagnose and report
+                                }
+                                else if (id.equals("position_position104")) {
+                                    // test suite bug; Xalan is right,
+                                    // sample output is incorrect; report????
+                                }
+                                else if (id.equals("position_position106")) {
+                                    // test suite bug and xsltproc; Xalan is right,
+                                    // sample output is incorrect; report for test suite????
+                                    // already reported for libxslt
+                                }
+                                else if (id.equals("whitespace_whitespace17")
+                                  || id.equals("position_position107")
+                                  || id.equals("position_position109")) {
+                                    // tests indent="yes" which is not
+                                    // not relevant within XOM
+                                } 
+                                else {
+                                    assertEquals("Problem with " + id,
+                                      expectedResult, actualResult);
+                                }
+                            }
+                            catch (ParsingException ex) {  
+                                // a few of the test cases generate 
+                                // text or HTML output rather than 
+                                // well-formed XML. For the moment, I 
+                                // just skip these; but could I compare
+                                // the raw text to the value of the 
+                                // document object instead????
+                                continue;
+                            }
+                            catch (IllegalAddException ex) {
+                                // A few of the test cases generate 
+                                // incomplete documents so we can't
+                                // compare output. Perhaps I could
+                                // wrap in an element,t hen get children
+                                // to build a Node object rather than a
+                                // Document???? i.e. a fragment parser?
+                                // Could use a SequenceInputStream to hack this
+                            }
+                            // XXX report issues in test suite with indent="yes" in stylesheets
+                            // where indenting is not specifically being tested
+                        }
+                        
+                    }
+                    catch (MalformedURIException ex) {
+                        // Some of the test cases contain relative 
+                        // namespace URIs XOM does not support
+                    }
+                    catch (XSLException ex) {
+                        // If the output was null the transformation 
+                        // was expected to fail
+                        if (output != null) {
+                            // a few of the test cases use relative namespace URIs
+                            // XOM doesn't support
+                            Throwable cause = ex.getCause();
+                            if (cause instanceof MalformedURIException) {
+                                continue;
+                            }
+                            
+                            if ("axes_axes62".equals(id)) {  
+                                // Bug 12690
+                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12690
+                                continue;
+                            }
+                            else if ("impincl_impincl27".equals(id)) {  
+                                // Test case uses file: URI XOM doesn't support
+                                continue;
+                            }
+                            else if ("select_select85".equals(id)) {  
+                                // This has been fixed in Xalan 2.6.0
+                                // However, it's a bug in earlier versions of Xalan
+                                // bundled with the JDK 1.4.2_05
+                                continue;
+                            }
+                            else if ("numberformat_numberformat45".equals(id)
+                              || "numberformat_numberformat46".equals(id)) {  
+                                // Test case uses illegal number format pattern
+                                // Xalan catches this. Test case is in error.
+                                // report this????
+                                continue;
+                            }
+                            
+                            System.err.println(id);
+                            System.err.println(ex.getMessage());
+                            throw ex;
+                        }
+                    }
+                    
+                }
+            } 
+            
+        }
+     
+    }
+    
+    
     public void testOASISMicrosoftConformanceSuite()  
       throws IOException, ParsingException, XSLException {
         
@@ -1167,6 +1384,9 @@ public class XSLTransformTest extends XOMTestCase {
                            // I think this test case is wrong; Uses backslash in URI
                            // XXX verify, document and report   
                         }
+                        else if ("Elements__89070".equals(id)) {
+                            // bug fixed in later versions of Xalan
+                        }
                         else if ("Namespace-alias_Namespace-Alias_NSAliasForDefaultWithExcludeResPref".equals(id)) {
                            // I think this test case is wrong; 
                            // XXX verify, document and report   
@@ -1179,6 +1399,12 @@ public class XSLTransformTest extends XOMTestCase {
                           || "BVTs_bvt094".equals(id)) {
                            // I think this test case output is wrong;
                            // XXX document and report   
+                            continue;
+                        }
+                        else if ("Output__78177".equals(id)
+                          || "Output__84009".equals(id)) {
+                           // Xalan does not recover from this error 
+                           // which involves duplicate and possibly conflicting xsl:output elements
                             continue;
                         }
                         else if ("Comment_Comment_CDATAWithSingleHyphen".equals(id)
@@ -1236,219 +1462,6 @@ public class XSLTransformTest extends XOMTestCase {
             } // end for 
             
         } // end if 
-     
-    }
-
-
-    private static boolean indentYes(Document styleDoc) {
-        
-        Element output = styleDoc
-          .getRootElement()
-          .getFirstChildElement("output", 
-             "http://www.w3.org/1999/XSL/Transform");
-        if (output == null) return false;
-        
-        String indent = output.getAttributeValue("indent"); // trim????
-        if ("yes".equals(indent)) return true;
-        else return false;
-        
-    }
-
-
-    public void testOASISXalanConformanceSuite()  
-      throws IOException, ParsingException, XSLException {
-        
-        Builder builder = new Builder();
-        File base = new File("data/oasis-xslt-testsuite/TESTS/Xalan_Conformance_Tests/");
-        File catalog = new File(base, "catalog.xml");
-        
-        // The test suite need to be installed separately. If we can't
-        // find the catalog, we just don't run these tests.
-        if (catalog.exists()) {
-            Document doc = builder.build(catalog);
-            Element testsuite = doc.getRootElement();
-            Elements submitters = testsuite.getChildElements("test-catalog");
-            for (int i = 0; i < submitters.size(); i++) {
-                Element submitter = submitters.get(i);
-                Elements testcases = submitter.getChildElements("test-case");
-                for (int j = 0; j < testcases.size(); j++) {
-                    Element testcase = testcases.get(j);
-                    String id = testcase.getAttributeValue("id");
-                    if (id.startsWith("output_")) {
-                        // These test cases are mostly about producing 
-                        // HTML and plain text output that isn't 
-                        // relevant to XOM
-                        continue;
-                    }
-                    File root = new File(base, testcase.getFirstChildElement("file-path").getValue());
-                    File input = null;
-                    File style = null;
-                    File output = null;
-                    Element scenario = testcase.getFirstChildElement("scenario");
-                    Elements inputs = scenario.getChildElements("input-file");
-                    for (int k = 0; k < inputs.size(); k++) {
-                        Element file = inputs.get(k);
-                        String role = file.getAttributeValue("role");
-                        if ("principal-data".equals(role)) {
-                            input = new File(root, file.getValue());
-                        }
-                        else if ("principal-stylesheet".equals(role)) {
-                            style = new File(root, file.getValue());
-                        }
-                    }
-                    Elements outputs = scenario.getChildElements("output-file");
-                    for (int k = 0; k < outputs.size(); k++) {
-                        Element file = outputs.get(k);
-                        String role = file.getAttributeValue("role");
-                        if ("principal".equals(role)) {
-                            // Fix up OASIS catalog bugs
-                            File parent = new File(root.getParent());
-                            parent = new File(parent, "REF_OUT");
-                            parent = new File(parent, root.getName());
-                            String outputFileName = file.getValue();
-                            output = new File(parent, outputFileName);
-                        }
-                    }
-                    
-                    try {
-                        Document inputDoc = builder.build(input);
-                        Document styleDoc = builder.build(style);
-                        // XXX For the moment let's just skip all tests
-                        // that specify indent="yes" for the output;
-                        // we can fix this with special comparison later.
-                        if (indentYes(styleDoc)) continue;
-                        XSLTransform xform = new XSLTransform(styleDoc);
-                        Nodes result = xform.transform(inputDoc);
-                        if (output == null) {
-                            // transform should have failed
-                            fail("Transformed " + testcase.getAttributeValue("id"));
-                        }
-                        else { 
-                            try {
-                                Document expectedResult = builder.build(output);
-                                Document actualResult = XSLTransform.toDocument(result);
-                                
-                                if (id.equals("attribset_attribset40")) {
-                                    // This test does not necessarily 
-                                    // produce an identical infoset due
-                                    // to necessary remapping of 
-                                    // namespace prefixes.
-                                    continue;
-                                }
-                                else if (id.equals("copy_copy56") 
-                                  || id.equals("copy_copy58")
-                                  || id.equals("copy_copy60")
-                                  || id.equals("copy_copy59")) {
-                                    // Xalan bug;
-                                    // XXX diagnose and report
-                                } 
-                                else if (id.equals("idkey_idkey31")
-                                  || id.equals("idkey_idkey59")
-                                  || id.equals("idkey_idkey61")
-                                  || id.equals("idkey_idkey62")) {
-                                    // Xalan bug?;
-                                    // XXX diagnose and report
-                                } 
-                                else if (id.equals("impincl_impincl11")) {
-                                    // Xalan bug?;
-                                    // XXX diagnose and report
-                                }
-                                else if (id.equals("math_math110")
-                                  || id.equals("math_math111")) {
-                                    // Xalan or test suite bug?;
-                                    // XXX diagnose and report
-                                }
-                                else if (id.equals("position_position104")) {
-                                    // test suite bug; Xalan is right,
-                                    // sample output is incorrect; report????
-                                }
-                                else if (id.equals("position_position106")) {
-                                    // test suite bug and xsltproc; Xalan is right,
-                                    // sample output is incorrect; report for test suite????
-                                    // already reported for libxslt
-                                }
-                                else if (id.equals("whitespace_whitespace17")
-                                  || id.equals("position_position107")
-                                  || id.equals("position_position109")) {
-                                    // tests indent="yes" which is not
-                                    // not relevant within XOM
-                                } 
-                                else {
-                                    assertEquals("Problem with " + id,
-                                      expectedResult, actualResult);
-                                }
-                            }
-                            catch (ParsingException ex) {  
-                                // a few of the test cases generate 
-                                // text or HTML output rather than 
-                                // well-formed XML. For the moment, I 
-                                // just skip these; but could I compare
-                                // the raw text to the value of the 
-                                // document object instead????
-                                continue;
-                            }
-                            catch (IllegalAddException ex) {
-                                // A few of the test cases generate 
-                                // incomplete documents so we can't
-                                // compare output. Perhaps I could
-                                // wrap in an element,t hen get children
-                                // to build a Node object rather than a
-                                // Document???? i.e. a fragment parser?
-                                // Could use a SequenceInputStream to hack this
-                            }
-                            // XXX report issues in test suite with indent="yes" in stylesheets
-                            // where indenting is not specifically being tested
-                        }
-                        
-                    }
-                    catch (MalformedURIException ex) {
-                        // Some of the test cases contain relative 
-                        // namespace URIs XOM does not support
-                    }
-                    catch (XSLException ex) {
-                        // If the output was null the transformation 
-                        // was expected to fail
-                        if (output != null) {
-                            // a few of the test cases use relative namespace URIs
-                            // XOM doesn't support
-                            Throwable cause = ex.getCause();
-                            if (cause instanceof MalformedURIException) {
-                                continue;
-                            }
-                            
-                            if ("axes_axes62".equals(id)) {  
-                                // Bug 12690
-                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12690
-                                continue;
-                            }
-                            else if ("impincl_impincl27".equals(id)) {  
-                                // Test case uses file: URI XOM doesn't support
-                                continue;
-                            }
-                            else if ("select_select85".equals(id)) {  
-                                // This has been fixed in Xalan 2.6.0
-                                // However, it's a bug in earlier versions of Xalan
-                                // bundled with the JDK 1.4.2_05
-                                continue;
-                            }
-                            else if ("numberformat_numberformat45".equals(id)
-                              || "numberformat_numberformat46".equals(id)) {  
-                                // Test case uses illegal number format pattern
-                                // Xalan catches this. Test case is in error.
-                                // report this????
-                                continue;
-                            }
-                            
-                            System.err.println(id);
-                            System.err.println(ex.getMessage());
-                            throw ex;
-                        }
-                    }
-                    
-                }
-            } 
-            
-        }
      
     }
     
