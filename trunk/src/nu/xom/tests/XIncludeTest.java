@@ -2407,10 +2407,6 @@ public class XIncludeTest extends XOMTestCase {
         XIncluder.resolve(doc);
                 
     }
-
-    
-    // XXX Need to test all hidden errors inside non-XInclude children 
-    // of xi:include elements
     
     
 }
