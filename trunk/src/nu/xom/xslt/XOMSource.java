@@ -32,7 +32,7 @@ import org.xml.sax.XMLReader;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b7
  *
  */
 class XOMSource extends SAXSource {
@@ -74,7 +74,7 @@ class XOMSource extends SAXSource {
 
     
     public XMLReader getXMLReader() {
-        return new XOMReader(source);
+        return new XOMReader();
     }
     
     
