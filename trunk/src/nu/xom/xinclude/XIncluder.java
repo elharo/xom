@@ -898,7 +898,6 @@ public class XIncluder {
             String oldBase = node.getBaseURI();
             node.detach();
             if (node instanceof Element) {
-                // XXX
                 ((Element) node).setBaseURI(oldBase);
             }
         }  

@@ -856,7 +856,7 @@ public class XSLTransformTest extends XOMTestCase {
                         try {
                             Document input = builder.build(xml);
                             XSLTransform style = new XSLTransform(builder.build(xsl));
-                            //???? Nodes output = style.transform(input);
+                            style.transform(input);
                         }
                         catch (MalformedURIException ex) {
                             // Some of the test cases use relative 
@@ -864,7 +864,7 @@ public class XSLTransformTest extends XOMTestCase {
                             // System.err.println("Malformed uri in " + xsl);
                         }
                         catch (XSLException ex) {
-                            // look at these again; are they really errors????
+                            // look at these again; are they really errors?
                             // reported bugs
                             if ("GenereateIdAppliedToNamespaceNodesOnDifferentElements".equals(name)) continue;
                             // fixed in Xalan 2.6
@@ -1024,8 +1024,8 @@ public class XSLTransformTest extends XOMTestCase {
                             // transform should have failed
                             fail("Transformed " + testcase.getAttributeValue("id"));
                         }
-                        // ???? need to compare output here. However, the test suite doesn't
-                        // include the sample output
+                        // Should compare output here. However, the 
+                        // test suite doesn't include the sample output
                     }
                     catch (MalformedURIException ex) {
                         // some of the test cases do contain relative namespace URIs
@@ -1066,7 +1066,9 @@ public class XSLTransformTest extends XOMTestCase {
                             
                             // test suite bugs
                             if ("impincl_impincl27".equals(id)) {  
-                                // Uses a file URI I'm not sure is legal????
+                                // Uses a file URI I'm not sure is legal
+                                // <xsl:import href="file:fragments/imp27b.xsl"/>
+                                // This was allowed in 1808 but disallowed in 2396
                                 continue;
                             }
                             

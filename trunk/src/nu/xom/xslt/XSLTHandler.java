@@ -134,6 +134,8 @@ class XSLTHandler
                             // According to section 7.1.3 of XSLT spec we 
                             // need to remap the prefix here; ideally the
                             // XSLT processor should do this but many don't
+                            // for instance, see 
+                            // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=5389
                             attribute.setNamespace(
                               "p"+attribute.getNamespacePrefix(), 
                               attribute.getNamespaceURI()
@@ -164,7 +166,7 @@ class XSLTHandler
                         // skip it; see attribset40 test case;
                         // This should only happen if an attribute's
                         // namespace conflicts with the element's 
-                        // namespace; in which case we alreayd remapped
+                        // namespace; in which case we already remapped
                         // the prefix when adding the attribute
                     }
                 }              
@@ -352,7 +354,7 @@ class XSLTHandler
         
         String data = new String(text, start, length);
         // Xalan should add spaces as necessary to split up double hyphens
-        // in commnts but it doesn't
+        // in comments but it doesn't
         int position = data.indexOf("--");
         while (position != -1) {
             data = data.substring(0, position) + "- -" + data.substring(position+2);
