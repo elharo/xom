@@ -988,6 +988,36 @@ public class BuilderTest extends XOMTestCase {
     }
 
     
+    public void testNotationAttributeTypeWithCrimson()
+      throws IOException, ParsingException {
+        
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        
+        String data = " <!DOCTYPE doc [\n"
+            + "<!ATTLIST e a NOTATION (n) #IMPLIED>\n"
+            + "<!ELEMENT document (e)*>\n"
+            + "<!ELEMENT e (#PCDATA)>\n"
+            + "<!NOTATION n PUBLIC \"whatever\">"
+            + "]><document />";
+        
+        Builder builder = new Builder(crimson);
+        Document document = builder.build(data, base); 
+        
+        String s = document.toXML();
+        Document roundTrip = builder.build(s, base);
+        assertEquals(document, roundTrip);
+        
+    }
+   
+    
     public void testEnumerationAttributeType()
       throws IOException, ParsingException {
         
