@@ -372,7 +372,13 @@ public abstract class Node {
      * </p>
      * 
      * <p>
-     * The context position is ????. The context size is ????. 
+     * The context position is the index of this node among its parents
+     * children, counting adjacent text nodes as one. The context size 
+     * is the number of children this node's parent has, again counting
+     * adjacent text nodes as one node. If the parent is a 
+     * <code>Document</code>, then the <code>DocType</code> (if any) is 
+     * not counted. If the node has no parent, then the context position
+     * is 1, and the context size is 1. 
      * </p>
      * 
      * @param xpath the XPath expression to evaluate
