@@ -873,12 +873,46 @@ public class XSLTransformTest extends XOMTestCase {
         else return false;
         
     }
+    
+    
+    private static class StrippingFactory extends NodeFactory {
+    
+        public Nodes makeText(String s) {
+            
+            String stripped = stripSpace(s);
+            if (stripped.length() == 0) return new Nodes();
+            Text result = new Text(stripped);
+            return new Nodes(result);
+        }
+        
+        public Nodes makeAttribute(String name, String URI, 
+          String value, Attribute.Type type) {
+            return new Nodes(new Attribute(name, URI, stripSpace(value), type));
+        }        
+        
+        private String stripSpace(String s) {
+            
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < s.length(); i++) {
+                if (!Character.isWhitespace(s.charAt(i))) {
+                    sb.append(s.charAt(i));
+                }
+            }
+            
+            return sb.toString();
+            
+        }
+        
+    }
 
 
     public void testOASISXalanConformanceSuite()  
       throws IOException, ParsingException, XSLException {
         
         Builder builder = new Builder();
+        NodeFactory stripper = new StrippingFactory();
+        Builder strippingBuilder = new Builder(stripper);
+        
         File base = new File("data/oasis-xslt-testsuite/TESTS/Xalan_Conformance_Tests/");
         File catalog = new File(base, "catalog.xml");
         
@@ -894,7 +928,6 @@ public class XSLTransformTest extends XOMTestCase {
                 for (int j = 0; j < testcases.size(); j++) {
                     Element testcase = testcases.get(j);
                     String id = testcase.getAttributeValue("id");
-                    // System.out.println(id);
                     if (id.startsWith("output_")) {
                         // These test cases are mostly about producing 
                         // HTML and plain text output that isn't 
@@ -934,21 +967,27 @@ public class XSLTransformTest extends XOMTestCase {
                     try {
                         Document inputDoc = builder.build(input);
                         Document styleDoc = builder.build(style);
-                        // XXX For the moment let's just skip all tests
-                        // that specify indent="yes" for the output;
-                        // we can fix this with special comparison later.
-                        // Could we simply build actual and expected with
-                        // a white space stripping filter?
-                        if (indentYes(styleDoc)) continue;
-                        XSLTransform xform = new XSLTransform(styleDoc);
+                        // If the transform specifies indent="yes".
+                        // we remove all white space before comparing
+                        XSLTransform xform;
+                        if (indentYes(styleDoc)) {
+                            xform = new XSLTransform(styleDoc, stripper);
+                        }
+                        else xform = new XSLTransform(styleDoc);
                         Nodes result = xform.transform(inputDoc);
                         if (output == null) {
                             // transform should have failed
-                            fail("Transformed " + testcase.getAttributeValue("id"));
+                            fail("Transformed " + id);
                         }
                         else { 
                             try {
-                                Document expectedResult = builder.build(output);
+                                Document expectedResult;
+                                if (indentYes(styleDoc)) {
+                                    expectedResult = strippingBuilder.build(output);
+                                }
+                                else {
+                                    expectedResult = builder.build(output);
+                                }
                                 Document actualResult = XSLTransform.toDocument(result);
                                 
                                 if (id.equals("attribset_attribset40")) {
@@ -957,6 +996,10 @@ public class XSLTransformTest extends XOMTestCase {
                                     // to necessary remapping of 
                                     // namespace prefixes.
                                     continue;
+                                }
+                                else if (id.equals("axes_axes129")) {
+                                    // Xalan bug. Fixed in more recent 
+                                    // version than bundled with the JDK 1.4.2_05
                                 }
                                 else if (id.equals("copy_copy56") 
                                   || id.equals("copy_copy58")
@@ -1353,12 +1396,6 @@ public class XSLTransformTest extends XOMTestCase {
                             else {
                                 Document expectedResult = builder.build(output);
                                 Document actualResult = XSLTransform.toDocument(result);
-                                /* if ("Keys_MultipltKeysInclude".equals(id) ) {
-                                   System.out.println(expectedResult.toXML());
-                                   System.out.println();
-                                   System.out.println(actualResult.toXML());
-                                   // return;
-                                } */
                                 assertEquals("Mismatch with " + id,
                                   expectedResult, actualResult);
                             }
