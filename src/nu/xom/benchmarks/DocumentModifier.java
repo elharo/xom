@@ -62,7 +62,7 @@ import nu.xom.ParsingException;
  * </blockquote>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b8
  *
  */
 class DocumentModifier {
@@ -99,7 +99,7 @@ class DocumentModifier {
               new ByteArrayInputStream(data)
             );    
             
-            // Try to avoid garrbage collection pauses     
+            // Try to avoid garbage collection pauses     
             System.gc(); System.gc(); System.gc();
             
             long prebuild = System.currentTimeMillis();
