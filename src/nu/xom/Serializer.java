@@ -46,7 +46,7 @@ import java.util.Locale;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d4
  * 
  */
 public class Serializer {
@@ -855,7 +855,7 @@ public class Serializer {
         else {
             throw new XMLException("Cannot write a " + 
               node.getClass().getName() + 
-              " from the writeChildNode() method");
+              " from the writeChild() method");
         }
         
     }
