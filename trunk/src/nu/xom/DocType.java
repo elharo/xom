@@ -70,7 +70,7 @@ package nu.xom;
  * 
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  * 
  */
 public class DocType extends LeafNode {
@@ -210,29 +210,9 @@ public class DocType extends LeafNode {
     public final String getInternalDTDSubset() {
         return internalDTDSubset;
     }
-    
-/*    final void addDeclaration(String declaration) {
-        internalDTDSubset.append(declaration);  
-        internalDTDSubset.append("\r\n");   
-    }
-
-    final void addComment(String comment) {
-        internalDTDSubset.append(comment);  
-        internalDTDSubset.append("\r\n");   
-    }
-
-    final void addProcessingInstruction(String instruction) {
-        internalDTDSubset.append(instruction);  
-        internalDTDSubset.append("\r\n");   
-    }
-
-    final void setInternalDTDSubset(StringBuffer internalSubset) {
-        this.internalDTDSubset = internalSubset;   
-    } */
 
     final void setInternalDTDSubset(String internalSubset) {
-        if (internalSubset == null) this.internalDTDSubset = "";
-        else this.internalDTDSubset = internalSubset;   
+        this.internalDTDSubset = internalSubset;   
     }
 
 
