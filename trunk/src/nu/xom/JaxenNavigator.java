@@ -276,8 +276,11 @@ class JaxenNavigator extends DefaultNavigator {
         boolean previousWasText = false;
         for (int i = 0; i < parent.getChildCount(); i++) {
             Node child = parent.getChild(i);
-            if (child instanceof Text && !previousWasText) {
-                if (child.getValue().length() != 0) {
+            if (child instanceof Text) {
+                if (previousWasText) {
+                    continue;
+                }
+                else if (child.getValue().length() != 0) {
                     children++;
                     previousWasText = true;
                 }
