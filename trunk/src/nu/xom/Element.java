@@ -1233,24 +1233,6 @@ public class Element extends ParentNode {
      * attribute. 
      * </p>
      * 
-     * <p>
-     * According to section 4.2 of 
-     * <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>, 
-     * "A URI reference that does 
-     * not contain a URI is a reference to the current document.  
-     * In other words, an empty URI reference within a 
-     * document is interpreted as a reference to the start of that document,
-     * and a reference containing only a fragment identifier is a reference
-     * to the identified fragment of that document."
-     * Also according to RFC 2396, "If none of the conditions described 
-     * in Sections 5.1.1--5.1.3 apply,
-     * then the base URI is defined by the context of the application.
-     * Since this definition is necessarily application-dependent, failing
-     * to define the base URI using one of the other methods may result in
-     * the same content being interpreted differently by different types of
-     * application." Based on this, if the URI FIXME
-     * </p>
-     * 
      * @return the base URI of this element 
      * 
      * @see Node#getBaseURI()
@@ -1283,7 +1265,6 @@ public class Element extends ParentNode {
                             parent = parent.getParent();
                         }
                         else {
-                            // FIXME absolutize
                             return parentActualBase;
                         }
                     }
