@@ -205,9 +205,6 @@ class XSLTHandler
                          && "".equals(namespacePrefix)) {
                             element.addNamespaceDeclaration("", "");                           
                        }
-                       else {
-                           throw ex;
-                       }
                     }
                 }                
             }             
