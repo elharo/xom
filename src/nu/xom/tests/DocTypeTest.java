@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -21,7 +21,9 @@
 
 package nu.xom.tests;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
@@ -43,7 +45,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d1
+ * @version 1.1d2
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -59,6 +61,10 @@ public class DocTypeTest extends XOMTestCase {
     String publicID = "-//Me//some public ID";
 
 
+    // This class tests error conditions, which Xerces
+    // annoyingly logs to System.err. This hides System.err 
+    // before each test and restores it after each test.
+    private PrintStream systemErr = System.err;
     private DocType doctypePublicID;
     private DocType doctypeSystemID;
     private DocType doctypeRootOnly;
@@ -68,8 +74,14 @@ public class DocTypeTest extends XOMTestCase {
         doctypePublicID = new DocType(name, publicID, systemID);
         doctypeSystemID = new DocType(name, systemID);
         doctypeRootOnly = new DocType(name);
+        System.setErr(new PrintStream(new ByteArrayOutputStream()));
     }
-
+    
+    
+    protected void tearDown() {
+        System.setErr(systemErr);
+    }
+    
     
     public void testToXML() {
         
