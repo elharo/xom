@@ -45,7 +45,6 @@ import nu.xom.ValidityException;
  * Benchmark perofmrance against a specified URL for
  * building, tree-walking, and serializing.
  * </p>
- * replay several times and take average????
  * 
  * 
  * @author Elliotte Rusty Harold
