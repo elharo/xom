@@ -33,10 +33,10 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
-public class Text extends LeafNode {
+public class Text extends Node {
 
     private byte[] data;
     
@@ -123,6 +123,7 @@ public class Text extends LeafNode {
         }
     }
 
+    
     /**
      * <p>
      * Subclasses can override this method to perform additional 
@@ -161,6 +162,41 @@ public class Text extends LeafNode {
         }
     }
 
+    
+    /**
+     * <p>
+     * Throws <code>IndexOutOfBoundsException</code> because 
+     * leaf nodes do not have children.
+     * </p>
+     * 
+     * @return never returns because leaf nodes do not have children;
+     *     Always throws an exception.
+     * 
+     * @param position the index of the child node to return
+     * 
+     * @throws IndexOutOfBoundsException because leaf nodes 
+     *     do not have children
+     */
+    public final Node getChild(int position) {
+        throw new IndexOutOfBoundsException(
+          "LeafNodes do not have children");        
+    }
+
+    
+    /**
+     * <p>
+     * Returns 0 because leaf nodes do not have children.
+     * </p>
+     * 
+     * @return zero
+     * 
+     * @see nu.xom.Node#getChildCount()
+     */
+    public final int getChildCount() {
+        return 0;   
+    }
+    
+    
     /**
      * <p>
      * Returns a deep copy of this <code>Text</code> with no parent,
@@ -180,6 +216,7 @@ public class Text extends LeafNode {
         }
     }
 
+    
     /**
      * <p>
      * Returns a string containing the XML serialization of this text 

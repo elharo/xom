@@ -41,10 +41,10 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
-public class ProcessingInstruction extends LeafNode {
+public class ProcessingInstruction extends Node {
 
     private String target;
     private String data;
@@ -68,6 +68,7 @@ public class ProcessingInstruction extends LeafNode {
         setValue(data);  
     }
 
+    
     /**
      * <p>
      * Create a copy of a processing instruction.
@@ -218,6 +219,40 @@ public class ProcessingInstruction extends LeafNode {
         return data;
     }
 
+    
+    /**
+     * <p>
+     * Throws <code>IndexOutOfBoundsException</code> because 
+     * leaf nodes do not have children.
+     * </p>
+     * 
+     * @return never returns because leaf nodes do not have children;
+     *     Always throws an exception.
+     * 
+     * @param position the index of the child node to return
+     * 
+     * @throws IndexOutOfBoundsException because leaf nodes 
+     *     do not have children
+     */
+    public final Node getChild(int position) {
+        throw new IndexOutOfBoundsException(
+          "LeafNodes do not have children");        
+    }
+
+    
+    /**
+     * <p>
+     * Returns 0 because leaf nodes do not have children.
+     * </p>
+     * 
+     * @return zero
+     * 
+     * @see nu.xom.Node#getChildCount()
+     */
+    public final int getChildCount() {
+        return 0;   
+    }
+    
     
     /**
      * <p>

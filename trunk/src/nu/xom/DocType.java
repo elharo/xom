@@ -72,8 +72,9 @@ package nu.xom;
  * @version 1.0a1
  * 
  */
-public class DocType extends LeafNode {
+public class DocType extends Node {
 
+    
     private String rootName;
     private String systemID;
     private String publicID;
@@ -426,6 +427,40 @@ public class DocType extends LeafNode {
     }
 
 
+    /**
+     * <p>
+     * Throws <code>IndexOutOfBoundsException</code> because 
+     * leaf nodes do not have children.
+     * </p>
+     * 
+     * @return never returns because leaf nodes do not have children;
+     *     Always throws an exception.
+     * 
+     * @param position the index of the child node to return
+     * 
+     * @throws IndexOutOfBoundsException because leaf nodes 
+     *     do not have children
+     */
+    public final Node getChild(int position) {
+        throw new IndexOutOfBoundsException(
+          "LeafNodes do not have children");        
+    }
+
+    
+    /**
+     * <p>
+     * Returns 0 because leaf nodes do not have children.
+     * </p>
+     * 
+     * @return zero
+     * 
+     * @see nu.xom.Node#getChildCount()
+     */
+    public final int getChildCount() {
+        return 0;   
+    }
+    
+    
     /**
      * <p>
      * This method returns a string form of the 
