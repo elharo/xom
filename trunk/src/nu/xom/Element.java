@@ -236,8 +236,7 @@ public class Element extends ParentNode {
             else {
                 endTag = false;
                 ParentNode sourceParent = sourceCurrent.getParent(); 
-                if (sourceParent == originalParent) break; // copying a single empty element
-                else if (sourceParent.getChildCount() - 1 == index) {
+                if (sourceParent.getChildCount() - 1 == index) {
                     sourceCurrent = sourceParent; 
                     top--;
                     if (sourceCurrent == sourceElement) break;
@@ -482,7 +481,6 @@ public class Element extends ParentNode {
     }
     
     
-    // XXX add initial size
     void fastAddAttribute(Attribute attribute) {
         if (attributes == null) attributes = new ArrayList(1);
         attributes.add(attribute);
