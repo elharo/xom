@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -115,7 +115,7 @@ public class MegaTest extends XOMTestCase {
             return empty;  
         }     
     
-        protected Nodes finishMakingElement(Element element) {
+        public Nodes finishMakingElement(Element element) {
             if (element.getQualifiedName().equals("data")) {
                 actualResult += Integer.parseInt(element.getValue());
                 return empty;
@@ -131,10 +131,6 @@ public class MegaTest extends XOMTestCase {
         public Nodes makeDocType(String rootElementName, 
           String publicID, String systemID) {
             return empty;    
-        }
-    
-        public Nodes makeWhiteSpaceInElementContent(String data) {
-            return empty;  
         }
     
         public Nodes makeText(String data) {

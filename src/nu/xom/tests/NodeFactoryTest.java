@@ -210,34 +210,6 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
-    
-    public void testSkippingIgnorableWhiteSpace() 
-      throws IOException, ParsingException {
-        
-        String data = "<!DOCTYPE root [ ";
-        data += "<!ELEMENT root (p*)> ";
-        data += "<!ELEMENT p (#PCDATA)> ]>";
-        data += "<root> <p>   </p> </root>";
-        Builder builder = new Builder(new IgnorableWhiteSpaceFilter());
-        Document doc = builder.build(data, "http://www.example.org/");
-        Element root = doc.getRootElement();
-        assertEquals("Failed to ignore white space", 
-          1, root.getChildCount());
-        assertEquals("   ", doc.getValue());
-        Node first = root.getChild(0);
-        assertEquals(first.getValue(), "   ");        
-    }
-
-    
-    private static class IgnorableWhiteSpaceFilter 
-      extends NodeFactory {
-
-        public Nodes makeWhiteSpaceInElementContent(String data) {
-            return new Nodes();
-        }
-
-    }
-
 
     public void testSkipping2() throws IOException, ParsingException {
         
@@ -264,6 +236,7 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
 
+    
     static class BFilter extends NodeFactory {
 
         public Element startMakingElement(
@@ -332,10 +305,6 @@ public class NodeFactoryTest extends XOMTestCase {
         public Nodes makeDocType(String rootElementName, 
           String publicID, String systemID) {
             return empty;    
-        }
-    
-        public Nodes makeWhiteSpaceInElementContent(String data) {
-            return empty;  
         }
     
         public Nodes makeProcessingInstruction(
