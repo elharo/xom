@@ -40,7 +40,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  * 
  */
 public class Attribute extends Node {
@@ -124,7 +124,7 @@ public class Attribute extends Node {
     /**
      * <p>
      * Creates a new attribute in the specified namespace with the
-     * specified name, namespace, value, and type.
+     * specified name, value, and type.
      * </p>
      * 
      * @param name  the prefixed attribute name
@@ -256,7 +256,6 @@ public class Attribute extends Node {
      * </p>
      * 
      * @return the value of the attribute
-     * @see nu.xom.Node#getValue()
      * 
      */
     public final String getValue() {
@@ -489,7 +488,6 @@ public class Attribute extends Node {
      * </p>
      * 
      * @return zero
-     * @see nu.xom.Node#getChildCount()
      */
     public final int getChildCount() {
         return 0;   
@@ -517,8 +515,6 @@ public class Attribute extends Node {
      * </p>
      * 
      * @return a string containing the XML form of this attribute
-     *
-     * @see nu.xom.Node#toXML()
      */
     public final String toXML() {
         return getQualifiedName() + "=\"" 
