@@ -117,7 +117,9 @@ public class Element extends ParentNode {
     
     private Element() {}
 
+    
     static Element build(String name, String uri) {
+        
         Element result = new Element();
         String prefix = "";
         String localName = name;
@@ -130,8 +132,11 @@ public class Element extends ParentNode {
         result.localName = localName;
         // We do need to verify the URI here because parsers are 
         // allowing relative URIs which XOM forbids, for reasons
-        // of canonical XML if nothing else
-        result.setNamespaceURI(uri);
+        // of canonical XML if nothing else. But we only have to verify
+        // that it's an absolute base URI. I don't have to verify 
+        // no conflicts.
+        if (! "".equals(uri)) Verifier.checkAbsoluteURIReference(uri);
+        result.URI = uri;
         return result;
         
     }
@@ -873,6 +878,7 @@ public class Element extends ParentNode {
         } 
 
         this.prefix = prefix;
+        
     }
 
 
