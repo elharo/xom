@@ -21,9 +21,6 @@
 
 package nu.xom;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -56,7 +53,7 @@ import org.jaxen.JaxenException;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.1b1
  *
  */
 public abstract class Node {
@@ -433,9 +430,7 @@ public abstract class Node {
             }
 
             List queryResults = connector.selectNodes(this);
-            HashSet results = new HashSet(queryResults);
-            List namespaceList = new ArrayList();
-            Iterator iterator = results.iterator();
+            Iterator iterator = queryResults.iterator();
             while (iterator.hasNext()) {
                 Object o = iterator.next();
                 try {
@@ -444,13 +439,10 @@ public abstract class Node {
                         iterator.remove();
                         // Want to allow // and //* and so forth
                         // but not / for rootless documents
-                        if (results.isEmpty()) {
+                        if (queryResults.isEmpty()) {
                             throw new XPathException("Tried to get document "
                               + "node of disconnected subtree");
                         }
-                    }
-                    else if (n.isNamespace()) {
-                        namespaceList.add(n);
                     }
                 }
                 catch (ClassCastException ex) {
@@ -462,13 +454,7 @@ public abstract class Node {
                 }
             }
             
-            // If we fix the bugs in Jaxen that don't return nodes in
-            // document order, we can speed things up by uncommenting
-            // this next line
-            /* if (xpath.indexOf('|') == -1) return new Nodes(results);
-            else  */
-                
-            return sortResults(results, namespaceList);
+            return new Nodes(queryResults);
         }
         catch (XPathException ex) {
             ex.setXPath(xpath);
@@ -486,84 +472,6 @@ public abstract class Node {
         }
         finally {
             if (frag != null) frag.removeChild(0);
-        }
-        
-    }
-
-
-    // XXX remove recursion
-    // recursively descend through document; in document
-    // order, and add results as they are found
-    private Nodes sortResults(Collection in, List namespaces) {
-        
-        if (in.size() > 1) {
-            Node root = this.getRoot();
-            if (root.isParentNode()) {
-                Nodes out = new Nodes();
-                process(in, namespaces, out, (ParentNode) root);
-                return out;
-            }
-        }
-        else if (in.size() == 0) {
-            return new Nodes();
-        }
-        return new Nodes((Node) in.iterator().next());
-        
-    }
-
-
-    private static void process(Collection in, List namespaces, Nodes out, ParentNode parent) {
-
-        if (in.isEmpty()) return;
-        if (in.contains(parent)) {
-            out.append(parent);
-            in.remove(parent);
-            if (in.isEmpty()) return;
-        }
-        
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            Node child = parent.getChild(i);
-            if (child.isElement()) {
-                Element element = (Element) child;
-                if (in.contains(element)) {
-                    out.append(element);
-                    in.remove(element);
-                }
-                // attach namespaces
-                if (!namespaces.isEmpty()) {
-                    Iterator iterator = in.iterator();
-                    while (iterator.hasNext()) {
-                        Object o = iterator.next();
-                        if (o instanceof Namespace) {
-                            Namespace n = (Namespace) o;
-                            if (element == n.getParent()) {
-                                out.append(n);
-                                iterator.remove();
-                            }
-                        }
-                    }
-                }
-                
-                // attach attributes
-                int attributeCount = element.getAttributeCount();  
-                for (int a = 0; a < attributeCount; a++) {
-                    Attribute att = element.getAttribute(a);
-                    if (in.contains(att)) {
-                        out.append(att);
-                        in.remove(att);
-                        if (in.isEmpty()) return;
-                    }
-                }
-                process(in, namespaces, out, element);
-            }
-            else {
-                if (in.contains(child)) {
-                    out.append(child);
-                    in.remove(child);
-                    if (in.isEmpty()) return;
-                }
-            }
         }
         
     }
