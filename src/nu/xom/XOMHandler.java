@@ -86,11 +86,11 @@ class XOMHandler
         doctype = null;
         if (locator != null) {
             documentBaseURI = locator.getSystemId();
+            // According to the XML spec, 
+            // "It is an error for a fragment identifier 
+            // (beginning with a # character) to be part of a system identifier"
+            // but some parsers including Xerces seem to get this wrong, so we'll 
             document.setBaseURI(documentBaseURI);
-            // FIXME do we need to depend on the locator here
-            // isn't the base URI often passed into build?
-            // and if it is how do we use it?
-            // especially if we set base URI on all built elements?
         }
     }
   
