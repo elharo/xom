@@ -71,6 +71,7 @@ public class BaseURITest extends XOMTestCase {
     
     
     protected void setUp() {
+        
         Element root = new Element("root");
         doc = new Document(root);
         doc.setBaseURI(base1);
@@ -111,7 +112,7 @@ public class BaseURITest extends XOMTestCase {
     public void testInheritBaseFromDocument() {
         Element root = doc.getRootElement();
         root.setBaseURI("");
-        assertEquals("", root.getBaseURI());
+        assertEquals(doc.getBaseURI(), root.getBaseURI());
     }
 
     
@@ -610,14 +611,25 @@ public class BaseURITest extends XOMTestCase {
 
     
     public void testXMLBaseRelativeWithNoRoot() {
+        
         Element element = new Element("test");
         element.addAttribute(new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", "base.html"));
-        assertEquals("base.html", element.getBaseURI());
+        assertEquals("", element.getBaseURI());
         
-        element = new Element("test");
-        element.setBaseURI("base.html");
-        assertEquals("base.html", element.getBaseURI());
+    }
+    
+    
+    public void testRelativeBaseURIsNotAllowed() {    
+        
+        Element element = new Element("test");
+        try {
+            element.setBaseURI("base.html");
+            fail("Allowed relative base URI");
+        }
+        catch (MalformedURIException success) {
+            assertTrue(success.getMessage().startsWith("Base"));
+        }
         
     }
 
@@ -771,7 +783,7 @@ public class BaseURITest extends XOMTestCase {
               "TR.html"));
             e.appendChild(child);
             String base = child.getBaseURI();
-            assertEquals("TR.html", base);
+            assertEquals("", base);
         }
 
     }
@@ -889,22 +901,6 @@ public class BaseURITest extends XOMTestCase {
     }
     
     
-    public void testRelativeBaseURIsAreNotResolvedAgainstXMLBaseAttributesFromADifferentEntity() {
-     
-        Element top = new Element("top");
-        top.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", 
-          "http://www.example.com/"));
-        top.setBaseURI("http://www.w3.org");
-        Element bottom = new Element("bottom");
-        top.appendChild(bottom);
-
-        bottom.setBaseURI("index.xml");
-        assertEquals("index.xml", bottom.getBaseURI());                
-        
-    }
-    
-    
     public void testXMLBaseAttributesInTheSameEntityOverrideActualBaseURI() {
      
         Element top = new Element("top");
@@ -924,13 +920,13 @@ public class BaseURITest extends XOMTestCase {
      
         Element root = new Element("root");
         Attribute baseAttribute = new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "data/limit/test.xml");
+          "http://www.w3.org/XML/1998/namespace", "http://www.example.com/data/limit/test.xml");
         root.addAttribute(baseAttribute);
         Element child = new Element ("child");
         child.addAttribute(new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", "child.xml"));
         root.appendChild(child);
-        assertEquals("data/limit/child.xml", child.getBaseURI());
+        assertEquals("http://www.example.com/data/limit/child.xml", child.getBaseURI());
         
     }
     
