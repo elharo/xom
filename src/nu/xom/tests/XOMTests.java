@@ -51,6 +51,7 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(ParentNodeTest.class));
         result.addTest(new TestSuite(LeafNodeTest.class));
         result.addTest(new TestSuite(AttributeTest.class));
+        result.addTest(new TestSuite(AttributeTypeTest.class));
         result.addTest(new TestSuite(TextTest.class));
         result.addTest(new TestSuite(ElementTest.class));
         result.addTest(new TestSuite(CommentTest.class));

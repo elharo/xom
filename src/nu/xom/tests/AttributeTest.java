@@ -83,23 +83,6 @@ public class AttributeTest extends XOMTestCase {
         assertEquals("  value  ", a2.getValue());
     }
 
-    public void testTypes() {
-        assertEquals(Attribute.Type.CDATA, Attribute.Type.CDATA);
-        assertEquals(Attribute.Type.ID, Attribute.Type.ID);
-        assertEquals(Attribute.Type.IDREF, Attribute.Type.IDREF);
-        assertEquals(Attribute.Type.IDREFS, Attribute.Type.IDREFS);
-        assertEquals(Attribute.Type.UNDECLARED, Attribute.Type.UNDECLARED);
-        assertEquals(Attribute.Type.NMTOKEN, Attribute.Type.NMTOKEN);
-        assertEquals(Attribute.Type.NMTOKENS, Attribute.Type.NMTOKENS);
-        assertTrue(Attribute.Type.CDATA != Attribute.Type.ID);
-        assertTrue(Attribute.Type.ID != Attribute.Type.IDREF);
-        assertTrue(Attribute.Type.ID != Attribute.Type.IDREFS);
-        assertTrue(Attribute.Type.ID != Attribute.Type.NMTOKEN);
-        assertTrue(Attribute.Type.ID != Attribute.Type.NMTOKENS);
-        assertTrue(Attribute.Type.UNDECLARED != Attribute.Type.CDATA);
-        assertTrue(Attribute.Type.NMTOKEN != Attribute.Type.CDATA);
-     }
-
     public void testConstructor2() {
         
         Attribute a1 = new Attribute("name", "value", Attribute.Type.CDATA);
