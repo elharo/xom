@@ -183,6 +183,10 @@ public class EncodingTest extends XOMTestCase {
         if (java14OrLater) checkAll("ISO-8859-15");
     } 
 
+    public void testGB18030() throws ParsingException, IOException {
+        if (java14OrLater) checkAll("GB18030");
+    } 
+
     // These encodings are not installed in all distributions by 
     // default. They are only found currently in IBM's Java 1.4.1 VM. 
     // They don't seem to be supported in the 1.5 alpha

@@ -36,10 +36,18 @@ class TextWriterFactory {
       Writer out, String encoding) {
     
         encoding = encoding.toUpperCase();
-        if (encoding.startsWith("UTF") || encoding.startsWith("UNICODE")) {
+        if (encoding.startsWith("UTF") 
+          || encoding.startsWith("UNICODE")
+          ) {  
             return new UnicodeWriter(out, encoding);    
         }    
-        else if (encoding.startsWith("ISO-10646-UCS") || encoding.startsWith("UCS") ) {
+        else if (encoding.startsWith("ISO-10646-UCS") 
+          || encoding.startsWith("UCS") 
+          || encoding.equals("GB18030")) {
+          // GB18030 has a 1-1 mapping to Unicode. However, the Sun
+          // GB18030 VM is buggy with non-BMP characters. The IBM VM
+          // gets this right, but for safety we'll escape all non-BMP
+          // characters.
             return new UCSWriter(out, encoding);    
         }    
         else if (encoding.equals("ISO-8859-1")) {
@@ -100,17 +108,13 @@ class TextWriterFactory {
               || encoding.equals("CSIBM037")) {
             // EBCDIC-37 has same character set as ISO-8859-1;
             // just at different code points.
-            // Need to fix this to use an EBCDICWriter instead????
-            // but tricky since that really need to start with
-            // an OutputStream. Possibly requires some rejiggering of
-            // internal interfaces, and when and where the writer is created
             return new Latin1Writer(out, encoding); 
         }     
         else {
             // I'm assuming here that all character sets can
             // handle the ASCII character set; even if not at the
-            // same code points. This is not technically true.
-            // There are some very old character sets that aren't,
+            // same code points. This is not completely true.
+            // There are some very old character sets that can't,
             // but no one is likely to be using them for XML.
             return new ASCIIWriter(out, encoding);  
         }
