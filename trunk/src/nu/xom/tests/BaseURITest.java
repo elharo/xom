@@ -306,6 +306,41 @@ public class BaseURITest extends XOMTestCase {
     }
 
     
+    public void testElementWithEmptyXMLBaseAttributeHasSameBaseURIAsDocument() {
+        
+        String base = "http://www.example.com/";
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        
+        Element child = new Element("child");
+        root.appendChild(child);
+        child.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", ""));
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.cafeaulait.org/");
+        assertEquals("http://www.cafeaulait.org/", child.getBaseURI());        
+        
+    }
+
+    
+    public void testBaseURIOfElementWithEmptyXMLBaseAttributeIsEmptyStringIfTheresNoActualBaseURI() {
+        
+        String base = "http://www.example.com/";
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
+        
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", ""));
+        root.appendChild(child);
+        Document doc = new Document(root);
+        assertEquals("", child.getBaseURI());        
+        
+    }
+
+    
     public void testXMLBaseWithUnreservedCharacters() {
         String base = "http://www.example.com/()-_.!~*'";
         Element root = new Element("test");
@@ -317,6 +352,7 @@ public class BaseURITest extends XOMTestCase {
     
     public void testXMLBaseWithNonASCIICharacters() 
       throws UnsupportedEncodingException, URISyntaxException {
+      
         String omega = "\u03A9";
         // In UTF-8 %ce%a9
         String base = "http://www.example.com/" + omega;
@@ -325,6 +361,7 @@ public class BaseURITest extends XOMTestCase {
         // This is a Java 1.4 dependence
         URI uri = new URI(root.getBaseURI());
         assertEquals("/" + omega, uri.getPath());
+        
     }
     
     
@@ -345,8 +382,8 @@ public class BaseURITest extends XOMTestCase {
             );
             fail("allowed multiple brackets");
         }
-        catch (MalformedURIException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());   
         }
 
         try {
@@ -355,9 +392,9 @@ public class BaseURITest extends XOMTestCase {
             );
             fail("allowed mismatched brackets");
         }
-        catch (MalformedURIException ex) {
+        catch (MalformedURIException success) {
             // success
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
 
         try {
@@ -366,9 +403,8 @@ public class BaseURITest extends XOMTestCase {
             );
             fail("allowed right bracket before left bracket");
         }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
         }
 
     }
@@ -607,6 +643,7 @@ public class BaseURITest extends XOMTestCase {
     
     
     public void testBadURIInElementsFromDifferentActualBases() {
+        
         Element parent = new Element("parent");
         parent.setBaseURI("http://www.cafeconleche.org/");
         Element child = new Element("child");
@@ -616,6 +653,7 @@ public class BaseURITest extends XOMTestCase {
           "%GF.html"));
         String base = child.getBaseURI();
         assertNull(base);
+        
     }
     
     
@@ -629,10 +667,12 @@ public class BaseURITest extends XOMTestCase {
           "http://www.w3.org/XML/1998/namespace",
           "http://www.example.com/%5.html"));
         assertNull(child.getBaseURI());
+        
     }
     
     
     public void testBadURIInBaseAttributeWithParent() {
+        
         Element parent = new Element("parent");
         parent.setBaseURI("http://www.cafeconleche.org/");
         Element child = new Element("child");
@@ -642,6 +682,7 @@ public class BaseURITest extends XOMTestCase {
           "http://www.w3.org/XML/1998/namespace",
           "%TR.html"));
         assertNull(child.getBaseURI());
+        
     }
     
     
@@ -875,6 +916,23 @@ public class BaseURITest extends XOMTestCase {
         assertEquals("data/limit/child.xml", child.getBaseURI());
         
     }
+    
+    
+    // Possible different behavior; don't return null when calling getBaseURI
+    // This is currently inconsistent with two other tests
+    /* public void testZ() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", "file:///data/limit/test.xml");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", "://:89:90//:78child.xml"));
+        root.appendChild(child);
+        assertEquals("://:89:90//:78child.xml", child.getBaseURI());
+        
+    } */
     
     
 }
