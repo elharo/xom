@@ -34,7 +34,6 @@ import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Attribute;
 import nu.xom.UnavailableCharacterException;
-import nu.xom.ValidityException;
 import nu.xom.XMLException;
 
 import java.io.ByteArrayInputStream;
@@ -45,7 +44,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -1852,8 +1850,7 @@ public class SerializerTest extends XOMTestCase {
         serializer.exposedWriteRaw("<>&\"'");
         assertEquals(5, serializer.exposeGetColumnNumber()); 
         serializer.flush();
-        byte[] data = out.toByteArray();
-        String result = new String(data, "UTF-8");
+        String result = out.toString("UTF-8");
         assertEquals("<>&\"'", result);
         
     }    
@@ -1880,8 +1877,7 @@ public class SerializerTest extends XOMTestCase {
         serializer.exposedWriteAttributeValue("<>&\"'");
         assertEquals(20, serializer.exposeGetColumnNumber());   
         serializer.flush();
-        byte[] data = out.toByteArray();
-        String result = new String(data, "UTF-8");
+        String result = out.toString("UTF-8");
         assertEquals("&lt;&gt;&amp;&quot;'", result);
         
     }    
@@ -1904,8 +1900,7 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
            
         serializer.flush();
-        byte[] data = out.toByteArray();
-        String result = new String(data, "UTF-8");
+        String result = out.toString("UTF-8");
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
                 "<a><b/></a>\r\n", result);      
     }
@@ -1930,11 +1925,9 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
            
         serializer.flush();
-        byte[] data = out.toByteArray();
-        String result = new String(data, "UTF-8");
+        String result = out.toString("UTF-8");
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
                 "<a><b/></a>\r\n", result);
-        
         
     }
 
@@ -1957,8 +1950,7 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
            
         serializer.flush();
-        byte[] data = out.toByteArray();
-        String result = new String(data, "UTF-8");
+        String result = out.toString("UTF-8");
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
                 "<a>\r\n    <b> </b>\r\n</a>\r\n", result);
 
@@ -1971,7 +1963,6 @@ public class SerializerTest extends XOMTestCase {
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       Serializer serializer = new Serializer(out, "ISO-8859-1");
       serializer.setIndent(4);
-      serializer.setMaxLength(64);
       serializer.setPreserveBaseURI(true);
       serializer.flush();
 
@@ -1980,8 +1971,29 @@ public class SerializerTest extends XOMTestCase {
       Document doc = builder.build(f);
       serializer.write(doc);
       String result = out.toString("UTF-8");
-      System.out.println(result);
       assertTrue(result.endsWith("\r\n</html>\r\n"));
+      
+    }
+
+    
+    public void testDontDoubleBreak() 
+      throws ParsingException, IOException {
+      
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      Serializer serializer = new Serializer(out, "ISO-8859-1");
+      serializer.setIndent(4);
+      serializer.setMaxLength(64);
+
+      File f = new File("data/prettytest.xml");
+      Builder builder = new Builder();
+      Document doc = builder.build(f);
+      serializer.write(doc);
+      String result = out.toString("UTF-8");
+      System.out.println(result);
+      assertEquals("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n" +
+"<html a=\"AReallyLongNameWithNoOpportunitiesToBreakToPutUsPastTheMaxLineLengthAndForceABreak\">\r\n" +    
+"    <head> </head>\r\n" + 
+"</html>\r\n", result);
       
     }
 
