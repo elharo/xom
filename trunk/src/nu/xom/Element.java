@@ -1292,6 +1292,7 @@ public class Element extends ParentNode {
             else if (c == '+') uri.append(c);
             else if (c == '$') uri.append(c);
             else if (c == ',') uri.append(c);
+            else if (c == ';') uri.append(c);
             else if (c == '_') uri.append(c);
             else if (c == '!') uri.append(c);
             else if (c == '~') uri.append(c);
@@ -1299,35 +1300,28 @@ public class Element extends ParentNode {
             else if (c == '\'')uri.append(c);
             else if (c == '(') uri.append(c);
             else if (c == ')') uri.append(c);
-            else if (c < 0xA0) {
-                uri.append('%');
-                uri.append(Integer.toHexString(c));
-            }
-            else {
-                String s = String.valueOf(c);
-                try {
-                    byte[] data = s.getBytes("UTF8");
-                    for (int j = 0; j < data.length; j++) {
-                        uri.append(percentEscape(data[j]));
-                    }
-                }
-                catch (UnsupportedEncodingException ex) {
-                    throw new RuntimeException( 
-                      "Broken VM: does not recognize UTF-8 encoding");   
-                }  
-            }
-
+            else uri.append(percentEscape(c));
         }    
         return uri.toString();
         
     }
     
-    private static String percentEscape(byte b) {
+    private static String percentEscape(char c) {
         StringBuffer result = new StringBuffer(3);
-        result.append("%");
-        String hex = Integer.toHexString(b);
-        result.append(hex.substring(hex.length()-2));
-        return result.toString();
+        String s = String.valueOf(c);
+        try {
+            byte[] data = s.getBytes("UTF8");
+            for (int i = 0; i < data.length; i++) {
+                result.append('%');
+                String hex = Integer.toHexString(data[i]);
+                result.append(hex.substring(hex.length()-2));
+            }
+            return result.toString();
+        }
+        catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException( 
+              "Broken VM: does not recognize UTF-8 encoding");   
+        }
     }
 
 
