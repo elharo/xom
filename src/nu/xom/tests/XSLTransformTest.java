@@ -64,7 +64,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -424,7 +424,6 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
 
-
     public void testTransformWithNamespaces() 
       throws ParsingException, IOException, XSLException {
         
@@ -442,6 +441,7 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
 
+    
     public void testSingleTextNode() 
       throws ParsingException, IOException, XSLException {
         
@@ -486,6 +486,7 @@ public class XSLTransformTest extends XOMTestCase {
         assertTrue(output.get(5) instanceof ProcessingInstruction);
     }
 
+    
     public void testCommentWithParent() throws XSLException {
         
         File stylesheet = new File("data/xslt/input/commentwithparent.xsl");
@@ -500,6 +501,7 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals("test", child.getValue());
     }
 
+    
     public void testProcessingInstructionWithParent() 
       throws XSLException {
         
@@ -516,6 +518,7 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals("test", child.getValue());
     } 
 
+    
     public void testTransformNodes() throws XSLException {
         
         File stylesheet = new File("data/xslt/input/piwithparent.xsl");
@@ -682,7 +685,6 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
  
-
     
     public void testElementsToAttributes() 
       throws IOException, ParsingException, XSLException {  
@@ -832,7 +834,6 @@ public class XSLTransformTest extends XOMTestCase {
                     File input = null;
                     File style = null;
                     File output = null;
-                    // can there be more than one scenario????
                     Element scenario = testcase.getFirstChildElement("scenario");
                     Elements inputs = scenario.getChildElements("input-file");
                     for (int k = 0; k < inputs.size(); k++) {
