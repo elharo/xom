@@ -27,7 +27,6 @@ import java.io.IOException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
-import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -59,7 +58,7 @@ public class DTDGenerator {
         
         try {
             Builder builder = new Builder(new NamingNodeFactory());
-            Document doc = builder.build(args[0]); 
+            builder.build(args[0]); 
         }
         catch (IOException ex) {
             System.err.println("Could not read " + args[0] 

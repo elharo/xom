@@ -26,7 +26,6 @@ package nu.xom.samples;
 import java.io.IOException;
 
 import nu.xom.Builder;
-import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Attribute;
 import nu.xom.Nodes;
@@ -37,8 +36,8 @@ import nu.xom.ParsingException;
 /**
  * <p>
  * Demonstrates walking the element hierarchy of 
- * an XML document in a streaming fashion while storing state in the 
- * node factory.
+ * an XML document in a streaming fashion while  
+ * storing state in the node factory.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -84,7 +83,7 @@ public class StreamingTypeCounter extends NodeFactory{
         Builder builder = new Builder(counter);
      
         try {
-            Document doc = builder.build(args[0]);
+            builder.build(args[0]);
             counter.printCount();
         }
         // indicates a well-formedness error

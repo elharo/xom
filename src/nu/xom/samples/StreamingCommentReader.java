@@ -27,7 +27,6 @@ import java.io.IOException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
-import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -97,7 +96,7 @@ public class StreamingCommentReader extends NodeFactory {
         
         try {
           Builder parser = new Builder(new StreamingCommentReader());
-          Document doc = parser.build(args[0]);
+          parser.build(args[0]);
         }
         catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
