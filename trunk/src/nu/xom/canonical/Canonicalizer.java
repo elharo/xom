@@ -191,62 +191,56 @@ public class Canonicalizer {
          * @throws IOException if the underlying <code>OutputStream</code>
          *     encounters an I/O error
          */
-        protected final void write(Element element) throws IOException {
-            
-            /* writeStartTag(element, false);
-            // children
-            for (int i = 0; i < element.getChildCount(); i++) {
-                writeChild(element.getChild(i)); 
+        protected final void write(Element element) 
+          throws IOException {
+
+            // treat empty elements differently to avoid an
+            // instance of test
+            if (element.getChildCount() == 0) {
+                writeStartTag(element, false);
+                writeEndTag(element);                
             }
-            writeEndTag(element); */
-            
-            
-            Node current = element;
-            boolean end = false;
-            int index = -1;
-            while (true) {
-                
-                if (!end && current.getChildCount() > 0) {
-                   writeStartTag((Element) current, false);
-                   current = current.getChild(0);
-                   index = 0;
-                }
-                else {
-                  if (end) {
-                     writeEndTag((Element) current);
-                     if (current == element) break;
-                  }
-                  else if (current instanceof Element) {
-                     writeStartTag((Element) current, false);
-                     end = true;
-                     continue;
-                  }
-                  else {
-                      writeChild(current);
-                  }
-                  end = false;
-                  ParentNode parent = current.getParent();
-                  if (parent.getChildCount() - 1 == index) {
-                    current = parent;
-                    if (current != element) {
-                        parent = current.getParent();
-                        index = parent.indexOf(current);
+            else {
+                Node current = element;
+                boolean end = false;
+                int index = -1;
+                while (true) {                   
+                    if (!end && current.getChildCount() > 0) {
+                       writeStartTag((Element) current, false);
+                       current = current.getChild(0);
+                       index = 0;
                     }
-                    end = true;
-                  }
-                  else {
-                     index++;
-                     current = parent.getChild(index);
-                  }
-                  
-                }
-    
-            }        
+                    else {
+                        if (end) {
+                            writeEndTag((Element) current);
+                            if (current == element) break;
+                        }
+                        else {
+                            writeChild(current);
+                        }
+                        end = false;
+                        ParentNode parent = current.getParent();
+                        if (parent.getChildCount() - 1 == index) {
+                            current = parent;
+                            if (current != element) {
+                                parent = current.getParent();
+                                index = parent.indexOf(current);
+                            }
+                            end = true;
+                        }
+                        else {
+                            index++;
+                            current = parent.getChild(index);
+                        }
+                    }
+                }   
+            }
             
         } 
     
         
-        protected void writeStartTag(Element element, boolean isEmpty) throws IOException {
+        protected void writeStartTag(Element element, boolean isEmpty) 
+          throws IOException {
             writeRaw("<");
             writeRaw(element.getQualifiedName());
             
