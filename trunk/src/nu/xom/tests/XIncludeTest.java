@@ -122,8 +122,6 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals("disclaimer",result.getQualifiedName());
     } */
 
-    // need to test this method resolve(nodes) when it returns more than one node????
-    
     private void dumpResult(File original, Document result)
       throws IOException {
         
@@ -146,6 +144,37 @@ public class XIncludeTest extends XOMTestCase {
           new File("data/xinclude/output/c1.xml")
         );
         assertEquals(expectedResult, result);
+
+    }
+
+    public void testCirclePointer() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/circlepointer1.xml");
+        Document doc = builder.build(input);
+        try {
+            Document result = XIncluder.resolve(doc);
+            fail("Allowed circular reference via XPointer");
+        }
+        catch (CircularIncludeException success) {
+            assertNotNull(success.getMessage());   
+        }
+
+    }
+    
+    // In this case the circle is OK because the XPointer
+    // doesn't cover the whole xinclude:include element
+    public void testAcceptableCirclePointer() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/legalcircle.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/legalcircle.xml")
+        );
+        dumpResult(input, result);
+        assertEquals(expectedResult, result);        
 
     }
     
