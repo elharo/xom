@@ -844,7 +844,10 @@ public class Element extends ParentNode {
      */
     public final void insertChild(Node child, int position) {
         
-        if (child.isElement()) {
+        if (child == null) {
+            super.insertChild(child, position);            
+        }
+        else if (child.isElement()) {
             if (child == this) {
                 throw new CycleException(
                   "Cannot add a node to itself");  
