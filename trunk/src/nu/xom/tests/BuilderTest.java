@@ -81,7 +81,21 @@ public class BuilderTest extends XOMTestCase {
     
     private File inputDir = new File("data");
 
+     // This class tests error conditions, which Xerces
+    // annoyingly logs to System.err. This hides System.err 
+    // before each test and restores it after each test.
+    private PrintStream systemErr = System.err;
     
+    protected void setUp() {
+        System.setErr(new PrintStream(new ByteArrayOutputStream()));
+    }
+    
+    
+    protected void tearDown() {
+        System.setErr(systemErr);
+    }
+    
+       
     // Custom parser to test what happens when parser supplies 
     // malformed data
     private static class CustomReader extends XMLFilterImpl {
@@ -135,21 +149,6 @@ public class BuilderTest extends XOMTestCase {
 
     public BuilderTest(String name) {
         super(name);   
-    }
-    
-    
-    // This class tests error conditions, which Xerces
-    // annoyingly logs to System.err. This hides System.err 
-    // before each test and restores it after each test.
-    private PrintStream systemErr = System.err;
-    
-    protected void setUp() {
-        System.setErr(new PrintStream(new ByteArrayOutputStream()));
-    }
-    
-    
-    protected void tearDown() {
-        System.setErr(systemErr);
     }
     
     
@@ -635,6 +634,37 @@ public class BuilderTest extends XOMTestCase {
         Document document = builder.build(source, base);
         verify(document);       
         assertEquals(base, document.getBaseURI());  
+    }
+    
+    
+    public void testBuildDocumentThatUsesDoubleQuoteNumericCharacterReferenceInEntityDeclaration()
+      throws IOException, ParsingException {
+        
+        String data = "<!DOCTYPE doc [\n"
+            + "<!ELEMENT doc (#PCDATA)>"
+            + " <!ENTITY e \"&#34;\">\n"
+            + "]><root />";
+        
+        Document document = builder.build(data, null);
+ 
+        Document roundtrip = builder.build(document.toXML(), null);
+        assertEquals(document, roundtrip);
+        
+    }
+    
+    
+    public void testBuildDocumentThatUsesDoubleQuoteNumericCharacterReferenceInAttributeDeclaration()
+      throws IOException, ParsingException {
+        
+        String data = "<!DOCTYPE doc [\n"
+            + "<!ATTLIST root test (CDATA) \"&#x34;\">\n"
+            + "]><root />";
+        
+        Document document = builder.build(data, null);
+ 
+        Document roundtrip = builder.build(document.toXML(), null);
+        assertEquals(document, roundtrip);
+        
     }
     
     

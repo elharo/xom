@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1d1
+ * @version 1.1d2
  *
  */
 class XOMHandler 
@@ -528,7 +528,7 @@ class XOMHandler
                 internalDTDSubset.append("  <!ENTITY ");
                 internalDTDSubset.append(name); 
                 internalDTDSubset.append(" \""); 
-                internalDTDSubset.append(escapeCarriageReturns(value)); 
+                internalDTDSubset.append(escapeCarriageReturnsAndDoubleQuotes(value)); 
                 internalDTDSubset.append("\">\n"); 
             }
         }
@@ -616,18 +616,20 @@ class XOMHandler
     
     
     /* It's really weird that SAX needs two different escape methods
-       here, but it does. We need to escape the carriage returns (and 
-       only the carriage returns for entity replacement text,
-       because those do not resolve general entities. However, 
-       general entities are resolved in attribute default values.
+       here, but it does. We need to escape the carriage returns and
+       double quotes and only these two for entity replacement text.
+       because element declarations do not resolve general entities.  
+       However, general entities are resolved in attribute default 
+       values.
      */
-    private static String escapeCarriageReturns(String s) {
+    private static String escapeCarriageReturnsAndDoubleQuotes(String s) {
         
         int length = s.length();
         StringBuffer result = new StringBuffer(length);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
             if (c == '\r') result.append("&#x0D;");
+            else if (c == '"') result.append("&#x34;");
             else result.append(c);
         }
         
