@@ -33,6 +33,7 @@ import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Attribute;
 import nu.xom.ValidityException;
+import nu.xom.XMLException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -1424,6 +1425,21 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
         String result = out.toString("UTF-8");
         assertTrue(result.endsWith("<root name=\"&quot;\"/>\r\n"));  
+    }
+
+    public void testSerializeUnavailableCharacterInMarkup() 
+      throws ParsingException, IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "ISO-8859-1");
+        Element root = new Element("\u0419");
+        Document doc = new Document(root);
+        try {
+            serializer.write(doc);
+            fail("Wrote bad character: " + out.toString("ISO-8859-1"));
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());   
+        }  
     }
 
 }
