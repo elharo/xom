@@ -1282,7 +1282,8 @@ public class SerializerTest extends XOMTestCase {
     }
     
     
-    public void testWhiteSpaceBetweenCommentsIsBoundaryWhiteSpace() throws IOException {
+    public void testWhiteSpaceBetweenCommentsIsBoundaryWhiteSpace() 
+      throws IOException {
         
         Element items = new Element("itemSet");
         items.appendChild(new Comment("item1"));
@@ -1305,7 +1306,8 @@ public class SerializerTest extends XOMTestCase {
     }
     
     
-    public void testWhiteSpaceBeforeCommentIsBoundaryWhiteSpace() throws IOException {
+    public void testWhiteSpaceBeforeCommentIsBoundaryWhiteSpace() 
+      throws IOException {
         
         Element items = new Element("itemSet");
         items.appendChild("      \r\n              ");
@@ -1318,7 +1320,6 @@ public class SerializerTest extends XOMTestCase {
         serializer.flush();
         out.close();
         String result = new String(out.toByteArray(), "UTF-8");
-        System.err.println(result);
         assertEquals(
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
           + "<itemSet>\r\n    <!--item1-->\r\n    <!--item2-->\r\n"
@@ -1329,7 +1330,8 @@ public class SerializerTest extends XOMTestCase {
     }
     
     
-    public void testWhiteSpaceAfterCommentsIsBoundaryWhiteSpace() throws IOException {
+    public void testWhiteSpaceAfterCommentsIsBoundaryWhiteSpace() 
+      throws IOException {
         
         Element items = new Element("itemSet");
         items.appendChild(new Comment("item1"));
@@ -1748,6 +1750,27 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.indexOf("<!DOCTYPE root [\r\n") > 0);         
         assertTrue(result.indexOf("\r\n]>\r\n") > 0);         
         assertTrue(result.indexOf("<!ELEMENT root EMPTY>\r\n") > 0);  
+        
+    }
+
+    
+    public void testSerializeInternalDTDSubsetContainingUnavailableCharacter() 
+      throws ParsingException, IOException {
+        
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        String data = "<!DOCTYPE root ["
+          + "<!ELEMENT root EMPTY> " 
+          + "<!ATTLIST root attr CDATA 'café creme'> "
+          + "]><test/>";   
+        Builder builder = new Builder();
+        Document doc = builder.build(data, "http://www.example.com");
+        try {
+            serializer.write(doc);
+            fail("How'd you serialize é in ASCII?");
+        }
+        catch (UnavailableCharacterException success) {
+            assertTrue(success.getMessage().indexOf("é (&#xE9;)") > 1);
+        }
         
     }
 
