@@ -610,6 +610,10 @@ public class Canonicalizer {
                 // grab all xml: attributes
                 Nodes attributes = element.query("ancestor::*/@xml:*", xmlcontext);
                 if (attributes.size() != 0) {
+                    // It's important to count backwards here because
+                    // XPath returns all nodes in document order, which 
+                    // is top-down. To get the nearest we need to go 
+                    // bottom up instead.
                     for (int i = attributes.size()-1; i >= 0; i--) {
                         Attribute a = (Attribute) attributes.get(i);
                         String name = a.getLocalName();
@@ -999,7 +1003,9 @@ public class Canonicalizer {
         if (in.contains(parent)) {
             out.append(parent);
             in.remove(parent);
-            if (in.isEmpty()) return;
+            // I'm fairly sure this next line is unreachable, but just
+            // in case it isn't I'll leave this comment here.
+            // if (in.isEmpty()) return;
         }
         
         int childCount = parent.getChildCount();
