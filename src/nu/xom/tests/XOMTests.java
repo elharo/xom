@@ -33,7 +33,7 @@ import junit.framework.TestSuite;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d3
  *
  */
 public class XOMTests extends TestCase {
@@ -45,7 +45,9 @@ public class XOMTests extends TestCase {
 
     
     public static Test suite() {
+        
         TestSuite result = new TestSuite();
+        result.addTest(new TestSuite(IDTest.class));
         result.addTest(new TestSuite(XOMTestCaseTest.class));
         result.addTest(new TestSuite(XPathTest.class));
         result.addTest(new TestSuite(VerifierTest.class));
