@@ -90,7 +90,7 @@ public class FibonacciXOMSOAPServlet extends HttpServlet
         servletResponse.setContentType("text/xml; charset=UTF-8");               
         OutputStreamWriter out = new OutputStreamWriter(
           servletResponse.getOutputStream(), "UTF-8");
-        InputStream in  = servletRequest.getInputStream();
+        InputStream in = servletRequest.getInputStream();
     
         Document request;
         Document response;
@@ -147,6 +147,7 @@ public class FibonacciXOMSOAPServlet extends HttpServlet
             throw new ServletException(ex); 
         }
         finally {
+            in.close();
             out.close();
         }
     
