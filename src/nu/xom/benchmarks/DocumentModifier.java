@@ -23,7 +23,12 @@
 
 package nu.xom.benchmarks;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -37,7 +42,7 @@ import nu.xom.ParsingException;
 /**
  * 
  * <p>
- * Based on Sosnoski's benchmarks:
+ * Based on Dennis Sosnoski's benchmarks:
  * </p>
  * 
  * <blockquote>
@@ -69,16 +74,27 @@ class DocumentModifier {
           );
           return; 
         }
-        
-        
-        
          
         DocumentModifier iterator = new DocumentModifier();
         Builder parser = new Builder();
-        // Can I separate out the I/O by storing document
-        // in byte array first????
         try {    
-            warmup(parser, iterator, args[0], 5);
+            // Separate out the basic I/O by storing document
+            // in byte array first. However, this only caches the
+            // document itself. Any DTD the document references will
+            // still need to be read from the actual file.
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            URL u = new URL(args[0]);
+            InputStream in = u.openStream();
+            for (int c = in.read(); c != -1; c = in.read()) {
+                out.write(c);   
+            }
+            out.flush();
+            out.close();
+            byte[] data = out.toByteArray();            
+            warmup(parser, iterator, data, 5, args[0]);
+            InputStream raw = new BufferedInputStream(
+              new ByteArrayInputStream(data)
+            );    
             long prebuild = System.currentTimeMillis();
           
             // Read the entire document into memory
@@ -88,9 +104,8 @@ class DocumentModifier {
             System.out.println((postbuild - prebuild) 
               + "ms to build the document");
 
-
             long prewalk = System.currentTimeMillis();
-            iterator.followNode(document);
+            performTask(parser, iterator, raw, args[0]);;
             long postwalk = System.currentTimeMillis();
             
             System.out.println((postwalk - prewalk) 
@@ -107,11 +122,22 @@ class DocumentModifier {
     } // end main
     
     private static void warmup(Builder parser, DocumentModifier iterator, 
-      String url, int numPasses)
+      byte[] data, int numPasses, String base)
       throws IOException, ParsingException {
         for (int i = 0; i < numPasses; i++) {
-            Node document = parser.build(url); 
-            iterator.followNode(document);        }
+            InputStream raw = new BufferedInputStream(
+              new ByteArrayInputStream(data)
+            );    
+            Node document;
+            performTask(parser, iterator, raw, base);
+        }
+    }
+
+    private static void performTask(Builder parser,
+      DocumentModifier iterator, InputStream raw, String base)
+        throws ParsingException, IOException {
+        Node document = parser.build(raw, base); 
+        iterator.followNode(document); 
     }
 
     // note use of recursion
