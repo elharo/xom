@@ -47,17 +47,18 @@ to http://www.xom.nu/
     <property name="lib.dir"   value="./lib"/>
     <property name="packages"  value="nu.xom.*"/>
 
-    <property name="build.dir"      value="./build"/>
-    <property name="build15.dir"    value="./classes15"/>
-    <property name="build.src"      value="./build/src"/>
-    <property name="build.dest"     value="./build/classes"/>
-    <property name="build.javadocs" value="./build/apidocs"/>
-    <property name="testoutput.dir" value="./testresults"/>
-    <property name="dist.dir"       value="./dist"/>    
-    <property name="clover.dir"     value="./clover"/>
+    <property name="build.dir"       value="./build"/>
+    <property name="build15.dir"     value="./classes15"/>
+    <property name="build.src"       value="./build/src"/>
+    <property name="build.dest"      value="./build/classes"/>
+    <property name="build.javadocs"  value="./build/apidocs"/>
+    <property name="testoutput.dir"  value="./testresults"/>
+    <property name="dist.dir"        value="./dist"/>    
+    <property name="clover.dir"      value="./clover"/>
+    <property name="testreports.dir" value="./testreports" />
 
     <property name="xml-apis.jar"   value="${lib.dir}/xmlParserAPIs.jar"/>
-    <property name="parser.jar"     value="$/opt/xerces-2_6_2/xercesImpl.jar"/>
+    <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
     <property name="tagsoup.jar"    value="${lib.dir}/tagsoup-0.10.2.jar"/>
@@ -321,6 +322,7 @@ XOM Build file
  
   <!-- This task requires the ANT optional.jar -->
   <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
+
     <junit printsummary="on" fork="yes">
        <classpath refid="test.class.path" />
        <formatter type="${test.outputFormat}" />
@@ -334,6 +336,14 @@ XOM Build file
          </fileset>
       </batchtest>
     </junit>
+
+    <junitreport todir="${testoutput.dir}">
+      <fileset dir="${testoutput.dir}">
+        <include name="TEST-*.xml" />
+      </fileset>
+      <report todir="${testoutput.dir}" />
+    </junitreport>
+
   </target>
  
  
@@ -356,11 +366,9 @@ XOM Build file
     </junit>
   </target>
  
- 
   <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
     <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
-      <sysproperty key="org.xml.sax.driver" value="org.apache.parsers.SAXParser"/> 
-      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xmlParserAPIs.jar:lib/xalan.jar"/> 
+      <sysproperty key="org.xml.sax.driver" value="org.apache.xerces.parsers.SAXParser"/> 
       <classpath refid="test.class.path" />
       <arg value="nu.xom.tests.XOMTests"/> 
     </java>
