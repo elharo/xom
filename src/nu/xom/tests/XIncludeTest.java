@@ -474,6 +474,49 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testFallbackInIncludedDocument() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/metafallbacktest.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/metafallbacktest.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }
+    
+    
+    public void testFallbackInIncludedDocumentWithFragmentID() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/metafallbacktestwithfragmentid.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/metafallbacktest.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }
+    
+    
+    public void testFallbackInIncludedDocumentWithXPointer() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/metafallbacktestwithxpointer.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        dumpResult(input, result);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/metafallbacktestwithxpointer.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }
+    
+    
     // from the XInclude CR
     public void testC1() 
       throws ParsingException, IOException, XIncludeException {
