@@ -25,17 +25,25 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import org.xml.sax.helpers.NamespaceSupport;
 
 import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Namespace;
 import nu.xom.Node;
+import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
 import nu.xom.Text;
+import nu.xom.XPathContext;
 
 /**
  * <p>
@@ -50,13 +58,13 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d4
  *
  */
 public class Canonicalizer {
 
     private boolean withComments;
-    private Serializer serializer;
+    private CanonicalXMLSerializer serializer;
     
     private static Comparator comparator = new AttributeComparator();
     
@@ -120,6 +128,9 @@ public class Canonicalizer {
 
 
     private class CanonicalXMLSerializer extends Serializer {
+        
+        private Nodes nodes;
+        private NamespaceSupport inScope;
 
         /**
          * <p>
@@ -151,28 +162,34 @@ public class Canonicalizer {
          */
          public final void write(Document doc) throws IOException {
             
+            inScope = new NamespaceSupport();
             int position = 0;        
             while (true) {
                 Node child = doc.getChild(position);
-                writeChild(child); 
-                position++;
-                if (child instanceof ProcessingInstruction) breakLine();
-                else if (child instanceof Comment && withComments) {
-                    breakLine();
+                if (nodes == null || child instanceof Element || nodes.contains(child)) {
+                    writeChild(child); 
+                    if (child instanceof ProcessingInstruction) breakLine();
+                    else if (child instanceof Comment && withComments) {
+                        breakLine();
+                    }
                 }
-                else if (child instanceof Element) break;
+                position++;
+                if (child instanceof Element) break;
             }       
             
             for (int i = position; i < doc.getChildCount(); i++) {
                 Node child = doc.getChild(i);
-                if (child instanceof ProcessingInstruction) breakLine();
-                else if (child instanceof Comment && withComments) {
-                    breakLine();
+                if (nodes == null || child instanceof Element || nodes.contains(child)) {
+                    if (child instanceof ProcessingInstruction) breakLine();
+                    else if (child instanceof Comment && withComments) {
+                        breakLine();
+                    }
+                    writeChild(child);
                 }
-                writeChild(child);
             }
             
             flush();
+            
         }  
      
          
@@ -193,7 +210,7 @@ public class Canonicalizer {
           throws IOException {
 
             // treat empty elements differently to avoid an
-            // instance of test
+            // instanceof test
             if (element.getChildCount() == 0) {
                 writeStartTag(element, false);
                 writeEndTag(element);                
@@ -257,57 +274,134 @@ public class Canonicalizer {
 
         protected void writeStartTag(Element element, boolean isEmpty) 
           throws IOException {
-            writeRaw("<");
-            writeRaw(element.getQualifiedName());
             
-            ParentNode parent = element.getParent();
+            boolean writeElement = nodes == null || nodes.contains(element);
+            if (writeElement) {
+                inScope.pushContext();
+                writeRaw("<");
+                writeRaw(element.getQualifiedName());
+            }
             
-            Element parentElement = null;
-            if (parent instanceof Element) {
-                parentElement = (Element) parent; 
-            } 
-            
-            for (int i = 0; 
-                 i < element.getNamespaceDeclarationCount(); 
-                 i++) {
-                String prefix = element.getNamespacePrefix(i);
-                String uri = element.getNamespaceURI(prefix);
-                if (parentElement != null) {
-                   if (uri.equals(
-                     parentElement.getNamespaceURI(prefix))) {
-                       continue; 
-                   }
-                }
-                else if (uri.equals("")) {
-                    continue; // no need to say xmlns=""   
+            if (nodes == null) {
+                ParentNode parent = element.getParent();
+                Element parentElement = null;
+                if (parent instanceof Element) {
+                    parentElement = (Element) parent; 
+                } 
+                for (int i = 0; 
+                     i < element.getNamespaceDeclarationCount(); 
+                     i++) {
+                    String prefix = element.getNamespacePrefix(i);
+                    String uri = element.getNamespaceURI(prefix);
+                    
+                    if (uri.equals(inScope.getURI(prefix))) {
+                        continue;
+                    }
+                    
+                    if (uri.equals("")) {
+                        // no need to say xmlns=""
+                        if (parentElement == null) continue;    
+                        if ("".equals(parentElement.getNamespaceURI())) {
+                            continue;
+                        }
+                    }
+                    
+                    writeRaw(" ");
+                    writeNamespaceDeclaration(prefix, uri);
+                    inScope.declarePrefix(prefix, uri);
+                } 
+            }
+            else {
+                int position = indexOf(element);
+                SortedMap map = new TreeMap();
+                // do we need to undeclare a default namespace?
+                // You know, should I instead create an output tree and then just
+                // canonicalize that? probably not
+                if (position != -1 && "".equals(element.getNamespaceURI())) {
+                    ParentNode parent = element.getParent();
+                    // Here we have to check for the nearest default on parents in the
+                    // output tree, not the input tree
+                    while (parent != null && parent instanceof Element && !(nodes.contains(parent))) {
+                        parent = parent.getParent();
+                    }
+                    if (parent != null && parent instanceof Element) {
+                        String uri = ((Element) parent).getNamespaceURI("");
+                        if (! "".equals(uri)) {
+                            map.put("", "");
+                        }
+                    }
                 }
                 
-                writeRaw(" ");
-                writeNamespaceDeclaration(prefix, uri);
-            } 
+                for (int i = position+1; i < nodes.size(); i++) {
+                    Node next = nodes.get(i);
+                    if ( !(next instanceof Namespace) ) break;
+                    Namespace namespace = (Namespace) next;
+                    String prefix = namespace.getPrefix();
+                    String uri = namespace.getValue();
+                    
+                    if (uri.equals(inScope.getURI(prefix))) {
+                        continue;
+                    }
+                    else {
+                        map.put(prefix, uri);
+                    }
+                    
+                } 
+                
+                Iterator prefixes = map.keySet().iterator();
+                while (prefixes.hasNext()) {
+                    String prefix = (String) prefixes.next();
+                    String uri = (String) map.get(prefix);
+                    writeRaw(" ");
+                    writeNamespaceDeclaration(prefix, uri);
+                    inScope.declarePrefix(prefix, uri);
+                }
+                
+            }
             
             Attribute[] sorted = sortAttributes(element);        
             for (int i = 0; i < sorted.length; i++) {
-                writeRaw(" ");
-                write(sorted[i]);
+                if (nodes == null || nodes.contains(sorted[i])) {
+                    writeRaw(" ");
+                    write(sorted[i]);
+                }
             }       
             
-            writeRaw(">");
+            if (writeElement) {
+                writeRaw(">");
+            }
+            
         } 
     
         
+        // ???? move into Nodes?
+        private int indexOf(Element element) {
+            for (int i = 0; i < nodes.size(); i++) {
+                if (nodes.get(i) == element) return i;
+            }
+            return -1;
+        }
+
+
         protected void write(Attribute attribute) throws IOException {
+            
             writeRaw(attribute.getQualifiedName());
             writeRaw("=\"");
             writeRaw(prepareAttributeValue(attribute));
             writeRaw("\"");
+            
         }
         
         
         protected void writeEndTag(Element element) throws IOException {
-            writeRaw("</");
-            writeRaw(element.getQualifiedName());
-            writeRaw(">");
+            
+            if (nodes == null || nodes.contains(element)) {
+                writeRaw("</");
+                writeRaw(element.getQualifiedName());
+                writeRaw(">");
+                inScope.popContext();
+            }
+            
         }    
         
         
@@ -421,27 +515,31 @@ public class Canonicalizer {
          *     encounters an I/O error
          */
         protected final void write(Text text) throws IOException {
-            String input = text.getValue();
-            StringBuffer result = new StringBuffer(input.length());
-            for (int i = 0; i < input.length(); i++) {
-                char c = input.charAt(i);
-                if (c == '\r') {
-                    result.append("&#xD;");
+            
+            if (nodes == null || nodes.contains(text)) {
+                String input = text.getValue();
+                StringBuffer result = new StringBuffer(input.length());
+                for (int i = 0; i < input.length(); i++) {
+                    char c = input.charAt(i);
+                    if (c == '\r') {
+                        result.append("&#xD;");
+                    }
+                    else if (c == '&') {
+                        result.append("&amp;");
+                    }
+                    else if (c == '<') {
+                        result.append("&lt;");
+                    }
+                    else if (c == '>') {
+                        result.append("&gt;");
+                    }
+                    else { 
+                        result.append(c);   
+                    }            
                 }
-                else if (c == '&') {
-                    result.append("&amp;");
-                }
-                else if (c == '<') {
-                    result.append("&lt;");
-                }
-                else if (c == '>') {
-                    result.append("&gt;");
-                }
-                else { 
-                    result.append(c);   
-                }            
+                writeRaw(result.toString());
             }
-            writeRaw(result.toString());
+            
         }   
     
         
@@ -458,8 +556,19 @@ public class Canonicalizer {
          * @throws IOException if the underlying <code>OutputStream</code>
          *     encounters an I/O error
          */
-        protected final void write(Comment comment) throws IOException {
-            if (withComments) super.write(comment);
+        protected final void write(Comment comment) 
+          throws IOException {
+            if (withComments && (nodes == null || nodes.contains(comment))) {
+                super.write(comment);
+            }
+        }
+        
+        
+        protected final void write(ProcessingInstruction pi) 
+          throws IOException {
+            if (nodes == null || nodes.contains(pi)) {
+                super.write(pi);
+            }
         }
         
         
@@ -491,8 +600,43 @@ public class Canonicalizer {
      *      encounters an I/O error
      */
     public final void write(Document doc) throws IOException {  
+        serializer.nodes = null;
         serializer.write(doc);        
         serializer.flush();
+    }  
+ 
+    
+    /**
+     * <p>
+     * Serializes a document subset selected by an XPath expression
+     * onto the output stream using the canonical XML algorithm.
+     * Only nodes selected by the XPath expression are output.
+     * Children are not output unless they are specifically selected.
+     * Selecting an element does not automatically select all the  
+     * element's children and attributes. Not selecting an element
+     * does not imply that its children and attributes will not be
+     * output. 
+     * </p>
+     * 
+     * @param doc the document to serialize
+     * @param xpath the XPath expression that identifies the nodes to
+     *     canonicalize
+     * @param context the namespace bindings used when resolving the 
+     *     XPath expression
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     * @throws XPathException if the XPath expression is syntactically
+     *     incorrect
+     */
+    public final void write(Document doc, String xpath, XPathContext context) 
+      throws IOException {  
+        
+        Nodes selected = doc.query(xpath, context);
+        serializer.nodes = selected;
+        serializer.write(doc);        
+        serializer.flush();
+        
     }  
  
     
