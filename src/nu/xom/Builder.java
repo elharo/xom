@@ -56,7 +56,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  * 
  */
 public class Builder {
@@ -64,7 +64,6 @@ public class Builder {
     private XMLReader   parser;
     private NodeFactory factory;
     
-    private static boolean IBMVM14 = false;
     private static double  xercesVersion = 2.6;
     
     static {  
@@ -84,11 +83,6 @@ public class Builder {
         }
         catch (Error err) {
             // Xerces not installed, so none of this matters
-        }
-        
-        // turn off XML 1.1
-        if (vendor.startsWith("IBM") && majorVersion.equals("1.4")) {
-            IBMVM14 = true;
         }
         
     }
@@ -194,18 +188,15 @@ public class Builder {
         // we set it up; and we need to configure it specially
         // so we can't load it with the XMLReaderFactory
         XMLReader parser; 
-        // IBM's bundled Xerces doesn't work with XOM's subclass
-        // Could test Xerces version instead to resolve issue with
-        // Xerces 2.4????
-        if (!IBMVM14) {
-            try {
-                parser = XMLReaderFactory.createXMLReader("nu.xom.xerces.XML1_0Parser");
-                setupParser(parser, validate);
-                return parser;
-            } 
-            catch (SAXException ex) {
-                // look for next one
-            }
+        try {
+            parser = XMLReaderFactory.createXMLReader(
+              "nu.xom.xerces.XML1_0Parser"
+            );
+            setupParser(parser, validate);
+            return parser;
+        } 
+        catch (SAXException ex) {
+            // look for next one
         }
         
         // XMLReaderFactory.createXMLReader never returns
@@ -289,18 +280,16 @@ public class Builder {
             // See http://nagoya.apache.org/bugzilla/show_bug.cgi?id=23768
             // if you care to know why this line breaks unit tests on 
             // versions of Xerces prior to 2.6.1
-            if (!IBMVM14) {
-                try {
-                    parser.setFeature(
-                     "http://apache.org/xml/features/standard-uri-conformant", 
-                     true);
-                }
-                catch (SAXException ex) {
-                    // Possibly an earlier version of Xerces, or a 
-                    // or a non-Xerces parser;  no big deal.
-                    // We can live without this.   
-                } 
+            try {
+                parser.setFeature(
+                 "http://apache.org/xml/features/standard-uri-conformant", 
+                 true);
             }
+            catch (SAXException ex) {
+                // Possibly an earlier version of Xerces, or a 
+                // or a non-Xerces parser;  no big deal.
+                // We can live without this.   
+            } 
         }
         
     }        
@@ -416,9 +405,6 @@ public class Builder {
         this.parser = parser;
         if (factory != null) {
             setHandlers(factory);             
-        }
-        else if (IBMVM14) {
-            setHandlers(new NodeFactory()); 
         }
         else if (knownGoodParser(parser)) {
             setHandlers(new NonVerifyingFactory()); 
