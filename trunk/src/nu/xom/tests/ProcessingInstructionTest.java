@@ -166,30 +166,6 @@ public class ProcessingInstructionTest extends XOMTestCase {
         assertEquals(instruction1.toXML(), instruction2.toXML());
            
     }
-    
-    
-    public void setTarget() {
-        
-        pi.setTarget("newname");
-        assertEquals("newname", pi.getTarget());
-        
-        try {
-            pi.setTarget("pre:name");
-            fail("Allowed colon in processing instruction target");
-        }
-        catch (IllegalTargetException success) {
-            assertNotNull(success.getMessage());
-        }
-        
-        try {
-            pi.setTarget("pre name");
-            fail("Allowed white space in processing instruction target");
-        }
-        catch (IllegalTargetException success) {
-            assertNotNull(success.getMessage());
-        }
-        
-    }
 
     
     public void testSetValue() {
