@@ -370,7 +370,8 @@ public class SerializerTest extends XOMTestCase {
         root.appendChild(data);
         Document doc = new Document(root);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Serializer.write(doc, out);
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
         String result = out.toString("UTF-8");
         
         assertEquals( 
@@ -406,20 +407,10 @@ public class SerializerTest extends XOMTestCase {
         
         Document resultDoc = parser.build(result, null);
         XOMTestCase.assertEquals(doc, resultDoc);
-        
-        staticSerializeParseAndCompare(doc);    
+           
         setOutputStreamSerializeParseAndCompare(doc);    
     }
-    
-    private void staticSerializeParseAndCompare(Document doc) 
-      throws IOException, ParsingException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Serializer.write(doc, out);
-        String result = out.toString("UTF-8");
-        
-        Document resultDoc = parser.build(result, null);
-        XOMTestCase.assertEquals(doc, resultDoc);    
-    }
+
     
     private void setOutputStreamSerializeParseAndCompare(Document doc) 
       throws IOException, ParsingException {

@@ -31,7 +31,6 @@ import nu.xom.Element;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
-import nu.xom.Serializer;
 
 /**
  * <p>
@@ -80,7 +79,7 @@ public class AttributesToElements extends NodeFactory {
         try {
           Builder parser = new Builder(new AttributesToElements());
           Document doc = parser.build(args[0]);
-          Serializer.write(doc, System.out);
+          EZSerializer.write(doc, System.out);
         }
         catch (ParsingException ex) {
           System.out.println(args[0] + " is not well-formed.");
