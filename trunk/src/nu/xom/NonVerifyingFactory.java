@@ -29,11 +29,14 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b8
  *
  */
 class NonVerifyingFactory extends NodeFactory {
 
+    
+    // XXX creating Nodes seems to be a HotSpot
+    // precreate a Nodes with a single spot and reuse it?
     
     /**
      * <p>
