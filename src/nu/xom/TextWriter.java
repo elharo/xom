@@ -33,7 +33,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1a3
  *
  */
 abstract class TextWriter {
@@ -76,7 +76,7 @@ abstract class TextWriter {
      */
     private boolean skipFollowingLinefeed = false;
     
-    private int highSurrogate;
+    private char highSurrogate;
     
     
     private boolean isHighSurrogate(int c) {
@@ -150,11 +150,7 @@ abstract class TextWriter {
             // text to be created with a malformed surrogate
             // pair such as a low surrogate that is not immediately
             // preceded by a high surrogate
-            int high =  highSurrogate & 0x7FF;
-            int low = c - 0xDC00;
-            int highShifted = high << 10;
-            int combined = highShifted | low; 
-            int uchar = combined + 0x10000;
+            int uchar = UnicodeUtil.combineSurrogatePair(highSurrogate, c);
             String s = "&#x" + Integer.toHexString(uchar).toUpperCase() + ';';
             out.write(s);
             column += s.length();
@@ -414,9 +410,7 @@ abstract class TextWriter {
     
     final void writePCDATA(String s) throws IOException {
         
-        if (normalize) {
-            s = Normalizer.normalize(s, Normalizer.NFC);   
-        }
+        s = normalize(s);
         int length = s.length();
         for (int i=0; i < length; i++) {
             writePCDATA(s.charAt(i));
@@ -424,13 +418,11 @@ abstract class TextWriter {
         
     }
 
-    
+
     final void writeAttributeValue(String s) 
       throws IOException {
         
-        if (normalize) {
-            s = Normalizer.normalize(s, Normalizer.NFC);   
-        }
+        s = normalize(s);
         int length = s.length();
         for (int i=0; i < length; i++) {
             writeAttributeValue(s.charAt(i));
@@ -441,9 +433,7 @@ abstract class TextWriter {
     
     final void writeMarkup(String s) throws IOException {
         
-        if (normalize) {
-            s = Normalizer.normalize(s, Normalizer.NFC);   
-        }
+        s = normalize(s);
         int length = s.length();
         for (int i=0; i < length; i++) {
             writeMarkup(s.charAt(i));
@@ -452,7 +442,18 @@ abstract class TextWriter {
     }
     
     
-    boolean isIndenting() {
+     private String normalize(String s) {
+
+        if (normalize) {
+            return UnicodeUtil.normalize(s);
+        }
+        return s;
+        
+    }
+    
+
+
+   boolean isIndenting() {
         return indentString.length() > 0;   
     }
 

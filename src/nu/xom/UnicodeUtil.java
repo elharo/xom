@@ -1,0 +1,1576 @@
+/* Copyright 2005 Elliotte Rusty Harold
+   
+   This library is free software; you can redistribute it and/or modify
+   it under the terms of version 2.1 of the GNU Lesser General Public 
+   License as published by the Free Software Foundation.
+   
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+   GNU Lesser General Public License for more details.
+   
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the 
+   Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+   Boston, MA 02111-1307  USA
+   
+   You can contact Elliotte Rusty Harold by sending e-mail to
+   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   subject line. The XOM home page is located at http://www.xom.nu/
+*/
+
+package nu.xom;
+
+
+final class UnicodeUtil {
+    
+    private static final int CANONICAL_COMBINING_CLASS_NOT_REORDERED = 0;
+    private static final int CANONICAL_COMBINING_CLASS_OVERLAY = 1;
+    private static final int CANONICAL_COMBINING_CLASS_NUKTA = 7;
+    private static final int CANONICAL_COMBINING_CLASS_KANA_VOICING = 8;
+    private final static int CANONICAL_COMBINING_CLASS_VIRAMA = 9;
+    private final static int CANONICAL_COMBINING_CLASS_10 = 10;
+    private final static int CANONICAL_COMBINING_CLASS_11 = 11;
+    private final static int CANONICAL_COMBINING_CLASS_12 = 12;
+    private final static int CANONICAL_COMBINING_CLASS_13 = 13;
+    private final static int CANONICAL_COMBINING_CLASS_14 = 14;
+    private final static int CANONICAL_COMBINING_CLASS_15 = 15;
+    private final static int CANONICAL_COMBINING_CLASS_16 = 16;
+    private final static int CANONICAL_COMBINING_CLASS_17 = 17;
+    private final static int CANONICAL_COMBINING_CLASS_18 = 18;
+    private final static int CANONICAL_COMBINING_CLASS_19 = 19;
+    private final static int CANONICAL_COMBINING_CLASS_20 = 20;
+    private final static int CANONICAL_COMBINING_CLASS_21 = 21;
+    private final static int CANONICAL_COMBINING_CLASS_22 = 22;
+    private final static int CANONICAL_COMBINING_CLASS_23 = 23;
+    private final static int CANONICAL_COMBINING_CLASS_24 = 24;
+    private final static int CANONICAL_COMBINING_CLASS_25 = 25;
+    private final static int CANONICAL_COMBINING_CLASS_26 = 26;
+    private final static int CANONICAL_COMBINING_CLASS_27 = 27;
+    private final static int CANONICAL_COMBINING_CLASS_28 = 28;
+    private final static int CANONICAL_COMBINING_CLASS_29 = 29;
+    private final static int CANONICAL_COMBINING_CLASS_30 = 30;
+    private final static int CANONICAL_COMBINING_CLASS_31 = 31;
+    private final static int CANONICAL_COMBINING_CLASS_32 = 32;
+    private final static int CANONICAL_COMBINING_CLASS_33 = 33;
+    private final static int CANONICAL_COMBINING_CLASS_34 = 34;
+    private final static int CANONICAL_COMBINING_CLASS_35 = 35;
+    private final static int CANONICAL_COMBINING_CLASS_36 = 36;
+    private final static int CANONICAL_COMBINING_CLASS_84 = 84;
+    private final static int CANONICAL_COMBINING_CLASS_91 = 91;
+    private final static int CANONICAL_COMBINING_CLASS_103 = 103;
+    private final static int CANONICAL_COMBINING_CLASS_107 = 107;
+    private final static int CANONICAL_COMBINING_CLASS_118 = 118;
+    private final static int CANONICAL_COMBINING_CLASS_122 = 122;
+    private final static int CANONICAL_COMBINING_CLASS_129 = 129;
+    private final static int CANONICAL_COMBINING_CLASS_130 = 130;
+    private final static int CANONICAL_COMBINING_CLASS_132 = 132;
+    private final static int CANONICAL_COMBINING_CLASS_ATTACHED_BELOW = 202;
+    private final static int CANONICAL_COMBINING_CLASS_ATTACHED_ABOVE_RIGHT = 216;
+    private final static int CANONICAL_COMBINING_CLASS_BELOW_LEFT = 218;
+    private final static int CANONICAL_COMBINING_CLASS_BELOW = 220;
+    private final static int CANONICAL_COMBINING_CLASS_BELOW_RIGHT = 222;
+    private final static int CANONICAL_COMBINING_CLASS_LEFT = 224;
+    private final static int CANONICAL_COMBINING_CLASS_RIGHT = 226;
+    private final static int CANONICAL_COMBINING_CLASS_ABOVE_LEFT = 228;
+    private final static int CANONICAL_COMBINING_CLASS_ABOVE = 230;
+    private final static int CANONICAL_COMBINING_CLASS_ABOVE_RIGHT = 232;
+    private final static int CANONICAL_COMBINING_CLASS_DOUBLE_BELOW = 233;
+    private final static int CANONICAL_COMBINING_CLASS_DOUBLE_ABOVE = 234;
+    private final static int CANONICAL_COMBINING_CLASS_IOTA_SUBSCRIPT = 240;
+    
+    private static int HI_SURROGATE_START  = 0xD800;
+    private static int HI_SURROGATE_END    = 0xDBFF;
+    private static int LOW_SURROGATE_START = 0xDC00;
+
+
+    boolean isStarter(int character) {
+        // FIXME
+        return true;
+    }
+
+    
+    int getCombiningClass(int c) {
+        // ???? optimize
+        
+        if (c >= 0x0000 && c <= 0x001F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0020) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0021 && c <= 0x0023) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0024) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0025 && c <= 0x0027) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0028) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0029) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x002A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x002B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x002C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x002D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x002E && c <= 0x002F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0030 && c <= 0x0039) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x003A && c <= 0x003B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x003C && c <= 0x003E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x003F && c <= 0x0040) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0041 && c <= 0x005A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x005B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x005C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x005D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x005E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x005F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0060) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0061 && c <= 0x007A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x007B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x007C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x007D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x007E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x007F && c <= 0x009F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00A0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00A1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x00A2 && c <= 0x00A5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x00A6 && c <= 0x00A7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00A8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00A9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00AA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00AB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00AC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00AD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00AE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00AF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00B0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00B1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x00B2 && c <= 0x00B3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00B4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00B5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00B6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00B7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00B8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00B9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00BA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00BB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x00BC && c <= 0x00BE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00BF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x00C0 && c <= 0x00D6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00D7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x00D8 && c <= 0x00F6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x00F7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x00F8 && c <= 0x01BA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x01BB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x01BC && c <= 0x01BF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x01C0 && c <= 0x01C3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x01C4 && c <= 0x0236) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0250 && c <= 0x02AF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x02B0 && c <= 0x02C1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x02C2 && c <= 0x02C5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x02C6 && c <= 0x02D1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x02D2 && c <= 0x02DF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x02E0 && c <= 0x02E4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x02E5 && c <= 0x02ED) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x02EE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x02EF && c <= 0x02FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x034F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0374 && c <= 0x0375) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x037A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x037E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0384 && c <= 0x0385) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0386) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0387) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0388 && c <= 0x038A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x038C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x038E && c <= 0x03A1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x03A3 && c <= 0x03CE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x03D0 && c <= 0x03F5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x03F6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x03F7 && c <= 0x03FB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0400 && c <= 0x0481) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0482) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0488 && c <= 0x0489) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x048A && c <= 0x04CE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x04D0 && c <= 0x04F5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x04F8 && c <= 0x04F9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0500 && c <= 0x050F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0531 && c <= 0x0556) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0559) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x055A && c <= 0x055F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0561 && c <= 0x0587) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0589) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x058A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x05BE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x05C0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x05C3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x05D0 && c <= 0x05EA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x05F0 && c <= 0x05F2) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x05F3 && c <= 0x05F4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0600 && c <= 0x0603) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x060C && c <= 0x060D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x060E && c <= 0x060F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x061B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x061F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0621 && c <= 0x063A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0640) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0641 && c <= 0x064A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0660 && c <= 0x0669) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x066A && c <= 0x066D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x066E && c <= 0x066F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0671 && c <= 0x06D3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x06D4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x06D5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x06DD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x06DE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x06E5 && c <= 0x06E6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x06E9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x06EE && c <= 0x06EF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x06F0 && c <= 0x06F9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x06FA && c <= 0x06FC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x06FD && c <= 0x06FE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x06FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0700 && c <= 0x070D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x070F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0710) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0712 && c <= 0x072F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x074D && c <= 0x074F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0780 && c <= 0x07A5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x07A6 && c <= 0x07B0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x07B1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0901 && c <= 0x0902) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0903) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0904 && c <= 0x0939) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x093D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x093E && c <= 0x0940) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0941 && c <= 0x0948) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0949 && c <= 0x094C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0950) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0958 && c <= 0x0961) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0962 && c <= 0x0963) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0964 && c <= 0x0965) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0966 && c <= 0x096F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0970) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0981) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0982 && c <= 0x0983) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0985 && c <= 0x098C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x098F && c <= 0x0990) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0993 && c <= 0x09A8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09AA && c <= 0x09B0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x09B2) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09B6 && c <= 0x09B9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x09BD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09BE && c <= 0x09C0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09C1 && c <= 0x09C4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09C7 && c <= 0x09C8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09CB && c <= 0x09CC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x09D7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09DC && c <= 0x09DD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09DF && c <= 0x09E1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09E2 && c <= 0x09E3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09E6 && c <= 0x09EF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09F0 && c <= 0x09F1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09F2 && c <= 0x09F3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x09F4 && c <= 0x09F9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x09FA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A01 && c <= 0x0A02) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0A03) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A05 && c <= 0x0A0A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A0F && c <= 0x0A10) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A13 && c <= 0x0A28) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A2A && c <= 0x0A30) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A32 && c <= 0x0A33) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A35 && c <= 0x0A36) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A38 && c <= 0x0A39) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A3E && c <= 0x0A40) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A41 && c <= 0x0A42) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A47 && c <= 0x0A48) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A4B && c <= 0x0A4C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A59 && c <= 0x0A5C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0A5E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A66 && c <= 0x0A6F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A70 && c <= 0x0A71) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A72 && c <= 0x0A74) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A81 && c <= 0x0A82) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0A83) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A85 && c <= 0x0A8D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A8F && c <= 0x0A91) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0A93 && c <= 0x0AA8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0AAA && c <= 0x0AB0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0AB2 && c <= 0x0AB3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0AB5 && c <= 0x0AB9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0ABD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0ABE && c <= 0x0AC0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0AC1 && c <= 0x0AC5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0AC7 && c <= 0x0AC8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0AC9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0ACB && c <= 0x0ACC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0AD0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0AE0 && c <= 0x0AE1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0AE2 && c <= 0x0AE3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0AE6 && c <= 0x0AEF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0AF1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B01) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B02 && c <= 0x0B03) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B05 && c <= 0x0B0C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B0F && c <= 0x0B10) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B13 && c <= 0x0B28) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B2A && c <= 0x0B30) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B32 && c <= 0x0B33) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B35 && c <= 0x0B39) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B3D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B3E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B3F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B40) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B41 && c <= 0x0B43) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B47 && c <= 0x0B48) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B4B && c <= 0x0B4C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B56) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B57) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B5C && c <= 0x0B5D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B5F && c <= 0x0B61) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B66 && c <= 0x0B6F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B70) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B71) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B82) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B83) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B85 && c <= 0x0B8A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B8E && c <= 0x0B90) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B92 && c <= 0x0B95) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B99 && c <= 0x0B9A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0B9C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0B9E && c <= 0x0B9F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BA3 && c <= 0x0BA4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BA8 && c <= 0x0BAA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BAE && c <= 0x0BB5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BB7 && c <= 0x0BB9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BBE && c <= 0x0BBF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0BC0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BC1 && c <= 0x0BC2) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BC6 && c <= 0x0BC8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BCA && c <= 0x0BCC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0BD7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BE7 && c <= 0x0BEF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BF0 && c <= 0x0BF2) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0BF3 && c <= 0x0BF8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0BF9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0BFA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C01 && c <= 0x0C03) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C05 && c <= 0x0C0C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C0E && c <= 0x0C10) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C12 && c <= 0x0C28) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C2A && c <= 0x0C33) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C35 && c <= 0x0C39) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C3E && c <= 0x0C40) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C41 && c <= 0x0C44) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C46 && c <= 0x0C48) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C4A && c <= 0x0C4C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C60 && c <= 0x0C61) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C66 && c <= 0x0C6F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C82 && c <= 0x0C83) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C85 && c <= 0x0C8C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C8E && c <= 0x0C90) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0C92 && c <= 0x0CA8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0CAA && c <= 0x0CB3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0CB5 && c <= 0x0CB9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0CBD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0CBE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0CBF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0CC0 && c <= 0x0CC4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0CC6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0CC7 && c <= 0x0CC8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0CCA && c <= 0x0CCB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0CCC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0CD5 && c <= 0x0CD6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0CDE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0CE0 && c <= 0x0CE1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0CE6 && c <= 0x0CEF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D02 && c <= 0x0D03) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D05 && c <= 0x0D0C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D0E && c <= 0x0D10) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D12 && c <= 0x0D28) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D2A && c <= 0x0D39) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D3E && c <= 0x0D40) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D41 && c <= 0x0D43) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D46 && c <= 0x0D48) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D4A && c <= 0x0D4C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0D57) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D60 && c <= 0x0D61) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D66 && c <= 0x0D6F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D82 && c <= 0x0D83) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D85 && c <= 0x0D96) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0D9A && c <= 0x0DB1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0DB3 && c <= 0x0DBB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0DBD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0DC0 && c <= 0x0DC6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0DCF && c <= 0x0DD1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0DD2 && c <= 0x0DD4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0DD6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0DD8 && c <= 0x0DDF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0DF2 && c <= 0x0DF3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0DF4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E01 && c <= 0x0E30) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0E31) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E32 && c <= 0x0E33) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E34 && c <= 0x0E37) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0E3F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E40 && c <= 0x0E45) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0E46) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0E47) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E4C && c <= 0x0E4E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0E4F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E50 && c <= 0x0E59) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E5A && c <= 0x0E5B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E81 && c <= 0x0E82) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0E84) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E87 && c <= 0x0E88) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0E8A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0E8D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E94 && c <= 0x0E97) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0E99 && c <= 0x0E9F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0EA1 && c <= 0x0EA3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0EA5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0EA7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0EAA && c <= 0x0EAB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0EAD && c <= 0x0EB0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0EB1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0EB2 && c <= 0x0EB3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0EB4 && c <= 0x0EB7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0EBB && c <= 0x0EBC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0EBD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0EC0 && c <= 0x0EC4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0EC6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0ECC && c <= 0x0ECD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0ED0 && c <= 0x0ED9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0EDC && c <= 0x0EDD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F00) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F01 && c <= 0x0F03) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F04 && c <= 0x0F12) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F13 && c <= 0x0F17) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F1A && c <= 0x0F1F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F20 && c <= 0x0F29) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F2A && c <= 0x0F33) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F34) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F36) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F38) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F3A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F3B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F3C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F3D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F3E && c <= 0x0F3F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F40 && c <= 0x0F47) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F49 && c <= 0x0F6A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F73) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F75 && c <= 0x0F79) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F7E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F7F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F81) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0F85) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F88 && c <= 0x0F8B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F90 && c <= 0x0F97) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0F99 && c <= 0x0FBC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0FBE && c <= 0x0FC5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0FC7 && c <= 0x0FCC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x0FCF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1000 && c <= 0x1021) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1023 && c <= 0x1027) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1029 && c <= 0x102A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x102C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x102D && c <= 0x1030) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1031) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1032) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1036) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1038) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1040 && c <= 0x1049) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x104A && c <= 0x104F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1050 && c <= 0x1055) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1056 && c <= 0x1057) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1058 && c <= 0x1059) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10A0 && c <= 0x10C5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10D0 && c <= 0x10F8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x10FB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1100 && c <= 0x1159) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x115F && c <= 0x11A2) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x11A8 && c <= 0x11F9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1200 && c <= 0x1206) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1208 && c <= 0x1246) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1248) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x124A && c <= 0x124D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1250 && c <= 0x1256) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1258) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x125A && c <= 0x125D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1260 && c <= 0x1286) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1288) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x128A && c <= 0x128D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1290 && c <= 0x12AE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x12B0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x12B2 && c <= 0x12B5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x12B8 && c <= 0x12BE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x12C0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x12C2 && c <= 0x12C5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x12C8 && c <= 0x12CE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x12D0 && c <= 0x12D6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x12D8 && c <= 0x12EE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x12F0 && c <= 0x130E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1310) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1312 && c <= 0x1315) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1318 && c <= 0x131E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1320 && c <= 0x1346) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1348 && c <= 0x135A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1361 && c <= 0x1368) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1369 && c <= 0x1371) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1372 && c <= 0x137C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x13A0 && c <= 0x13F4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1401 && c <= 0x166C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x166D && c <= 0x166E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x166F && c <= 0x1676) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1680) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1681 && c <= 0x169A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x169B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x169C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x16A0 && c <= 0x16EA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x16EB && c <= 0x16ED) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x16EE && c <= 0x16F0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1700 && c <= 0x170C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x170E && c <= 0x1711) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1712 && c <= 0x1713) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1720 && c <= 0x1731) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1732 && c <= 0x1733) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1735 && c <= 0x1736) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1740 && c <= 0x1751) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1752 && c <= 0x1753) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1760 && c <= 0x176C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x176E && c <= 0x1770) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1772 && c <= 0x1773) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1780 && c <= 0x17B3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x17B4 && c <= 0x17B5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x17B6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x17B7 && c <= 0x17BD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x17BE && c <= 0x17C5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x17C6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x17C7 && c <= 0x17C8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x17C9 && c <= 0x17D1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x17D3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x17D4 && c <= 0x17D6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x17D7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x17D8 && c <= 0x17DA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x17DB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x17DC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x17E0 && c <= 0x17E9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x17F0 && c <= 0x17F9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1800 && c <= 0x1805) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1806) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1807 && c <= 0x180A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x180B && c <= 0x180D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x180E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1810 && c <= 0x1819) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1820 && c <= 0x1842) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1843) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1844 && c <= 0x1877) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1880 && c <= 0x18A8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1900 && c <= 0x191C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1920 && c <= 0x1922) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1923 && c <= 0x1926) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1927 && c <= 0x1928) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1929 && c <= 0x192B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1930 && c <= 0x1931) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1932) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1933 && c <= 0x1938) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1940) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1944 && c <= 0x1945) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1946 && c <= 0x194F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1950 && c <= 0x196D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1970 && c <= 0x1974) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x19E0 && c <= 0x19FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D00 && c <= 0x1D2B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D2C && c <= 0x1D61) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D62 && c <= 0x1D6B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1E00 && c <= 0x1E9B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1EA0 && c <= 0x1EF9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1F00 && c <= 0x1F15) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1F18 && c <= 0x1F1D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1F20 && c <= 0x1F45) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1F48 && c <= 0x1F4D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1F50 && c <= 0x1F57) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1F59) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1F5B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1F5D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1F5F && c <= 0x1F7D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1F80 && c <= 0x1FB4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FB6 && c <= 0x1FBC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1FBD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1FBE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FBF && c <= 0x1FC1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FC2 && c <= 0x1FC4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FC6 && c <= 0x1FCC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FCD && c <= 0x1FCF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FD0 && c <= 0x1FD3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FD6 && c <= 0x1FDB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FDD && c <= 0x1FDF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FE0 && c <= 0x1FEC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FED && c <= 0x1FEF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FF2 && c <= 0x1FF4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FF6 && c <= 0x1FFC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1FFD && c <= 0x1FFE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2000 && c <= 0x200A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x200B && c <= 0x200F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2010 && c <= 0x2015) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2016 && c <= 0x2017) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2018) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2019) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x201A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x201B && c <= 0x201C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x201D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x201E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x201F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2020 && c <= 0x2027) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2028) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2029) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x202A && c <= 0x202E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x202F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2030 && c <= 0x2038) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2039) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x203A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x203B && c <= 0x203E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x203F && c <= 0x2040) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2041 && c <= 0x2043) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2044) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2045) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2046) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2047 && c <= 0x2051) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2052) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2053) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2054) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2057) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x205F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2060 && c <= 0x2063) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x206A && c <= 0x206F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2070) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2071) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2074 && c <= 0x2079) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x207A && c <= 0x207C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x207D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x207E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x207F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2080 && c <= 0x2089) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x208A && c <= 0x208C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x208D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x208E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x20A0 && c <= 0x20B1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x20DD && c <= 0x20E0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x20E2 && c <= 0x20E4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2100 && c <= 0x2101) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2102) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2103 && c <= 0x2106) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2107) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2108 && c <= 0x2109) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x210A && c <= 0x2113) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2114) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2115) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2116 && c <= 0x2118) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2119 && c <= 0x211D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x211E && c <= 0x2123) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2124) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2125) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2126) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2127) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2128) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2129) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x212A && c <= 0x212D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x212E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x212F && c <= 0x2131) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2132) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2133 && c <= 0x2134) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2135 && c <= 0x2138) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2139) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x213A && c <= 0x213B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x213D && c <= 0x213F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2140 && c <= 0x2144) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2145 && c <= 0x2149) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x214A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x214B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2153 && c <= 0x215F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2160 && c <= 0x2183) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2190 && c <= 0x2194) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2195 && c <= 0x2199) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x219A && c <= 0x219B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x219C && c <= 0x219F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x21A0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x21A1 && c <= 0x21A2) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x21A3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x21A4 && c <= 0x21A5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x21A6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x21A7 && c <= 0x21AD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x21AE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x21AF && c <= 0x21CD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x21CE && c <= 0x21CF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x21D0 && c <= 0x21D1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x21D2) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x21D3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x21D4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x21D5 && c <= 0x21F3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x21F4 && c <= 0x22FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2300 && c <= 0x2307) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2308 && c <= 0x230B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x230C && c <= 0x231F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2320 && c <= 0x2321) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2322 && c <= 0x2328) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2329) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x232A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x232B && c <= 0x237B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x237C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x237D && c <= 0x239A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x239B && c <= 0x23B3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x23B4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x23B5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x23B6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x23B7 && c <= 0x23D0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2400 && c <= 0x2426) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2440 && c <= 0x244A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2460 && c <= 0x249B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x249C && c <= 0x24E9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x24EA && c <= 0x24FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2500 && c <= 0x25B6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x25B7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x25B8 && c <= 0x25C0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x25C1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x25C2 && c <= 0x25F7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x25F8 && c <= 0x25FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2600 && c <= 0x2617) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2619 && c <= 0x266E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x266F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2670 && c <= 0x267D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2680 && c <= 0x2691) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x26A0 && c <= 0x26A1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2701 && c <= 0x2704) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2706 && c <= 0x2709) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x270C && c <= 0x2727) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2729 && c <= 0x274B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x274D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x274F && c <= 0x2752) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2756) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2758 && c <= 0x275E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2761 && c <= 0x2767) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2768) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2769) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x276A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x276B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x276C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x276D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x276E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x276F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2770) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2771) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2772) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2773) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2774) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2775) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2776 && c <= 0x2793) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2794) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2798 && c <= 0x27AF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x27B1 && c <= 0x27BE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x27D0 && c <= 0x27E5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x27E6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x27E7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x27E8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x27E9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x27EA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x27EB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x27F0 && c <= 0x27FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2800 && c <= 0x28FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2900 && c <= 0x2982) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2983) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2984) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2985) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2986) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2987) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2988) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2989) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x298A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x298B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x298C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x298D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x298E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x298F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2990) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2991) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2992) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2993) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2994) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2995) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2996) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2997) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x2998) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2999 && c <= 0x29D7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x29D8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x29D9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x29DA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x29DB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x29DC && c <= 0x29FB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x29FC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x29FD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x29FE && c <= 0x2AFF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2B00 && c <= 0x2B0D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2E80 && c <= 0x2E99) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2E9B && c <= 0x2EF3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2F00 && c <= 0x2FD5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2FF0 && c <= 0x2FFB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3000) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3001 && c <= 0x3003) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3004) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3005) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3006) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3007) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3008) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3009) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x300A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x300B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x300C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x300D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x300E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x300F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3010) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3011) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3012 && c <= 0x3013) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3014) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3015) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3016) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3017) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3018) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3019) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x301A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x301B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x301C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x301D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x301E && c <= 0x301F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3020) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3021 && c <= 0x3029) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3030) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3031 && c <= 0x3035) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3036 && c <= 0x3037) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3038 && c <= 0x303A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x303B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x303C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x303D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x303E && c <= 0x303F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3041 && c <= 0x3096) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x309B && c <= 0x309C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x309D && c <= 0x309E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x309F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x30A0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x30A1 && c <= 0x30FA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x30FB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x30FC && c <= 0x30FE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x30FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3105 && c <= 0x312C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3131 && c <= 0x318E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3190 && c <= 0x3191) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3192 && c <= 0x3195) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3196 && c <= 0x319F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x31A0 && c <= 0x31B7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x31F0 && c <= 0x31FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3200 && c <= 0x321E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3220 && c <= 0x3229) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x322A && c <= 0x3243) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x3250) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3251 && c <= 0x325F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3260 && c <= 0x327D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x327F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3280 && c <= 0x3289) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x328A && c <= 0x32B0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x32B1 && c <= 0x32BF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x32C0 && c <= 0x32FE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3300 && c <= 0x33FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x3400 && c <= 0x4DB5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x4DC0 && c <= 0x4DFF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x4E00 && c <= 0x9FA5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xA000 && c <= 0xA48C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xA490 && c <= 0xA4C6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xAC00 && c <= 0xD7A3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xE000 && c <= 0xF8FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xF900 && c <= 0xFA2D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFA30 && c <= 0xFA6A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFB00 && c <= 0xFB06) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFB13 && c <= 0xFB17) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFB1D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFB1F && c <= 0xFB28) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFB29) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFB2A && c <= 0xFB36) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFB38 && c <= 0xFB3C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFB3E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFB40 && c <= 0xFB41) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFB43 && c <= 0xFB44) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFB46 && c <= 0xFBB1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFBD3 && c <= 0xFD3D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFD3E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFD3F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFD50 && c <= 0xFD8F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFD92 && c <= 0xFDC7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFDF0 && c <= 0xFDFB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFDFC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFDFD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE00 && c <= 0xFE0F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE30) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE31 && c <= 0xFE32) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE33 && c <= 0xFE34) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE35) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE36) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE37) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE38) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE39) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE3A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE3B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE3C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE3D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE3E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE3F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE40) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE41) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE42) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE43) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE44) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE45 && c <= 0xFE46) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE47) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE48) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE49 && c <= 0xFE4C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE4D && c <= 0xFE4F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE50 && c <= 0xFE52) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE54 && c <= 0xFE57) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE58) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE59) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE5A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE5B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE5C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE5D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE5E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE5F && c <= 0xFE61) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE62) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE63) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE64 && c <= 0xFE66) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE68) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFE69) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE6A && c <= 0xFE6B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE70 && c <= 0xFE74) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFE76 && c <= 0xFEFC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFEFF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF01 && c <= 0xFF03) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF04) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF05 && c <= 0xFF07) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF08) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF09) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF0A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF0B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF0C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF0D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF0E && c <= 0xFF0F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF10 && c <= 0xFF19) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF1A && c <= 0xFF1B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF1C && c <= 0xFF1E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF1F && c <= 0xFF20) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF21 && c <= 0xFF3A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF3B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF3C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF3D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF3E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF3F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF40) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF41 && c <= 0xFF5A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF5B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF5C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF5D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF5E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF5F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF60) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF61) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF62) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF63) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF64) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF65) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF66 && c <= 0xFF6F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFF70) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF71 && c <= 0xFF9D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFF9E && c <= 0xFF9F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFA0 && c <= 0xFFBE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFC2 && c <= 0xFFC7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFCA && c <= 0xFFCF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFD2 && c <= 0xFFD7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFDA && c <= 0xFFDC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFE0 && c <= 0xFFE1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFFE2) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFFE3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFFE4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFE5 && c <= 0xFFE6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0xFFE8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFE9 && c <= 0xFFEC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFED && c <= 0xFFEE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFF9 && c <= 0xFFFB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xFFFC && c <= 0xFFFD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10000 && c <= 0x1000B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1000D && c <= 0x10026) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10028 && c <= 0x1003A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1003C && c <= 0x1003D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1003F && c <= 0x1004D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10050 && c <= 0x1005D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10080 && c <= 0x100FA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10100 && c <= 0x10101) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10107 && c <= 0x10133) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10137 && c <= 0x1013F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10300 && c <= 0x1031E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10320 && c <= 0x10323) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10330 && c <= 0x10349) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10380 && c <= 0x1039D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10400 && c <= 0x1044F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10450 && c <= 0x1049D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x104A0 && c <= 0x104A9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10800 && c <= 0x10805) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1080A && c <= 0x10835) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x10837 && c <= 0x10838) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D000 && c <= 0x1D0F5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D100 && c <= 0x1D126) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D12A && c <= 0x1D164) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D16A && c <= 0x1D16C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D173 && c <= 0x1D17A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D183 && c <= 0x1D184) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D18C && c <= 0x1D1A9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D1AE && c <= 0x1D1DD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D300 && c <= 0x1D356) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D400 && c <= 0x1D454) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D456 && c <= 0x1D49C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D49E && c <= 0x1D49F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D4A5 && c <= 0x1D4A6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D4A9 && c <= 0x1D4AC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D4AE && c <= 0x1D4B9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D4BD && c <= 0x1D4C3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D4C5 && c <= 0x1D505) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D507 && c <= 0x1D50A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D50D && c <= 0x1D514) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D516 && c <= 0x1D51C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D51E && c <= 0x1D539) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D53B && c <= 0x1D53E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D540 && c <= 0x1D544) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D54A && c <= 0x1D550) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D552 && c <= 0x1D6A3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D6A8 && c <= 0x1D6C0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D6C2 && c <= 0x1D6DA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D6DC && c <= 0x1D6FA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D6FC && c <= 0x1D714) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D716 && c <= 0x1D734) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D736 && c <= 0x1D74E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D750 && c <= 0x1D76E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D770 && c <= 0x1D788) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D78A && c <= 0x1D7A8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D7AA && c <= 0x1D7C2) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D7C4 && c <= 0x1D7C9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x1D7CE && c <= 0x1D7FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x20000 && c <= 0x2A6D6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x2F800 && c <= 0x2FA1D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xE0020 && c <= 0xE007F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xE0100 && c <= 0xE01EF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0xF0000 && c <= 0xFFFFD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x100000 && c <= 0x10FFFD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c >= 0x0334 && c <= 0x0338) return CANONICAL_COMBINING_CLASS_OVERLAY;
+        if (c >= 0x20D2 && c <= 0x20D3) return CANONICAL_COMBINING_CLASS_OVERLAY;
+        if (c >= 0x20D8 && c <= 0x20DA) return CANONICAL_COMBINING_CLASS_OVERLAY;
+        if (c >= 0x20E5 && c <= 0x20E6) return CANONICAL_COMBINING_CLASS_OVERLAY;
+        if (c == 0x20EA) return CANONICAL_COMBINING_CLASS_OVERLAY;
+        if (c >= 0x1D167 && c <= 0x1D169) return CANONICAL_COMBINING_CLASS_OVERLAY;
+        if (c == 0x093C) return CANONICAL_COMBINING_CLASS_NUKTA;
+        if (c == 0x09BC) return CANONICAL_COMBINING_CLASS_NUKTA;
+        if (c == 0x0A3C) return CANONICAL_COMBINING_CLASS_NUKTA;
+        if (c == 0x0ABC) return CANONICAL_COMBINING_CLASS_NUKTA;
+        if (c == 0x0B3C) return CANONICAL_COMBINING_CLASS_NUKTA;
+        if (c == 0x0CBC) return CANONICAL_COMBINING_CLASS_NUKTA;
+        if (c == 0x1037) return CANONICAL_COMBINING_CLASS_NUKTA;
+        if (c >= 0x3099 && c <= 0x309A) return CANONICAL_COMBINING_CLASS_KANA_VOICING;
+        if (c == 0x094D) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x09CD) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0A4D) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0ACD) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0B4D) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0BCD) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0C4D) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0CCD) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0D4D) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0DCA) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0E3A) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x0F84) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x1039) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x1714) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x1734) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x17D2) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        if (c == 0x05B0) return CANONICAL_COMBINING_CLASS_10;
+        if (c == 0x05B1) return CANONICAL_COMBINING_CLASS_11;
+        if (c == 0x05B2) return CANONICAL_COMBINING_CLASS_12;
+        if (c == 0x05B3) return CANONICAL_COMBINING_CLASS_13;
+        if (c == 0x05B4) return CANONICAL_COMBINING_CLASS_14;
+        if (c == 0x05B5) return CANONICAL_COMBINING_CLASS_15;
+        if (c == 0x05B6) return CANONICAL_COMBINING_CLASS_16;
+        if (c == 0x05B7) return CANONICAL_COMBINING_CLASS_17;
+        if (c == 0x05B8) return CANONICAL_COMBINING_CLASS_18;
+        if (c == 0x05B9) return CANONICAL_COMBINING_CLASS_19;
+        if (c == 0x05BB) return CANONICAL_COMBINING_CLASS_20;
+        if (c == 0x05BC) return CANONICAL_COMBINING_CLASS_21;
+        if (c == 0x05BD) return CANONICAL_COMBINING_CLASS_22;
+        if (c == 0x05BF) return CANONICAL_COMBINING_CLASS_23;
+        if (c == 0x05C1) return CANONICAL_COMBINING_CLASS_24;
+        if (c == 0x05C2) return CANONICAL_COMBINING_CLASS_25;
+        if (c == 0xFB1E) return CANONICAL_COMBINING_CLASS_26;
+        if (c == 0x064B) return CANONICAL_COMBINING_CLASS_27;
+        if (c == 0x064C) return CANONICAL_COMBINING_CLASS_28;
+        if (c == 0x064D) return CANONICAL_COMBINING_CLASS_29;
+        if (c == 0x064E) return CANONICAL_COMBINING_CLASS_30;
+        if (c == 0x064F) return CANONICAL_COMBINING_CLASS_31;
+        if (c == 0x0650) return CANONICAL_COMBINING_CLASS_32;
+        if (c == 0x0651) return CANONICAL_COMBINING_CLASS_33;
+        if (c == 0x0652) return CANONICAL_COMBINING_CLASS_34;
+        if (c == 0x0670) return CANONICAL_COMBINING_CLASS_35;
+        if (c == 0x0711) return CANONICAL_COMBINING_CLASS_36;
+        if (c == 0x0C55) return CANONICAL_COMBINING_CLASS_84;
+        if (c == 0x0C56) return CANONICAL_COMBINING_CLASS_91;
+        if (c >= 0x0E38 && c <= 0x0E39) return CANONICAL_COMBINING_CLASS_103;
+        if (c >= 0x0E48 && c <= 0x0E4B) return CANONICAL_COMBINING_CLASS_107;
+        if (c >= 0x0EB8 && c <= 0x0EB9) return CANONICAL_COMBINING_CLASS_118;
+        if (c >= 0x0EC8 && c <= 0x0ECB) return CANONICAL_COMBINING_CLASS_122;
+        if (c == 0x0F71) return CANONICAL_COMBINING_CLASS_129;
+        if (c == 0x0F72) return CANONICAL_COMBINING_CLASS_130;
+        if (c >= 0x0F7A && c <= 0x0F7D) return CANONICAL_COMBINING_CLASS_130;
+        if (c == 0x0F80) return CANONICAL_COMBINING_CLASS_130;
+        if (c == 0x0F74) return CANONICAL_COMBINING_CLASS_132;
+        if (c >= 0x0321 && c <= 0x0322) return CANONICAL_COMBINING_CLASS_ATTACHED_BELOW;
+        if (c >= 0x0327 && c <= 0x0328) return CANONICAL_COMBINING_CLASS_ATTACHED_BELOW;
+        if (c == 0x031B) return CANONICAL_COMBINING_CLASS_ATTACHED_ABOVE_RIGHT;
+        if (c == 0x0F39) return CANONICAL_COMBINING_CLASS_ATTACHED_ABOVE_RIGHT;
+        if (c >= 0x1D165 && c <= 0x1D166) return CANONICAL_COMBINING_CLASS_ATTACHED_ABOVE_RIGHT;
+        if (c >= 0x1D16E && c <= 0x1D172) return CANONICAL_COMBINING_CLASS_ATTACHED_ABOVE_RIGHT;
+        if (c == 0x302A) return CANONICAL_COMBINING_CLASS_BELOW_LEFT;
+        if (c >= 0x0316 && c <= 0x0319) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x031C && c <= 0x0320) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x0323 && c <= 0x0326) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x0329 && c <= 0x0333) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x0339 && c <= 0x033C) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x0347 && c <= 0x0349) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x034D && c <= 0x034E) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x0353 && c <= 0x0356) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0591) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0596) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x059B) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x05A3 && c <= 0x05A7) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x05AA) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x0655 && c <= 0x0656) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x06E3) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x06EA) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x06ED) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0731) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0734) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x0737 && c <= 0x0739) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x073B && c <= 0x073C) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x073E) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0742) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0744) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0746) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0748) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0952) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x0F18 && c <= 0x0F19) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0F35) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0F37) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x0FC6) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x193B) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x20E8) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x1D17B && c <= 0x1D182) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c >= 0x1D18A && c <= 0x1D18B) return CANONICAL_COMBINING_CLASS_BELOW;
+        if (c == 0x059A) return CANONICAL_COMBINING_CLASS_BELOW_RIGHT;
+        if (c == 0x05AD) return CANONICAL_COMBINING_CLASS_BELOW_RIGHT;
+        if (c == 0x1939) return CANONICAL_COMBINING_CLASS_BELOW_RIGHT;
+        if (c == 0x302D) return CANONICAL_COMBINING_CLASS_BELOW_RIGHT;
+        if (c >= 0x302E && c <= 0x302F) return CANONICAL_COMBINING_CLASS_LEFT;
+        if (c == 0x05AE) return CANONICAL_COMBINING_CLASS_ABOVE_LEFT;
+        if (c == 0x18A9) return CANONICAL_COMBINING_CLASS_ABOVE_LEFT;
+        if (c == 0x302B) return CANONICAL_COMBINING_CLASS_ABOVE_LEFT;
+        if (c >= 0x0300 && c <= 0x0314) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x033D && c <= 0x0344) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x0346) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x034A && c <= 0x034C) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0350 && c <= 0x0352) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x0357) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0363 && c <= 0x036F) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0483 && c <= 0x0486) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0592 && c <= 0x0595) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0597 && c <= 0x0599) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x059C && c <= 0x05A1) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x05A8 && c <= 0x05A9) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x05AB && c <= 0x05AC) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x05AF) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x05C4) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0610 && c <= 0x0615) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0653 && c <= 0x0654) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0657 && c <= 0x0658) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x06D6 && c <= 0x06DC) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x06DF && c <= 0x06E2) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x06E4) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x06E7 && c <= 0x06E8) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x06EB && c <= 0x06EC) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x0730) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0732 && c <= 0x0733) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0735 && c <= 0x0736) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x073A) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x073D) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x073F && c <= 0x0741) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x0743) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x0745) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x0747) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0749 && c <= 0x074A) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x0951) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0953 && c <= 0x0954) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0F82 && c <= 0x0F83) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x0F86 && c <= 0x0F87) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x17DD) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x193A) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x20D0 && c <= 0x20D1) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x20D4 && c <= 0x20D7) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x20DB && c <= 0x20DC) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x20E1) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x20E7) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x20E9) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0xFE20 && c <= 0xFE23) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x1D185 && c <= 0x1D189) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c >= 0x1D1AA && c <= 0x1D1AD) return CANONICAL_COMBINING_CLASS_ABOVE;
+        if (c == 0x0315) return CANONICAL_COMBINING_CLASS_ABOVE_RIGHT;
+        if (c == 0x031A) return CANONICAL_COMBINING_CLASS_ABOVE_RIGHT;
+        if (c == 0x302C) return CANONICAL_COMBINING_CLASS_ABOVE_RIGHT;
+        if (c == 0x035F) return CANONICAL_COMBINING_CLASS_DOUBLE_BELOW;
+        if (c == 0x0362) return CANONICAL_COMBINING_CLASS_DOUBLE_BELOW;
+        if (c >= 0x035D && c <= 0x035E) return CANONICAL_COMBINING_CLASS_DOUBLE_ABOVE;
+        if (c >= 0x0360 && c <= 0x0361) return CANONICAL_COMBINING_CLASS_DOUBLE_ABOVE;
+        if (c == 0x0345) return CANONICAL_COMBINING_CLASS_IOTA_SUBSCRIPT;    
+        
+        return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+    }
+    
+    
+    
+    private static boolean isExcluded(int c) {
+        
+        // ???? optimize
+        if (c == 0x0958) return true; // DEVANAGARI LETTER QA
+        if (c == 0x0959) return true; // DEVANAGARI LETTER KHHA
+        if (c == 0x095A) return true; // DEVANAGARI LETTER GHHA
+        if (c == 0x095B) return true; // DEVANAGARI LETTER ZA
+        if (c == 0x095C) return true; // DEVANAGARI LETTER DDDHA
+        if (c == 0x095D) return true; // DEVANAGARI LETTER RHA
+        if (c == 0x095E) return true; // DEVANAGARI LETTER FA
+        if (c == 0x095F) return true; // DEVANAGARI LETTER YYA
+        if (c == 0x09DC) return true; // BENGALI LETTER RRA
+        if (c == 0x09DD) return true; // BENGALI LETTER RHA
+        if (c == 0x09DF) return true; // BENGALI LETTER YYA
+        if (c == 0x0A33) return true; // GURMUKHI LETTER LLA
+        if (c == 0x0A36) return true; // GURMUKHI LETTER SHA
+        if (c == 0x0A59) return true; // GURMUKHI LETTER KHHA
+        if (c == 0x0A5A) return true; // GURMUKHI LETTER GHHA
+        if (c == 0x0A5B) return true; // GURMUKHI LETTER ZA
+        if (c == 0x0A5E) return true; // GURMUKHI LETTER FA
+        if (c == 0x0B5C) return true; // ORIYA LETTER RRA
+        if (c == 0x0B5D) return true; // ORIYA LETTER RHA
+        if (c == 0x0F43) return true; // TIBETAN LETTER GHA
+        if (c == 0x0F4D) return true; // TIBETAN LETTER DDHA
+        if (c == 0x0F52) return true; // TIBETAN LETTER DHA
+        if (c == 0x0F57) return true; // TIBETAN LETTER BHA
+        if (c == 0x0F5C) return true; // TIBETAN LETTER DZHA
+        if (c == 0x0F69) return true; // TIBETAN LETTER KSSA
+        if (c == 0x0F76) return true; // TIBETAN VOWEL SIGN VOCALIC R
+        if (c == 0x0F78) return true; // TIBETAN VOWEL SIGN VOCALIC L
+        if (c == 0x0F93) return true; // TIBETAN SUBJOINED LETTER GHA
+        if (c == 0x0F9D) return true; // TIBETAN SUBJOINED LETTER DDHA
+        if (c == 0x0FA2) return true; // TIBETAN SUBJOINED LETTER DHA
+        if (c == 0x0FA7) return true; // TIBETAN SUBJOINED LETTER BHA
+        if (c == 0x0FAC) return true; // TIBETAN SUBJOINED LETTER DZHA
+        if (c == 0x0FB9) return true; // TIBETAN SUBJOINED LETTER KSSA
+        if (c == 0xFB1D) return true; // HEBREW LETTER YOD WITH HIRIQ
+        if (c == 0xFB1F) return true; // HEBREW LIGATURE YIDDISH YOD YOD PATAH
+        if (c == 0xFB2A) return true; // HEBREW LETTER SHIN WITH SHIN DOT
+        if (c == 0xFB2B) return true; // HEBREW LETTER SHIN WITH SIN DOT
+        if (c == 0xFB2C) return true; // HEBREW LETTER SHIN WITH DAGESH AND SHIN DOT
+        if (c == 0xFB2D) return true; // HEBREW LETTER SHIN WITH DAGESH AND SIN DOT
+        if (c == 0xFB2E) return true; // HEBREW LETTER ALEF WITH PATAH
+        if (c == 0xFB2F) return true; // HEBREW LETTER ALEF WITH QAMATS
+        if (c == 0xFB30) return true; // HEBREW LETTER ALEF WITH MAPIQ
+        if (c == 0xFB31) return true; // HEBREW LETTER BET WITH DAGESH
+        if (c == 0xFB32) return true; // HEBREW LETTER GIMEL WITH DAGESH
+        if (c == 0xFB33) return true; // HEBREW LETTER DALET WITH DAGESH
+        if (c == 0xFB34) return true; // HEBREW LETTER HE WITH MAPIQ
+        if (c == 0xFB35) return true; // HEBREW LETTER VAV WITH DAGESH
+        if (c == 0xFB36) return true; // HEBREW LETTER ZAYIN WITH DAGESH
+        if (c == 0xFB38) return true; // HEBREW LETTER TET WITH DAGESH
+        if (c == 0xFB39) return true; // HEBREW LETTER YOD WITH DAGESH
+        if (c == 0xFB3A) return true; // HEBREW LETTER FINAL KAF WITH DAGESH
+        if (c == 0xFB3B) return true; // HEBREW LETTER KAF WITH DAGESH
+        if (c == 0xFB3C) return true; // HEBREW LETTER LAMED WITH DAGESH
+        if (c == 0xFB3E) return true; // HEBREW LETTER MEM WITH DAGESH
+        if (c == 0xFB40) return true; // HEBREW LETTER NUN WITH DAGESH
+        if (c == 0xFB41) return true; // HEBREW LETTER SAMEKH WITH DAGESH
+        if (c == 0xFB43) return true; // HEBREW LETTER FINAL PE WITH DAGESH
+        if (c == 0xFB44) return true; // HEBREW LETTER PE WITH DAGESH
+        if (c == 0xFB46) return true; // HEBREW LETTER TSADI WITH DAGESH
+        if (c == 0xFB47) return true; // HEBREW LETTER QOF WITH DAGESH
+        if (c == 0xFB48) return true; // HEBREW LETTER RESH WITH DAGESH
+        if (c == 0xFB49) return true; // HEBREW LETTER SHIN WITH DAGESH
+        if (c == 0xFB4A) return true; // HEBREW LETTER TAV WITH DAGESH
+        if (c == 0xFB4B) return true; // HEBREW LETTER VAV WITH HOLAM
+        if (c == 0xFB4C) return true; // HEBREW LETTER BET WITH RAFE
+        if (c == 0xFB4D) return true; // HEBREW LETTER KAF WITH RAFE
+        if (c == 0xFB4E) return true; // HEBREW LETTER PE WITH RAFE
+
+        // Post Composition Version precomposed characters
+
+        if (c == 0x2ADC) return true; // FORKING
+        if (c == 0x1D15E) return true; // MUSICAL SYMBOL HALF NOTE
+        if (c == 0x1D15F) return true; // MUSICAL SYMBOL QUARTER NOTE
+        if (c == 0x1D160) return true; // MUSICAL SYMBOL EIGHTH NOTE
+        if (c == 0x1D161) return true; // MUSICAL SYMBOL SIXTEENTH NOTE
+        if (c == 0x1D162) return true; // MUSICAL SYMBOL THIRTY-SECOND NOTE
+        if (c == 0x1D163) return true; // MUSICAL SYMBOL SIXTY-FOURTH NOTE
+        if (c == 0x1D164) return true; // MUSICAL SYMBOL ONE HUNDRED TWENTY-EIGHTH NOTE
+        if (c == 0x1D1BB) return true; // MUSICAL SYMBOL MINIMA
+        if (c == 0x1D1BC) return true; // MUSICAL SYMBOL MINIMA BLACK
+        if (c == 0x1D1BD) return true; // MUSICAL SYMBOL SEMIMINIMA WHITE
+        if (c == 0x1D1BE) return true; // MUSICAL SYMBOL SEMIMINIMA BLACK
+        if (c == 0x1D1BF) return true; // MUSICAL SYMBOL FUSA WHITE
+        if (c == 0x1D1C0) return true; // MUSICAL SYMBOL FUSA BLACK
+
+        // Singleton Decompositions
+
+        if (c == 0x0340) return true; // COMBINING GRAVE TONE MARK
+        if (c == 0x0341) return true; // COMBINING ACUTE TONE MARK
+        if (c == 0x0343) return true; // COMBINING GREEK KORONIS
+        if (c == 0x0374) return true; // GREEK NUMERAL SIGN
+        if (c == 0x037E) return true; // GREEK QUESTION MARK
+        if (c == 0x0387) return true; // GREEK ANO TELEIA
+        if (c == 0x1F71) return true; // GREEK SMALL LETTER ALPHA WITH OXIA
+        if (c == 0x1F73) return true; // GREEK SMALL LETTER EPSILON WITH OXIA
+        if (c == 0x1F75) return true; // GREEK SMALL LETTER ETA WITH OXIA
+        if (c == 0x1F77) return true; // GREEK SMALL LETTER IOTA WITH OXIA
+        if (c == 0x1F79) return true; // GREEK SMALL LETTER OMICRON WITH OXIA
+        if (c == 0x1F7B) return true; // GREEK SMALL LETTER UPSILON WITH OXIA
+        if (c == 0x1F7D) return true; // GREEK SMALL LETTER OMEGA WITH OXIA
+        if (c == 0x1FBB) return true; // GREEK CAPITAL LETTER ALPHA WITH OXIA
+        if (c == 0x1FBE) return true; // GREEK PROSGEGRAMMENI
+        if (c == 0x1FC9) return true; // GREEK CAPITAL LETTER EPSILON WITH OXIA
+        if (c == 0x1FCB) return true; // GREEK CAPITAL LETTER ETA WITH OXIA
+        if (c == 0x1FD3) return true; // GREEK SMALL LETTER IOTA WITH DIALYTIKA AND OXIA
+        if (c == 0x1FDB) return true; // GREEK CAPITAL LETTER IOTA WITH OXIA
+        if (c == 0x1FE3) return true; // GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND OXIA
+        if (c == 0x1FEB) return true; // GREEK CAPITAL LETTER UPSILON WITH OXIA
+        if (c == 0x1FEE) return true; // GREEK DIALYTIKA AND OXIA
+        if (c == 0x1FEF) return true; // GREEK VARIA
+        if (c == 0x1FF9) return true; // GREEK CAPITAL LETTER OMICRON WITH OXIA
+        if (c == 0x1FFB) return true; // GREEK CAPITAL LETTER OMEGA WITH OXIA
+        if (c == 0x1FFD) return true; // GREEK OXIA
+        if (c == 0x2000) return true; // EN QUAD
+        if (c == 0x2001) return true; // EM QUAD
+        if (c == 0x2126) return true; // OHM SIGN
+        if (c == 0x212A) return true; // KELVIN SIGN
+        if (c == 0x212B) return true; // ANGSTROM SIGN
+        if (c == 0x2329) return true; // LEFT-POINTING ANGLE BRACKET
+        if (c == 0x232A) return true; // RIGHT-POINTING ANGLE BRACKET
+        if (c >= 0xF900 && c <= 0xFA0D) return true; // CJK COMPATIBILITY IDEOGRAPH-F900..CJK COMPATIBILITY IDEOGRAPH-FA0D
+        if (c == 0xFA10) return true; // CJK COMPATIBILITY IDEOGRAPH-FA10
+        if (c == 0xFA12) return true; // CJK COMPATIBILITY IDEOGRAPH-FA12
+        if (c >= 0xFA15 && c <= 0xFA1E) return true; // CJK COMPATIBILITY IDEOGRAPH-FA15..CJK COMPATIBILITY IDEOGRAPH-FA1E
+        if (c == 0xFA20) return true; // CJK COMPATIBILITY IDEOGRAPH-FA20
+        if (c == 0xFA22) return true; // CJK COMPATIBILITY IDEOGRAPH-FA22
+        if (c == 0xFA25) return true; // CJK COMPATIBILITY IDEOGRAPH-FA25
+        if (c == 0xFA26) return true; // CJK COMPATIBILITY IDEOGRAPH-FA26
+        if (c >= 0xFA2A && c <= 0xFA2D) return true; // CJK COMPATIBILITY IDEOGRAPH-FA2A..CJK COMPATIBILITY IDEOGRAPH-FA2D
+        if (c >= 0xFA30 && c <= 0xFA6A) return true; // CJK COMPATIBILITY IDEOGRAPH-FA30..CJK COMPATIBILITY IDEOGRAPH-FA6A
+        if (c >= 0x2F800 && c <= 0x2FA1D) return true; // CJK COMPATIBILITY IDEOGRAPH-2F800..CJK COMPATIBILITY IDEOGRAPH-2FA1D
+
+        // Non-Starter Decompositions
+        if (c == 0x0344) return true; // COMBINING GREEK DIALYTIKA TONOS
+        if (c == 0x0F73) return true; // TIBETAN VOWEL SIGN II
+        if (c == 0x0F75) return true; // TIBETAN VOWEL SIGN UU
+        if (c == 0x0F81) return true; // TIBETAN VOWEL SIGN REVERSED II
+
+        return false;
+    }
+    
+    
+    private static boolean isComposite(int c) {
+
+        // XXX verify
+        if (c <= 0xA0) return false;
+        if (c >= HANGUL_SYLLABLE_BEGIN && c <= HANGUL_SYLLABLE_END) {
+            return true;
+        }
+        if (isExcluded(c)) return false;
+        
+        return true;
+    }
+    
+    
+    boolean isBlocked(String s, int index) {
+      
+        int start = unicodeCharAt(s, 0);
+        // start must be a starter
+        int c = unicodeCharAt(s, index);
+        int combiningClass = getCombiningClass(c);
+        for (int i = 1; i < index; i++) {
+            int b = unicodeCharAt(s, i);
+            if (isStarter(b)) return true;
+            if (combiningClass == getCombiningClass(b)) return true;
+        }
+        
+        return false;
+    }
+
+
+    static int unicodeCharAt(String s, int character) {
+        
+        int length = s.length();
+        int count = 0;
+        
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (count == character) {
+                if (isHighSurrogate(c)) {
+                    return combineSurrogatePair(c, s.charAt(i+1));
+                }
+                else return c;
+            }
+            else {
+                count++;
+                if (isHighSurrogate(c)) {
+                    i++;
+                }
+            }
+        }
+        
+        throw new StringIndexOutOfBoundsException(); // message????
+        
+    }
+
+
+    static boolean isHighSurrogate(char c) {
+        return c >= HI_SURROGATE_START && c <= HI_SURROGATE_END;
+    }
+
+    
+    static int combineSurrogatePair(char highSurr, char lowSurrogate) {
+
+        int high =  highSurr & 0x7FF;
+        int low = lowSurrogate - 0xDC00;
+        int highShifted = high << 10;
+        int combined = highShifted | low; 
+        int uchar = combined + 0x10000;
+        return uchar;
+        
+    }
+
+    static char getHighSurrogate(int codepoint) {
+
+        char x = (char) codepoint;
+        int u = (codepoint >> 16) & ((1<<5) - 1);
+        char w = (char) (u - 1);
+        return (char) (HI_SURROGATE_START | (w << 6) | x >> 10);
+        
+    }
+
+
+    static char getLowSurrogate(int codepoint) {
+
+        char x = (char) codepoint;
+        return (char) (LOW_SURROGATE_START | x & ((1<<10) - 1));
+        
+    }
+    
+
+     static String normalize(String s) {
+
+        boolean needsNormalizing = false;
+            
+            int length = s.length();
+            for (int i = 0; i < length; i++) {
+                char c = s.charAt(i);
+                if (c > 255) {
+                    needsNormalizing = true;
+                    break;
+                }
+            }
+            
+            // s =  
+        
+        
+        if (needsNormalizing) {
+            String decomposed = decompose(s); 
+            s = recompose(decomposed);
+        }
+        
+        return s;
+        
+    }
+    
+    private static String recompose(String s) {
+        return com.ibm.icu.text.Normalizer.normalize(s, com.ibm.icu.text.Normalizer.NFC);
+    }
+
+
+    private static String decompose(String s) {
+        
+        int length = s.length();
+        StringBuffer result = new StringBuffer(length);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (isHighSurrogate(c)) {
+                i++;
+                char low = s.charAt(i);
+                result.append(decompose(UnicodeUtil.combineSurrogatePair(c, low)));
+            }
+            else {
+                result.append(decompose(c));
+            }
+        }
+        return s;
+        
+    }
+
+
+    // ???? thread issue
+    private static StringBuffer sb = new StringBuffer("aa");
+    
+    private static String decompose(int c) {
+        
+        if (c >= HANGUL_SYLLABLE_BEGIN && c <= HANGUL_SYLLABLE_END) {
+            return decomposeHangul((char) c);
+        }
+        else if (c <= 0xFFFF) {
+            return String.valueOf((char) c);
+        }
+        sb.setCharAt(0, UnicodeUtil.getHighSurrogate(c));
+        sb.setCharAt(1, UnicodeUtil.getLowSurrogate(c));
+        // FIXME must recurse this
+        return sb.toString();
+        
+    }    
+
+    
+    private final static int HANGUL_SYLLABLE_BEGIN = 0xAC00;
+    private final static int HANGUL_SYLLABLE_END = 0xAC00;
+
+    private static String decomposeHangul(char c) {
+        
+        int lBase = 0x1100;
+        int vBase = 0x1161;
+        int tBase = 0x11A7;
+        int lCount = 19;
+        int vCount = 21;
+        int tCount = 28;
+        int nCount = vCount * tCount; 
+        int sCount = lCount * nCount;
+
+        int sIndex = c - HANGUL_SYLLABLE_BEGIN;
+        if (sIndex < 0 || sIndex >= sCount) {
+            return String.valueOf(c);
+        }
+        
+        StringBuffer result = new StringBuffer(3);
+        int L = lBase + sIndex / nCount;
+        int V = vBase + (sIndex % nCount) / tCount;
+        int T = tBase + sIndex % tCount;
+        result.append((char) L);
+        result.append((char) V);
+        if (T != tBase) result.append((char) T);
+        return result.toString();
+        
+    }   
+    
+    
+}
