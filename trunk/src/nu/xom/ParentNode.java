@@ -367,7 +367,7 @@ public abstract class ParentNode extends Node {
      * 
      * <p>
      *   The URI as specified is actually an IRI (once that spec
-     *   is finished. It is not necessary to hexadecimally escape 
+     *   is finished). It is not necessary to hexadecimally escape 
      *   URI illegal, non-ASCII Unicode characters such as &gamma; 
      *   or &eacute;. In fact, you should not to do so.
      *   It is necessary to escape reserved ASCII characters such as
@@ -388,7 +388,7 @@ public abstract class ParentNode extends Node {
 
 
     void setActualBaseURI(String uri) {
-        Verifier.checkURI(uri);
+        Verifier.checkIRI(uri);
         actualBaseURI = uri;     
     }
 
