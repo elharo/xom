@@ -41,7 +41,7 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public class ProcessingInstruction extends Node {
@@ -114,8 +114,6 @@ public class ProcessingInstruction extends Node {
      * 
      * @throws IllegalTargetException if the proposed target 
      *   is not an XML 1.0 non-colonized name
-     * @throws XMLException if the proposed target does not 
-     *     satisfy the local constraints
      */
     public void setTarget(String target) {
         
@@ -149,8 +147,6 @@ public class ProcessingInstruction extends Node {
      * 
      * @throws IllegalDataException if <code>data</code> is null
      *      or otherwise not legal XML processing instruction data
-     * @throws XMLException if the proposed data does not satisfy 
-     *   the local constraints
      */
     public void setValue(String data) {
         
