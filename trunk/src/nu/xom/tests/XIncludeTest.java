@@ -502,15 +502,45 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
-    public void testFallbackInIncludedDocumentWithXPointer() 
+    public void testFallbackInIncludedDocumentThatResolvesToNonElement() 
       throws ParsingException, IOException, XIncludeException {
       
+        File input = new File("data/xinclude/input/metafallbacktotexttest.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/metafallbacktotexttest.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }
+    
+    
+    public void testFallbackInIncludedDocumentWithXPointer() 
+      throws ParsingException, IOException, XIncludeException {
+        // This test case activates processFallbackSilently
         File input = new File("data/xinclude/input/metafallbacktestwithxpointer.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/metafallbacktestwithxpointer.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }
+    
+    
+    // test case where fallback falls back to text and comments rather than
+    // an element
+    public void testFallbackInIncludedDocumentWithXPointer2() 
+      throws ParsingException, IOException, XIncludeException {
+        // This test case activates processFallbackSilently
+        File input = new File("data/xinclude/input/metafallbacktestwithxpointer2.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
         dumpResult(input, result);
         Document expectedResult = builder.build(
-          new File("data/xinclude/output/metafallbacktestwithxpointer.xml")
+          new File("data/xinclude/output/metafallbacktestwithxpointer2.xml")
         );
         assertEquals(expectedResult, result);
 
