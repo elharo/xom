@@ -1080,10 +1080,19 @@ public class Element extends ParentNode {
      * <code>xml:base</code>, <code>xml:lang</code>, and 
      * <code>xml:space</code> is not counted even if one of these 
      * attributes is present on the element.
-     * The return value is guaranteed to be positive.
      * </p>
      * 
-     * @return the number of namespaces declsred by this element
+     * <p>
+     * The return value is almost always positive. It can be zero 
+     * if and only if the element itself has the prefix 
+     * <code>xml</code>; e.g. <code>&lt;xml:space /></code>.
+     * This is not endorsed by the XML specification. The prefix
+     * <code>xml</code> is reserved for use by the W3C, which has only
+     * used it for attributes to date. You really shouldn't do this.
+     * Nonetheless, this is not malformed so XOM allows it.
+     * </p>
+     * 
+     * @return the number of namespaces declared by this element
      */
     public final int getNamespaceDeclarationCount() {
         
@@ -1092,7 +1101,7 @@ public class Element extends ParentNode {
             allPrefixes = new HashSet(namespaces.getPrefixes());
         } 
         else allPrefixes = new HashSet(3);
-        allPrefixes.add(prefix);
+        if (!"xml".equals(prefix)) allPrefixes.add(prefix);
         // add attribute prefixes
         for (int i = 0; i < getAttributeCount(); i++) {
             Attribute att = getAttribute(i);
@@ -1142,8 +1151,9 @@ public class Element extends ParentNode {
         if (namespaces != null) {
             allPrefixes = new TreeSet(namespaces.getPrefixes());
         } 
-        else allPrefixes = new TreeSet(); 
-        allPrefixes.add(prefix);
+        else allPrefixes = new TreeSet();
+        
+        if (!("xml".equals(prefix))) allPrefixes.add(prefix);
         
         // add attribute prefixes
         for (int i = 0; i < getAttributeCount(); i++) {
