@@ -30,9 +30,8 @@ import java.util.List;
 /**
  * 
  * <p>
- * This is the generic superclass for nodes 
- * that have children. Not counting subclasses,
- * there are exactly two such classes in XOM:
+ * The generic superclass for nodes that have children. 
+ * Not counting subclasses, there are exactly two such classes in XOM:
  * </p>
  * 
  * <ul>
@@ -41,7 +40,7 @@ import java.util.List;
  * </ul>
  * 
  * <p>
- * It provides methods to add and remove child nodes.
+ * This class provides methods to add and remove child nodes.
  * </p>
  * 
  * 
@@ -67,7 +66,7 @@ public abstract class ParentNode extends Node {
 
     /**
      * <p>
-     * Returns the number of child nodes this node has.
+     * Returns the number of child nodes this node contains.
      * This is always greater than or equal to 0.
      * </p>
      * 
@@ -83,7 +82,7 @@ public abstract class ParentNode extends Node {
      * <p>
      * Inserts a child node at the specified position.
      * The child node previously at that position (if any) 
-     * and all subsequent positions are moved up by one.
+     * and all subsequent child nodes are moved up by one.
      * That is, when inserting a node at 2, the old node at 2
      * is moved to 3, the old child at 3 is moved to 4, and so 
      * forth. Inserting at position 0 makes the child the first 
@@ -160,8 +159,8 @@ public abstract class ParentNode extends Node {
      * 
      * @return the node at the requested position
      * 
-     * @throws IndexOutOfBoundsException if the index is negative 
-     *     or greater than the number of children of the node - 1
+     * @throws IndexOutOfBoundsException if the index is negative or
+     *     greater than or equal to the number of children of this node
      */
     public Node getChild(int position) {
         
@@ -178,7 +177,7 @@ public abstract class ParentNode extends Node {
     /**
      *<p>
      * Returns the position of a node within the children of this
-     * node. This is a number from 0 to one less than the number of
+     * node. This is a number between 0 and one less than the number of
      * children of this node. It returns -1 if <code>child</code>
      * does not have this node as a parent.
      * </p>
@@ -205,8 +204,8 @@ public abstract class ParentNode extends Node {
      *
      * @return the node which was removed
      * 
-     * @throws IndexOutOfBoundsException if the index is negative 
-     *      or greater than the number of children of this node - 1
+     * @throws IndexOutOfBoundsException if the index is negative or
+     *     greater than or equal to the number of children of this node
      */
     public Node removeChild(int position) {
         
@@ -330,7 +329,7 @@ public abstract class ParentNode extends Node {
     /**
      * 
      * <p>
-     * Sets the URI against which relative URLs in this node will be 
+     * Sets the URI against which relative URIs in this node will be 
      * resolved. Generally, it's only necessary to set this property if
      * it's different from a node's parent's base URI, as it may
      * be in a document assembled from multiple entities
@@ -350,20 +349,20 @@ public abstract class ParentNode extends Node {
      * </p>
      * 
      * <p>
-     *   You can also add an <code>xml:base</code> attribute to 
-     *   an element in the same way you'd add any other namespaced
-     *   attribute to an element. If an element's base URI 
-     *   conflicts with its <code>xml:base</code> attribute,
-     *   then the value found in the <code>xml:base</code> attribute
-     *   is used. 
+     * You can also add an <code>xml:base</code> attribute to 
+     * an element in the same way you'd add any other namespaced
+     * attribute to an element. If an element's base URI 
+     * conflicts with its <code>xml:base</code> attribute,
+     * then the value found in the <code>xml:base</code> attribute
+     * is used. 
      * </p>
      * 
      * <p>
-     *   If the base URI is null or the empty string and there is 
-     *   no <code>xml:base</code> attribute, then the base URI is 
-     *   determined by the nearest ancestor node which does have a  
-     *   base URI. Moving such a node from one location to another 
-     *   can change its base URI.
+     * If the base URI is null or the empty string and there is 
+     * no <code>xml:base</code> attribute, then the base URI is 
+     * determined by the nearest ancestor node which does have a  
+     * base URI. Moving such a node from one location to another 
+     * can change its base URI.
      * </p>
      * 
      * @param URI the new base URI for this node
