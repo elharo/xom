@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -177,14 +177,11 @@ class TreeWalker {
               new ByteArrayInputStream(data)
             );    
             // why copy these variables here????
-            Builder parser1 = parser;
-            TreeWalker iterator1 = iterator;
-            String base1 = base;
-            Document doc1 = parser1.build(raw, base1);
-            walkTree(iterator1, doc1);
-            serialize(doc1, new ByteArrayOutputStream(3000000));
-            prettyPrint(doc1, new ByteArrayOutputStream(4000000));
-            serializeUTF16(doc1, new ByteArrayOutputStream(4000000));
+            Document doc = parser.build(raw, base);
+            walkTree(iterator, doc);
+            serialize(doc, new ByteArrayOutputStream(3000000));
+            prettyPrint(doc, new ByteArrayOutputStream(4000000));
+            serializeUTF16(doc, new ByteArrayOutputStream(4000000));
         }
     }
 
