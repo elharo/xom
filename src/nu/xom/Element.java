@@ -919,14 +919,7 @@ public class Element extends ParentNode {
               + " child already has a parent.");
         }
         else if (child.isElement()) {
-            if (child == this) {
-                throw new CycleException(
-                  "Cannot add a node to itself");  
-            }
-            else if (child.getChildCount() > 0 && isCycle(child, this)) {
-                throw new CycleException(
-                  "Cannot add an ancestor as a child");                   
-            }
+            checkCycle(child, this);
             return;            
         }
         else if (child.isText()
@@ -942,13 +935,19 @@ public class Element extends ParentNode {
     }
     
     
-    private static boolean isCycle(Node child, ParentNode parent) {       
+    private static void checkCycle(Node child, ParentNode parent) {       
         
-        while (parent != null) {
-            if (parent == child) return true;
-            parent = parent.getParent();
+        if (child == parent) {
+            throw new CycleException("Cannot add a node to itself");
         }
-        return false;
+        if (child.getChildCount() == 0) return;
+        while ((parent = parent.getParent()) != null) {
+            if (parent == child) {
+                throw new CycleException(
+                  "Cannot add an ancestor as a child");
+            }
+        }
+        return;
         
     }
 
