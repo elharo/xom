@@ -72,7 +72,7 @@ public class Document extends ParentNode {
               this.insertChild(child.copy(), i);
           }
       }
-      this.setActualBaseURI(doc.getActualBaseURI());
+      this.actualBaseURI = doc.actualBaseURI;
 
     }
 
@@ -272,16 +272,18 @@ public class Document extends ParentNode {
     
     /**
      * <p>
-     *   Returns the URI from which this document was loaded.
-     *   This method returns null if the base URI is not known;
-     *   for instance if the document was created in memory with
+     *   Returns the absolute URI from which this document was loaded.
+     *   This method returns the empty string if the base URI is not 
+     *   known; for instance if the document was created in memory with
      *   a constructor rather than by parsing an existing document.
      * </p>
      * 
      * @return the base URI of this document 
      */
     public final String getBaseURI() {       
-        return getActualBaseURI();       
+        String base = getActualBaseURI(); 
+        if (base == null) return "";
+        return base;
     }
 
     

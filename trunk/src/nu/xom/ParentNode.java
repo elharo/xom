@@ -51,8 +51,8 @@ import java.util.List;
  */
 public abstract class ParentNode extends Node {
 
-            List   children; 
-    private String actualBaseURI;
+              List   children; 
+    protected String actualBaseURI;
 
     /**
      * <p>

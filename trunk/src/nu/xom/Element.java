@@ -164,7 +164,7 @@ public class Element extends ParentNode {
             this.attributes = element.attributes.copy();
         } 
         
-        this.setActualBaseURI(element.getActualBaseURI());
+        this.actualBaseURI = element.actualBaseURI;
         
         // non-recursive algorithm for filling in children
         // doesn't yet work
@@ -1231,35 +1231,47 @@ public class Element extends ParentNode {
     /**
      * 
      * <p>
-     * Returns the base URI against which relative URIs in this
-     * element should be resolved. <code>xml:base</code> attributes
-     * <em>in the same entity</em> take precedence over the
+     * Returns the absolute base URI against which relative URIs in 
+     * this element should be resolved. <code>xml:base</code> 
+     * attributes <em>in the same entity</em> take precedence over the
      * actual base URI of the document where the element was found
-     * or whuch was set by <code>setBaseURI</code>.
+     * or which was set by <code>setBaseURI</code>.
      * </p>
      * 
      * <p>
-     * If possible, this URI is made absolute before it is returned 
+     * This URI is made absolute before it is returned 
      * by resolving the information in this element against the 
      * information in its parent element and document entity.
      * However, it is not always possible to fully absolutize the
-     * URI in all circumstances. Sometimes, a relative URI may be 
-     * returned instead. If the base URI cannot be determined,
-     * this method returns null. 
+     * URI in all circumstances. In this case, this method returns the
+     * empty string to indicate the base URI of the current entity.
      * </p>
      * 
      * <p>
      * If the element's <code>xml:base</code> attribute contains a 
-     * value that is a syntactically illegal URI (e.g. %GF.html") 
-     * then what is returned????. Currently this method can return
-     * null in several circumstances including this one.
-     * However, I may change that to returning the empty string.
-     * According to 4.2 of RFC 2396, "A URI reference that does 
+     * value that is a syntactically illegal URI (e.g. %GF.html"),
+     * the according to the xml:base errata, the value of this element's
+     * base URI is application dependent. XOM's choice in this case is 
+     * to behave as if the element did not have an <code>xml:base</code>
+     * attribute. 
+     * </p>
+     * 
+     * <p>
+     * According to section 4.2 of 
+     * <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>, 
+     * "A URI reference that does 
      * not contain a URI is a reference to the current document.  
      * In other words, an empty URI reference within a 
      * document is interpreted as a reference to the start of that document,
      * and a reference containing only a fragment identifier is a reference
      * to the identified fragment of that document."
+     * Also according to RFC 2396, "If none of the conditions described 
+     * in Sections 5.1.1--5.1.3 apply,
+     * then the base URI is defined by the context of the application.
+     * Since this definition is necessarily application-dependent, failing
+     * to define the base URI using one of the other methods may result in
+     * the same content being interpreted differently by different types of
+     * application." Based on this, if the URI
      * </p>
      * 
      * @return the base URI of this element 
@@ -1279,71 +1291,75 @@ public class Element extends ParentNode {
 
         // This element has an xml:base attribute
         if (baseAttribute != null) {
-            String base = baseAttribute.getValue();
+            String baseIRI = baseAttribute.getValue();
             // The base attribute contains an IRI, not a URI.
             // Thus the first thing we have to do is escape it
             // to convert illegal characters to hexadecimal escapes.
-            base = URIUtil.toURI(base);
+            String base = URIUtil.toURI(baseIRI);
+            if (legalURI(base)) {
             
-            if ("".equals(base)) {
-                // Look for nearest actual base URI
-                while (parent != null) {
-                    String parentActualBase = parent.getActualBaseURI();
-                    if (parentActualBase == null) {
-                        parent = parent.getParent();
+                if ("".equals(base)) {
+                    // Look for nearest actual base URI
+                    while (parent != null) {
+                        String parentActualBase = parent.getActualBaseURI();
+                        if (parentActualBase == null) {
+                            parent = parent.getParent();
+                        }
+                        else {
+                            // FIXME absolutize
+                            return parentActualBase;
+                        }
                     }
-                    else {
-                        // FIXME absolutize
-                        return parentActualBase;
-                    }
+                    return "";
                 }
-                return "";
-            }
-            else if (!URIUtil.isAbsolute(base)) {
-                // absolutize the URI if possible
-                if (parent != null) {                   
-                    String parentActualBase = parent.getActualBaseURI();
-                    // can element be considered to come from same entity as its parent?
-                    if (actualBase == null || actualBase.equals(parentActualBase)) {
-                        try {
-                            String parentBase = parent.getBaseURI();
-                            if (!nu.xom.URIUtil.isOpaque(parentBase)) {
-                                base = URIUtil.absolutize(parentBase, base);    
+                else if (!URIUtil.isAbsolute(base)) {
+                    // absolutize the URI if possible
+                    if (parent != null) {                   
+                        String parentActualBase = parent.getActualBaseURI();
+                        // can element be considered to come from same entity as its parent?
+                        if (actualBase == null || actualBase.equals(parentActualBase)) {
+                            try {
+                                String parentBase = parent.getBaseURI();
+                                if (!nu.xom.URIUtil.isOpaque(parentBase)) {
+                                    base = URIUtil.absolutize(parentBase, base);    
+                                }
+                            }
+                            catch (MalformedURIException ex) {
+                                return "";
                             }
                         }
-                        catch (MalformedURIException ex) {
-                            return null;
-                        }
-                    }
-                    else {
-                        try {
-                            if (!URIUtil.isOpaque(actualBase)) {
-                                base = URIUtil.absolutize(actualBase, base);    
-                            } 
-                        }
-                        catch (MalformedURIException ex) {
-                            // System.err.println("Oops " + base);
-                            return null;
+                        else {
+                            try {
+                                if (!URIUtil.isOpaque(actualBase)) {
+                                    base = URIUtil.absolutize(actualBase, base);    
+                                } 
+                            }
+                            catch (MalformedURIException ex) {
+                                return "";
+                            }
                         }
                     }
                 }
+                
+                try {
+                    Verifier.checkURI(base);
+                }
+                catch (MalformedURIException ex) {
+                    base = "";
+                }
+                
+                return base;
+                
             }
-            
-            try {
-                Verifier.checkURI(base);
-            }
-            catch (MalformedURIException ex) {
-                base = null;
-            }
-            
-            return base;
-            
         }
         
         // This element does not have an xml:base attribute
         // 2. If this node doesn't have a parent,
         //    then return its own base URI.
-        if (parent == null) return actualBase;
+        if (parent == null) {
+            if (actualBase != null) return actualBase;
+            return "";
+        }
                
         // 3. This element does not declare a base URI,
         //    so it uses its parent's base URI.
@@ -1357,11 +1373,25 @@ public class Element extends ParentNode {
                
         // The parent is loaded from a different entity.
         // Therefore just return the actual base.
-        return actualBase;    
+        if (actualBase != null) return actualBase;
+        return "";
         
     }
         
     
+    private boolean legalURI(String base) {
+        
+        try {
+            Verifier.checkURI(base);
+            return true;
+        }
+        catch (MalformedURIException ex) {
+            return false;
+        }
+        
+    }
+
+
     /**
      * <p>
      * Returns a string containing the XML serialization of this 
