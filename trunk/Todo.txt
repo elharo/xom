@@ -50,6 +50,7 @@ Templates or Transformer object to allow
 additional properties to be configured
 
 a setInternalDTDSubset mehod that simply uses a parser to check the subset????
+but what about entity references?
 
 should Builder have an option to cache all external entities so it doesn't keep reloading them, perhaps via a SAX EntityResolver.
 
@@ -61,6 +62,8 @@ Does XSLTransform need a setParameter method to set values of xsl:params?
 
 Should Builder/NodeFactory have a build(Document) method that allows one to pass an existing document through a node factory without reserializing? 
 
+A FastSerializer that does no indenting, no line-breaking, no character sets
+except UTF-8 and UTF-16, no normalization, and does not use TextWriter
 
 1.0.1:
 --------
@@ -73,13 +76,10 @@ See http://lists.ibiblio.org/pipermail/xom-interest/2004-January/000898.html
 
 He also suggests using char[] arrays internally rather than Strings
 
-Optimize toXML for Elements and Documents by adding a package private
-toXML(StringBuffer method)
-
 dvholten suggests zipping characters.dat to save space
 This gets almost 99% compression. How many times would I have to reload it?
 
-Can XInclude be rewritten to be non-recursive?
+Can XInclude be rewritten to be non-recursive? Isn't it already?
 
 with XIncluder would it make more sense to use a private class
 that stores all the variables rather than constantly passing them
@@ -96,22 +96,42 @@ A streaming serializer based on a  NodeFactory that can serialize arbitrarily la
 
 should I synchronize a single static TransformerFactory object inside XSLTransform?
 
+Would it make sense to cache previously verified namespace prefixes 
+to avoid checking them every element and attribute? 
+
+Ditto, would it make sense to hash previously looked up names?
+Must profile this. 
+
+Add a Fetch task that loads code from CVS
+
+XInclude:  In order to minimize encoding errors for parse="text" processing,
+please change the definition of the encoding attribute to include a
+requirement that if the attribute has a legal value and the encoding is
+supported and the protocol supports such action, that the server is
+informed of the encoding attribute value, e.g. for encoding="iso-8859-2"
+and a HTTP request, that the request includes
+
+  Accept-Charset: iso-8859-2
+
+such that the server has a chance to provide a proper representation.
+
+would it make since to start with a larger size for attributes and children when building and trimToSize when done?
+
 
 Before 1.0:
 -----------
 
-register XOM as a trademark
-
-Move history to a new page, and rewrite main page
-
-
-Before 1.0RC1:
------------
+Add TM marks to XOM on the web page
 
 Update all versions to 1.0
 
-move servlets.jar to lib2?
-move tagsoup.jar to lib2?
+===============
+Done 1.0b8/RC2:
+===============
+
+The TagSoup and servlet JARs are no longer bundled. They're not needed to run XOM, just for one of the samples and for the JavaDoc
+
+A few more optimizations to speed up the checking of namespace URIs, and a variety of other operations.
 
 ===============
 Done 1.0b7:
