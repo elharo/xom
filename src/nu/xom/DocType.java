@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -68,7 +68,6 @@ package nu.xom;
  *   This restriction may be relaxed in a future version. 
  * </p>
  * 
- *
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  * 
@@ -107,6 +106,7 @@ public class DocType extends LeafNode {
         setPublicID(publicID);
     }
 
+    
     /**
      * <p>
      * Creates a new document type declaration with a system ID
@@ -135,20 +135,21 @@ public class DocType extends LeafNode {
      * </p>
      * 
      * @param rootElementName the name specified for the root element
-     * @throws IllegalNameException  if the rootElementName is not 
+     * @throws IllegalNameException if the rootElementName is not 
      *      a legal XML 1.0 name
      */
     public DocType(String rootElementName) {
         setRootElementName(rootElementName);    
     }
 
+    
     /**
      * <p>
      * Creates a new <code>DocType</code> that's a copy of its 
      * argument. The copy has the same data but no parent document.
      * </p>
      * 
-     * @param doctype The DocType to copy
+     * @param doctype the DocType to copy
      */
     public DocType(DocType doctype) {
         this.internalDTDSubset = doctype.internalDTDSubset;
@@ -156,6 +157,7 @@ public class DocType extends LeafNode {
         this.systemID = doctype.systemID;
         this.rootName = doctype.rootName;    
     }
+    
     
     private DocType() {}
     
@@ -185,6 +187,7 @@ public class DocType extends LeafNode {
         this.rootName = name;
     }
 
+    
     /**
      * <p>
      * Returns the name the document type declaration specifies 
@@ -211,6 +214,7 @@ public class DocType extends LeafNode {
         return internalDTDSubset;
     }
 
+    
     final void setInternalDTDSubset(String internalSubset) {
         this.internalDTDSubset = internalSubset;   
     }
@@ -237,11 +241,38 @@ public class DocType extends LeafNode {
               "Cannot have a public ID without a system ID"
             );   
         }
-        Verifier.checkPublicID(id);
+        
+        if (id != null) {
+            int length = id.length();
+            if (length != 0) {
+                if (Verifier.isXMLSpaceCharacter(id.charAt(0))) {
+                    throw new IllegalDataException("Initial white space "
+                      + "in public IDs is not round trippable.");           
+                }
+                if (Verifier.isXMLSpaceCharacter(id.charAt(length - 1))) {
+                    throw new IllegalDataException("Trailing white space " 
+                      + "in public IDs is not round trippable.");           
+                }
+                
+                for (int i = 0; i < length; i++) {
+                    char c = id.charAt(i);
+                    if (!isXMLPublicIDCharacter(c)) {
+                        throw new IllegalDataException("The character 0x"   
+                          + Integer.toHexString(c) 
+                          + " is not allowed in public IDs");
+                    }
+                    if (c == ' ' && id.charAt(i-1) == ' ') {
+                        throw new IllegalDataException("Multiple consecutive "
+                          + "spaces in public IDs are not round trippable.");  
+                    }
+                }  
+            }
+        }
         checkPublicID(id);
         this.publicID = id;
     }
 
+    
     /**
      * <p>
      * Returns the public ID of the external DTD subset. 
@@ -255,6 +286,7 @@ public class DocType extends LeafNode {
         return publicID;
     }
 
+    
     /**
      * <p>
      * Sets the system ID for the external DTD subset.
@@ -277,10 +309,26 @@ public class DocType extends LeafNode {
              "Cannot remove system ID without removing public ID first"
             );   
         }
-        Verifier.checkSystemLiteral(id);
+
+        if (id != null) {
+            if (id.indexOf('"') != -1 && id.indexOf('\'') != -1) {
+                throw new IllegalDataException(
+                 "System literal contains both single and double quotes");
+            }
+            
+            Verifier.checkURI(id);
+            
+            if (id.indexOf('#') != -1) {
+                throw new IllegalDataException(
+                  "System literals cannot contain fragment identifiers"
+                );
+            }
+        }
+        
         checkSystemID(id);
         this.systemID = id;
     }
+    
     
     /**
      * <p>
@@ -314,6 +362,7 @@ public class DocType extends LeafNode {
      */
     protected void checkRootElementName(String name) {}
 
+    
     /**
      * <p>
      * Subclasses can override this method to perform additional 
@@ -332,6 +381,7 @@ public class DocType extends LeafNode {
      */
     protected void checkSystemID(String systemID) {}
 
+    
     /**
      * <p>
      * Subclasses can override this method to perform additional 
@@ -351,6 +401,7 @@ public class DocType extends LeafNode {
      */
     protected void checkPublicID(String publicID) {}
 
+    
     /**
      * <p>
      * Returns the empty string.
@@ -383,6 +434,7 @@ public class DocType extends LeafNode {
         return "[" + getClass().getName() + ": " + rootName + "]";
     }
 
+    
     /**
      * <p>
      *   This method returns a copy of this <code>DocType</code> 
@@ -399,6 +451,7 @@ public class DocType extends LeafNode {
     public Node copy() {      
         return new DocType(this);
     }
+    
 
     /**
      * <p>
@@ -441,9 +494,114 @@ public class DocType extends LeafNode {
         return result.toString();
     }
 
+
     boolean isDocType() {
         return true;   
     } 
 
+    
+    private static boolean isXMLPublicIDCharacter(char c) {
 
+        // PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
+        // but I'm deliberately not allowing carriage return and linefeed
+        // because the parser normalizes them to a space. They are not
+        // roundtrippable.
+        switch(c) {
+            case ' ': return true;
+            case '!': return true;
+            case '"': return false;
+            case '#': return true;
+            case '$': return true;
+            case '%': return true;
+            case '&': return false;
+            case '\'': return true;
+            case '(': return true;
+            case ')': return true;
+            case '*': return true;
+            case '+': return true;
+            case ',': return true;
+            case '-': return true;
+            case '.': return true;
+            case '/': return true;
+            case '0': return true;
+            case '1': return true;
+            case '2': return true;
+            case '3': return true;
+            case '4': return true;
+            case '5': return true;
+            case '6': return true;
+            case '7': return true;
+            case '8': return true;
+            case '9': return true;
+            case ':': return true;
+            case ';': return true;
+            case '<': return false;
+            case '=': return true;
+            case '>': return false;
+            case '?': return true;
+            case '@': return true;
+            case 'A': return true;
+            case 'B': return true;
+            case 'C': return true;
+            case 'D': return true;
+            case 'E': return true;
+            case 'F': return true;
+            case 'G': return true;
+            case 'H': return true;
+            case 'I': return true;
+            case 'J': return true;
+            case 'K': return true;
+            case 'L': return true;
+            case 'M': return true;
+            case 'N': return true;
+            case 'O': return true;
+            case 'P': return true;
+            case 'Q': return true;
+            case 'R': return true;
+            case 'S': return true;
+            case 'T': return true;
+            case 'U': return true;
+            case 'V': return true;
+            case 'W': return true;
+            case 'X': return true;
+            case 'Y': return true;
+            case 'Z': return true;
+            case '[': return false;
+            case '\\': return false;
+            case ']': return false;
+            case '^': return false;
+            case '_': return true;
+            case '`': return false;
+            case 'a': return true;
+            case 'b': return true;
+            case 'c': return true;
+            case 'd': return true;
+            case 'e': return true;
+            case 'f': return true;
+            case 'g': return true;
+            case 'h': return true;
+            case 'i': return true;
+            case 'j': return true;
+            case 'k': return true;
+            case 'l': return true;
+            case 'm': return true;
+            case 'n': return true;
+            case 'o': return true;
+            case 'p': return true;
+            case 'q': return true;
+            case 'r': return true;
+            case 's': return true;
+            case 't': return true;
+            case 'u': return true;
+            case 'v': return true;
+            case 'w': return true;
+            case 'x': return true;
+            case 'y': return true;
+            case 'z': return true;
+        }
+
+        return false;
+    }
+
+    
 }
