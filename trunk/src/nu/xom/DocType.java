@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -52,17 +52,8 @@ package nu.xom;
  * 
  * </ul>
  * 
- * <p>
- *   The first three properties are read-write.
- *   The internal DTD subset is read-only. 
- *   XOM fills it in when a document is read by a parser.
- *   However, it cannot be changed, because XOM cannot 
- *   currently check that an internal DTD subset is well-formed.
- *   This restriction may be relaxed in a future version. 
- * </p>
- * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d1
  * 
  */
 public class DocType extends Node {
@@ -71,7 +62,6 @@ public class DocType extends Node {
     private String rootName;
     private String systemID;
     private String publicID;
-    // Internal DTD subset purely for parsing
     private String internalDTDSubset = "";
 
     
@@ -186,7 +176,7 @@ public class DocType extends Node {
     /**
      * <p>
      * Sets the name the document type declaration specifies 
-     * for the  root element. In an invalid document, this may 
+     * for the root element. In an invalid document, this may 
      * not be the same as the actual root element name.
      * </p>
      * 
@@ -221,7 +211,40 @@ public class DocType extends Node {
     }
 
     
-    final void setInternalDTDSubset(String internalSubset) {
+    /**
+     * <p>
+     * Sets the internal DTD subset; that is the part of the DTD 
+     * between <code>[</code> and <code>]</code>. Changing the 
+     * internal DTD subset does not affect the instance document. 
+     * That is, default attribute values and attribute types 
+     * specified in the new internal DTD subset are not applied to the
+     * corresponding elements in the instance document. Furthermore,
+     * there's no guarantee that the instance document is or is not
+     * valid with respect to the declarations in the new internal 
+     * DTD subset.
+     * </p>
+     * 
+     * @param subset the internal DTD subset
+     * 
+     * @throws IllegalDataException if subset is not 
+     *     a legal XML 1.0 internal DTD subset
+     * 
+     * @since 1.1
+     */
+    public final void setInternalDTDSubset(String subset) {
+        
+        if (subset != null) {
+            Verifier.checkInternalDTDSubset(subset);
+            fastSetInternalDTDSubset(subset);
+        }
+        else {
+            this.internalDTDSubset = "";              
+        }
+        
+    }
+
+    
+    final void fastSetInternalDTDSubset(String internalSubset) {
         this.internalDTDSubset = internalSubset;   
     }
 
@@ -239,6 +262,7 @@ public class DocType extends Node {
         return publicID;
     }
 
+    
     /**
      * <p>
      * Sets the public ID for the external DTD subset.

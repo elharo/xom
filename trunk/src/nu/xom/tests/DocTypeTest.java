@@ -43,7 +43,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d1
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -72,6 +72,7 @@ public class DocTypeTest extends XOMTestCase {
 
     
     public void testToXML() {
+        
         String expected 
           = "<!DOCTYPE " + name + " PUBLIC \"" 
             + publicID + "\" \"" + systemID + "\">";
@@ -84,11 +85,13 @@ public class DocTypeTest extends XOMTestCase {
           "<!DOCTYPE " + name + ">",
           doctypeRootOnly.toXML()
         );    
+        
     }
     
     
     public void testToXMLWithInternalDTDSubset() 
       throws ValidityException, ParsingException, IOException {
+        
         String data = "<?xml version=\"1.0\"?>\n" 
           + "<!DOCTYPE root [\n  <!ELEMENT test (#PCDATA)>\n]>"
           + "\n<test />\n";  
@@ -270,6 +273,59 @@ public class DocTypeTest extends XOMTestCase {
             fail("Allowed colon to begin root element name");
         }
         catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testAllowEmptyInternalDTDSubset() {
+        
+        DocType doctype = new DocType("root");
+        doctype.setInternalDTDSubset("");
+        assertEquals("", doctype.getInternalDTDSubset());
+        
+    }
+
+    
+    public void testAllowNullInternalDTDSubset() {
+        
+        DocType doctype = new DocType("root");
+        doctype.setInternalDTDSubset(null);
+        assertEquals("", doctype.getInternalDTDSubset());
+        
+    }
+
+    
+    public void testSetInternalDTDSubset() {
+        
+        DocType doctype = new DocType("root");
+        doctype.setInternalDTDSubset("<!ELEMENT test (PCDATA)>");
+        assertEquals("<!ELEMENT test (PCDATA)>", doctype.getInternalDTDSubset());
+        
+    }
+
+    
+    public void testSetInternalDTDSubsetWithEntityThatPointsToNonexistentURL() {
+        
+        String subset = 
+          "<!ENTITY % test SYSTEM 'http://www.example.com/notexists.dtd'>\n"
+          + "%test;\n";
+        DocType doctype = new DocType("root");
+        doctype.setInternalDTDSubset(subset);
+        assertEquals(subset, doctype.getInternalDTDSubset());
+        
+    }
+
+    
+    public void testSetMalformedInternalDTDSubset() {
+        
+        DocType doctype = new DocType("root");
+        try {
+            doctype.setInternalDTDSubset("<!ELEMENT test (PCDATA>");
+            fail("Allowed malformed internal DTD subset");
+        }
+        catch (WellformednessException success) {
             assertNotNull(success.getMessage());
         }
         
