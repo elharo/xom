@@ -47,8 +47,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * <p>
  * The <code>Builder</code> class is responsible  
  * for creating XOM <code>Document</code> objects 
- * from a URL, file, or input stream by reading an  
- * XML document. A SAX parser is used to read the   
+ * from a URL, file, string, or input stream by reading   
+ * an XML document. A SAX parser is used to read the   
  * document and report any well-formedness errors.
  * </p>
  * 
@@ -67,14 +67,12 @@ public class Builder {
      * following order:
      * </p>
      * 
-     * need to check Xerces 1.x????
-     * 
      * <ol>
-     * <li>Xerces 2.x</li>
+     * <li>Xerces 2.x (a.k.a. IBM XML parser for Java)</li>
+     * <li>Crimson</li>
      * <li>Piccolo</li>
      * <li>GNU &AElig;lfred</li>
      * <li>Oracle</li>
-     * <li>Crimson</li>
      * <li>XP</li>
      * <li>Saxon's &AElig;lfred</li>
      * <li>dom4j's &AElig;lfred</li>
@@ -83,7 +81,7 @@ public class Builder {
      * </ol>
      * 
      * <p>
-     * Parsers must support the 
+     * Parsers must implicitly or explicitly support the 
      * http://xml.org/sax/features/external-general-entities
      * and
      * http://xml.org/sax/features/external-parameter-entities
@@ -142,10 +140,10 @@ public class Builder {
     // These are stored in the order of preference.
     private static String[] parsers = {
         "org.apache.xerces.parsers.SAXParser",
-        "com.bluecast.xml.Piccolo",
         "gnu.xml.aelfred2.XmlReader",
-        "oracle.xml.parser.v2.SAXParser",
         "org.apache.crimson.parser.XMLReaderImpl",
+        "com.bluecast.xml.Piccolo",
+        "oracle.xml.parser.v2.SAXParser",
         "com.jclark.xml.sax.SAX2Driver",
         "com.icl.saxon.aelfred.SAXDriver",
         "org.dom4j.io.aelfred.SAXDriver"
@@ -226,7 +224,13 @@ public class Builder {
         
         
     }        
-
+    
+    // This is one of the few places where the 
+    // SAXness is exposed. What if the object is changed after
+    // being passed to this method? Wrong features set, etc.????
+    // Could/should I eliminate this? Perhpas after adding
+    // get/setFeature/property?
+    
     /**
      * <p>
      * Creates a new <code>Builder</code> based 
@@ -440,7 +444,6 @@ public class Builder {
       throws ParsingException, ValidityException, IOException {
 
         InputSource source = new InputSource(in);
-        // parser.setEntityResolver(new BaseRelativeResolver(null));
         return build(source);
         
     }
@@ -470,7 +473,6 @@ public class Builder {
         baseURI = canonicalizeURL(baseURI);
         InputSource source = new InputSource(in);
         source.setSystemId(baseURI);
-        // parser.setEntityResolver(new BaseRelativeResolver(baseURI));
         return build(source);
         
     }
@@ -521,7 +523,6 @@ public class Builder {
         }
         
         String base = url.toString();
-        // parser.setEntityResolver(new BaseRelativeResolver(base));
         return build(fin, base);
         
     }
@@ -546,7 +547,6 @@ public class Builder {
       throws ParsingException, ValidityException, IOException {
 
         InputSource source = new InputSource(in);
-        // parser.setEntityResolver(new BaseRelativeResolver(null));
         return build(source);
         
     }
@@ -575,7 +575,6 @@ public class Builder {
         baseURI = canonicalizeURL(baseURI);
         InputSource source = new InputSource(in);
         source.setSystemId(baseURI);
-        // parser.setEntityResolver(new BaseRelativeResolver(baseURI));
         return build(source);
         
     }
@@ -602,9 +601,7 @@ public class Builder {
     public Document build(String document, String baseURI) 
       throws ParsingException, ValidityException, IOException {
 
-
         Reader reader = new StringReader(document);
-        // parser.setEntityResolver(new BaseRelativeResolver(canonicalizeURL(baseURI)));
         return build(reader, baseURI);
         
     }
@@ -637,9 +634,9 @@ public class Builder {
      * @param in the <code>InputSource</code> from 
      *     which the document is read. 
      * 
-     * @return  the parsed <code>Document</code>
+     * @return the parsed <code>Document</code>
      * 
-     * @throws ParsingException    if a well-formedness error is detected
+     * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk
      *     prevents the doucment from being read
      * @throws ValidityException if a validity error is detected. This 
@@ -655,36 +652,55 @@ public class Builder {
         catch (SAXInvalidException ex) {
             // This should only be thrown if validation 
             // was requested from the constructor 
-            throw new ValidityException(
+            ValidityException vex = new ValidityException(
                 ex.getMessage(),
                 ex.getLineNumber(),
                 ex.getColumnNumber(),
                 ex);
+            vex.setPartialDocument(getCurrentDocument());
+            throw vex;
         }
         catch (SAXParseException ex) {
             // yet another work around for a Crimson bug
             Exception nested = ex.getException();
             if (nested instanceof SAXInvalidException) {
-                throw new ValidityException(
+                ValidityException vex = new ValidityException(
                     nested.getMessage(),
                     ((SAXInvalidException) nested).getLineNumber(),
                     ((SAXInvalidException) nested).getColumnNumber(),
-                    nested);                
+                    nested); 
+                vex.setPartialDocument(getCurrentDocument());
+                throw vex;               
             }
             // end workaround
-            throw new ParsingException(
+            ParsingException pex = new ParsingException(
                 ex.getMessage(),
                 ex.getLineNumber(),
                 ex.getColumnNumber(),
                 ex);
+            pex.setPartialDocument(getCurrentDocument());
+            throw pex;
         }
         catch (SAXException ex) {
-            throw new ParsingException(ex.getMessage(), ex);
+            ParsingException pex 
+              = new ParsingException(ex.getMessage(), ex);
+            pex.setPartialDocument(getCurrentDocument());
+            throw pex;
         }
 
-        XOMHandler handler = (XOMHandler) (parser.getContentHandler());
-        return handler.getDocument();
+        return getCurrentDocument();
         
+    }
+    
+    private Document getCurrentDocument() {
+        XOMHandler handler = (XOMHandler) (parser.getContentHandler());
+        Document result = handler.getDocument();
+        if (result.getRootElement()
+                  .getNamespaceURI()
+                  .equals("http://www.xom.nu/fakeRoot")) {
+            return null;
+        }
+        return result;        
     }
     
     private static class ValidityRequired implements ErrorHandler {
