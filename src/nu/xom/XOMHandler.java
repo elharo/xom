@@ -39,24 +39,24 @@ import org.xml.sax.ext.LexicalHandler;
 class XOMHandler 
   implements ContentHandler, LexicalHandler, DeclHandler, DTDHandler {
 
-    private Document     document;
-    private String       documentBaseURI;
+    protected Document     document;
+    protected String       documentBaseURI;
     
     // parent is never null. It is the node we're adding children 
     // to. current corresponds to the most recent startElement()
     // method and may be null if we've skipped it (makeElement
     // returned null.) If we didn't skip it, then parent and
     // current should be the same node.
-    private ParentNode   parent;
-    private ParentNode   current;
-    private Stack        parents;
-    private boolean      inProlog;
-    private boolean      inDTD;
-    private int          position; // current number of items in prolog
-    private Locator      locator; 
-    private DocType      doctype;
-    private StringBuffer internalDTDSubset;
-    private NodeFactory  factory;
+    protected ParentNode   parent;
+    protected ParentNode   current;
+    protected Stack        parents;
+    protected boolean      inProlog;
+    protected boolean      inDTD;
+    protected int          position; // current number of items in prolog
+    protected Locator      locator; 
+    protected DocType      doctype;
+    protected StringBuffer internalDTDSubset;
+    protected NodeFactory  factory;
     
     
     XOMHandler(NodeFactory factory) {
@@ -145,7 +145,11 @@ class XOMHandler
             }         
             
             // Attach the attributes; this must be done before the
-            // namespaces are attached.           
+            // namespaces are attached.      
+            // XXX pull out length
+            
+            // XXX we've got a pretty good guess at how many attributes there
+            // will be here; we should ensureCapacity up to that length
             for (int i = 0; i < attributes.getLength(); i++) {
                 String qName = attributes.getQName(i);
                 if (qName.startsWith("xmlns:") || qName.equals("xmlns")) {               
@@ -197,14 +201,13 @@ class XOMHandler
                     }                
                 }             
             }
-
             
             // this is the new parent
             parent = element;
         }
         
     }
-    
+
     
     public void endElement(
       String namespaceURI, String localName, String qualifiedName) {
@@ -268,7 +271,7 @@ class XOMHandler
     }
     
     
-    private static Attribute.Type convertStringToType(String saxType) {
+    static Attribute.Type convertStringToType(String saxType) {
     
         if (saxType.equals("CDATA"))    return Attribute.Type.CDATA;
         if (saxType.equals("ID"))       return Attribute.Type.ID;
@@ -291,7 +294,7 @@ class XOMHandler
     }
   
     
-    private StringBuffer buffer;
+    protected StringBuffer buffer;
   
     public void characters(char[] text, int start, int length) {
         buffer.append(text, start, length); 
@@ -410,7 +413,7 @@ class XOMHandler
     }
 
     
-    private boolean inExternalSubset = false;
+    protected boolean inExternalSubset = false;
 
     // We have a problem here. Xerces gets this right,
     // but Crimson and possibly other parsers don't properly
@@ -426,8 +429,8 @@ class XOMHandler
     }
     
     
-    private boolean inCDATA = false;
-    private boolean finishedCDATA = false;
+    protected boolean inCDATA = false;
+    protected boolean finishedCDATA = false;
     
     public void startCDATA() {
         if (buffer.length() == 0) inCDATA = true;
