@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d1
  *
  */
 class XOMHandler 
@@ -406,7 +406,7 @@ class XOMHandler
         
         inDTD = false;
         if (doctype != null) {
-            doctype.setInternalDTDSubset(internalDTDSubset.toString());
+            doctype.fastSetInternalDTDSubset(internalDTDSubset.toString());
         }
         
     }

@@ -179,7 +179,7 @@ public class Builder {
     };
 
     
-    private static XMLReader findParser(boolean validate) {
+    static XMLReader findParser(boolean validate) {
         
         // first look for Xerces; we only trust Xerces if
         // we set it up; and we need to configure it specially
@@ -1247,7 +1247,7 @@ public class Builder {
     /**
      * <p>
      * Returns this builder's <code>NodeFactory</code>. It may return
-     * null if a factory was not supplied when the builder was created. XXX
+     * null if a factory was not supplied when the builder was created.
      * </p>
      * 
      * @return the node factory that was specified in the constructor

@@ -23,7 +23,15 @@ package nu.xom;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.StringTokenizer;
+
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 /**
  * <p>
@@ -32,7 +40,7 @@ import java.util.StringTokenizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d1
  * 
  */
 final class Verifier {
@@ -1302,7 +1310,61 @@ final class Verifier {
             throw ex;
         }        
 
+    }
+
+    
+    // For use in checking internal DTD subsets 
+    private static XMLReader parser;
+    private static InputSource empty;
+
+    static synchronized void checkInternalDTDSubset(String subset) {
+
+        if (parser == null) {
+            empty = new InputSource(new EmptyReader());
+            parser = Builder.findParser(false);
+            // Now let's stop this parser from loading any external
+            // entities the subset references
+            parser.setEntityResolver(new EntityResolver() {
+
+                public InputSource resolveEntity(String publicID, String systemID) {
+                    return empty;
+                }   
+            
+            });
+        }
+        
+        String doc = "<!DOCTYPE root [" + subset + "]><root/>";
+        try {
+            parser.parse(new InputSource(new StringReader(doc)));
+        }
+        catch (SAXException ex) {
+            IllegalDataException idex = new IllegalDataException(
+              "Malformed internal DTD subset: " + ex.getMessage(), ex);
+            idex.setData(subset);
+            throw idex;
+        }
+        catch (IOException ex) {
+            throw new RuntimeException("BUG: I don't think this can happen");
+        }
+        
     } 
+    
+    
+    // A reader that immediately returns end of stream. This is a great
+    // big hack to avoid reading anything when setting the internal 
+    // DTD subset. I could use the 
+    // http://xml.org/sax/features/external-parameter-entities SAX 
+    // feature, but many  parsers don't reliably implement that so  
+    // instead we simply pretend that all URLs point to empty files.
+    private static class EmptyReader extends Reader {
+
+        public int read(char[] text, int start, int length) throws IOException {
+            return -1;
+        }
+
+        public void close() {}
+        
+    }
 
     
 }
