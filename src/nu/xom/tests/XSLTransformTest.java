@@ -1254,15 +1254,6 @@ public class XSLTransformTest extends XOMTestCase {
                         // Xalan bug: XXX verify and report
                         continue;
                     } 
-                    else if ("Whitespaces__91433".equals(id)
-                      || "Whitespaces__91435".equals(id)
-                      || "Whitespaces__91443".equals(id)
-                      || "Whitespaces__91445".equals(id)
-                      || "Whitespaces__91449".equals(id)
-                      || "Whitespaces__91441".equals(id)) {
-                        // I think my white space stripping changes the result
-                        continue;
-                    }
                     else if ("BVTs_bvt041".equals(id) || "BVTs_bvt063".equals(id)
                         || "BVTs_bvt070".equals(id)) {
                         // Xalan bundled with JDK 1.4.2_05 does not recover 
@@ -1272,6 +1263,9 @@ public class XSLTransformTest extends XOMTestCase {
                         continue;
                     } 
                     Document inputDoc = builder.build(input);
+                    if (id.equals("Whitespaces__91444")) {
+                        System.err.println(inputDoc.toXML());
+                    }
                     XSLTransform xform;
                     if (strip) xform = new XSLTransform(styleDoc, stripper);
                     else xform = new XSLTransform(styleDoc);
@@ -1415,15 +1409,10 @@ public class XSLTransformTest extends XOMTestCase {
                                // Requires disable-output-escaping 
                                 continue;
                             } 
-                            else if ("Whitespaces__91434".equals(id)
-                              || "Whitespaces__91436".equals(id)        
-                              || "Whitespaces__91442".equals(id)        
-                              || "Whitespaces__91444".equals(id)        
-                              || "Whitespaces__91446".equals(id)        
-                              || "Whitespaces__91450".equals(id)        
-                            ) {
-                                // May be a Xalan bug
-                                // See http://nagoya.apache.org/jira/browse/XALANJ-1946 
+                            else if ("Whitespaces__91443".equals(id)
+                              || "Whitespaces__91444".equals(id)) { 
+                                // Xalan bug
+                                // See http://nagoya.apache.org/jira/browse/XALANJ-1969 
                                 continue;
                             } 
                             else if ("AVTs__77591".equals(id)) {
