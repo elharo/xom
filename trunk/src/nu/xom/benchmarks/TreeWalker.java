@@ -24,6 +24,7 @@
 package nu.xom.benchmarks;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +38,6 @@ import nu.xom.Node;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.ValidityException;
-
 
 /**
  * 
@@ -66,21 +66,33 @@ class TreeWalker {
         TreeWalker iterator = new TreeWalker();
         Builder parser = new Builder();
         try {
+            // Separate out the basic I/O by storing document
+            // in byte array first. However, this only caches the
+            // document itself. Any DTD the document references will
+            // still need to be read from the actual file.
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            URL u = new URL(args[0]);
+            InputStream in = u.openStream();
+            for (int c = in.read(); c != -1; c = in.read()) {
+                out.write(c);   
+            }
+            out.flush();
+            out.close();
+            byte[] data = out.toByteArray();            
+            warmup(data, parser, iterator, 5, args[0]);
+            InputStream raw = new BufferedInputStream(
+              new ByteArrayInputStream(data)
+            );
             
-            warmup(args[0], parser, iterator, 5);
-            
+            // try to avoid garbage collection pauses
             System.gc(); System.gc(); System.gc();
             
-            
-            // Can I separate out the I/O by storing document
-            // in byte array first????
             long prebuild = System.currentTimeMillis();         
             // Read the entire document into memory
-            Document document = build(args[0], parser);
+            Document document = build(data, args[0], parser);
             long postbuild = System.currentTimeMillis();
             System.out.println((postbuild - prebuild) 
-              + "ms to build the tree");
-              
+              + "ms to build the tree");  
            
             long prewalk = System.currentTimeMillis();         
             // Process it starting at the root
@@ -89,44 +101,47 @@ class TreeWalker {
             System.out.println((postwalk - prewalk) 
               + "ms to walk tree");
             
-            OutputStream out = new ByteArrayOutputStream(3000000);
+            OutputStream result = new ByteArrayOutputStream(3000000);
 
             long preserialize = System.currentTimeMillis();
-            serialize(document, out);
+            serialize(document, result);
             long postserialize = System.currentTimeMillis();
             System.out.println((postserialize - preserialize) 
               + "ms to serialize the tree in UTF-8");
 
             out = new ByteArrayOutputStream(4000000);
             long preprettyserialize = System.currentTimeMillis();
-            prettyPrint(document, out);
+            prettyPrint(document, result);
             long postprettyserialize = System.currentTimeMillis();
-            System.out.println((postprettyserialize - preprettyserialize) 
+            System.out.println(
+             (postprettyserialize - preprettyserialize) 
               + "ms to pretty print the tree in UTF-8");
 
             long preUTF16serialize = System.currentTimeMillis();
-            serializeUTF16(document, out);
+            serializeUTF16(document, result);
             long postUTF16serialize = System.currentTimeMillis();
-            System.out.println((postUTF16serialize - preUTF16serialize) 
+            System.out.println((postUTF16serialize - preUTF16serialize)
               + "ms to serialize the tree in UTF-16");
         }
-        catch (IOException e) { 
-          System.out.println(e); 
+        catch (IOException ex) { 
+          System.out.println(ex); 
         }
-        catch (ParsingException e) { 
-          System.out.println(e); 
+        catch (ParsingException ex) { 
+          System.out.println(ex); 
         }
   
     }
 
-    private static void serializeUTF16(Document document, OutputStream out)
+    private static void serializeUTF16(
+      Document document, OutputStream out)
         throws UnsupportedEncodingException, IOException {
         Serializer serializer = new Serializer(out, "UTF-16");
         serializer.write(document);
         serializer.flush();
     }
 
-    private static void prettyPrint(Document document, OutputStream out)
+    private static void prettyPrint(
+      Document document, OutputStream out)
         throws UnsupportedEncodingException, IOException {
         Serializer serializer = new Serializer(out, "UTF-8");
         serializer.setIndent(2);
@@ -142,30 +157,39 @@ class TreeWalker {
         serializer.flush();
     }
 
-    private static void walkTree(TreeWalker iterator, Document document)
-        throws IOException {
-        iterator.followNode(document);
+    private static void walkTree(TreeWalker iterator, Document doc)
+      throws IOException {
+        iterator.followNode(doc);
     }
     
-    private static Document build(String url, Builder parser)
-        throws ParsingException, ValidityException, IOException {
-            
-        InputStream in = new BufferedInputStream((new URL(url)).openStream());
-        Document document = parser.build(in, url); 
+    private static Document build(
+      byte[] data, String base, Builder parser)
+      throws ParsingException, ValidityException, IOException {
+        InputStream raw = new BufferedInputStream(
+          new ByteArrayInputStream(data)
+        );
+        Document document = parser.build(raw, base); 
         return document;
     } 
 
-    private static void warmup(String url, Builder parser, TreeWalker iterator, int numPasses) 
+    private static void warmup(byte[] data, Builder parser, 
+      TreeWalker iterator, int numPasses, String base) 
       throws IOException, ParsingException {
         for (int i = 0; i < numPasses; i++) {
-            Document doc = parser.build(url);
-            walkTree(iterator, doc);
-            serialize(doc, new ByteArrayOutputStream(3000000));
-            prettyPrint(doc, new ByteArrayOutputStream(4000000));
-            serializeUTF16(doc, new ByteArrayOutputStream(4000000));
+            InputStream raw = new BufferedInputStream(
+              new ByteArrayInputStream(data)
+            );    
+            Document doc;
+            Builder parser1 = parser;
+            TreeWalker iterator1 = iterator;
+            String base1 = base;
+            Document doc1 = parser1.build(raw, base1);
+            walkTree(iterator1, doc1);
+            serialize(doc1, new ByteArrayOutputStream(3000000));
+            prettyPrint(doc1, new ByteArrayOutputStream(4000000));
+            serializeUTF16(doc1, new ByteArrayOutputStream(4000000));
         }
     }
-
 
     // note use of recursion
     public void followNode(Node node) throws IOException {
