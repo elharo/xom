@@ -145,30 +145,7 @@ public class ParsingException extends Exception {
     public int getColumnNumber() {
         return this.columnNumber;  
     }
-    
-    
-    /**
-     * <p>
-     * Returns a <code>Document</code> object containing the content
-     * of the document before the first error was detected.
-     * This may return null, especially if the error occurred in the
-     * document prolog.
-     * </p>
-     * 
-     * @return the document up to the first error which caused this
-     *     exception
-     */
-    public Document getPartialDocument() {
-        return partialDocument;    
-    }
-    
-    // test this????
-    
-    private Document partialDocument;
-    
-    void setPartialDocument(Document doc) {
-        this.partialDocument = doc;
-    }
+
 
     // null is insufficient for determining unset cause.
     // The cause may be set to null which may not then be reset.
