@@ -41,8 +41,25 @@ import nu.xom.ParsingException;
  */
 public class IDTest extends XOMTestCase {
 
+    
     public IDTest(String name) {
         super(name);
+    }
+
+    
+    public void testBuilderRejectsNonNCNameXmlIdAttributes() 
+      throws IOException {
+        
+        Builder builder = new Builder();
+        String data = "<root xml:id='p 2'/>";
+        try {
+            builder.build(data, null);
+            fail("Allowed non-NCName for xml:id");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }
+        
     }
     
     
@@ -205,5 +222,7 @@ public class IDTest extends XOMTestCase {
         
     }
 
+    
+    // need a test that this works with XInclude????
     
 }

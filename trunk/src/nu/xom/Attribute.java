@@ -208,6 +208,7 @@ public class Attribute extends Node {
             if ("xml:id".equals(name)) {
                 type = Attribute.Type.ID;
                 value = value.trim(); // ???? really shouldn't trim carrauge return and linefeed and tab here
+                Verifier.checkNCName(value);
             }
         }        
         
