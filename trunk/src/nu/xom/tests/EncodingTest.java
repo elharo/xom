@@ -45,7 +45,7 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b1
  *
  */
 public class EncodingTest extends XOMTestCase {
@@ -103,6 +103,22 @@ public class EncodingTest extends XOMTestCase {
       System.gc();   
     } 
     
+    
+    public void testEUCJP() throws ParsingException, IOException {
+        checkAll("EUC-JP");
+    } 
+
+    
+    public void testShift_JIS() throws ParsingException, IOException {
+        checkAll("Shift_JIS");
+    } 
+
+
+    public void testISO2022JP() throws ParsingException, IOException {
+        checkAll("ISO-2022-JP");
+    } 
+
+
     public void testGeneric() throws ParsingException, IOException {
         checkAll("Cp1252");
     }
@@ -117,18 +133,6 @@ public class EncodingTest extends XOMTestCase {
 
     public void testBig5() throws ParsingException, IOException {
         checkAll("Big5");
-    } 
-
-    public void testEUCJP() throws ParsingException, IOException {
-        checkAll("EUC-JP");
-    } 
-
-    public void testShift_JIS() throws ParsingException, IOException {
-        checkAll("Shift_JIS");
-    } 
-
-    public void testISO2022JP() throws ParsingException, IOException {
-        checkAll("ISO-2022-JP");
     } 
 
     public void testUSASCII() throws ParsingException, IOException {

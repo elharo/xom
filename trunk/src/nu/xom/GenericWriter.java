@@ -41,7 +41,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b1
  * 
  */
 class GenericWriter extends TextWriter {
@@ -49,13 +49,24 @@ class GenericWriter extends TextWriter {
     
     private ByteArrayOutputStream bout;
     private OutputStreamWriter wout;
+    private boolean isJapanese = false;
 
     
     GenericWriter(Writer out, String encoding) 
       throws UnsupportedEncodingException {
+        
         super(out, encoding);
         bout = new ByteArrayOutputStream(32);
         wout = new OutputStreamWriter(bout, encoding);
+        encoding = encoding.toUpperCase();
+        if (encoding.indexOf("EUC-JP") > -1
+          || encoding.startsWith("EUC_JP")
+          || encoding.equals("SHIFT_JIS")
+          || encoding.equals("SJIS")
+          || encoding.equals("ISO-2022-JP")) {
+            isJapanese = true;
+        }
+        
     }
 
     
@@ -63,9 +74,12 @@ class GenericWriter extends TextWriter {
        
         // assume everything has at least the ASCII characters
         if (c <= 127) return false;
-        if (c == 0xA5) return true; // Yen symbol is problematic in some Japanese encodings
-        if (c == 0x203E) return true; // work around Sun bugs in EUC-JP
-
+        // work around various bugs in Japanese encodings
+        if (isJapanese) {
+            if (c == 0xA5) return true; // Yen symbol 
+            if (c == 0x203E) return true; // Sun bugs in EUC-JP and SJIS
+        } 
+        
         boolean result = false;
         try {
             wout.write(c);
@@ -73,10 +87,13 @@ class GenericWriter extends TextWriter {
             byte[] data = bout.toByteArray();    
             if (data.length == 0) result = true; // surrogate pair
             else if (data[0] == '?') result = true;
+            // work around various bugs in Japanese encodings
+            // especially in JDK 1.4.2_05
+            else if (isJapanese && data[0] == 0x21) result = true;
         }
         catch (IOException ex) {
             // There really shouldn't be any IOException here.
-            // However chaarcter conversion bugs in Java 1.2
+            // However character conversion bugs in Java 1.2
             // sometimes throw one. In this case, we just say
             // escape it. 
             return true;
