@@ -102,6 +102,7 @@ public class Serializer {
      *   <li>ISO-8859-8</li>
      *   <li>ISO-8859-9</li>
      *   <li>ISO-8859-10</li>
+     *   <li>ISO-8859-11 (a.k.a. TIS-620)</li>
      *   <li>ISO-8859-13</li>
      *   <li>ISO-8859-14</li>
      *   <li>ISO-8859-15</li>
@@ -192,6 +193,13 @@ public class Serializer {
           || encoding.equals("ISO-10646-UCS-2")) {
            // For compatibility with Java 1.2 and earlier
            writer = new OutputStreamWriter(out, "UnicodeBig");  
+        }
+        else if (encoding.equals("ISO-8859-11") 
+          || encoding.equals("TIS-620")) {
+           // Java doesn't recognize the name ISO-8859-11 and 
+           // Java 1.3 and earlier don't recognize TIS-620
+           // file a bug on this at JDC????
+           writer = new OutputStreamWriter(out, "TIS620");  
         }
         else writer = new OutputStreamWriter(out, encoding);
         writer = new BufferedWriter(writer);
