@@ -93,11 +93,10 @@ public class Document extends ParentNode {
      *     or greater than the number of children of the node.`
      */
     public final void insertChild(Node child, int position) {
-        if (child instanceof Comment 
-          || child instanceof ProcessingInstruction) {
+        if (child.isComment() || child.isProcessingInstruction()) {
             super.insertChild(child, position);
         }
-        else if (child instanceof DocType) {
+        else if (child.isDocType()) {
             if (position <= getRootPosition()) {
                 DocType oldDocType = getDocType(); 
                 if (oldDocType != null) {
@@ -114,7 +113,7 @@ public class Document extends ParentNode {
                 );               
             }
         }
-        else if (child instanceof Element) {
+        else if (child.isElement()) {
             throw new IllegalAddException(
              "Cannot add a second root element to a Document."
             );
@@ -129,7 +128,7 @@ public class Document extends ParentNode {
     private int getRootPosition() {
         for (int i = 0; i < getChildCount(); i++) {
              Node child = getChild(i);
-             if (child instanceof Element) {
+             if (child.isElement()) {
                 return i;
              }
          }
@@ -151,7 +150,7 @@ public class Document extends ParentNode {
     public final DocType getDocType() {
         for (int i = 0; i < getChildCount(); i++) {
              Node child = getChild(i);
-             if (child instanceof DocType) {
+             if (child.isDocType()) {
                 return (DocType) child;
              }
          }
