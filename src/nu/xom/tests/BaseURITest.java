@@ -52,7 +52,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class BaseURITest extends XOMTestCase {
@@ -380,7 +380,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "http://www.example.com/" + omega;
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", base));;
-        assertEquals("http://www.example.com/%ce%a9", root.getBaseURI());
+        assertEquals("http://www.example.com/%CE%A9", root.getBaseURI());
         
     }
     
