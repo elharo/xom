@@ -63,7 +63,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a5
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -226,6 +226,22 @@ public class BuilderTest extends XOMTestCase {
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("notationatt"); 
         assertEquals(Attribute.Type.NOTATION, att.getType()); 
+        
+    }
+    
+    
+    public void testBuildInternalDTDSubsetWithFixedDefaultAttributeValue() 
+      throws ParsingException, IOException {
+        
+        String doctype = "<!DOCTYPE xsl:stylesheet [\n"
+            + "<!ATTLIST a b CDATA #FIXED \"c\">]>";
+        String document = doctype + "\n<root/>";
+        Builder builder = new Builder();
+        Document doc = builder.build(document, null);
+        DocType dt = doc.getDocType();
+        String internalDTDSubset = dt.getInternalDTDSubset();
+        System.err.println(internalDTDSubset);
+        assertTrue(internalDTDSubset.indexOf("#FIXED \"c\"") > 0);
         
     }
     

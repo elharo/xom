@@ -34,7 +34,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a5
  *
  */
 class XOMHandler 
@@ -494,11 +494,12 @@ class XOMHandler
             internalDTDSubset.append(attributeName);
             internalDTDSubset.append(' ');
             internalDTDSubset.append(type);
-            internalDTDSubset.append(' ');
             if (mode != null) {
+            internalDTDSubset.append(' ');
                 internalDTDSubset.append(mode);
             }
             if (defaultValue != null) {
+                internalDTDSubset.append(' ');
                 internalDTDSubset.append('"');
                 internalDTDSubset.append(defaultValue);
                 internalDTDSubset.append("\"");         
