@@ -28,6 +28,7 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Namespace;
 import nu.xom.Node;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
@@ -40,7 +41,7 @@ import nu.xom.Text;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d4
  *
  */
 public class XOMTestCase extends TestCase {
@@ -551,6 +552,34 @@ public class XOMTestCase extends TestCase {
     
     /**
      * <p>
+     * Asserts that two namespace nodes are equal.
+     * Namespace nodes are considered
+     * equal if they have the same prefix and the same URI. 
+     * If the two nodes are not equal, a
+     * <code>ComparisonFailure</code> is thrown with the given 
+     * message.
+     * </p>
+     * 
+     * @param message printed if the namespaces are not equal
+     * @param expected the namespace the test should produce
+     * @param actual the namespace the test does produce
+     *
+     * @throws ComparisonFailure if the namespaces are not equal
+     */
+    public static void assertEquals(String message, 
+      Namespace expected, Namespace actual) {
+
+        if (actual == expected) return;
+        nullCheck(message, expected, actual);
+
+        assertEquals(message, expected.getValue(), actual.getValue());
+        assertEquals(message, expected.getPrefix(), actual.getPrefix());
+        
+    }
+
+    
+    /**
+     * <p>
      * Asserts that two nodes are equal. If the two nodes are not 
      * equal a <code>ComparisonFailure</code> is thrown. 
      * The subclass is not considered. The basic XOM class
@@ -625,6 +654,12 @@ public class XOMTestCase extends TestCase {
                 assertEquals(message,
                   (Attribute) expected, 
                   (Attribute) actual
+                );
+            }
+            else if (expected instanceof Namespace) {
+                assertEquals(message,
+                  (Namespace) expected, 
+                  (Namespace) actual
                 );
             }
             else {
