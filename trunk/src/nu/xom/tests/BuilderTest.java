@@ -228,6 +228,7 @@ public class BuilderTest extends XOMTestCase {
         assertNull(document.getBaseURI());
     }
     
+    
     public void testCDATAAttributeType() 
       throws IOException, ParsingException {
         Reader reader = new StringReader(attributeDoc);
@@ -237,6 +238,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(Attribute.Type.CDATA, att.getType());      
         assertNull(document.getBaseURI());
     }
+    
     
     public void testEntityAttributeType() 
       throws IOException, ParsingException {
@@ -248,6 +250,7 @@ public class BuilderTest extends XOMTestCase {
         assertNull(document.getBaseURI());
     }
     
+    
     public void testEntitiesAttributeType() 
       throws IOException, ParsingException {
         Reader reader = new StringReader(attributeDoc);
@@ -257,6 +260,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(Attribute.Type.ENTITIES, att.getType());      
         assertNull(document.getBaseURI());
     }
+    
     
     public void testNameTokenAttributeType() 
       throws IOException, ParsingException {
@@ -269,6 +273,7 @@ public class BuilderTest extends XOMTestCase {
         assertNull(document.getBaseURI());
     }
     
+    
     public void testNameTokensAttributeType() 
       throws IOException, ParsingException {
         Reader reader = new StringReader(attributeDoc);
@@ -279,6 +284,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("1 2 3", att.getValue());      
         assertNull(document.getBaseURI());
     }
+    
     
     // verify that XML 1.1 is not supported
     public void testXML11() throws IOException {
@@ -318,6 +324,7 @@ public class BuilderTest extends XOMTestCase {
         }
     }
     
+    
     public void testIDAttributeType() 
       throws IOException, ParsingException {
         Reader reader = new StringReader(attributeDoc);
@@ -329,6 +336,7 @@ public class BuilderTest extends XOMTestCase {
         assertNull(document.getBaseURI());
     }
     
+    
     public void testIDREFAttributeType() 
       throws IOException, ParsingException {
         Reader reader = new StringReader(attributeDoc);
@@ -339,6 +347,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("p1", att.getValue());      
         assertNull(document.getBaseURI());
     }
+    
     
     public void testIDREFSAttributeType() 
       throws IOException, ParsingException {
@@ -562,17 +571,20 @@ public class BuilderTest extends XOMTestCase {
     
     public void testValidateFromReader() 
       throws IOException, ParsingException {
+        
         Reader reader1 = new StringReader(validDoc);
         Document document1 = validator.build(reader1);       
         assertNull(document1.getBaseURI());
         Reader reader2 = new StringReader(validDoc);
         Document document2 = builder.build(reader2);  
-        assertEquals(document2, document1);     
+        assertEquals(document2, document1); 
+        
     }
 
     
     public void testDocumentWithDefaultNamespaceOnPrefixedElement()
       throws IOException, ParsingException {
+        
         Reader reader = new StringReader("<pre:root " +
                 "xmlns='http://www.example.org/' " +
                 "xmlns:pre='http://www.cafeconleche.org/'/>");
@@ -580,30 +592,36 @@ public class BuilderTest extends XOMTestCase {
         Element root = document.getRootElement();
         assertEquals("http://www.example.org/", root.getNamespaceURI(""));    
         assertEquals("http://www.cafeconleche.org/", root.getNamespaceURI("pre"));    
-        assertEquals("http://www.cafeconleche.org/", root.getNamespaceURI());    
+        assertEquals("http://www.cafeconleche.org/", root.getNamespaceURI());   
+        
     } 
     
     
     public void testValidateFromReaderWithBase()
       throws IOException, ParsingException {
+        
         Reader reader = new StringReader(validDoc);
         Document document = validator.build(reader, base); 
         assertEquals(base, document.getBaseURI());
         Reader reader2 = new StringReader(validDoc);
         Document document2 = builder.build(reader2);  
-        assertEquals(document2, document);     
+        assertEquals(document2, document);    
+        
     }
     
     
     public void testValidateFromInputStreamWithBase()
       throws IOException, ParsingException {
+        
         InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
         Document document = validator.build(in, base);  
         assertEquals(base, document.getBaseURI());  
         Reader reader2 = new StringReader(validDoc);
         Document document2 = builder.build(reader2);  
         assertEquals(document2, document);     
+        
     }
+    
     
     public void testValidateInSeries()
       throws IOException, ParsingException {
@@ -619,33 +637,39 @@ public class BuilderTest extends XOMTestCase {
         // now make sure validating a valid document doesn't
         // throw an exception
         InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
-        validator.build(in, base);       
+        validator.build(in, base);   
+        
     }
     
     
     public void testValidateFromInputStreamWithoutBase()
       throws IOException, ParsingException {
+        
         InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
         Document document = validator.build(in);        
         assertNull(document.getBaseURI());
         Reader reader2 = new StringReader(validDoc);
         Document document2 = builder.build(reader2);  
-        assertEquals(document2, document);     
+        assertEquals(document2, document);  
+        
     }
 
     
     public void testValidateFromStringWithBase()
       throws IOException, ParsingException {
+        
         Document document = validator.build(validDoc, base);        
         assertEquals(base, document.getBaseURI());  
         Reader reader2 = new StringReader(validDoc);
         Document document2 = builder.build(reader2);  
         assertEquals(document2, document);     
+        
     }
     
     
     public void testValidateWithCrimson()
       throws IOException, ParsingException {
+        
         XMLReader crimson;
         try {
             crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
@@ -659,7 +683,31 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(base, document.getBaseURI());  
         Reader reader2 = new StringReader(validDoc);
         Document document2 = builder.build(reader2);  
-        assertEquals(document2, document);     
+        assertEquals(document2, document);    
+        
+    }
+
+    
+    public void testEnumerationAttributeType()
+      throws IOException, ParsingException {
+        
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        Builder builder = new Builder(crimson, false);
+        String doc = "<!DOCTYPE root [" +
+                "<!ATTLIST root att (yes | no) #IMPLIED>" +
+                "]><root att='yes'/>";
+        Document document = builder.build(doc, base); 
+        Element root = document.getRootElement();
+        Attribute att = root.getAttribute(0);
+        assertEquals(Attribute.Type.ENUMERATION, att.getType());
+        
     }
 
     
@@ -1304,5 +1352,6 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(expectedResult, actual);
         
     }
+  
     
 }
