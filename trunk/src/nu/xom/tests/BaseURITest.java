@@ -721,11 +721,14 @@ public class BaseURITest extends XOMTestCase {
         Document doc = builder.build(input);
         Element root = doc.getRootElement();
         String base = root.getBaseURI();
-        // This only works if we have an absolute URI. I can't assert
-        // equality with the expected absolute URI because that varies 
-        // from one installation to the next
-        URL u = new URL(base); 
+        // This constructor only works if we have an absolute URI. 
+        // If the test fails an aexception is thrown here. I can't 
+        // assert equality with the expected absolute URI because 
+        // that varies from one installation to the next
+        new URL(base); 
         assertTrue(base.startsWith("file:/"));
                 
-    }    
+    } 
+    
+    
 }

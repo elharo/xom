@@ -398,7 +398,7 @@ public class ElementTest extends XOMTestCase {
           new Attribute("zzz:zzz", "http://www.example.org", "preserve"));
         assertEquals(2, e.getNamespaceDeclarationCount());
         try {
-            String prefix = e.getNamespacePrefix(2);
+            e.getNamespacePrefix(2);
             fail("Got prefix beyond bounds");
         }
         catch (IndexOutOfBoundsException success) {

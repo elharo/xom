@@ -218,7 +218,6 @@ public class VerifierTest extends XOMTestCase {
             0x4FFFF, 0x5FFFE, 0x6FFFF, 0x7FFFE, 0x8FFFF, 0x9FFFE,
             0xAFFFE, 0xBFFFF, 0xCFFFE, 0xDFFFE, 0xEFFFF, 0xFDDF};
         
-        Element element = new Element("test");
         for (int i = 0; i < illegalChars.length; i++) {
             String utf16 = convertToUTF16(illegalChars[i]);
             String url = "http://www.example.com/" + utf16 + ".xml";
@@ -295,11 +294,10 @@ public class VerifierTest extends XOMTestCase {
           "1080:0:0:0:-8:800:-200C:417A"
         };
         
-        Element element = new Element("test");
         for (int i = 0; i < addresses.length; i++) {
             String url = "http://[" + addresses[i] + "]/";
             try {
-                DocType doctype = new DocType("root", url);
+                new DocType("root", url);
                 fail("Allowed illegal IPv6 address: " +  addresses[i] );
             }
             catch (MalformedURIException success) {
