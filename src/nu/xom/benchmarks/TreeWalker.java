@@ -80,9 +80,6 @@ class TreeWalker {
             byte[] data = out.toByteArray(); 
                        
             warmup(data, parser, iterator, 5, args[0]);
-            InputStream raw = new BufferedInputStream(
-              new ByteArrayInputStream(data)
-            );
             
             // try to avoid garbage collection pauses
             System.gc(); System.gc(); System.gc();
@@ -179,7 +176,7 @@ class TreeWalker {
             InputStream raw = new BufferedInputStream(
               new ByteArrayInputStream(data)
             );    
-            Document doc;
+            // why copy these variables here????
             Builder parser1 = parser;
             TreeWalker iterator1 = iterator;
             String base1 = base;

@@ -202,14 +202,7 @@ public class Canonicalizer {
             writeRaw("<");
             writeRaw(element.getQualifiedName());
             
-            // Namespace
-            String prefix = element.getNamespacePrefix();
-            
             ParentNode parent = element.getParent();
-            String parentURI = "";
-            if (parent instanceof Element) {
-                parentURI = ((Element) parent).getNamespaceURI(prefix);
-            } 
             
             Element parentElement = null;
             if (parent instanceof Element) {
