@@ -29,15 +29,17 @@ import java.io.UnsupportedEncodingException;
 class URIUtil {
 
     
-    // XXX is there any way to merge these two methods?
     static boolean isOpaque(String uri) {
         
         int colon = uri.indexOf(':');
         if (colon < 1) return false;
+        // This next line is the difference between absolute and opaque
         if (uri.substring(colon+1).startsWith("/")) return false;
         if (!Verifier.isAlpha(uri.charAt(0))) return false;
         for (int i = 1; i < colon; i++) {
-             if (!Verifier.isSchemeCharacter(uri.charAt(i))) return false;
+             if (!Verifier.isSchemeCharacter(uri.charAt(i))) {
+                 return false;
+             }
         }
         return true;
         
@@ -150,7 +152,9 @@ class URIUtil {
             else if (path.equals("/..")) {
                 path = "/";
                 int lastSlash = output.lastIndexOf('/');
-                if (lastSlash != -1) output = output.substring(0, lastSlash);
+                if (lastSlash != -1) {
+                    output = output.substring(0, lastSlash);
+                }
             }
             else if (path.equals(".") || path.equals("..")) {
                 path = "";
