@@ -254,7 +254,6 @@ public class Document extends ParentNode {
     
     
     /**
-     * 
      * <p>
      * Sets the URI from which this node was loaded,
      * and against which relative URLs in this node will be resolved.
@@ -263,10 +262,9 @@ public class Document extends ParentNode {
      * @param URI the base URI of this document 
      * 
      * @throws MalformedURIException if <code>URI</code> is 
-     *     not a legal absolute IRI
+     *     not a legal absolute URI
      */
     public void setBaseURI(String URI) { 
-        // XXX test that IRIs are allowed or not?
         setActualBaseURI(URI);       
     }
     
