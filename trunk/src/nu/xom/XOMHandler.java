@@ -585,7 +585,6 @@ class XOMHandler
             internalDTDSubset.append("  <!NOTATION ");
             internalDTDSubset.append(name); 
             if (publicID != null) {
-                publicID = escapeReservedCharactersInDeclarations(publicID);
                 internalDTDSubset.append(" PUBLIC \""); 
                 internalDTDSubset.append(publicID);
                 internalDTDSubset.append('"'); 
