@@ -859,21 +859,185 @@ public class Canonicalizer {
     
     /**
      * <p>
-     * Serializes a document onto the output 
-     * stream using the specified canonicalization algorithm.
+     * Serializes a node onto the output stream using the specified 
+     * canonicalization algorithm. If the node is a document or an 
+     * element, then the node's entire subtree is written out.
      * </p>
      * 
-     * @param doc the document to serialize
+     * @param node the node to canonicalize
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *      encounters an I/O error
      */
-    public final void write(Node doc) throws IOException {  
+    public final void write(Node node) throws IOException {  
         serializer.nodes = null;
-        serializer.write(doc);        
+        serializer.write(node);        
         serializer.flush();
     }  
  
+    
+    /**
+     * <p>
+     * Serializes a document subset onto the output stream using the 
+     * canonical XML algorithm. All nodes in the list must come from 
+     * same document. Furthermore, they must come from a document.
+     * They cannot be detached. 
+     * </p>
+     * 
+     * <p>
+     * Children are not output unless they are also included in the 
+     * list. Including an element in the list does not automatically  
+     * select all the element's children, attributes, and namespaces. 
+     * Furthermore, not selecting an element does not imply that its 
+     * children, namespaces, attributes will not be output. 
+     * </p>
+     * 
+     * @param nodes the nodes to serialize
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     * @throws CanonicalizationException if the nodes come from more
+     *     than one document; or if a detached node is in the list
+     */
+    public final void write(Nodes nodes) throws IOException { 
+        this.write(nodes, null);
+    }   
+
+    
+    /**
+     * <p>
+     * Serializes a document subset onto the output stream using the 
+     * canonical XML algorithm. All nodes in the list must come from 
+     * same document. Furthermore, they must come from a document.
+     * They cannot be detached. 
+     * </p>
+     * 
+     * <p>
+     * Children are not output unless they are also included in the 
+     * list. Including an element in the list does not automatically  
+     * select all the element's children, attributes, and namespaces. 
+     * Furthermore, not selecting an element does not imply that its 
+     * children, namespaces, attributes will not be output. 
+     * </p>
+     * 
+     * @param nodes the nodes to serialize
+     * @param inclusiveNamespacePrefixes a whitespace separated list 
+     *     of namespace prefixes that will always be included in the 
+     *     output, even in exclusive canonicalization
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     * @throws CanonicalizationException if the nodes come from more
+     *     than one document; or if a detached node is in the list
+     */
+    public final void write(Nodes nodes, String inclusiveNamespacePrefixes) 
+      throws IOException {  
+        
+        
+        this.inclusiveNamespacePrefixes.clear();
+        if (this.exclusive && inclusiveNamespacePrefixes != null) {
+            StringTokenizer tokenizer = new StringTokenizer(
+              inclusiveNamespacePrefixes, " \t\r\n", false);
+            while (tokenizer.hasMoreTokens()) {
+                this.inclusiveNamespacePrefixes.add(tokenizer.nextToken());
+            }
+        }
+        
+        if (nodes.size() > 0) {
+            Document doc = nodes.get(0).getDocument();
+            if (doc == null) {
+                throw new RuntimeException("change me to different type"); // ????
+            }
+            Nodes result = sort(nodes);
+            serializer.nodes = result;
+            serializer.write(doc);        
+            serializer.flush();
+        } 
+       
+    }   
+
+    // XXX remove recursion
+    // recursively descend through document; in document
+    // order, and add results as they are found
+    private Nodes sort(Nodes in) {
+
+        Node root = in.get(0).getDocument();;
+        if (in.size() > 1) {
+            Nodes out = new Nodes();
+            List list = new ArrayList(in.size());
+            List namespaces = new ArrayList();
+            for (int i = 0; i < in.size(); i++) {
+                Node node = in.get(i);
+                if (node instanceof Namespace) namespaces.add(node);
+                else list.add(node);
+                list.add(in.get(i));
+            }
+            process(list, namespaces, out, (ParentNode) root);
+            return out;
+        }
+        else {
+            return new Nodes(in.get(0));
+        }
+        
+    }
+
+
+    private static void process(List in, List namespaces, Nodes out, ParentNode parent) {
+
+        if (in.isEmpty()) return;
+        if (in.contains(parent)) {
+            out.append(parent);
+            in.remove(parent);
+            if (in.isEmpty()) return;
+        }
+        
+        int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            Node child = parent.getChild(i);
+            if (child instanceof Element) {
+                Element element = (Element) child;
+                if (in.contains(element)) {
+                    out.append(element);
+                    in.remove(element);
+                }
+                // attach namespaces
+                if (!namespaces.isEmpty()) {
+                    Iterator iterator = in.iterator();
+                    while (iterator.hasNext()) {
+                        Object o = iterator.next();
+                        if (o instanceof Namespace) {
+                            Namespace n = (Namespace) o;
+                            if (element == n.getParent()) {
+                                out.append(n);
+                                iterator.remove();
+                            }
+                        }
+                    }
+                }
+                
+                // attach attributes
+                for (int a = 0; a < element.getAttributeCount(); a++) {
+                    Attribute att = element.getAttribute(a);
+                    if (in.contains(att)) {
+                        out.append(att);
+                        in.remove(att);
+                        if (in.isEmpty()) return;
+                    }
+                }
+                process(in, namespaces, out, element);
+            }
+            else {
+                if (in.contains(child)) {
+                    out.append(child);
+                    in.remove(child);
+                    if (in.isEmpty()) return;
+                }
+            }
+        }
+        
+    }
+    
+    
     
     /**
      * <p>
@@ -944,9 +1108,10 @@ public class Canonicalizer {
         }
         
         Nodes selected = doc.query(xpath, context);
-        serializer.nodes = selected;
+        write(selected, inclusiveNamespacePrefixes);
+        /* serializer.nodes = selected;
         serializer.write(doc);        
-        serializer.flush();
+        serializer.flush(); */
         
     }  
  
