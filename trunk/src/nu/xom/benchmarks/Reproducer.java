@@ -71,7 +71,7 @@ class Reproducer {
             iterator.copy(document);
             long postwalk = System.currentTimeMillis();
             System.out.println((postwalk - prewalk) 
-              + "ms to walk tree");
+              + "ms to build tree");
 
         }
         catch (IOException ex) { 
@@ -103,7 +103,8 @@ class Reproducer {
     
     private Element copy(Element original) {
 
-        Element copy = new Element(original.getQualifiedName(), new String(original.getNamespaceURI()));
+        Element copy = new Element(original.getQualifiedName(), 
+          original.getNamespaceURI());
         for (int i = original.getAttributeCount()-1; i >= 0; i--) {
             Attribute att = original.getAttribute(i);
             copy.addAttribute(copy(att));
@@ -159,7 +160,10 @@ class Reproducer {
 
     
     private Node copy(DocType doctype) {
-        return new DocType(doctype.getRootElementName(), doctype.getPublicID(), doctype.getSystemID());
+        return new DocType(
+          doctype.getRootElementName(), 
+          doctype.getPublicID(), 
+          doctype.getSystemID());
     }
 
     
