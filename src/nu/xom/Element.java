@@ -1346,13 +1346,13 @@ public class Element extends ParentNode {
      * @return the XML representation of this element
      * 
      */
-    // XXX might optimize by caching index, as we're iterating through in order
     public final String toXML() {
         
         StringBuffer result = new StringBuffer();
         Node current = this;
         boolean end = false;
         int index = -1;
+        
         while (true) {
             
             if (!end && current.getChildCount() > 0) {
