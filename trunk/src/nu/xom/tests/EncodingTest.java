@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -43,7 +43,7 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public class EncodingTest extends XOMTestCase {
@@ -311,48 +311,7 @@ public class EncodingTest extends XOMTestCase {
         
         in = null;
             
-    }
+    }    
 
-    
-    private void checkSome(String encoding) 
-      throws ParsingException, IOException {
-        
-        Builder builder = new Builder();
-        byte[] data = null;
-        ByteArrayOutputStream out = new ByteArrayOutputStream(100000);    
-        // Write data into a byte array using encoding
-        Serializer serializer = new Serializer(out, encoding);
-        serializer.write(doc);
-        serializer.flush();
-        out.flush();
-        out.close();
-        data = out.toByteArray();
-        InputStream in = new ByteArrayInputStream(data);
-        Document reparsed = builder.build(in);
-        in.close();
-        serializer = null;
-        
-        Element reparsedRoot = reparsed.getRootElement();
-        int childCount = reparsedRoot.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            Element test = (Element) reparsedRoot.getChild(i); 
-            String value = test.getValue();
-            int expected 
-              = Integer.parseInt(test.getAttributeValue("c"));
-            // workaround for EBCDIC bugs
-            if (expected == 133 && encoding.equalsIgnoreCase("Cp037")) {
-                continue;
-            }
-            int actual = value.charAt(0);
-            if (value.length() > 1) {
-                actual = UTF16.charAt(value, 0);
-            }
-            if (expected != actual) System.err.println(expected);
-        } 
-        
-        in = null;
-            
-    }
-    
     
 }
