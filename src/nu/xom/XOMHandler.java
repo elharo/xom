@@ -637,6 +637,9 @@ class XOMHandler
                 case '\r': 
                     result.append("&#x0D;");
                     break;
+                case '%': 
+                    result.append("&#x25;");
+                    break;
                 case '&': 
                     result.append("&#x26;");
                     break;
@@ -663,6 +666,9 @@ class XOMHandler
             switch (c) {
                 case '\r': 
                     result.append("&#x0D;");
+                    break;
+                case '%': 
+                    result.append("&#x25;");
                     break;
                 case '&': 
                     result.append("&amp;");

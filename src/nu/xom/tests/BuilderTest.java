@@ -2878,12 +2878,31 @@ public class BuilderTest extends XOMTestCase {
           + "<!ENTITY % e 'INCLUDE'>]><doc />";
         Document doc = builder.build(data, null);
         String subset = doc.getDocType().getInternalDTDSubset();
-        System.out.println(subset);
         assertEquals("  <!ENTITY % e \"INCLUDE\">\n", subset);
         
     }
     
    
+    public void testTrickyCaseFromAppendixA2OfXMLSpec() 
+      throws ParsingException, IOException {
+        
+        String data = "<?xml version='1.0'?>\n"
+          + "<!DOCTYPE test [\n"
+          + "<!ELEMENT test (#PCDATA) >\n"
+          + "<!ENTITY % xx '&#37;zz;'>\n"
+          + "<!ENTITY % zz '&#60;!ENTITY tricky \"error-prone\" >' >\n"
+          + "%xx;\n"
+          + "]>\n"
+          + "<test>This sample shows a &tricky; method.</test>\n";
+        
+        Document doc = builder.build(data, null);
+        String s = doc.toXML();
+        Document roundTrip = builder.build(s, null);
+        assertEquals(doc, roundTrip);
+        
+    }
+    
+    
     public void testXMLConformanceTestSuiteDocuments() 
       throws ParsingException, IOException {
       
