@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -27,9 +27,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import com.ibm.icu.text.Normalizer;
 
@@ -38,7 +40,9 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import nu.xom.Namespace;
 import nu.xom.ParsingException;
+import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
 
 /**
@@ -47,7 +51,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d4
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -91,7 +95,14 @@ public class CanonicalizerTest extends XOMTestCase {
             finally {
                 out.close();
             }            
-            byte[] actual = out.toByteArray();  
+            byte[] actual = out.toByteArray();
+            
+            // for debugging
+            File debug = new File(canonical, "debug/" 
+              + input.getName() + ".dbg");
+            OutputStream fout = new FileOutputStream(debug);
+            fout.write(actual);
+            fout.close();
             
             File expected = new File(output, input.getName() + ".out");
             assertEquals(
@@ -135,13 +146,6 @@ public class CanonicalizerTest extends XOMTestCase {
             
             byte[] actual = out.toByteArray();
             
-            // for debugging
-            /* File debug = new File(canonical, "debug/" 
-             + input.getName() + ".dbg");
-            OutputStream fout = new FileOutputStream(debug);
-            fout.write(actual);
-            fout.close(); */
-            
             File expected = new File(canonical, "wocommentsoutput/");
             expected = new File(expected, input.getName() + ".out");
             byte[] expectedBytes = new byte[actual.length];
@@ -160,7 +164,198 @@ public class CanonicalizerTest extends XOMTestCase {
 
         }
         
-    }    
+    }   
+    
+    
+    public void testXMLNamespaceAttributeInheritance() 
+      throws IOException {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        root.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p1"));
+        root.appendChild(new Element("child"));
+        
+        String expected = "<child xml:id=\"p1\"></child>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc, "/*/child", null);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    public void testXMLNSEqualsEmptyString() 
+      throws IOException {
+     
+        Element root = new Element("root", "http://www.ietf.org");
+        Document doc = new Document(root);
+        root.appendChild(new Element("child"));
+        
+        String expected = "<root xmlns=\"http://www.ietf.org\"><child xmlns=\"\"></child></root>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    // from section 3.7 of spec
+    public void testDocumentSubsetCanonicalization() 
+      throws ParsingException, IOException {
+        
+        String input = "<!DOCTYPE doc [\n"
+            + "<!ATTLIST e2 xml:space (default|preserve) 'preserve'>\n"
+            + "<!ATTLIST e3 id ID #IMPLIED>\n"
+            + "]>\n"
+            + "<doc xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\">\n"
+            + "   <e1>\n"
+            + "      <e2 xmlns=\"\">\n"
+            + "         <e3 id=\"E3\"/>\n"
+            + "      </e2>\n"
+            + "   </e1>\n"
+            + "</doc>";
+        
+        Document doc = builder.build(input, null);
+        XPathContext context = new XPathContext("ietf", "http://www.ietf.org");
+        String xpath = "(//. | //@* | //namespace::*)\n"
+            + "[\n"
+            + "self::ietf:e1 or (parent::ietf:e1 and not(self::text() or self::e2))"
+            + " or\n"
+            + " count(id(\"E3\")|ancestor-or-self::node()) = count(ancestor-or-self::node())\n"
+            + "]";
+        
+        String expected = "<e1 xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\"><e3 xmlns=\"\" id=\"E3\" xml:space=\"preserve\"></e3></e1>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc, xpath, context);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    public void testEmptyDefaultNamespace() 
+      throws ParsingException, IOException {
+        
+        String input = "<doc xmlns=\"http://www.ietf.org\">"
+            + "<e2 xmlns=\"\"></e2>"
+            + "</doc>";
+        
+        Document doc = builder.build(input, null);
+        String xpath = "(//* | //namespace::*)";
+        
+        String expected = input;
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc, xpath, null);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+
+    
+    
+    public void testDocumentSubsetCanonicalizationSimple() 
+      throws ParsingException, IOException {
+        
+        String input = "<!DOCTYPE doc [\n"
+            + "<!ATTLIST e2 xml:space (default|preserve) 'preserve'>\n"
+            + "<!ATTLIST e3 id ID #IMPLIED>\n"
+            + "]>\n"
+            + "<doc xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\">\n"
+            + "   <e1>\n"
+            + "      <e2 xmlns=\"\">\n"
+            + "         <e3 id=\"E3\"/>\n"
+            + "      </e2>\n"
+            + "   </e1>\n"
+            + "</doc>";
+        
+        Document doc = builder.build(input, null);
+        XPathContext context = new XPathContext("ietf", "http://www.ietf.org");
+        String xpath = "(/* | /*/namespace::*)\n";
+        
+        String expected = "<doc xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\"></doc>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc, xpath, context);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+
+    public void testDocumentSubsetCanonicalizationNamespaceInheritance() 
+      throws ParsingException, IOException {
+        
+        String input = "<!DOCTYPE doc [\n"
+            + "<!ATTLIST e2 xml:space (default|preserve) 'preserve'>\n"
+            + "<!ATTLIST e3 id ID #IMPLIED>\n"
+            + "]>\n"
+            + "<doc xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\">\n"
+            + "   <e1>\n"
+            + "      <e2 xmlns=\"\">\n"
+            + "         <e3 id=\"E3\"/>\n"
+            + "      </e2>\n"
+            + "   </e1>\n"
+            + "</doc>";
+        
+        Document doc = builder.build(input, null);
+        XPathContext context = new XPathContext("ietf", "http://www.ietf.org");
+        String xpath = "(/*/* | /*/*/namespace::*)\n";
+        
+        String expected = "<e1 xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\"></e1>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc, xpath, context);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
     
     
     public void testRelativeNamespaceURIsForbidden() 
@@ -181,78 +376,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
     }
     
-    
-/*    public void testNodeList() 
-      throws ParsingException, IOException {
-        
-        Element element = new Element("test");
-        Nodes nodes = new Nodes();
-        nodes.append(element);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer serializer 
-          = new Canonicalizer(out, false);
-        serializer.write(nodes);
-        serializer.flush(); 
-        byte[] data = out.toByteArray();
-        String result = new String(data, "UTF-8");
-        assertEquals("<test></test>", result);  
-        
-    }
-    
-    public void testNodeListNamespace() 
-      throws ParsingException, IOException {
-        
-        Element parent = new Element("parent");
-        parent.addNamespaceDeclaration(
-          "pre", "http://www.example.com/");
-        Element element = new Element("test");
-        parent.appendChild(element);
-        Nodes nodes = new Nodes();
-        nodes.append(element);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer serializer 
-          = new Canonicalizer(out, false);
-        serializer.write(nodes);
-        serializer.flush(); 
-        byte[] data = out.toByteArray();
-        String result = new String(data, "UTF-8");
-        assertEquals(
-          "<test xmlns:pre=\"http://www.example.com/\"></test>", 
-          result
-        );  
-        
-    }
-    
-    public void testNodeListXMLAttributes() 
-      throws ParsingException, IOException {
-        
-        Element grandparent = new Element("grandparent");
-        grandparent.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", 
-          "http://www.example.com/"));
-        grandparent.addAttribute(new Attribute("testing", 
-          "This should not appear in the output"));
-        Element parent = new Element("parent");
-        grandparent.appendChild(parent);
-        Document doc = new Document(grandparent);
-        parent.addAttribute(new Attribute("xml:space", 
-          "http://www.w3.org/XML/1998/namespace", "preserve"));
-        Element element = new Element("test");
-        parent.appendChild(element);
-        Nodes nodes = new Nodes();
-        nodes.append(element);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer serializer 
-          = new Canonicalizer(out, false);
-        serializer.write(nodes);
-        serializer.flush(); 
-        byte[] data = out.toByteArray();
-        String result = new String(data, "UTF-8");
-        assertEquals(
-          "<test xml:base=\"http://www.example.com/\" xml:space=\"preserve\"></test>",
-          result);  
-        
-    } */
     
     private static class XMLFilter implements FilenameFilter {
                 
@@ -418,6 +541,7 @@ public class CanonicalizerTest extends XOMTestCase {
     
     public void testWhiteSpaceTrimmingInNonCDATAAttribute() 
       throws IOException {
+        
         Attribute attribute = new Attribute("name", "  value1  value2  ");
         attribute.setType(Attribute.Type.NMTOKENS);
         Element root = new Element("root");
@@ -429,6 +553,7 @@ public class CanonicalizerTest extends XOMTestCase {
         out.close();
         String result = new String(out.toByteArray(), "UTF8");
         assertEquals("<root name=\"value1 value2\"></root>", result);
+        
     }
     
     
