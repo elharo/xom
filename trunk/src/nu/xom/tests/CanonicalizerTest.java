@@ -306,6 +306,56 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
+    public void testXMLNSAttributeNotInheritedWithExclusiveCanonicalization() 
+      throws IOException {
+     
+        Element root = new Element("root", "http://www.example.org/");
+        Document doc = new Document(root);
+        root.appendChild(new Element("child312", "http://www.example.org/"));
+        
+        String expected = "<child312 xmlns=\"http://www.example.org/\"></child312>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false, true);
+            XPathContext context = new XPathContext("pre", "http://www.example.org/");
+            serializer.write(doc, "/*/pre:child312 | /*/pre:child312/namespace::node()", context);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    public void testXMLNSPrefixAttributeInheritedWithExclusiveCanonicalization() 
+      throws IOException {
+     
+        Element root = new Element("pre:root", "http://www.example.org/");
+        Document doc = new Document(root);
+        root.appendChild(new Element("pre:child312", "http://www.example.org/"));
+        
+        String expected = "<pre:child312 xmlns:pre=\"http://www.example.org/\"></pre:child312>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            XPathContext context = new XPathContext("pre", "http://www.example.org/");
+            Canonicalizer serializer = new Canonicalizer(out, false, true);
+            serializer.write(doc, "/*/pre:child312 | /*/pre:child312/namespace::node()", context);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
     public void testXMLNSEqualsEmptyString() 
       throws IOException {
      
@@ -755,5 +805,27 @@ public class CanonicalizerTest extends XOMTestCase {
         
     }
 
+    
+    public void testExclusive() throws IOException {
+     
+        Element pdu = new Element("n0:pdu", "http://a.example");
+        Element elem1 = new Element("n1:elem1", "http://b.example");
+        elem1.appendChild("content");
+        pdu.appendChild(elem1);
+        
+        String expected = "<n1:elem1 xmlns:n1=\"http://b.example\">content</n1:elem1>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        
+        XPathContext context = new XPathContext("n1", "http://b.example");
+        canonicalizer.write(new Document(pdu), "(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
 
 }
