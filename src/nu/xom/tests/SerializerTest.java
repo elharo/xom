@@ -82,7 +82,7 @@ public class SerializerTest extends XOMTestCase {
         // LATIN CAPITAL LETTER D WITH DOT BELOW, COMBINING DOT ABOVE
         String input = "<a>&#x1E0A;&#x0323;</a>";
         // LATIN CAPITAL LETTER D WITH DOT ABOVE, COMBINING DOT BELOW
-        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<a>&#x1E0C;&#x0307;</a>\r\n";  
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<a>&#x1E0C;&#x307;</a>\r\n";  
             
         Document doc = parser.build(input, null);
         Serializer serializer = new Serializer(out, "US-ASCII");
@@ -93,6 +93,43 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(output, result);
             
     }
+    
+
+    public void testEWithCombiningMacron() 
+      throws ParsingException, IOException {
+    
+        // LATIN CAPITAL LETTER E WITH COMBINING MACRON 
+        String input = "<a>&#x45;&#x0304;</a>";
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<a>&#x112;</a>\r\n";  
+            
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(output, result);
+            
+    }
+
+    
+    public void testEWithCombiningMacronAndGrave() 
+      throws ParsingException, IOException {
+    
+        // LATIN CAPITAL LETTER E WITH COMBINING MACRON and grave
+        String input = "<a>&#x0045;&#x0304;&#x0300;</a>";
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<a>&#x1E14;</a>\r\n";  
+            
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(output, result);
+            
+    }
+
     
     public void testCDATASectionEndDelimiter() throws IOException {
 

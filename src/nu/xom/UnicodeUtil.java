@@ -8633,8 +8633,10 @@ final class UnicodeUtil {
                     }
                     else {
                         lastStarter = composedChar;
-                        // XXX dangerous side effect
+                        // XXX dangerous side effects
                         data[lastStarterIndex] = composedChar;
+                        data[i] = 0;
+                        
                         composed.data[lastStarterIndex] = composedChar; 
                     }
                 }
@@ -8695,7 +8697,9 @@ final class UnicodeUtil {
           
             int combiningClass = getCombiningClass(data[index]);
             for (int i = lastStarterIndex+1; i < index; i++) {
-                if (combiningClass == getCombiningClass(data[i])) {
+                // FIXME here we're testing against something we may have already combined;
+                // need to start from after that point or at least skip that point
+                if (data[i] !=0 && combiningClass == getCombiningClass(data[i])) {
                     return true;
                 }
             }
