@@ -30,11 +30,11 @@ import nu.xom.Text;
 /**
  * 
  * <p>
- *  Basic tests for the <ocde>Text</code> class.
+ *  Basic tests for the <code>Text</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b3
  *
  */
 public class TextTest extends XOMTestCase {
