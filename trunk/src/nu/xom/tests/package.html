@@ -35,18 +35,21 @@
 <p>
 <code>nu.xom.tests</code> contains the <a href="http://www.junit.org/">JUnit</a>
 based test suite for XOM. JUnit 3.7 or later is required.
-(Earlier version don't have the <code>assertTrue</code> method
+(Earlier versions don't have the <code>assertTrue</code> method
 these tests depend on.)
 </p>
 
 <p>
-The XOMTests class runs all the tests.
+The <code>XOMTests</code> class runs all the tests, except those that
+take an exceptionally long time to run (MegaTest).
 Some of the tests, especially the builder tests,
-are dependent on the underlying parser, and are known to fail 
+depend on the underlying parser, and are known to fail 
 if the parser is buggy. Xerces 2.6.1 is the only parser which is currently
-known to be able to run all the tests. (Truth be told, there are actually a few tests
-it fails, but I've commented those out.) Earlier versions of Xerces 2.x, including
+known to be able to run all the tests. Earlier versions of Xerces 2.x, including
 the one bundled with the JDK 1.4, cannot successfully run all the tests.
+The IBM JVM 1.4.1 bundles ane arlier version of Xerces which overrides the one bundled with XOM.
+For this reason, a few tests will fail when using that VM. All tests shoudl pass when using the
+Sun VMs. 
 </p>
 
 <p>
@@ -55,7 +58,7 @@ all test cases to be public. However, the only <em>published</em> class is
 <code>XOMTestCase</code> which provides methods for asserting the equality
 of Documents, Elements, ProcessingInstructions, and other Node types.
 This may be useful for your own tests. The remainder of this package
-shoudl be treated as unstable and your code should not depend on it.
+should be treated as unstable and your code should not depend on it.
 </p>
 
 @since 1.0
