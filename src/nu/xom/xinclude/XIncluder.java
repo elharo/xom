@@ -322,7 +322,7 @@ public class XIncluder {
             }
             if (href != null) href = convertToURI(href);
             
-            testForMultipleFallbacks(element);
+            testForForbiddenChildElements(element);
 
             ParentNode parent = element.getParent();
             String base = element.getBaseURI();
@@ -647,7 +647,7 @@ public class XIncluder {
             }
             if (href != null) href = convertToURI(href);
             
-            testForMultipleFallbacks(element);
+            testForForbiddenChildElements(element);
 
             // ParentNode parent = element.getParent();
             String base = element.getBaseURI();
@@ -755,15 +755,7 @@ public class XIncluder {
     }
 
     
-    /*
-     * <p>
-     *   This is a controversial test. NIST test case 12 
-     *   requires it, but I'm not convinced the XInclude spec does,
-     *   in the case where there's no resource error.
-     *   I've requested clarification from the working group.
-     * </p>
-     */
-    private static void testForMultipleFallbacks(Element element) 
+    private static void testForForbiddenChildElements(Element element) 
       throws XIncludeException {
         Elements fallbacks 
           = element.getChildElements("fallback", XINCLUDE_NS);
@@ -773,19 +765,22 @@ public class XIncluder {
         }
         
         // while we're at it let's test to see if there are any
-        // xi:include children. I actually don't think the spec
-        // requires this, but the test cases do. I've filed a 
-        // comment with the WG
-        Element include 
-          = element.getFirstChildElement("include", XINCLUDE_NS);
-        if (include != null) {
-            throw new XIncludeException(
-              "Include element contains an include child",
-              element.getDocument().getBaseURI());   
+        // other children from the XInclude namespace
+        Elements children = element.getChildElements();
+        for (int i = 0; i < children.size(); i++) {
+            Element child = children.get(i);
+            if (XINCLUDE_NS.equals(child.getNamespaceURI())) {
+                if (!("fallback".equals(child.getLocalName()))) {
+                    throw new XIncludeException(
+                      "Include element contains an include child",
+                      element.getDocument().getBaseURI());     
+                }
+            }
         }
         
     }
 
+    
     private static void processFallback(Element includeElement, 
       Builder builder, Stack baseURLs, ParentNode parent, Exception ex)
         throws XIncludeException, IOException, ParsingException {
