@@ -741,7 +741,6 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
 
     }
-
         
     
     public void testFallbackInIncludedDocumentWithBadParseAttribute() 
@@ -2201,12 +2200,20 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         try {
+            File f = new File(inputDir, "!\"$&'+,.txt");
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("!\"$&'+,");
+            out.flush();
+            out.close();
+
             File input = new File(inputDir, "lowerpunctuation.xml");
             Document doc = builder.build(input);
             Document result = XIncluder.resolve(doc);
             Document expectedResult = builder.build(
               new File(outputDir, "lowerpunctuation.xml")
             );
+            f.delete();
             assertEquals(expectedResult, result);
         }
         catch (FileNotFoundException ex) {
