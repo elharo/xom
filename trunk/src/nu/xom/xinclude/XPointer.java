@@ -33,7 +33,6 @@ import java.util.List;
 import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 import nu.xom.IllegalNameException;
 import nu.xom.Node;
 import nu.xom.Nodes;
@@ -277,23 +276,53 @@ class XPointer {
     
     public static Element findByID(Element element, String id) {
          
-        for (int i = 0; i < element.getAttributeCount(); i++) {
-            Attribute att = element.getAttribute(i);
-            if (att.getType() == Attribute.Type.ID) {
-                if (att.getValue().trim().equals(id)) {
-                    return element;   
+        Node current = element;
+        boolean end = false;
+        int index = -1;
+        while (true) {
+            
+            if (current instanceof Element) {
+                Element currentElement = (Element) current;
+                for (int i = 0; i < currentElement.getAttributeCount(); i++) {
+                    Attribute att = currentElement.getAttribute(i);
+                    if (att.getType() == Attribute.Type.ID) {
+                        if (att.getValue().trim().equals(id)) {
+                            return currentElement;   
+                        }
+                    }   
                 }
-            }   
-        }
-        
-        Elements children = element.getChildElements();
-        for (int i = 0; i < children.size(); i++) {
-            // ???? try and remove recursion here
-            Element result = findByID(children.get(i), id);
-            if (result != null) return result; 
-        }
+            }
+            
+            if (!end && current.getChildCount() > 0) {
+               current = current.getChild(0);
+               index = 0;
+            }
+            else {
+                if (end) {
+                    if (current == element) break;
+                }
+                else {
+                    ;
+                }
+                end = false;
+                ParentNode parent = current.getParent();
+                if (parent.getChildCount() - 1 == index) {
+                    current = parent;
+                    if (current != element) {
+                        parent = current.getParent();
+                        index = parent.indexOf(current);
+                    }
+                    end = true;
+                }
+                else {
+                    index++;
+                    current = parent.getChild(index);
+                }
+            }
+        }  
         
         return null;
+        
     }
     
     
