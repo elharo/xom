@@ -463,17 +463,9 @@ public class Element extends ParentNode {
         
         // Is there already an attribute with this local name
         // and namespace? If so, remove it.
-        Attribute oldAttribute = getAttribute(attribute.getLocalName(), 
+        Attribute oldAttribute = getAttribute(attribute.getLocalName(),
           attribute.getNamespaceURI());
-        if (oldAttribute != null) {
-            boolean removed = attributes.remove(oldAttribute);
-            if (!removed) {
-                throw new NoSuchAttributeException(
-                  "Tried to remove attribute " 
-                  + oldAttribute.getQualifiedName() 
-                  + " from non-parent element");
-            }
-        }
+        if (oldAttribute != null) attributes.remove(oldAttribute);
         
         attributes.add(attribute);
         attribute.setParent(this);
