@@ -268,9 +268,17 @@ public class ParentNodeTest extends XOMTestCase {
         // Test replacing node with itself
         empty.replaceChild(new1, new1);
         assertEquals(new1, empty.getChild(0));        
+        assertEquals(empty, new1.getParent());        
 
-        // what should happen if we replace new1 with new2????
-        // what should happen if we replace new1 with a child with a different parent????
+        // Test replacing node with a sibling
+        try {
+            empty.replaceChild(new1, new2);
+            fail("replaced a node wiht its sibling");
+        }
+        catch (MultipleParentException success) {
+            assertNotNull(success.getMessage());
+        }
+        
         
     } 
 
