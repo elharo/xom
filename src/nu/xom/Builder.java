@@ -43,6 +43,8 @@ import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import org.apache.xerces.impl.Version;
+
 /**
  * <p>
  * The <code>Builder</code> class is responsible  
@@ -53,7 +55,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  */
 public class Builder {
@@ -68,11 +70,26 @@ public class Builder {
         String version = System.getProperty("java.version");
         String majorVersion = version.substring(0, 3);
         
+        double xercesVersion = 2.6;
+        try {
+            String versionString = Version.getVersion();
+            versionString = versionString.substring(9, 12);
+            xercesVersion = Double.valueOf(versionString).doubleValue();
+        }
+        catch (Exception ex) {
+            // The version string format changed so presumably it's
+            // 2.6 or later 
+        }
+        catch (Error err) {
+            // xerces not installed, so none of this matters
+        }
+        
+        
         // turn off XML 1.1
-        if ( vendor.startsWith("IBM") && majorVersion.equals("1.4")) {
+        if (vendor.startsWith("IBM") && majorVersion.equals("1.4")) {
             IBMVM14 = true;
         }
-        else {
+        else if (xercesVersion >= 2.4) {
             System.setProperty(
               "org.apache.xerces.xni.parser.XMLParserConfiguration", 
               "nu.xom.xerces.XML1_0ParserConfiguration");
