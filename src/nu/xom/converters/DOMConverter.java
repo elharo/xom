@@ -16,9 +16,8 @@
    
    You can contact Elliotte Rusty Harold by sending e-mail to
    elharo@metalab.unc.edu. Please include the word "XOM" in the
-   subject line. The XOM home page is temporarily located at
-   http://www.cafeconleche.org/XOM/  but will eventually move
-   to http://www.xom.nu/  */
+   subject line. The XOM home page is located at http://www.xom.nu/
+*/
 
 package nu.xom.converters;
 

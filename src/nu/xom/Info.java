@@ -16,9 +16,8 @@
    
    You can contact Elliotte Rusty Harold by sending e-mail to
    elharo@metalab.unc.edu. Please include the word "XOM" in the
-   subject line. The XOM home page is temporarily located at
-   http://www.cafeconleche.org/XOM/  but will eventually move
-   to http://www.xom.nu/  */
+   subject line. The XOM home page is located at http://www.xom.nu/
+*/
 
 package nu.xom;
 
@@ -29,7 +28,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b11
  * 
  */
 class Info {
@@ -37,13 +36,13 @@ class Info {
     
     public static void main(String[] args) {
      
-        System.out.println("This is XOM 1.0b6, a new XML Object Model.");
+        System.out.println("This is XOM 1.0b11, a new XML Object Model.");
         System.out.println("Copyright 2002-2004 Elliotte Rusty Harold");
         System.out.println("http://www.xom.nu/");
         System.out.println();
-        System.out.println("XOM is a class library intended to be used with other programs. ");
+        System.out.println("XOM is a class library intended to be used with other programs.");
         System.out.println("By itself, it doesn't really do anything.");
-        System.out.println("For more information see http://www.cafeconleche.org/XOM/");
+        System.out.println("For more information see http://www.xom.nu/");
         System.out.println();
         System.out.println("This library is free software; you can redistribute it and/or modify it");
         System.out.println("under the terms of version 2.1 of the GNU Lesser General Public License");
@@ -55,7 +54,7 @@ class Info {
         System.out.println("See the GNU Lesser General Public License for more details.");
         System.out.println();
         System.out.println("You should have received a copy of the GNU Lesser General"); 
-        System.out.println("Public License along with this library; if not, write to the ");
+        System.out.println("Public License along with this library; if not, write to the");
         System.out.println(); 
         System.out.println("Free Software Foundation, Inc."); 
         System.out.println("59 Temple Place"); 
