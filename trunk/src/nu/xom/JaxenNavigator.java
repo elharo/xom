@@ -279,79 +279,6 @@ class JaxenNavigator extends DefaultNavigator {
         
     }
     
-    
-    // Need to make sure we don't count DocType in children when 
-    // working with XPath
-    private static Object getXPathChild(int request, Document parent) {
-     
-        DocType doctype = parent.getDocType();
-        if (doctype == null) return parent.getChild(request);
-        else {
-            int doctypePosition = parent.indexOf(doctype);
-            if (request < doctypePosition) {
-                return parent.getChild(request);
-            }
-            else return parent.getChild(request+1);
-        }
-        
-    }
-    
-
-    private static Object getXPathChild(int request, ParentNode parent) {
-    
-        if (parent.isDocument()) {
-            return getXPathChild(request, (Document) parent);
-        }
-        
-        int childCount = 0;
-        
-        boolean previousWasText = false;
-        int parentCount = parent.getChildCount();
-        for (int i = 0; i < parentCount; i++) {
-            Node child = parent.getChild(i);
-            
-            // check to see if previous was text and if so go to next
-            if (child.isText() && previousWasText) continue;
-            
-            if (request == childCount) {
-                if (child.isText()) {
-                    StringBuffer sb = new StringBuffer();
-                    List list = new ArrayList();
-                    int textCount = i;
-                    do {
-                        Text temp = (Text) child;
-                        list.add(temp);
-                        sb.append(child.getValue());
-                        textCount++;
-                        if (textCount == parentCount) break;
-                        child = parent.getChild(textCount);
-                    } while (child.isText());
-                     
-                    
-                    if (sb.length() != 0) return list;
-                }
-                else {
-                    return child;
-                }
-            }
-            else {
-                if (child.isText() && !previousWasText) {
-                    if (! ((Text) child).isEmpty()) {
-                      childCount++;
-                      previousWasText = true;
-                    }
-                }
-                else {
-                    previousWasText = false;
-                    childCount++;
-                }
-            }
-        }
-        
-        return null; 
-        
-    }
-    
 
     private static class ChildIterator implements Iterator {
     
@@ -363,7 +290,6 @@ class JaxenNavigator extends DefaultNavigator {
         ChildIterator(ParentNode parent) {
             this.parent = parent;
             this.xomCount = parent.getChildCount();
-            
         }
         
         public boolean hasNext() {
@@ -398,7 +324,9 @@ class JaxenNavigator extends DefaultNavigator {
                     xomIndex++;
                     texts.add(nextText);
                     if (empty) {
-                        if (! ((Text) nextText).isEmpty()) empty = false;
+                        if (! ((Text) nextText).isEmpty()) {
+                            empty = false;
+                        }
                     }
                 }
                 // need to make sure at least one of these texts is non-empty
