@@ -311,6 +311,8 @@ public class XIncluder {
             String xpointer = element.getAttributeValue("xpointer");
             String encoding = element.getAttributeValue("encoding");
             String href = element.getAttributeValue("href");
+            // empty string href is same as no href attribute
+            if ("".equals(href)) href = null;
             if (href == null && xpointer == null) {
                 throw new MissingHrefException(
                   "Missing href attribute", 
