@@ -111,16 +111,17 @@ public class AttributeTypeTest extends XOMTestCase {
 
     }
 
-    public void testToXML() {
-        assertEquals("NOTATION", Attribute.Type.NOTATION.toXML());
-        assertEquals("ENTITY", Attribute.Type.ENTITY.toXML());
-        assertEquals("ENTITIES", Attribute.Type.ENTITIES.toXML());
-        assertEquals("CDATA", Attribute.Type.CDATA.toXML());
-        assertEquals("ID", Attribute.Type.ID.toXML());
-        assertEquals("IDREF", Attribute.Type.IDREF.toXML());
-        assertEquals("IDREFS", Attribute.Type.IDREFS.toXML());
-        assertEquals("NMTOKEN", Attribute.Type.NMTOKEN.toXML());
-        assertEquals("NMTOKENS", Attribute.Type.NMTOKENS.toXML());
+    public void testGetName() {
+        assertEquals("ENUMERATION", Attribute.Type.ENUMERATION.getName());
+        assertEquals("NOTATION", Attribute.Type.NOTATION.getName());
+        assertEquals("ENTITY", Attribute.Type.ENTITY.getName());
+        assertEquals("ENTITIES", Attribute.Type.ENTITIES.getName());
+        assertEquals("CDATA", Attribute.Type.CDATA.getName());
+        assertEquals("ID", Attribute.Type.ID.getName());
+        assertEquals("IDREF", Attribute.Type.IDREF.getName());
+        assertEquals("IDREFS", Attribute.Type.IDREFS.getName());
+        assertEquals("NMTOKEN", Attribute.Type.NMTOKEN.getName());
+        assertEquals("NMTOKENS", Attribute.Type.NMTOKENS.getName());
     }
 
 }
