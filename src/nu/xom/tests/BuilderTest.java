@@ -64,17 +64,17 @@ public class BuilderTest extends XOMTestCase {
     private String attributeDeclaration2 
       = "<!ATTLIST root anotherattribute CDATA \"value\">";
     private String unparsedEntityDeclaration 
-      = "<!ENTITY hatch-pic SYSTEM \"http://www.example.com/images/cup.gif\" NDATA gif>";
+      = "<!ENTITY hatch-pic SYSTEM " +        "\"http://www.example.com/images/cup.gif\" NDATA gif>";
     private String internalEntityDeclaration 
-      = "<!ENTITY Pub-Status \"This is a pre-release of the specification.\">";
+      = "<!ENTITY Pub-Status \"" +        "This is a pre-release of the specification.\">";
     private String externalEntityDeclarationPublic = 
       "<!ENTITY open-hatch " 
-      + "PUBLIC \"-//Textuality//TEXT Standard open-hatch boilerplate//EN\" "
+      + "PUBLIC \"-//Textuality//TEXT Standard " +        "open-hatch boilerplate//EN\" "
       + "\"http://www.textuality.com/boilerplate/OpenHatch.xml\">";
     private String externalEntityDeclarationSystem = 
-      "<!ENTITY test " 
-      + "SYSTEM \"http://www.textuality.com/boilerplate/OpenHatch.xml\">";
-    private String notationDeclarationSystem = "<!NOTATION ISODATE SYSTEM "
+      "<!ENTITY test SYSTEM " +      "\"http://www.textuality.com/boilerplate/OpenHatch.xml\">";
+    private String notationDeclarationSystem 
+     = "<!NOTATION ISODATE SYSTEM "
      + "\"http://www.iso.ch/cate/d15903.html\">";
     private String notationDeclarationPublic = "<!NOTATION gif PUBLIC "
     + "\"-//Textuality//TEXT Standard open-hatch boilerplate//EN\">";
@@ -94,12 +94,12 @@ public class BuilderTest extends XOMTestCase {
      + "<?xml-stylesheet href=\"file.css\" type=\"text/css\"?>" 
      + "<!-- test -->"
      + "<test xmlns:xlink='http://www.w3.org/TR/1999/xlink'>Hello dear"
-     + "\r\n<em id=\"p1\" xmlns:none=\"http://www.example.com\">very important</em>"
+     + "\r\n<em id=\"p1\" xmlns:none=\"http://www.example.com\">"
+     + "very important</em>"
      + "<span xlink:type='simple'>here&apos;s the link</span>\r\n"
-     + "<svg:svg xmlns:svg='http://www.w3.org/TR/2000/svg'><svg:text>text in a namespace</svg:text></svg:svg>\r\n"
-     + "<svg xmlns='http://www.w3.org/TR/2000/svg'><text>text in a namespace</text></svg>"
-     + "</test>\r\n"
-     + "<!--epilog-->";
+     + "<svg:svg xmlns:svg='http://www.w3.org/TR/2000/svg'>"
+     + "<svg:text>text in a namespace</svg:text></svg:svg>\r\n"
+     + "<svg xmlns='http://www.w3.org/TR/2000/svg'><text>text in a "      +   "namespace</text></svg></test>\r\n<!--epilog-->";
      
     private String validDoc = "<!DOCTYPE test [\r\n"
      + "<!ELEMENT test (#PCDATA)>\n" 
@@ -487,13 +487,13 @@ public class BuilderTest extends XOMTestCase {
         Element external = root.getFirstChildElement("external");
         assertEquals("Hello from an entity!", external.getValue());
    }
-    
-   // This test exposes a bug in Crimson but not Xerces.
-   // It's testing whether the external DTD subset is read,
-   // default attribute values applied, and comments and
-   // processing instructions in the external DTD subset are not
-   // reported.
-   public void testExternalDTDSubset()
+     
+    // This test exposes a bug in Crimson but not Xerces.
+    // It's testing whether the external DTD subset is read,
+    // default attribute values applied, and comments and
+    // processing instructions in the external DTD subset are not
+    // reported.
+    public void testExternalDTDSubset()
       throws IOException, ParsingException {
         File input = new File("data/externalDTDtest.xml");
         Builder builder = new Builder(false);
@@ -502,14 +502,22 @@ public class BuilderTest extends XOMTestCase {
         Element root = doc.getRootElement();
         Attribute name = root.getAttribute("name");
         assertEquals("value", name.getValue());
-   }
+    }
     
-   // This test exposes a bug in Crimson and Xerces 
-   // and possibly other parsers. I've reported the bug in Xerces.
-   // I don't have a workaround for this yet.
-   /* public void testBaseRelativeResolutionRemotelyWithDirectory()
+   // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
+   // and possibly other parsers. I've reported the bug in Xerces,
+   // and it should be fixed in Xerces 2.6.
+   public void testBaseRelativeResolutionRemotelyWithDirectory()
       throws IOException, ParsingException {
-        Document doc = builder.build("http://www.ibiblio.org/xml");
-   } */
+        builder.build("http://www.ibiblio.org/xml");
+   } 
+
+   // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
+   // and possibly other parsers. I've reported the bug in Xerces,
+   // and it should be fixed in Xerces 2.6.
+   public void testRelativeURIResolutionAgainstARedirectedBase()
+      throws IOException, ParsingException {
+        builder.build("http://www.cafeconleche.org/redirecttest.xml");
+   } 
 
 }
