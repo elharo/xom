@@ -550,7 +550,7 @@ public class DOMConverterTest extends XOMTestCase {
     }
  
     
-    public void testConvertSingleElementDocument() {
+    public void testConvertSingleElementDocumentFromXOMToDOM() {
      
         Element root = new Element("root");
         Document xomDocIn = new Document(root);
@@ -558,6 +558,19 @@ public class DOMConverterTest extends XOMTestCase {
         org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
         assertEquals(0, domRoot.getChildNodes().getLength());
         assertEquals("root", domRoot.getNodeName());
+        
+    }
+ 
+    
+    public void testConvertSingleElementDocumentFromDOMToXOM() 
+      throws SAXException, IOException {
+     
+        byte[] data = "<element />".getBytes();
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
+        Document xomDoc = DOMConverter.convert(doc);
+        Element root = xomDoc.getRootElement();
+        assertEquals(0, root.getChildCount());
+        assertEquals("element", root.getLocalName());
         
     }
  
