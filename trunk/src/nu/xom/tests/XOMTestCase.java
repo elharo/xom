@@ -310,8 +310,8 @@ public class XOMTestCase extends TestCase {
           actual.getLocalName()
         );
         assertEquals(message,
-          expected.getQualifiedName(), 
-          actual.getQualifiedName()
+          expected.getNamespacePrefix(), 
+          actual.getNamespacePrefix()
         );
         assertEquals(message,
           expected.getNamespaceURI(), 
