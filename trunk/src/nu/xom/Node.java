@@ -331,11 +331,11 @@ public abstract class Node {
      * 
      * @return a list of all matched nodes; possibly empty
      */
-    public Nodes query(String xpath, Map namespaces) {
+    public Nodes query(String xpath, XPathContext namespaces) {
         
         try {
             XPath xp = new JaxenConnector(xpath);
-            xp.setNamespaceContext(new MapNamespaceContext(namespaces));
+            xp.setNamespaceContext(namespaces.getJaxenContext());
             List results = xp.selectNodes(this);
             return new Nodes(results);
         }
@@ -388,22 +388,6 @@ public abstract class Node {
         
     }
     
-    
-    private static class MapNamespaceContext implements NamespaceContext {
-
-        private Map context;
-        
-        MapNamespaceContext(Map context) {
-            this.context = context;
-        }
-        
-        
-        public String translateNamespacePrefixToUri(String prefix) {
-            return (String) context.get(prefix);
-        }
-        
-    }
-
     
     // Methods to replace instanceof tests to improve performance
     boolean isElement() {

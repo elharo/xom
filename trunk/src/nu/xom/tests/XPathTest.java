@@ -21,9 +21,6 @@
 
 package nu.xom.tests;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Document;
@@ -32,6 +29,7 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
+import nu.xom.XPathContext;
 import nu.xom.XPathException;
 
 /**
@@ -690,9 +688,8 @@ public class XPathTest extends XOMTestCase {
         Element child = new Element("child", "http://www.example.org");
         parent.appendChild(child);
         
-        Map namespaces = new HashMap();
-        namespaces.put("pre", "http://www.example.org");
-        Nodes result = parent.query("child::pre:child", namespaces);
+        XPathContext context = new XPathContext("pre", "http://www.example.org");
+        Nodes result = parent.query("child::pre:child", context);
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
         
@@ -707,14 +704,13 @@ public class XPathTest extends XOMTestCase {
         parent.appendChild(child);
         child.addAttribute(att);
         
-        Map namespaces = new HashMap();
-        namespaces.put("pre", "http://www.example.org");
-        namespaces.put("c", "http://www.cafeconleche.org/");
-        Nodes result = parent.query("child::pre:child", namespaces);
+        XPathContext context = new XPathContext("pre", "http://www.example.org");
+        context.addNamespace("c", "http://www.cafeconleche.org/");
+        Nodes result = parent.query("child::pre:child", context);
         assertEquals(1, result.size());
         assertEquals(child, result.get(0)); 
         
-        result = child.query("@c:*", namespaces);
+        result = child.query("@c:*", context);
         assertEquals(1, result.size());
         assertEquals(att, result.get(0)); 
         
@@ -763,9 +759,8 @@ public class XPathTest extends XOMTestCase {
         child.appendChild("1");
         child.appendChild("2");
         
-        Map namespaces = new HashMap();
-        namespaces.put("pre", "http://www.example.org");
-        Nodes result = parent.query("descendant::text()", namespaces);
+        XPathContext context = new XPathContext("pre", "http://www.example.org");
+        Nodes result = parent.query("descendant::text()", context);
         assertEquals(2, result.size());
         assertEquals("1", result.get(0).getValue());   
         assertEquals("2", result.get(1).getValue());   
