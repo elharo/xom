@@ -34,11 +34,12 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  */
-public class Comment extends LeafNode {
+public class Comment extends Node {
 
+    
     private String data;
 
     /**
@@ -165,6 +166,39 @@ public class Comment extends LeafNode {
         return data;
     }
 
+    
+    /**
+     * <p>
+     * Throws <code>IndexOutOfBoundsException</code> because 
+     * leaf nodes do not have children.
+     * </p>
+     * 
+     * @return never returns because leaf nodes do not have children;
+     *     Always throws an exception.
+     * 
+     * @param position the index of the child node to return
+     * 
+     * @throws IndexOutOfBoundsException because leaf nodes 
+     *     do not have children
+     */
+    public final Node getChild(int position) {
+        throw new IndexOutOfBoundsException(
+          "LeafNodes do not have children");        
+    }
+
+    
+    /**
+     * <p>
+     * Returns 0 because leaf nodes do not have children.
+     * </p>
+     * 
+     * @return zero
+     * 
+     * @see nu.xom.Node#getChildCount()
+     */
+    public final int getChildCount() {
+        return 0;   
+    }
     
     /**
      * <p>
