@@ -21,7 +21,10 @@
 package nu.xom.tests;
 
 import nu.xom.Element;
+import nu.xom.IllegalNameException;
+import nu.xom.MalformedURIException;
 import nu.xom.Namespace;
+import nu.xom.NamespaceConflictException;
 import nu.xom.NoSuchChildException;
 import nu.xom.Nodes;
 
@@ -124,6 +127,123 @@ public class NamespaceNodeTest extends XOMTestCase {
         Nodes result = root.query("namespace::pre");
         Namespace namespace = (Namespace) result.get(0);
         assertEquals("[Namespace: xmlns:pre=\"http://www.example.org/\"]", namespace.toString());
+        
+    }
+    
+    
+    public void testIllegalPrefix() {
+     
+        try {
+            new Namespace("white space", "http://www.example.org", null);
+            fail("Allowed prefix containing white space");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testEmptyStringPrefix() {
+        Namespace ns = new Namespace("", "http://www.example.org", null);
+        assertEquals("", ns.getPrefix());
+    }
+
+    
+    public void testNullPrefix() {
+        Namespace ns = new Namespace(null, "http://www.example.org", null);
+        assertEquals("", ns.getPrefix());
+    }
+
+    
+    public void testIllegalURI() {
+     
+        try {
+            new Namespace("pre", "http:// www.example.org", null);
+            fail("Allowed URI containing white space");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testNullURI() {
+        Namespace ns = new Namespace("", null, null);
+        assertEquals("", ns.getValue());
+    }
+
+    
+    public void testCantBindPrefixToEmptyURI() {
+        
+        try {
+            new Namespace("pre", "", null);
+            fail("Bound prefix to no namespace");
+        }
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testCantBindXMLNS() {
+        
+        try {
+            new Namespace("xmlns", "", null);
+            fail("Bound xmlns prefix to no namespace");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testCantBindXMLNSToDOMURI() {
+        
+        try {
+            new Namespace("xmlns", "http://www.w3.org/2000/xmlns/", null);
+            fail("Bound xmlns prefix to DOM namespace");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testCantBindXMLPrefixToWrongURI() {
+        
+        try {
+            new Namespace("xml", "http://www.w3.org/2000/xmlns/", null);
+            fail("Bound xml prefix to DOM namespace");
+        }
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testCanBindXMLPrefixToCorrectURI() {
+        
+        Namespace ns = new Namespace("xml", Namespace.XML_NAMESPACE, null);
+        assertEquals(Namespace.XML_NAMESPACE, ns.getValue());
+        
+    }
+
+    
+    public void testCanBindNonXMLPrefixToXMLURI() {
+        
+        try {
+            new Namespace("pre", Namespace.XML_NAMESPACE, null);
+            fail("Bound non-xml prefix to XML namespace");
+        }
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
 
