@@ -207,10 +207,8 @@ public abstract class Node {
      * body element to be detached.
      * </p>
      * 
-     * @param target the potential target to check.
-     * 
-     * @throws XMLException if the proposed target 
-     *   does not satisfy the local constraints
+     * @throws XMLException if local constraints in a subclass do not
+     *     allow this node to be detached
      */
     protected void checkDetach() {
     }
