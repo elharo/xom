@@ -25,6 +25,7 @@ package nu.xom.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -56,6 +57,10 @@ public class BuilderTest extends XOMTestCase {
     public BuilderTest(String name) {
         super(name);   
     }
+    
+    // flag to turn on and off tests based on 
+    // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=24124
+    private boolean xercesBroken = true;
     
     private String elementDeclaration = "<!ELEMENT root (#PCDATA)>";
     private String defaultAttributeDeclaration 
@@ -113,9 +118,6 @@ public class BuilderTest extends XOMTestCase {
     private Builder builder = new Builder();
     private Builder validator = new Builder(true);
     private String base = "http://www.example.com/";
-
-    protected void setUp() {
-    }
 
     private String attributeDoc = "<!DOCTYPE test [\n"
      + "<!ELEMENT test (#PCDATA)>\n" 
@@ -228,8 +230,6 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("p1 p2", att.getValue());      
         assertNull(document.getBaseURI());
     }
-    
-
 
     public void testBuildFromReader() 
       throws IOException, ParsingException {
@@ -294,33 +294,63 @@ public class BuilderTest extends XOMTestCase {
         
         assertTrue(doctype != null);
         assertTrue(document.getChild(0) instanceof DocType);
-        assertTrue(document.getChild(4) instanceof nu.xom.Comment);
-        assertTrue(document.getChild(2) instanceof nu.xom.Comment);
+        assertTrue(document.getChild(4) instanceof Comment);
+        assertTrue(document.getChild(2) instanceof Comment);
         assertEquals(" test ", document.getChild(2).getValue());
         assertEquals("epilog", document.getChild(4).getValue());
-        assertTrue(document.getChild(1) instanceof nu.xom.ProcessingInstruction);
+        assertTrue(document.getChild(1) instanceof ProcessingInstruction);
         assertEquals("test", doctype.getRootElementName());
         assertNull(doctype.getPublicID());
         assertNull(doctype.getSystemID());
         
         String internalDTDSubset = doctype.getInternalDTDSubset();
-        assertTrue(internalDTDSubset, internalDTDSubset.indexOf(elementDeclaration) > 0);
-        assertTrue(internalDTDSubset, internalDTDSubset.indexOf(attributeDeclaration) > 0);
-        assertTrue(internalDTDSubset, internalDTDSubset.indexOf(attributeDeclaration2) > 0);
-        assertTrue(internalDTDSubset, internalDTDSubset.indexOf(internalEntityDeclaration) > 0);
-        assertTrue(internalDTDSubset, internalDTDSubset.indexOf(externalEntityDeclarationPublic) > 0);
-        assertTrue(internalDTDSubset, internalDTDSubset.indexOf(externalEntityDeclarationSystem) > 0);
-        assertTrue(internalDTDSubset, internalDTDSubset.indexOf(unparsedEntityDeclaration) > 0);
-        assertTrue(internalDTDSubset, internalDTDSubset.indexOf(notationDeclarationPublic) > 0);
-        assertTrue(internalDTDSubset, internalDTDSubset.indexOf(notationDeclarationSystem) > 0);
+        assertTrue(
+          internalDTDSubset, 
+          internalDTDSubset.indexOf(elementDeclaration) > 0
+        );
+        assertTrue(
+          internalDTDSubset, 
+          internalDTDSubset.indexOf(attributeDeclaration) > 0
+        );
+        assertTrue(
+          internalDTDSubset, 
+          internalDTDSubset.indexOf(attributeDeclaration2) > 0
+        );
+        assertTrue(
+          internalDTDSubset, 
+          internalDTDSubset.indexOf(internalEntityDeclaration) > 0
+        );
+        assertTrue(
+          internalDTDSubset, 
+          internalDTDSubset.indexOf(externalEntityDeclarationPublic) > 0
+        );
+        assertTrue(
+          internalDTDSubset, 
+          internalDTDSubset.indexOf(externalEntityDeclarationSystem) > 0
+        );
+        assertTrue(
+          internalDTDSubset,
+          internalDTDSubset.indexOf(unparsedEntityDeclaration) > 0
+        );
+        assertTrue(
+          internalDTDSubset, 
+          internalDTDSubset.indexOf(notationDeclarationPublic) > 0
+        );
+        assertTrue(
+          internalDTDSubset, 
+          internalDTDSubset.indexOf(notationDeclarationSystem) > 0
+        );
                
     }
 
     public void testValidateFromReader() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(validDoc);
-        Document document = validator.build(reader1);       
-        assertNull(document.getBaseURI());
+        Reader reader1 = new StringReader(validDoc);
+        Document document1 = validator.build(reader1);       
+        assertNull(document1.getBaseURI());
+        Reader reader2 = new StringReader(validDoc);
+        Document document2 = builder.build(reader2);  
+        assertEquals(document2, document1);     
     }
     
     public void testValidateFromReaderWithBase()
@@ -328,7 +358,9 @@ public class BuilderTest extends XOMTestCase {
         StringReader reader1 = new StringReader(validDoc);
         Document document = validator.build(reader1, base); 
         assertEquals(base, document.getBaseURI());
-        
+        Reader reader2 = new StringReader(validDoc);
+        Document document2 = builder.build(reader2);  
+        assertEquals(document2, document);     
     }
     
     public void testValidateFromInputStreamWithBase()
@@ -336,6 +368,26 @@ public class BuilderTest extends XOMTestCase {
         InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
         Document document = validator.build(in, base);  
         assertEquals(base, document.getBaseURI());  
+        Reader reader2 = new StringReader(validDoc);
+        Document document2 = builder.build(reader2);  
+        assertEquals(document2, document);     
+    }
+    
+    public void testValidateInSeries()
+      throws IOException, ParsingException {
+          
+        try {
+            Reader reader = new StringReader(source);
+            validator.build(reader);   
+            fail("Allowed invalid doc");
+        }
+        catch (ValidityException ex) {
+            // success   
+        }  
+        // now make sure validating a valid document doesn't
+        // throw an exception
+        InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
+        Document document = validator.build(in, base);       
     }
     
     public void testValidateFromInputStreamWithoutBase()
@@ -343,18 +395,27 @@ public class BuilderTest extends XOMTestCase {
         InputStream in = new ByteArrayInputStream(validDoc.getBytes("UTF-8"));
         Document document = validator.build(in);        
         assertNull(document.getBaseURI());
+        Reader reader2 = new StringReader(validDoc);
+        Document document2 = builder.build(reader2);  
+        assertEquals(document2, document);     
     }
 
     public void testValidateFromStringWithBase()
       throws IOException, ParsingException {
         Document document = validator.build(validDoc, base);        
         assertEquals(base, document.getBaseURI());  
+        Reader reader2 = new StringReader(validDoc);
+        Document document2 = builder.build(reader2);  
+        assertEquals(document2, document);     
     }
     
     public void testValidateFromStringWithNullBase()
       throws IOException, ParsingException {
         Document document = validator.build(validDoc, null);    
         assertNull(document.getBaseURI());  
+        Reader reader2 = new StringReader(validDoc);
+        Document document2 = builder.build(reader2);  
+        assertEquals(document2, document);     
     }
 
 
@@ -365,7 +426,7 @@ public class BuilderTest extends XOMTestCase {
             fail("Builder allowed undeclared prefix");
         }
         catch (ParsingException ex) {
-            // success    
+            assertNotNull(ex.getMessage());   
         }        
     }
 
@@ -377,19 +438,37 @@ public class BuilderTest extends XOMTestCase {
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
-             // success   
+            assertNotNull(ex.getMessage());
+            assertTrue(ex.getErrorCount() > 0);
+            for (int i = 0; i < ex.getErrorCount(); i++) {
+                assertNotNull(ex.getValidityError(i));   
+            }   
+            if (!xercesBroken) {
+                Document doc = builder.build(reader1); 
+                this.verify(ex.getDocument());
+                assertEquals(doc, ex.getDocument());
+            }
         }
     }
     
     public void testInvalidDocFromReaderWithBase()
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(source);
+        Reader reader1 = new StringReader(source);
         try {
             validator.build(reader1, base); 
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
-             // success   
+            assertNotNull(ex.getMessage());   
+            assertTrue(ex.getErrorCount() > 0);
+            for (int i = 0; i < ex.getErrorCount(); i++) {
+                assertNotNull(ex.getValidityError(i));   
+            }   
+            if (!xercesBroken) {
+                Document doc = builder.build(reader1, base); 
+                this.verify(ex.getDocument());
+                assertEquals(doc, ex.getDocument());
+            }
         }
         
     }
@@ -402,7 +481,16 @@ public class BuilderTest extends XOMTestCase {
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
-             // success   
+            assertNotNull(ex.getMessage());   
+            assertTrue(ex.getErrorCount() > 0);
+            for (int i = 0; i < ex.getErrorCount(); i++) {
+                assertNotNull(ex.getValidityError(i));   
+            }   
+            if (!xercesBroken) {
+                Document doc = builder.build(in, base); 
+                this.verify(ex.getDocument());
+                assertEquals(doc, ex.getDocument());
+            }
         }
     }
     
@@ -414,7 +502,16 @@ public class BuilderTest extends XOMTestCase {
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
-             // success   
+            assertNotNull(ex.getMessage());   
+            assertTrue(ex.getErrorCount() > 0);
+            for (int i = 0; i < ex.getErrorCount(); i++) {
+                assertNotNull(ex.getValidityError(i));   
+            }   
+            if (!xercesBroken) {
+                Document doc = builder.build(in); 
+                this.verify(ex.getDocument());
+                assertEquals(doc, ex.getDocument());
+            }
         }
     }
 
@@ -425,7 +522,16 @@ public class BuilderTest extends XOMTestCase {
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
-             // success   
+            assertNotNull(ex.getMessage());   
+            assertTrue(ex.getErrorCount() > 0);
+            for (int i = 0; i < ex.getErrorCount(); i++) {
+                assertNotNull(ex.getValidityError(i));   
+            }   
+            if (!xercesBroken) {
+                Document doc = builder.build(source, base); 
+                this.verify(ex.getDocument());
+                assertEquals(doc, ex.getDocument());
+            }
         }
     }
     
@@ -436,7 +542,15 @@ public class BuilderTest extends XOMTestCase {
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
-             // success   
+            assertTrue(ex.getErrorCount() > 0);
+            for (int i = 0; i < ex.getErrorCount(); i++) {
+                assertNotNull(ex.getValidityError(i));   
+            }   
+            if (!xercesBroken) {
+                Document doc = builder.build(source, null); 
+                this.verify(ex.getDocument());
+                assertEquals(doc, ex.getDocument());
+            } 
         }
     }
     
