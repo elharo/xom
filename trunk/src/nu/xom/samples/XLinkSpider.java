@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -46,7 +46,7 @@ import nu.xom.Elements;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0b3
  *
  */
 public class XLinkSpider {
@@ -99,7 +99,7 @@ public class XLinkSpider {
             // absolutize URL
             try {
                 URL discovered = new URL(base, uri);
-                // strip ref field if any
+                // remove fragment identifier if any
                 discovered = new URL(
                   discovered.getProtocol(),
                   discovered.getHost(),
