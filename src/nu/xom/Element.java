@@ -969,9 +969,9 @@ public class Element extends ParentNode {
     public void insertChild(String text, int position) {
         
        if (text == null) {
-              throw new NullPointerException("Inserted null string");
+           throw new NullPointerException("Inserted null string");
        }
-       super.insertChild(new Text(text), position);
+       super.fastInsertChild(new Text(text), position);
        
     } 
 
