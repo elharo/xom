@@ -457,6 +457,7 @@ public abstract class Node {
                     XPathTypeException qex = new XPathTypeException(
                       "XPath expression " + xpath + " did not return a node-set.", 
                       queryResults.get(0));
+                    qex.setXPath(xpath);
                     throw qex;
                 }
             }

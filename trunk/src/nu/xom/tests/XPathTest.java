@@ -42,6 +42,7 @@ import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.XPathContext;
 import nu.xom.XPathException;
+import nu.xom.XPathTypeException;
 
 /**
  * <p>
@@ -412,8 +413,10 @@ public class XPathTest extends XOMTestCase {
             parent.query("count(*)");
             fail("Allowed query to return number");
         }
-        catch (XPathException success) {
+        catch (XPathTypeException success) {
             assertNotNull(success.getMessage());
+            assertEquals(new Double(1), success.getReturnValue());
+            assertEquals("count(*)", success.getXPath());
         }
         
     }
