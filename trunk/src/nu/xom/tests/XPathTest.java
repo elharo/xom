@@ -36,7 +36,6 @@ import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
-import nu.xom.ValidityException;
 import nu.xom.XPathContext;
 import nu.xom.XPathException;
 
@@ -934,8 +933,25 @@ public class XPathTest extends XOMTestCase {
         
         Element parent = new Element("Test", "http://www.example.org");
         
-        Nodes results = parent.query("namespace::*");
-        assertEquals(0, results.size());  
+        try {
+            parent.query("namespace::*");
+            fail("returned namespace nodes");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+        } 
+        
+        // even an element in no namespace has a mapping for the 
+        // xml prefix
+        Element nonamespace = new Element("Test");
+        
+        try {
+             nonamespace.query("namespace::*");
+             fail("returned namespace nodes");
+         }
+         catch (XPathException success) {
+             assertNotNull(success.getMessage());
+         }
         
     }
     
@@ -1417,29 +1433,21 @@ public class XPathTest extends XOMTestCase {
     }
     
     
-    /* <html>
-<head>
-</head>
-<body>
+    /* <body>
 <p>
-  <span>text1</span>
+  <span></span>
 </p>
-<div>text2</div>
-</body>
-</html> */
+<div></div>
+</body> */
      public void testPrecedingAxis() {
       
-         Element root = new Element("html");
          Element body = new Element("body");
-         root.appendChild(body);
          Element p = new Element("p");
          body.appendChild(p);
          Element span = new Element("span");
          p.appendChild(span);
-         span.appendChild("text1");
          Element div = new Element("div");
          body.appendChild(div);
-         div.appendChild("text2");
          
          Nodes result = div.query("preceding::*[1]");
          assertEquals(1, result.size());
@@ -1475,7 +1483,6 @@ public class XPathTest extends XOMTestCase {
          assertEquals(child2, result.get(0));
          
      }
-     
      
      
      public void testJaxen51() throws ParsingException, IOException {

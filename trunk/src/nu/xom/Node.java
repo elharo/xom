@@ -405,8 +405,13 @@ public abstract class Node {
             Iterator iterator = results.iterator();
             while (iterator.hasNext()) {
                 Object o = iterator.next();
-                if (o instanceof JaxenNavigator.XPathNamespaceNode || o instanceof DocumentFragment) {
-                    iterator.remove();
+                if (o instanceof JaxenNavigator.XPathNamespaceNode) {
+                    throw new XPathException("XPath expression " 
+                      + xpath + "returned namespace nodes, which XOM "
+                      + "does not support.");
+                }
+                else if (o instanceof DocumentFragment) {
+                    iterator.remove(); // throw exception????
                 }
                 else if (!(o instanceof Node)) {
                     throw new XPathException("XPath expression " 
