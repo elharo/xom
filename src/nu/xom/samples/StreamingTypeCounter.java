@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -130,10 +130,6 @@ public class StreamingTypeCounter extends NodeFactory{
     public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
         return empty;    
-    }
-
-    public Nodes makeWhiteSpaceInElementContent(String data) {
-        return empty;  
     }
 
     public Nodes makeProcessingInstruction(

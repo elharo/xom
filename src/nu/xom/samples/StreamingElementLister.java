@@ -32,7 +32,6 @@ import nu.xom.Attribute;
 import nu.xom.Nodes;
 import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
-import nu.xom.WellformednessException;
 
 
 /**
@@ -108,10 +107,6 @@ public class StreamingElementLister extends NodeFactory{
     public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
         return empty;    
-    }
-
-    public Nodes makeWhiteSpaceInElementContent(String data) {
-        return empty;  
     }
 
     public Nodes makeProcessingInstruction(
