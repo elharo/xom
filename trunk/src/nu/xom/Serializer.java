@@ -268,26 +268,6 @@ public class Serializer {
         escaper.breakLine();
     }
     
-    // 1 == preserve all
-    // 0 == inherit
-    // -1 == default
-    private int isWhiteSpaceSignificant(ParentNode node) {
-     
-        if (node == null) return -1;
-        if (node.isDocument()) return -1;
-        Element element = (Element) node;
-        String xmlSpace = element.getAttributeValue(
-          "space", "http://www.w3.org/XML/1998/namespace"
-        );
-
-        if ("preserve".equals(xmlSpace)) return 1;
-        else if ("default".equals(xmlSpace)) return 0;
-        else {
-            return isWhiteSpaceSignificant(element.getParent());
-        }
- 
-    }
-    
     
     /**
      * <p>
