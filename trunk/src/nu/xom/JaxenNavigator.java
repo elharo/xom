@@ -55,22 +55,18 @@ class JaxenNavigator extends DefaultNavigator {
             Text node = (Text) contextNode;
             XOMList temp = new XOMList();
             ParentNode parent = node.getParent();
-            if (parent == null) {
-                temp.add(node);
+            // parent is never null here due to DocumentFragment
+            int index = parent.indexOf(node);
+            int first = index;
+            int last = index;
+            while (first > 0 && parent.getChild(first-1).isText()) {
+                first--;
             }
-            else {
-                int index = parent.indexOf(node);
-                int first = index;
-                int last = index;
-                while (first > 0 && parent.getChild(first-1).isText()) {
-                    first--;
-                }
-                while (last < parent.getChildCount()-1 && parent.getChild(last+1).isText()) {
-                    last++;
-                }
-                for (int i = first; i <= last; i++) {
-                    temp.add(parent.getChild(i));
-                }
+            while (last < parent.getChildCount()-1 && parent.getChild(last+1).isText()) {
+                last++;
+            }
+            for (int i = first; i <= last; i++) {
+                temp.add(parent.getChild(i));
             }
             contextNode = temp;
         }
@@ -90,9 +86,6 @@ class JaxenNavigator extends DefaultNavigator {
         else {
             parent = original.getParent();
         }
-        
-        // no elements in the tree
-        if (parent == null) return null;
         
         // find highest parent node
         ParentNode high = parent;
