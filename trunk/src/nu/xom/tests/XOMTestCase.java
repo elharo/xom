@@ -23,6 +23,7 @@
 
 package nu.xom.tests;
 
+import junit.framework.ComparisonFailure;
 import junit.framework.TestCase;
 import nu.xom.Attribute;
 import nu.xom.Comment;
@@ -56,10 +57,11 @@ public class XOMTestCase extends TestCase {
     
     /**
      * <p>
-     *   Asserts that two text nodes are equal. 
-     *   Text nodes are considered equal if and only if they are identical
-     *   char by char. null???? Unicode and whitespace normalization
-     *   is not performed before comparison.
+     * Asserts that two text nodes are equal. Text nodes are considered
+     * equal if they are identical char by char, or if both are null. 
+     * Unicode and whitespace normalization is not performed before 
+     * comparison. If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown.
      * </p>
      * 
      * @param expected
@@ -72,14 +74,12 @@ public class XOMTestCase extends TestCase {
     
     /**
      * <p>
-     * Asserts that two text nodes are equal. 
-     * Text nodes are considered equal if and 
-     * only if they are identical
-     * char by char, or if both are null. 
-     * Unicode and whitespace normalization
-     * is not performed before comparison.
-     * If they are not an <code>AssertionFailedError</code>
-     * is thrown with the given message.
+     * Asserts that two text nodes are equal. Text nodes are considered
+     * equal if they are identical char by char, or if both are null. 
+     * Unicode and whitespace normalization is not performed before 
+     * comparison. If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown with the given 
+     * message.
      * </p>
      * 
      * @param message
@@ -88,11 +88,26 @@ public class XOMTestCase extends TestCase {
      */
     public static void assertEquals(
       String message, Text expected, Text actual) {
+        
         if (actual == expected) return;
+        nullCheck(message, expected, actual);
+
         assertEquals(message, expected.getValue(), actual.getValue());
     }
 
     
+    private static void nullCheck(String message, Node expected, Node actual) {
+        
+        if (expected == null) {
+            throw new ComparisonFailure(message, null, actual.toXML());
+        }
+        else if (actual == null) {
+            throw new ComparisonFailure(message, expected.toXML(), null);
+        }
+        
+    }
+
+
     public static void assertEquals(
       Attribute expected, Attribute actual) {
         assertEquals(null, expected, actual);   
@@ -103,6 +118,8 @@ public class XOMTestCase extends TestCase {
       String message, Attribute expected, Attribute actual) {
         
         if (actual == expected) return;
+        nullCheck(message, expected, actual);
+        
         String value1 = expected.getValue();
         String value2 = actual.getValue();
         if ("xml:base".equals(expected.getQualifiedName())) {
@@ -134,6 +151,8 @@ public class XOMTestCase extends TestCase {
       String message, DocType expected, DocType actual) {
         
         if (actual == expected) return;
+        nullCheck(message, expected, actual);
+
         /* assertEquals(
           type1.getInternalDTDSubset(), 
           type2.getInternalDTDSubset()
@@ -164,6 +183,8 @@ public class XOMTestCase extends TestCase {
       Element expected, Element actual) {
         
         if (actual == expected) return;
+        nullCheck(message, expected, actual);
+
         assertEquals(message,
           expected.getLocalName(), 
           actual.getLocalName()
@@ -263,6 +284,8 @@ public class XOMTestCase extends TestCase {
       String message, Document expected, Document actual) {       
 
         if (actual == expected) return;
+        nullCheck(message, expected, actual);
+
         assertEquals(message,
           expected.getChildCount(), 
           actual.getChildCount()
@@ -284,8 +307,11 @@ public class XOMTestCase extends TestCase {
     
     public static void assertEquals(
       String message, Comment expected, Comment actual) {
+        
         if (actual == expected) return;
+        nullCheck(message, expected, actual);
         assertEquals(message, expected.getValue(), actual.getValue());
+        
     }
     
     
@@ -305,6 +331,8 @@ public class XOMTestCase extends TestCase {
       ProcessingInstruction actual) {
 
         if (actual == expected) return;
+        nullCheck(message, expected, actual);
+
         assertEquals(message, expected.getValue(), actual.getValue());
         assertEquals(message, expected.getTarget(), actual.getTarget());
         
@@ -320,6 +348,8 @@ public class XOMTestCase extends TestCase {
       String message, Node expected, Node actual) {
         
         if (actual == expected) return;
+        nullCheck(message, expected, actual);
+
         try {
             if (expected instanceof Document) {
                 assertEquals(message, (Document) expected, (Document) actual);
