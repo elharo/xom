@@ -31,7 +31,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  * 
  */
 public class Document extends ParentNode {
@@ -191,7 +191,7 @@ public class Document extends ParentNode {
     public final Element getRootElement() {
         for (int i = 0; i < getChildCount(); i++) {
              Node child = getChild(i);
-             if (child instanceof Element) {
+             if (child.isElement()) {
                 return (Element) child;
              }
          }
