@@ -44,7 +44,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0b3
  *
  */
 public class WrappingSerializer extends Serializer {
@@ -86,7 +86,7 @@ public class WrappingSerializer extends Serializer {
      * </p>
      * 
      * <p>
-     * The default value for max line length is 0, which is  
+     * The default value for maxLength is 0, which is  
      * interpreted as no maximum line length. 
      * Setting this to a negative value just sets it to 0. 
      * </p>

@@ -98,7 +98,7 @@ public class XHTMLPurifier {
                } 
             }
             
-            // Strip out addditional namespaces
+            // Strip out additional namespaces
             for (int i = 0; i < element.getNamespaceDeclarationCount(); i++) {
                 String prefix = element.getNamespacePrefix(i);
                 element.removeNamespaceDeclaration(prefix);  

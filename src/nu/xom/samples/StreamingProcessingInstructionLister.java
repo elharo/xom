@@ -35,14 +35,14 @@ import nu.xom.ProcessingInstruction;
 
 /**
  * <p>
- *   Demonstrates using the <code>Builder</code> and a custom 
- *   <code>NodeFactory</code> to list the processing instructions
- *   while avoiding the overhead of construcitng a lot of unneeded 
- *   nodes thus saving memory and time.
+ * Demonstrates using the <code>Builder</code> and a custom 
+ * <code>NodeFactory</code> to list the processing instructions
+ * while avoiding the overhead of constructing a lot of unneeded 
+ * nodes thus saving memory and time.
  * </p>
  * 
  *  @author Elliotte Rusty Harold
- *  @version 1.0d23
+ *  @version 1.0b3
  *
  */
 public class StreamingProcessingInstructionLister extends NodeFactory {
