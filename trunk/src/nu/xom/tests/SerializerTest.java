@@ -1360,4 +1360,15 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("ISO-8859-1", serializer.getEncoding());
     }
 
+    public void testGetPreserveBaseURI() 
+      throws UnsupportedEncodingException {
+        Serializer serializer = new Serializer(System.out, "ISO-8859-1");
+        assertFalse(serializer.getPreserveBaseURI());
+        serializer.setPreserveBaseURI(true);
+        assertTrue(serializer.getPreserveBaseURI());
+        serializer.setPreserveBaseURI(false);
+        assertFalse(serializer.getPreserveBaseURI());
+        
+    }
+
 }
