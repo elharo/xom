@@ -753,6 +753,36 @@ public class ElementTest extends XOMTestCase {
 
     }
 
+    public void testInsertNull() {
+        
+        String name = "red:sakjdhjhd";
+        String uri = "http://www.red.com/";
+        Element e = new Element(name, uri);
+        String data = null;
+        try {
+            e.insertChild(data, 0);
+            fail("Inserted null");
+        }
+        catch (NullPointerException ex) {
+            // success;   
+        }
+    }
+
+    public void appendNullChild() {
+        
+        String name = "red:sakjdhjhd";
+        String uri = "http://www.red.com/";
+        Element e = new Element(name, uri);
+        String data = null;
+        try {
+            e.appendChild(data);
+            fail("Appended null");
+        }
+        catch (NullPointerException ex) {
+            // success;   
+        }
+    }
+
     public void testInsertChild() {
         
         String name = "red:sakjdhjhd";
