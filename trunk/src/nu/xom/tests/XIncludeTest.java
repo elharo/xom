@@ -64,7 +64,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1a3
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -311,6 +311,31 @@ public class XIncludeTest extends XOMTestCase {
         String result = out.toXML();
         assertEquals("<?xml version=\"1.0\"?>\n" +
            "<root><child2 id=\"p1\" /><child2 id=\"p1\" /></root>\n", result);
+        
+    }
+    
+
+    public void testRelativeURLInBaselessDocument() 
+      throws IOException, ParsingException, XIncludeException {
+        
+        Element root = new Element("root");
+        Element child1 = new Element("xi:include", XIncluder.XINCLUDE_NS);
+        child1.addAttribute(new Attribute("href", "test.xml"));
+        Element child2 = new Element("child2");
+        root.appendChild(child1);
+        root.appendChild(child2);
+        Document in = new Document(root);
+        try {
+            XIncluder.resolve(in);
+            fail("Resolved relative URI in baseless document");
+        }
+        catch (BadHrefAttributeException success) {
+            assertEquals(
+              "Could not resolve relative URI test.xml because the "
+              + "xi:include element does not have a base URI.", 
+              success.getMessage());
+        }
+        
     }
     
 
