@@ -24,8 +24,11 @@ package nu.xom.tests;
 import java.util.HashMap;
 import java.util.Map;
 
+import nu.xom.Attribute;
 import nu.xom.Element;
+import nu.xom.Node;
 import nu.xom.Nodes;
+import nu.xom.Text;
 import nu.xom.XPathException;
 
 /**
@@ -52,6 +55,129 @@ public class XPathTest extends XOMTestCase {
         Nodes result = parent.query("*");
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
+        
+    }
+    
+
+    public void testParentAxis() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        
+        Nodes result = child.query("parent::*");
+        assertEquals(1, result.size());
+        assertEquals(parent, result.get(0));   
+        
+    }
+    
+
+    public void testSelfAxis() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        
+        Nodes result = child.query("self::*");
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));   
+        result = parent.query("self::*");
+        assertEquals(1, result.size());
+        assertEquals(parent, result.get(0));   
+        
+    }
+    
+
+    public void testSelfAxisWithTextChild() {
+        
+        Element parent = new Element("parent");
+        Node child = new Text("child");
+        parent.appendChild(child);
+        Nodes result = child.query("self::text()");
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));
+        
+    }
+    
+
+    public void testSelfAxisWithTextChildAndNoParent() {
+        
+        Node child = new Text("child");
+        Nodes result = child.query("self::text()");
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));
+        
+    }
+    
+
+    public void testAttributeAxis() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        parent.addAttribute(new Attribute("name", "value"));
+        parent.addAttribute(new Attribute("name2", "value"));
+        
+        Nodes result = child.query("attribute::*");
+        assertEquals(0, result.size());
+        result = parent.query("attribute::*");
+        assertEquals(2, result.size());
+        result = parent.query("attribute::name");
+        assertEquals(1, result.size()); 
+        
+    }
+    
+
+    public void testEmptyParentAxis() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        
+        Nodes result = parent.query("parent::*");
+        assertEquals(0, result.size());   
+        
+    }
+    
+
+    public void testPrecedingSiblingAxis() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child1");
+        Element child2 = new Element("child2");
+        Element child3 = new Element("child3");
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        parent.appendChild(child3);
+        
+        Nodes result = child1.query("preceding-sibling::*");
+        assertEquals(0, result.size());   
+        result = child2.query("preceding-sibling::*");
+        assertEquals(1, result.size());   
+        assertEquals(child1, result.get(0));   
+        result = child3.query("preceding-sibling::*");
+        assertEquals(2, result.size());    
+        
+    }
+    
+
+    public void testFollowingSiblingAxis() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child1");
+        Element child2 = new Element("child2");
+        Element child3 = new Element("child3");
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        parent.appendChild(child3);
+        
+        Nodes result = child3.query("following-sibling::*");
+        assertEquals(0, result.size());   
+        result = child2.query("following-sibling::*");
+        assertEquals(1, result.size());   
+        assertEquals(child3, result.get(0));   
+        result = child1.query("following-sibling::*");
+        assertEquals(2, result.size());    
         
     }
     
@@ -89,7 +215,7 @@ public class XPathTest extends XOMTestCase {
     }
     
 
-    public void testNamespaceQueryWithoutprefixMapping() {
+    public void testNamespaceQueryWithoutPrefixMapping() {
         
         Element parent = new Element("Test", "http://www.example.org");
         Element child = new Element("child", "http://www.example.org");
