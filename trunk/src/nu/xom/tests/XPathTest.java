@@ -372,7 +372,9 @@ public class XPathTest extends XOMTestCase {
             String id = query.getAttributeValue("id");
             // test suite bug; should be fixed soon
             if ("A2".equals(id)) continue;
-            // ???? Not sure what's going on here; need to figure it out
+            // These two tests are buggy because the results don't
+            // declare the XLink namespace on the root html element
+            // as they should.
             else if ("A3".equals(id)) continue;
             else if ("A4".equals(id)) continue;
 
