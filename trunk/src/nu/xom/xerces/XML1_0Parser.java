@@ -23,6 +23,7 @@
 package nu.xom.xerces;
 
 import org.apache.xerces.parsers.SAXParser;
+import org.apache.xerces.parsers.DTDConfiguration;
 
 /**
  * <p>
@@ -31,20 +32,27 @@ import org.apache.xerces.parsers.SAXParser;
  * (<code>org.apache.xerces.parsers.SAXParser</code>) XOM verifies
  * everything. When using this subclass, XOM will rely on Xerces
  * to verify the rules, and skip its own verification checks.
- * If you want to set cusotm SAX features and properties 
+ * If you want to set custom SAX features and properties 
  * on the <code>XMLReader</code> before creating a 
  * <code>Builder</code>, you should use this class in preference
  * to <code>org.apache.xerces.parsers.SAXParser</code>. 
  * </p>
  * 
+ * <p>
+ * This class does not support schema validation. If you want to use
+ * the W3C XML Schema Language, you'll need to download and install 
+ * the full version of Xerces from 
+ * <a href="http://xml.apache.org/xerces2-j">http://xml.apache.org</a>.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0a3
  * 
  */
 public class XML1_0Parser extends SAXParser {
 
     public XML1_0Parser() {
-        super(new XML1_0ParserConfiguration());
+        super(new DTDConfiguration());
     }
 
 }
