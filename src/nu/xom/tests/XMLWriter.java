@@ -37,7 +37,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * </p>
  *
  * @author David Megginson, Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  */
 class XMLWriter extends XMLFilterImpl implements LexicalHandler {
 
@@ -71,42 +71,6 @@ class XMLWriter extends XMLFilterImpl implements LexicalHandler {
     public XMLWriter (Writer writer) {
 	   init(writer);
     }
-    
-
-    /**
-     * <p>
-     * Create a new XML writer.
-     * </p>
-     * 
-     * <p>Use the specified XML reader as the parent.</p>
-     *
-     * @param xmlreader the parent in the filter chain, or null
-     *        for no parent
-     */
-    public XMLWriter (XMLReader xmlreader) {
-    	super(xmlreader);
-    	init(null);
-    }
-    
-
-    /**
-     * <p>
-     * Create a new XML writer.
-     * </p>
-     * 
-     * <p>Use the specified XML reader as the parent, and write
-     * to the specified writer.</p>
-     *
-     * @param xmlreader the parent in the filter chain, or null
-     *        for no parent
-     * @param writer the output destination, or null to use standard
-     *        output
-     */
-    public XMLWriter(XMLReader xmlreader, Writer writer) {
-    	super(xmlreader);
-    	init(writer);
-    }
-
 
     /**
      * <p>
