@@ -166,53 +166,42 @@ public class Element extends ParentNode {
         
         this.actualBaseURI = element.findActualBaseURI();
         
-        // non-recursive algorithm for filling in children
-        // doesn't yet work
-        /*
-        Node current = element;
-        Node newNode = this;
-        ParentNode copyParent = this;
+        // XXX non-recursive algorithm for filling in children
+        // DOMCOnverter would probably be a better place to look for this
+        // Just change the DOM creation to XOM creation
+        /*Node current = element;
         boolean end = false;
         int index = -1;
-        while (true) {
-            
-            // 1. Append a copy of the current node to the current parent
-            if (index != -1 && !end) {
-                if (current.isElement()) {
-                    copyParent.appendChild(copyTag((Element) current));
-                }
-                else {
-                    copyParent.appendChild(current.copy());
-                }
-            }
-            
-            
-            // 2. Select next following node
+        while (true) {                   
             if (!end && current.getChildCount() > 0) {
+               // writeStartTag((Element) current);
                current = current.getChild(0);
                index = 0;
             }
-            else  if (current == element) break;
             else {
-              end = false;
-              ParentNode parent = current.getParent();
-              if (parent.getChildCount() - 1 == index) {
-                current = parent;
-                if (current != element) {
-                    parent = current.getParent();
-                    index = parent.indexOf(current);
+                if (end) {
+                    // writeEndTag((Element) current);
+                    if (current == element) break;
                 }
-                end = true;
-              }
-              else {
-                 index++;
-                 current = parent.getChild(index);
-              }
-              
+                else {
+                    // writeChild(current);
+                }
+                end = false;
+                ParentNode parent = current.getParent();
+                if (parent.getChildCount() - 1 == index) {
+                    current = parent;
+                    if (current != element) {
+                        parent = current.getParent();
+                        index = parent.indexOf(current);
+                    }
+                    end = true;
+                }
+                else {
+                    index++;
+                    current = parent.getChild(index);
+                }
             }
-
-        }        
-        */
+        }   */    
         
         for (int i = 0; i < element.getChildCount(); i++) {
            Node child = element.getChild(i);
