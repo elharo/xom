@@ -297,7 +297,9 @@ public class XIncluder {
      * </p>
      * 
      * @param in the <code>Nodes</code> object in which include 
-     *     elements should be resolved.
+     *     elements should be resolved
+     * @param builder the <code>Builder</code> used to build the
+     *     nodes included from other documents
      * 
      * @throws BadParseAttributeException if an <code>include</code>  
      *     element has a <code>parse</code> attribute
@@ -355,6 +357,8 @@ public class XIncluder {
      * 
      * @param in the <code>Nodes</code> object in which include 
      *     elements should be resolved
+     * @param builder the <code>Builder</code> used to build the
+     *     nodes included from other documents
      * 
      * @return a new Nodes object which contains no 
      *   <code>xinclude:include</code> elements
@@ -736,7 +740,7 @@ public class XIncluder {
         
     }
 
-    /**
+    /*
      * <p>
      *   This is a controversial test. NIST test case 12 
      *   requires it, but I'm not convinced the XInclude spec does,
@@ -878,9 +882,15 @@ public class XIncluder {
     * @param source   <code>URL</code> of the document to download 
     * @param encoding encoding of the document; e.g. UTF-8,
     *                  ISO-8859-1, etc.
+    * @param builder the <code>Builder</code> used to build the
+    *     nodes included from other documents
+    * 
     * @return the document retrieved from the source <code>URL</code>
-    * @throws <code>UnavailableResourceException</code> if the source
-    *     document cannot be located or cannot be read
+    * 
+    * @throws IOException if the remote document cannot
+    *     be read due to an I/O error
+    * @throws XIncludeException if the NodeFactory 
+    *     misbehaves
     */    
     private static Text downloadTextDocument(
       URL source, String encoding, Builder builder) 
@@ -938,7 +948,7 @@ public class XIncluder {
                 sb = new StringBuffer(sb.length());
                 for (int i = 0; i < results.size(); i++) {
                     try {
-                        sb.append((Text) (results.get(i))); 
+                        sb.append((results.get(i))); 
                     }
                     catch (ClassCastException ex) {
                         throw new XIncludeException(
