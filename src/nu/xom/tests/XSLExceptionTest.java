@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -31,7 +31,7 @@ import nu.xom.xslt.XSLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a5
  *
  */
 public class XSLExceptionTest extends XOMTestCase {
@@ -50,7 +50,7 @@ public class XSLExceptionTest extends XOMTestCase {
     
     public void testConstructor() {
         String message = "testing 1-2-3";
-        Exception ex = new XSLException(message, cause);
+        XSLException ex = new XSLException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
