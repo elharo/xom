@@ -123,7 +123,7 @@ public class BaseURITest extends XOMTestCase {
             fail("allowed multiple brackets");
         }
         catch (MalformedURIException ex) {
-            // success   
+            assertNotNull(ex.getMessage());   
         }
 
         try {
@@ -133,7 +133,8 @@ public class BaseURITest extends XOMTestCase {
             fail("allowed mismatched brackets");
         }
         catch (MalformedURIException ex) {
-            // success   
+            // success
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -143,7 +144,8 @@ public class BaseURITest extends XOMTestCase {
             fail("allowed right bracket before left bracket");
         }
         catch (MalformedURIException ex) {
-            // success   
+            // success
+            assertNotNull(ex.getMessage());
         }
 
     }
@@ -164,7 +166,8 @@ public class BaseURITest extends XOMTestCase {
             fail("Allowed URI containing space");
         }
         catch (MalformedURIException ex) {
-           // success;   
+            // success
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -172,7 +175,8 @@ public class BaseURITest extends XOMTestCase {
             fail("Allowed URI containing latin-1 character");
         }
         catch (MalformedURIException ex) {
-           // success;   
+            // success
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -180,7 +184,8 @@ public class BaseURITest extends XOMTestCase {
             fail("Allowed URI containing %");
         }
         catch (MalformedURIException ex) {
-           // success;   
+            // success
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -188,7 +193,8 @@ public class BaseURITest extends XOMTestCase {
             fail("Allowed URI containing half percent");
         }
         catch (MalformedURIException ex) {
-           // success;   
+            // success
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -196,7 +202,8 @@ public class BaseURITest extends XOMTestCase {
             fail("Allowed URI containing unwise character");
         }
         catch (MalformedURIException ex) {
-           // success;   
+            // success
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -204,7 +211,8 @@ public class BaseURITest extends XOMTestCase {
             fail("Allowed URI containing unwise < character");
         }
         catch (MalformedURIException ex) {
-           // success;   
+            // success
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -212,7 +220,8 @@ public class BaseURITest extends XOMTestCase {
             fail("Allowed URI containing unwise control character");
         }
         catch (MalformedURIException ex) {
-           // success;   
+            // success
+            assertNotNull(ex.getMessage());
         }
 
     }
@@ -255,14 +264,14 @@ public class BaseURITest extends XOMTestCase {
      }
 
     public void testXMLBaseRelativeWithNoRoot() {
-        Element e = new Element("test");
-        e.addAttribute(new Attribute("xml:base", 
+        Element element = new Element("test");
+        element.addAttribute(new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", "base.html"));
-        assertEquals("base.html", e.getBaseURI());
+        assertEquals("base.html", element.getBaseURI());
         
-        e = new Element("test");
-        e.setBaseURI("base.html");
-        assertEquals("base.html", e.getBaseURI());
+        element = new Element("test");
+        element.setBaseURI("base.html");
+        assertEquals("base.html", element.getBaseURI());
         
      }
 
