@@ -146,8 +146,8 @@ public class BuilderTest extends XOMTestCase {
 
     public void testNotationAttributeType() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(attributeDoc);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("notationatt"); 
         assertEquals(Attribute.Type.NOTATION, att.getType());      
@@ -156,8 +156,8 @@ public class BuilderTest extends XOMTestCase {
     
     public void testCDATAAttributeType() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(attributeDoc);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("cdataatt"); 
         assertEquals(Attribute.Type.CDATA, att.getType());      
@@ -166,8 +166,8 @@ public class BuilderTest extends XOMTestCase {
     
     public void testEntityAttributeType() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(attributeDoc);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("entityatt"); 
         assertEquals(Attribute.Type.ENTITY, att.getType());      
@@ -176,8 +176,8 @@ public class BuilderTest extends XOMTestCase {
     
     public void testEntitiesAttributeType() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(attributeDoc);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("entitiesatt"); 
         assertEquals(Attribute.Type.ENTITIES, att.getType());      
@@ -186,8 +186,8 @@ public class BuilderTest extends XOMTestCase {
     
     public void testNameTokenAttributeType() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(attributeDoc);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("nmtokenatt"); 
         assertEquals(Attribute.Type.NMTOKEN, att.getType());      
@@ -197,8 +197,8 @@ public class BuilderTest extends XOMTestCase {
     
     public void testNameTokensAttributeType() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(attributeDoc);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("nmtokensatt"); 
         assertEquals(Attribute.Type.NMTOKENS, att.getType());      
@@ -244,8 +244,8 @@ public class BuilderTest extends XOMTestCase {
     
     public void testIDAttributeType() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(attributeDoc);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("idatt"); 
         assertEquals(Attribute.Type.ID, att.getType());      
@@ -255,8 +255,8 @@ public class BuilderTest extends XOMTestCase {
     
     public void testIDREFAttributeType() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(attributeDoc);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("idrefatt"); 
         assertEquals(Attribute.Type.IDREF, att.getType());      
@@ -266,8 +266,8 @@ public class BuilderTest extends XOMTestCase {
     
     public void testIDREFSAttributeType() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(attributeDoc);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(attributeDoc);
+        Document document = builder.build(reader);
         Element root = document.getRootElement();
         Attribute att = root.getAttribute("idrefsatt"); 
         assertEquals(Attribute.Type.IDREFS, att.getType());      
@@ -277,16 +277,16 @@ public class BuilderTest extends XOMTestCase {
 
     public void testBuildFromReader() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(source);
-        Document document = builder.build(reader1);
+        Reader reader = new StringReader(source);
+        Document document = builder.build(reader);
         verify(document);        
         assertNull(document.getBaseURI());
     }
     
     public void testBuildFromReaderWithBase()
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(source);
-        Document document = builder.build(reader1, base);
+        Reader reader = new StringReader(source);
+        Document document = builder.build(reader, base);
         verify(document);        
         assertEquals(base, document.getBaseURI());
         
@@ -396,16 +396,30 @@ public class BuilderTest extends XOMTestCase {
         Document document2 = builder.build(reader2);  
         assertEquals(document2, document1);     
     }
+
+    public void testDocumentWithDefaultNamespaceOnPrefixedElement()
+      throws IOException, ParsingException {
+        Reader reader = new StringReader("<pre:root " +
+                "xmlns='http://www.example.org/' " +
+                "xmlns:pre='http://www.cafeconleche.org/'/>");
+        Document document = builder.build(reader); 
+        Element root = document.getRootElement();
+        assertEquals("http://www.example.org/", root.getNamespaceURI(""));    
+        assertEquals("http://www.cafeconleche.org/", root.getNamespaceURI("pre"));    
+        assertEquals("http://www.cafeconleche.org/", root.getNamespaceURI());    
+    } 
+    
     
     public void testValidateFromReaderWithBase()
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(validDoc);
-        Document document = validator.build(reader1, base); 
+        Reader reader = new StringReader(validDoc);
+        Document document = validator.build(reader, base); 
         assertEquals(base, document.getBaseURI());
         Reader reader2 = new StringReader(validDoc);
         Document document2 = builder.build(reader2);  
         assertEquals(document2, document);     
     }
+    
     
     public void testValidateFromInputStreamWithBase()
       throws IOException, ParsingException {
@@ -494,9 +508,9 @@ public class BuilderTest extends XOMTestCase {
 
     public void testInvalidDocFromReader() 
       throws IOException, ParsingException {
-        StringReader reader1 = new StringReader(source);
+        Reader reader = new StringReader(source);
         try {
-            validator.build(reader1);   
+            validator.build(reader);   
             fail("Allowed invalid doc");
         }
         catch (ValidityException ex) {
@@ -508,7 +522,7 @@ public class BuilderTest extends XOMTestCase {
                 assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
-                Document doc = builder.build(reader1); 
+                Document doc = builder.build(reader); 
                 this.verify(ex.getDocument());
                 assertEquals(doc, ex.getDocument());
             }
@@ -961,7 +975,5 @@ public class BuilderTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
     }        
-    
-    
     
 }
