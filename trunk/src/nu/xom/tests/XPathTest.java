@@ -46,7 +46,6 @@ import nu.xom.XPathException;
  */
 public class XPathTest extends XOMTestCase {
     
-    // ???? add tests that return namespace nodes
     // ???? add tests that use namespace axis in predicate but do not return namespace nodes
     
     
@@ -216,6 +215,19 @@ public class XPathTest extends XOMTestCase {
         assertEquals(2, result.size());
         assertEquals(parent, result.get(0));   
         assertEquals(grandparent, result.get(1));
+        
+    }
+    
+
+    public void testParentAxisWithDocument() {
+        
+        Element root = new Element("Test");
+        Document doc = new Document(root);
+        
+        Nodes result = root.query("parent::*");
+        // ???? appears to be a bug where root node is considered to
+        // be of principle node type on parent axis
+        assertEquals(0, result.size());
         
     }
     
@@ -727,6 +739,38 @@ public class XPathTest extends XOMTestCase {
         Nodes result = parent.query("child::pre:child", context);
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
+        
+    }
+    
+    
+    public void testNamespaceAxis() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        
+        try {
+            parent.query("namespace::*");
+            fail("Allowed return of namespace nodes");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+            assertNotNull(success.getCause());
+        }   
+        
+    }
+    
+    
+    public void testPredicateWithNamespaceAxis() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child", "http://www.example.com");
+        Element grandchild = new Element("child", "http://www.example.com");
+        grandchild.addNamespaceDeclaration("pre", "http://www.w3.org/");
+        parent.appendChild(child);
+        child.appendChild(grandchild);
+        
+        Nodes result = parent.query("//*[count(namespace::*)=1]");
+        assertEquals(1, result.size());   
+        assertEquals(child, result.get(0));
         
     }
     
