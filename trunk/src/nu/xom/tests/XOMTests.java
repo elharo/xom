@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0d24
  *
  */
 public class XOMTests extends TestCase {
@@ -53,7 +53,6 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(LeafNodeTest.class));
         result.addTest(new TestSuite(AttributeTest.class));
         result.addTest(new TestSuite(AttributeTypeTest.class));
-        result.addTest(new TestSuite(TextTest.class));
         result.addTest(new TestSuite(ElementTest.class));
         result.addTest(new TestSuite(CommentTest.class));
         result.addTest(new TestSuite(ProcessingInstructionTest.class));
@@ -75,12 +74,13 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(RoundTripTest.class));
         result.addTest(new TestSuite(DOMConverterTest.class));
         result.addTest(new TestSuite(SAXConverterTest.class));
-        result.addTest(new TestSuite(XSLTransformTest.class));
         result.addTest(new TestSuite(SerializerTest.class));
         result.addTest(new TestSuite(CanonicalizerTest.class));
         result.addTest(new TestSuite(BuilderTest.class));
         result.addTest(new TestSuite(XIncludeTest.class));
         result.addTest(new TestSuite(BaseURITest.class));
+        result.addTest(new TestSuite(TextTest.class));
+        result.addTest(new TestSuite(XSLTransformTest.class));
         result.addTest(new TestSuite(EncodingTest.class));
         return result;
     }
