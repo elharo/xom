@@ -38,12 +38,15 @@ import com.ibm.icu.text.Normalizer;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Comment;
+import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Namespace;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
+import nu.xom.Text;
 import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
 
@@ -1264,6 +1267,157 @@ and expect to see
             
             assertEquals(resolvedURI, new String(expected, "UTF-8"), new String(actual, "UTF-8"));
             
+        }
+        
+    }
+    
+    
+    public void testCanonicalizeAttribute() throws IOException {
+     
+        Attribute att = new Attribute("pre:foo", "http://www.example.org", "value");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(att);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = " pre:foo=\"value\"".getBytes("UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+
+    
+    public void testCanonicalizeNamespace() throws IOException {
+     
+        Element element = new Element("pre:foo", "http://www.example.org");
+        Nodes namespaces = element.query("namespace::pre");
+        Namespace ns = (Namespace) namespaces.get(0);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(ns);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = " xmlns:pre=\"http://www.example.org\"".getBytes("UTF-8");
+        assertEquals(expected, actual);
+        
+        
+    }
+
+    
+    public void testCanonicalizeXMLNamespace() {
+     
+        // ????
+        
+    }
+
+    
+    public void testCanonicalizeElement() throws IOException {
+     
+        Element element = new Element("pre:foo", "http://www.example.org");
+        element.appendChild("  value \n value");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(element);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = "<pre:foo xmlns:pre=\"http://www.example.org\">  value \n value</pre:foo>".getBytes("UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+
+    
+    public void testCanonicalizeDocumentTypeDeclaration() throws IOException {
+     
+        DocType doctype = new DocType("root", "http://www.example.org");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(doctype);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        assertEquals(0, actual.length);
+        
+    }
+
+    
+    public void testCanonicalizeProcessingInstruction() throws IOException {
+     
+        ProcessingInstruction pi = new ProcessingInstruction("target", "value \n value");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(pi);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = "<?target value \n value?>".getBytes("UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+
+    
+    public void testCanonicalizeText() throws IOException {
+     
+        Text c = new Text("  pre:foo \n  ");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(c);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();  
+        byte[] expected = "  pre:foo \n  ".getBytes("UTF-8");
+        assertEquals(expected, actual);        
+        
+        
+    }
+
+    
+    public void testCanonicalizeComment() throws IOException {
+     
+        Comment c = new Comment("pre:foo");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(c);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = "<!--pre:foo-->".getBytes("UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    // ???? pull up into XOMTestCase?
+    public void assertEquals(byte[] expected, byte[] actual) {
+        
+        if (expected == null && actual == null) {
+            return;
+        }
+        assertEquals(expected.length, actual.length);
+        for (int i = 0; i < actual.length; i++) {
+            assertEquals(expected[i], actual[i]);
         }
         
     }
