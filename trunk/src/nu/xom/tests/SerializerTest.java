@@ -716,8 +716,6 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("Tab not normalized to space", " ", result);
     }
 
-    // This is the tough case; want to maintain line break
-    // but not necessarily line break character????
     public void testCRLFInAttributeValueWithLineSeparatorCR() 
       throws IOException, ParseException {        
         Element root = new Element("root");
@@ -884,16 +882,6 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("Carriage return unnecessarily escaped", "\n", result);
     }
     
-    /**
-     * <p>
-     *   Test that tabs in attribute values are not escaped when 
-     *   a max length is set. test for setting 0 maxlength and 
-     *   negative max length????
-     * </p>
-     * 
-     * @throws IOException
-     * @throws ParseException
-     */
     public void testTabInAttributeValueWithMaxLength() 
       throws IOException, ParseException {        
         Element root = new Element("root");
@@ -909,6 +897,33 @@ public class SerializerTest extends XOMTestCase {
         String result = reparsed.getRootElement().getAttributeValue("test");
         assertEquals("Tab not normalized to space", " ", result);
     }
+
+    /**
+     * <p>
+     *   Test that tabs in attribute values are escaped when 
+     *   max length is set to 0
+     * </p>
+     * 
+     * @throws IOException
+     * @throws ParseException
+     */
+    public void testTabInAttributeValueWithZeroMaxLength() 
+      throws IOException, ParseException {        
+        Element root = new Element("root");
+        root.addAttribute(new Attribute("test", "\t"));
+        Document original = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "ISO-8859-1");
+        serializer.setMaxLength(0);
+        serializer.write(original);
+        out.close();
+        InputStream in = new ByteArrayInputStream(out.toByteArray());
+        Document reparsed = parser.build(in);
+        String result = reparsed.getRootElement().getAttributeValue("test");
+        assertEquals("Tab not normalized to space", "\t", result);
+    }
+    
+
     
     public void testSetMaxLength() {
         Serializer serializer = new Serializer(System.out);
