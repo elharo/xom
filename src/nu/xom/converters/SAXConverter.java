@@ -29,6 +29,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
@@ -37,6 +38,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.LocatorImpl;
 
 /**
  * 
@@ -46,7 +48,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
   * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b4
  * 
  */
 public class SAXConverter {
@@ -54,6 +56,7 @@ public class SAXConverter {
     
     private ContentHandler contentHandler;
     private LexicalHandler lexicalHandler;
+    private LocatorImpl locator;
 
     
     /**
@@ -84,12 +87,14 @@ public class SAXConverter {
      * 
      */
     public void setContentHandler(ContentHandler handler) {
+        
         if (handler == null) {
             throw new NullPointerException(
               "ContentHandler must be non-null."
             );
         }
         this.contentHandler = handler;
+        
     }
 
     
@@ -146,11 +151,15 @@ public class SAXConverter {
      * </p>
      * 
      * @param doc the document to pass to SAX
+     * 
      * @throws SAXException if the content handler
      *      or lexical handler throws an exception
      */
     public void convert(Document doc) throws SAXException {
         
+        locator = new LocatorImpl();
+        locator.setSystemId(doc.getBaseURI());
+        contentHandler.setDocumentLocator(locator);
         contentHandler.startDocument();
         for (int i = 0; i < doc.getChildCount(); i++) {
              process(doc.getChild(i));
@@ -192,6 +201,10 @@ public class SAXConverter {
 
     
     private void convertElement(Element element) throws SAXException {
+        
+        // Does this need to be the actual base URI, unaffected by xml:base????
+        locator.setSystemId(element.getBaseURI());
+        
         // start prefix mapping
         for (int i = 0; 
              i < element.getNamespaceDeclarationCount(); 
@@ -203,7 +216,7 @@ public class SAXConverter {
         ParentNode parentNode = element.getParent();
         if (parentNode instanceof Element) {
             Element parent = (Element) parentNode;
-         // now handle element's prefix if not declared on ancestor
+            // now handle element's prefix if not declared on ancestor
             String prefix = element.getNamespacePrefix();
             if (!element.getNamespaceURI(prefix)
               .equals(parent.getNamespaceURI(prefix))) {
@@ -211,14 +224,16 @@ public class SAXConverter {
                   element.getNamespaceURI(prefix));  
             }
             
-         // Handle attributes' prefixes if not declared on ancestor
+            // Handle attributes' prefixes if not declared on ancestor
             for (int i = 0; i < element.getAttributeCount(); i++) {
                 Attribute att = element.getAttribute(i);
                 String attPrefix = att.getNamespacePrefix();
                 if (!element.getNamespaceURI(attPrefix)
                   .equals(parent.getNamespaceURI(attPrefix))
                   && !element.getNamespacePrefix()
-                  .equals(attPrefix)) {
+                  .equals(attPrefix)
+                  // SAX never calls startPrefixMapping for the xml prefix
+                  && !"xml".equals(attPrefix)) {
                     contentHandler.startPrefixMapping(attPrefix, 
                       element.getNamespaceURI(attPrefix));  
                 }
@@ -231,11 +246,14 @@ public class SAXConverter {
                   element.getNamespaceURI());  
             }
             
-         // Handle attributes' prefixes if not declared on ancestor
+            // Handle attributes' prefixes if not declared on ancestor
             for (int i = 0; i < element.getAttributeCount(); i++) {
                 Attribute att = element.getAttribute(i);
                 String attPrefix = att.getNamespacePrefix();
-                if (!attPrefix.equals("") &&
+                if ("xml".equals(attPrefix)) {
+                    continue;   
+                }
+                else if (!attPrefix.equals("") &&
                   !attPrefix.equals(element.getNamespacePrefix())){
                     contentHandler.startPrefixMapping(attPrefix, 
                       att.getNamespaceURI());  
@@ -277,7 +295,7 @@ public class SAXConverter {
         }
         if (parentNode instanceof Element) {
             Element parent = (Element) parentNode;
-         // Now handle element's prefix if not declared on ancestor
+            // Now handle element's prefix if not declared on ancestor
             String prefix = element.getNamespacePrefix();
             if (!element.getNamespaceURI(prefix)
               .equals(parent.getNamespaceURI(prefix))) {
@@ -291,7 +309,8 @@ public class SAXConverter {
                 if (!element.getNamespaceURI(attPrefix)
                   .equals(parent.getNamespaceURI(attPrefix))
                   && !element.getNamespacePrefix().equals(
-                  attPrefix)) {
+                  attPrefix)
+                  && !"xml".equals(attPrefix)) {
                     contentHandler.endPrefixMapping(attPrefix);  
                 }
             }                
@@ -307,7 +326,8 @@ public class SAXConverter {
                 Attribute att = element.getAttribute(i);
                 String attPrefix = att.getNamespacePrefix();
                 if (!attPrefix.equals("") && !attPrefix
-                  .equals(element.getNamespacePrefix())) {
+                  .equals(element.getNamespacePrefix())
+                  && !"xml".equals(attPrefix)) {
                     contentHandler.endPrefixMapping(attPrefix);  
                 }
             }
@@ -330,6 +350,38 @@ public class SAXConverter {
         if (type.equals(Attribute.Type.ENTITIES))    return "ENTITIES";
         if (type.equals(Attribute.Type.NOTATION))    return "NOTATION";
         return "NMTOKEN"; // ENUMERATED
+        
+    }
+
+
+    /**
+     * <p>
+     * Converts a <code>Nodes</code> list into SAX by firing events
+     * into the registered handlers. This method calls 
+     * invokes <code>startDocument</code> before processing the list
+     * of nodes, and calls <code>endDocument</code> after processing 
+     * all of them. 
+     * </p>
+     * 
+     * @param nodes the nodes to pass to SAX
+     * 
+     * @throws SAXException if the content handler
+     *      or lexical handler throws an exception
+     */
+    public void convert(Nodes nodes) throws SAXException {
+        
+        if (nodes.size() == 1 && nodes.get(0) instanceof Document) {
+            convert((Document) nodes.get(0));
+        }
+        else {
+            locator = new LocatorImpl();
+            contentHandler.setDocumentLocator(locator);
+            contentHandler.startDocument();
+            for (int i = 0; i < nodes.size(); i++) {
+                process(nodes.get(i));
+            }
+            contentHandler.endDocument();
+        }
         
     }
 
