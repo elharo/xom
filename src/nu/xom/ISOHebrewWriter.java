@@ -55,10 +55,9 @@ class ISOHebrewWriter extends TextWriter {
             case 0x00AC: return false; // NOT SIGN
             case 0x00AD: return false; // SOFT HYPHEN
             case 0x00AE: return false; // REGISTERED SIGN
-            // A bug in Java prevents a macron from being correctly output
-            // as the actual character in this encoding
-            // even though it does exist in the 
-            // ISO-8859-8 character set.
+            // A bug in Java prevents a macron from being correctly 
+            // output as the actual character in this encoding even
+            // though it does exist in the ISO-8859-8 character set.
             // See JDC bug 4760496
             // http://developer.java.sun.com/developer/bugParade/bugs/4760496.html
             // They have marked this as fixed in Tiger (i.e. Java 1.5)
