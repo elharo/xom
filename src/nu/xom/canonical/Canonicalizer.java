@@ -59,7 +59,7 @@ import nu.xom.XPathContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.1d6
  *
  */
 public class Canonicalizer {
@@ -155,7 +155,7 @@ public class Canonicalizer {
      *     should be performed, false if regular XML canonicalization
      *     should be performed
      */
-    public Canonicalizer(
+    private Canonicalizer(
       OutputStream out, boolean withComments, boolean exclusive) {
         
         this.serializer = new CanonicalXMLSerializer(out);
@@ -169,8 +169,8 @@ public class Canonicalizer {
     /**
      * <p>
      * Creates a <code>Canonicalizer</code> that outputs a 
-     * canonical XML document using the specified algorithm.Currently, four 
-     * algorithms are defined and supported:
+     * canonical XML document using the specified algorithm. 
+     * Currently, four algorithms are defined and supported:
      * </p>
      * 
      * <ul>
