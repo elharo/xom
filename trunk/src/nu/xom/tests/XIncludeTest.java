@@ -488,6 +488,20 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testFallbackInIncludedDocumentUsesAnIntradocumentXPointer() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/metafallbacktest6.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/metafallbacktest6.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }
+    
+    
     public void testFallbackInIncludedDocumentIncludesADocumentWithParseEqualsText() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -873,7 +887,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
 
-    // In this test the inlcuded document has a prolog and an epilog
+    // In this test the included document has a prolog and an epilog
     public void testReplaceRoot2() 
       throws ParsingException, IOException, XIncludeException {
       
