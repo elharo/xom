@@ -946,7 +946,6 @@ public class Canonicalizer {
     public final void write(Nodes documentSubset, String inclusiveNamespacePrefixes) 
       throws IOException {  
         
-        
         this.inclusiveNamespacePrefixes.clear();
         if (this.exclusive && inclusiveNamespacePrefixes != null) {
             StringTokenizer tokenizer = new StringTokenizer(
@@ -970,6 +969,7 @@ public class Canonicalizer {
        
     }   
 
+    
     // XXX remove recursion
     // recursively descend through document; in document
     // order, and add results as they are found
@@ -982,11 +982,14 @@ public class Canonicalizer {
             List namespaces = new ArrayList();
             for (int i = 0; i < in.size(); i++) {
                 Node node = in.get(i);
+                list.add(node);
                 if (node instanceof Namespace) namespaces.add(node);
-                else list.add(node);
-                list.add(in.get(i));
             }
-            process(list, namespaces, out, (ParentNode) root);
+            sort(list, namespaces, out, (ParentNode) root);
+            if (! list.isEmpty() ) {
+                throw new CanonicalizationException(
+                  "Cannot canonicalize subsets that contain nodes from more than one document");
+            }
             return out;
         }
         else {
@@ -996,7 +999,7 @@ public class Canonicalizer {
     }
 
 
-    private static void process(List in, List namespaces, Nodes out, ParentNode parent) {
+    private static void sort(List in, List namespaces, Nodes out, ParentNode parent) {
 
         if (in.isEmpty()) return;
         if (in.contains(parent)) {
@@ -1038,7 +1041,7 @@ public class Canonicalizer {
                         if (in.isEmpty()) return;
                     }
                 }
-                process(in, namespaces, out, element);
+                sort(in, namespaces, out, element);
             }
             else {
                 if (in.contains(child)) {
@@ -1050,8 +1053,7 @@ public class Canonicalizer {
         }
         
     }
-    
-    
+
     
     /**
      * <p>
@@ -1112,14 +1114,14 @@ public class Canonicalizer {
       XPathContext context, String inclusiveNamespacePrefixes) 
       throws IOException {  
         
-        this.inclusiveNamespacePrefixes.clear();
+        /* this.inclusiveNamespacePrefixes.clear();
         if (this.exclusive && inclusiveNamespacePrefixes != null) {
             StringTokenizer tokenizer = new StringTokenizer(
               inclusiveNamespacePrefixes, " \t\r\n", false);
             while (tokenizer.hasMoreTokens()) {
                 this.inclusiveNamespacePrefixes.add(tokenizer.nextToken());
             }
-        }
+        } */
         
         Nodes selected = doc.query(xpath, context);
         write(selected, inclusiveNamespacePrefixes);
