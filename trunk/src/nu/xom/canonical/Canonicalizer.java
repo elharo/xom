@@ -396,7 +396,7 @@ public class Canonicalizer {
                         continue;
                     }
                     else if (exclusive) {
-                        if (visiblyUtilized(element, prefix, uri)) {
+                        if (needToDeclareNamespace(element, prefix, uri)) {
                             map.put(prefix, uri);
                         }
                     }
@@ -449,7 +449,7 @@ public class Canonicalizer {
                         continue;
                     }
                     else if (exclusive) {
-                        if (visiblyUtilized(element, prefix, uri)) {
+                        if (needToDeclareNamespace(element, prefix, uri)) {
                             map.put(prefix, uri);
                         }
                     }
@@ -494,26 +494,9 @@ public class Canonicalizer {
         }
 
 
-        private boolean visiblyUtilized(Element parent, String prefix, String uri) {
+        private boolean needToDeclareNamespace(Element parent, String prefix, String uri) {
 
-            boolean match = false;
-            String pfx = parent.getNamespacePrefix();
-            String local = parent.getNamespaceURI();
-            if (prefix.equals(pfx) && local.equals(uri)) {
-                match = true;
-            }
-            else {
-                for (int i = 0; i < parent.getAttributeCount(); i++) {
-                    Attribute attribute = parent.getAttribute(i);
-                    if (nodes == null || nodes.contains(attribute)) {
-                        pfx = attribute.getNamespacePrefix();
-                        if (prefix.equals(pfx)) {
-                            match = true;
-                            break;
-                        }
-                    }
-                }
-            }
+            boolean match = visiblyUtilized(parent, prefix, uri);
         
             if (match) {
                 return noOutputAncestorUsesPrefix(parent, prefix, uri);
@@ -524,14 +507,45 @@ public class Canonicalizer {
         }
 
 
+        private boolean visiblyUtilized(Element element, String prefix, String uri) {
+
+            boolean match = false;
+            String pfx = element.getNamespacePrefix();
+            String local = element.getNamespaceURI();
+            if (prefix.equals(pfx) && local.equals(uri)) {
+                match = true;
+            }
+            else {
+                for (int i = 0; i < element.getAttributeCount(); i++) {
+                    Attribute attribute = element.getAttribute(i);
+                    if (nodes == null || nodes.contains(attribute)) {
+                        pfx = attribute.getNamespacePrefix();
+                        if (prefix.equals(pfx)) {
+                            match = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return match;
+        }
+
+
         private boolean noOutputAncestorUsesPrefix(Element original, String prefix, String uri) {
 
             ParentNode parent = original.getParent();
             while (parent != null && !(parent instanceof Document)) {
                 if (nodes.contains(parent)) {
                     Element element = (Element) parent;
-                    for (int i = 0; i < element.getNamespaceDeclarationCount(); i++) {
-                        String current = element.getNamespacePrefix(i);
+                    String pfx = element.getNamespacePrefix();
+                    if (pfx.equals(prefix)) {
+                        String newURI = element.getNamespaceURI(prefix);
+                        return ! newURI.equals(uri);                        
+                    }
+                    
+                    for (int i = 0; i < element.getAttributeCount(); i++) {
+                        Attribute attribute = element.getAttribute(i);
+                        String current = attribute.getNamespacePrefix();
                         if (current.equals(prefix)) {
                             String newURI = element.getNamespaceURI(prefix);
                             return ! newURI.equals(uri);
