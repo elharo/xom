@@ -266,21 +266,22 @@ class JaxenNavigator extends DefaultNavigator {
     
     private static int getXPathChildCount(ParentNode parent) {
     
-        if (parent instanceof Document) {
+        int childCount = parent.getChildCount();
+        if (parent.isDocument()) {
             DocType doctype = ((Document) parent).getDocType();
-            if (doctype == null) return parent.getChildCount();
-            else return parent.getChildCount() - 1;
+            if (doctype == null) return childCount;
+            else return childCount - 1;
         }
         int children = 0;
         
         boolean previousWasText = false;
-        for (int i = 0; i < parent.getChildCount(); i++) {
+        for (int i = 0; i < childCount; i++) {
             Node child = parent.getChild(i);
-            if (child instanceof Text) {
+            if (child.isText()) {
                 if (previousWasText) {
                     continue;
                 }
-                else if (child.getValue().length() != 0) {
+                else if (((Text) child).data.length != 0) {
                     children++;
                     previousWasText = true;
                 }
@@ -293,6 +294,7 @@ class JaxenNavigator extends DefaultNavigator {
         return children;
         
     }
+    
     
     public String getTextStringValue(Object o) {
         
@@ -364,7 +366,7 @@ class JaxenNavigator extends DefaultNavigator {
             }
             else {
                 if (child.isText() && !previousWasText) {
-                    if (child.getValue().length() != 0) {
+                    if (((Text) child).data.length != 0) {
                       childCount++;
                       previousWasText = true;
                     }
