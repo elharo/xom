@@ -44,6 +44,12 @@ public class XIncludeExceptionTest extends XOMTestCase {
         ex = new XIncludeException();
         cause = new Exception();
     }
+    
+    public void testConstructor() {
+        ex = new XIncludeException("test", "http://ex.com/");
+        assertEquals("test", ex.getMessage());
+        assertEquals("http://ex.com/", ex.getURI());
+    }
 
     public void testInitCause() {
         
@@ -72,7 +78,8 @@ public class XIncludeExceptionTest extends XOMTestCase {
 
     public void testNullInitCause() {
         
-        XIncludeException ex = new XIncludeException(null, null);
+        XIncludeException ex
+          = new XIncludeException("message", (Exception) null);
         assertNull(ex.getCause());
         
         try {

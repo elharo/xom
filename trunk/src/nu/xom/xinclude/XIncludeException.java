@@ -31,9 +31,11 @@ package nu.xom.xinclude;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  */
 public class XIncludeException extends Exception {
+
+    private String uri;
 
     /**
      * <p>
@@ -73,6 +75,33 @@ public class XIncludeException extends Exception {
     public XIncludeException(String message, Throwable cause) {
         super(message);
         initCause(cause);
+    }
+
+    /**
+     * <p>
+     * Creates a new <code>XIncludeException</code> with a detail 
+     * message, line and column numbers, and a URI of the document
+     * that caused the exception.
+     * </p>
+     * 
+     * @param message indicates the specific problem
+     * @param uri the URI of the document that caused this exception
+     */
+    public XIncludeException(String message, String uri) {
+        super(message);
+        this.uri = uri;
+    }
+
+    /**
+     * <p>
+     * Returns the URI of the document that caused this exception. 
+     * If the URI is not known, null is returned.
+     * </p>
+     * 
+     * @return URI of the document where the exception occurred
+     */
+    public String getURI() {
+        return this.uri;  
     }
 
     private Throwable cause;

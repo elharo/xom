@@ -58,4 +58,18 @@ public class BadParseAttributeException extends XIncludeException {
         super(message);
     }
 
+    /**
+     * <p>
+     * Creates a new <code>BadParseAttributeException</code> with a detail 
+     * message, line and column numbers, and a URI of the document
+     * that caused the exception.
+     * </p>
+     * 
+     * @param message indicates the specific problem
+     * @param uri the URI of the document that caused this exception
+     */
+    public BadParseAttributeException(String message, String uri) {
+        super(message, uri);
+    }
+
 }

@@ -26,6 +26,7 @@ package nu.xom.tests;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -216,12 +217,14 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (CircularIncludeException ex) {
             // success   
+            assertEquals(input.toURL().toExternalForm(), ex.getURI());           
         }
     }
     
     public void testCircle2() 
       throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/circle2a.xml");
+        File errorFile = new File("data/xinclude/input/circle2b.xml");
         Document doc = builder.build(input);
         try {
             XIncluder.resolve(doc);
@@ -229,6 +232,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (CircularIncludeException ex) {
             // success   
+            assertEquals(errorFile.toURL().toExternalForm(), ex.getURI());           
         }
     }
     
@@ -242,6 +246,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (MissingHrefException ex) {
             // success   
+            assertEquals(doc.getBaseURI(), ex.getURI());           
         }
     }
     
@@ -255,6 +260,9 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (BadParseAttributeException ex) {
             // success   
+            URL u1 = input.toURL();
+            URL u2 = new URL(ex.getURI());
+            assertEquals(u1, u2);
         }
     }
     
@@ -326,9 +334,14 @@ public class XIncludeTest extends XOMTestCase {
         Document doc = builder.build(input);
         try {
             Document result = XIncluder.resolve(doc);
-            fail("Resolved a document with an XPointer that selects no subresource");
+            fail("Resolved a document with an XPointer " +              "that selects no subresource");
         }
         catch (XIncludeException ex) {
+            // Must compare URLs instead of strings here to avoid 
+            // issues of whether a file URL begins file:/ or file:///
+            URL u1 = input.toURL();
+            URL u2 = new URL(ex.getURI());
+            assertEquals(u1, u2);
             // success   
         }
         
@@ -402,7 +415,7 @@ public class XIncludeTest extends XOMTestCase {
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
         // For debugging
-        dumpResult(input, result); 
+        // dumpResult(input, result); 
         Document expectedResult = builder.build(
           new File("data/xinclude/output/xptrtumblertest.xml")
         );
@@ -442,7 +455,8 @@ public class XIncludeTest extends XOMTestCase {
     public void testXPointerTumblerWithWhiteSpace() 
       throws ParsingException, IOException, XIncludeException {
       
-        File input = new File("data/xinclude/input/xptrtumblertest3.xml");
+        File input 
+          = new File("data/xinclude/input/xptrtumblertest3.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
@@ -461,24 +475,30 @@ public class XIncludeTest extends XOMTestCase {
         Document doc = builder.build(input);
         try {
             Document result = XIncluder.resolve(doc);
-            fail("Did not indicate error on XPointer matching nothing");
+            fail("Did not error on XPointer matching nothing");
         }
         catch (XIncludeException ex) {
             // success    
+            URL u1 = input.toURL();
+            URL u2 = new URL(ex.getURI());
+            assertEquals(u1, u2);            
         }
         
     }
     
     public void testMalformedXPointer() 
-      throws ParsingException, IOException, XIncludeException {
-      
+      throws ParsingException, IOException, XIncludeException {   
+        
+        File input = new File("data/xinclude/input/badxptr.xml");
+        Document doc = builder.build(input);
         try {
-            File input = new File("data/xinclude/input/badxptr.xml");
-            Document doc = builder.build(input);
             XIncluder.resolve(doc);
         }
         catch (XIncludeException ex) {
             // success   
+            URL u1 = input.toURL();
+            URL u2 = new URL(ex.getURI());
+            assertEquals(u1, u2);            
         }
         
     }
@@ -487,13 +507,16 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
         
         // testing use of non NCNAME as ID
+        File input = new File("data/xinclude/input/badxptr2.xml");
+        Document doc = builder.build(input);
         try {
-            File input = new File("data/xinclude/input/badxptr2.xml");
-            Document doc = builder.build(input);
             XIncluder.resolve(doc);
         }
         catch (XIncludeException ex) {
             // success   
+            URL u1 = input.toURL();
+            URL u2 = new URL(ex.getURI());
+            assertEquals(u1, u2);            
         }
         
     }
@@ -647,7 +670,7 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
-    // This test requires files that I have not recieved permission
+    // This test requires files that I have not received permission
     // to distribute so for the moment you won't be able to run it.
     // For my own use it checks to see if the files are present
     // and runs if it does find them. You can't just install the
@@ -718,7 +741,7 @@ public class XIncludeTest extends XOMTestCase {
         Document expectedResult = builder.build(
           new File("data/xinclude/output/UTF8WithByteOrderMark.xml")
         );
-        XMLAssert.assertEquals(expectedResult, result);
+        assertEquals(expectedResult, result);
                 
     }
 
@@ -731,8 +754,29 @@ public class XIncludeTest extends XOMTestCase {
         Document expectedResult = builder.build(
           new File("data/xinclude/output/UTF8WithByteOrderMark.xml")
         );
-        XMLAssert.assertEquals(expectedResult, result);
+        assertEquals(expectedResult, result);
                 
     } */
-
+    
+    
+    // Need a test case where A includes B, B includes C
+    // and B encounters the error (e.g. a missing href)
+    // to make sure B's URL is in the error message, not A's
+    public void testChildDocumentSetsErrorURI() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/toplevel.xml");
+        File error = new File("data/xinclude/input/onedown.xml");
+        Document doc = builder.build(input);
+        try {
+            Document result = XIncluder.resolve(doc);
+            fail("Missing HREF not detected");
+        }
+        catch (MissingHrefException ex) {
+            URL u1 = error.toURL();
+            URL u2 = new URL(ex.getURI());
+            assertEquals(u1, u2);            
+        }
+                
+    } 
 }

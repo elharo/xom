@@ -56,7 +56,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class XIncluder {
@@ -101,7 +101,8 @@ public class XIncluder {
      *     and no fallback was available
      * @throws MissingHrefException if an <code>xinclude:include</code> 
      *      element does not have an href attribute.
-     * @throws ParsingException if an included XML document was malformed
+     * @throws ParsingException if an included XML document 
+     *     was malformed
      * @throws UnsupportedEncodingException if an included document 
      *     used an encoding this parser does not support, and no
      *     fallback was available
@@ -116,8 +117,7 @@ public class XIncluder {
              UnsupportedEncodingException, XIncludeException {        
         Document copy = new Document(in);
         resolveInPlace(copy);
-        return copy;
-        
+        return copy;   
     }
 
     /**
@@ -145,7 +145,8 @@ public class XIncluder {
      *     and no fallback was available
      * @throws MissingHrefException if an <code>xinclude:include</code>
      *     element does not have an <code>href</code> attribute.
-     * @throws ParsingException if an included XML document was malformed
+     * @throws ParsingException if an included XML document
+     *    was malformed
      * @throws UnsupportedEncodingException if an included document 
      *     used an encoding this parser does not support, and no 
      *     fallback was available
@@ -188,7 +189,8 @@ public class XIncluder {
      *     and no fallback was available
      * @throws MissingHrefException if an <code>xinclude:include</code>
      *     element does not have an <code>href</code> attribute.
-     * @throws ParsingException if an included XML document was malformed
+     * @throws ParsingException if an included XML document 
+     *     was malformed
      * @throws UnsupportedEncodingException if an included document 
      *     used an encoding this parser does not support, and no 
      *     fallback was available
@@ -216,7 +218,9 @@ public class XIncluder {
         
         String base = in.getBaseURI();
         if (baseURLs.indexOf(base) != -1) {
-            throw new CircularIncludeException(base);   
+            throw new CircularIncludeException(
+              "Tried to include the already included document" + base +
+              " from " + in.getBaseURI(), in.getBaseURI());
         } 
         baseURLs.push(base);       
         resolve(in.getRootElement(), baseURLs);
@@ -232,7 +236,10 @@ public class XIncluder {
             String encoding = element.getAttributeValue("encoding");
             String href = element.getAttributeValue("href");
             if (href == null) {
-                throw new MissingHrefException();   
+                throw new MissingHrefException(
+                  "Missing href attribute", 
+                  element.getDocument().getBaseURI()
+                );   
             }
             href = convertToURI(href);
             
@@ -262,10 +269,10 @@ public class XIncluder {
                       = downloadXMLDocument(url, baseURLs);
                       
                 // Add base URIs. Base URIs added by XInclusion require
-                // the element to maintain the same base URI as it had in 
-                // the original document. Since its
-                // base URI in the original document does not contain a fragment 
-                // ID, therefore its base URI after inclusion shouldn't, 
+                // the element to maintain the same base URI as it had  
+                // in the original document. Since its base URI in the 
+                // original document does not contain a fragment ID,
+                // therefore its base URI after inclusion shouldn't, 
                 // and this special case is unnecessary. Base URI fixup
                 // should not add the fragment ID. 
                     for (int i = 0; i < replacements.size(); i++) {
@@ -273,7 +280,8 @@ public class XIncluder {
                         if (child instanceof Element) {
                             String noFragment = url.toExternalForm();
                             if (noFragment.indexOf('#') >= 0) {
-                                noFragment = noFragment.substring(0, noFragment.indexOf('#'));
+                                noFragment = noFragment.substring(
+                                  0, noFragment.indexOf('#'));
                             }
                             Element baseless = (Element) child;
                             Attribute baseAttribute = new Attribute(
@@ -334,7 +342,9 @@ public class XIncluder {
                     parent.replaceChild(element, replacement);
                 }
                 else {
-                   throw new BadParseAttributeException(parse);   
+                   throw new BadParseAttributeException(
+                     "Bad value for parse attribute: " + parse, 
+                     element.getDocument().getBaseURI());   
                 }
             
             }
@@ -356,7 +366,8 @@ public class XIncluder {
         }
         else if (isFallbackElement(element)) {
             throw new MisplacedFallbackException(
-                "Fallback element outside include element"
+              "Fallback element outside include element", 
+              element.getDocument().getBaseURI()
             );
         }
         else {
@@ -380,18 +391,23 @@ public class XIncluder {
      */
     private static void testForMultipleFallbacks(Element element) 
       throws XIncludeException {
-        Elements fallbacks = element.getChildElements("fallback", XINCLUDE_NS);
+        Elements fallbacks 
+          = element.getChildElements("fallback", XINCLUDE_NS);
         if (fallbacks.size() > 1) {
-            throw new XIncludeException("Multiple fallback elements");   
+            throw new XIncludeException("Multiple fallback elements", 
+              element.getDocument().getBaseURI());   
         }
         
         // while we're at it let's test to see if there are any
         // xi:include children. I actually don't think the spec
         // requires this, but the test cases do. I've filed a 
         // comment with the WG
-        Element include = element.getFirstChildElement("include", XINCLUDE_NS);
+        Element include 
+          = element.getFirstChildElement("include", XINCLUDE_NS);
         if (include != null) {
-            throw new XIncludeException("Include element contains an include child");   
+            throw new XIncludeException(
+              "Include element contains an include child",
+              element.getDocument().getBaseURI());   
         }
         
     }
@@ -403,15 +419,14 @@ public class XIncluder {
               = element.getChildElements("fallback", XINCLUDE_NS);
            if (fallbacks.size() == 0) {
                 if (ex instanceof IOException) throw (IOException) ex;
-                /* if (ex instanceof XPointerSyntaxException) {
-                    ex.printStackTrace();   
-                } */
-                XIncludeException ex2 
-                  = new XIncludeException(ex.getMessage(), ex);
+                XIncludeException ex2 = new XIncludeException(
+                  ex.getMessage(), element.getDocument().getBaseURI());
+                ex2.initCause(ex);
                 throw ex2;
            }
            else if (fallbacks.size() > 1) {
-                throw new XIncludeException("Multiple fallbacks");
+                throw new XIncludeException("Multiple fallbacks", 
+                   element.getDocument().getBaseURI());
            }
              
            Element fallback = fallbacks.get(0); 
@@ -445,7 +460,7 @@ public class XIncluder {
             resolveInPlace(included);
         }
         else {
-            resolveInPlace(doc, baseURLs); // remove any include elements
+            resolveInPlace(doc, baseURLs); // remove include elements
             included = new NodeList();
             for (int i = 0; i < doc.getChildCount(); i++) {
                 Node child = doc.getChild(i);
@@ -476,7 +491,7 @@ public class XIncluder {
     * @param encoding encoding of the document; e.g. UTF-8,
     *                  ISO-8859-1, etc.
     * @return the document retrieved from the source <code>URL</code>
-    * @throws <code>UnavailableResourceException</code> if the source  
+    * @throws <code>UnavailableResourceException</code> if the source
     *     document cannot be located or cannot be read
     */    
     private static Text downloadTextDocument(
@@ -511,8 +526,9 @@ public class XIncluder {
         // workaround for pre-1.3 VMs that don't recognize UTF-16
         if (encoding.equalsIgnoreCase("UTF-16")) {
             String version = System.getProperty("java.version");   
-            if (version.startsWith("1.2") || version.startsWith("1.1")) {
-                // is it  big-endina or little-endian?
+            if (version.startsWith("1.2") 
+              || version.startsWith("1.1")) {
+                // is it  big-endian or little-endian?
                 in.mark(2);
                 int first = in.read();
                 if (first == 0xFF) encoding = "UnicodeLittle";
@@ -552,8 +568,8 @@ public class XIncluder {
    unwise characters '{' #x7B, '}' #x7D, '|' #x7C, '\' #x5C, '^' #x5E 
    and '`' #x60, as well as all characters above #x7F.
 
-[Definition: An IRI reference is a string that can be converted to a URI 
-reference by escaping all disallowed characters as follows: ]
+[Definition: An IRI reference is a string that can be converted to a  
+URI reference by escaping all disallowed characters as follows: ]
 
    1. Each disallowed character is converted to UTF-8 [Unicode 3.2] 
       as one or more bytes.
