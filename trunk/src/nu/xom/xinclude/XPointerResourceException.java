@@ -37,8 +37,6 @@ package nu.xom.xinclude;
  */
 class XPointerResourceException extends XPointerException {
 
-    private Throwable cause = null;
-
     /**
      * <p>
      * Constructs an <code>XPointerResourceException</code> 

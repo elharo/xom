@@ -35,8 +35,6 @@ package nu.xom.xinclude;
  */
 class XPointerSyntaxException extends XPointerException {
 
-    private Throwable cause = null;
-
     /**
      * <p>
      * Constructs an <code>XPointerSyntaxException</code> 
