@@ -29,7 +29,6 @@ import java.io.StringReader;
 import javax.xml.transform.sax.SAXSource;
 
 import nu.xom.Document;
-import nu.xom.Node;
 import nu.xom.Nodes;
 
 import org.xml.sax.InputSource;
@@ -53,9 +52,9 @@ class XOMSource extends SAXSource {
     public final static String XOM_FEATURE
        = "http://nu.xom/XOMResultFeature";
 
-    // private Document document;
     private Nodes source;
 
+    
     /**
      * <p>
      * Creates a new <code>XOMSource</code> object from a 
@@ -70,6 +69,7 @@ class XOMSource extends SAXSource {
         this.source.append(source);
     }
     
+    
     /**
      * <p>
      * Creates a new <code>XOMSource</code> object 
@@ -81,13 +81,8 @@ class XOMSource extends SAXSource {
     public XOMSource(Nodes source) {
         this.source = source;
     }
-    
-    public void setInputSource(InputSource inputSource) {
-        throw new UnsupportedOperationException(
-          "XOM isn't really SAX"
-        ); 
-    }
 
+    
     public InputSource getInputSource() {
         StringBuffer data = new StringBuffer();
         for (int i = 0; i < source.size(); i++) {
@@ -95,20 +90,14 @@ class XOMSource extends SAXSource {
         }
         Reader in = new StringReader(data.toString());
         InputSource source = new InputSource(in);
-        Node first = this.source.get(0);
-        if (first != null) source.setSystemId(first.getBaseURI()); 
+        source.setSystemId(getSystemId()); 
         return source; 
     }
 
-    public void setSystemId(String systemID) {
-        throw new UnsupportedOperationException(
-          "System ID is read from the document's base URI");   
-    }
-
+    
     public String getSystemId() {
-        Node first = this.source.get(0);
-        if (first == null) return null;
-        else return first.getBaseURI();
+        if (this.source.size() == 0) return null;
+        else return this.source.get(0).getBaseURI();
     }      
 
 }

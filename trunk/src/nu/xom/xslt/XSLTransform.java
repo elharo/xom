@@ -273,6 +273,7 @@ public final class XSLTransform {
      *     due to an XSLT error
      */ 
     public Nodes transform(Nodes in) throws XSLException {
+        if (in.size() == 0) return new Nodes();
         return transform(new XOMSource(in));
     }
 
