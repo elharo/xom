@@ -38,6 +38,7 @@ import nu.xom.IllegalNameException;
 import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
+import nu.xom.XMLException;
 
 /**
  * 
@@ -111,9 +112,9 @@ class XPointer {
                     try {
                         new Element(id);   
                     }
-                    catch (IllegalNameException inex) {
+                    catch (XMLException inex) {
                         throw new XPointerSyntaxException(
-                          id + " is not a non-colonized name");   
+                          id + " is not a non-colonized name", inex);   
                     }
                     current = findByID(doc.getRootElement(), id);                         
                     keys = split(currentData.substring(
