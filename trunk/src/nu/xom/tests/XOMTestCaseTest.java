@@ -149,6 +149,36 @@ public class XOMTestCaseTest extends XOMTestCase {
     }
     
     
+    public void testCombineThreeTextNodes() {
+     
+        Element e1 = new Element("test");
+        e1.appendChild("1");
+        e1.appendChild("2");
+        e1.appendChild("3");
+        Element e2 = new Element("test");
+        e2.appendChild("123");
+        assertEquals(e1, e2);
+        
+    }
+    
+    
+    public void testCombineThreeTextNodes2() {
+     
+        Element e1 = new Element("test");
+        e1.appendChild("\n");
+        e1.appendChild(new Element("p"));
+        e1.appendChild("1");
+        e1.appendChild("2");
+        e1.appendChild("3");
+        Element e2 = new Element("test");
+        e2.appendChild("\n");
+        e2.appendChild(new Element("p"));
+        e2.appendChild("123");
+        assertEquals(e2, e1);
+        
+    }
+    
+    
     public void testUnequalElements() {
      
         Element e1 = new Element("test");
