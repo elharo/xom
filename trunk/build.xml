@@ -31,7 +31,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0"/>
+    <property name="version" value="1.1d2"/>
     <property name="year"    value="2005"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -60,6 +60,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
+    <property name="jaxen.jar"      value="${lib.dir}/jaxen-1.1-beta-3-min.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.0rc1.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
@@ -92,6 +93,7 @@ subject line. The XOM home page is http://www.xom.nu/
       <pathelement location="${parser.jar}"/>
       <pathelement location="${normalizer.jar}"/>
       <pathelement location="${junit.jar}"/>
+      <pathelement location="${jaxen.jar}"/>
       <pathelement location="${servlet.jar}"/>
     </path>
 
@@ -100,6 +102,7 @@ subject line. The XOM home page is http://www.xom.nu/
       <pathelement location="${parser.jar}"/>
       <pathelement location="${normalizer.jar}"/>
       <pathelement location="${xom-core}"/>
+      <pathelement location="${jaxen.jar}"/>
       <pathelement location="${xslt.jar}"/>
     </path>
     
@@ -228,7 +231,7 @@ XOM Build file
     <jar jarfile="${build.dir}/${name}-${version}.jar"
          basedir="${build.dest}"
          index="no"
-		     compress="yes"
+		 compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*">
       <manifest>
