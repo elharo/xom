@@ -200,6 +200,8 @@ public class Builder {
         if (!IBMVM14) {
             try {
                 parser = XMLReaderFactory.createXMLReader("nu.xom.xerces.XML1_0Parser");
+                setupParser(parser, validate);
+                return parser;
             } 
             catch (SAXException ex) {
                 // look for next one
