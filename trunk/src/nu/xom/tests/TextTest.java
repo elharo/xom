@@ -34,7 +34,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a5
  *
  */
 public class TextTest extends XOMTestCase {
@@ -291,7 +291,8 @@ public class TextTest extends XOMTestCase {
     
     
     public void testHighSurrogateWithNoLowSurrogate() {
-        String data = Character.toString((char) 0xD800);
+        
+        String data = String.valueOf((char) 0xD800);
         try {
             new Text(data);
             fail("Allowed single high surrogate in text node");
@@ -300,6 +301,7 @@ public class TextTest extends XOMTestCase {
             assertEquals(data, success.getData());
             assertNotNull(success.getMessage());
         }
+        
     }
 
 
