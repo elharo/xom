@@ -256,6 +256,78 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     
+    public void testSetParameter() 
+      throws ParsingException, IOException, XSLException {
+        
+        File doc = new File(inputDir, "8-1.xml");
+        File stylesheet = new File(inputDir, "paramtest.xsl");
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
+        xform.setParameter("test", new Double(2));
+        Nodes output = xform.transform(builder.build(doc));
+        assertEquals(1, output.size());
+        Element result = (Element) output.get(0);
+        assertEquals("<root>2</root>", result.toXML());
+        
+    }
+
+    
+    public void testSetParameterWithNamespace() 
+      throws ParsingException, IOException, XSLException {
+        
+        File doc = new File(inputDir, "8-1.xml");
+        File stylesheet = new File(inputDir, "namespaceparamtest.xsl");
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
+        xform.setParameter("test", "http://www.xom.nu/", new Double(2));
+        Nodes output = xform.transform(builder.build(doc));
+        assertEquals(1, output.size());
+        Element result = (Element) output.get(0);
+        assertEquals("<root xmlns:pre=\"http://www.xom.nu/\">2</root>", 
+            result.toXML());
+        
+    }
+
+    
+    public void testRemoveParameterWithNamespace() 
+      throws ParsingException, IOException, XSLException {
+        
+        File doc = new File(inputDir, "8-1.xml");
+        File stylesheet = new File(inputDir, "namespaceparamtest.xsl");
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
+        xform.setParameter("test", "http://www.xom.nu/", new Double(2));
+        xform.setParameter("test", "http://www.xom.nu/", null);
+        Nodes output = xform.transform(builder.build(doc));
+        assertEquals(1, output.size());
+        Element result = (Element) output.get(0);
+        assertEquals("<root xmlns:pre=\"http://www.xom.nu/\">1</root>", 
+            result.toXML());
+        
+    }
+
+    
+    public void testRemoveParameter() 
+      throws ParsingException, IOException, XSLException {
+        
+        File doc = new File(inputDir, "8-1.xml");
+        File stylesheet = new File(inputDir, "paramtest.xsl");
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
+        xform.setParameter("test", new Double(2));
+        xform.setParameter("test", null);
+        Nodes output = xform.transform(builder.build(doc));
+        assertEquals(1, output.size());
+        Element result = (Element) output.get(0);
+        assertEquals("<root>1</root>", result.toXML());
+        
+    }
+
+    
     public void testTransformWithCFilter() 
       throws ParsingException, IOException, XSLException {
         

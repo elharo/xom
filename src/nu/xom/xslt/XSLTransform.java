@@ -21,6 +21,10 @@
 
 package nu.xom.xslt;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
@@ -111,7 +115,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d6
  */
 public final class XSLTransform {
 
@@ -124,7 +128,9 @@ public final class XSLTransform {
      * </p>
      */
     private Templates   templates;  
-    private NodeFactory factory;  
+    private NodeFactory factory;
+    private Map         parameters = new HashMap();
+    
     
     
     // I could use one TransformerFactory field instead of local
@@ -228,8 +234,63 @@ public final class XSLTransform {
     public Nodes transform(Document in) throws XSLException {
         return transform(new XOMSource(in));
     }
+    
+    
+    /**
+     * <p>
+     * Supply a parameter to transformations performed by this object.
+     * The value is normally a <code>Boolean</code>, 
+     * <code>Double</code>, or <code>String</code>. However, it may be
+     * another type if the underlying XSLT processor supports that
+     * type. Passing null for the value removes the parameter.
+     * </p>
+     * 
+     * @param name the name of the parameter
+     * @param value the value of the parameter
+     */
+    public void setParameter(String name, Object value) {
+       this.setParameter(name, null, value); 
+    }
+    
+
+    /**
+     * <p>
+     * Supply a parameter to transformations performed by this object.
+     * The value is normally a <code>Boolean</code>, 
+     * <code>Double</code>, or <code>String</code>. However, it may be
+     * another type if the underlying XSLT processor supports that
+     * type. Passing null for the value removes the parameter.
+     * </p>
+     * 
+     * @param name the name of the parameter
+     * @param namespace the namespace URI of the parameter
+     * @param value the value of the parameter
+     */
+    public void setParameter(String name, String namespace, Object value) {
+       
+       
+       if (namespace == null || "".equals(namespace)) {
+           _setParameter(name, value);
+       }
+       else {
+           _setParameter("{" + namespace + "}" + name, value);
+       }
+       
+    }
   
     
+    private void _setParameter(String name, Object value) {
+
+        if (value == null) {
+            parameters.remove(name);
+        }
+        else {
+            parameters.put(name, value);
+        }
+        
+    }
+
+
     /**
      * <p>
      * Creates a new <code>Nodes</code> object from the
@@ -277,6 +338,12 @@ public final class XSLTransform {
             Transformer transformer = templates.newTransformer();
             // work around Xalan bug
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            Iterator iterator = parameters.keySet().iterator();
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                Object value = parameters.get(key);
+                transformer.setParameter(key, value);
+            }
             transformer.transform(in, out);
             return out.getResult();
         }
