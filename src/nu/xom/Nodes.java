@@ -31,20 +31,27 @@ import java.util.List;
  * <p>
  * Implements a list of nodes for traversal purposes.
  * Changes to the document from which this list was generated
- * are not reflected in this list. Changes to the individual
- * <code>Node</code> objects in the list are reflected.
+ * are not reflected in this list, nor are changes to the list
+ * reflected in the document. Changes to the individual
+ * <code>Node</code> objects in the list and the document
+ * are reflected in the other one.
+ * </p>
+ * 
+ * <p>
+ * There is no requirement that the list not contain duplicates,
+ * or that all the members come from the same document. It is simply
+ * a list of nodes. 
  * </p>
  * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
- * 
  *
  */
 public final class Nodes {
     
     private List nodes;
     
-    // would it be quicker to lazy allocate the nodes only
+    // would it be quicker to lazy allocate nodes only
     // when the first element is appended????
     
     /**
@@ -82,7 +89,7 @@ public final class Nodes {
     
     /**
      * <p>
-     * Returns the index<sup>th</sup>node in the list.
+     * Returns the index<sup>th</sup> node in the list.
      * The first node has index 0. The last node
      * has index <code>size()-1</code>.
      * </p>
@@ -97,7 +104,41 @@ public final class Nodes {
     public Node get(int index) {
         return (Node) nodes.get(index);   
     }
+
+    /**
+     * <p>
+     * Removes the index<sup>th</sup>node in the list.
+     * Subsequent nodes have their indexes reduced by one.
+     * </p>
+     * 
+     * @param index the node to remove
+     * 
+     * @return the node at the specified position
+     * 
+     * @throws <code>IndexOutOfBoundsException</code> if index is  
+     *     negative or greater than or equal to the size of the list
+     */
+    public void remove(int index) {
+        nodes.remove(index);   
+    }
     
+    /**
+     * <p>
+     * Inserts a node at the index<sup>th</sup> position in the list.
+     * Subsequent nodes have their indexes increased by one.
+     * </p>
+     * 
+     * @param node the node to insert
+     * @param index the position at which to insert the node
+     * 
+     * @return the node at the specified position
+     * 
+     * @throws <code>IndexOutOfBoundsException</code> if index is  
+     *     negative or greater than or equal to the size of the list
+     */
+    public void insert(Node node, int index) {
+        nodes.add(index, node);   
+    }
     
     /**
      * <p>
