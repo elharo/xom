@@ -319,7 +319,8 @@ public class EncodingTest extends XOMTestCase {
 
 
 // Java 1.4 does not yet support these encodings
-/*    public void testUCS4() throws ParsingException, UnsupportedEncodingException {
+/*  public void testUCS4() 
+      throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-10646-UCS-4");
     } 
 
@@ -327,8 +328,6 @@ public class EncodingTest extends XOMTestCase {
       throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-16");
     } */
-    
-
 
     
     private void checkAll(String encoding) 
