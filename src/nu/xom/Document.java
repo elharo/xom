@@ -47,7 +47,6 @@ public class Document extends ParentNode {
      * @throws NullPointerException if <code>root</code> is null
      * @throws MultipleParentException if <code>root</code> already 
      *     has a parent
-     * @throws NullPointerException if <code>child</code> is null
      */
     public Document(Element root) {
         _insertChild(root, 0);
@@ -59,7 +58,7 @@ public class Document extends ParentNode {
      * Creates a copy of the <code>Document</code>.
      * </p>
      * 
-     * @param doc the Document to copy
+     * @param doc the document to copy
      * 
      * @throws NullPointerException if <code>doc</code> is null
      */
@@ -255,8 +254,8 @@ public class Document extends ParentNode {
     
     /**
      * <p>
-     * Sets the URI from which this node was loaded,
-     * and against which relative URLs in this node will be resolved.
+     * Sets the URI from which this document was loaded, and
+     * against which relative URLs in this document will be resolved.
      * Setting the base URI to null or the empty string removes any
      * existing base URI.
      * </p>
@@ -362,7 +361,7 @@ public class Document extends ParentNode {
      *     is not a child of this node
      * @throws NullPointerException if either argument is null
      * @throws IllegalAddException if <code>newChild</code> is an
-     *     attribute
+     *     attribute or a text node
      * @throws WellformednessException if <code>newChild</code> 
      *     <code>oldChild</code> is an element and 
      *     <code>newChild</code> is not
@@ -413,8 +412,7 @@ public class Document extends ParentNode {
      * The entire document is contained in this one string.
      * </p>
      * 
-     * @return a <code>String</code> containing this entire
-     *     XML document
+     * @return a string containing this entire XML document
      * 
      * @see nu.xom.Node#toXML()
      */
@@ -441,8 +439,7 @@ public class Document extends ParentNode {
      * Returns a complete copy of this document.
      * </p>
      * 
-     * @return a complete, deep copy of this 
-     *     <code>Document</code> object
+     * @return a deep copy of this <code>Document</code> object
      * 
      * @see nu.xom.Node#copy()
      */
