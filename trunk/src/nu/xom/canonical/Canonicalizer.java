@@ -881,8 +881,22 @@ public class Canonicalizer {
      * Serializes a document subset onto the output stream using the 
      * canonical XML algorithm. All nodes in the list must come from 
      * same document. Furthermore, they must come from a document.
-     * They cannot be detached. 
+     * They cannot be detached. The nodes need not be sorted. This 
+     * method will sort them into the appropriate order for 
+     * canonicalization.
      * </p>
+     * 
+     * <p>
+     * In most common use cases, these nodes will be the result of 
+     * evaluating an XPath expression. For example,
+     * </p>
+     * 
+     * <pre><code> Canonicalizer canonicalizer 
+     *   = new Canonicalizer(System.out, Canonicalizer.CANONICAL_XML);
+     * XPathContext context = new XPathContext("n1", "http://example.net");
+     * Nodes result = doc.query(" (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context);
+     * canonicalizer.write(result);  
+     * </code></pre>
      * 
      * <p>
      * Children are not output unless they are also included in the 
