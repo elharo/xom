@@ -188,6 +188,7 @@ class EncodingHeuristics {
     
     private static String findEncodingDeclaration(String declaration)
         throws IOException {
+        
           int position = declaration.indexOf("encoding") + 8;
           char c;
           // get rid of white space before equals sign
@@ -219,6 +220,7 @@ class EncodingHeuristics {
               encodingName.append(c);
           }
           return encodingName.toString();
+          
     }
 
 }
