@@ -381,16 +381,34 @@ public abstract class Node {
      * is 1, and the context size is 1. 
      * </p>
      * 
+     * <p>
+     * Queries such as /&#x2A;, //, and /&#x2A;//p that refer to the 
+     * root node do work when operating with a context node that is not 
+     * part of a document. However, the query / (return the root node)
+     * throws an <code>XPathException</code> when applied to a node
+     * that is not part of the document. Furthermore the top-level 
+     * node in the tree is treated as the first and only child of the 
+     * root node, not as the root node itself. For instance, this
+     * query stores <code>parent</code> in the <code>result</code>
+     * variable, not <code>child</code>:
+     * </p>
+     * 
+     * <pre><code>  Element parent = new Element("parent");
+     *   Element child = new Element("child");
+     *   parent.appendChild(child);
+     *   Nodes results = child.query("/*");
+     *   Node result = result.get(0);</code></pre>
+     * 
      * @param xpath the XPath expression to evaluate
-     * @param namespaces a collection of namespace prefix bindings used in the 
-     *     XPath expression
+     * @param namespaces a collection of namespace prefix bindings  
+     *     used in the XPath expression
      * 
      * @return a list of all matched nodes; possibly empty
      * 
      * @throws XPathException if there's a syntax error in the 
      *     expression, the query returns something other than
-     *     a node-set, or the query returns a node-set containing a
-     *     namespace node
+     *     a node-set, or the query returns a node-set containing
+     *     a namespace node
      * 
      */
     public final Nodes query(String xpath, XPathContext namespaces) {
