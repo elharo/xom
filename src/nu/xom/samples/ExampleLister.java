@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0b7
  *
  */
 public class ExampleLister {
@@ -73,7 +73,8 @@ public class ExampleLister {
         
     }        
 
-      private static int exampleNumber = 0;
+    
+    private static int exampleNumber = 0;
   
     private static void findExamples(Element element) {        
 
@@ -88,8 +89,9 @@ public class ExampleLister {
             }  
         } 
 
-  }
+    }
 
+    
     private static void printExample(Element example) {
 
         exampleNumber++;
@@ -102,7 +104,8 @@ public class ExampleLister {
     
     }
   
-      public static void main(String[] args) {
+    
+    public static void main(String[] args) {
 
         if (args.length <= 0) {
           System.out.println("Usage: java nu.xom.samples.ExampleLister URL");
@@ -112,7 +115,6 @@ public class ExampleLister {
         
         try {
             Builder builder = new Builder();
-//            Builder builder = new Builder(true);
             // Read the document
             Document document = builder.build(args[0]);
          

@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002-2004 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -39,7 +39,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0b7
  *
  */
 public class SimpleSVG {
@@ -47,14 +47,11 @@ public class SimpleSVG {
   public static void main(String[] args) {
      
     try {
-      // Find the implementation
-      
       // Create the document
       DocType svgDOCTYPE = new DocType(
        "svg", "-//W3C//DTD SVG 1.0//EN", 
        "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"
       );
-      
        
       // Fill the document
       Element root = new Element("svg", 
