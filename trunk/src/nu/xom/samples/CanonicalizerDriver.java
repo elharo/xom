@@ -33,7 +33,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class CanonicalizerDriver {
@@ -48,6 +48,11 @@ public class CanonicalizerDriver {
       */
     public static void main(String[] args) {
   
+        if (args.length == 0) {
+            System.out.println("Usage: java nu.xom.samples.CanonicalizerDriver URL");
+            return;
+        }
+        
         Builder builder = new Builder();
         try {
             Canonicalizer outputter = new Canonicalizer(System.out);
