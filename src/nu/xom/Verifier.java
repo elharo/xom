@@ -206,6 +206,9 @@ final class Verifier {
      * Both absolute and relative IRIs are supported.
      * </p>
      * 
+     * I am not correctly checking that an IPV6 address
+     * contains a legal IPv6 address????
+     * 
      * @param iri <code>String</code> to check
      * @throws MalformedURIException if this is not a legal IRI
      */
@@ -222,7 +225,30 @@ final class Verifier {
         int leftBrackets = 0;
         int rightBrackets = 0;
         for (int i = 0; i < iri.length(); i++) {
-            char test = iri.charAt(i);
+            int test = iri.charAt(i);
+            // decode surrogate pair if necessary
+            // Could refactor this to keep in common
+            // checkCharacterData. Also could use ICU????
+            if (test >= 0xD800 && test <= 0xDBFF) { 
+               int high = test;
+               try {
+                 int low = iri.charAt(i+1);
+                 if (low < 0xDC00 || low > 0xDFFF) {
+                   throw new MalformedURIException(
+                     "Bad surrogate pair"
+                   );
+                 }
+                 // Algorithm defined in Unicode spec
+                 test = (high-0xD800)*0x400 + (low-0xDC00) + 0x10000;
+                 i++;
+               }
+               catch (IndexOutOfBoundsException ex) {
+                   throw new IllegalDataException(
+                     "Bad surrogate pair"
+                   );
+               }
+            }  // end if 
+            
             if (checkForURI && !isURICharacter(test)) {
                 String msgNumber = "0x" + Integer.toHexString(test);
                 if (test <= 0x09) {
@@ -231,7 +257,7 @@ final class Verifier {
                 throw new MalformedURIException("URIs cannot contain "
                   + msgNumber);                
             }
-            else if (!isIRICharacter(test)) {
+            else if (!isIRICharacter(test)) {                
                 String msgNumber = "0x" + Integer.toHexString(test);
                 if (test <= 0x09) {
                     msgNumber = "0x0" + Integer.toHexString(test);
