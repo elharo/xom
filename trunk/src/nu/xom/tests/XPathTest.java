@@ -33,6 +33,7 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Elements;
 import nu.xom.Namespace;
 import nu.xom.NamespaceConflictException;
 import nu.xom.Node;
@@ -288,9 +289,12 @@ public class XPathTest extends XOMTestCase {
     public void testFranceschet1() throws ParsingException, IOException {
      
         Builder builder = new Builder();
-        Document doc = builder.build("http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml");
+        Document doc = builder.build(
+          "http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml"
+        );
         Element root = doc.getRootElement();
-        Element input = root.getFirstChildElement("document_1").getFirstChildElement("site");
+        Elements inputs = root.getChildElements("document");
+        Element input = inputs.get(0).getFirstChildElement("site");
         input.detach();
         
         Nodes doc1Queries = root.query("child::query[starts-with(@id, 'Q')]");
@@ -302,17 +306,13 @@ public class XPathTest extends XOMTestCase {
             // this query needs special comparison code due to 
             // adjacent text nodes
             if ("Q21".equals(id)) continue;
-            // test suite bug: missing white space in mailbox 
-            // element in item 3 in result
-            else if ("Q32".equals(id)) continue;
-            else if ("Q42".equals(id)) continue;
             // test suite bug relating to id() function
             else if (xpath.indexOf("id(") >= 0) continue;
             Nodes result = input.query(xpath);
-            Element xpath_result = query.getFirstChildElement("XPATH_RESULT");
+            Element answer = query.getFirstChildElement("answer");
             Nodes expected = new Nodes();
-            for (int j = 0; j < xpath_result.getChildCount(); j++) {
-                Node node = xpath_result.getChild(j);
+            for (int j = 0; j < answer.getChildCount(); j++) {
+                Node node = answer.getChild(j);
                 if (node instanceof Text) {
                     if (!("".equals(node.getValue().trim()))) {
                         expected.append(node);
@@ -336,9 +336,12 @@ public class XPathTest extends XOMTestCase {
     public void testFranceschet2() throws ParsingException, IOException {
      
         Builder builder = new Builder();
-        Document doc = builder.build("http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml");
+        Document doc = builder.build(
+          "http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml"
+        );
         Element root = doc.getRootElement();
-        Element input = root.getFirstChildElement("document_2");
+        Elements inputs = root.getChildElements("document");
+        Element input = inputs.get(1);
         Document html = new Document(new Element("fake"));
         int p = 0;
         while (true) {
@@ -370,19 +373,12 @@ public class XPathTest extends XOMTestCase {
             Element query = (Element) doc2Queries.get(i);
             String xpath = query.getFirstChildElement("syntax").getValue();
             String id = query.getAttributeValue("id");
-            // test suite bug; should be fixed soon
-            if ("A2".equals(id)) continue;
-            // These two tests are buggy because the results don't
-            // declare the XLink namespace on the root html element
-            // as they should.
-            else if ("A3".equals(id)) continue;
-            else if ("A4".equals(id)) continue;
 
             Nodes result = html.query(xpath, context);
-            Element xpath_result = query.getFirstChildElement("XPATH_RESULT");
+            Element answer = query.getFirstChildElement("answer");
             Nodes expected = new Nodes();
-            for (int j = 0; j < xpath_result.getChildCount(); j++) {
-                Node node = xpath_result.getChild(j);
+            for (int j = 0; j < answer.getChildCount(); j++) {
+                Node node = answer.getChild(j);
                 if (node instanceof Text) {
                     if (!("".equals(node.getValue().trim()))) {
                         expected.append(node);
@@ -396,7 +392,8 @@ public class XPathTest extends XOMTestCase {
             for (int j = 0; j < result.size(); j++) {
                 Node expectedNode = expected.get(j);
                 Node actualNode = result.get(j);                
-                assertEquals(id + " " + expectedNode.toXML() + " " + actualNode.toXML(), expectedNode, actualNode);
+                assertEquals(id + " " + expectedNode.toXML() + " " 
+                  + actualNode.toXML(), expectedNode, actualNode);
             }
         }
         
