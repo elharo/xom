@@ -22,6 +22,8 @@ package nu.xom.tests;
 
 import junit.framework.ComparisonFailure;
 import nu.xom.Attribute;
+import nu.xom.Element;
+import nu.xom.Namespace;
 import nu.xom.Node;
 import nu.xom.Text;
 
@@ -32,7 +34,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d7
  *
  */
 public class XOMTestCaseTest extends XOMTestCase {
@@ -62,6 +64,12 @@ public class XOMTestCaseTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
         
+    }
+    
+    
+    public void testNamespaceEqualsItself() {
+        Namespace ns = new Namespace("pre", "http://www.example.org", null);
+        assertEquals(ns, ns);
     }
     
     
@@ -109,6 +117,28 @@ public class XOMTestCaseTest extends XOMTestCase {
      
         Node a1 = new Attribute("test", "value");
         Node a2 = a1.copy();
+        assertEquals(a1, a2);
+        
+    }
+    
+    
+    public void testCombineTextNodes() {
+     
+        Element e1 = new Element("test");
+        e1.appendChild("1");
+        e1.appendChild("2");
+        Element e2 = new Element("test");
+        e2.appendChild("12");
+        assertEquals(e1, e2);
+        assertEquals(2, e1.getChildCount());
+        
+    }
+    
+    
+    public void testCompareXMLBaseAttributes() {
+     
+        Node a1 = new Attribute("xml:base", Namespace.XML_NAMESPACE, "value.xml");
+        Node a2 = new Attribute("xml:base", Namespace.XML_NAMESPACE, "./value.xml");
         assertEquals(a1, a2);
         
     }
