@@ -51,7 +51,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -900,14 +900,16 @@ public class ElementTest extends XOMTestCase {
             fail("Added comment after end");    
         }
         catch (IndexOutOfBoundsException ex) {
-          // success    
+            // success    
+            assertNotNull(ex.getMessage()); 
         }
         try {
             e.insertChild(new Comment("test"), -20);
             fail("Added comment before start"); 
         }
         catch (IndexOutOfBoundsException ex) {
-          // success    
+            // success   
+            assertNotNull(ex.getMessage()); 
         }     
         
     }
@@ -1242,14 +1244,16 @@ public class ElementTest extends XOMTestCase {
             e.getAttribute(2);
         }
         catch (IndexOutOfBoundsException ex) {
-            // success
+            // success   
+            assertNotNull(ex.getMessage()); 
         }
   
         try {
             e.getAttribute(-1);
         }
         catch (IndexOutOfBoundsException ex) {
-            // success
+            // success   
+            assertNotNull(ex.getMessage()); 
         }
            
     }

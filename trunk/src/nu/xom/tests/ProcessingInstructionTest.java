@@ -34,7 +34,7 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class ProcessingInstructionTest extends XOMTestCase {
@@ -105,17 +105,26 @@ public class ProcessingInstructionTest extends XOMTestCase {
           pi.setValue("kjsahdj ?>");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
+        }
         try {
           pi.setValue("?>");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
+        }
         try {
           pi.setValue("kjsahdj ?> skhskjlhd");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
+        }
         try {
             pi.setValue(null);
             fail("Allowed null data");   
