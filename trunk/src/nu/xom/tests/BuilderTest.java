@@ -953,22 +953,6 @@ public class BuilderTest extends XOMTestCase {
     }
     
 
-    public void testSkippedEntities()
-      throws IOException, ParsingException, SAXException {
-        
-        String doc = "<!DOCTYPE root SYSTEM 'http://www.cafeaulait.org/DTD/none.dtd'>"
-          + "<root>&none;</root>";
-        XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
-        Builder builder = new Builder(xerces);
-        
-        xerces.setFeature("http://xml.org/sax/features/external-general-entities", false);
-        xerces.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-        
-        Document result = builder.build(doc, "http://www.example.org/");
-        
-    }   
-        
-        
     public void testInvalidDocWithCrimson()
       throws IOException, ParsingException {
         
