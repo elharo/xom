@@ -30,11 +30,11 @@ import nu.xom.Text;
 
 /**
  * <p>
- *  Utility methods for merging all consaecutive text nodes.
+ *  Utility methods for merging all consecutive text nodes.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class TextMerger {
@@ -52,7 +52,8 @@ public class TextMerger {
                     parent.removeChild(nextChild);
                     if (i+1 == parent.getChildCount()) break;
                 }
-                parent.replaceChild(child, new Text(sb.toString()));
+                if (sb.length() == 0) parent.removeChild(child);
+                else parent.replaceChild(child, new Text(sb.toString()));
             }
             else if (child instanceof Element) {
                 merge((ParentNode) child);
