@@ -44,18 +44,21 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b1
+ * @version 1.0b7
  *
  */
 public class EncodingTest extends XOMTestCase {
 
+    
     public EncodingTest(String name) {
         super(name);
     }
 
+    
     private Document doc;
 
     protected void setUp() {
+        
         Element root = new Element("root");
         doc = new Document(root);           
 
@@ -295,6 +298,12 @@ public class EncodingTest extends XOMTestCase {
             if (value.length() > 1) {
                 actual = UTF16.charAt(value, 0);
             }
+            // This doesn't work for all encodings, because there are
+            // a few cases where you write a Unicode compatibility 
+            // character such as an Arabic presentation form,
+            // but read back what is essentially a different version 
+            // of the same character. That is the mapping from some
+            // legacy character sets to Unicode is not always 1-1.
             assertEquals("Expected 0x" 
               + Integer.toHexString(expected).toUpperCase()
               + " but was 0x" 
