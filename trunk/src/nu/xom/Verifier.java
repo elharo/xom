@@ -1,5 +1,7 @@
 package nu.xom;
 
+import java.util.StringTokenizer;
+
 // This is the one file in XOM derived from JDOM.
 // It is subject to the following license:
 /*
@@ -190,22 +192,6 @@ final class Verifier {
 
     /**
      * <p>
-     * Checks a string to see if it is a legal IRI.
-     * Both absolute and relative IRIs are supported.
-     * </p>
-     * 
-     * I am not correctly checking that an IPV6 address
-     * contains a legal IPv6 address????
-     * 
-     * @param iri <code>String</code> to check
-     * @throws MalformedURIException if this is not a legal IRI
-     */
-    static void checkIRI(String iri) {
-        checkIRIOrURI(iri, false);
-    }
-
-    /**
-     * <p>
      * Checks a string to see if it is a legal value for xml:base.
      * This requires first escaping the excluded characters from  
      * Section 2.4 of IETF RFC 2396 per section 3.1 of the XML Base
@@ -213,7 +199,7 @@ final class Verifier {
      * </p>
      * 
      * honestly should I check this at all, parser don't????
-     * maybe just throw an exception when decosing on getBaseURI?
+     * maybe just throw an exception when decoding on getBaseURI?
      * 
      * @param iri <code>String</code> to check
      * @throws MalformedURIException if this is not a legal IRI after
@@ -342,9 +328,89 @@ final class Verifier {
                 "Multiple square brackets"
             );                   
         }
+        
+        if (leftBrackets == 1) { 
+            // We have exactly one left and one right bracket
+            String ip6Address = iri.substring(
+              iri.indexOf('[')+1, iri.indexOf(']')
+            );
+            checkIP6Address(ip6Address);
+        }
+        
+        
         // If we got here, everything is OK
         return;
     }
+    
+
+    private static void checkIP6Address(String ip6Address) {
+
+        StringTokenizer st = new StringTokenizer(ip6Address, ":", true);
+        int numTokens = st.countTokens();
+        if (numTokens > 15 || numTokens < 2) {
+            throw new MalformedURIException(
+              "Illegal IP6 host address: " + ip6Address
+            );                                              
+        }
+        for (int i = 0; i < numTokens; i++) {
+            String hexPart = st.nextToken();
+            if (":".equals(hexPart)) continue;
+            try {
+                int part = Integer.parseInt(hexPart, 16);
+                if (part < 0) {
+                    throw new MalformedURIException(
+                      "Illegal IP6 host address: " + ip6Address
+                    );                                                            
+                }
+            }
+            catch (NumberFormatException ex) {
+                if (i == numTokens-1) {
+                    checkIP4Address(hexPart, ip6Address);        
+                }
+                else {
+                    throw new MalformedURIException(
+                      "Illegal IP6 host address: " + ip6Address
+                    );                                                            
+                }
+            }
+        }
+        
+        if (ip6Address.indexOf("::") != ip6Address.lastIndexOf("::")) {
+            throw new MalformedURIException(
+              "Illegal IP6 host address: " + ip6Address
+            );                                                          
+        }
+        
+    }
+
+    
+    private static void checkIP4Address(String address, String ip6Address) {
+
+        StringTokenizer st = new StringTokenizer(address, ".");
+        int numTokens = st.countTokens();
+        if (numTokens != 4) {
+            throw new MalformedURIException(
+              "Illegal IP6 host address: " + ip6Address
+            );                                              
+        }
+        for (int i = 0; i < 4; i++) {
+            String decPart = st.nextToken();
+            try {
+                int dec = Integer.parseInt(decPart);
+                if (dec > 255 || dec < 0) {
+                    throw new MalformedURIException(
+                      "Illegal IP6 host address: " + ip6Address
+                    );                                                                                
+                }
+            }
+            catch (NumberFormatException ex) {
+                throw new MalformedURIException(
+                  "Illegal IP6 host address: " + ip6Address
+                );                                                            
+            }
+        }
+        
+    }    
 
     
     private static int decodeSurrogatePair(int high, int low) {
