@@ -1707,7 +1707,60 @@ public class XPathTest extends XOMTestCase {
          Nodes result = doc.query("//*[./../servlet-name = 'DeviceInfoServlet']");
          assertEquals(2, result.size());
        
-     }
+     }         
+
+
+    public void testXPathNamespaceParentage() 
+      throws ParsingException, IOException {
+        
+        String input = "<!DOCTYPE doc [\n"
+            + "<!ATTLIST e2 xml:space (default|preserve) 'preserve'>\n"
+            + "<!ATTLIST e3 id ID #IMPLIED>\n"
+            + "]>\n"
+            + "<doc xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\">\n"
+            + "   <e1>\n"
+            + "      <e2 xmlns=\"\">\n"
+            + "         <e3 id=\"E3\"/>\n"
+            + "      </e2>\n"
+            + "   </e1>\n"
+            + "</doc>";
+        
+        Document doc = (new Builder()).build(input, null);
+        XPathContext context = new XPathContext("ietf", "http://www.ietf.org");
+        String xpath = "(/*/* | /*/*/namespace::*)\n";
+        Nodes result = doc.query(xpath);
+        assertEquals(4, result.size());
+        Element parent = (Element) result.get(0);
+        for (int i = 1; i < 4; i++) {
+            Namespace namespace = (Namespace) result.get(i); 
+            assertEquals(parent, namespace.getParent());
+        }
+        
+    }
+    
+
+    public void testAttributesFollowElementsInDocumentOrder() 
+      throws ParsingException, IOException {
+        
+        String input = "<document>\n"
+            + "   <e1 a='b' c='d' e='f'>\n"
+            + "      <e2>\n"
+            + "         <e3 id=\"E3\"/>\n"
+            + "      </e2>\n"
+            + "   </e1>\n"
+            + "</document>";
+        
+        Document doc = (new Builder()).build(input, null);
+        String xpath = "(/*/* | /*/*/attribute::*)\n";
+        Nodes result = doc.query(xpath);
+        assertEquals(4, result.size());
+        Element parent = (Element) result.get(0);
+        for (int i = 1; i < 4; i++) {
+            Attribute attribute = (Attribute) result.get(i); 
+            assertEquals(parent, attribute.getParent());
+        }
+        
+    }
     
 
 }
