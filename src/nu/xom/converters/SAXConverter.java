@@ -47,7 +47,7 @@ import org.xml.sax.helpers.LocatorImpl;
  * </p>
   * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  * 
  */
 public class SAXConverter {
@@ -353,7 +353,6 @@ public class SAXConverter {
         }
         else { // undeclare all prefixes
             String prefix = element.getNamespacePrefix();
-            String uri = element.getNamespaceURI();
             if (!prefix.equals("")  && !"xml".equals(prefix)) {
                 contentHandler.endPrefixMapping(prefix);  
             }
