@@ -47,7 +47,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a3
  * 
  */
 public class Serializer {
@@ -66,6 +66,7 @@ public class Serializer {
      * @throws NullPointerException if <code>out</code> is null
      */
     public Serializer(OutputStream out) {
+        
         if (out == null) {
             throw new NullPointerException("Null OutputStream");
         } 
@@ -78,6 +79,7 @@ public class Serializer {
             throw new RuntimeException(
               "The VM is broken. It does not understand UTF-8.");
         }
+        
     }
     
     
@@ -487,8 +489,8 @@ public class Serializer {
      *     written
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws UnavailableCharacterException if the name of any of the element's 
-     *     attributes contains a character that is not 
+     * @throws UnavailableCharacterException if the name of any of
+     *     the element's attributes contains a character that is not 
      *     available in the current encoding
      */
     protected void writeAttributes(Element element)
@@ -500,19 +502,17 @@ public class Serializer {
             if (element.getAttribute("base", 
               "http://www.w3.org/XML/1998/namespace") == null) {
                 String baseValue = element.getBaseURI();
-                if (baseValue != null) {
-                    if (parent == null 
-                      || parent.isDocument()
-                      || !element.getBaseURI()
-                           .equals(parent.getBaseURI())) {
-                           
-                        escaper.writeMarkup(' ');
-                        Attribute baseAttribute = new Attribute(
-                          "xml:base", 
-                          "http://www.w3.org/XML/1998/namespace", 
-                          baseValue);
-                        write(baseAttribute);
-                    }
+                if (parent == null 
+                  || parent.isDocument()
+                  || !element.getBaseURI()
+                       .equals(parent.getBaseURI())) {
+                       
+                    escaper.writeMarkup(' ');
+                    Attribute baseAttribute = new Attribute(
+                      "xml:base", 
+                      "http://www.w3.org/XML/1998/namespace", 
+                      baseValue);
+                    write(baseAttribute);
                 }
             }
         }
