@@ -269,6 +269,7 @@ public class Element extends ParentNode {
      * </p>
      * 
      * @param name the name of the element to return
+     * 
      * @return the first child element with the specified local name 
      *    in no namespace or null if there is no such element
      */
@@ -455,7 +456,7 @@ public class Element extends ParentNode {
      */
     public final Attribute getAttribute(String localName,
       String namespaceURI) {
-          if (attributes == null) return null;
+        if (attributes == null) return null;
         return attributes.get(localName, namespaceURI);
     }
 
@@ -1262,20 +1263,32 @@ public class Element extends ParentNode {
             // The base attribute contains an IRI, not a URI.
             // Thus the first thing we have to do is escape it
             // to convert illegal characters to hexadecimal escapes.
-            base = toURI(base);
+            base = toURI(base);  // ???? move this method to URIUtil
             
             if (!URIUtil.isAbsolute(base)) {
                 // absolutize the URI if possible
                 if (parent != null) {                   
                     String parentActualBase = parent.getActualBaseURI();
-                         // Mostly a null check
-                    if (parentActualBase == actualBase || parentActualBase.equals(actualBase)) {
+                    // can element be considered to come from same entity as its parent?
+                    if (actualBase == null || actualBase.equals(parentActualBase)) {
                         try {
                             String parentBase = parent.getBaseURI();
                             if (!nu.xom.URIUtil.isOpaque(parentBase)) {
-                                base = nu.xom.URIUtil.absolutize(parentBase, base);
-                                
+                                base = URIUtil.absolutize(parentBase, base);    
                             }
+                        }
+                        catch (MalformedURIException ex) {
+                            // System.err.println("Oops " + base);
+                            return null;
+                        }
+                    }
+                    else {
+                        try {
+                            if (!URIUtil.isOpaque(actualBase)) {
+                                // should the absolutize method be able to
+                                // combine two relative bases????
+                                base = URIUtil.absolutize(actualBase, base);    
+                            } 
                         }
                         catch (MalformedURIException ex) {
                             // System.err.println("Oops " + base);

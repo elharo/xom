@@ -69,6 +69,21 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testXMLBaseUsedToResolveHref() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/xmlbasetest.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expected = builder.build(
+          new File("data/xinclude/output/xmlbasetest.xml")
+        );
+        assertEquals(expected, result);
+                
+    }
+    
+ 
     public void testMarsh() 
       throws ParsingException, IOException, XIncludeException {
       
