@@ -605,7 +605,7 @@ public class Element extends ParentNode {
             Element parent = (Element) getParent();
             result = parent.getNamespaceURI(prefix);
         }
-        if (result == null && "".equals(prefix)) result = ""; // ????
+        if (result == null && "".equals(prefix)) result = "";
         return result;
     }
 
