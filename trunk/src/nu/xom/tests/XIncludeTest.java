@@ -2394,6 +2394,25 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
+    // Test that a fallback element with a non-include parent is a
+    // fatal error even when the ancestor
+    // fallback element containing it is not activated.????
+    public void testHiddenError3() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "hiddenerror3.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed fallback with non-include parent hidden by successful include element");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());
+        }
+                
+    }
+
+   
     // Test that an xpointer attribute that uses percent escapes 
     // is a not a fatal error when the 
     // fallback element containing it is not activated????
@@ -2407,63 +2426,5 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
-
-        
     
-    // Test that a malformed parse attribute causes an exception
-    // even when the fallback element containing it is not activated.
-    public void testHiddenError4() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File(inputDir, "hiddenerror4.xml");
-        Document doc = builder.build(input);
-        try {
-            XIncluder.resolve(doc);
-            fail("Allowed bad parse attribute in unactivated fallback");
-        }
-        catch (BadParseAttributeException success) {
-            assertNotNull(success.getMessage());
-        }
-                
-    }
-        
-
-    // Test that an href attribute that has a fragment identifier
-    // is a fatal error even when the
-    // fallback element containing it is not activated.????
-    public void testHiddenError5() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File(inputDir, "hiddenerror5.xml");
-        Document doc = builder.build(input);
-        try {
-            XIncluder.resolve(doc);
-            fail("Allowed fragment identifier in href attribute in unactivated fallback");
-        }
-        catch (BadParseAttributeException success) {
-            assertNotNull(success.getMessage());
-        }
-                
-    }
-
-    
-    // Test that an xpointer attribute that uses percent escapes 
-    // is a fatal error even when the 
-    // fallback element containing it is not activated????
-    public void testHiddenError6() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File(inputDir, "hiddenerror6.xml");
-        Document doc = builder.build(input);
-        try {
-            XIncluder.resolve(doc);
-            fail("Allowed xpointer attribute to use percent escape in unactivated fallback");
-        }
-        catch (BadParseAttributeException success) {
-            assertNotNull(success.getMessage());
-        }
-                
-    }
-
-      
 }
