@@ -29,11 +29,13 @@ import java.util.Map;
 import java.util.Stack;
 
 import nu.xom.Attribute;
+import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
+import nu.xom.WellformednessException;
 import nu.xom.XMLException;
 
 import org.xml.sax.Attributes;
@@ -85,6 +87,7 @@ class XSLTHandler
     public void startDocument() {}
     public void endDocument() {}
   
+    private Element current;
     
     public void startElement(String namespaceURI, String localName, 
      String qualifiedName, Attributes attributes) {
@@ -94,7 +97,8 @@ class XSLTHandler
           = factory.startMakingElement(qualifiedName, namespaceURI);
         
         if (parents.isEmpty()) {
-           result.append(element); 
+          // won't append until finishmakingElement
+           current = element; 
         }
         else {
             ParentNode parent = (ParentNode) parents.peek();
@@ -148,9 +152,36 @@ class XSLTHandler
     
     public void endElement(String namespaceURI, String localName, 
       String qualifiedName) {
-        // call finishmakingElement????
+        
         flushText();
-        parents.pop(); 
+        Element element = (Element) parents.pop();
+        if (parents.isEmpty()) {
+            Nodes nodes = factory.finishMakingElement(current);
+            for (int i = 0; i < nodes.size(); i++) {
+                result.append(nodes.get(i));
+            }
+            current = null;
+        }
+        else {
+            Nodes nodes = factory.finishMakingElement(element);
+            ParentNode parent = element.getParent();
+            if (parent != null) {
+                element.detach();
+                for (int i = 0; i < nodes.size(); i++) {
+                    Node node = nodes.get(i);
+                    if (node instanceof Attribute) {
+                        ((Element) parent).addAttribute((Attribute) node);
+                    }
+                    else {
+                        parent.appendChild(node);
+                    }
+                }
+            }
+            else {
+                // ????
+            }
+        }
+
     }
   
     
