@@ -42,10 +42,11 @@ to http://www.xom.nu/
     <property name="optimize"    value="on"/>
     <property name="deprecation" value="off"/>
 
-    <property name="src.dir"   value="./src"/>
-    <property name="src15.dir" value="./src15"/>
-    <property name="lib.dir"   value="./lib"/>
-    <property name="packages"  value="nu.xom.*"/>
+    <property name="src.dir"    value="./src"/>
+    <property name="src15.dir"  value="./src15"/>
+    <property name="lib.dir"    value="./lib"/>
+    <property name="lib2.dir"   value="./lib2"/>
+    <property name="packages"   value="nu.xom.*"/>
 
     <property name="build.dir"       value="./build"/>
     <property name="build15.dir"     value="./classes15"/>
@@ -67,6 +68,12 @@ to http://www.xom.nu/
     <property name="xom-core"       value="${build.dest}"/>
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"    value="${lib.dir}/servlet.jar"/>
+
+    <property name="saxon6.jar"     value="${lib2.dir}/saxon.jar"/>
+    <property name="saxon7.jar"     value="${lib2.dir}/saxon-aelfred.jar"/>
+    <property name="gnujaxp.jar"    value="${lib2.dir}/gnujaxp.jar"/>
+    <property name="resolver.jar"   value="${lib2.dir}/resolver.jar"/>
+    <property name="dom4j.jar"      value="${lib2.dir}/dom4j-1.5.1.jar"/>
   
 
     <property name="test.outputFormat" value="xml"/>    
@@ -91,6 +98,11 @@ to http://www.xom.nu/
     <path id="test.class.path">
       <path refid="run.class.path"/>
       <pathelement location="${junit.jar}"/>
+      <pathelement location="${saxon6.jar}"/>
+      <pathelement location="${saxon7.jar}"/>
+      <pathelement location="${gnujaxp.jar}"/>
+      <pathelement location="${resolver.jar}"/>
+      <pathelement location="${dom4j.jar}"/>
     </path>
     
     <path id="doc.class.path">
@@ -306,7 +318,7 @@ XOM Build file
   <target name="zip" depends="jar, betterdoc, samples" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, clover_html/**,  clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/canonical/xmlconf/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, clover_html/**,  clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/canonical/xmlconf/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, lib2/**"/>   
       <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
@@ -422,7 +434,7 @@ XOM Build file
   <target name="clover.html" depends="with.clover">
     <clover-report>
        <current outfile="clover_html" title="Clover results for ${Name} ${version}">
-	       <format type="html"/>
+	     <format type="html"/>
        </current>	 
     </clover-report>
   </target>
@@ -431,9 +443,9 @@ XOM Build file
   <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib-->
   <target name="clovertest" depends="compile" description="Run JUnit tests with clover.jar in classpath">
     <junit printsummary="on" fork="no">
-       <classpath refid="run.class.path" />
+       <classpath refid="test.class.path" />
         <classpath>
-            <pathelement path="${ant-home}/lib/clover.jar"/>
+          <pathelement path="${ant-home}/lib/clover.jar"/>
         </classpath>
         <formatter type="${test.outputFormat}" />
        <batchtest fork="yes" todir="${testoutput.dir}">
