@@ -37,7 +37,7 @@ import nu.xom.ParseException;
 /**
  * 
  * <p>
- * based on Sosnoski's benchmarks:
+ * Based on Sosnoski's benchmarks:
  * </p>
  * 
  * <blockquote>
@@ -56,6 +56,7 @@ import nu.xom.ParseException;
  * </blockquote>
  * 
  * @author Elliotte Rusty Harold
+ * @version 1.0d21
  *
  */
 class DocumentModifier {
@@ -69,40 +70,49 @@ class DocumentModifier {
           return; 
         }
          
-        TreeWalker iterator = new TreeWalker();
-        try {
-            
+        DocumentModifier iterator = new DocumentModifier();
+        Builder parser = new Builder();
+        try {    
+            warmup(parser, iterator, args[0], 5);
             long prebuild = System.currentTimeMillis();
-            Builder parser = new Builder();
           
             // Read the entire document into memory
             Node document = parser.build(args[0]); 
             long postbuild = System.currentTimeMillis();
             
-            System.out.println((postbuild - prebuild) + "ms to build the document");
+            System.out.println((postbuild - prebuild) 
+              + "ms to build the document");
 
 
             long prewalk = System.currentTimeMillis();
-            
-            // Process it starting at the root
             iterator.followNode(document);
             long postwalk = System.currentTimeMillis();
             
-            System.out.println((postwalk - prewalk) + "ms to walk tree");
+            System.out.println((postwalk - prewalk) 
+              + "ms to modify the document");
             
         }
-        catch (IOException e) { 
-          System.out.println(e); 
+        catch (IOException ex) { 
+            System.out.println(ex); 
         }
-        catch (ParseException e) { 
-          System.out.println(e); 
+        catch (ParseException ex) { 
+            System.out.println(ex); 
         }
   
     } // end main
+    
+    private static void warmup(Builder parser, DocumentModifier iterator, 
+      String url, int numPasses)
+      throws IOException, ParseException {
+        for (int i = 0; i < numPasses; i++) {
+            Node document = parser.build(url); 
+            iterator.followNode(document);        }
+    }
 
-  // note use of recursion
+    // note use of recursion
     public void followNode(Node node) throws IOException {
     
+        // Chances are most of the time is spent in the instanceof test
         if (node instanceof Text) {
             if (node.getValue().trim().length() == 0) {
                 node.detach();
@@ -113,7 +123,6 @@ class DocumentModifier {
                 parent.insertChild(dummy, parent.indexOf(node));
                 node.detach();
                 dummy.appendChild(node);
-
             }
             return;
         }
