@@ -50,6 +50,7 @@ import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -61,7 +62,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b4
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -514,13 +515,9 @@ public class DOMConverterTest extends XOMTestCase {
         String data = "<root><scope><a>1</a><b>2</b><c /></scope></root>";
         Builder builder = new Builder();
         Document xomDocIn = builder.build(data, null);
-        System.out.println(xomDocIn.toXML());
         int xomRootNumber = xomDocIn.getRootElement().getChildCount(); 
         org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
         org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
-        XMLSerializer serializer = new XMLSerializer();
-        serializer.setOutputByteStream(System.err);
-        serializer.serialize(domDoc);
         assertEquals(xomRootNumber, domRoot.getChildNodes().getLength());
         Document xomDocOut = DOMConverter.convert(domDoc);
         assertEquals(xomDocIn, xomDocOut);
@@ -541,6 +538,18 @@ public class DOMConverterTest extends XOMTestCase {
         assertEquals(2, domTop.getChildNodes().getLength());
         
     } 
+    
+    
+    public void testNamespaceAttributes() {
+     
+        Element root = new Element("root", "http://www.example.org/");
+        root.appendChild("text");
+        Document xomDocIn = new Document(root);
+        org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
+        org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
+        assertTrue(domRoot.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns"));
+        
+    }
  
     
 }
