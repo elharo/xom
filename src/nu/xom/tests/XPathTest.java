@@ -275,6 +275,22 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testGetNodeBeforeDocType() {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        DocType doctype = new DocType("root");
+        doc.setDocType(doctype);
+        Comment c = new Comment("test");
+        doc.insertChild(c, 0);
+        
+        Nodes result = doc.query("child::node()[1]");
+        assertEquals(1, result.size());
+        assertEquals(c, result.get(0));
+        
+    }
+    
+
     public void testCantUseDocTypeAsXPathContextNode() {
      
         Element root = new Element("root");
@@ -345,6 +361,17 @@ public class XPathTest extends XOMTestCase {
         assertEquals(2, result.size());
         assertEquals(a1, result.get(0));   
         assertEquals(a2, result.get(1));
+        
+    }
+    
+    
+    public void testGetNamespaceStringValue() {
+        
+        Element test = new Element("Test", "http://www.example.com/");
+        
+        Nodes result = test.query("self::*[contains(namespace::*, 'http://')]");
+        assertEquals(1, result.size());
+        assertEquals(test, result.get(0));
         
     }
     
@@ -561,6 +588,16 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testSelfAxisWithUnparentedText() {
+        
+        Text text = new Text("test");
+        Nodes result = text.query("self::text()");
+        assertEquals(1, result.size());
+        assertEquals(text, result.get(0));  
+        
+    }
+    
+
     public void testSelfAxisWithTextChild() {
         
         Element parent = new Element("parent");
@@ -765,6 +802,15 @@ public class XPathTest extends XOMTestCase {
         Nodes result = text.query("id('anchor')");
         assertEquals(1, result.size());     
         assertEquals(child2, result.get(0));
+        
+    }
+    
+
+    public void testIDFunctionFromUnparentedTextNode() {
+        
+        Text text = new Text("test");
+        Nodes result = text.query("id('anchor')");
+        assertEquals(0, result.size());
         
     }
     
