@@ -528,7 +528,7 @@ class XOMHandler
                 internalDTDSubset.append("  <!ENTITY ");
                 internalDTDSubset.append(name); 
                 internalDTDSubset.append(" \""); 
-                internalDTDSubset.append(escapeCarriageReturnsAndDoubleQuotes(value)); 
+                internalDTDSubset.append(escapeReservedCharactersInEntityDeclaration(value)); 
                 internalDTDSubset.append("\">\n"); 
             }
         }
@@ -615,22 +615,26 @@ class XOMHandler
     }
     
     
-    /* It's really weird that SAX needs two different escape methods
-       here, but it does. We need to escape the carriage returns and
-       double quotes and only these two for entity replacement text.
-       because element declarations do not resolve general entities.  
-       However, general entities are resolved in attribute default 
-       values.
-     */
-    private static String escapeCarriageReturnsAndDoubleQuotes(String s) {
+    private static String escapeReservedCharactersInEntityDeclaration(String s) {
         
         int length = s.length();
         StringBuffer result = new StringBuffer(length);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
-            if (c == '\r') result.append("&#x0D;");
-            else if (c == '"') result.append("&#x34;");
-            else result.append(c);
+            // XXX table lookup
+            switch (c) {
+                case '\r': 
+                    result.append("&#x0D;");
+                    break;
+                case '&': 
+                    result.append("&#x26;");
+                    break;
+                case '"': 
+                    result.append("&quot;");
+                    break;
+                default:
+                    result.append(c);
+            }
         }
         
         return result.toString();
