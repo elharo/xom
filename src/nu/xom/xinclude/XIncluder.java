@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -61,7 +61,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b11
  *
  */
 public class XIncluder {
@@ -949,15 +949,6 @@ public class XIncluder {
      
         return element.getLocalName().equals("fallback")
           && element.getNamespaceURI().equals(XINCLUDE_NS);
-        
-    }
-    
-    
-    private static void checkForFatalErrors(Element include) 
-      throws XIncludeException {
-        
-        
-        
         
     }
 
