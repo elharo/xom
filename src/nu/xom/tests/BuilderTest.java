@@ -438,6 +438,16 @@ public class BuilderTest extends XOMTestCase {
              // success   
         }
     }
+    
+    public void testJavaEncodings() 
+      throws IOException, ParsingException {
+        String str = "<?xml version='1.0' encoding='ISO8859_1'?>" +            "<root>é</root>"; 
+        byte[] data = str.getBytes("8859_1"); 
+        InputStream in = new ByteArrayInputStream(data);
+        Document doc = builder.build(in);
+        assertEquals("é", doc.getValue()); 
+        
+    }
 
     // Crimson improperly converts 0x0D and 0x0A to spaces
     // even when the attribute type is not CDATA.

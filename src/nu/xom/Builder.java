@@ -222,14 +222,40 @@ public class Builder {
             // We can live without that.
         }
         
+        // A couple of Xerces specific properties
+        if (parser.getClass().getName().equals(  
+            "org.apache.xerces.parsers.SAXParser")) {
+            try {
+                parser.setFeature(
+                 "http://apache.org/xml/features/allow-java-encodings", true);
+            }
+            catch (SAXException ex) {
+                // Possibly an earlier version of Xerces; no big deal.
+                // We can live without this feature.   
+            }
+            // See http://nagoya.apache.org/bugzilla/show_bug.cgi?id=23768
+            // If this bug gets fixed, we could uncomment this
+            /*
+            try {
+                parser.setFeature(
+                 "http://apache.org/xml/features/standard-uri-conformant", true);
+            }
+            catch (SAXException ex) {
+                // Possibly an earlier version of Xerces; no big deal.
+                // We can live without these.   
+            } 
+            */
+        }
         
     }        
     
     // This is one of the few places where the 
     // SAXness is exposed. What if the object is changed after
     // being passed to this method? Wrong features set, etc.????
-    // Could/should I eliminate this? Perhpas after adding
-    // get/setFeature/property?
+    // Could/should I eliminate this? Perhaps after adding
+    // get/setFeature/property? Would it then be necesdsary to
+    // add a variation in SAXConverter to handle special, non-XML 
+    // reader like my SQLReader?
     
     /**
      * <p>
@@ -419,7 +445,6 @@ public class Builder {
 
         systemID = canonicalizeURL(systemID);
         InputSource source = new InputSource(systemID);
-        // parser.setEntityResolver(new BaseRelativeResolver(systemID));
         return build(source);
         
     }
@@ -530,7 +555,7 @@ public class Builder {
     
     /**
      * <p>
-     * This method reads the document from an input stream.
+     * This method reads the document from a reader.
      * </p>
      * 
      * @param in the <code>Reader</code> from which the 
@@ -538,7 +563,7 @@ public class Builder {
      * 
      * @return  the parsed <code>Document</code>
      * 
-     * @throws ParsingException    if a well-formedness error is detected
+     * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk.
      * @throws ValidityException if a validity error is detected. This 
      *   is only thrown if the builder has been instructed to validate.
