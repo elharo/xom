@@ -93,6 +93,24 @@ public class XSLTransformTest extends XOMTestCase {
      + "<!--epilog-->";
 
     
+    public void testPrefixMappingIssues() 
+      throws XSLException, ParsingException, IOException {
+        
+        String doc = "<test>"
+           + "<span xmlns:a='http://www.example.com'/>"
+           + "<span xmlns:b='http://www.example.net'/>"
+           + "</test>"; 
+        File stylesheet = new File("data/xslt/input/identity.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+        
+        Builder builder = new Builder();
+        Document input = builder.build(doc, "http://example.org/");
+        Nodes result = xform.transform(input);
+        assertEquals(input.getRootElement(), result.get(0));
+        
+    }
+    
+    
     public void testReaderConstructor() {
         
         try {
@@ -471,6 +489,7 @@ public class XSLTransformTest extends XOMTestCase {
 
     // Make sure that method="text" doesn't affect what we get
     // since this is not a serialized transform
+    // See http://nagoya.apache.org/bugzilla/show_bug.cgi?id=30197
     public void testTextMethod() 
       throws ParsingException, IOException, XSLException {
         
@@ -487,6 +506,7 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals("0987654321", output.get(3).getValue());
         assertTrue(output.get(4) instanceof Comment);
         assertTrue(output.get(5) instanceof ProcessingInstruction);
+        
     }
 
     
@@ -502,6 +522,7 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals(1, root.getChildCount());
         Comment child = (Comment) root.getChild(0);
         assertEquals("test", child.getValue());
+        
     }
 
     
@@ -519,6 +540,7 @@ public class XSLTransformTest extends XOMTestCase {
         ProcessingInstruction child = (ProcessingInstruction) root.getChild(0);
         assertEquals("target", child.getTarget());
         assertEquals("test", child.getValue());
+        
     } 
 
     
@@ -535,6 +557,7 @@ public class XSLTransformTest extends XOMTestCase {
         ProcessingInstruction child = (ProcessingInstruction) root.getChild(0);
         assertEquals("target", child.getTarget());
         assertEquals("test", child.getValue());
+        
     } 
 
     
@@ -554,24 +577,6 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals(root, output.get(0));
         
     } 
-    
-    
-    public void testPrefixMappingIssues() 
-      throws XSLException, ParsingException, IOException {
-        
-         String doc = "<test>"
-           + "<span xmlns:a='http://www.example.com'/>"
-           + "<span xmlns:b='http://www.example.net'/>"
-           + "</test>"; 
-        File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
-        
-        Builder builder = new Builder();
-        Document input = builder.build(doc, "http://example.org/");
-        Nodes result = xform.transform(input);
-        assertEquals(input.getRootElement(), result.get(0));
-        
-    }
     
     
     public void testTriple() 
@@ -1061,42 +1066,22 @@ public class XSLTransformTest extends XOMTestCase {
                                     // namespace prefixes.
                                     continue;
                                 }
-                                else if (id.equals("axes_axes129")) {
-                                    // Xalan bug involving counting of namespace nodes
-                                    // starting from an attribute or a test suite bug;
-                                    // XXX diagnose and report
-                                }
                                 else if (id.equals("copy_copy56") 
                                   || id.equals("copy_copy58")
                                   || id.equals("copy_copy60")
                                   || id.equals("copy_copy59")) {
                                     // Xalan bug;
                                     // XXX diagnose and report
-                                }
+                                } 
                                 else if (id.equals("idkey_idkey31")
                                   || id.equals("idkey_idkey59")
-                                  || id.equals("idkey_idkey62")
-                                  || id.equals("idkey_idkey61")) {
+                                  || id.equals("idkey_idkey61")
+                                  || id.equals("idkey_idkey62")) {
                                     // Xalan bug?;
                                     // XXX diagnose and report
-                                }
+                                } 
                                 else if (id.equals("impincl_impincl11")) {
                                     // Xalan bug?;
-                                    // XXX diagnose and report
-                                }
-                                else if (id.equals("math_math110")
-                                  || id.equals("math_math111")) {
-                                    // Xalan bug?;
-                                    // XXX diagnose and report
-                                }
-                                else if (id.equals("position_position104")) {
-                                    // probable test suite bug?;
-                                    // XXX diagnose and report
-                                }
-                                else if (id.equals("position_position106")
-                                  || id.equals("position_position107")
-                                  || id.equals("position_position109")) {
-                                    // probable Xalan bug?;
                                     // XXX diagnose and report
                                 }
                                 else if (id.equals("whitespace_whitespace17")
@@ -1104,7 +1089,7 @@ public class XSLTransformTest extends XOMTestCase {
                                   || id.equals("position_position109")) {
                                     // tests indent="yes" which is not
                                     // not relevant within XOM
-                                }
+                                } 
                                 else {
                                     assertEquals(
                                       id + "\r\n" + actualResult.toXML(),
