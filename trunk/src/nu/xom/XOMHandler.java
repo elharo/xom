@@ -34,7 +34,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 class XOMHandler 
@@ -58,18 +58,22 @@ class XOMHandler
     private StringBuffer internalDTDSubset;
     private NodeFactory  factory;
     
+    
     XOMHandler(NodeFactory factory) {
         this.factory = factory; 
     }   
+    
     
     public void setDocumentLocator(Locator locator) {
         this.locator = locator;
     }
 
+    
     Document getDocument() {
         return document;
     }
 
+    
     public void startDocument() {
         document = factory.makeDocument();
         parent = document;
@@ -86,11 +90,13 @@ class XOMHandler
         }
     }
   
+    
     public void endDocument() {
         factory.endDocument(document);
         parents.pop();
     }
   
+    
     public void startElement(String namespaceURI, String localName, 
       String qualifiedName, org.xml.sax.Attributes attributes) {
         
@@ -191,6 +197,7 @@ class XOMHandler
         
     }
     
+    
     public void endElement(
       String namespaceURI, String localName, String qualifiedName) {
         
@@ -249,7 +256,9 @@ class XOMHandler
                 }
             }
         }
+        
     }
+    
     
     private static Attribute.Type convertStringToType(String saxType) {
     
@@ -273,6 +282,7 @@ class XOMHandler
         
     }
   
+    
     private StringBuffer buffer;
   
     public void characters(char[] text, int start, int length) {
@@ -280,6 +290,7 @@ class XOMHandler
         if (finishedCDATA && length > 0) inCDATA = false;
     }
  
+    
     // acumulate all text that's in the buffer into a text node
     private void flushText() {
         if (buffer.length() > 0) {
@@ -326,7 +337,7 @@ class XOMHandler
                     position++;
                 }
                 else {
-                    if (node instanceof Attribute) {
+                    if (node.isAttribute()) {
                         ((Element) parent).addAttribute((Attribute) node);
                     }
                     else parent.appendChild(node);
@@ -348,7 +359,7 @@ class XOMHandler
     }
 
 
-    // I handle this with attribute values; not prefix mappings
+    // XOM handles this with attribute values; not prefix mappings
     public void startPrefixMapping(String prefix, String uri) {}
     public void endPrefixMapping(String prefix) {}
 
@@ -356,6 +367,7 @@ class XOMHandler
         flushText();
         throw new XMLException("Could not resolve entity " + name);                        
     }
+    
     
     // LexicalHandler events
     
@@ -375,8 +387,9 @@ class XOMHandler
                 this.doctype = doctype;
             }
         }
-     }
+    }
      
+    
     public void endDTD() {
         inDTD = false;
         if (doctype != null) {
@@ -384,6 +397,7 @@ class XOMHandler
         }
     }
 
+    
     private boolean inExternalSubset = false;
 
     // We have a problem here. Xerces gets this right,
@@ -394,9 +408,11 @@ class XOMHandler
       if (name.equals("[dtd]")) inExternalSubset = true;
     }
     
+    
     public void endEntity(String name) {
       if (name.equals("[dtd]")) inExternalSubset = false;    
     }
+    
     
     private boolean inCDATA = false;
     private boolean finishedCDATA = false;
@@ -406,10 +422,12 @@ class XOMHandler
         finishedCDATA = false;
     }
     
+    
     public void endCDATA() {
         finishedCDATA = true;
     }
 
+    
     public void comment(char[] text, int start, int length) {
         
         if (!inDTD) flushText();
@@ -446,16 +464,18 @@ class XOMHandler
 
     }    
     
+    
     public void elementDecl(String name, String model) {
         if (!inExternalSubset && doctype != null) {
             internalDTDSubset.append("  <!ELEMENT ");
             internalDTDSubset.append(name); 
             internalDTDSubset.append(' '); 
             internalDTDSubset.append(model); 
-            internalDTDSubset.append('>'); 
+            internalDTDSubset.append(">\r\n"); 
         }
     }
   
+    
     public void attributeDecl(String elementName, 
       String attributeName, String type, String mode, 
       String defaultValue)  {
@@ -476,10 +496,11 @@ class XOMHandler
                 internalDTDSubset.append(defaultValue);
                 internalDTDSubset.append("\"");         
             }
-            internalDTDSubset.append(">");   
+            internalDTDSubset.append(">\r\n");   
         }
     }
   
+    
     public void internalEntityDecl(String name, 
        String value) {   
         if (!inExternalSubset && doctype != null) {
@@ -488,11 +509,12 @@ class XOMHandler
                 internalDTDSubset.append(name); 
                 internalDTDSubset.append(" \""); 
                 internalDTDSubset.append(value); 
-                internalDTDSubset.append("\">"); 
+                internalDTDSubset.append("\">\r\n"); 
             }
         }
     }
   
+    
     public void externalEntityDecl(String name, 
        String publicID, String systemID) {
      
@@ -511,10 +533,11 @@ class XOMHandler
                     internalDTDSubset.append(" SYSTEM \""); 
                     internalDTDSubset.append(systemID); 
                 }
-                internalDTDSubset.append("\">"); 
+                internalDTDSubset.append("\">\r\n"); 
             }
         }
     }
+    
     
     public void notationDecl(String name, String publicID, 
       String systemID) {
@@ -537,11 +560,12 @@ class XOMHandler
                 internalDTDSubset.append(systemID);
                 internalDTDSubset.append('"');                 
             }
-            internalDTDSubset.append('>'); 
+            internalDTDSubset.append(">\r\n"); 
         }        
         
     }
    
+    
     public void unparsedEntityDecl(String name, String publicID, 
      String systemID, String notationName) {
         if (!inExternalSubset && doctype != null) {
@@ -562,7 +586,7 @@ class XOMHandler
                 internalDTDSubset.append("\" NDATA "); 
                 internalDTDSubset.append(notationName);     
             }
-            internalDTDSubset.append('>'); 
+            internalDTDSubset.append(">\r\n"); 
         }
         
     }

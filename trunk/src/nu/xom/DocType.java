@@ -69,7 +69,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  */
 public class DocType extends LeafNode {
@@ -495,7 +495,7 @@ public class DocType extends LeafNode {
         if (internalDTDSubset.length() != 0) {
             result.append(" [\r\n");    
             result.append(internalDTDSubset);   
-            result.append("\r\n]"); 
+            result.append(']'); 
         }
         
         result.append(">");
