@@ -46,7 +46,7 @@ import java.util.List;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public abstract class ParentNode extends Node {
@@ -206,12 +206,30 @@ public abstract class ParentNode extends Node {
             );
         }
         Node removed = (Node) children.get(position);
+        // fill in actual base URI
+        // This way does add base URIs to elements created in memory
+        if (removed.isElement()) fillInBaseURI((Element) removed);
         children.remove(position);
         removed.setParent(null);
-        return removed;    
+                
+        return removed;  
+        
     }
 
     
+    void fillInBaseURI(Element removed) {
+
+        ParentNode parent = removed;
+        String actualBaseURI = null;
+        while (parent != null && actualBaseURI == null) {
+            actualBaseURI = parent.getActualBaseURI();
+            parent = parent.getParent();
+        }
+        removed.setActualBaseURI(actualBaseURI);
+        
+    }
+
+
     /**
      * <p>
      * Removes the specified child of this node.
@@ -238,9 +256,11 @@ public abstract class ParentNode extends Node {
               "Child does not belong to this node"
             );
         }
+        if (child.isElement()) fillInBaseURI((Element) child);
         children.remove(position);
         
         child.setParent(null);
+
         return child;
         
     }
