@@ -94,6 +94,9 @@ public class BuilderTest extends XOMTestCase {
     private String notationDeclarationSystem 
      = "<!NOTATION ISODATE SYSTEM "
      + "\"http://www.iso.ch/cate/d15903.html\">";
+    private String notationDeclarationPublicAndSystem 
+     = "<!NOTATION DATE PUBLIC \"DATE PUBLIC ID\""
+     + "\"http://www.iso.ch/cate/d15903.html\">";
     private String notationDeclarationPublic = "<!NOTATION gif PUBLIC "
     + "\"-//Textuality//TEXT Standard open-hatch boilerplate//EN\">";
 
@@ -109,6 +112,7 @@ public class BuilderTest extends XOMTestCase {
      + unparsedEntityDeclarationPublic + "\n"
      + notationDeclarationPublic + "\n"
      + notationDeclarationSystem + "\n"
+     + notationDeclarationPublicAndSystem + "\n"
      + "]>\r\n"
      + "<?xml-stylesheet href=\"file.css\" type=\"text/css\"?>" 
      + "<!-- test -->"
@@ -392,6 +396,10 @@ public class BuilderTest extends XOMTestCase {
         assertTrue(
           internalDTDSubset, 
           internalDTDSubset.indexOf(notationDeclarationSystem) > 0
+        );
+        assertTrue(
+          internalDTDSubset, 
+          internalDTDSubset.indexOf(notationDeclarationPublicAndSystem) > 0
         );
                
     }
