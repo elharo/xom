@@ -60,7 +60,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
-    <property name="jaxen.jar"      value="${lib.dir}/jaxen-1.1-beta-3-min.jar"/>
+    <property name="jaxen.jar"      value="${lib.dir}/jaxen-1.1-min.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.0rc1.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
@@ -384,7 +384,7 @@ XOM Build file
   </target>
 
   
-  <target name="dist" depends="zip, tar.gz" />
+  <target name="dist" depends="zip, tar.gz, maven" />
  
   <target name="zip" depends="jar, betterdoc, samples" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
@@ -533,6 +533,37 @@ XOM Build file
       </batchtest>
     </junit>
   </target> 
+
+<!-- Generate a Maven JAR for uploading to the maven
+    bug repository and hence placement onto ibilio and mirrors. 
+    See http://maven.apache.org/repository-upload.html -->
+  <target name="maven" depends="jar" >
+    <property name="pom.template" location="project.xml" />
+    <property name="pom.file" location="${build.dir}/project.xml" />
+    <property name="package.jar"
+location="${build.dir}/${name}-${version}.jar"/>
+    <property name="license" location="LICENSE.txt" />
+    <property name="xom-maven.jar"
+location="${dist.dir}/xom-maven-${version}.jar" />
+    <copy file="${pom.template}" tofile="${pom.file}">
+      <filterset>
+       <filter token="VERSION" value="${version}"/>
+     </filterset>
+    </copy>
+    <jar destFile="${xom-maven.jar}">
+      <fileset file="${pom.file}" />
+      <fileset file="${license}" />
+      <fileset file="${package.jar}" />
+    </jar>
+  </target>
+
+  <!-- ???? set this up to compile jaxen and parameterize locations -->
+  <target name="jaxen" description="Minimal Jar file for Jaxen" depends="init">
+    <jar jarfile="${jaxen.jar}" excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/**" basedir="/Users/elharo/projects/workspace/jaxen/bin">
+    </jar>
+  </target>
+
+
   
 </project>
 
