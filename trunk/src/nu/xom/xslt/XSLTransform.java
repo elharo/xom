@@ -106,7 +106,7 @@ import nu.xom.NodeList;
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d21
  */
 public final class XSLTransform {
 
@@ -125,9 +125,8 @@ public final class XSLTransform {
 
     /**
      * <p>
-     * This will create a new <code>XSLTransform</code> by
-     *  reading the stylesheet from the specified 
-     *   <code>Source</code>.
+     *  This will create a new <code>XSLTransform</code> by
+     *  reading the stylesheet from the specified <code>Source</code>.
      * </p>
      *
      * @param stylesheet TrAX <code>Source</code> from 
