@@ -33,7 +33,6 @@ package nu.xom;
  * @version 1.0d23
  *
  */
-// ???? update javadoc
 class NonVerifyingFactory extends NodeFactory {
 
     /**
@@ -62,7 +61,8 @@ class NonVerifyingFactory extends NodeFactory {
      * @param value the attribute value
      * @param type the attribute type
      * 
-     * @return the new <code>Attribute</code>
+     * @return a <code>Nodes</code> containing 
+     *     the new <code>Attribute</code>
      */
     public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
@@ -76,7 +76,8 @@ class NonVerifyingFactory extends NodeFactory {
      * 
      * @param data the complete text content of the comment
      * 
-     * @return the new <code>Comment</code>
+     * @return a <code>Nodes</code> containing 
+     *     the new <code>Comment</code>
      */
     public Nodes makeComment(String data) {
         return new Nodes(Comment.build(data));   
@@ -93,7 +94,8 @@ class NonVerifyingFactory extends NodeFactory {
      * @param publicID the public ID of the external DTD subset
      * @param systemID the URL of the external DTD subset
      * 
-     * @return the new <code>DocType</code>
+     * @return a <code>Nodes</code> containing 
+     *     the new <code>DocType</code>
      */
     public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
@@ -107,7 +109,8 @@ class NonVerifyingFactory extends NodeFactory {
      * 
      * @param data the complete text content of the node
      * 
-     * @return the new <code>Text</code>
+     * @return a <code>Nodes</code> containing 
+     *     the new <code>Text</code>
      */
     public Nodes makeText(String data) {
         return new Nodes(Text.build(data));  
@@ -120,7 +123,8 @@ class NonVerifyingFactory extends NodeFactory {
      * 
      * @param data the complete text content of the node
      * 
-     * @return the new <code>Text</code>
+     * @return a <code>Nodes</code> containing 
+     *     the new <code>Text</code>
      */
     Nodes makeCDATASection(String data) {
         return new Nodes(CDATASection.build(data));  
@@ -135,7 +139,8 @@ class NonVerifyingFactory extends NodeFactory {
      * @param target the target of the processing instruction
      * @param data the data of the processing instruction
      * 
-     * @return the new <code>ProcessingInstruction</code>
+     * @return a <code>Nodes</code> containing 
+     *     the new <code>ProcessingInstruction</code>
      */
     public Nodes makeProcessingInstruction(
       String target, String data) {
