@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d3
  * 
  */
 public class Attribute extends Node {
@@ -163,7 +163,12 @@ public class Attribute extends Node {
         }
         _setNamespace(prefix, URI);
         _setValue(value);
-        _setType(type);
+        if ("xml:id".equals(this.getQualifiedName())) {
+            _setType(Attribute.Type.ID);
+        }   
+        else {
+            _setType(type);
+        }
         
     }
 
@@ -200,6 +205,10 @@ public class Attribute extends Node {
         if (name.indexOf(':') >= 0) {
             prefix = name.substring(0, name.indexOf(':'));   
             localName = name.substring(name.indexOf(':') + 1);
+            if ("xml:id".equals(name)) {
+                type = Attribute.Type.ID;
+                value = value.trim(); // ???? really shouldn't trim carrauge return and linefeed and tab here
+            }
         }        
         
         result.localName = localName;
@@ -236,7 +245,18 @@ public class Attribute extends Node {
      * @param type the DTD type of this attribute
      */
     public void setType(Type type) {
+        
+        if (isXMLID() && ! Type.ID.equals(type)) {
+            throw new IllegalDataException(
+              "Can't change type of xml:id attribute to " + type);
+        }
         _setType(type);
+        
+    }
+    
+    
+    private boolean isXMLID() {
+        return "xml:id".equals(this.getQualifiedName());
     }
 
     
@@ -283,8 +303,15 @@ public class Attribute extends Node {
 
     
     private void _setValue(String value) {
-        Verifier.checkPCDATA(value);
+        
+        if ("xml:id".equals(this.getQualifiedName())) {
+            Verifier.checkNCName(value);
+        }
+        else {
+            Verifier.checkPCDATA(value);
+        }
         this.value = value;
+        
     }
 
 
@@ -313,7 +340,16 @@ public class Attribute extends Node {
      * 
      */
     public void setLocalName(String localName) {
+        
+        if ("id".equals(localName) &&
+          "http://www.w3.org/XML/1998/namespace".equals(this.URI)) {
+            Verifier.checkNCName(this.value);
+        }
         _setLocalName(localName);
+        if (isXMLID()) {
+            this.setType(Attribute.Type.ID);
+        }
+        
     }   
     
     
@@ -396,7 +432,14 @@ public class Attribute extends Node {
      * </ul>
      */
     public void setNamespace(String prefix, String URI) {
+        
+        if ("xml".equals(prefix) && "id".equals(this.localName)) {
+            Verifier.checkNCName(this.value);
+            this.setType(Attribute.Type.ID);
+        }
+        
         _setNamespace(prefix, URI);
+        
     }
 
     
