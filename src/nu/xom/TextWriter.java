@@ -320,9 +320,10 @@ abstract class TextWriter {
         else if (lineSeparator.equals("\n")) {
             out.write('\n');    
         } 
-        else if (lineSeparator.equals("\r")) {
+        else  { // lineSeparator.equals("\r")) 
             out.write('\r');    
         } 
+        // Remember, there are only three possible line separators
 
     }
 
