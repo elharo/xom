@@ -320,9 +320,9 @@ public class DocType extends Node {
     /**
      * <p>
      * Sets the system ID for the external DTD subset.
-     * This is normally a relative or absolute URL.
-     * Passing null removes the system ID, but only if the 
-     * public ID has been removed first. Otherwise,
+     * This must be a a relative or absolute  URI with no fragment
+     * identifier. Passing null removes the system ID, but only if  
+     * the public ID has been removed first. Otherwise,
      * passing null causes a <code>WellformednessException</code>.
      * </p>
      * 
@@ -372,8 +372,6 @@ public class DocType extends Node {
      * </p>
      * 
      * @return an empty string
-     * 
-     * @see nu.xom.Node#getValue()
      */
     public final String getValue() {
         return "";
@@ -407,8 +405,6 @@ public class DocType extends Node {
      * </p>
      * 
      * @return zero
-     * 
-     * @see nu.xom.Node#getChildCount()
      */
     public final int getChildCount() {
         return 0;   
@@ -423,9 +419,7 @@ public class DocType extends Node {
      * an actual XML document type declaration. 
      * </p>
      * 
-     * @return a string representation of the object
-     * 
-     * @see nu.xom.Node#toString()
+     * @return a string representation of this object
      */
     public final String toString() {
         return "[" + getClass().getName() + ": " + rootName + "]";
@@ -442,8 +436,6 @@ public class DocType extends Node {
      * 
      * @return a deep copy of this <code>DocType</code> 
      *     that is not part of a document
-     * 
-     * @see nu.xom.Node#copy()
      */
     public Node copy() {      
         return new DocType(this);
@@ -460,8 +452,6 @@ public class DocType extends Node {
      * 
      * @return a <code>String</code> containing 
      *      an XML document type declaration
-     *
-     * @see nu.xom.Node#toXML()
      */
     public final String toXML() { 
           
