@@ -55,7 +55,7 @@ class ISOCyrillicWriter extends TextWriter {
             case 0x040A: return false; // CYRILLIC CAPITAL LETTER NJE
             case 0x040B: return false; // CYRILLIC CAPITAL LETTER TSHE
             case 0x040C: return false; // CYRILLIC CAPITAL LETTER KJE
-            case 0x00AD: return false; // SOFT HYPHEN
+            case 0x040D: return true;  // place holder to enable table lookup
             case 0x040E: return false; // CYRILLIC CAPITAL LETTER SHORT U
             case 0x040F: return false; // CYRILLIC CAPITAL LETTER DZHE
             case 0x0410: return false; // CYRILLIC CAPITAL LETTER A
@@ -122,7 +122,7 @@ class ISOCyrillicWriter extends TextWriter {
             case 0x044D: return false; // CYRILLIC SMALL LETTER E
             case 0x044E: return false; // CYRILLIC SMALL LETTER YU
             case 0x044F: return false; // CYRILLIC SMALL LETTER YA
-            case 0x2116: return false; // NUMERO SIGN
+            case 0x0450: return true;  // place holder to enable table lookup
             case 0x0451: return false; // CYRILLIC SMALL LETTER IO
             case 0x0452: return false; // CYRILLIC SMALL LETTER DJE
             case 0x0453: return false; // CYRILLIC SMALL LETTER GJE
@@ -135,10 +135,17 @@ class ISOCyrillicWriter extends TextWriter {
             case 0x045A: return false; // CYRILLIC SMALL LETTER NJE
             case 0x045B: return false; // CYRILLIC SMALL LETTER TSHE
             case 0x045C: return false; // CYRILLIC SMALL LETTER KJE
-            case 0x00A7: return false; // SECTION SIGN
+            case 0x045D: return true;  // place holder to enable table lookup
             case 0x045E: return false; // CYRILLIC SMALL LETTER SHORT U
             case 0x045F: return false; // CYRILLIC SMALL LETTER DZHE
         }
+        
+        switch (c) { // assorted leftover characters
+            case 0x00AD: return false; // SOFT HYPHEN
+            case 0x00A7: return false; // SECTION SIGN
+            case 0x2116: return false; // NUMERO SIGN
+        }
+
         return true;
     }
 
