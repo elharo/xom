@@ -55,7 +55,7 @@ import org.jaxen.XPath;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a1
+ * @version 1.1a2
  *
  */
 public abstract class Node {
@@ -339,9 +339,6 @@ public abstract class Node {
         return super.hashCode();    
     }
     
-    // ???? how does document order work with
-    // nodes selected from multiple documents
-    // document(url1) | document(url2) ?
     
     /**
      * <p>
@@ -438,27 +435,33 @@ public abstract class Node {
             Iterator iterator = results.iterator();
             while (iterator.hasNext()) {
                 Object o = iterator.next();
-                if (o instanceof DocumentFragment) {
-                    iterator.remove();
-                    // Want to allow // and //* and so forth
-                    // but not / for rootless documents
-                    if (results.isEmpty()) {
-                        throw new XPathException("Tried to get document "
-                          + "node of disconnected subtree");
-                    }
-                }
-                else if (o instanceof Node) {
+                try {
                     Node n = (Node) o;
-                    if (n.isNamespace()) {
+                    if (n.isDocumentFragment()) {
+                        iterator.remove();
+                        // Want to allow // and //* and so forth
+                        // but not / for rootless documents
+                        if (results.isEmpty()) {
+                            throw new XPathException("Tried to get document "
+                              + "node of disconnected subtree");
+                        }
+                    }
+                    else if (n.isNamespace()) {
                         namespaceList.add(n);
                     }
                 }
-                else {
+                catch (ClassCastException ex) {
                     throw new XPathException("XPath expression " 
-                      + xpath + " did not return a node-set.");
+                      + xpath + " did not return a node-set.", ex);
                 }
             }
             
+            // If we fix the bugs in Jaxen that don't return nodes in
+            // document order, we can speed things up by uncommenting
+            // this next line
+            /* if (xpath.indexOf('|') == -1) return new Nodes(results);
+            else  */
+                
             return sortResults(results, namespaceList);
         }
         catch (XPathException ex) {
@@ -486,16 +489,17 @@ public abstract class Node {
     // recursively descend through document; in document
     // order, and add results as they are found
     private Nodes sortResults(List in, List namespaces) {
-
-        Node root = this.getRoot();
-        if (in.size() > 1 && root instanceof ParentNode) {
-            Nodes out = new Nodes();
-            process(in, namespaces, out, (ParentNode) root);
-            return out;
+        
+        if (in.size() > 1) {
+            Node root = this.getRoot();
+            if (root instanceof ParentNode) {
+                Nodes out = new Nodes();
+                process(in, namespaces, out, (ParentNode) root);
+                return out;
+            }
         }
-        else {
-            return new Nodes(in);
-        }
+        return new Nodes(in);
+        
     }
 
 
@@ -533,7 +537,8 @@ public abstract class Node {
                 }
                 
                 // attach attributes
-                for (int a = 0; a < element.getAttributeCount(); a++) {
+                int attributeCount = element.getAttributeCount();  
+                for (int a = 0; a < attributeCount; a++) {
                     Attribute att = element.getAttribute(a);
                     if (in.contains(att)) {
                         out.append(att);
@@ -612,6 +617,10 @@ public abstract class Node {
     boolean isNamespace() {
         return false;   
     }
-  
+
+    boolean isDocumentFragment() {
+        return false;
+    }
+    
     
 }
