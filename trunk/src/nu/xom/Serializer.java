@@ -293,10 +293,10 @@ public class Serializer {
      * </p>
      * 
      * <ol>
-     *   <li>It calls <code>writeStartTag</code></li>
+     *   <li>It calls <code>writeStartTag</code>.</li>
      *   <li>It passes each of the element's children to 
      *       <code>writeChild</code> in order.</li>
-     *   <li>It calls <code>writeEndTag</code></li>
+     *   <li>It calls <code>writeEndTag</code>.</li>
      * </ol>
      * 
      * <p>
@@ -351,7 +351,25 @@ public class Serializer {
             escaper.incrementIndent();
             // children
             for (int i = 0; i < childCount; i++) {
-                writeChild(element.getChild(i)); 
+                Node child = element.getChild(i);
+                // need to work around a very tricky case here where
+                // denormalized characters cross boundaries of
+                // consecutive text nodes
+                if (escaper.getNFC() && child.isText()) {
+                    Text t = (Text) child;
+                    while (i < childCount-1) { // not the last node
+                        Node next = element.getChild(i+1);
+                        if (next.isText()) {
+                            t = new Text(t.getValue() + next.getValue());
+                            i++;
+                        }
+                        else break;
+                    }
+                    writeChild(t); 
+                }
+                else {
+                    writeChild(child);
+                }
             }
             escaper.decrementIndent();
             if (escaper.getIndent() > 0 && !escaper.isPreserveSpace()) {
