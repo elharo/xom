@@ -22,8 +22,10 @@
 package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -467,12 +469,41 @@ public class XPathTest extends XOMTestCase {
     }
     
     
-    public void testGetDocument() {
+    private File inputDir = new File("data");
+
+    
+    public void testGetDocument() throws MalformedURLException {
         
         Element element = new Element("test");
-        // do this locally????
-        Nodes result = element.query("document('http://www.cafeconleche.org/')/*");
+        File f = new File(inputDir, "prettyxml.xml");
+        String url = f.toURL().toExternalForm();
+        Nodes result = element.query("document('" + url + "')/*");
         assertEquals(1, result.size());
+        
+    }
+    
+
+    public void testGetMultipleNodesViaDocumentFunction() 
+      throws MalformedURLException {
+        
+        Element element = new Element("test");
+        File f = new File(inputDir, "prettyxml.xml");
+        String url = f.toURL().toExternalForm();
+        Nodes result = element.query("document('" + url + "')//*");
+        assertEquals(2, result.size());
+        
+    }
+    
+
+    public void testDoubleDocument() throws MalformedURLException {
+        
+        Element element = new Element("test");
+        File f1 = new File(inputDir, "prettyxml.xml");
+        String url1 = f1.toURL().toExternalForm();
+        File f2 = new File(inputDir, "test.xml");
+        String url2 = f2.toURL().toExternalForm();
+        Nodes result = element.query("document('" + url1 + "')/* | " + "document('" + url2 + "')/*");
+        assertEquals(2, result.size());
         
     }
     
