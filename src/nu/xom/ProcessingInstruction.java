@@ -41,7 +41,7 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  *
  */
 public class ProcessingInstruction extends Node {
@@ -49,6 +49,7 @@ public class ProcessingInstruction extends Node {
     private String target;
     private String data;
 
+    
     /**
      * <p>
      * Create a processing instruction with a certain target and data.
@@ -58,10 +59,9 @@ public class ProcessingInstruction extends Node {
      * @param data the processing instruction data
      * 
      * @throws IllegalTargetException if the target is not a 
-     *    non-colonized name or is made of the string "xml" 
-     *    in any case.
+     *    non-colonized name or is the string "xml" in any case
      * @throws IllegalDataException if data contains "?>" or any 
-     *   other illegal characters
+     *    other illegal characters
      */
     public ProcessingInstruction(String target, String data) {
         _setTarget(target);  
@@ -113,7 +113,8 @@ public class ProcessingInstruction extends Node {
      * @param target the new target
      * 
      * @throws IllegalTargetException if the proposed target 
-     *   is not an XML 1.0 non-colonized name
+     *     is not an XML 1.0 non-colonized name or is the string 
+     *     "xml" in any case
      */
     public void setTarget(String target) {
         
@@ -197,8 +198,6 @@ public class ProcessingInstruction extends Node {
      * 
      * @return the data of the processing instruction
      *
-     * @see nu.xom.Node#getValue()
-     *
      */
     public final String getValue() {
         return data;
@@ -231,8 +230,6 @@ public class ProcessingInstruction extends Node {
      * </p>
      * 
      * @return zero
-     * 
-     * @see nu.xom.Node#getChildCount()
      */
     public final int getChildCount() {
         return 0;   
@@ -247,8 +244,6 @@ public class ProcessingInstruction extends Node {
      * 
      * @return an XML representation of this processing instruction 
      *         as a <code>String</code>
-     *
-     * @see nu.xom.Node#toXML()
      */
     public final String toXML() {
         
@@ -272,8 +267,6 @@ public class ProcessingInstruction extends Node {
      * 
      * @return a copy of this <code>ProcessingInstruction</code> 
      *         with no parent
-     * 
-     * @see nu.xom.Node#copy()
      */
     public Node copy() {
         return new ProcessingInstruction(target, data);
@@ -295,8 +288,6 @@ public class ProcessingInstruction extends Node {
      * 
      * @return a non-XML string representation of this 
      *      <code>ProcessingInstruction</code>
-     * 
-     * @see java.lang.Object#toString()
      */
     public final String toString() {
         return "[" + getClass().getName() + ": target=\"" 
