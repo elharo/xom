@@ -24,7 +24,6 @@
 package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
-import java.io.CharConversionException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -1631,7 +1630,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
-    public void testBuildFromFileThatContainsNonASCIICharacterInFileName()
+    public void testBuildFromFileThatContainsNonASCIICharacterInName()
       throws ParsingException, IOException {
         
         Document doc = builder.build(new File("data/resumé.xml"));
@@ -1643,10 +1642,24 @@ public class BuilderTest extends XOMTestCase {
     }
   
     
-    public void testBuildFromFileThatContainsSpaceInFileName()
+    public void testBuildFromFileThatContainsSpaceInName()
       throws ParsingException, IOException {
         
         Document doc = builder.build(new File("data/space file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/space%" + Integer.toHexString(' ') + "file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsSharpInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/# file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1655,14 +1668,288 @@ public class BuilderTest extends XOMTestCase {
     }
   
     
-    public void testBuildFromFileThatContainsSharpInFileName()
+    public void testBuildFromFileThatContainsExclamationPointInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/# file.xml"));
+        Document doc = builder.build(new File("data/!file.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsDoubleQuoteInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/\"file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsSingleQuoteInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/'file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsParenthesesInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/()file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/()file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsCurlyBracesInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/{file}.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" 
+          + Integer.toHexString('{').toUpperCase() + "file%"
+          + Integer.toHexString('}').toUpperCase() + ".xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsSquareBracketsInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/[file].xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" 
+          + Integer.toHexString('[').toUpperCase() + "file%"
+          + Integer.toHexString(']').toUpperCase() + ".xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsVerticalBarInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/|file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI(),
+          doc.getBaseURI().endsWith("data/%" 
+          + Integer.toHexString('|').toUpperCase()
+          + "file.xml"));
+        
+    }
+
+  
+    
+    public void testBuildFromFileThatContainsAsteriskInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/*file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/*file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsSemicolonInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/;file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/;file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsPlusSignInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/+file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" 
+          + Integer.toHexString('+').toUpperCase() + "file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsCommaInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/,file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/,file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsAngleBracketsInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/<file>.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" 
+          + Integer.toHexString('<').toUpperCase() + "file%"
+          + Integer.toHexString('>').toUpperCase() + ".xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsDollarSignInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/$file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/$file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsPercentSignInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/%file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('%') + "file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsQuestionMarkInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/?file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" 
+          + Integer.toHexString('?').toUpperCase() + "file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsAtSignInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/@file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('@') + "file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsEqualsSignInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/=file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/=file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsCaretInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/^file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('^').toUpperCase() + "file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsAmpersandInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/&file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('&') + "file.xml"));
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsBactickInName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/`file.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('`') + "file.xml"));
         
     }
   
