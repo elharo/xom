@@ -175,6 +175,7 @@ public class Builder {
         "com.jclark.xml.sax.SAX2Driver",
         "net.sf.saxon.aelfred.SAXDriver",
         "com.icl.saxon.aelfred.SAXDriver",
+        "org.dom4j.io.aelfred2.SAXDriver",
         "org.dom4j.io.aelfred.SAXDriver"
     };
 
@@ -462,12 +463,9 @@ public class Builder {
         
         // These parsers are known to not make all the checks
         // they're supposed to. :-(
-        // XXX test this line
         if (parserName.equals("gnu.xml.aelfred2.XmlReader")) return false;
         if (parserName.equals("net.sf.saxon.aelfred.SAXDriver")) return false;
-        if (parserName.equals("com.icl.saxon.aelfred.SAXDriver")) return false;
-        // XXX test this line
-        if (parserName.equals("org.dom4j.io.aelfred.SAXDriver")) return false;     
+        if (parserName.equals("com.icl.saxon.aelfred.SAXDriver")) return false;    
     
         if (parserName.equals("org.apache.xerces.parsers.SAXParser")
             && xercesVersion >= 2.4) {
