@@ -11,6 +11,10 @@ encryption?
 
 DTD API?
 
+catalog support????
+
+RELAX NG?
+
 1.1:
 -------
 
@@ -31,9 +35,7 @@ Add separate implementations optimized for speed and size.
 The current implementation is mostly optimized for size. The speedy version
 would carry extra pointers (especially next sibling) to make navigation very quick.
 Some final methods would have to be implemented by calling non-final package protected 
-methods that could be overridden instead. 
-
-catalog support????
+methods that could be overridden instead.
 
 Should XSLTransform have a constructor that takes a TrAX 
 Templates or Transformer object to allow
@@ -44,21 +46,18 @@ should Builder have an option to cache all external entities so it doesn't keep 
 A getAttributeValueInScope() method that searches up the tree for the nearest 
 ancestor element with the specified attribute. This would be useful for xml:lang, xml:space, and many other cases!!!!
 
-Does XSLTransform need a setParameter method to set values of xsl:params?
-
 Should Builder/NodeFactory have a build(Document) method that allows one to pass an existing document through a node factory without reserializing? 
 
 A FastSerializer that does no indenting, no line-breaking, no character sets
 except UTF-8 and UTF-16, no normalization, and does not use TextWriter
-
-Combine jaxen into minimal jar
 
 consider using a WeakHashMap to hold all mappings of nodes to base URIs
 
 Could Builder hold a cache of interned strings to use while building?
 Does NUX BinaryXMLCODEC do something like this?
 
-Can a Nodes object contain null? Should it be able to?
+Should/could the TrAX source and result, Jaxen adapter and so forth go public in the converters package?
+
 
 1.0.1:
 --------
@@ -97,6 +96,7 @@ Ditto, would it make sense to hash previously looked up names?
 Must profile this. 
 
 Add a Fetch task that loads code from CVS
+(Need to fix guest access on java.net first, or register a fake user)
 
 Use GET task to grab servlet.jar and tagsoup.jar if necessary
 
@@ -129,6 +129,40 @@ TextWriter.java
 XOMTestCase.java
 XOMHandler.java for internal DTD subset
 
+~/projects/1.0.1$ cvs -d :pserver:elharo@cvs.dev.java.net:/cvs rtag -r XOM_10  -b BR_1_0 xom
+lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
+cvs [rtag aborted]: received abort signal
+cvs [rtag aborted]: received abort signal
+lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
+
+
+===============
+Done 1.1d6:
+===============
+
+The primary JAR file now bundles Jaxen so that in Java 1.4 and later the only
+thing that needs to be on the classpath is xom-1.1d6.jar (provided you don't use NFC in the serializer)
+
+A setParameter method in XSLTransform
+
+All items in a Nodes must now be non-null
+
+XPath expressions now recognize the xml: prefix, even if it hasn't been
+specifically bound in a context
+
+Fixed bug that unnecessarily duplicated xml: attributes 
+during document subset canonicalization
+
+The Canonicalizer API has been reworked significantly. 
+Document subset canoniclization is now performed by passing in a Nodes
+object rather than a Document and an XPath expression. The Canonicalizer(out, boolean, boolean) constructor
+has been removed on the grounds of redundancy and confusion. The canonicalize(Document) method is now canonicalize(node) and canonicalizes the entire subtree represented by the ndoe you pass to it.
+
+===============
+Done 1.1d5:
+===============
+
+Exclusive XML canonicalization
 
 ===============
 Done 1.1d4:
