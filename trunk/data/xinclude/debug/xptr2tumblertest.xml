@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+   You should see a p element:
+  <p id="p1" xml:base="file:/home/elharo/XOM/data/xinclude/input/docwithid.xml#element(/1/12/3)element(/1/2)element(/1/1)">Test worked</p>
+</root>
+
