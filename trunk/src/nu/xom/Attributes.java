@@ -102,6 +102,12 @@ final class Attributes {
     }
     
     
+    // for use when building only
+    void fastAdd(Attribute attribute) {        
+        attributes.add(attribute);
+    }
+    
+    
     void checkPrefixConflict(Attribute attribute) {
         
         String prefix = attribute.getNamespacePrefix();

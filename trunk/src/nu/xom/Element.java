@@ -46,7 +46,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b8
  *
  */
 public class Element extends ParentNode {
@@ -448,15 +448,16 @@ public class Element extends ParentNode {
             // namespaces of other attributes
         }
         
-        fastAddAttribute(attribute);
+        if (attributes == null) attributes = new Attributes();
+        attributes.add(attribute);
+        attribute.setParent(this);
         
     }
     
-
     
     void fastAddAttribute(Attribute attribute) {
         if (attributes == null) attributes = new Attributes();
-        attributes.add(attribute);
+        attributes.fastAdd(attribute);
         attribute.setParent(this);
     }
 
