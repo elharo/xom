@@ -41,21 +41,21 @@ package nu.xom;
  * </p>
  * 
  * <p>
- *   Subclasses can also filter content while building.
- *   For example, namespaces could be added to or changed 
- *   on all elements. Comments could be deleted. Processing
- *   instructions can be changed into elements. An 
- *   <code>xinclude:include</code> element could be replaced
- *   with the content it references. All such changes must be 
- *   consistent with the usual rules of well-formedness. For example,
- *   the <code>makeDocType()</code> method should not 
- *   return a list containing two <code>DocType</code> objects
- *   because an XML document can have at most one document type
- *   declaration. Nor should it return a list containing an element,
- *   because an element cannot appear in a document prolog. However,
- *   it could return a list containing any number of comments and
- *   processing instructions, and not more than one 
- *   <code>DocType</code> object.
+ * Subclasses can also filter content while building.
+ * For example, namespaces could be added to or changed 
+ * on all elements. Comments could be deleted. Processing
+ * instructions can be changed into elements. An 
+ * <code>xinclude:include</code> element could be replaced
+ * with the content it references. All such changes must be 
+ * consistent with the usual rules of well-formedness. For 
+ * example, the <code>makeDocType()</code> method should not 
+ * return a list containing two <code>DocType</code> objects
+ * because an XML document can have at most one document type
+ * declaration. Nor should it return a list containing an element,
+ * because an element cannot appear in a document prolog. However,
+ * it could return a list containing any number of comments and
+ * processing instructions, and not more than one <code>DocType</code> 
+ * object.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -74,14 +74,14 @@ public class NodeFactory {
     
     /**
      * <p>
-     * Creates a new <code>Element</code> in the specified namespace 
+     * Creates a new element in the specified namespace 
      * with the specified name. The builder calls this
      * method to make the root element of the document.
      * </p>
      * 
      * <p>
      * Subclasses may change the name, namespace, content, or other 
-     * characteristics of the <code>Element</code> returned.
+     * characteristics of the element returned.
      * The default implementation merely calls 
      * <code>startMakingElement</code>. However, when subclassing, it 
      * is often useful to be able to easily distinguish between the  
@@ -190,17 +190,17 @@ public class NodeFactory {
      * </p>
      * 
      * <p>
-     *  The <code>Builder</code> calls this method at the beginning of
+     *  The builder calls this method at the beginning of
      *  each document, before it calls any other method in this class.
      *  Thus this is a useful place to perform per-document 
      *  initialization tasks.
      * </p>
      * 
      * <p>
-     * Subclasses may change the root element, content, 
-     * or other characteristics of the <code>Document</code> 
-     * returned. However, this method must not return null
-     * or the builder will throw a <code>ParsingException</code>.
+     *  Subclasses may change the root element, content, 
+     *  or other characteristics of the document 
+     *  returned. However, this method must not return null
+     *  or the builder will throw a <code>ParsingException</code>.
      * </p>
      * 
      * @return the newly created <code>Document</code>
@@ -217,7 +217,7 @@ public class NodeFactory {
      * Signals the end of a document. The default implementation of   
      * this method does nothing. The builder does not 
      * call this  method if an exception is thrown while building 
-     * a <code>Document</code>.
+     * a document.
      * </p>
      * 
      * @param document the completed <code>Document</code>
@@ -228,7 +228,7 @@ public class NodeFactory {
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing an 
-     * <code>Attribute</code> in the specified namespace 
+     * attribute in the specified namespace 
      * with the specified name and type.
      * </p>
      * 
@@ -240,7 +240,7 @@ public class NodeFactory {
      * object may not contain any <code>Document</code> objects.
      * All of the nodes returned must be parentless.
      * Subclasses may return an empty <code>Nodes</code> to indicate  
-     * the <code>Attribute</code> should not be created.
+     * the sttribute should not be created.
      * </p>
      * 
      * @param name the prefixed name of the attribute
@@ -259,12 +259,12 @@ public class NodeFactory {
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing a 
-     * <code>Comment</code> with the specified text.
+     * comment with the specified text.
      * </p>
      * 
      * <p>
      * Subclasses may change the content or other 
-     * characteristics of the <code>Comment</code> returned. 
+     * characteristics of the comment returned. 
      * Subclasses may change the nodes returned from this method.
      * They may return a <code>Nodes</code> object containing any 
      * number of children and attributes which are appended and 
@@ -272,7 +272,7 @@ public class NodeFactory {
      * object should not contain any <code>Document</code> objects.
      * All of the nodes returned must be parentless.
      * Subclasses may return an empty <code>Nodes</code> to indicate  
-     * the <code>Comment</code> should not be included in the 
+     * the comment should not be included in the 
      * finished document.
      * </p>
      * 
@@ -288,17 +288,16 @@ public class NodeFactory {
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing a 
-     * <code>DocType</code> with the specified root element name,
-     * system ID, and public ID.
+     * <code>DocType</code> object with the specified root element
+     * name, system ID, and public ID.
      * </p>
      * 
      * <p>
      * Subclasses may change the root element name, public ID, 
      * system ID, or other characteristics of the <code>DocType</code> 
-     * returned. 
-     * Subclasses may change the nodes returned from this method.
-     * They may return a <code>Nodes</code> object containing any 
-     * number of comments and processing instructions which are  
+     * returned. Subclasses may change the nodes returned from this 
+     * method. They may return a <code>Nodes</code> object containing  
+     * any number of comments and processing instructions which are  
      * appended to the current parent node. This <code>Nodes</code> 
      * object may not contain any <code>Document</code>,
      * <code>Element</code>, <code>Attribute</code>, or 
@@ -324,12 +323,12 @@ public class NodeFactory {
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing a 
-     * <code>Text</code> node with the specified content.
+     * text node with the specified content.
      * </p>
      * 
      * <p>
-     * Subclasses may change the content, or other characteristics of 
-     * the <code>Text</code> returned. Subclasses may change the nodes 
+     * Subclasses may change the content or other characteristics of 
+     * the text returned. Subclasses may also change the nodes 
      * returned from this method. They may return a <code>Nodes</code> 
      * object containing any number of nodes which are added or 
      * appended to the current parent node. This <code>Nodes</code> 
@@ -366,7 +365,7 @@ public class NodeFactory {
     /**
      * <p>
      * Returns a new <code>Nodes</code> object containing a 
-     * new <code>ProcessingInstruction</code> with
+     * new <code>ProcessingInstruction</code> object with
      * the specified target and data.
      * </p>
      * 

@@ -31,7 +31,6 @@ package nu.xom;
  * 
  * @author Elliotte Rusty Harold
  * @version 1.0a4
- * 
  *
  */
 public class CycleException extends IllegalAddException {
