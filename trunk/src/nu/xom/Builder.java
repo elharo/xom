@@ -184,6 +184,7 @@ public class Builder {
         "com.bluecast.xml.Piccolo",
         "oracle.xml.parser.v2.SAXParser",
         "com.jclark.xml.sax.SAX2Driver",
+        "net.sf.saxon.aelfred.SAXDriver",
         "com.icl.saxon.aelfred.SAXDriver",
         "org.dom4j.io.aelfred.SAXDriver"
     };
