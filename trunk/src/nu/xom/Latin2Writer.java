@@ -162,8 +162,35 @@ class Latin2Writer extends TextWriter {
             case 0x0119: return false; // LATIN SMALL LETTER E WITH OGONEK
             case 0x011A: return false; // LATIN CAPITAL LETTER E WITH CARON
             case 0x011B: return false; // LATIN SMALL LETTER E WITH CARON
-        }  // could fill in here????
-        switch (c) {
+            case 0x011C: return true;  // place holder to enable table lookup
+            case 0x011D: return true;  // place holder to enable table lookup
+            case 0x011E: return true;  // place holder to enable table lookup
+            case 0x011F: return true;  // place holder to enable table lookup
+            case 0x0120: return true;  // place holder to enable table lookup
+            case 0x0121: return true;  // place holder to enable table lookup
+            case 0x0122: return true;  // place holder to enable table lookup
+            case 0x0123: return true;  // place holder to enable table lookup
+            case 0x0124: return true;  // place holder to enable table lookup
+            case 0x0125: return true;  // place holder to enable table lookup
+            case 0x0126: return true;  // place holder to enable table lookup
+            case 0x0127: return true;  // place holder to enable table lookup
+            case 0x0128: return true;  // place holder to enable table lookup
+            case 0x0129: return true;  // place holder to enable table lookup
+            case 0x012A: return true;  // place holder to enable table lookup
+            case 0x012B: return true;  // place holder to enable table lookup
+            case 0x012C: return true;  // place holder to enable table lookup
+            case 0x012D: return true;  // place holder to enable table lookup
+            case 0x012E: return true;  // place holder to enable table lookup
+            case 0x012F: return true;  // place holder to enable table lookup
+            case 0x0130: return true;  // place holder to enable table lookup
+            case 0x0131: return true;  // place holder to enable table lookup
+            case 0x0132: return true;  // place holder to enable table lookup
+            case 0x0133: return true;  // place holder to enable table lookup
+            case 0x0134: return true;  // place holder to enable table lookup
+            case 0x0135: return true;  // place holder to enable table lookup
+            case 0x0136: return true;  // place holder to enable table lookup
+            case 0x0137: return true;  // place holder to enable table lookup
+            case 0x0138: return true;  // place holder to enable table lookup
             case 0x0139: return false; // LATIN CAPITAL LETTER L WITH ACUTE
             case 0x013A: return false; // LATIN SMALL LETTER L WITH ACUTE
             case 0x013B: return true;  // place holder to enable table lookup

@@ -135,14 +135,37 @@ class Latin3Writer extends TextWriter {
             case 0x00FA: return false; // LATIN SMALL LETTER U WITH ACUTE
             case 0x00FB: return false; // LATIN SMALL LETTER U WITH CIRCUMFLEX
             case 0x00FC: return false; // LATIN SMALL LETTER U WITH DIAERESIS
-        } // could fill in here????
-        switch (c) {
+            case 0x00FD: return true;  // place holder to enable table lookup
+            case 0x00FE: return true;  // place holder to enable table lookup
+            case 0x00FF: return true;  // place holder to enable table lookup
+            case 0x0100: return true;  // place holder to enable table lookup
+            case 0x0101: return true;  // place holder to enable table lookup
+            case 0x0102: return true;  // place holder to enable table lookup
+            case 0x0103: return true;  // place holder to enable table lookup
+            case 0x0104: return true;  // place holder to enable table lookup
+            case 0x0105: return true;  // place holder to enable table lookup
+            case 0x0106: return true;  // place holder to enable table lookup
+            case 0x0107: return true;  // place holder to enable table lookup
             case 0x0108: return false; // LATIN CAPITAL LETTER C WITH CIRCUMFLEX
             case 0x0109: return false; // LATIN SMALL LETTER C WITH CIRCUMFLEX
             case 0x010A: return false; // LATIN CAPITAL LETTER C WITH DOT ABOVE
             case 0x010B: return false; // LATIN SMALL LETTER C WITH DOT ABOVE
-        } // could fill in here????
-        switch (c) {
+            case 0x010C: return true;  // place holder to enable table lookup
+            case 0x010D: return true;  // place holder to enable table lookup
+            case 0x010E: return true;  // place holder to enable table lookup
+            case 0x010F: return true;  // place holder to enable table lookup
+            case 0x0110: return true;  // place holder to enable table lookup
+            case 0x0111: return true;  // place holder to enable table lookup
+            case 0x0112: return true;  // place holder to enable table lookup
+            case 0x0113: return true;  // place holder to enable table lookup
+            case 0x0114: return true;  // place holder to enable table lookup
+            case 0x0115: return true;  // place holder to enable table lookup
+            case 0x0116: return true;  // place holder to enable table lookup
+            case 0x0117: return true;  // place holder to enable table lookup
+            case 0x0118: return true;  // place holder to enable table lookup
+            case 0x0119: return true;  // place holder to enable table lookup
+            case 0x011A: return true;  // place holder to enable table lookup
+            case 0x011B: return true;  // place holder to enable table lookup
             case 0x011C: return false; // LATIN CAPITAL LETTER G WITH CIRCUMFLEX
             case 0x011D: return false; // LATIN SMALL LETTER G WITH CIRCUMFLEX
             case 0x011E: return false; // LATIN CAPITAL LETTER G WITH BREVE
@@ -163,8 +186,44 @@ class Latin3Writer extends TextWriter {
             case 0x0133: return true;  // place holder to enable table lookup
             case 0x0134: return false; // LATIN CAPITAL LETTER J WITH CIRCUMFLEX
             case 0x0135: return false; // LATIN SMALL LETTER J WITH CIRCUMFLEX
-        } // could fill in here????
-        switch (c) {
+            case 0x0136: return true;  // place holder to enable table lookup
+            case 0x0137: return true;  // place holder to enable table lookup
+            case 0x0138: return true;  // place holder to enable table lookup
+            case 0x0139: return true;  // place holder to enable table lookup
+            case 0x013A: return true;  // place holder to enable table lookup
+            case 0x013B: return true;  // place holder to enable table lookup
+            case 0x013C: return true;  // place holder to enable table lookup
+            case 0x013D: return true;  // place holder to enable table lookup
+            case 0x013E: return true;  // place holder to enable table lookup
+            case 0x013F: return true;  // place holder to enable table lookup
+            case 0x0140: return true;  // place holder to enable table lookup
+            case 0x0141: return true;  // place holder to enable table lookup
+            case 0x0142: return true;  // place holder to enable table lookup
+            case 0x0143: return true;  // place holder to enable table lookup
+            case 0x0144: return true;  // place holder to enable table lookup
+            case 0x0145: return true;  // place holder to enable table lookup
+            case 0x0146: return true;  // place holder to enable table lookup
+            case 0x0147: return true;  // place holder to enable table lookup
+            case 0x0148: return true;  // place holder to enable table lookup
+            case 0x0149: return true;  // place holder to enable table lookup
+            case 0x014A: return true;  // place holder to enable table lookup
+            case 0x014B: return true;  // place holder to enable table lookup
+            case 0x014C: return true;  // place holder to enable table lookup
+            case 0x014D: return true;  // place holder to enable table lookup
+            case 0x014E: return true;  // place holder to enable table lookup
+            case 0x014F: return true;  // place holder to enable table lookup
+            case 0x0150: return true;  // place holder to enable table lookup
+            case 0x0151: return true;  // place holder to enable table lookup
+            case 0x0152: return true;  // place holder to enable table lookup
+            case 0x0153: return true;  // place holder to enable table lookup
+            case 0x0154: return true;  // place holder to enable table lookup
+            case 0x0155: return true;  // place holder to enable table lookup
+            case 0x0156: return true;  // place holder to enable table lookup
+            case 0x0157: return true;  // place holder to enable table lookup
+            case 0x0158: return true;  // place holder to enable table lookup
+            case 0x0159: return true;  // place holder to enable table lookup
+            case 0x015A: return true;  // place holder to enable table lookup
+            case 0x015B: return true;  // place holder to enable table lookup
             case 0x015C: return false; // LATIN CAPITAL LETTER S WITH CIRCUMFLEX
             case 0x015D: return false; // LATIN SMALL LETTER S WITH CIRCUMFLEX
             case 0x015E: return false; // LATIN CAPITAL LETTER S WITH CEDILLA
