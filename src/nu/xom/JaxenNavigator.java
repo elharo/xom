@@ -21,7 +21,15 @@
 
 package nu.xom;
 
-
+/**
+ * <p>
+ * Interface between Jaxen and XOM.
+ * </p>
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.1d4
+ *
+ */
 import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Document;
@@ -76,7 +84,13 @@ class JaxenNavigator extends DefaultNavigator {
     
     public Object getElementById(Object node, String id) {
         
-        Node original = (Node) node;
+        Node original;
+        if (node instanceof ArrayList) {
+            original = (Node) ((List) node).get(0);
+        }
+        else {
+            original = (Node) node;
+        }
         ParentNode parent;
         if (original.isElement() || original.isDocument()) {
             parent = (ParentNode) original;
@@ -155,13 +169,15 @@ class JaxenNavigator extends DefaultNavigator {
     
     static class XPathNamespaceNode {
         
-        XPathNamespaceNode(String prefix, String uri) {
-            this.prefix = prefix;
-            this.uri = uri;
-        }
-        
         String prefix;
         String uri;
+        private Element parent;
+
+        XPathNamespaceNode(String prefix, String uri, Element parent) {
+            this.prefix = prefix;
+            this.uri = uri;
+            this.parent = parent;
+        }
         
     }
     
@@ -174,13 +190,13 @@ class JaxenNavigator extends DefaultNavigator {
             Map bindings = element.getNamespacePrefixesInScope();
             Iterator iterator = bindings.keySet().iterator();
             List result = new ArrayList(bindings.size()+1);
-            result.add(new XPathNamespaceNode("xml", "http://www.w3.org/XML/1998/namespace"));
+            result.add(new XPathNamespaceNode("xml", "http://www.w3.org/XML/1998/namespace", element));
 
             while (iterator.hasNext()) {
                 String prefix = (String) iterator.next();
                 String uri = (String) bindings.get(prefix);
                 if (! "".equals(prefix) || ! "".equals(uri)) {
-                    XPathNamespaceNode ns = new XPathNamespaceNode(prefix, uri);
+                    XPathNamespaceNode ns = new XPathNamespaceNode(prefix, uri, element);
                     result.add(ns);
                 }
             }
@@ -194,8 +210,7 @@ class JaxenNavigator extends DefaultNavigator {
     
     public Iterator getParentAxisIterator(Object contextNode)  {
         
-        Node n = (Node) contextNode;
-        Node parent = n.getParent();
+        Node parent = (Node) getParentNode(contextNode);
         if (parent == null) return Collections.EMPTY_LIST.iterator();
         else {
             List l = new ArrayList(1);
@@ -247,8 +262,20 @@ class JaxenNavigator extends DefaultNavigator {
     
     
     public Object getParentNode(Object o) {
-        Node n = (Node) o;
+        
+        Node n;
+        if (o instanceof ArrayList) {
+            n = (Node) ((List) o).get(0);
+        }
+        else if (o instanceof XPathNamespaceNode) {
+            return ((XPathNamespaceNode) o).parent;
+        }
+        else {
+            System.out.println(o.getClass().getName());
+            n = (Node) o;
+        }
         return n.getParent();
+        
     }
 
     
