@@ -21,8 +21,14 @@
 
 package nu.xom;
 
+import java.io.InputStream;
+import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
+
 
 final class UnicodeUtil {
+    
     
     private static final int CANONICAL_COMBINING_CLASS_NOT_REORDERED = 0;
     private static final int CANONICAL_COMBINING_CLASS_OVERLAY = 1;
@@ -82,11 +88,51 @@ final class UnicodeUtil {
     private static int HI_SURROGATE_START  = 0xD800;
     private static int HI_SURROGATE_END    = 0xDBFF;
     private static int LOW_SURROGATE_START = 0xDC00;
-
+    
+    
+    private static Map compositions;
+    
+    
+    private static void loadCompositions() {
+       
+        ClassLoader loader = UnicodeUtil.class.getClassLoader();
+        // FIXME use Verifier logic for loading this
+        if (loader == null) {
+            loader = Thread.currentThread().getContextClassLoader();
+        }
+        
+        InputStream in = loader.getResourceAsStream("nu/xom/comp.xml");
+        if (in == null) return;
+        
+        try {
+            Document doc = (new Builder()).build(in);
+            Element root = doc.getRootElement();
+            Elements mappings = root.getChildElements();
+            compositions = new HashMap();
+            for (int i = 0; i < mappings.size(); i++) {
+                String composed = mappings.get(i).getFirstChildElement("composed").getValue();
+                String decomposed = mappings.get(i).getFirstChildElement("decomposed").getValue();
+                compositions.put(decomposed, composed);
+            }
+        }
+        catch (Exception ex) {
+            throw new RuntimeException("Broken XOM installation: "
+              + "could not load nu/xom/comp.xml", ex);
+        }
+        finally {
+            try {
+                in.close();
+            }
+            catch (IOException ex) {
+                // no big deal
+            }
+        }
+        
+    }
+    
 
     boolean isStarter(int character) {
-        // FIXME
-        return true;
+        return getCombiningClass(character) == 0;
     }
 
     
@@ -1497,9 +1543,17 @@ final class UnicodeUtil {
     
      
     private static String recompose(String s) {
-        return com.ibm.icu.text.Normalizer.normalize(s, com.ibm.icu.text.Normalizer.NFC);
+        if (compositions == null) loadCompositions();
+        return com.ibm.icu.text.Normalizer.compose(s, false);
     }
 
+    
+    // return -1 if the character is not composite; otherwise
+    // return the composed character
+    private static int composeCharacter(int starter, int c) {
+        
+        return -1;
+    }
 
     private static String decompose(String s) {
         
