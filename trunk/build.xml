@@ -167,9 +167,14 @@ XOM Build file
              noindex="false"
              windowtitle="${Name} ${version}  API"
              doctitle="${Name} ${version}"
-             bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com'&gt;Elliotte Rusty Harold&lt;/a&gt;
+             bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
 			 &lt;br/&gt; &lt;a href='mailto:elharo@metalab.unc.edu?Subject=XOM'&gt;elharo@metalab.unc.edu&lt;/a&gt;">
       <classpath refid="run.class.path"/>
+      
+    <fileset dir="${build.src}" defaultexcludes="yes">
+      <include name="nu/xom/tests/XOMTestCase.java" />
+    </fileset>
+      
     </javadoc>
   </target>
 
