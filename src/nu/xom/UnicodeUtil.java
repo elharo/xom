@@ -1438,11 +1438,16 @@ final class UnicodeUtil {
     }
     
     
+    private final static int FIRST_HANGUL_SYLLABLE    = 0xAC00;
+    // even if this is not right; why do tests still pass????
+    // private final static int LAST_HANGUL_SYLLABLE     = 0xAC00; // FIXME 
+    private final static int LAST_HANGUL_SYLLABLE = 0xD7A3;
+    
     private static boolean isComposite(int c) {
 
         // XXX verify
         if (c <= 0xA0) return false;
-        if (c >= HANGUL_SYLLABLE_BEGIN && c <= HANGUL_SYLLABLE_END) {
+        if (c >= FIRST_HANGUL_SYLLABLE && c <= LAST_HANGUL_SYLLABLE) {
             return true;
         }
         if (isExcluded(c)) return false;
@@ -1539,10 +1544,14 @@ final class UnicodeUtil {
         } 
         
         if (needsNormalizing) {
+            
+            s = decomposeHangul(s);
             UnicodeString ustring = new UnicodeString(s);
             UnicodeString decomposed = ustring.decompose(); 
             UnicodeString recomposed = decomposed.compose();
             String result = recomposed.toString();
+            // ???? unnecessarily invoking this in many cases
+            result = composeHangul(result);
             return result;
         }
         
@@ -1550,12 +1559,36 @@ final class UnicodeUtil {
         
     }
 
+     
+    private static String decomposeHangul(String s) {
+
+        int length = s.length();
+        StringBuffer sb = new StringBuffer(s.length());
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (c >= FIRST_HANGUL_SYLLABLE && c <= LAST_HANGUL_SYLLABLE) {
+                sb.append(decomposeHangul(c));
+            }
+            else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+        
+    }
+
+
+    private static boolean isJamo(int c) {
+        // XXX replace with named constants
+        return c >= 0x1100 && c <= 0x11FF;
+    }
     
     // return -1 if the character cannot be combined with the starter; 
     // otherwise return the composed character
     private static int composeCharacter(int starter, int c) {
         
         StringBuffer decomposed = new StringBuffer(4);
+
         // FIXME encode in UTF-8
         decomposed.append((char) starter);
         decomposed.append((char) c);
@@ -1573,7 +1606,7 @@ final class UnicodeUtil {
         if (character < 0x00C0) {
             return String.valueOf((char) character);
         }
-        else if (character >= HANGUL_SYLLABLE_BEGIN && character <= HANGUL_SYLLABLE_END) {
+        else if (character >= FIRST_HANGUL_SYLLABLE && character <= LAST_HANGUL_SYLLABLE) {
             return decomposeHangul((char) character);
         }
         
@@ -8503,37 +8536,102 @@ final class UnicodeUtil {
         
     }    
 
-    
-    private final static int HANGUL_SYLLABLE_BEGIN = 0xAC00;
-    private final static int HANGUL_SYLLABLE_END = 0xAC00;
 
     private static String decomposeHangul(char c) {
         
-        int lBase = 0x1100;
-        int vBase = 0x1161;
-        int tBase = 0x11A7;
-        int lCount = 19;
-        int vCount = 21;
-        int tCount = 28;
-        int nCount = vCount * tCount; 
-        int sCount = lCount * nCount;
+        final int firstLeadingConsonant  = 0x1100;
+        final int firstMedialVowel       = 0x1161;
+        final int firstTrailingConsonant = 0x11A7;
+        
+        final int numberOfLeadingConsonants  = 19;
+        final int numberOfMedialVowels       = 21;
+        final int numberOfTrailingConsonants = 28;
+        
+        final int numberOfFinalPairs 
+          = numberOfMedialVowels * numberOfTrailingConsonants; 
+        final int numberOfSyllables 
+          = numberOfLeadingConsonants * numberOfFinalPairs;
 
-        int sIndex = c - HANGUL_SYLLABLE_BEGIN;
-        if (sIndex < 0 || sIndex >= sCount) {
+        final int syllable = c - FIRST_HANGUL_SYLLABLE;
+        
+        if (syllable < 0 || syllable >= numberOfSyllables) {
             return String.valueOf(c);
         }
         
-        StringBuffer result = new StringBuffer(3);
-        int L = lBase + sIndex / nCount;
-        int V = vBase + (sIndex % nCount) / tCount;
-        int T = tBase + sIndex % tCount;
-        result.append((char) L);
-        result.append((char) V);
-        if (T != tBase) result.append((char) T);
+        int leadingConsonant = firstLeadingConsonant 
+          + syllable / numberOfFinalPairs;
+        int medialVowel = firstMedialVowel 
+          + (syllable % numberOfFinalPairs) / numberOfTrailingConsonants;
+        int trailingConsonant = firstTrailingConsonant 
+          + syllable % numberOfTrailingConsonants;
+        
+        StringBuffer result = new StringBuffer(3);        
+        result.append((char) leadingConsonant);
+        result.append((char) medialVowel);
+        if (trailingConsonant != firstTrailingConsonant) {
+            result.append((char) trailingConsonant);
+        }
+        
         return result.toString();
         
     }   
     
+    
+    private static String composeHangul(String source) {
+
+        final int firstLeadingConsonant = 0x1100;
+        final int firstMedialVowel = 0x1161;
+        final int firstTrailingConsonant = 0x11A7;
+        
+        final int numberOfLeadingConsonants  = 19;
+        final int numberOfMedialVowels       = 21;
+        final int numberOfTrailingConsonants = 28;
+        
+        final int numberOfFinalPairs 
+          = numberOfMedialVowels * numberOfTrailingConsonants;
+        final int numberOfSyllables 
+          = numberOfLeadingConsonants * numberOfFinalPairs;
+        
+        final int length = source.length();
+        if (length == 0) return "";
+        StringBuffer result = new StringBuffer(length);
+        char previous = source.charAt(0); 
+        result.append(previous);
+
+        for (int i = 1; i < length; ++i) {
+            char c = source.charAt(i);
+
+            int leadingConsonant = previous - firstLeadingConsonant;
+            if (0 <= leadingConsonant && leadingConsonant < numberOfLeadingConsonants) {
+                int medialVowel = c - firstMedialVowel;
+                if (medialVowel >= 0 && medialVowel < numberOfMedialVowels) {
+                    previous = (char) (FIRST_HANGUL_SYLLABLE 
+                      + (leadingConsonant * numberOfMedialVowels + medialVowel) 
+                      * numberOfTrailingConsonants);
+                    result.setCharAt(result.length()-1, previous);
+                    continue; 
+                }
+            }
+
+            int syllable = previous - FIRST_HANGUL_SYLLABLE;
+            if (syllable >= 0 && syllable < numberOfSyllables 
+              && (syllable % numberOfTrailingConsonants) == 0) {
+                int trailingConsonant = c - firstTrailingConsonant;
+                if (trailingConsonant >= 0 && trailingConsonant <= numberOfTrailingConsonants) {
+                    previous += trailingConsonant;
+                    result.setCharAt(result.length()-1, previous);
+                    continue; 
+                }
+            }
+
+            previous = c;
+            result.append(c);
+        }
+        
+        return result.toString();
+        
+    } 
+ 
     
     private static class UnicodeString {
         
@@ -8608,30 +8706,6 @@ final class UnicodeUtil {
             
             for (int i = 0; i < size; i++) {
                 int c = data[i];
-                // assuming starters are never combined with preceding characters; true????
-                // Kannada vowel sign OO may be counter example
-                /* if (isStarter(c) ) {
-                    lastStarter = c;
-                    lastStarterIndex = i;
-                    composed.append(c);
-                }
-                else if (lastStarter == -1 || isBlocked(lastStarterIndex, i)) {
-                    composed.append(c);
-                }
-                else  {
-                    int composedChar = composeCharacter(lastStarter, c);
-                    if (composedChar == -1) {
-                        composed.append(c);
-                    }
-                    else {
-                        lastStarter = composedChar;
-                        // XXX dangerous side effects
-                        data[lastStarterIndex] = composedChar;
-                        data[i] = 0;
-                        
-                        composed.data[lastStarterIndex] = composedChar; 
-                    }
-                } */
                 if (lastStarter == -1 || isBlocked(lastStarterIndex, i)) {
                     composed.append(c);
                     if (isStarter(c) ) {
