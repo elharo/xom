@@ -60,9 +60,7 @@ public class Attribute extends Node {
      * @param value the attribute value
      * 
      * @throws IllegalNameException if the local name is not 
-     *     a namespace well-formed non-colonized name
-     * @throws NamespaceException if the local name is  
-     *     <code>xmlns</code>
+     *     a namespace well-formed, non-colonized name
      * @throws IllegalDataException if the value contains characters  
      *     which are not legal in XML such as vertical tab or a null.
      *     Characters such as " and &amp; are legal, but will be  
@@ -84,8 +82,6 @@ public class Attribute extends Node {
      * 
      * @throws IllegalNameException if the local name is 
      *     not a namespace well-formed non-colonized name
-     * @throws NamespaceException if the local name is  
-     *     <code>xmlns</code>
      * @throws IllegalDataException if the value contains 
      *     characters which are not legal in
      *     XML such as vertical tab or a null. Note that 
@@ -109,13 +105,11 @@ public class Attribute extends Node {
      * 
      * @throws IllegalNameException  if the name is not a namespace 
      *     well-formed prefixed name
-     * @throws NamespaceException if the name has the form  
-     *     <code>xmlns:<i>prefix</i></code>
      * @throws IllegalDataException if the value contains characters 
      *     which are not legal in XML such as vertical tab or a null. 
      *     Note that characters such as " and &amp; are legal, but will
      *     be automatically escaped when the attribute is serialized.
-     * @throws MalformedURIException if <code>URI</code> is not `
+     * @throws MalformedURIException if <code>URI</code> is not 
      *     an RFC2396 URI reference
      */
     public Attribute(String name, String URI, String value) {
@@ -135,15 +129,13 @@ public class Attribute extends Node {
      * 
      * @throws IllegalNameException if the name is not a namespace 
      *     well-formed prefixed name
-     * @throws NamespaceException if the name has the form  
-     *     <code>xmlns:<i>prefix</i></code>
      * @throws IllegalDataException if the value contains 
      *     characters which are not legal in XML such as 
      *     vertical tab or a null. Note that characters such as 
      *     " and &amp; are legal, but will be automatically escaped 
      *     when the attribute is serialized.
      * @throws MalformedURIException if <code>URI</code> is not 
-     *     an RFC2396 URI reference
+     *     an RFC2396 absolute URI reference
      */
     public Attribute(
       String name, String URI, String value, Type type) {
@@ -159,10 +151,11 @@ public class Attribute extends Node {
             localName = name.substring(name.indexOf(':') + 1);
         }
 
-        setNamespace(prefix, URI);
         setLocalName(localName);
+        setNamespace(prefix, URI);
         setValue(value);
         setType(type);
+        
     }
 
     /**
@@ -322,13 +315,13 @@ public class Attribute extends Node {
      * @param localName the new local name
      * 
      * @throws IllegalNameException if <code>localName</code>
-     *      is not a legal, non-colonized name
+     *      is not a namespace well-formed, non-colonized name
      * 
      */
     public final void setLocalName(String localName) {
         Verifier.checkNCName(localName);
         if (localName.equals("xmlns")) {
-            throw new NamespaceException("The Attribute class is not"
+            throw new IllegalNameException("The Attribute class is not"
               + " used for namespace declaration attributes.");
         }
         checkLocalName(localName);
@@ -405,13 +398,16 @@ public class Attribute extends Node {
      * 
      * @throws MalformedURIException if <code>URI</code> is 
      *     not an RFC2396 URI reference
-     * @throws NamespaceException if
+     * @throws IllegalNameException if
      *  <ul>
      *      <li>The prefix is xmlns</li>
-     *      <li>The prefix is xml and the namespace URI is not 
-     *             http://www.w3.org/XML/1998/namespace</li>
      *      <li>The prefix is null or the empty string.</li>
      *      <li>The URI is null or the empty string.</li>
+     * </ul>
+     * @throws NamespaceConflictException if
+     *  <ul>
+     *      <li>The prefix is xml and the namespace URI is not 
+     *             http://www.w3.org/XML/1998/namespace</li>
      *      <li>The prefix conflicts with an existing declaration
      *          on the attribute's parent element.</li>
      * </ul>
@@ -422,18 +418,18 @@ public class Attribute extends Node {
         if (prefix == null) prefix = "";
         
         if (prefix.equals("xmlns")) {
-            throw new NamespaceException(
+            throw new IllegalNameException(
               "Attribute objects are not used to represent "
               + " namespace declarations"); 
         }
         else if (prefix.equals("xml") 
           && !(URI.equals("http://www.w3.org/XML/1998/namespace"))) {
-            throw new NamespaceException(
+            throw new NamespaceConflictException(
               "Wrong namespace URI for xml prefix: " + URI); 
         }
         else if (URI.equals("http://www.w3.org/XML/1998/namespace")
           && !prefix.equals("xml")) {
-            throw new NamespaceException(
+            throw new NamespaceConflictException(
               "Wrong prefix for the XML namespace: " + prefix); 
         }
         else if (prefix.length() == 0) {
@@ -443,12 +439,12 @@ public class Attribute extends Node {
                 return; 
             }
             else {
-                throw new NamespaceException(
-                  "Attributes cannot be in a default namespace.");
+                throw new NamespaceConflictException(
+                  "Prefixed attributes cannot be in a default namespace.");
             }
         }
         else if (URI.length() == 0) {
-            throw new NamespaceException(
+            throw new NamespaceConflictException(
              "Attribute prefixes must be declared.");
         }
         
@@ -458,7 +454,7 @@ public class Attribute extends Node {
            Element element = (Element) parent;
            String  currentURI = element.getLocalNamespaceURI(prefix);
            if (currentURI != null && !currentURI.equals(URI)) {
-                throw new NamespaceException(
+                throw new NamespaceConflictException(
                   "New prefix " + prefix 
                   + "conflicts with existing namespace declaration"
                 );

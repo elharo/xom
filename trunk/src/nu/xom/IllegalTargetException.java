@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -38,7 +38,6 @@ package nu.xom;
  * 
  *
  */
-
 public class IllegalTargetException extends IllegalNameException {
 
     /**
@@ -53,6 +52,7 @@ public class IllegalTargetException extends IllegalNameException {
         super(message);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>IllegalTargetException</code> 
@@ -66,4 +66,5 @@ public class IllegalTargetException extends IllegalNameException {
         super(message, cause);
     }
 
+    
 }

@@ -81,6 +81,7 @@ public class ProcessingInstruction extends LeafNode {
         this.data = instruction.data;  
     }
     
+    
     private ProcessingInstruction() {}
     
     static ProcessingInstruction build(String target, String data) {
@@ -89,6 +90,8 @@ public class ProcessingInstruction extends LeafNode {
         result.data = data;
         return result;
     }
+    
+    
     /**
      * <p>
      * Returns the processing instruction target.
@@ -100,6 +103,7 @@ public class ProcessingInstruction extends LeafNode {
         return target;
     }
 
+    
     /**
      * <p>
      * Sets the target.
@@ -110,30 +114,30 @@ public class ProcessingInstruction extends LeafNode {
      * @throws IllegalTargetException if the proposed target 
      *   is not an XML 1.0 non-colonized name
      * @throws XMLException if the proposed target does not 
-     *   satisfy the local constraints
+     *     satisfy the local constraints
      */
     public final void setTarget(String target) {
         
         try {
             Verifier.checkNCName(target);
         }
-        catch (NamespaceException ex) {
-            throw new IllegalTargetException(target +
-              "- Processing instruction targets must be non-colonized names"
-            );         
-        }
         catch (IllegalNameException ex) {
-            throw new IllegalTargetException(ex.getMessage());            
+            IllegalTargetException tex = new IllegalTargetException(ex.getMessage()); 
+            tex.setData(target);
+            throw tex;
         }
         
         if (target.equalsIgnoreCase("xml")) {
-            throw new IllegalTargetException(
+            IllegalTargetException tex = new IllegalTargetException(
               "Processing instructions targets cannot be XML better message????.");
+            tex.setData(target);
+            throw tex;
         }
         
         checkTarget(target);
         
         this.target = target;
+        
     }  
     
     
@@ -152,6 +156,7 @@ public class ProcessingInstruction extends LeafNode {
      */
     protected void checkTarget(String target) {}
 
+    
     /**
      * <p>
      * Sets the data.
@@ -169,26 +174,33 @@ public class ProcessingInstruction extends LeafNode {
         Verifier.checkPCDATA(data);
         if (data.length() != 0) {
             if (data.indexOf("?>") >= 0) {
-                throw new IllegalDataException(
+                IllegalDataException ex = new IllegalDataException(
                   "Processing instruction data must not contain \"?>\""
                 );
+                ex.setData(data);
+                throw ex;
             }
             if (data.indexOf('\r') >= 0) {
-                throw new IllegalDataException(
+                IllegalDataException ex = new IllegalDataException(
                   "Processing instruction data cannot contain carriage returns"
                 );
+                ex.setData(data);
+                throw ex;
             }
             
             char first = data.charAt(0);
             if (first == ' ' || first == '\n' || first == '\t') {
-                throw new IllegalDataException(
+                IllegalDataException ex =  new IllegalDataException(
                   "Processing instruction data cannot contain " +
                   "leading white space"
                 );
+                ex.setData(data);
+                throw ex;
             }
         }
         checkValue(data);
         this.data = data;
+        
     }
 
     
@@ -206,6 +218,7 @@ public class ProcessingInstruction extends LeafNode {
         return data;
     }
 
+    
     /**
      * <p>
      * Subclasses can override this method to perform 
@@ -222,6 +235,7 @@ public class ProcessingInstruction extends LeafNode {
      */
     protected void checkValue(String data) {}
 
+    
     /**
      * <p>
      * Returns the actual XML form of this processing instruction, 
@@ -244,6 +258,7 @@ public class ProcessingInstruction extends LeafNode {
         return result.toString();   
     }
 
+    
     /**
      * <p>
      * Returns a deep copy of this processing instruction with no
@@ -260,10 +275,12 @@ public class ProcessingInstruction extends LeafNode {
         return new ProcessingInstruction(target, data);
     }
 
+    
     boolean isProcessingInstruction() {
         return true;   
     }
 
+    
     /**
      * <p>
      * Returns a <code>String</code> representation 
@@ -282,4 +299,5 @@ public class ProcessingInstruction extends LeafNode {
          + target + "\"; data=\"" + data +"\"]";
     }
 
+    
 }

@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -26,8 +26,9 @@ package nu.xom.tests;
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.IllegalDataException;
+import nu.xom.IllegalNameException;
 import nu.xom.MalformedURIException;
-import nu.xom.NamespaceException;
+import nu.xom.NamespaceConflictException;
 
 /**
  * <p>
@@ -44,14 +45,17 @@ public class AttributeTest extends XOMTestCase {
         super(name);
     }
 
+    
     private Attribute a1;
     private Attribute a2;
 
+    
     protected void setUp() {
         a1 = new Attribute("test", "value");
         a2 = new Attribute("test", "  value  ");
     }
 
+    
     public void testGetChildCount() {
         assertEquals(0, a1.getChildCount());
     }
@@ -59,6 +63,7 @@ public class AttributeTest extends XOMTestCase {
     public void testHasChildren() {
         assertTrue(!a1.hasChildren());
     }
+    
     
     public void testGetChild() {
         try {
@@ -70,6 +75,7 @@ public class AttributeTest extends XOMTestCase {
         }
     }
 
+    
     public void testConstructor() {
         assertEquals("test", a1.getLocalName());
         assertEquals("test", a1.getQualifiedName());
@@ -79,6 +85,7 @@ public class AttributeTest extends XOMTestCase {
         assertEquals("  value  ", a2.getValue());
     }
 
+    
     public void testConstructor2() {
         
         Attribute a1 = new Attribute("name", "value", Attribute.Type.CDATA);
@@ -90,6 +97,7 @@ public class AttributeTest extends XOMTestCase {
         assertEquals(Attribute.Type.CDATA, a1.getType());
     }
 
+    
     public void testGetExternalForm() {
         
         Attribute a1 = new Attribute("test", "value contains a \"");
@@ -98,9 +106,9 @@ public class AttributeTest extends XOMTestCase {
         Attribute a2 = new Attribute("test", "value contains a '");
         assertEquals("test=\"value contains a &apos;\"", a2.toXML());
 
+    }
 
-     }
-
+    
     // No xmlns attributes or xmlns:prefix attributes are allowed
     public void testXmlns() {
         
@@ -108,18 +116,16 @@ public class AttributeTest extends XOMTestCase {
             new Attribute("xmlns", "http://www.w3.org/TR");
             fail("Created attribute with name xmlns");
         }
-        catch (NamespaceException ex) {
-            // success
-            assertNotNull(ex.getMessage());    
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());    
         }
  
         try {
             new Attribute("xmlns:prefix", "http://www.w3.org/TR");
             fail("Created attribute with name xmlns:prefix");
         }
-        catch (NamespaceException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());    
         }
  
         // Now try with namespace URI from errata
@@ -127,9 +133,8 @@ public class AttributeTest extends XOMTestCase {
             new Attribute("xmlns", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/");
             fail("created xmlns attribute");
          }
-         catch (NamespaceException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+         catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());    
          }
         
         // Now try with namespace URI from errata
@@ -137,9 +142,8 @@ public class AttributeTest extends XOMTestCase {
              new Attribute("xmlns:pre", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/");
             fail("created xmlns:pre attribute");
          }
-         catch (NamespaceException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+         catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());    
          }
 
     }
@@ -164,33 +168,31 @@ public class AttributeTest extends XOMTestCase {
         
     }
 
+    
     public void testXmlPrefix() {
         
         try {
             new Attribute("xml:base", "http://www.w3.org/TR");
             fail("Created attribute with name xml:base");
         }
-        catch (NamespaceException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());    
         }
  
         try {
             new Attribute("xml:space", "preserve");
-            fail("Created attribute with name xml:space");
+            fail("Created attribute with local name xml:space");
         }
-        catch (NamespaceException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());    
         }
  
         try {
             new Attribute("xml:lang", "fr-FR");
             fail("Created attribute with name xml:lang");
         }
-        catch (NamespaceException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());    
         }
         
         String xmlNamespace = "http://www.w3.org/XML/1998/namespace";       
@@ -216,25 +218,26 @@ public class AttributeTest extends XOMTestCase {
               "http://www.w3.org/");
             fail("remapped xml prefix");
         }
-        catch (NamespaceException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());    
         }
 
     }
 
+    
     public void testWrongPrefixNotAllowedWithXMLURI() {
         
         try {
             new Attribute("test:base", "http://www.w3.org/XML/1998/namespace", "value");
             fail("Allowed XML namespace to be associated with non-xml prefix");    
         }
-        catch (NamespaceException success) {
+        catch (NamespaceConflictException success) {
             assertNotNull(success.getMessage());   
         }
         
     }
 
+    
     public void testToString() {   
         assertEquals(
           "[nu.xom.Attribute: test=\"value\"]", a1.toString());      
@@ -242,11 +245,13 @@ public class AttributeTest extends XOMTestCase {
           "[nu.xom.Attribute: test=\"  value  \"]", a2.toString());             
     }
     
+    
     public void testToXML() {        
         assertEquals("test=\"value\"", a1.toXML());          
         assertEquals("test=\"  value  \"", a2.toXML());                    
     }
 
+    
     public void testEscapingWithToXML() {          
         a1.setValue("<");     
         assertEquals("test=\"&lt;\"", a1.toXML());  
@@ -260,6 +265,7 @@ public class AttributeTest extends XOMTestCase {
         assertEquals("test=\"&amp;\"", a1.toXML());  
     }
 
+    
     public void testWhiteSpaceEscapingWithToXML() {          
         a1.setValue(" ");     
         assertEquals("test=\" \"", a1.toXML());  
@@ -301,8 +307,9 @@ public class AttributeTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
 
-     }
+    }
 
+    
     public void testNames() {
         
         String prefix = "testPrefix";
@@ -340,6 +347,7 @@ public class AttributeTest extends XOMTestCase {
         assertFalse(Attribute.Type.CDATA.equals(new Element("CDATA")));
     }
 
+    
     public void testCopyConstructor() {
         Attribute c1 = new Attribute("test", "data");
         Attribute c2 = new Attribute(c1);
@@ -353,6 +361,7 @@ public class AttributeTest extends XOMTestCase {
 
     }
 
+    
     // Check passing in a string with broken surrogate pairs
     // and with correct surrogate pairs
     public void testSurrogates() {
@@ -366,20 +375,19 @@ public class AttributeTest extends XOMTestCase {
           new Attribute("surrogate", "test: \uD8F5\uDBF0  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (IllegalDataException success) {
+            assertEquals("test: \uD8F5\uDBF0  ", success.getData());
+            assertNotNull(success.getMessage());    
         }
-
 
         // Two high-halves
         try {
           new Attribute("surrogate", "test: \uD8F5\uD8F5  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (IllegalDataException success) {
+            assertEquals("test: \uD8F5\uD8F5  ", success.getData());
+            assertNotNull(success.getMessage());    
         }
 
         // One high-half
@@ -387,42 +395,57 @@ public class AttributeTest extends XOMTestCase {
            new Attribute("surrogate", "test: \uD8F5  ");
            fail("Should raise an IllegalDataException");
          }
-        catch (IllegalDataException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (IllegalDataException success) {   
+            assertEquals("test: \uD8F5  ", success.getData());
+            assertNotNull(success.getMessage());    
         }
 
         // One low half
         try {
             new Attribute("surrogate", "test: \uDF80  ");
-            fail("Should raise an IllegalDataException");
+            fail("One low half");
         }
-        catch (IllegalDataException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (IllegalDataException success) {   
+             assertEquals("test: \uDF80  ", success.getData());
+           assertNotNull(success.getMessage());    
         }
 
         // Low half before high half
         try {
             new Attribute("surrogate", "test: \uDCF5\uD8F5  ");
-            fail("Should raise an IllegalDataException");
+            fail("Low half before high half");
         }
-        catch (IllegalDataException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
+        catch (IllegalDataException success) { 
+            assertEquals("test: \uDCF5\uD8F5  ", success.getData());
+            assertNotNull(success.getMessage());    
         }
 
 
     }
     
+    
     public void testNullNamespace() {
         Attribute a = new Attribute("red:prefix", 
           "http://www.example.com", "data");
         a.setNamespace(null, null);
-        assertEquals(a.getNamespaceURI(), "");
-        assertEquals(a.getNamespacePrefix(), "");
+        assertEquals("", a.getNamespaceURI());
+        assertEquals("", a.getNamespacePrefix());
     }
 
+    
+    public void testChangeNamespaceToSameNamespaceAsElement() {
+        Attribute a = new Attribute("red:prefix", 
+          "http://www.example.com", "data");
+        Element e = new Element("pre:test", "http://www.example.org/");
+        e.addAttribute(a);
+        a.setNamespace("pre", "http://www.example.org/");
+        assertEquals("http://www.example.org/", a.getNamespaceURI());
+        assertEquals("pre", a.getNamespacePrefix());
+        assertEquals("http://www.example.org/", e.getNamespaceURI());
+        assertEquals("pre", e.getNamespacePrefix());
+    }
+
+    
     public void testSetNamespaceURI() {
         
         String name = "red:sakjdhjhd";
@@ -445,8 +468,7 @@ public class AttributeTest extends XOMTestCase {
           "!@#$%^&*()",
           "fred",
           "#fred",
-          "/fred",
-          ""
+          "/fred"
         }; 
         
         for (int i = 0; i < legal.length; i++) {
@@ -459,17 +481,15 @@ public class AttributeTest extends XOMTestCase {
                 a.setNamespace(prefix, illegal[i]);
                 fail("Illegal namespace URI allowed");  
             }
-            catch (MalformedURIException ex) {
-               // Success   
+            catch (MalformedURIException success) {
+               assertEquals(illegal[i], success.getData());
             }
-            catch (NamespaceException ex) {
-               // Success   
+            catch (IllegalNameException success) {
+               assertNotNull(success.getMessage());   
             }
         }
         
     }
-
-
 
 
     public void testNodeProperties() {
@@ -487,6 +507,7 @@ public class AttributeTest extends XOMTestCase {
         assertNull(element.getAttribute("test"));
 
     }
+    
     
     public void testDistinctTypes() {
     
@@ -549,4 +570,5 @@ public class AttributeTest extends XOMTestCase {
 
     }
 
+    
 }

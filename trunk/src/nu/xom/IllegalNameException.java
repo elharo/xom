@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -38,8 +38,8 @@ package nu.xom;
  *
  */
 
-public class IllegalNameException extends WellformednessException {
-
+public class IllegalNameException extends IllegalDataException {
+    
     /**
      * <p>
      * Creates a new <code>IllegalNameException</code> 
@@ -52,6 +52,7 @@ public class IllegalNameException extends WellformednessException {
         super(message);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>IllegalNameException</code> 
@@ -64,5 +65,6 @@ public class IllegalNameException extends WellformednessException {
     public IllegalNameException(String message, Throwable cause) {
         super(message, cause);
     }
+
 
 }

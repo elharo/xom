@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 /**
- * 
  * <p>
  * <code>Verifier</code>checks names and data for 
  * compliance with XML 1.0 and Namespaces in XML rules.
@@ -81,22 +80,23 @@ final class Verifier {
      * 
      * @param name <code>String</code> name to check
      * 
-     * @throws IllegalNameException if this is not a legal NCName
+     * @throws IllegalNameException if <code>name</code> is not a 
+     *     non-colonized name
      */
     static void checkNCName(String name) {
 
         if (name == null) {
-            throw new IllegalNameException("NCNames cannot be null");
+            throwIllegalNameException(name, "NCNames cannot be null");
         }
         
         int length = name.length();
         if (length == 0) {
-            throw new IllegalNameException("NCNames cannot be empty");
+            throwIllegalNameException(name, "NCNames cannot be empty");
         }
         
         char first = name.charAt(0);
         if ((flags[first] & NAME_START_CHARACTER) == 0) {
-            throw new IllegalNameException("NCNames cannot start " +
+            throwIllegalNameException(name, "NCNames cannot start " +
               "with the character " + Integer.toHexString(first));
         }
         
@@ -104,10 +104,10 @@ final class Verifier {
             char c = name.charAt(i);
             if ((flags[c] & NCNAME_CHARACTER) == 0) {
                 if (c == ':') {
-                    throw new NamespaceException("NCNames cannot contain colons");                    
+                    throwIllegalNameException(name, "NCNames cannot contain colons");                    
                 }
                 else {
-                    throw new IllegalNameException("0x" 
+                    throwIllegalNameException(name, "0x" 
                       + Integer.toHexString(c) + " is not a legal NCName character");
                 }
             }
@@ -116,6 +116,27 @@ final class Verifier {
     }
 
     
+    private static void throwIllegalNameException(String name, String message) {
+        IllegalNameException ex = new IllegalNameException(message);
+        ex.setData(name);
+        throw ex;
+    }
+
+
+    private static void throwIllegalCharacterDataException(String data, String message) {
+        IllegalDataException ex = new IllegalCharacterDataException(message);
+        ex.setData(data);
+        throw ex;
+    }
+
+
+    private static void throwMalformedURIException(String uri, String message) {
+        MalformedURIException ex = new MalformedURIException(message);
+        ex.setData(uri);
+        throw ex;
+    }
+
+
     /**
      * <p>
      * This methods checks whether a string contains only
@@ -124,12 +145,12 @@ final class Verifier {
      *
      * @param text <code>String</code> value to verify
      * 
-     * @throws IllegalDataException if <code>text</code> is not 
-     *     legal PCDATA
+     * @throws IllegalCharacterDataException if <code>text</code> is  
+     *     not legal PCDATA
      */
     static void checkPCDATA(String text) {
         
-        if (text == null) throw new IllegalDataException("Null text");
+        if (text == null) throwIllegalCharacterDataException(text, "Null text");
 
         char[] data = text.toCharArray();
         for (int i = 0, len = data.length; i < len; i++) {
@@ -140,12 +161,20 @@ final class Verifier {
                     i++; // increment past low surrogate
                 }
                 catch (ArrayIndexOutOfBoundsException ex) {
-                    throw new IllegalDataException("Bad Surrogate Pair", ex);
+                    IllegalCharacterDataException ide 
+                      = new IllegalCharacterDataException("Bad Surrogate Pair", ex);
+                    ide.setData(text);
+                    throw ide;
+                }
+                catch (IllegalCharacterDataException ex) {
+                    ex.setData(text);
+                    throw ex;
                 }
                 // all properly matched surrogate pairs are legal in PCDATA
             }  // end if 
             else if ((flags[result] & XML_CHARACTER) == 0) {
-                throw new IllegalDataException("0x " + Integer.toHexString(result)
+                throwIllegalCharacterDataException(text, "0x " 
+                  + Integer.toHexString(result)
                   + " is not allowed in XML content");
             }
 
@@ -181,30 +210,33 @@ final class Verifier {
                     i++; // increment past low surrogate
                 }
                 catch (Exception ex) {
-                    throw new MalformedURIException("Bad surrogate pair", ex);
+                    MalformedURIException uriex = 
+                      new MalformedURIException("Bad surrogate pair", ex);
+                    uriex.setData(uri);
+                    throw uriex;
                 }
             }  // end if 
             
             if (!isURICharacter(c)) {
-                throw new MalformedURIException("The character 0x"
+                throwMalformedURIException(uri, "The character 0x"
                   + Integer.toHexString(c) + " is not allowed in URIs");                
             }
             if (c == '%') { 
                try {
                    if (!isHexDigit(uri.charAt(i+1)) || !isHexDigit(uri.charAt(i+2))) {
-                       throw new MalformedURIException(
+                       throwMalformedURIException(uri, 
                          "Bad percent escape sequence");    
                    }
                }
                catch (StringIndexOutOfBoundsException ex) {
-                   throw new MalformedURIException(
+                   throwMalformedURIException(uri, 
                     "Bad percent escape sequence");    
                }
             }
             else if (c == '[') {
                 leftBrackets++;  
                 if (rightBrackets >= leftBrackets) {
-                    throw new MalformedURIException(
+                    throwMalformedURIException(uri, 
                         "Mismatched square brackets"
                     );                                       
                 } 
@@ -215,12 +247,12 @@ final class Verifier {
         } // end for
 
         if (leftBrackets != rightBrackets) {
-            throw new MalformedURIException(
+            throwMalformedURIException(uri, 
                 "Mismatched square brackets"
             );                   
         }
         if (leftBrackets > 1) {
-            throw new MalformedURIException(
+            throwMalformedURIException(uri, 
                 "Multiple square brackets"
             );                   
         }
@@ -230,7 +262,13 @@ final class Verifier {
             String ip6Address = uri.substring(
               uri.indexOf('[')+1, uri.indexOf(']')
             );
-            checkIP6Address(ip6Address);
+            try {
+                checkIP6Address(ip6Address);
+            }
+            catch (MalformedURIException ex) {
+                ex.setData(uri);
+                throw ex;
+            }
         }
         
     }
@@ -251,7 +289,7 @@ final class Verifier {
             try {
                 int part = Integer.parseInt(hexPart, 16);
                 if (part < 0) {
-                    throw new MalformedURIException(
+                      throw new MalformedURIException( 
                       "Illegal IP6 host address: " + ip6Address
                     );                                                            
                 }
@@ -261,7 +299,7 @@ final class Verifier {
                     checkIP4Address(hexPart, ip6Address);        
                 }
                 else {
-                    throw new MalformedURIException(
+                    throwMalformedURIException(ip6Address,
                       "Illegal IP6 host address: " + ip6Address
                     );                                                            
                 }
@@ -305,11 +343,14 @@ final class Verifier {
         
     }    
 
+
     
     private static int decodeSurrogatePair(int high, int low) {
-        
+        // This method is only called after a high-surrogate 
+        // has been spotted in the stream so we know that's good.
+        // Thus we only need to test the low surrogate.
         if (low < 0xDC00 || low > 0xDFFF) {
-            throw new IllegalDataException("Bad surrogate pair");
+            throw new IllegalCharacterDataException("Bad surrogate pair");
         }
         // Algorithm defined in Unicode spec
         return (high-0xD800)*0x400 + (low-0xDC00) + 0x10000;
@@ -319,30 +360,27 @@ final class Verifier {
     
     static void checkXMLName(String name) {
         
-        // should IllegalNameException contain the name????
-        // IllegalDataException contain the data????
-        //MalformedURIException contain the malformedURI????
-
         if (name == null) {
-            throw new IllegalNameException("XML names cannot be null");
+            throwIllegalNameException(name, "XML names cannot be null");
         }
         
         int length = name.length();
         if (length == 0) {
-            throw new IllegalNameException("XML names cannot be empty");
+            throwIllegalNameException(name, "XML names cannot be empty");
         }
         
         char first = name.charAt(0);
         if ((flags[first] & NAME_START_CHARACTER) == 0) {
-            throw new IllegalNameException("XML names cannot start " +
+            throwIllegalNameException(name, "XML names cannot start " +
               "with the character " + Integer.toHexString(first));
         }
         
         for (int i = 1; i < length; i++) {
             char c = name.charAt(i);
             if ((flags[c] & NAME_CHARACTER) == 0) {
-                throw new IllegalNameException("0x" 
-                  + Integer.toHexString(c) + " is not a legal name character");
+                throwIllegalNameException(name, "0x" 
+                  + Integer.toHexString(c) 
+                  + " is not a legal name character");
             }
         }
 
@@ -383,7 +421,7 @@ final class Verifier {
             case '=': return false;
             case '>': return false;
             case '?': return false;
-            case '@': return true;
+            case '@': return false;
             case 'A': return true;
             case 'B': return true;
             case 'C': return true;
@@ -442,13 +480,13 @@ final class Verifier {
         // Next test is necessary if we're really testing URI 
         // references but not for namespace URIs
         if (uri == null || uri.length() == 0) {
-            throw new MalformedURIException(
+            throwMalformedURIException(uri, 
               "Absolute URIs cannot be empty"
             );   
         }
         
         if (!isAlpha(uri.charAt(0))) {
-            throw new MalformedURIException(
+            throwMalformedURIException(uri,
               "Absolute URIs must begin with an ASCII letter");
         }
         
@@ -460,13 +498,13 @@ final class Verifier {
                 break;               
              }
              if (!isSchemeCharacter(c)) {
-                throw new MalformedURIException(
+                throwMalformedURIException(uri,
                   "URI schemes cannot contain " + c);   
              }
         }
         
         if (colonLocation == -1) {
-             throw new MalformedURIException(
+             throwMalformedURIException(uri,
                 "Namespace URIs should be absolute.");   
         }
         int numberSharps = 0;
@@ -477,26 +515,26 @@ final class Verifier {
                     char c1 = uri.charAt(i+1);
                     char c2 = uri.charAt(i+2);
                     if (!isHexDigit(c1) || !isHexDigit(c2)) {
-                        throw new MalformedURIException(
+                        throwMalformedURIException(uri,
                           ("Bad hexadecimal escape sequence %" 
                           + c1) + c2);   
                     }                      
                 }
                 catch (IndexOutOfBoundsException ex) {
-                    throw new MalformedURIException(
+                    throwMalformedURIException(uri,
                       "Bad hexadecimal escape sequence %");   
                 }
             }
             else if (c == '#') {
                 numberSharps++;
                 if (numberSharps > 1) {
-                    throw new MalformedURIException(
+                    throwMalformedURIException(uri,
                       "Multiple fragments #"
                     );
                 }
             }
             else if (!isURICharacter(c)) {
-                throw new MalformedURIException(
+                throwMalformedURIException(uri,
                   "URIs cannot contain " + c
                 );
             }

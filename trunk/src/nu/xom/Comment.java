@@ -56,6 +56,7 @@ public class Comment extends LeafNode {
         setValue(data);  
     }
 
+    
     /**
      * <p>
      * Creates a new comment that's a <code>Comment</code> 
@@ -67,6 +68,7 @@ public class Comment extends LeafNode {
     public Comment(Comment comment) {
         this.data = comment.data;  
     }
+    
     
     private Comment() {}
     
@@ -94,29 +96,40 @@ public class Comment extends LeafNode {
         if (data == null) data = "";
         else {
             Verifier.checkPCDATA(data);
+            
             if (data.indexOf("--") != -1) {
-                throw new IllegalDataException(
+                IllegalDataException ex = new IllegalDataException(
                  "Comment data contains a double hyphen (--).");
+                ex.setData(data);
+                throw ex;
             }
     
             if (data.indexOf('\r') != -1) {
-                throw new IllegalDataException(
+                IllegalDataException ex = new IllegalDataException(
                  "Comment data cannot contain carriage returns.");
+                ex.setData(data);
+                throw ex;
             }
     
             if (data.startsWith("-")) {
-                throw new IllegalDataException(
+                IllegalDataException ex = new IllegalDataException(
                  "Comment data starts with a hyphen.");
+                ex.setData(data);
+                throw ex;
             }
     
             if (data.endsWith("-")) {
-                throw new IllegalDataException(
+                IllegalDataException ex = new IllegalDataException(
                  "Comment data ends with a hyphen.");
-            }              
+                ex.setData(data);
+                throw ex;
+            } 
+            
         }
         checkValue(data);
         // Is <!----> a legal comment? Yes it is. 
         this.data = data;
+        
     }
 
 
@@ -135,6 +148,7 @@ public class Comment extends LeafNode {
      */
     protected void checkValue(String data) {}
 
+    
     /**
      * <p>
      * Returns the value of this comment as defined by XPath 1.0. 
@@ -150,6 +164,7 @@ public class Comment extends LeafNode {
         return data;
     }
 
+    
     /**
      * <p>
      *   Returns a deep copy of this <code>Comment</code> object 
@@ -207,8 +222,10 @@ public class Comment extends LeafNode {
           + value.substring(0, 35) + "...]";
     }
 
+    
     boolean isComment() {
         return true;   
     } 
+    
     
 }

@@ -1,4 +1,4 @@
-// Copyright 2002-2004 Elliotte Rusty Harold
+// Copyright 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -25,71 +25,45 @@ package nu.xom;
 
 /**
  * <p>
- *  An <code>IllegalDataException</code> indicates an attempt to
- *  set some value to malformed content; for instance
- *  by adding a string containing a null or a vertical tab
- *  to a text node, or using white space in an element name.
+ *  An <code>IllegalCharacterDataException</code> indicates an attempt 
+ *  to create text content that is not allowed in XML 1.0.
+ *  For example, this could be a text node that contains a vertical tab
+ *  or an attribute value that contains an unmatched surrogate 
+ *  character.
  * </p>
 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  *
  */
-public class IllegalDataException extends WellformednessException {
 
-    private String data;
-    
+public class IllegalCharacterDataException extends IllegalDataException {
     
     /**
      * <p>
-     * Creates a new <code>IllegalDataException</code> 
+     * Creates a new <code>IllegalCharacterDataException</code> 
      * with a detail message.
      * </p>
      * 
      * @param message indicates the specific problem
      */
-    public IllegalDataException(String message) {
+    public IllegalCharacterDataException(String message) {
         super(message);
     }
 
     
     /**
      * <p>
-     * Creates a new <code>IllegalDataException</code> 
+     * Creates a new <code>IllegalCharacterDataException</code> 
      * with a detail message and an underlying root cause.
      * </p>
      * 
      * @param message indicates the specific problem
      * @param cause the original cause of this exception
      */
-    public IllegalDataException(String message, Throwable cause) {
+    public IllegalCharacterDataException(String message, Throwable cause) {
         super(message, cause);
     }
-    
-    
-    /**
-     * <p>
-     *   Stores the illegal text that caused this exception.
-     * </p>
-     * 
-     * @param data the illegal data that caused this exception
-     */
-    public void setData(String data) {
-        this.data = data;
-    }
 
-    
-    /**
-     * <p>
-     *   Returns a string containing the actual illegal text that 
-     *   caused this exception.
-     * </p>
-     * 
-     * @return the syntactically incorrect data that caused
-     *     this exception
-     */
-    public String getData() {
-        return data;
-    }
 
 }
