@@ -48,7 +48,7 @@ import nu.xom.ParentNode;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 class XPointer {
@@ -279,7 +279,8 @@ class XPointer {
         return null;
     }
     
-    private static String decode(String xptr) throws XPointerSyntaxException {
+    private static String decode(String xptr) 
+      throws XPointerSyntaxException {
         StringBuffer result = new StringBuffer(xptr);
         try {
             for (int i = 0; i < result.length(); i++) {
@@ -309,14 +310,14 @@ class XPointer {
             }
         }
         catch (StringIndexOutOfBoundsException ex) {
-            XPointerSyntaxException ex2 = new XPointerSyntaxException( 
+            XPointerSyntaxException ex2 = new XPointerSyntaxException(
               xptr + " is not a syntactically correct XPointer"); 
             ex2.initCause(ex);
             throw ex2; 
         }
         catch (NumberFormatException ex) {
-            XPointerSyntaxException ex2 = new XPointerSyntaxException(xptr 
-              + " is not a syntactically correct XPointer"); 
+            XPointerSyntaxException ex2 = new XPointerSyntaxException(
+              xptr + " is not a syntactically correct XPointer"); 
             ex2.initCause(ex);
             throw ex2; 
         }

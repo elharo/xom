@@ -31,7 +31,7 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  */
 public class CircularIncludeException extends XIncludeException {
 
@@ -57,6 +57,20 @@ public class CircularIncludeException extends XIncludeException {
      */
     public CircularIncludeException(String message) {
         super(message);
+    }
+
+    /**
+     * <p>
+     * Creates a new <code>CircularIncludeException</code> with a detail 
+     * message, line and column numbers, and a URI of the document
+     * that caused the exception.
+     * </p>
+     * 
+     * @param message indicates the specific problem
+     * @param uri the URI of the document that caused this exception
+     */
+    public CircularIncludeException(String message, String uri) {
+        super(message, uri);
     }
 
 }
