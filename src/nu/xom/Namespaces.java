@@ -74,35 +74,6 @@ class Namespaces {
     String getURI(String prefix) {
         return (String) (namespaces.get(prefix));
     }
-
-    
-    /**
-     * <p>
-     * Returns the number of namespace declarations in this list.
-     * This is guaranteed to be non-negative.
-     * </p>
-     * 
-     * @return the number of namespace declarations in this list
-     */
-    int size() {
-        return namespaces.size();
-    }
-
-    
-    /**
-     * <p>
-     * Returns the index<sup>th</sup> prefix in this list.
-     * The index is purely for convenience, and has no
-     * meaning in itself.
-     * </p>
-     * 
-     * @param index the prefix to return
-     * 
-     * @return the prefix
-     */
-    public String getPrefix(int index) {
-        return (String) prefixes.get(index);
-    }
     
     
     // This violates encapsulation. Don't change the 
