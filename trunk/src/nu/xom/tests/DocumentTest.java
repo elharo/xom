@@ -75,7 +75,8 @@ public class DocumentTest extends XOMTestCase {
             fail("inserted doctype after root element");
         }
         catch (IllegalAddException ex) {
-            // success
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
         doc.insertChild(type1, 0);
@@ -88,6 +89,7 @@ public class DocumentTest extends XOMTestCase {
         }
         catch (IllegalAddException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         assertEquals(type1, doc.getDocType());
         assertNull(type2.getParent());
@@ -143,7 +145,8 @@ public class DocumentTest extends XOMTestCase {
             fail("Added second root element");
         }
         catch (IllegalAddException ex) {
-          // success    
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -160,6 +163,7 @@ public class DocumentTest extends XOMTestCase {
         }
         catch (NullPointerException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -222,7 +226,8 @@ public class DocumentTest extends XOMTestCase {
             fail("allowed null root!");
         }
         catch (NullPointerException ex) {
-            // success  
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -231,7 +236,7 @@ public class DocumentTest extends XOMTestCase {
             fail("allowed null doc!");
         }
         catch (NullPointerException ex) {
-            // success  
+            // success   
         }
         
     }
@@ -291,24 +296,27 @@ public class DocumentTest extends XOMTestCase {
             doc.appendChild(new Text("test"));
             fail("appended string");
         }   
-        catch (IllegalAddException e) {
-            // success  
+        catch (IllegalAddException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
             doc.appendChild(new Text("    "));
             fail("appended white space");
         }   
-        catch (IllegalAddException e) {
-            // success  
+        catch (IllegalAddException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
             doc.appendChild(new Text("test"));
             fail("appended Text");
         }   
-        catch (IllegalAddException e) {
-            // success  
+        catch (IllegalAddException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -316,16 +324,18 @@ public class DocumentTest extends XOMTestCase {
             doc.appendChild(new Element("test"));
             fail("appended element");
         }   
-        catch (IllegalAddException e) {
-            // success  
+        catch (IllegalAddException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
             doc.insertChild(new Element("test"), 0);
             fail("inserted element");
         }   
-        catch (IllegalAddException e) {
-            // success  
+        catch (IllegalAddException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -339,24 +349,27 @@ public class DocumentTest extends XOMTestCase {
             root.detach();
             fail("detached root element");
         }   
-        catch (WellformednessException e) {
-            // success  
+        catch (WellformednessException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
             doc.removeChild(root);
             fail("removed root element");
         }   
-        catch (WellformednessException e) {
-            // success  
+        catch (WellformednessException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
             doc.removeChild(0);
             fail("removed root element");
         }   
-        catch (WellformednessException e) {
-            // success  
+        catch (WellformednessException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
         doc.appendChild(new Comment("test"));
@@ -375,14 +388,16 @@ public class DocumentTest extends XOMTestCase {
         }
         catch (NoSuchChildException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
 
         try {
             doc.removeChild(20);
             fail("removed overly sized element");
         }   
-        catch (IndexOutOfBoundsException e) {
-            // success  
+        catch (IndexOutOfBoundsException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
     }

@@ -41,6 +41,10 @@ import nu.xom.xinclude.XIncludeException;
 import nu.xom.xinclude.XIncluder;
 
 /**
+ * <p>
+ *   Unit tests for the XInclude and XPointer engines.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d22
  *
@@ -217,6 +221,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (CircularIncludeException ex) {
             // success   
+            assertNotNull(ex.getMessage());
             assertEquals(input.toURL().toExternalForm(), ex.getURI());           
         }
     }
@@ -232,6 +237,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (CircularIncludeException ex) {
             // success   
+            assertNotNull(ex.getMessage());
             assertEquals(errorFile.toURL().toExternalForm(), ex.getURI());           
         }
     }
@@ -246,6 +252,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (MissingHrefException ex) {
             // success   
+            assertNotNull(ex.getMessage());
             assertEquals(doc.getBaseURI(), ex.getURI());           
         }
     }
@@ -260,6 +267,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (BadParseAttributeException ex) {
             // success   
+            assertNotNull(ex.getMessage());
             URL u1 = input.toURL();
             URL u2 = new URL(ex.getURI());
             assertEquals(u1, u2);
@@ -337,12 +345,13 @@ public class XIncludeTest extends XOMTestCase {
             fail("Resolved a document with an XPointer " +              "that selects no subresource");
         }
         catch (XIncludeException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
             // Must compare URLs instead of strings here to avoid 
             // issues of whether a file URL begins file:/ or file:///
             URL u1 = input.toURL();
             URL u2 = new URL(ex.getURI());
-            assertEquals(u1, u2);
-            // success   
+            assertEquals(u1, u2);  
         }
         
         
@@ -382,6 +391,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (XIncludeException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }  
         
     }
@@ -398,6 +408,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (XIncludeException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }  
         
     }
@@ -510,7 +521,8 @@ public class XIncludeTest extends XOMTestCase {
             fail("Did not error on XPointer matching nothing");
         }
         catch (XIncludeException ex) {
-            // success    
+            // success   
+            assertNotNull(ex.getMessage());
             URL u1 = input.toURL();
             URL u2 = new URL(ex.getURI());
             assertEquals(u1, u2);            
@@ -528,6 +540,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (XIncludeException ex) {
             // success   
+            assertNotNull(ex.getMessage());
             URL u1 = input.toURL();
             URL u2 = new URL(ex.getURI());
             assertEquals(u1, u2);            
@@ -546,6 +559,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (XIncludeException ex) {
             // success   
+            assertNotNull(ex.getMessage());
             URL u1 = input.toURL();
             URL u2 = new URL(ex.getURI());
             assertEquals(u1, u2);            
@@ -740,13 +754,15 @@ public class XIncludeTest extends XOMTestCase {
                             fail("Failed test " + id + ": " + description);
                         }
                         catch (XIncludeException ex) {
-                           // success   
+                            // success   
+                            assertNotNull(ex.getMessage());
                         }
                         catch (IOException ex) {
                            // success   
                         }
                         catch (ParsingException ex) {
-                           // success   
+                            // success   
+                            assertNotNull(ex.getMessage());
                         }
                     }
                     else {
@@ -805,6 +821,8 @@ public class XIncludeTest extends XOMTestCase {
             fail("Missing HREF not detected");
         }
         catch (MissingHrefException ex) {
+            // success   
+            assertNotNull(ex.getMessage());
             URL u1 = error.toURL();
             URL u2 = new URL(ex.getURI());
             assertEquals(u1, u2);            

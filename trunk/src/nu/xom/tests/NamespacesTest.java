@@ -83,7 +83,8 @@ public class NamespacesTest extends XOMTestCase {
             fail("changed prefix to conflict with additional namespace declaration");
         }
         catch (NamespaceException ex) {
-            // success    
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -96,7 +97,8 @@ public class NamespacesTest extends XOMTestCase {
             fail("changed namespace URI to conflict with additional namespace declaration");
         }
         catch (NamespaceException ex) {
-            // success    
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -125,6 +127,7 @@ public class NamespacesTest extends XOMTestCase {
         }  
         catch (NamespaceException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         try {
             noNamespaces.addNamespaceDeclaration("xmlns",
@@ -133,6 +136,7 @@ public class NamespacesTest extends XOMTestCase {
         }  
         catch (NamespaceException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
     }
     
@@ -144,6 +148,7 @@ public class NamespacesTest extends XOMTestCase {
         }  
         catch (NamespaceException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
     }
     
@@ -252,7 +257,8 @@ public class NamespacesTest extends XOMTestCase {
            fail("added conflicting default namespace");   
        }
        catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
        }
        
        e.addNamespaceDeclaration("", "http://www.example.com");
@@ -270,7 +276,8 @@ public class NamespacesTest extends XOMTestCase {
            fail("added conflicting default namespace");   
        }
        catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
        }
        
        e.setNamespaceURI("http://www.example.com");
@@ -290,7 +297,8 @@ public class NamespacesTest extends XOMTestCase {
            fail("added null prefix");   
        }
        catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
        }
        
        e.setNamespaceURI("http://www.example.com");
@@ -317,7 +325,8 @@ public class NamespacesTest extends XOMTestCase {
             fail("added conflicting default namespace");
         }
         catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -326,7 +335,8 @@ public class NamespacesTest extends XOMTestCase {
             fail("added conflicting attribute prefix namespace");
         }
         catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -335,7 +345,8 @@ public class NamespacesTest extends XOMTestCase {
             fail("added conflicting additional prefix namespace");
         }
         catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
         someNamespaces.addNamespaceDeclaration("foo", 
@@ -355,7 +366,8 @@ public class NamespacesTest extends XOMTestCase {
             fail("Redeclared without removal");   
         }
         catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
         someNamespaces.removeNamespaceDeclaration("xlink");
         assertNull(someNamespaces.getNamespaceURI("xlink"));
@@ -375,7 +387,8 @@ public class NamespacesTest extends XOMTestCase {
             fail("added conflicting attribute prefix");
         }
         catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
    }
@@ -392,7 +405,8 @@ public class NamespacesTest extends XOMTestCase {
            fail("changed to conflicting element namespace");
         }
         catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
    }
@@ -410,7 +424,8 @@ public class NamespacesTest extends XOMTestCase {
            fail("changed to conflicting attribute namespace");
         }
         catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
    }
@@ -423,7 +438,8 @@ public class NamespacesTest extends XOMTestCase {
            fail("added conflicting element prefix");
         }
         catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -431,7 +447,8 @@ public class NamespacesTest extends XOMTestCase {
            fail("added conflicting element prefix");
         }
         catch (NamespaceException ex) {
-           // success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
    }

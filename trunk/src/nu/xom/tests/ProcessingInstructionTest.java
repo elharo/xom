@@ -29,8 +29,12 @@ import nu.xom.IllegalTargetException;
 import nu.xom.ProcessingInstruction;
 
 /**
+ * <p>
+ * Unit tests for the <code>ProcessingInstruction</code> class.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class ProcessingInstructionTest extends XOMTestCase {
@@ -118,6 +122,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         catch (IllegalDataException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
         // These should all work
@@ -186,6 +191,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         catch (IllegalDataException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -194,6 +200,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         catch (IllegalDataException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -202,6 +209,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         catch (IllegalDataException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -210,6 +218,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         catch (IllegalDataException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }        
         
     }

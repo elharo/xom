@@ -37,11 +37,11 @@ import nu.xom.Text;
 
 /**
  * <p>
- * 
+ *   Tests adding, removing, and counting children from parent nodes.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class ParentNodeTest extends XOMTestCase {
@@ -95,6 +95,7 @@ public class ParentNodeTest extends XOMTestCase {
         }
         catch (CycleException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
     } 
 
@@ -108,6 +109,7 @@ public class ParentNodeTest extends XOMTestCase {
         }
         catch (CycleException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
     } 
 
@@ -193,6 +195,7 @@ public class ParentNodeTest extends XOMTestCase {
         }
         catch (IllegalAddException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -201,6 +204,7 @@ public class ParentNodeTest extends XOMTestCase {
         }
         catch (MultipleParentException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
 
     } 
@@ -236,7 +240,8 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Replaced Nonexistent element");     
         }
         catch (NoSuchChildException ex) {
-            // success
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
         // Test replacing node with itself
@@ -317,7 +322,8 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Removed non-existent child from empty element");   
         }
         catch (NoSuchChildException ex) {
-            // success
+            // success   
+            assertNotNull(ex.getMessage());
         }
 
         empty.appendChild(old1);
@@ -353,14 +359,13 @@ public class ParentNodeTest extends XOMTestCase {
         empty.removeChild(old2);
         
         assertEquals(0, empty.getChildCount());
-        assertNull(old1.getParent());
-        
+        assertNull(old1.getParent());   
 
     } 
 
 
 
-   public void testReplaceChildFailures() {
+    public void testReplaceChildFailures() {
         
         Element old1 = new Element("old1");
         Element old2 = new Element("old2");
@@ -377,6 +382,7 @@ public class ParentNodeTest extends XOMTestCase {
         }
         catch (NoSuchChildException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
 
         try {
@@ -393,6 +399,7 @@ public class ParentNodeTest extends XOMTestCase {
         }
         catch (NoSuchChildException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
 
     } 

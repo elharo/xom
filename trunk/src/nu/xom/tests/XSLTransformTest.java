@@ -39,6 +39,10 @@ import nu.xom.xslt.XSLException;
 import nu.xom.xslt.XSLTransform;
 
 /**
+ * <p>
+ *  Unit tests for the XSLT engine.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d22
  *
@@ -69,6 +73,7 @@ public class XSLTransformTest extends XOMTestCase {
         }
         catch (XSLException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -82,6 +87,7 @@ public class XSLTransformTest extends XOMTestCase {
         }
         catch (XSLException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -98,6 +104,7 @@ public class XSLTransformTest extends XOMTestCase {
         }
         catch (XSLException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -112,6 +119,7 @@ public class XSLTransformTest extends XOMTestCase {
         }
         catch (XSLException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -126,6 +134,7 @@ public class XSLTransformTest extends XOMTestCase {
         }
         catch (XSLException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
