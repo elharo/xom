@@ -246,8 +246,6 @@ public class NodeFactory {
      * or the builder will throw a <code>NullPointerException</code>.
      * </p>
      * 
-     * @param root the root <code>Element</code>
-     * 
      * @return the newly created <code>Document</code>
      */
     public Document makeDocument() {
