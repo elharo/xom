@@ -466,8 +466,15 @@ public class Element extends ParentNode {
         // and namespace? If so, remove it.
         Attribute oldAttribute = getAttribute(attribute.getLocalName(), 
           attribute.getNamespaceURI());
-        // XXX remove directly from arraylist????
-        if (oldAttribute != null) remove(oldAttribute);
+        if (oldAttribute != null) {
+            boolean removed = attributes.remove(oldAttribute);
+            if (!removed) {
+                throw new NoSuchAttributeException(
+                  "Tried to remove attribute " 
+                  + oldAttribute.getQualifiedName() 
+                  + " from non-parent element");
+            }
+        }
         
         attributes.add(attribute);
         attribute.setParent(this);
@@ -1689,25 +1696,6 @@ public class Element extends ParentNode {
                 "Prefix of " + attribute.getQualifiedName() 
                 + " conflicts with " + a.getQualifiedName());
             }   
-        }
-        
-    }
-
-    
-    // Remove the specified Attribute object from the list.
-    private void remove(Attribute attribute) {
-        
-        if (attribute == null) {
-            throw new NullPointerException(
-              "Tried to remove null attribute"
-            );
-        }
-        boolean removed = attributes.remove(attribute);
-        if (!removed) {
-            throw new NoSuchAttributeException(
-              "Tried to remove attribute " 
-              + attribute.getQualifiedName() 
-              + " from non-parent element");
         }
         
     }
