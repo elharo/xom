@@ -221,6 +221,23 @@ public class DocTypeTest extends XOMTestCase {
     }
 
     
+    public void testNoChildren() {
+        
+        assertEquals(0, doctypePublicID.getChildCount());
+        assertEquals(0, doctypeSystemID.getChildCount());
+        assertEquals(0, doctypeRootOnly.getChildCount());
+        
+        try {
+            doctypePublicID.getChild(0);
+            fail("Got zeroth child");
+        }
+        catch (IndexOutOfBoundsException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
     public void testConstructor2Arg() {
 
         String name = "MyName";
@@ -294,9 +311,9 @@ public class DocTypeTest extends XOMTestCase {
                 fail("Allowed bad public ID character " 
                   + Integer.toHexString(c));
             }
-            catch (WellformednessException ex) {
+            catch (WellformednessException success) {
                 // successfully detected bad public ID    
-                assertNotNull(ex.getMessage());
+                assertNotNull(success.getMessage());
             }
         } 
         for (char c = 0xB; c < 0xD; c++) {
@@ -332,6 +349,20 @@ public class DocTypeTest extends XOMTestCase {
                 assertNotNull(success.getMessage());
             }
         } 
+        
+        char[] illegalPunctuationMarks = "<>`^&\"[]{}|\\~".toCharArray();
+        for (int i = 0; i < illegalPunctuationMarks.length; i++) {
+            char c = illegalPunctuationMarks[i];
+            try {
+                checkPublicIDCharacter(c + "");
+                fail("Allowed bad public ID character " 
+                  + Integer.toHexString(c));
+            }
+            catch (WellformednessException success) {
+                // successfully detected bad public ID    
+                assertNotNull(success.getMessage());
+            }
+        } 
 
     }
     
@@ -346,9 +377,9 @@ public class DocTypeTest extends XOMTestCase {
         // not roundtrippable. They can appear in the document but not
         // the infoset so XOM forbids them.
         checkPublicIDCharacter("-'()+,./:=?;!*#@$_%");
-        for (char c = 'a'; c < 'z'; c++) checkPublicIDCharacter(c + "");
-        for (char c = 'A'; c < 'Z'; c++) checkPublicIDCharacter(c + "");
-        for (char c = '0'; c < '9'; c++) checkPublicIDCharacter(c + "");
+        for (char c = 'a'; c <= 'z'; c++) checkPublicIDCharacter(c + "");
+        for (char c = 'A'; c <= 'Z'; c++) checkPublicIDCharacter(c + "");
+        for (char c = '0'; c <= '9'; c++) checkPublicIDCharacter(c + "");
 
     }
     
