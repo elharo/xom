@@ -48,8 +48,11 @@ import nu.xom.Text;
  */
 public class XOMTestCase extends TestCase {
 
-    // add JavaDocs????
-    
+    /**
+     * <p>
+     * Create a new XOMTestCase with the specified name.
+     * </p>
+     */
     public XOMTestCase(String name) {
         super(name);   
     }  
@@ -64,8 +67,11 @@ public class XOMTestCase extends TestCase {
      * <code>ComparisonFailure</code> is thrown.
      * </p>
      * 
-     * @param expected
-     * @param actual
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     * 
+     * @throws ComparisonException if the <code>Text</code> nodes 
+     *     are not equal
      */
     public static void assertEquals(Text expected, Text actual) {
         assertEquals(null, expected, actual);
@@ -82,9 +88,12 @@ public class XOMTestCase extends TestCase {
      * message.
      * </p>
      * 
-     * @param message
-     * @param expected
-     * @param actual
+     * @param message printed if the nodes are not equal
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     * 
+     * @throws ComparisonException if the <code>Text</code> nodes 
+     *     are not equal
      */
     public static void assertEquals(
       String message, Text expected, Text actual) {
@@ -108,12 +117,63 @@ public class XOMTestCase extends TestCase {
     }
 
 
+    /**
+     * <p>
+     * Asserts that two attribute nodes are equal. 
+     * Attribute nodes are considered equal if their 
+     * qualified names, namespace URIs, and values
+     * are equal. The type is not considered because it tends not to 
+     * survive a roundtrip.  If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown.
+     * </p>
+     * 
+     * <p>
+     * There is special handling for the <code>xml:base</code> 
+     * attribute. In order to faciliate comparison between relative and
+     * absolute URIs, two <code>xml:base</code> attributes are 
+     * considered equal if one might be a relative form of the other.
+     * ???? this test could be made more URI accurate
+     * </p>
+     * 
+     * @param message printed if the nodes are not equal
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     * 
+     * @throws ComparisonException if the <code>Attribute</code> nodes 
+     *     are not equal
+     */
     public static void assertEquals(
       Attribute expected, Attribute actual) {
         assertEquals(null, expected, actual);   
     }
 
     
+    /**
+     * <p>
+     * Asserts that two attribute nodes are equal. 
+     * Attribute nodes are considered equal if their 
+     * qualified names, namespace URIs, and values
+     * are equal. The type is not considered because this tends not to
+     * survive a roundtrip. If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown with the given 
+     * message.
+     * </p>
+     * 
+     * <p>
+     * There is special handling for the <code>xml:base</code> 
+     * attribute. In order to faciliate comparison between relative and
+     * absolute URIs, two <code>xml:base</code> attributes are 
+     * considered equal if one might be a relative form of the other.
+     * ???? this test could be made more URI accurate
+     * </p>
+     * 
+     * @param message printed if the nodes are not equal 
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     * 
+     * @throws ComparisonException if the <code>Attribute</code> nodes 
+     *     are not equal
+     */
     public static void assertEquals(
       String message, Attribute expected, Attribute actual) {
         
@@ -142,11 +202,46 @@ public class XOMTestCase extends TestCase {
     }
 
     
+    /**
+     * <p>
+     * Asserts that two DocType nodes are equal. 
+     * DocType nodes are considered equal if their 
+     * root element name, public ID, and system ID
+     * are equal. The internal DTD subset is not considered. 
+     * If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown.
+     * </p>
+     * 
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the <code>DocType</code> nodes 
+     *     are not equal
+     */
     public static void assertEquals(DocType expected, DocType actual) {
         assertEquals(null, expected, actual);
     }
 
     
+    /**
+     * <p>
+     * Asserts that two DocType nodes are equal. 
+     * DocType nodes are considered equal if their 
+     * root element name, public ID, and system ID
+     * are equal. The internal DTD subset is not considered. 
+     * If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown with the given 
+     * message.
+     * </p>
+     * 
+     * @param message printed if the nodes are not equal
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the <code>DocType</code> nodes 
+     *     are not equal
+     *
+     */
     public static void assertEquals(
       String message, DocType expected, DocType actual) {
         
@@ -172,6 +267,23 @@ public class XOMTestCase extends TestCase {
     }
 
     
+    /**
+     * <p>
+     * Asserts that two element nodes are equal. 
+     * Element nodes are considered equal if their 
+     * qualified names, namespace URI, attributes,
+     * declared namespaces, and children
+     * are equal. Consecutive text node children are coalesced
+     * before the comparison is made. If the two nodes are not equal, 
+     * a <code>ComparisonFailure</code> is thrown.
+     * </p>
+     * 
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the <code>Elements</code> nodes 
+     *     are not equal
+     */
     public static void assertEquals(
       Element expected, Element actual) {
         assertEquals(null, expected, actual);
@@ -179,6 +291,25 @@ public class XOMTestCase extends TestCase {
     }
 
     
+    /**
+     * <p>
+     * Asserts that two element nodes are equal. 
+     * Element nodes are considered equal if their 
+     * qualified names, namespace URI, attributes,
+     * declared namespaces, and children
+     * are equal. Consecutive text node children are coalesced
+     * before the comparison is made. If the two nodes are not equal, 
+     * a <code>ComparisonFailure</code> is thrown with the given 
+     * message.
+     * </p>
+     * 
+     * @param message printed if the nodes are not equal
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the <code>Element</code> nodes 
+     *     are not equal
+     */
     public static void assertEquals(String message,
       Element expected, Element actual) {
         
@@ -214,13 +345,13 @@ public class XOMTestCase extends TestCase {
             assertEquals(message, att1, att2);
         }
 
-        // Check namespaces in scope by listing all the prefixes
+        // Check declared namespaces by listing all the prefixes
         // on element1 and making sure element2 gives the same value
         // for those prefixes, and vice versa. This is necessary
         // to handle a few weird cases that arise in XInclude
         // when prefixes are declared multiple times, to account for
         // the fact that some serializers may drop redundant
-        // namespace declarations 
+        // namespace declarations.
         for (int i = 0; 
              i < expected.getNamespaceDeclarationCount(); 
              i++ ) {
@@ -280,6 +411,22 @@ public class XOMTestCase extends TestCase {
     }
 
     
+    /**
+     * <p>
+     * Asserts that two document nodes are equal. 
+     * Document nodes are considered equal if their 
+     * children are equal. If the two nodes are not equal, 
+     * a <code>ComparisonFailure</code> is thrown with the given 
+     * message.
+     * </p>
+     * 
+     * @param message printed if the nodes are not equal
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the <code>Document</code> nodes 
+     *     are not equal
+     */
     public static void assertEquals(
       String message, Document expected, Document actual) {       
 
@@ -299,12 +446,43 @@ public class XOMTestCase extends TestCase {
     }
 
     
+    /**
+     * <p>
+     * Asserts that two document nodes are equal. 
+     * Document nodes are considered equal if their 
+     * children are equal. If the two nodes are not equal, 
+     * a <code>ComparisonFailure</code> is thrown.
+     * </p>
+     * 
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the <code>Document</code> nodes 
+     *     are not equal
+     */
     public static void assertEquals(
       Document expected, Document actual) {       
         assertEquals(null, expected, actual);
     }
     
     
+    /**
+     * <p>
+     * Asserts that two comment nodes are equal. Comemnt nodes are considered
+     * equal if they are identical char by char, or if both are null. 
+     * Unicode and whitespace normalization is not performed before 
+     * comparison. If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown with the given 
+     * message.
+     * </p>
+     * 
+     * @param message printed if the nodes are not equal
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the <code>Comment</code> nodes 
+     *     are not equal
+     */
     public static void assertEquals(
       String message, Comment expected, Comment actual) {
         
@@ -315,17 +493,64 @@ public class XOMTestCase extends TestCase {
     }
     
     
+    /**
+     * <p>
+     * Asserts that two comment nodes are equal. Comemnt nodes are considered
+     * equal if they are identical char by char, or if both are null. 
+     * Unicode and whitespace normalization is not performed before 
+     * comparison. If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown.
+     * </p>
+     * 
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the <code>Comment</code> nodes 
+     *     are not equal
+     */
     public static void assertEquals(Comment expected, Comment actual) {
         assertEquals(null, expected, actual);
     }
     
     
-    public static void assertEquals(ProcessingInstruction instruction1, 
-      ProcessingInstruction instruction2) {
-        assertEquals(null, instruction1, instruction2);
+    /**
+     * <p>
+     * Asserts that two processing instruction nodes are equal.
+     * Processing instruction nodes are considered
+     * equal if they have the same target and the same value. 
+     * If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown.
+     * </p>
+     * 
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the 
+     *     <code>ProcessingInstruction</code> nodes are not equal
+     */
+    public static void assertEquals(ProcessingInstruction expected, 
+      ProcessingInstruction actual) {
+        assertEquals(null, expected, actual);
     }
     
     
+    /**
+     * <p>
+     * Asserts that two processing instruction nodes are equal.
+     * Processing instruction nodes are considered
+     * equal if they have the same target and the same value. 
+     * If the two nodes are not equal a
+     * <code>ComparisonFailure</code> is thrown with the given 
+     * message.
+     * </p>
+     * 
+     * @param message printed if the nodes are not equal
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     *
+     * @throws ComparisonException if the 
+     *     <code>ProcessingInstruction</code> nodes are not equal
+     */
     public static void assertEquals(String message, 
       ProcessingInstruction expected, 
       ProcessingInstruction actual) {
@@ -339,11 +564,44 @@ public class XOMTestCase extends TestCase {
     }
 
     
+    /**
+     * <p>
+     * Asserts that two nodes are equal. If the two nodes are not 
+     * equal a <code>ComparisonFailure</code> is thrown. 
+     * The subclass is not considered. The basic XOM class
+     * is considered, but the subclass is not. For example,
+     * a <code>Text</code> object can be equal to an object that
+     * is an <code>HTMLText</code>, but it can never be equal to
+     * a <code>Comment</code>.
+     * </p>
+     * 
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     * 
+     * @throws ComparisonException if the nodes are not equal
+     */
     public static void assertEquals(Node expected, Node actual) {
         assertEquals(null, expected, actual);
     }
     
     
+    /**
+     * <p>
+     * Asserts that two nodes are equal. If the two nodes are not 
+     * equal a <code>ComparisonFailure</code> is thrown with the given 
+     * message. The subclass is not considered. The basic XOM class
+     * is considered, but the subclass is not. For example,
+     * a <code>Text</code> object can be equal to an object that
+     * is an <code>HTMLText</code>, but it can never be equal to
+     * a <code>Comment</code>.
+     * </p>
+     * 
+     * @param message printed if the nodes are not equal
+     * @param expected the node the test should producee
+     * @param actual the node the test does produce
+     * 
+     * @throws ComparisonException if the nodes are not equal
+     */
     public static void assertEquals(
       String message, Node expected, Node actual) {
         
