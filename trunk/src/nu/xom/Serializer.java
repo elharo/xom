@@ -34,9 +34,9 @@ import java.util.Locale;
  *  Outputs a <code>Document</code> object in a specific encoding using
  *  various options for controlling white space, normalization,
  *  indenting, line breaking, and base URIs. However, in general these 
- *  do affect the document's infoset. In particular, if you set either 
- *  the maximum line length or the indent size to a positive value, 
- *  then the serializer will not respect input white space. It 
+ *  options do affect the document's infoset. In particular, if you set 
+ *  either the maximum line length or the indent size to a positive  
+ *  value, then the serializer will not respect input white space. It 
  *  may trim leading and trailing space, condense runs of white 
  *  space to a single space, convert carriage  returns and line 
  *  feeds to spaces, add extra space where none was present before, 
