@@ -199,27 +199,39 @@ public class Element extends ParentNode {
         ParentNode resultParent = resultElement;
         Node sourceCurrent = sourceElement;
         int index = 0;
-        boolean end = false; // true if processing the element for the 2nd time; i.e. the element's end-tag
+        int[] indexes = new int[10];
+        int top = 0;
+        indexes[0] = 0;
+        
+        // true if processing the element for the 2nd time; i.e. the element's end-tag
+        boolean endTag = false; 
+        
         while (true) {
-            if (!end && sourceCurrent.getChildCount() > 0) {
+            if (!endTag && sourceCurrent.getChildCount() > 0) {
                sourceCurrent = sourceCurrent.getChild(0);
                index = 0;
+               index = 0;
+               top++;
+               indexes = grow(indexes, top);
+               indexes[top] = 0;
             }
             else {
-                end = false;
+                endTag = false;
                 ParentNode sourceParent = sourceCurrent.getParent(); 
                 if (sourceParent == originalParent) break; // copying a single empty element
                 else if (sourceParent.getChildCount() - 1 == index) {
                     sourceCurrent = sourceParent; 
+                    top--;
                     if (sourceCurrent == sourceElement) break;
                     // switch parent up
                     resultParent = (Element) resultParent.getParent();
-                    index = sourceCurrent.getParent().indexOf(sourceCurrent);
-                    end = true;
+                    index = indexes[top];
+                    endTag = true;
                     continue;
                 }
                 else {
                     index++;
+                    indexes[top] = index;
                     sourceCurrent = sourceParent.getChild(index); 
                 }
             }
@@ -239,6 +251,16 @@ public class Element extends ParentNode {
         }
         
         return resultElement;  
+        
+    }
+
+
+    private static int[] grow(int[] indexes, int top) {
+        
+        if (top < indexes.length) return indexes;
+        int[] result = new int[indexes.length*2];
+        System.arraycopy(indexes, 0, result, 0, indexes.length);
+        return result;
         
     }
 
@@ -1171,12 +1193,12 @@ public class Element extends ParentNode {
      * </p>
      * 
      * <p>
-     *   If the namespaces on the element change for any reason 
-     *  (adding or removing an attribute in a namespace, adding 
-     *   or removing a namespace declaration, changing the prefix 
-     *   of an element, etc.) then then this method may skip or 
-     *   repeat prefixes. Don't change the prefixes of an element  
-     *   while iterating across them. 
+     * If the namespaces on the element change for any reason 
+     * (adding or removing an attribute in a namespace, adding 
+     * or removing a namespace declaration, changing the prefix 
+     * of an element, etc.) then then this method may skip or 
+     * repeat prefixes. Don't change the prefixes of an element  
+     * while iterating across them. 
      * </p>
      * 
      * @param index the prefix to return
