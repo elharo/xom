@@ -21,6 +21,13 @@
 
 package nu.xom;
 
+import java.util.List;
+import java.util.Map;
+
+import org.jaxen.JaxenException;
+import org.jaxen.NamespaceContext;
+import org.jaxen.XPath;
+
 /**
  *
  * <p>
@@ -47,7 +54,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public abstract class Node {
@@ -306,6 +313,80 @@ public abstract class Node {
      */
     public final int hashCode() {
         return super.hashCode();    
+    }
+    
+    
+    /**
+     * <p>
+     * ????. This node is the context node.
+     * </p>
+     * 
+     * <p>
+     * No variables are bound. 
+     * </p>
+     * 
+     * @param xpath the XPath location path to search for
+     * @param namespaces a collection of namespace prefix bindings used in the 
+     *     XPath expression
+     * 
+     * @return a list of all matched nodes; possibly empty
+     */
+    public Nodes query(String xpath, Map namespaces) {
+        
+        try {
+            XPath xp = new JaxenConnector(xpath);
+            xp.setNamespaceContext(new MapNamespaceContext(namespaces));
+            List results = xp.selectNodes(this);
+            return new Nodes(results);
+        }
+        catch (JaxenException ex) {
+            throw new XPathException("XPath error???? " + ex.getMessage(), ex);
+        }
+        
+    }
+
+    
+    /**
+     * <p>
+     * ????. This node is the context node.
+     * </p>
+     * 
+     * <p>
+     * No variables are bound. No namespace prefixes are bound.
+     * </p>
+     * 
+     * @param xpath the XPath location path to search for
+     * 
+     * @return a list of all matched nodes; possibly empty
+     * @throws XPathException if the query is syntactically incorrect
+     */
+    public Nodes query(String xpath) {
+        
+        try {
+            XPath xp = new JaxenConnector(xpath);
+            List results = xp.selectNodes(this);
+            return new Nodes(results);
+        }
+        catch (JaxenException ex) {
+            throw new XPathException("XPath error???? " + ex.getMessage(), ex);
+        }
+        
+    }
+    
+    
+    private static class MapNamespaceContext implements NamespaceContext {
+
+        private Map context;
+        
+        MapNamespaceContext(Map context) {
+            this.context = context;
+        }
+        
+        
+        public String translateNamespacePrefixToUri(String prefix) {
+            return (String) context.get(prefix);
+        }
+        
     }
 
     

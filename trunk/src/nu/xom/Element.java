@@ -55,7 +55,7 @@ public class Element extends ParentNode {
     private String prefix;
     private String URI;
 
-    private ArrayList  attributes = null;
+            ArrayList  attributes = null;
     private Namespaces namespaces = null;
 
     /**

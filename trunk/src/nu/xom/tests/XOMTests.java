@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,7 +33,7 @@ import junit.framework.TestSuite;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public class XOMTests extends TestCase {
@@ -46,6 +46,7 @@ public class XOMTests extends TestCase {
     
     public static Test suite() {
         TestSuite result = new TestSuite();
+        result.addTest(new TestSuite(XPathTest.class));
         result.addTest(new TestSuite(VerifierTest.class));
         result.addTest(new TestSuite(SubclassTest.class));
         result.addTest(new TestSuite(NodeFactoryTest.class));
