@@ -417,13 +417,18 @@ public abstract class Node {
             return new Nodes(results);
         }
         catch (XPathException ex) {
+            ex.setXPath(xpath);
             throw ex;
         }
         catch (JaxenException ex) {
-            throw new XPathException("XPath error: " + ex.getMessage(), ex);
+            XPathException xpe = new XPathException("XPath error: " + ex.getMessage(), ex);
+            xpe.setXPath(xpath);
+            throw xpe;
         }
         catch (RuntimeException ex) {
-            throw new XPathException("XPath error: " + ex.getMessage(), ex);
+            XPathException xpe = new XPathException("XPath error: " + ex.getMessage(), ex);
+            xpe.setXPath(xpath);
+            throw xpe;
         }
         finally {
             if (frag != null) frag.removeChild(0);

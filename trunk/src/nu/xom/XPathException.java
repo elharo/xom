@@ -20,7 +20,15 @@
 */
 package nu.xom;
 
-
+/**
+ * <p>
+ * Indicates problems with XPath syntax or evaluation.
+ * </p>
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.1d2
+ * 
+ */
 public class XPathException extends RuntimeException {
     
     
@@ -28,11 +36,28 @@ public class XPathException extends RuntimeException {
     private Throwable cause;
 
     
+    /**
+     * <p>
+     * Creates a new <code>XPathException</code> 
+     * with a detail message.
+     * </p>
+     * 
+     * @param message a string indicating the specific problem
+     */
     public XPathException(String message) {
         super(message);
     }
 
 
+    /**
+     * <p>
+     * Creates a new <code>IllegalNameException</code> 
+     * with a detail message and an underlying root cause.
+     * </p>
+     * 
+     * @param message a string indicating the specific problem
+     * @param cause the original cause of this exception
+     */
     public XPathException(String message, Throwable cause) {
         super(message);
         this.initCause(cause);
@@ -92,6 +117,30 @@ public class XPathException extends RuntimeException {
         
     }
     
-// XXX add setXPath
+    
+    /**
+     * <p>
+     * Sets the specific XPath expression that caused this exception.
+     * </p>
+     * 
+     * @param expression the XPath expression that caused the exception
+     */
+    void setXPath(String expression) {
+        this.expression = expression;
+    }
+    
+    
+    /**
+     * <p>
+     * Returns the specific XPath expression being evaluated when this
+     * excepiton was thrown.
+     * </p>
+     * 
+     * @return the XPath expression that caused the exception
+     */
+    public String getXPath() {
+        return this.expression;
+    }
+    
     
 }
