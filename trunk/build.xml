@@ -31,7 +31,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.1a1"/>
+    <property name="version" value="1.1a2"/>
     <property name="year"    value="2005"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -194,6 +194,7 @@ XOM Build file
        <classpath refid="compile.class.path"/>
     </javac>
     <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
+    <copy file="${build.src}/nu/xom/comp.xml" tofile="${build.dest}/nu/xom/comp.xml"/>
     <!-- This file requires Java 1.5 to generate so we compile it with a 
          different target and copy it over here. -->
     <copy file="classes15/nu/xom/JDK15XML1_0Parser.class" tofile="${build.dest}/nu/xom/JDK15XML1_0Parser.class"/>
