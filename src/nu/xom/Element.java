@@ -1145,7 +1145,7 @@ public class Element extends ParentNode {
      */
     public final int getNamespaceDeclarationCount() {
         
-        // This seems to be a HotSpot for DOM conversion.
+        // This seems to be a hot spot for DOM conversion.
         // I'm trying to avoid the overhead of creating and adding
         // to a HasSet for the simplest case of an element, none 
         // of whose attributes are in namespaces, and which has no
@@ -1159,7 +1159,8 @@ public class Element extends ParentNode {
         } 
         if ("xml".equals(prefix)) allPrefixes = new HashSet();
         // add attribute prefixes
-        for (int i = 0; i < getAttributeCount(); i++) {
+        int count = getAttributeCount();
+        for (int i = 0; i < count; i++) {
             Attribute att = getAttribute(i);
             String attPrefix = att.getNamespacePrefix();
             if (attPrefix.length() != 0 && !"xml".equals(attPrefix)) {
@@ -1384,20 +1385,26 @@ public class Element extends ParentNode {
      */
     public final String toXML() {
         
-        StringBuffer result = new StringBuffer();
+        StringBuffer result = new StringBuffer(1024);
         Node current = this;
-        boolean end = false;
+        boolean endTag = false;
         int index = -1;
+        int[] indexes = new int[10];
+        int top = 0;
+        indexes[0] = -1;
         
         while (true) {
             
-            if (!end && current.getChildCount() > 0) {
+            if (!endTag && current.getChildCount() > 0) {
                writeStartTag((Element) current, result);
                current = current.getChild(0);
                index = 0;
+               top++;
+               indexes = grow(indexes, top);
+               indexes[top] = 0;
             }
             else {
-              if (end) {
+              if (endTag) {
                  writeEndTag((Element) current, result);
                  if (current == this) break;
               }
@@ -1408,18 +1415,20 @@ public class Element extends ParentNode {
               else {
                   result.append(current.toXML());
               }
-              end = false;
+              endTag = false;
               ParentNode parent = current.getParent();
               if (parent.getChildCount() - 1 == index) {
                 current = parent;
+                top--;
                 if (current != this) {
                     parent = current.getParent();
-                    index = parent.indexOf(current);
+                    index = indexes[top];
                 }
-                end = true;
+                endTag = true;
               }
               else {
                  index++;
+                 indexes[top] = index;
                  current = parent.getChild(index);
               }
               
