@@ -362,18 +362,27 @@ public class XOMTestCase extends TestCase {
             );                      
         }
         
-        if (expected.getChildCount() != actual.getChildCount()) {
-           Element expectedCopy = combineTextNodes(expected);
-           Element actualCopy = combineTextNodes(actual);
-           compareChildren(message, expectedCopy, actualCopy);
-        }
-        else {
-            compareChildren(message, expected, actual);
-        }
+        if (hasAdjacentTextNodes(expected)) expected = combineTextNodes(expected);
+        if (hasAdjacentTextNodes(actual)) actual = combineTextNodes(actual);
+        compareChildren(message, expected, actual);
 
     }
     
     
+    private static boolean hasAdjacentTextNodes(Element element) {
+
+        boolean previousWasText = false;
+        for (int i = 0; i < element.getChildCount(); i++) {
+            Node child = element.getChild(i);
+            if (child instanceof Text) {
+                if (previousWasText) return true;
+                else previousWasText = true;
+            }
+        }
+        return false;
+        
+    }
+
     private static void compareChildren(String message, Element expected, Element actual) {
 
         assertEquals(message,
