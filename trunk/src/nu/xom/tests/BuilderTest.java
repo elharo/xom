@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -227,24 +227,26 @@ public class BuilderTest extends XOMTestCase {
         }
     }
     
+    
     // verify that XML 1.2 is not supported
     public void testXML12() throws IOException {
         String data = "<?xml version='1.2'?><root/>";
         try {
             builder.build(data, "http://www.example.com");
-            fail("XML 1.1 allowed");
+            fail("XML 1.2 allowed");
         }
         catch (ParsingException ex) {
             assertNotNull(ex.getMessage());   
         }
     }
     
+    
     // verify that XML 2.0 is not supported
     public void testXML20() throws IOException {
         String data = "<?xml version='2.0'?><root/>";
         try {
             builder.build(data, "http://www.example.com");
-            fail("XML 1.1 allowed");
+            fail("XML 2.0 allowed");
         }
         catch (ParsingException ex) {
             assertNotNull(ex.getMessage());   
@@ -597,7 +599,9 @@ public class BuilderTest extends XOMTestCase {
         }
         // This document generates a warning due to the duplicate
         // attribute declaration
-        xerces.setFeature("http://apache.org/xml/features/validation/warn-on-duplicate-attdef", true);
+        xerces.setFeature(
+          "http://apache.org/xml/features/validation/warn-on-duplicate-attdef", 
+          true);
         Builder builder = new Builder(xerces, true);
         Document document = builder.build("<!DOCTYPE root [" +
                 "<!ELEMENT root ANY>" +
@@ -991,9 +995,7 @@ public class BuilderTest extends XOMTestCase {
         assertTrue(internalSubset.indexOf("image/jpeg\">") > 0);
     }
     
-    // Do I need tests with PUBLIC IDs for these????
-    
-    
+
     // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
     // and possibly other parsers. I've reported the bug in Xerces,
     // and it is fixed in Xerces 2.6.
