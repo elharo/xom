@@ -965,14 +965,14 @@ public class Builder {
                             }
                             catch (IndexOutOfBoundsException ex) {
                                 // file name contains a high half and not a low half
-                                url = new StringBuffer();
+                                url.setLength(0);
                                 break;
                             }
                         }
                         else {
                             // low half not preceded by high half
                             // Can't create a base URI
-                            url = new StringBuffer();
+                            url.setLength(0);
                             break;
                         }
                 }
