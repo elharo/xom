@@ -214,7 +214,7 @@ public class CanonicalizerTest extends XOMTestCase {
     }   
     
     
-    public void testNamesdAlgorithmWithoutComments() 
+    public void testNamedAlgorithmWithoutComments() 
       throws ParsingException, IOException {
       
         File tests = input;
@@ -269,6 +269,31 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc, "/*/child312", null);
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
+    public void testXMLNamespaceAttributeNotInheritedWithExclusiveCanonicalization() 
+      throws IOException {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        root.addAttribute(new Attribute("xml:id", Namespace.XML_NAMESPACE, "p1"));
+        root.appendChild(new Element("child312"));
+        
+        String expected = "<child312></child312>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false, true);
             serializer.write(doc, "/*/child312", null);
         }
         finally {

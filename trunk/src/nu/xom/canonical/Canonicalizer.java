@@ -509,7 +509,7 @@ public class Canonicalizer {
     
             Map nearest = new TreeMap();
             // add in any inherited xml: attributes 
-            if (nodes != null && indexOf(element) != -1) {
+            if (!exclusive && nodes != null && indexOf(element) != -1) {
                 // grab all xml: attributes
                 Nodes attributes = element.query("ancestor::*/@xml:*", xmlcontext);
                 if (attributes.size() != 0) {
