@@ -61,11 +61,27 @@ public class UnavailableCharacterException extends XMLException {
     }
 
     
+    /**
+     * <p>
+     * Returns the character which could not be written
+     * in the current encoding.
+     * </p>
+
+     * @return the character which caused the exception
+     */
     public char getCharacter() {
         return this.unavailableCharacter;
     }
     
     
+    /**
+     * <p>
+     * Returns the encoding that does not support the character.
+     * </p>
+     *
+     * @return the encoding used by the serializer when the exception
+     *    was thrown
+     */
     public String getEncoding() {
         return this.encoding;
     }
