@@ -893,7 +893,7 @@ public class Element extends ParentNode {
                 throw new CycleException(
                   "Cannot add a node to itself");  
             }
-            else if (child.getChildCount() > 0 && isAncestor(this, child)) {
+            else if (child.getChildCount() > 0 && isCycle(child, this)) {
                 throw new CycleException(
                   "Cannot add an ancestor as a child");                   
             }
@@ -912,10 +912,14 @@ public class Element extends ParentNode {
     }
     
     
-    private static boolean isAncestor(Node parent, Node child) {       
-        if (child == parent) return true;
-        if (parent == null) return false;
-        else return isAncestor(parent.getParent(), child);
+    private static boolean isCycle(Node child, ParentNode parent) {       
+        
+        while (parent != null) {
+            if (parent == child) return true;
+            parent = parent.getParent();
+        }
+        return false;
+        
     }
 
     
