@@ -26,14 +26,12 @@ package nu.xom;
 /**
  * <p>
  *  An <code>IllegalAddException</code> indicates an attempt to
- *  add a node in a wrong place; for instance adding
- *  any child to a <code>Text</code> node or adding a 
- *  <code>Text</code> node to
- *  a <code>Document</code> object.
+ *  add a node in a wrong place; for instance adding a 
+ *  <code>Text</code> node to a <code>Document</code> object.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a3
  *
  */
 
@@ -51,6 +49,7 @@ public class IllegalAddException extends WellformednessException {
         super(message);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>IllegalAddException</code> with a detail message
