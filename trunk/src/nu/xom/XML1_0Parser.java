@@ -20,7 +20,7 @@
 // subject line. The XOM home page is temporarily located at
 // http://www.cafeconleche.org/XOM/  but will eventually move
 // to http://www.xom.nu/
-package nu.xom.xerces;
+package nu.xom;
 
 import org.apache.xerces.parsers.SAXParser;
 import org.apache.xerces.parsers.DTDConfiguration;
@@ -46,12 +46,12 @@ import org.apache.xerces.parsers.DTDConfiguration;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  * 
  */
-public class XML1_0Parser extends SAXParser {
+class XML1_0Parser extends SAXParser {
 
-    public XML1_0Parser() {
+    XML1_0Parser() {
         super(new DTDConfiguration());
     }
 
