@@ -66,9 +66,6 @@ class XSLTHandler
     private Map         prefixes; // In scope right now
     
     XSLTHandler(NodeFactory factory) {
-        if (factory == null) {
-            throw new NullPointerException("Factory cannot be null");
-        }
         this.factory = factory; 
         result = new Nodes();
         parents = new Stack();
