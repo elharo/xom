@@ -671,7 +671,7 @@ public class Builder {
                         url.append(c);
                         break;
                     case '%':  
-                        url.append(c);
+                        url.append("%25");
                         break;
                     case '&':  
                         url.append(c);
