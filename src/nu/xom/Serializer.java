@@ -47,7 +47,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  * 
  */
 public class Serializer {
@@ -117,14 +117,12 @@ public class Serializer {
      *   <li>IBM037 (a.k.a. CP037, EBCDIC-CP-US, EBCDIC-CP-CA, 
      *         EBCDIC-CP-WA, EBCDIC-CP-NL, and CSIBM037)</li>
      *   <li>GB18030</li>
-     *   <li>Big5</li>
-     *   <li>EUC-JP</li>
      * </ul>
      * 
      * <p>
-     *   You can use encodings not in this list if the virtual
-     *   machine supports them. However, they are likely to be
-     *   significntly slower than the encodings in this list 
+     * You can use encodings not in this list if the virtual
+     * machine supports them. However, they are likely to be
+     * significntly slower than the encodings in this list 
      * </p>
      * 
      * <p>
