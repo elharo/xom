@@ -22,11 +22,13 @@
 // to http://www.xom.nu/
 package nu.xom.tests;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.UnknownHostException;
 import java.util.MissingResourceException;
 
@@ -90,6 +92,20 @@ public class XSLTransformTest extends XOMTestCase {
      + "</test>\r\n"
      + "<!--epilog-->";
     
+    
+    // This class tests a lot error conditions, which
+    // Xalan annoyingly logs to System.err. This hides System.err 
+    // before each test and restores it after each test.
+    private PrintStream systemErr = System.err;
+    
+    protected void setUp() {
+        System.setErr(new PrintStream(new ByteArrayOutputStream()));
+    }
+    
+    
+    protected void tearDown() {
+        System.setErr(systemErr);
+    }
     
     // primarily this makes sure the XSLTHandler can handle various
     // edge cases
