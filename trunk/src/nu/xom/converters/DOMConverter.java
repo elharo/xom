@@ -58,7 +58,7 @@ import org.w3c.dom.NodeList;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0b3
  *
  */
 public class DOMConverter {
@@ -501,11 +501,18 @@ public class DOMConverter {
         int index = 0;
         boolean end = false;
         while (true) {
+            
+            String debug = "no";
+            if (xomCurrent instanceof Element) {
+                debug = ((Element) xomCurrent).getLocalName();
+            }
+            
             if (!end && xomCurrent.getChildCount() > 0) {
                xomCurrent = xomCurrent.getChild(0);
                index = 0;
             }
             else {
+                boolean wasEnd = end;
                 end = false;
                 ParentNode xomParent = xomCurrent.getParent();
                 if (xomParent.getChildCount() - 1 == index) {
@@ -520,23 +527,37 @@ public class DOMConverter {
                 else {
                     index++;
                     xomCurrent = xomParent.getChild(index);
+                    if (wasEnd 
+                      && domParent.getParentNode().getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+                        domParent = (org.w3c.dom.Element) domParent.getParentNode();
+                    }
                 }
             }
             
             if (xomCurrent instanceof Element) {
-                org.w3c.dom.Element child = makeElement((Element) xomCurrent, document);
+                Element currentElement = (Element) xomCurrent;
+                org.w3c.dom.Element child = makeElement(currentElement, document);
                 domParent.appendChild(child); 
                 domParent = child;
+                /* if (currentElement.getChildCount() == 0 && isLast(currentElement)) {
+                    domParent = (org.w3c.dom.Element) domParent.getParentNode();
+                } */
             }
             else {
                 org.w3c.dom.Node child = convert(xomCurrent, document);
                 domParent.appendChild(child);
             }
             
-        }
+        } // end while
         
         return domResult;  
         
+    }
+
+
+    private static boolean isLast(Element currentElement) {
+        ParentNode parent = currentElement.getParent();
+        return parent.indexOf(currentElement) == parent.getChildCount()-1;
     }
 
 
