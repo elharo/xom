@@ -1,7 +1,0 @@
-<simple>
-<test xmlns:xinclude="http://www.w3.org/2001/XInclude">
-  This test is just covering some branches in the unit test
-  suite to increase Clover coverage numbers
-  <xinclude:include href="\%5D^_`.txt" parse="text"/>
-</test>
-</simple>
