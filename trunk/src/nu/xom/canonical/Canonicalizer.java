@@ -897,8 +897,8 @@ public class Canonicalizer {
      * </code></pre>
      * 
      * <p>
-     * Children are not output unless they are also included in the 
-     * list. Including an element in the list does not automatically  
+     * Children are not output unless the subset also includes them.
+     * Including an element in the subset does not automatically  
      * select all the element's children, attributes, and namespaces. 
      * Furthermore, not selecting an element does not imply that its 
      * children, namespaces, attributes will not be output. 
@@ -919,17 +919,18 @@ public class Canonicalizer {
     /**
      * <p>
      * Serializes a document subset onto the output stream using the 
-     * canonical XML algorithm. All nodes in the list must come from 
+     * canonical XML algorithm. All nodes in the subset must come from
      * same document. Furthermore, they must come from a document.
      * They cannot be detached. 
      * </p>
      * 
      * <p>
      * Children are not output unless they are also included in the 
-     * list. Including an element in the list does not automatically  
-     * select all the element's children, attributes, and namespaces. 
-     * Furthermore, not selecting an element does not imply that its 
-     * children, namespaces, attributes will not be output. 
+     * subset. Including an element in the subset does not 
+     * automatically select all the element's children, attributes,  
+     * and namespaces. Furthermore, not selecting an element does  
+     * not imply that its children, namespaces, attributes will not 
+     * be output. 
      * </p>
      * 
      * @param documentSubset the nodes to serialize
