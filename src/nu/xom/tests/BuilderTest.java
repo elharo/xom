@@ -36,6 +36,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UTFDataFormatException;
 import java.io.Writer;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -2623,7 +2625,7 @@ public class BuilderTest extends XOMTestCase {
         Builder builder = new Builder(parser);
         
         try {
-            // known bug in Saxon: doesn't catch 
+            // known bug in Saxon; doesn't catch 
             // colon in processing instruction targets
             builder.build("<?test:data ?><data/>", null);
             fail("Didn't verify Saxon's input");
@@ -2679,7 +2681,7 @@ public class BuilderTest extends XOMTestCase {
         Builder builder = new Builder(parser);
         
         try {
-            // known bug in AElfred: doesn't catch 
+            // known bug in GNUJAXP: doesn't catch 
             // colon in processing instruction targets
             builder.build("<?test:data ?><data/>", null);
             fail("Didn't verify GNU JAXP's input");
@@ -2689,6 +2691,34 @@ public class BuilderTest extends XOMTestCase {
         }
         
     }
+   
+   
+   public void testCatalogOnTopOfTrustedParserIsTrusted() throws  
+     NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+       
+        try {
+            XMLReader parser = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl"
+            );
+        
+            Class filter = Class.forName("org.apache.xml.resolver.tools.ResolvingXMLFilter");
+            Class[] types = {XMLReader.class};
+            Constructor constructor = filter.getConstructor(types);
+            Object[] args = {parser};
+            XMLReader reader = (XMLReader) constructor.newInstance(args);
+            Builder builder = new Builder(reader);
+            // If the factory is a nonverifying factory, then 
+            // getNodeFactory() won't return it.
+            assertNull(builder.getNodeFactory());
+        }
+        catch (ClassNotFoundException ex) {
+            // Can't test is we can't find the class
+        }
+        catch (SAXException ex) {
+            // Need a trusted parser to test this
+        }
+
+   }
     
     
 }
