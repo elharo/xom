@@ -23,6 +23,7 @@
 
 package nu.xom.tests;
 
+import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.MisplacedFallbackException;
 import nu.xom.xinclude.MissingHrefException;
 import nu.xom.xinclude.XIncludeException;
@@ -125,6 +126,12 @@ public class XIncludeExceptionTest extends XOMTestCase {
     public void testMisplacedFallbackException() {
         String message = "message";
         Exception ex = new MisplacedFallbackException(message);
+        assertEquals(message, ex.getMessage());
+    }
+
+    public void testBadParseAttributeException() {
+        String message = "message";
+        Exception ex = new BadParseAttributeException(message);
         assertEquals(message, ex.getMessage());
     }
 
