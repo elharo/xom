@@ -2057,6 +2057,23 @@ public class XIncludeTest extends XOMTestCase {
     }
     
  
+    // This also tests that the base URI applied to an element is as set by the xml:base
+    // attribute, not the document.
+    public void testFragmentIDsAreRemovedFromElementBaseURIsAfterInclusion() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/basewithfragmentid.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        System.out.println(result.toXML());
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/basewithfragmentid.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
     public void testLineEnds() 
       throws ParsingException, IOException, XIncludeException {
       
