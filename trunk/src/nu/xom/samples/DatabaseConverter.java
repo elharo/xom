@@ -56,7 +56,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d21
  *
  */
 public class DatabaseConverter {
@@ -135,7 +135,7 @@ public class DatabaseConverter {
             Blob blob = data.getBlob(field);
             return hexEncode(blob.getBinaryStream());
           // String types may contain C0 control characters that are
-          // not legal in XML. How should this be handled????
+          // not legal in XML. If so an exception is thrown.
           case Types.CLOB: 
             Clob clob = data.getClob(field);
             Reader r = clob.getCharacterStream();
