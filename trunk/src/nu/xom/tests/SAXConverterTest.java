@@ -36,7 +36,6 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
-import nu.xom.ValidityException;
 import nu.xom.converters.SAXConverter;
 
 import org.xml.sax.ContentHandler;
@@ -105,6 +104,7 @@ public class SAXConverterTest extends XOMTestCase {
         assertNull(converter.getLexicalHandler()); 
         
     }
+    
     
     private void convertAndCompare(Document doc) 
       throws IOException, SAXException, ParsingException {
@@ -257,6 +257,18 @@ public class SAXConverterTest extends XOMTestCase {
     }
     
     
+    public void testNoPrefixMappingEventsForXMLPrefixOnElement() 
+      throws ParsingException, IOException, SAXException {
+     
+        String data = "<xml:root/>";
+        Document doc = builder.build(data, null);
+        ContentHandler handler = new XMLPrefixTester();
+        SAXConverter converter = new SAXConverter(handler);
+        converter.convert(doc);
+        
+    }
+    
+ 
     private static class XMLPrefixTester extends DefaultHandler {
         
         public void startPrefixMapping(String prefix, String uri) 
@@ -274,5 +286,46 @@ public class SAXConverterTest extends XOMTestCase {
         }
         
     }
+    
+    
+    public void testNoRedundantPrefixMappingEvents() 
+      throws ParsingException, IOException, SAXException {
+     
+        String data = "<root xmlns='http://www.example.org'> <a> <b/> </a> </root>";
+        Document doc = builder.build(data, null);
+        XMLPrefixMapCounter handler = new XMLPrefixMapCounter();
+        SAXConverter converter = new SAXConverter(handler);
+        converter.convert(doc);
+        assertEquals(1, handler.getStarts());
+        assertEquals(1, handler.getEnds());
+        
+    }
+    
+    
+    private static class XMLPrefixMapCounter extends DefaultHandler {
+        
+        private int starts = 0;
+        private int ends = 0;
+        
+        public void startPrefixMapping(String prefix, String uri) 
+          throws SAXException {
+            starts++;
+        }
+        
+        public void endPrefixMapping(String prefix) 
+          throws SAXException {
+            ends++;
+        }
+        
+        int getStarts() {
+            return starts;
+        }
+        
+        int getEnds() {
+            return starts;
+        }
+        
+    }
+ 
     
 }
