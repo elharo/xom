@@ -119,6 +119,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals((byte) 0, data[1]);
     }   
     
+    
     /**
      * <p>
      *   Check that the UTF-16 encoding outputs a byte-order mark.
@@ -140,6 +141,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals((byte) 0, data[2]);
         assertEquals('<', (char) data[3]);     
     }
+    
     
     /**
      * <p>
@@ -226,6 +228,7 @@ public class SerializerTest extends XOMTestCase {
            result);            
     }
 
+    
     public void testXMLSpaceUnspecifiedValueWithIndenting() 
       throws IOException {
         Element root = new Element("test");
@@ -271,6 +274,7 @@ public class SerializerTest extends XOMTestCase {
            result);                       
     }
 
+    
     public void testXMLSpaceDefaultWithIndentingAndGrandchildren() 
       throws IOException {
         Element root = new Element("test");
@@ -323,6 +327,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(-1, result.indexOf("xmlns="));
     }
     
+    
     public void testDefaultNamespace() throws IOException {        
         Element root = new Element("root", "http://www.example.com");
         Document doc = new Document(root);
@@ -333,6 +338,7 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.indexOf("xmlns=") > 1);
         assertTrue(result.indexOf("http://www.example.com") > 1);
     }
+    
     
     public void testEmptyElement() throws IOException {        
         Element root = new Element("root");
@@ -346,6 +352,7 @@ public class SerializerTest extends XOMTestCase {
           result
         );
     }
+    
     
     public void testElementWithText() throws IOException {        
         Element root = new Element("root");
@@ -362,6 +369,7 @@ public class SerializerTest extends XOMTestCase {
           + data + "</root>\r\n",
           result);    
     }    
+    
     
     public void testStaticElementWithText() 
       throws IOException {        
@@ -380,6 +388,7 @@ public class SerializerTest extends XOMTestCase {
           result);    
     }    
     
+    
     public void testElementWithTextAndCarriageReturns() 
       throws IOException {        
         Element root = new Element("root");
@@ -397,6 +406,7 @@ public class SerializerTest extends XOMTestCase {
           + "</root>\r\n",
           result);    
     }    
+    
     
     private void serializeParseAndCompare(Document doc) 
       throws IOException, ParsingException {
@@ -426,6 +436,7 @@ public class SerializerTest extends XOMTestCase {
         XOMTestCase.assertEquals(doc, resultDoc);    
     }
     
+    
     public void testComment() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -434,6 +445,7 @@ public class SerializerTest extends XOMTestCase {
         Document doc = new Document(root);
         serializeParseAndCompare(doc);     
     }
+    
     
     public void testProcessingInstruction() 
       throws IOException, ParsingException {        
@@ -452,6 +464,7 @@ public class SerializerTest extends XOMTestCase {
         Document doc = new Document(root);
         serializeParseAndCompare(doc);     
     }
+    
     
     public void testAttributes() 
       throws IOException, ParsingException {        
@@ -475,6 +488,7 @@ public class SerializerTest extends XOMTestCase {
         
     }
 
+    
     public void testChildElements() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -513,6 +527,7 @@ public class SerializerTest extends XOMTestCase {
         
     }
 
+    
     public void testPrologAndEpilog() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -578,7 +593,9 @@ public class SerializerTest extends XOMTestCase {
         
     }
     
-    public void testDontChangeLineSeparator() throws IOException {        
+    
+    public void testDontChangeLineSeparator() throws IOException { 
+        
         Element root = new Element("root");
         Document doc = new Document(root);
         String breaks 
@@ -747,6 +764,7 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result, result.indexOf("&#x10000;") > 12);
     }
     
+    
     public void testUpperLimitOfUnicodeInCharacterData() 
       throws IOException {        
         Element root = new Element("root");
@@ -759,6 +777,7 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result, result.indexOf("&#x10FFFD;") > 12);
     }
       
+    
     public void testSerializePlane1CharacterInAttributeValue() 
       throws IOException {        
         Element root = new Element("root");
@@ -794,6 +813,7 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
     }
     
+    
     private static class ColumnSerializer extends Serializer {
      
         ColumnSerializer(OutputStream out) {
@@ -810,6 +830,7 @@ public class SerializerTest extends XOMTestCase {
         
     }
     
+    
     public void testEscapeAttributeValue() throws IOException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\u0110"));
@@ -819,8 +840,7 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
         String result = out.toString("ISO-8859-1");
         assertTrue(result, result.indexOf("&#x110;") > 5);
-    }
-    
+    }   
 
     
     public void testLineFeedInAttributeValueWithDefaultOptions() 
@@ -837,6 +857,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(original, reparsed);
     }
     
+    
     public void testCarriageReturnInAttributeValueWithDefaultOptions()
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -850,6 +871,7 @@ public class SerializerTest extends XOMTestCase {
         Document reparsed = parser.build(in);
         assertEquals(original, reparsed);
     }
+    
     
     public void testCarriageReturnInTextWithDefaultOptions() 
       throws IOException, ParsingException {        
@@ -879,6 +901,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(original, reparsed);
     }
     
+    
     /**
      * <p>
      *   Test that tabs in attribute values are escaped even when
@@ -902,6 +925,7 @@ public class SerializerTest extends XOMTestCase {
         Document reparsed = parser.build(in);
         assertEquals(original, reparsed);
     }
+    
     
     /**
      * <p>
@@ -944,6 +968,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("\r", result);
     }
     
+    
     public void testCRLFInAttributeValueWithLineSeparatorLF() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -976,6 +1001,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("\r\n", result);
     }
 
+    
     public void testNotEscapeLinefeedInTextContent() 
       throws IOException {        
         Element root = new Element("root");
@@ -1010,6 +1036,7 @@ public class SerializerTest extends XOMTestCase {
         // and write a unit test for that too.
     }
     
+    
     public void testCRLFInAttributeValueWithMaxLength() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -1026,6 +1053,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("CRLF unnecessarily escaped", " ", result);
     }
 
+    
     public void testCRInTextValueWithLineSeparator() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -1042,6 +1070,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("\n", result);
     } 
     
+    
     public void testCRLFInTextValueWithLineSeparator() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -1057,6 +1086,7 @@ public class SerializerTest extends XOMTestCase {
         String result = reparsed.getValue();
         assertEquals("test \n test", result);
     } 
+    
     
     public void testCRInTextWithIndenting() 
       throws IOException, ParsingException {        
@@ -1078,6 +1108,7 @@ public class SerializerTest extends XOMTestCase {
         // and write a test case for that; this is not ideal output
     }
     
+    
     public void testCRInTextWithMaxLength() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -1093,6 +1124,7 @@ public class SerializerTest extends XOMTestCase {
         String result = reparsed.getValue();
         assertEquals("Carriage return unnecessarily escaped", "\n", result);
     }
+    
     
     public void testTabInAttributeValueWithMaxLength() 
       throws IOException, ParsingException {        
@@ -1110,6 +1142,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("Tab not normalized to space", " ", result);
     }
 
+    
     /**
      * <p>
      *   Test that tabs in attribute values are escaped when 
@@ -1136,7 +1169,6 @@ public class SerializerTest extends XOMTestCase {
     }
     
 
-    
     public void testSetMaxLength() {
         Serializer serializer = new Serializer(System.out);
         
@@ -1153,6 +1185,7 @@ public class SerializerTest extends XOMTestCase {
         
     }
 
+    
     public void testSetIndent() {
         Serializer serializer = new Serializer(System.out);
         
@@ -1175,6 +1208,7 @@ public class SerializerTest extends XOMTestCase {
         
     }
 
+    
     public void testLineLength() throws IOException {
           
         int length = 40;        
@@ -1201,6 +1235,7 @@ public class SerializerTest extends XOMTestCase {
         }
     }
 
+    
     public void testLineLengthWithSetOutputStream() 
       throws IOException {
           
@@ -1230,6 +1265,7 @@ public class SerializerTest extends XOMTestCase {
         }
     }   
     
+    
     public void testPrettyXML() throws IOException {
         Element items = new Element("itemSet");
         items.appendChild(new Element("item1"));
@@ -1251,6 +1287,7 @@ public class SerializerTest extends XOMTestCase {
         
     }
 
+    
     public void testIndentAndBreakBeforeComment() throws IOException {
         Element items = new Element("itemSet");
         items.appendChild(new Comment("item1"));
@@ -1270,6 +1307,7 @@ public class SerializerTest extends XOMTestCase {
         );
         
     }
+    
     
     public void testIndentAndBreakBeforeProcessingInstruction() 
       throws IOException {
@@ -1293,7 +1331,6 @@ public class SerializerTest extends XOMTestCase {
     }
     
     
-    
     public void testDontBreakLineInElementWithSimpleContent() throws IOException {
         Element items = new Element("itemSet");
         Element item1 = new Element("item1");
@@ -1315,6 +1352,7 @@ public class SerializerTest extends XOMTestCase {
         );
         
     }
+    
     
     public void testPrettyXMLWithSetOutputStream() throws IOException {
         Element items = new Element("itemSet");
@@ -1340,6 +1378,7 @@ public class SerializerTest extends XOMTestCase {
         
     }
     
+    
     public void testAmpersandAndLessThanInText() throws IOException {
         Element root = new Element("a");
         Document doc = new Document(root);
@@ -1358,6 +1397,7 @@ public class SerializerTest extends XOMTestCase {
         );
     }
 
+    
     public void testAmpersandAndAngleBracketsInAttributeValue() 
       throws IOException {
         Element root = new Element("a");
@@ -1376,6 +1416,7 @@ public class SerializerTest extends XOMTestCase {
         );
     }
     
+    
     public void testSetNFC() {
         Serializer serializer = new Serializer(System.out);
         assertFalse(serializer.getUnicodeNormalizationFormC());
@@ -1383,6 +1424,7 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(serializer.getUnicodeNormalizationFormC());
     }
 
+    
     public void testNFCInElementContent() throws IOException {
         Element root = new Element("a");
         root.appendChild("c\u0327"); // c with combining cedilla
@@ -1401,6 +1443,7 @@ public class SerializerTest extends XOMTestCase {
         );       
     }
 
+    
     public void testNoNFCByDefault() throws IOException {
         Element root = new Element("c\u0327");
         root.appendChild("c\u0327"); // c with combining cedilla
@@ -1417,7 +1460,6 @@ public class SerializerTest extends XOMTestCase {
           result
         );       
     }
-
 
 
     public void testNFCInAttribute() throws IOException {
@@ -1438,6 +1480,7 @@ public class SerializerTest extends XOMTestCase {
         );       
     }
 
+    
     public void testNFCInElementName() throws IOException {
         Element root = new Element("c\u0327"); // c with combining cedilla
         Document doc = new Document(root);
@@ -1455,6 +1498,7 @@ public class SerializerTest extends XOMTestCase {
         );       
     }
 
+    
     public void testNFCInComment() throws IOException {
         Element root = new Element("a"); 
         Document doc = new Document(root);
@@ -1474,6 +1518,7 @@ public class SerializerTest extends XOMTestCase {
         );       
     }
 
+    
     public void testNFCInProcessingInstruction() throws IOException {
         Element root = new Element("a"); 
         Document doc = new Document(root);
@@ -1493,6 +1538,7 @@ public class SerializerTest extends XOMTestCase {
         );       
     }
 
+    
     public void testNFCInElementContentWithNonUnicodeEncoding() 
       throws IOException {
         Element root = new Element("a");
@@ -1512,6 +1558,7 @@ public class SerializerTest extends XOMTestCase {
         );       
     }
 
+    
     public void testNFCWithSetOutputStream() 
       throws IOException {
         Element root = new Element("a");
@@ -1533,6 +1580,7 @@ public class SerializerTest extends XOMTestCase {
         );       
     }
     
+    
     public void testNullOutputStream() {
         try {
             new Serializer(null);
@@ -1543,6 +1591,7 @@ public class SerializerTest extends XOMTestCase {
         }
     }
 
+    
     public void testNullOutputStreamWithEncoding() 
       throws UnsupportedEncodingException {
         try {
@@ -1554,6 +1603,7 @@ public class SerializerTest extends XOMTestCase {
         }
     }
 
+    
     public void testNullEncoding() 
       throws UnsupportedEncodingException {
         try {
@@ -1565,6 +1615,7 @@ public class SerializerTest extends XOMTestCase {
         }
     }
 
+    
     // make sure null pointer exception doesn't cause any output
     public void testNullDocument() 
       throws IOException {
@@ -1582,12 +1633,14 @@ public class SerializerTest extends XOMTestCase {
         
     }
 
+    
     public void testGetEncoding() 
       throws UnsupportedEncodingException {
         Serializer serializer = new Serializer(System.out, "ISO-8859-1");
         assertEquals("ISO-8859-1", serializer.getEncoding());
     }
 
+    
     public void testGetPreserveBaseURI() 
       throws UnsupportedEncodingException {
         Serializer serializer = new Serializer(System.out, "ISO-8859-1");
@@ -1625,6 +1678,7 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.indexOf("<!DOCTYPE b PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"example.dtd\">") > 0);         
     }
 
+    
     public void testSerializeDocTypeWithInternalDTDSubset() 
       throws ParsingException, IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -1640,6 +1694,7 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.indexOf("<!ELEMENT root EMPTY>") > 0);         
     }
 
+    
     public void testSerializeQuoteInAttributeValue() 
       throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -1652,6 +1707,7 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.endsWith("<root name=\"&quot;\"/>\r\n"));  
     }
 
+    
     public void testSerializeUnavailableCharacterInMarkup() 
       throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -1667,6 +1723,7 @@ public class SerializerTest extends XOMTestCase {
         }  
     }
 
+    
     public void testTurnLineFeedInAttributeValueIntoSpaceWhenIndenting() 
       throws IOException {
         Element root = new Element("a");
@@ -1738,6 +1795,7 @@ public class SerializerTest extends XOMTestCase {
         }
        
     }
+    
     
     // just so we can test protected methods
     private static class ExposingSerializer extends Serializer {
@@ -1857,11 +1915,37 @@ public class SerializerTest extends XOMTestCase {
         serializer.flush();
         byte[] data = out.toByteArray();
         String result = new String(data, "UTF-8");
-        System.err.println(result);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
                 "<a><b/></a>\r\n", result);
         
         
+    }
+
+    
+    // This test case reproduces a bug that
+    // showed up while working on SAX conformance testing.
+    public void testElementsThatOnlyContainASingleSpaceShouldNotBeSplitWhileIndenting() 
+      throws IOException {
+        
+        Element root = new Element("a");
+        Element child = new Element("b");
+        child.appendChild(" ");
+        root.appendChild(child);
+        
+        Document doc = new Document(root);
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+           
+        serializer.flush();
+        byte[] data = out.toByteArray();
+        String result = new String(data, "UTF-8");
+        System.err.println(result);
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
+                "<a>\r\n    <b> </b>\r\n</a>\r\n", result);
+
     }
 
     
