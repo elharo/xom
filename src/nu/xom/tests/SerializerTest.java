@@ -56,6 +56,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class SerializerTest extends XOMTestCase {
 
+    
     private Builder parser;
     private final static double version = Double.parseDouble(
       System.getProperty("java.version").substring(0,3)
@@ -74,6 +75,24 @@ public class SerializerTest extends XOMTestCase {
        parser = new Builder();  
     }
     
+    
+    public void testMultipleCombiningCharactersWithNFC() 
+      throws ParsingException, IOException {
+    
+        // LATIN CAPITAL LETTER D WITH DOT BELOW, COMBINING DOT ABOVE
+        String input = "<a>&#x1E0A;&#x0323;</a>";
+        // LATIN CAPITAL LETTER D WITH DOT ABOVE, COMBINING DOT BELOW
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<a>&#x1E0C;&#x0307;</a>\r\n";  
+            
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(output, result);
+            
+    }
     
     public void testCDATASectionEndDelimiter() throws IOException {
 
@@ -1560,7 +1579,8 @@ public class SerializerTest extends XOMTestCase {
         Builder builder = new Builder();
         Document doc = builder.build("data/nfctests.xml");
         Elements tests = doc.getRootElement().getChildElements("test");
-        for (int i = 0; i < tests.size(); i++) {
+        int size = tests.size();
+        for (int i = 0; i < size; i++) {
             System.out.println(i);
             Element test = tests.get(i);
             test.detach();
