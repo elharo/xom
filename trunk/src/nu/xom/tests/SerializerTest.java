@@ -52,7 +52,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b4
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -1677,7 +1677,31 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.endsWith("<test/>\r\n"));
         assertTrue(result.indexOf("<!DOCTYPE root [\r\n") > 0);         
         assertTrue(result.indexOf("\r\n]>\r\n") > 0);         
-        assertTrue(result.indexOf("<!ELEMENT root EMPTY>") > 0);  
+        assertTrue(result.indexOf("<!ELEMENT root EMPTY>\r\n") > 0);  
+        
+    }
+
+    
+    public void testLineBreaksInInternalDTDSubset() 
+      throws ParsingException, IOException {
+        
+        Serializer serializer = new Serializer(out);
+        serializer.setLineSeparator("\r");
+        String data = "<!DOCTYPE root [ <!ELEMENT root EMPTY> <!ELEMENT data EMPTY> ]><test/>";   
+        Builder builder = new Builder();
+        Document doc = builder.build(data, "http://www.example.com");
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertTrue(result.endsWith("<test/>\r"));
+        assertTrue(result.indexOf("<!DOCTYPE root [\r") > 0);         
+        assertTrue(result.indexOf("\r]>\r") > 0);         
+        assertTrue(result.indexOf("<!ELEMENT root EMPTY>\r") > 0);  
+        assertTrue(result.indexOf("<!ELEMENT data EMPTY>\r") > 0);  
+        assertEquals(-1, result.indexOf("<!ELEMENT data EMPTY>\r\n"));  
+        assertEquals(-1, result.indexOf("<!ELEMENT root EMPTY>\r\n"));  
+        assertEquals(-1, result.indexOf("<!ELEMENT data EMPTY>\r\r"));  
+        assertEquals(-1, result.indexOf("<!ELEMENT root EMPTY>\r\r"));  
+        assertEquals(-1, result.indexOf('\n'));  
         
     }
 
