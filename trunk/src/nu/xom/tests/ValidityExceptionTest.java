@@ -23,7 +23,7 @@
 
 package nu.xom.tests;
 
-import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 
 /**
  * <p>
@@ -34,38 +34,33 @@ import nu.xom.ParsingException;
  * @version 1.0d23
  *
  */
-public class ParsingExceptionTest extends XOMTestCase {
+public class ValidityExceptionTest extends XOMTestCase {
     
-    private ParsingException ex;
+    private ValidityException ex;
     private Exception cause;
     private String message = "testing 1-2-3";
     
-    public ParsingExceptionTest(String name) {
+    public ValidityExceptionTest(String name) {
         super(name);
     }
     
     protected void setUp() {
-        ex = new ParsingException("message");
+        ex = new ValidityException("message");
         cause = new Exception();
     }
 
     public void testConstructor() {
-        Exception ex = new ParsingException(message, cause);
+        Exception ex = new ValidityException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
     }
     
     public void testLineAndColumnNumbers() {
-        ParsingException ex = new ParsingException(message, 10, 20);
+        ValidityException ex = new ValidityException(message, 10, 20);
         assertEquals(message, ex.getMessage());
         assertNull(ex.getCause());
         assertEquals(10, ex.getLineNumber()); 
         assertEquals(20, ex.getColumnNumber()); 
-    }
-    
-    public void testToString() {
-        ParsingException ex = new ParsingException(message, 10, 20);
-        assertTrue(ex.toString().endsWith(" at line 10, column 20.")); 
     }
     
     public void testInitCause() {
@@ -95,8 +90,11 @@ public class ParsingExceptionTest extends XOMTestCase {
 
     public void testNullInitCause() {
         
-        ParsingException ex = new ParsingException(null, null);
+        ValidityException ex = new ValidityException(null, null);
         assertNull(ex.getCause());
+        assertNull(ex.getMessage());
+        assertEquals(-1, ex.getLineNumber()); 
+        assertEquals(-1, ex.getColumnNumber()); 
         
         try {
             ex.initCause(new Exception());
@@ -129,7 +127,7 @@ public class ParsingExceptionTest extends XOMTestCase {
     }
 
     public void testGetMessage() {      
-        Exception ex = new ParsingException("testing");
+        Exception ex = new ValidityException("testing");
         assertEquals("testing", ex.getMessage());
     }
 

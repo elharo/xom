@@ -58,28 +58,29 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(ProcessingInstructionTest.class));
         result.addTest(new TestSuite(DocumentTest.class));
         result.addTest(new TestSuite(DocTypeTest.class));
-        result.addTest(new TestSuite(DOMConverterTest.class));
-        result.addTest(new TestSuite(SAXConverterTest.class));
-        result.addTest(new TestSuite(BuilderTest.class));
         result.addTest(new TestSuite(AttributesTest.class));
         result.addTest(new TestSuite(NamespacesTest.class));
-        result.addTest(new TestSuite(BaseURITest.class));
-        result.addTest(new TestSuite(SerializerTest.class));
-        result.addTest(new TestSuite(CanonicalizerTest.class));
-        result.addTest(new TestSuite(XIncludeTest.class));
-        result.addTest(new TestSuite(XSLTransformTest.class));
-        result.addTest(new TestSuite(EncodingTest.class));
-        // EBCDIC test fails due to bugs in the Java class library
-        // result.addTest(new TestSuite(EBCDICTest.class));
-        result.addTest(new TestSuite(RoundTripTest.class));
         // Too slow to run routinely
         // result.addTest(new TestSuite(MegaTest.class));
         result.addTest(new TestSuite(XMLExceptionTest.class));
+        result.addTest(new TestSuite(ValidityExceptionTest.class));
         result.addTest(new TestSuite(ParsingExceptionTest.class));
         result.addTest(new TestSuite(XSLExceptionTest.class));
         result.addTest(new TestSuite(XIncludeExceptionTest.class));
         result.addTest(new TestSuite(CDATASectionTest.class));
         result.addTest(new TestSuite(NodesTest.class));
+        // EBCDIC test fails due to bugs in the Java class library
+        // result.addTest(new TestSuite(EBCDICTest.class));
+        result.addTest(new TestSuite(RoundTripTest.class));
+        result.addTest(new TestSuite(DOMConverterTest.class));
+        result.addTest(new TestSuite(SAXConverterTest.class));
+        result.addTest(new TestSuite(XSLTransformTest.class));
+        result.addTest(new TestSuite(SerializerTest.class));
+        result.addTest(new TestSuite(CanonicalizerTest.class));
+        result.addTest(new TestSuite(BuilderTest.class));
+        result.addTest(new TestSuite(XIncludeTest.class));
+        result.addTest(new TestSuite(BaseURITest.class));
+        result.addTest(new TestSuite(EncodingTest.class));
         return result;
     }
 
