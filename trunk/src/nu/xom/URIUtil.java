@@ -173,7 +173,7 @@ class URIUtil {
 
 
     // really just a struct
-    private static class ParsedURI {
+    static class ParsedURI {
      
         String scheme;
         String schemeSpecificPart;
@@ -194,9 +194,19 @@ class URIUtil {
                 schemeSpecificPart = spec.substring(colon+1);
             }
             else if (question != -1) {
+                if (question < colon) {
+                    MalformedURIException ex = new MalformedURIException("Unparseable URI");
+                    ex.setData(spec);
+                    throw ex;
+                }
                 schemeSpecificPart = spec.substring(colon+1, question);                
             }
             else {
+                if (sharp < colon) {
+                    MalformedURIException ex = new MalformedURIException("Unparseable URI");
+                    ex.setData(spec);
+                    throw ex;
+                }
                 schemeSpecificPart = spec.substring(colon+1, sharp);                
             }
             

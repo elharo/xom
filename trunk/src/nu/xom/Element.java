@@ -47,7 +47,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a2
  *
  */
 public class Element extends ParentNode {
@@ -1193,6 +1193,8 @@ public class Element extends ParentNode {
      * Sets the URI from which this element was loaded,
      * and against which relative URLs in this node will be resolved,
      * unless an <code>xml:base</code> attribute overrides this.
+     * Setting the base URI to null or the empty string removes any
+     * existing base URI.
      * </p>
      * 
      * @param URI the new base URI for this node
@@ -1340,7 +1342,7 @@ public class Element extends ParentNode {
     private boolean legalURI(String base) {
         
         try {
-            Verifier.checkURI(base);
+            Verifier.checkURIReference(base);
             return true;
         }
         catch (MalformedURIException ex) {

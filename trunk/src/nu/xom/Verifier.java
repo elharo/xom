@@ -34,7 +34,7 @@ import java.util.StringTokenizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a2
  * 
  */
 final class Verifier {
@@ -50,6 +50,7 @@ final class Verifier {
     private final static byte[] flags = new byte[65536];
 
     static {
+        
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) loader = Verifier.class.getClassLoader();
         if (loader == null) throw new RuntimeException(
@@ -72,6 +73,7 @@ final class Verifier {
                 // no big deal
             }
         }
+        
     }
     
     
@@ -187,107 +189,448 @@ final class Verifier {
     }
 
     
-    // FIXME This seems to be allowing URIs with fragment IDs.
-    // rename to checkURIReference and provide separate checkURI method
-    // Make sure this is OK everywhere it's used. It's
-    // definitely needed in some places; might need separate
-    // check URI and checkURIReference methods
     /**
      * <p>
      * Checks a string to see if it is a syntactically correct 
-     * RFC 2396/RFC 2732 URI. Both absolute and relative URIs 
-     * are supported.
+     * RFC 2396/RFC 2732 URI reference. Both absolute and relative  
+     * URIs are supported, as are URIs with fragment identifiers.
      * </p>
      * 
      * @param uri <code>String</code> containing the potential URI
      * 
-     * @throws MalformedURIException if this is not a legal URI
+     * @throws MalformedURIException if this is not a 
+     *     legal URI reference
      */
-    static void checkURI(String uri) {
+    static void checkURIReference(String uri) {
         
-        // Are there any loosened rules for fragment
-        // IDs? i.e. can they contain characters that the rest of the URI
-        // can't such as [ and ]? e.g. in XPointer?
-        // Same question for query strings?
-        // FIXME I need to divide URI into base, query, and fragment and check each
-        // separately
         if ((uri == null) || uri.length() == 0) return;
 
-        int leftBrackets = 0;
-        int rightBrackets = 0;
-        
-        int size = uri.length();
-        for (int i = 0; i < size; i++) {
-            int c = uri.charAt(i);
-            if (c >= 0xD800 && c <= 0xDBFF) { 
-                try {
-                    c = decodeSurrogatePair(c, uri.charAt(i+1));
-                    i++; // increment past low surrogate
-                }
-                catch (Exception ex) {
-                    MalformedURIException uriex = 
-                      new MalformedURIException("Bad surrogate pair", ex);
-                    uriex.setData(uri);
-                    throw uriex;
-                }
-            }  // end if 
-            
-            if (!isURICharacter(c)) {
-                throwMalformedURIException(uri, "The character 0x"
-                  + Integer.toHexString(c) + " is not allowed in URIs");                
-            }
-            if (c == '%') { 
-               try {
-                   if (!isHexDigit(uri.charAt(i+1)) || !isHexDigit(uri.charAt(i+2))) {
-                       throwMalformedURIException(uri, 
-                         "Bad percent escape sequence");    
-                   }
-               }
-               catch (StringIndexOutOfBoundsException ex) {
-                   throwMalformedURIException(uri, 
-                    "Bad percent escape sequence");    
-               }
-            }
-            else if (c == '[') {
-                leftBrackets++;  
-                if (rightBrackets >= leftBrackets) {
-                    throwMalformedURIException(uri, 
-                        "Mismatched square brackets"
-                    );                                       
-                } 
-            }
-            else if (c == ']') {
-                rightBrackets++;   
-            }
-        } // end for
-
-        if (leftBrackets != rightBrackets) {
-            throwMalformedURIException(uri, 
-                "Mismatched square brackets"
-            );                   
+        URIUtil.ParsedURI parsed = new URIUtil.ParsedURI(uri);
+        try {
+            if (parsed.scheme != null) checkScheme(parsed.scheme);
+            if (parsed.authority != null) checkAuthority(parsed.authority);
+            checkPath(parsed.path);
+            if (parsed.fragment != null) checkFragment(parsed.fragment);
+            if (parsed.query != null) checkQuery(parsed.query);
         }
-        if (leftBrackets > 1) {
-            throwMalformedURIException(uri, 
-                "Multiple square brackets"
-            );                   
-        }
-        
-        if (leftBrackets == 1) { 
-            // We have exactly one left and one right bracket
-            String ip6Address = uri.substring(
-              uri.indexOf('[')+1, uri.indexOf(']')
-            );
-            try {
-                checkIP6Address(ip6Address);
-            }
-            catch (MalformedURIException ex) {
-                ex.setData(uri);
-                throw ex;
-            }
+        catch (MalformedURIException ex) {
+            ex.setData(uri);
+            throw ex;
         }
         
     }
     
+
+    private static void checkQuery(String query) {
+        
+        for (int i = 0; i < query.length(); i++) {
+            char c = query.charAt(i);
+            if (c == '%') {
+               try {
+                   if (!isHexDigit(query.charAt(i+1)) || !isHexDigit(query.charAt(i+2))) {
+                       throwMalformedURIException(query, 
+                         "Bad percent escape sequence");    
+                   }
+               }
+               catch (StringIndexOutOfBoundsException ex) {
+                   throwMalformedURIException(query, 
+                     "Bad percent escape sequence");                       
+               }
+               i += 2;
+            }
+            else if (!isQueryCharacter(c)) {
+                throw new MalformedURIException(
+                  "Illegal query character " + c
+                );
+            }
+        }
+        
+    }
+
+    
+    // same for fragment ID
+    private static boolean isQueryCharacter(char c) {
+        
+        switch(c) {
+            case '!': return true;
+            case '"': return false;
+            case '#': return false;
+            case '$': return true;
+            case '%': return false; // tested in checkQuery
+            case '&': return true;
+            case '\'': return true;
+            case '(': return true;
+            case ')': return true;
+            case '*': return true;
+            case '+': return true;
+            case ',': return true;
+            case '-': return true;
+            case '.': return true;
+            case '/': return true;
+            case '0': return true;
+            case '1': return true;
+            case '2': return true;
+            case '3': return true;
+            case '4': return true;
+            case '5': return true;
+            case '6': return true;
+            case '7': return true;
+            case '8': return true;
+            case '9': return true;
+            case ':': return false;
+            case ';': return true;
+            case '<': return false;
+            case '=': return true;
+            case '>': return false;
+            case '?': return true;
+            case '@': return true;
+            case 'A': return true;
+            case 'B': return true;
+            case 'C': return true;
+            case 'D': return true;
+            case 'E': return true;
+            case 'F': return true;
+            case 'G': return true;
+            case 'H': return true;
+            case 'I': return true;
+            case 'J': return true;
+            case 'K': return true;
+            case 'L': return true;
+            case 'M': return true;
+            case 'N': return true;
+            case 'O': return true;
+            case 'P': return true;
+            case 'Q': return true;
+            case 'R': return true;
+            case 'S': return true;
+            case 'T': return true;
+            case 'U': return true;
+            case 'V': return true;
+            case 'W': return true;
+            case 'X': return true;
+            case 'Y': return true;
+            case 'Z': return true;
+            case '[': return false;
+            case '\\': return false;
+            case ']': return false;
+            case '^': return false;
+            case '_': return true;
+            case '`': return false;
+            case 'a': return true;
+            case 'b': return true;
+            case 'c': return true;
+            case 'd': return true;
+            case 'e': return true;
+            case 'f': return true;
+            case 'g': return true;
+            case 'h': return true;
+            case 'i': return true;
+            case 'j': return true;
+            case 'k': return true;
+            case 'l': return true;
+            case 'm': return true;
+            case 'n': return true;
+            case 'o': return true;
+            case 'p': return true;
+            case 'q': return true;
+            case 'r': return true;
+            case 's': return true;
+            case 't': return true;
+            case 'u': return true;
+            case 'v': return true;
+            case 'w': return true;
+            case 'x': return true;
+            case 'y': return true;
+            case 'z': return true;
+            case '{': return false;
+            case '|': return false;
+            case '}': return false;
+            case '~': return true;
+        }
+        return false;
+        
+    }
+
+
+    private static void checkFragment(String fragment) {
+        // The BNF for fragments is the same as for query strings
+        checkQuery(fragment);
+    }
+
+    
+    // Besides the legal chaarcters issues, a path must
+    // not contain two consecutive forward slashes
+    private static void checkPath(String path) {
+        
+        for (int i = 0; i < path.length(); i++) {
+            char c = path.charAt(i);
+            if (c == '/') {
+                if (i < path.length()-1) {
+                    if (path.charAt(i+1) == '/') {
+                        throwMalformedURIException(path, 
+                          "Double slash (//) in path");
+                    }
+                }
+            }
+            else if (c == '%') {
+               try {
+                   if (!isHexDigit(path.charAt(i+1)) 
+                     || !isHexDigit(path.charAt(i+2))) {
+                       throwMalformedURIException(path, 
+                         "Bad percent escape sequence");    
+                   }
+               }
+               catch (StringIndexOutOfBoundsException ex) {
+                   throwMalformedURIException(path, 
+                     "Bad percent escape sequence");                       
+               }
+               i += 2;
+            }
+            else if (!isPathCharacter(c)) {
+                throwMalformedURIException(path, 
+                  "Illegal path character " + c
+                );
+            }
+        }
+        
+    }
+
+
+    private static void checkAuthority(String authority) {
+        
+        String userInfo = null;
+        String host = null;
+        String port = null;
+        
+        int atSign = authority.indexOf('@');
+        if (atSign != -1) {
+            userInfo = authority.substring(0, atSign);
+            authority = authority.substring(atSign+1);
+        }
+        
+        int colon = -1;
+        if (authority.startsWith("[")) {
+            colon = authority.indexOf("]:");
+            if (colon != -1) colon = colon+1;
+        }
+        else colon = authority.indexOf(':');
+        
+        if (colon != -1) {
+            host = authority.substring(0, colon);
+            port = authority.substring(colon+1);
+        }
+        else {
+            host = authority;
+        }
+        
+        if (userInfo != null) checkUserInfo(userInfo);
+        if (port != null) checkPort(port);
+        checkHost(host);
+        
+    }
+
+
+    private static void checkHost(String host) {
+    
+        if (host.length() == 0) return; // file URI
+        
+        if (host.charAt(0) == '[') {
+            if (host.charAt(host.length()-1) != ']') {
+                throw new MalformedURIException("Missing closing ]");
+            }
+                            // trim [ and ] from ends of host
+            checkIP6Address(host.substring(1, host.length()-1));
+        }
+        else {
+            if (host.length() > 255) {
+                throw new MalformedURIException("Host name too long: " + host);
+            }
+            
+            for (int i = 0; i < host.length(); i++) {
+                char c = host.charAt(i);
+                if (c == '%') {
+                   try {
+                       if (!isHexDigit(host.charAt(i+1)) || !isHexDigit(host.charAt(i+2))) {
+                           throwMalformedURIException(host, 
+                             "Bad percent escape sequence");    
+                       }
+                   }
+                   catch (StringIndexOutOfBoundsException ex) {
+                       throwMalformedURIException(host, 
+                         "Bad percent escape sequence");                       
+                   }
+                   i += 2;
+                }
+                else if (!isRegNameCharacter(c)) {
+                    throwMalformedURIException(host, 
+                      "Illegal host character " + c
+                    );
+                }
+            }
+        }
+    }
+
+
+    private static boolean isRegNameCharacter(char c) {
+
+        switch(c) {
+            case '!': return true;
+            case '"': return false;
+            case '#': return false;
+            case '$': return true;
+            case '%': return false; // checked separately
+            case '&': return true;
+            case '\'': return true;
+            case '(': return true;
+            case ')': return true;
+            case '*': return true;
+            case '+': return true;
+            case ',': return true;
+            case '-': return true;
+            case '.': return true;
+            case '/': return false;
+            case '0': return true;
+            case '1': return true;
+            case '2': return true;
+            case '3': return true;
+            case '4': return true;
+            case '5': return true;
+            case '6': return true;
+            case '7': return true;
+            case '8': return true;
+            case '9': return true;
+            case ':': return false;
+            case ';': return true;
+            case '<': return false;
+            case '=': return true;
+            case '>': return false;
+            case '?': return false;
+            case '@': return false;
+            case 'A': return true;
+            case 'B': return true;
+            case 'C': return true;
+            case 'D': return true;
+            case 'E': return true;
+            case 'F': return true;
+            case 'G': return true;
+            case 'H': return true;
+            case 'I': return true;
+            case 'J': return true;
+            case 'K': return true;
+            case 'L': return true;
+            case 'M': return true;
+            case 'N': return true;
+            case 'O': return true;
+            case 'P': return true;
+            case 'Q': return true;
+            case 'R': return true;
+            case 'S': return true;
+            case 'T': return true;
+            case 'U': return true;
+            case 'V': return true;
+            case 'W': return true;
+            case 'X': return true;
+            case 'Y': return true;
+            case 'Z': return true;
+            case '[': return false;
+            case '\\': return false;
+            case ']': return false;
+            case '^': return false;
+            case '_': return true;
+            case '`': return false;
+            case 'a': return true;
+            case 'b': return true;
+            case 'c': return true;
+            case 'd': return true;
+            case 'e': return true;
+            case 'f': return true;
+            case 'g': return true;
+            case 'h': return true;
+            case 'i': return true;
+            case 'j': return true;
+            case 'k': return true;
+            case 'l': return true;
+            case 'm': return true;
+            case 'n': return true;
+            case 'o': return true;
+            case 'p': return true;
+            case 'q': return true;
+            case 'r': return true;
+            case 's': return true;
+            case 't': return true;
+            case 'u': return true;
+            case 'v': return true;
+            case 'w': return true;
+            case 'x': return true;
+            case 'y': return true;
+            case 'z': return true;
+            case '{': return false;
+            case '|': return false;
+            case '}': return false;
+            case '~': return true;
+        }
+        return false;
+        
+    }
+
+
+    private static void checkPort(String port) {
+        
+        for (int i = 0; i < port.length(); i++) {
+            char c = port.charAt(i);
+            if (c < '0' || c > '9') {
+                throw new MalformedURIException("Bad port: " + port);
+            }
+        }
+
+    }
+
+
+    private static void checkUserInfo(String userInfo) {
+
+        for (int i = 0; i < userInfo.length(); i++) {
+            char c = userInfo.charAt(i);
+            if (c == '%') {
+               try {
+                   if (!isHexDigit(userInfo.charAt(i+1)) 
+                     || !isHexDigit(userInfo.charAt(i+2))) {
+                       throwMalformedURIException(userInfo, 
+                         "Bad percent escape sequence");    
+                   }
+               }
+               catch (StringIndexOutOfBoundsException ex) {
+                   throwMalformedURIException(userInfo, 
+                     "Bad percent escape sequence");                       
+               }
+               i += 2;
+            }
+            else if (!isUserInfoCharacter(c)) {
+                throw new MalformedURIException("Bad user info: " + userInfo);
+            }
+        }
+        
+    }
+
+
+    private static void checkScheme(String scheme) {
+
+        char c = scheme.charAt(0);
+        if (!isAlpha(c)) {
+            throw new MalformedURIException(
+              "Illegal initial scheme character " + c);
+        }
+        
+        for (int i = 1; i < scheme.length(); i++) {
+            c = scheme.charAt(i);
+            if (!isSchemeCharacter(c)) {
+                throw new MalformedURIException(
+                  "Illegal scheme character " + c
+                );
+            }
+        }
+        
+    }
+
 
     private static void checkIP6Address(String ip6Address) {
 
@@ -483,6 +826,7 @@ final class Verifier {
      * <p>
      * Checks a string to see if it is an RFC 2396/RFC 2732 absolute 
      * URI reference. URI references can contain fragment identifiers.
+     * Absolute URI references must have a scheme.
      * </p>
      * 
      * @param uri <code>String</code> to check
@@ -492,9 +836,26 @@ final class Verifier {
      */
     static void checkAbsoluteURIReference(String uri) {
         
+        URIUtil.ParsedURI parsed = new URIUtil.ParsedURI(uri);
+        try {
+            if (parsed.scheme == null) {
+                throwMalformedURIException(
+                  uri, "Missing scheme in absolute URI reference");
+            }
+            checkScheme(parsed.scheme);
+            if (parsed.authority != null) checkAuthority(parsed.authority);
+            checkPath(parsed.path);
+            if (parsed.fragment != null) checkFragment(parsed.fragment);
+            if (parsed.query != null) checkQuery(parsed.query);
+        }
+        catch (MalformedURIException ex) {
+            ex.setData(uri);
+            throw ex;
+        }   
+        
         // Next test is necessary if we're really testing URI 
         // references but not for namespace URIs
-        if (uri == null || uri.length() == 0) {
+        /* if (uri == null || uri.length() == 0) {
             throwMalformedURIException(uri, 
               "Absolute URIs cannot be empty"
             );   
@@ -554,7 +915,7 @@ final class Verifier {
                 );
             }
             
-        }       
+        }    */   
    
     }
 
@@ -712,6 +1073,7 @@ final class Verifier {
     
 
     private static boolean isURICharacter(int c) {
+        
         switch(c) {
             case '!': return true;
             case '"': return false;
@@ -813,26 +1175,236 @@ final class Verifier {
     }
 
 
-    static void checkAbsoluteURI(String uri) {
-        if (uri.indexOf('#') > -1) {
-            throwMalformedURIException(uri, 
-              "Absolute URIs cannot contain fragment identifiers"
-            );
+    private static boolean isPathCharacter(char c) {
+
+        switch(c) {
+            case '!': return true;
+            case '"': return false;
+            case '#': return false;
+            case '$': return true;
+            case '%': return false; // checked separately
+            case '&': return true;
+            case '\'': return true;
+            case '(': return true;
+            case ')': return true;
+            case '*': return true;
+            case '+': return true;
+            case ',': return true;
+            case '-': return true;
+            case '.': return true;
+            case '/': return false; // handled separately
+            case '0': return true;
+            case '1': return true;
+            case '2': return true;
+            case '3': return true;
+            case '4': return true;
+            case '5': return true;
+            case '6': return true;
+            case '7': return true;
+            case '8': return true;
+            case '9': return true;
+            case ':': return true;
+            case ';': return true;
+            case '<': return false;
+            case '=': return true;
+            case '>': return false;
+            case '?': return false;
+            case '@': return true;
+            case 'A': return true;
+            case 'B': return true;
+            case 'C': return true;
+            case 'D': return true;
+            case 'E': return true;
+            case 'F': return true;
+            case 'G': return true;
+            case 'H': return true;
+            case 'I': return true;
+            case 'J': return true;
+            case 'K': return true;
+            case 'L': return true;
+            case 'M': return true;
+            case 'N': return true;
+            case 'O': return true;
+            case 'P': return true;
+            case 'Q': return true;
+            case 'R': return true;
+            case 'S': return true;
+            case 'T': return true;
+            case 'U': return true;
+            case 'V': return true;
+            case 'W': return true;
+            case 'X': return true;
+            case 'Y': return true;
+            case 'Z': return true;
+            case '[': return false;
+            case '\\': return false;
+            case ']': return false;
+            case '^': return false;
+            case '_': return true;
+            case '`': return false;
+            case 'a': return true;
+            case 'b': return true;
+            case 'c': return true;
+            case 'd': return true;
+            case 'e': return true;
+            case 'f': return true;
+            case 'g': return true;
+            case 'h': return true;
+            case 'i': return true;
+            case 'j': return true;
+            case 'k': return true;
+            case 'l': return true;
+            case 'm': return true;
+            case 'n': return true;
+            case 'o': return true;
+            case 'p': return true;
+            case 'q': return true;
+            case 'r': return true;
+            case 's': return true;
+            case 't': return true;
+            case 'u': return true;
+            case 'v': return true;
+            case 'w': return true;
+            case 'x': return true;
+            case 'y': return true;
+            case 'z': return true;
+            case '{': return false;
+            case '|': return false;
+            case '}': return false;
+            case '~': return true;
         }
+        return false;
+        
+    }
+    
+
+    private static boolean isUserInfoCharacter(char c) {
+
+        switch(c) {
+            case '!': return true;
+            case '"': return false;
+            case '#': return false;
+            case '$': return true;
+            case '%': return false; // checked separately
+            case '&': return true;
+            case '\'': return true;
+            case '(': return true;
+            case ')': return true;
+            case '*': return true;
+            case '+': return true;
+            case ',': return true;
+            case '-': return true;
+            case '.': return true;
+            case '/': return true;
+            case '0': return true;
+            case '1': return true;
+            case '2': return true;
+            case '3': return true;
+            case '4': return true;
+            case '5': return true;
+            case '6': return true;
+            case '7': return true;
+            case '8': return true;
+            case '9': return true;
+            case ':': return true;
+            case ';': return true;
+            case '<': return false;
+            case '=': return true;
+            case '>': return false;
+            case '?': return false;
+            case '@': return false;
+            case 'A': return true;
+            case 'B': return true;
+            case 'C': return true;
+            case 'D': return true;
+            case 'E': return true;
+            case 'F': return true;
+            case 'G': return true;
+            case 'H': return true;
+            case 'I': return true;
+            case 'J': return true;
+            case 'K': return true;
+            case 'L': return true;
+            case 'M': return true;
+            case 'N': return true;
+            case 'O': return true;
+            case 'P': return true;
+            case 'Q': return true;
+            case 'R': return true;
+            case 'S': return true;
+            case 'T': return true;
+            case 'U': return true;
+            case 'V': return true;
+            case 'W': return true;
+            case 'X': return true;
+            case 'Y': return true;
+            case 'Z': return true;
+            case '[': return false;
+            case '\\': return false;
+            case ']': return false;
+            case '^': return false;
+            case '_': return true;
+            case '`': return false;
+            case 'a': return true;
+            case 'b': return true;
+            case 'c': return true;
+            case 'd': return true;
+            case 'e': return true;
+            case 'f': return true;
+            case 'g': return true;
+            case 'h': return true;
+            case 'i': return true;
+            case 'j': return true;
+            case 'k': return true;
+            case 'l': return true;
+            case 'm': return true;
+            case 'n': return true;
+            case 'o': return true;
+            case 'p': return true;
+            case 'q': return true;
+            case 'r': return true;
+            case 's': return true;
+            case 't': return true;
+            case 'u': return true;
+            case 'v': return true;
+            case 'w': return true;
+            case 'x': return true;
+            case 'y': return true;
+            case 'z': return true;
+            case '{': return false;
+            case '|': return false;
+            case '}': return false;
+            case '~': return true;
+        }
+        return false;
+    }
+    
+        
+    /**
+     * Check to see that this string is an absolute URI,
+     * neither a relative URI nor a URI reference.
+     * 
+     */
+    static void checkAbsoluteURI(String uri) {
+        
+        URIUtil.ParsedURI parsed = new URIUtil.ParsedURI(uri);
         try {
-            // XXX reduce to one checkAbsoluteURI method
-            checkAbsoluteURIReference(uri);
-            checkURI(uri);
+            if (parsed.scheme == null) {
+                throwMalformedURIException(uri, "Missing scheme in absolute URI");
+            }
+            checkScheme(parsed.scheme);
+            if (parsed.authority != null) checkAuthority(parsed.authority);
+            checkPath(parsed.path);
+            if (parsed.fragment != null) {
+                throwMalformedURIException(uri, "URIs cannot have fragment identifiers");
+            }
+            if (parsed.query != null) checkQuery(parsed.query);
         }
         catch (MalformedURIException ex) {
-            // XXX perhaps this is the wrong place to change the 
-            // message? should use a more generic message here and 
-            // fix in place that calls it.
-            MalformedURIException ex2 
-              = new MalformedURIException("Base URIs must be absolute");
-            ex2.setData(uri);
-            throw ex2;
-        }
+            ex.setData(uri);
+            throw ex;
+        }        
+
     } 
 
     

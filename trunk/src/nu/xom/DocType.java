@@ -69,7 +69,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a2
  * 
  */
 public class DocType extends Node {
@@ -352,7 +352,7 @@ public class DocType extends Node {
                 throw ex;
             }
             
-            Verifier.checkURI(id);
+            Verifier.checkURIReference(id);
             
             if (id.indexOf('#') != -1) {
                 IllegalDataException ex = new IllegalDataException(
