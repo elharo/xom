@@ -320,6 +320,7 @@ public class SAXConverter {
         }
     }
     
+    // should I use equals() method here????
     private static String getSAXType(Attribute attribute) {
 
         Attribute.Type type = attribute.getType();

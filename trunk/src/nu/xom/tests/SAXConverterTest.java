@@ -169,13 +169,29 @@ public class SAXConverterTest extends XOMTestCase {
         convertAndCompare(doc); 
     }
     
+    public void testAttributesTypes() throws Exception {
+        Element root = new Element("root");
+        root.addAttribute(new Attribute("CDATA", "CDATA", Attribute.Type.CDATA));
+        root.addAttribute(new Attribute("ID", "ID", Attribute.Type.ID));
+        root.addAttribute(new Attribute("IDREF", "IDREF", Attribute.Type.IDREF));
+        root.addAttribute(new Attribute("IDRES", "IDREFS", Attribute.Type.IDREFS));
+        root.addAttribute(new Attribute("NMTOKEN", "NMTOKEN", Attribute.Type.NMTOKEN));
+        root.addAttribute(new Attribute("NMTOKENS", "NMTOKENS", Attribute.Type.NMTOKENS));
+        root.addAttribute(new Attribute("UNDECLARED", "UNDECLARED", Attribute.Type.UNDECLARED));
+        root.addAttribute(new Attribute("ENTITY", "ENTITY", Attribute.Type.ENTITY));
+        root.addAttribute(new Attribute("ENTITIES", "ENTITIES", Attribute.Type.ENTITIES));
+        root.addAttribute(new Attribute("NOTATION", "NOTATION", Attribute.Type.NOTATION));
+        root.addAttribute(new Attribute("ENUMERATION", "ENUMERATION", Attribute.Type.ENUMERATION));
+        Document doc = new Document(root);  
+        convertAndCompare(doc); 
+    }
+    
     public void testAttributes() throws Exception {
         Element root = new Element("root");
         root.addAttribute(new Attribute("a", "test"));
         root.addAttribute(new Attribute("xlink:type", 
           "http://www.w3.org/1999/xlink", "simple"));
-        Document doc = new Document(
-          new Element("a:a", "http://www.a.com/"));  
+        Document doc = new Document(root);  
         convertAndCompare(doc); 
     }
     
