@@ -137,7 +137,10 @@ class XMLWriter extends XMLFilterImpl implements LexicalHandler {
      * {@link #endDocument endDocument} method after writing a
      * document.</p>
      *
+     * @throws IOException
+     *
      * @see #reset
+     * 
      */
     public void flush() throws IOException {
 	   output.flush();
@@ -404,10 +407,10 @@ class XMLWriter extends XMLFilterImpl implements LexicalHandler {
      * 
      * @see org.xml.sax.ContentHandler#characters
      */
-    public void characters (char[] ch, int start, int len)
+    public void characters (char[] ch, int start, int length)
       throws SAXException {
-    	writeEsc(ch, start, len, false);
-    	super.characters(ch, start, len);
+    	writeEsc(ch, start, length, false);
+    	super.characters(ch, start, length);
     }
     
 
@@ -492,7 +495,7 @@ class XMLWriter extends XMLFilterImpl implements LexicalHandler {
      *        processing is not being performed
      * @param localName the element's local name (without prefix).  This
      *        parameter must be provided.
-     * @param qName the element's qualified name (with prefix), or
+     * @param qualifiedName the element's qualified name (with prefix), or
      *        the empty string if none is available.  This parameter
      *        is strictly advisory: the writer may or may not use
      *        the prefix attached.
