@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -44,8 +44,6 @@ import nu.xom.ParsingException;
  *  @author Elliotte Rusty Harold
  *  @version 1.0d23
  * 
- * ???? This is not stripping the xmlns:rddl declaration like it should
- *
  */
 public class RDDLFilter extends NodeFactory {
 
@@ -55,6 +53,11 @@ public class RDDLFilter extends NodeFactory {
     public Element startMakingElement(String name, String namespace) {
         if (namespace.equals(RDDL_NAMESPACE)) return null;
         return new Element(name, namespace);    
+    }
+
+    public Nodes finishMakingElement(Element element) {
+        element.removeNamespaceDeclaration("rddl");
+        return new Nodes(element);    
     }
 
     // change the DOCTYPE to XHTML Basic DOCTYPE
