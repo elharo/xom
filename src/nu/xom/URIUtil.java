@@ -24,32 +24,17 @@
 package nu.xom;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
 
-import org.apache.xerces.util.URI;
 
-/**
- * Prefer URI resolution to be done by Xerces if available;
- * Java 1.4 if Xerces isn't available, and java.net.URL
- * as a last-ditch fallback.
- */
 class URIUtil {
 
     
+    // XXX is there any way to merge these two methods?
     static boolean isOpaque(String uri) {
         
         int colon = uri.indexOf(':');
         if (colon < 1) return false;
-        if (uri.substring(colon+1).startsWith("//")) return false;
-        // Java seems to occasionally use URLs for file scheme
-        // that look like file:/home/elharo/...
-        // According to RFC 2396 these are opaque, but we can't treat 
-        // them that way. 
-        if (uri.startsWith("file:/")) return false;
+        if (uri.substring(colon+1).startsWith("/")) return false;
         if (!Verifier.isAlpha(uri.charAt(0))) return false;
         for (int i = 1; i < colon; i++) {
              if (!Verifier.isSchemeCharacter(uri.charAt(i))) return false;
@@ -69,63 +54,202 @@ class URIUtil {
         }
         return true;
         
+    } 
+    
+    
+    // This doesn't do enough error checking to be a public API.
+    static String absolutize(String baseURI, String spec) {
+        
+        if ("".equals(baseURI) || baseURI == null) return spec;
+        
+        ParsedURI base = new ParsedURI(baseURI);
+        ParsedURI R = new ParsedURI(spec);
+        ParsedURI T = new ParsedURI();
+        
+        if (R.scheme != null) {
+            T.scheme    = R.scheme;
+            T.authority = R.authority;
+            T.query     = R.query;
+            T.path      = removeDotSegments(R.path); 
+        }
+        else {
+            if (R.authority != null) {
+                T.authority = R.authority;
+                T.query     = R.query;
+                T.path      = removeDotSegments(R.path); 
+            }
+            else {
+                if ("".equals(R.path)) {
+                    T.path = base.path;
+                    if (R.query != null) {
+                        T.query = R.query;
+                    }
+                    else {
+                        T.query = base.query;
+                    }
+                }
+                else {
+                    if (R.path.startsWith("/")) {
+                       T.path = removeDotSegments(R.path);
+                    }
+                    else {
+                       T.path = merge(base, R.path);
+                       T.path = removeDotSegments(T.path);
+                    }
+                    T.query = R.query;
+                }
+                T.authority = base.authority;
+            }
+            T.scheme = base.scheme;
+        }
+        T.fragment = R.fragment;
+        
+        return T.toString();
+        
+    }
+    
+    
+    private static String merge(ParsedURI base, String relativePath) {
+    
+        if (base.authority != null && "".equals(base.path) && !"".equals(base.authority)) {
+            return "/" + relativePath;
+        }
+    
+        int lastSlash = base.path.lastIndexOf('/');
+        if (lastSlash == -1) return relativePath;
+        String topPath = base.path.substring(0, lastSlash+1);
+        return topPath + relativePath;
+        
+    }
+    
+    
+    private static String removeDotSegments(String path) {
+    
+        String output = "";
+
+        while (path.length() > 0) {
+            if (path.startsWith("../")) {
+                path = path.substring(3);
+            }
+            else if (path.startsWith("./")) {
+                path = path.substring(2);
+            }
+            else if (path.startsWith("/./")) {
+                path = '/' + path.substring(3);
+            }
+            else if (path.equals("/.")) {
+                path = "/";
+            }
+            else if (path.startsWith("/../")) {
+                path = '/' + path.substring(4);
+                int lastSlash = output.lastIndexOf('/');
+                if (lastSlash != -1) output = output.substring(0, lastSlash);
+            }
+            else if (path.equals("/..")) {
+                path = "/";
+                int lastSlash = output.lastIndexOf('/');
+                if (lastSlash != -1) output = output.substring(0, lastSlash);
+            }
+            else if (path.equals(".") || path.equals("..")) {
+                path = "";
+            }
+            else {
+                int nextSlash = path.indexOf('/');
+                if (nextSlash == 0) nextSlash = path.indexOf('/', 1);
+                if (nextSlash == -1) {
+                    output += path;
+                    path = "";
+                }
+                else {
+                    output += path.substring(0, nextSlash);
+                    path = path.substring(nextSlash);
+                }
+            }
+        }
+        
+        return output;
+        
     }
 
-    
-    // Prefer Xerces resolution if available. It's less buggy.
-    static String absolutizeWithJava14(String base, String spec) {
+
+    // really just a struct
+    private static class ParsedURI {
+     
+        String scheme;
+        String schemeSpecificPart;
+        String query;
+        String fragment;
+        String authority;
+        String path = "";
         
-        // Trying to avoid dependence on Java 1.4
-        try {
-            Class javanetURI = Class.forName("java.net.URI");
-            Class[] params = {String.class};
-            Constructor constructor = javanetURI.getConstructor(params);
-            Object[] args = {base};
-            Object resolver = constructor.newInstance(args);
-            Method resolve = javanetURI.getMethod("resolve", params);
-            String[] args2 = {spec};
-            Object result = resolve.invoke(resolver, args2);
+        ParsedURI(String spec) {
+            
+            int colon = spec.indexOf(':');
+            int question = spec.indexOf('?');
+            int sharp = spec.indexOf('#');
+            
+            if (colon != -1) scheme = spec.substring(0, colon);
+            
+            if (question == -1 && sharp == -1) {
+                schemeSpecificPart = spec.substring(colon+1);
+            }
+            else if (question != -1) {
+                schemeSpecificPart = spec.substring(colon+1, question);                
+            }
+            else {
+                schemeSpecificPart = spec.substring(colon+1, sharp);                
+            }
+            
+            if (sharp != -1) {
+                fragment = spec.substring(sharp+1);
+            }
+            
+            if (question != -1) {
+                if (sharp == -1) {
+                    query = spec.substring(question+1);
+                }
+                else {
+                    query = spec.substring(question+1, sharp);
+                }
+            }
+
+            if (schemeSpecificPart.startsWith("//")) {
+                int authorityBegin = 2;
+                int authorityEnd = schemeSpecificPart.indexOf('/', authorityBegin);
+                if (authorityEnd == -1) {
+                    authority = schemeSpecificPart.substring(2);
+                    path = "";
+                }
+                else {
+                    authority = schemeSpecificPart.substring(authorityBegin, authorityEnd);
+                    path = schemeSpecificPart.substring(authorityEnd);
+                } 
+            }
+            else {
+                path = schemeSpecificPart;
+            }
+            
+        }
+
+        ParsedURI() {}
+        
+        public String toString() {
+        
+            StringBuffer result = new StringBuffer(20);
+            if (scheme != null) result.append(scheme + ':');
+            if (schemeSpecificPart != null) result.append(schemeSpecificPart);
+            else {
+                result.append("//");
+                result.append(authority);
+                if (path != null) result.append(path);
+            }
+            
+            if (query != null) result.append('?' + query);
+            if (fragment != null) result.append('#' + fragment);
+            
             return result.toString();
         }
-        catch (InvocationTargetException e) {
-            MalformedURIException ex = new MalformedURIException(e.getMessage(), e);
-            throw ex;
-        } 
-        catch (Throwable t) {
-            try {
-                // fallback to java.net.URL
-                URL u = new URL(new URL(base), spec);
-                return u.toExternalForm();
-            }
-            catch (MalformedURLException ex) {
-                throw new MalformedURIException(ex.getMessage()); 
-            }
-        }        
         
-    }
-    
-
-    // XXX remove dependence on Xerces URI class
-    // XXX should name be resolve rather than absolutize, because
-    // this method can also resolve pure relative URIs
-    static String absolutize(String base, String spec) {
-        
-        if (!isAbsolute(base)) {
-           // Xerces can't handle two relative URIs so use Java instead
-           return absolutizeWithJava14(base, spec);
-        }
-        try {
-            URI u = new URI(base);
-            URI resolved = new URI(u, spec);
-            return resolved.toString();
-        } 
-        catch (Exception ex) {
-            throw new nu.xom.MalformedURIException("bad");
-        } 
-        catch (NoClassDefFoundError error) {
-            return absolutizeWithJava14(base, spec);
-        } 
-     
     }
 
 
