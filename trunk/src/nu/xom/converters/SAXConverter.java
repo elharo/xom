@@ -41,12 +41,12 @@ import org.xml.sax.helpers.AttributesImpl;
 /**
  * 
  * <p>
- * This class walks a XOM tree, while firing events into a
+ * Feeds a XOM <code>Document</code> into a
  * SAX2 <code>ContentHandler</code>.
  * </p>
   * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  * 
  */
 public class SAXConverter {
@@ -61,7 +61,7 @@ public class SAXConverter {
      * Creates a new <code>SAXConverter</code>.
      * </p>
      * 
-     * @param handler SAX2 <code>ContentHandler</code> 
+     * @param handler the SAX2 content handler 
      *     that receives the data
      * 
      * @throws NullPointerException if handler is null
@@ -74,10 +74,10 @@ public class SAXConverter {
     
     /**
      * <p>
-     * Set the <code>ContentHandler</code> for this converter.
+     * Set the content handler for this converter.
      * </p>
      * 
-     * @param handler SAX2 <code>ContentHandler</code> that 
+     * @param handler SAX2 content handler that 
      *     receives the data
      * 
      * @throws NullPointerException if handler is null
@@ -95,10 +95,10 @@ public class SAXConverter {
     
     /**
      * <p>
-     * Returns the <code>ContentHandler</code>.
+     * Returns the content handler.
      * </p>
      * 
-     * @return SAX2 <code>ContentHandler</code> that receives the data
+     * @return SAX2 content handler that receives the data
      */
     public ContentHandler getContentHandler() {
         return this.contentHandler;
@@ -107,12 +107,12 @@ public class SAXConverter {
 
     /**
      * <p>
-     * Sets the optional <code>LexicalHandler</code> for this 
+     * Sets the optional lexical handler for this 
      * converter. The only lexical events the converter supplies 
      * are comments.
      * </p>
      * 
-     * @param handler the <code>LexicalHandler</code>; 
+     * @param handler the lexical handler; 
      *     may be null to turn off lexical events
      */
     public void setLexicalHandler(LexicalHandler handler) {
@@ -126,7 +126,7 @@ public class SAXConverter {
      * converter. This is only used for comments.
      * </p>
      * 
-     * @return SAX2 <code>LexicalHandler</code> that receives 
+     * @return SAX2 lexical handler that receives 
      *     lexical events
      */
     public LexicalHandler getLexicalHandler() {
@@ -146,8 +146,8 @@ public class SAXConverter {
      * </p>
      * 
      * @param doc the document to pass to SAX
-     * @throws SAXException if the <code>ContentHandler</code> 
-     *      or <code>LexicalHandler</code> throws an exception
+     * @throws SAXException if the content handler
+     *      or lexical handler throws an exception
      */
     public void convert(Document doc) throws SAXException {
         
