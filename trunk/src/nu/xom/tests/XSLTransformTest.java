@@ -39,6 +39,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.IllegalAddException;
 import nu.xom.MalformedURIException;
+import nu.xom.Namespace;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -63,7 +64,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1a3
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -638,6 +639,26 @@ public class XSLTransformTest extends XOMTestCase {
         ProcessingInstruction child = (ProcessingInstruction) root.getChild(0);
         assertEquals("target", child.getTarget());
         assertEquals("test", child.getValue());
+        
+    } 
+    
+    
+    public void testCopyXMLBaseAttribute()
+      throws XSLException, ParsingException, IOException {
+        
+        File stylesheet = new File(inputDir, "id_transform.xsl");
+        Builder builder = new Builder();
+        Element root = new Element("root");
+        root.addAttribute(new Attribute("xml:base", Namespace.XML_NAMESPACE, "http://www.example.org/"));
+        Document input = new Document(root);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
+        Nodes output = xform.transform(input);
+        assertEquals(1, output.size());
+        assertEquals("", output.get(0).getValue());
+        Element rootOut = (Element) output.get(0);
+        assertEquals(0, rootOut.getChildCount());
+        assertEquals(1, rootOut.getAttributeCount());
         
     } 
     
