@@ -21,11 +21,12 @@
 
 package nu.xom.tests;
 
+import nu.xom.Element;
 import nu.xom.XPathException;
 
 /**
  * <p>
- *   Unit tests for the <code>XSLException</code> class.
+ * Unit tests for the <code>XPathException</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -125,5 +126,20 @@ public class XPathExceptionTest extends XOMTestCase {
         assertEquals("testing", ex.getMessage());
     }
 
+    public void testGetXPathExpression() {
+        
+        Element parent = new Element("Test");
+        
+        try {
+            parent.query("This is not an XPath expression");
+            fail("Allowed malformed query");
+        }
+        catch (XPathException success) {
+            assertEquals(
+              "This is not an XPath expression", success.getXPath());
+        }  
+        
+    }
+    
     
 }
