@@ -56,7 +56,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  * 
  */
 public class Builder {
@@ -185,15 +185,15 @@ public class Builder {
         // so we can't load it with the XMLReaderFactory
         XMLReader parser; 
         try {
-            // XXX test with Xerces not available
             parser = new XML1_0Parser();
             setupParser(parser, validate);
             return parser;
         } 
-        catch (Throwable ex) {
-            // If Xerces is not available, this will be a 
-            // NoClassDefError or some such;
+        catch (SAXException ex) {
             // look for next one
+        }
+        catch (NoClassDefFoundError err) {
+            // Xerces is not available; look for next one
         }
         
         // XMLReaderFactory.createXMLReader never returns
