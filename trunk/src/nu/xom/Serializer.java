@@ -47,7 +47,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b6
  * 
  */
 public class Serializer {
@@ -314,7 +314,9 @@ public class Serializer {
      */
     protected void write(Element element) throws IOException {
 
-        if (escaper.isIndenting() && !escaper.isPreserveSpace() && !escaper.justBroke()) {
+        if (escaper.isIndenting() 
+          && !escaper.isPreserveSpace() 
+          && !escaper.justBroke()) {
             escaper.breakLine();
         }
         
@@ -668,8 +670,8 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws UnavailableCharacterException if the comment contains a character that is
-     *     not available in the current encoding
+     * @throws UnavailableCharacterException if the comment contains a 
+     *     character that is not available in the current encoding
      */
     protected void write(ProcessingInstruction instruction) 
       throws IOException {
@@ -737,17 +739,20 @@ public class Serializer {
         
     }  
     
+    
     private boolean isBoundaryWhitespace(Text text) {
         
         if (getIndent() <= 0) return false;
         if (!"".equals(text.getValue().trim())) return false;
         ParentNode parent = text.getParent();
         int position = parent.indexOf(text);
-        if (position == 0) return false;
+        if (position == 0 && parent.getChildCount() == 1) return false;
         Node previous = null;
         Node next = null;
-        previous = parent.getChild(position-1);
-        if (position != parent.getChildCount()-1) next = parent.getChild(position+1);
+        if (position != 0) previous = parent.getChild(position-1);
+        if (position != parent.getChildCount()-1) {
+            next = parent.getChild(position+1);
+        }
         if (previous == null || !previous.isText()) {
             if (next == null || !next.isText()) {
                 return true;
@@ -769,8 +774,9 @@ public class Serializer {
      * 
      * @throws IOException if the underlying 
      *     output stream encounters an I/O error
-     * @throws UnavailableCharacterException if the document type declaration contains  
-     *     a character that is not available in the current encoding
+     * @throws UnavailableCharacterException if the document type   
+     *     declaration contains a character that is not available 
+     *     in the current encoding
      */
     protected void write(DocType doctype) throws IOException {
         

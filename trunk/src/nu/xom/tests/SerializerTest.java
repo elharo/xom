@@ -52,7 +52,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b6
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -1282,6 +1282,76 @@ public class SerializerTest extends XOMTestCase {
     }
     
     
+    public void testWhiteSpaceBetweenCommentsIsBoundaryWhiteSpace() throws IOException {
+        
+        Element items = new Element("itemSet");
+        items.appendChild(new Comment("item1"));
+        items.appendChild("      \r\n              ");
+        items.appendChild(new Comment("item2"));
+        Document doc = new Document(items);
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<itemSet>\r\n    <!--item1-->\r\n    <!--item2-->\r\n"
+          + "</itemSet>\r\n", 
+          result
+        );
+        
+    }
+    
+    
+    public void testWhiteSpaceBeforeCommentIsBoundaryWhiteSpace() throws IOException {
+        
+        Element items = new Element("itemSet");
+        items.appendChild("      \r\n              ");
+        items.appendChild(new Comment("item1"));
+        items.appendChild(new Comment("item2"));
+        Document doc = new Document(items);
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        System.err.println(result);
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<itemSet>\r\n    <!--item1-->\r\n    <!--item2-->\r\n"
+          + "</itemSet>\r\n", 
+          result
+        );
+        
+    }
+    
+    
+    public void testWhiteSpaceAfterCommentsIsBoundaryWhiteSpace() throws IOException {
+        
+        Element items = new Element("itemSet");
+        items.appendChild(new Comment("item1"));
+        items.appendChild(new Comment("item2"));
+        items.appendChild("      \r\n              ");
+        Document doc = new Document(items);
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<itemSet>\r\n    <!--item1-->\r\n    <!--item2-->\r\n"
+          + "</itemSet>\r\n", 
+          result
+        );
+        
+    }
+    
+    
     public void testIndentAndBreakBeforeProcessingInstruction() 
       throws IOException {
         
@@ -1930,6 +2000,51 @@ public class SerializerTest extends XOMTestCase {
         Element root = new Element("a");
         Element child = new Element("b");
         child.appendChild(" ");
+        root.appendChild(child);
+        
+        Document doc = new Document(root);
+        
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+           
+        serializer.flush();
+        String result = out.toString("UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
+          "<a>\r\n    <b> </b>\r\n</a>\r\n", result);
+
+    }
+    
+    
+    public void testElementsThatOnlyContainTextNodesWithBoundaryWhiteSpaceShouldNotBeSplitWhileIndenting() 
+      throws IOException {
+        
+        Element root = new Element("a");
+        Element child = new Element("b");
+        child.appendChild(" ");
+        child.appendChild(" ");
+        root.appendChild(child);
+        
+        Document doc = new Document(root);
+        
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+           
+        serializer.flush();
+        String result = out.toString("UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
+          "<a>\r\n    <b> </b>\r\n</a>\r\n", result);
+
+    }
+    
+    
+    public void testElementsThatOnlyContainASingleLinefeedShouldNotBeSplitWhileIndenting() 
+      throws IOException {
+        
+        Element root = new Element("a");
+        Element child = new Element("b");
+        child.appendChild("\n");
         root.appendChild(child);
         
         Document doc = new Document(root);
