@@ -1412,5 +1412,37 @@ public class XPathTest extends XOMTestCase {
         
     }
     
+    
+    /* <html>
+<head>
+</head>
+<body>
+<p>
+  <span>text1</span>
+</p>
+<div>text2</div>
+</body>
+</html> */
+     public void testPrecedingAxis() {
+      
+         Element root = new Element("html");
+         Element body = new Element("body");
+         root.appendChild(body);
+         Element p = new Element("p");
+         body.appendChild(p);
+         Element span = new Element("span");
+         p.appendChild(span);
+         span.appendChild("text1");
+         Element div = new Element("div");
+         body.appendChild(div);
+         div.appendChild("text2");
+         
+         Nodes result = div.query("preceding::*[1]");
+         assertEquals(1, result.size());
+         assertEquals(span, result.get(0));
+         
+     }
+    
+    
 
 }
