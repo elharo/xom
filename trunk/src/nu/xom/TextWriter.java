@@ -270,7 +270,10 @@ abstract class TextWriter {
     }
 
     private void write(char c) throws IOException {
-      if ((c == ' ' || c == '\r' || c == '\n' || c == '\t')) {
+      // Carriage returns are completely handled by
+      // writePCDATA and writeAttributeValue. They never
+      // enter this method.
+      if ((c == ' ' || c == '\n' || c == '\t')) {
             if (needsBreak()) {
                 breakLine();
                 skipFollowingLinefeed = false;
@@ -283,12 +286,7 @@ abstract class TextWriter {
                     skipFollowingLinefeed = false;
                     column++;
                 } 
-                else if (c == '\r') {
-                    writeLineSeparator(c);
-                    skipFollowingLinefeed = true;
-                    column = 0;
-                }
-                else if (c == '\n') {
+                else { // (c == '\n')
                     if (!lineSeparatorSet ||
                         !skipFollowingLinefeed) {
                         writeLineSeparator(c);
