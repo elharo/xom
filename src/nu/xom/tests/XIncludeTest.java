@@ -456,7 +456,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testShorthandXPointerMatchesNothing() 
-      throws ParsingException, IOException, XIncludeException {
+      throws ParsingException, IOException {
       
         File input = new File("data/xinclude/input/xptridtest2.xml");
         Document doc = builder.build(input);
@@ -513,7 +513,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testXPointerSyntaxErrorInSecondPart() 
-      throws ParsingException, IOException, XIncludeException {
+      throws ParsingException, IOException {
       
         File input = new File("data/xinclude/input/laterfailure.xml");
         Document doc = builder.build(input);
@@ -530,7 +530,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testXPointerSyntaxErrorMissingFinalParenthesis() 
-      throws ParsingException, IOException, XIncludeException {
+      throws ParsingException, IOException {
       
         File input = new File("data/xinclude/input/laterfailure2.xml");
         Document doc = builder.build(input);
@@ -661,7 +661,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     public void testXPointerTumblerMatchesNothing() 
-      throws ParsingException, IOException, XIncludeException {
+      throws ParsingException, IOException {
       
         File input = new File(
           "data/xinclude/input/xptrtumblertest2.xml"
@@ -682,7 +682,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testMalformedXPointer() 
-      throws ParsingException, IOException, XIncludeException {   
+      throws ParsingException, IOException {   
         
         File input = new File("data/xinclude/input/badxptr.xml");
         Document doc = builder.build(input);
@@ -700,7 +700,7 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     public void testAnotherMalformedXPointer() 
-      throws ParsingException, IOException, XIncludeException {
+      throws ParsingException, IOException {
         
         // testing use of non NCNAME as ID
         File input = new File("data/xinclude/input/badxptr2.xml");
@@ -982,7 +982,7 @@ public class XIncludeTest extends XOMTestCase {
     } 
 
     public void testColonizedNameForIdValueInElementScheme() 
-      throws ParsingException, IOException, XIncludeException {
+      throws ParsingException, IOException {
       
         File input = new File("data/xinclude/input/badxptr3.xml");
         Document doc = builder.build(input);
@@ -998,7 +998,7 @@ public class XIncludeTest extends XOMTestCase {
     } 
 
     public void testBadIdValueInElementScheme() 
-      throws ParsingException, IOException, XIncludeException {
+      throws ParsingException, IOException {
       
         File input = new File("data/xinclude/input/badxptr4.xml");
         Document doc = builder.build(input);

@@ -117,8 +117,7 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
 
-    public void testFileConstructor() 
-      throws ParsingException, IOException {
+    public void testFileConstructor() {
         
         try {
             File f = new File("data/schematest.xml");
@@ -132,8 +131,7 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
 
-    public void testURLConstructor() 
-      throws ParsingException, IOException {
+    public void testURLConstructor() throws IOException {
         
         try {
             File f = new File("data/schematest.xml");
@@ -350,8 +348,7 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
     
-    public void testToString() 
-      throws ParsingException, IOException, XSLException {
+    public void testToString() throws XSLException {
         
         File stylesheet = new File("data/xslt/input/singlestring.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);

@@ -320,8 +320,7 @@ public class SerializerTest extends XOMTestCase {
         );
     }
     
-    public void testElementWithText() 
-      throws IOException, ParsingException {        
+    public void testElementWithText() throws IOException {        
         Element root = new Element("root");
         String data = "   test   \n\n   \n  \n hello again";
         root.appendChild(data);
@@ -338,7 +337,7 @@ public class SerializerTest extends XOMTestCase {
     }    
     
     public void testStaticElementWithText() 
-      throws IOException, ParsingException {        
+      throws IOException {        
         Element root = new Element("root");
         String data = "   test   \n\n   \n  \n hello again";
         root.appendChild(data);
@@ -354,7 +353,7 @@ public class SerializerTest extends XOMTestCase {
     }    
     
     public void testElementWithTextAndCarriageReturns() 
-      throws IOException, ParsingException {        
+      throws IOException {        
         Element root = new Element("root");
         String data = "   test   \r\n   \n  \r hello again";
         root.appendChild(data);
@@ -892,7 +891,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testNotEscapeLinefeedInTextContent() 
-      throws IOException, ParsingException {        
+      throws IOException {        
         Element root = new Element("root");
         root.appendChild("\r\n");
         Document original = new Document(root);
@@ -1090,8 +1089,7 @@ public class SerializerTest extends XOMTestCase {
         
     }
 
-    public void testLineLength() 
-      throws IOException, ParsingException {
+    public void testLineLength() throws IOException {
           
         int length = 40;        
         Element root = new Element("root");
@@ -1118,7 +1116,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testLineLengthWithSetOutputStream() 
-      throws IOException, ParsingException {
+      throws IOException {
           
         int length = 40;        
         Element root = new Element("root");
@@ -1495,7 +1493,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testSerializeQuoteInAttributeValue() 
-      throws ParsingException, IOException {
+      throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out);
         Element root = new Element("root");
@@ -1507,7 +1505,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
     public void testSerializeUnavailableCharacterInMarkup() 
-      throws ParsingException, IOException {
+      throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out, "ISO-8859-1");
         Element root = new Element("\u0419");

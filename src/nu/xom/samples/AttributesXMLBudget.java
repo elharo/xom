@@ -48,7 +48,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class AttributesXMLBudget {
@@ -93,12 +93,12 @@ public class AttributesXMLBudget {
 
   // Just a couple of private methods to factor out repeated code 
   private static void setYear(Element element, String name, 
-   Map record) throws IOException {
+   Map record) {
     element.addAttribute(new Attribute(name, (String) record.get(name)));       
   }
 
   private static void setAmount(Element element, String year, 
-   Map record) throws IOException {
+   Map record) {
     Element amount = new Element("Amount");
     amount.addAttribute(new Attribute("year", String.valueOf(year)));    
     amount.appendChild((String) record.get("Y" + year));

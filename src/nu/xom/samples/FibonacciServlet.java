@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,14 +44,14 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d23
  *
  */
 public class FibonacciServlet extends HttpServlet {
 
     public void doGet(
       HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+      throws IOException {
     
         //read the query string
         int numberOfGenerations = 10;
@@ -96,7 +95,7 @@ public class FibonacciServlet extends HttpServlet {
 
     public void doPost(
       HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+      throws IOException {
         doGet(request, response);
       }
 
