@@ -156,31 +156,16 @@ class JaxenNavigator extends DefaultNavigator {
 
 
     public String getNamespacePrefix(Object o) {
-        XPathNamespaceNode ns = (XPathNamespaceNode) o;
-        return ns.prefix;
+        Namespace ns = (Namespace) o;
+        return ns.getPrefix();
     }
     
     
     public String getNamespaceStringValue(Object o) {
-        XPathNamespaceNode ns = (XPathNamespaceNode) o;
-        return ns.uri;
+        Namespace ns = (Namespace) o;
+        return ns.getValue();
     }
 
-    
-    static class XPathNamespaceNode {
-        
-        String prefix;
-        String uri;
-        private Element parent;
-
-        XPathNamespaceNode(String prefix, String uri, Element parent) {
-            this.prefix = prefix;
-            this.uri = uri;
-            this.parent = parent;
-        }
-        
-    }
-    
     
     public Iterator getNamespaceAxisIterator(Object contextNode) {
         
@@ -190,13 +175,14 @@ class JaxenNavigator extends DefaultNavigator {
             Map bindings = element.getNamespacePrefixesInScope();
             Iterator iterator = bindings.keySet().iterator();
             List result = new ArrayList(bindings.size()+1);
-            result.add(new XPathNamespaceNode("xml", "http://www.w3.org/XML/1998/namespace", element));
+            result.add(new Namespace("xml", 
+              "http://www.w3.org/XML/1998/namespace", element));
 
             while (iterator.hasNext()) {
                 String prefix = (String) iterator.next();
                 String uri = (String) bindings.get(prefix);
                 if (! "".equals(prefix) || ! "".equals(uri)) {
-                    XPathNamespaceNode ns = new XPathNamespaceNode(prefix, uri, element);
+                    Namespace ns = new Namespace(prefix, uri, element);
                     result.add(ns);
                 }
             }
@@ -267,11 +253,10 @@ class JaxenNavigator extends DefaultNavigator {
         if (o instanceof ArrayList) {
             n = (Node) ((List) o).get(0);
         }
-        else if (o instanceof XPathNamespaceNode) {
-            return ((XPathNamespaceNode) o).parent;
+        else if (o instanceof Namespace) {
+            return ((Namespace) o).getParent();
         }
         else {
-            System.out.println(o.getClass().getName());
             n = (Node) o;
         }
         return n.getParent();
@@ -480,7 +465,7 @@ class JaxenNavigator extends DefaultNavigator {
 
     
     public boolean isNamespace(Object object) {
-        return object instanceof XPathNamespaceNode;
+        return object instanceof Namespace;
     }
 
     
