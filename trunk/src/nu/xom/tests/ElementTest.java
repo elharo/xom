@@ -106,11 +106,13 @@ public class ElementTest extends XOMTestCase {
     }
     
     public void testGetChildElementsNull() {
-        Elements elements = element.getChildElements("", "http://www.example.com");
+        Elements elements = element.getChildElements(
+          "", "http://www.example.com");
         assertEquals(2, elements.size());
         elements = element.getChildElements("", "");
         assertEquals(1, elements.size());
-        elements = element.getChildElements(null, "http://www.example.com");
+        elements = element.getChildElements(null, 
+          "http://www.example.com");
         assertEquals(2, elements.size());
         elements = element.getChildElements("", null);
         assertEquals(1, elements.size());     
@@ -120,12 +122,16 @@ public class ElementTest extends XOMTestCase {
         Element first = element.getFirstChildElement("test");
         assertEquals(child1, first);
         
-        first = element.getFirstChildElement("test", "http://www.example.com");
+        first = element.getFirstChildElement(
+          "test", "http://www.example.com");
         assertEquals(child4, first);
         
         assertNull(element.getFirstChildElement("nonesuch"));
         assertNull(element.getFirstChildElement("pre:test"));
-        assertNull(element.getFirstChildElement("nonesuch", "http://www.example.com"));
+        assertNull(
+          element.getFirstChildElement(
+          "nonesuch", "http://www.example.com")
+        );
         
     }
 
@@ -270,17 +276,19 @@ public class ElementTest extends XOMTestCase {
         String name = "red:sakjdhjhd";
         String uri = "http://www.red.com/";
         Element child = new Element(name, uri);
-        Element parent = new Element("parent", "http://www.example.com");
+        Element parent = new Element(
+          "parent", "http://www.example.com");
 
         assertEquals("http://www.example.com", 
             parent.getNamespaceURI(""));
-
         
         parent.appendChild(child);
         child.addNamespaceDeclaration("", "");
          
         assertEquals("", child.getNamespaceURI(""));
-        assertEquals("http://www.example.com", parent.getNamespaceURI(""));
+        assertEquals(
+          "http://www.example.com", 
+          parent.getNamespaceURI(""));
         
         Element child2 = new Element("name", "http://www.default.com");
         parent.appendChild(child2);
@@ -291,7 +299,8 @@ public class ElementTest extends XOMTestCase {
             fail("Illegally undeclared default namespace");
         }
         catch (NamespaceException ex) {
-            //success   
+            // success   
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -315,7 +324,8 @@ public class ElementTest extends XOMTestCase {
         String name = "red:sakjdhjhd";
         String uri = "http://www.red.com/";
         Element element = new Element(name, uri);
-        element.addAttribute(new Attribute("red:attribute", uri, "test"));
+        element.addAttribute(
+          new Attribute("red:attribute", uri, "test"));
         element.setNamespaceURI(uri);
         assertEquals(uri, element.getNamespaceURI());
         assertEquals(uri, element.getNamespaceURI("red"));
@@ -328,7 +338,8 @@ public class ElementTest extends XOMTestCase {
         String name = "a";
         String uri = "http://www.w3.org/1999/xhtml";
         Element element = new Element(name);
-        element.addAttribute(new Attribute("href", "http://www.elharo.com"));
+        element.addAttribute(
+          new Attribute("href", "http://www.elharo.com"));
         element.setNamespaceURI(uri);
         assertEquals(uri, element.getNamespaceURI());
         
@@ -339,7 +350,8 @@ public class ElementTest extends XOMTestCase {
         String name = "a";
         String uri = "http://www.w3.org/1999/xhtml";
         Element element = new Element(name);
-        element.addAttribute(new Attribute("html:href", uri, "http://www.elharo.com"));
+        element.addAttribute(
+          new Attribute("html:href", uri, "http://www.elharo.com"));
         element.setNamespaceURI("http://www.example.com");
         element.setNamespacePrefix("pre");
         element.setNamespaceURI(uri);
@@ -359,26 +371,47 @@ public class ElementTest extends XOMTestCase {
         e.addNamespaceDeclaration("blue", "http://www.blue.com/");
         e.addNamespaceDeclaration("green", "http://www.green.com/");
         Attribute a1 = new Attribute("test", "test");
-        Attribute a2 = new Attribute("pre1:green", "http://www.green.com/", "data");
-        Attribute a3 = new Attribute("yellow:sfsdadf", "http://www.yellow.com/", "data");
+        Attribute a2 = new Attribute(
+          "pre1:green", "http://www.green.com/", "data");
+        Attribute a3 = new Attribute(
+          "yellow:sfsdadf", "http://www.yellow.com/", "data");
         e.addAttribute(a1);
         e.addAttribute(a2);
         e.addAttribute(a3);
         
         assertEquals("http://www.red.com/", e.getNamespaceURI("red"));
-        assertEquals("http://www.green.com/", e.getNamespaceURI("green"));
-        assertEquals("http://www.blue.com/", e.getNamespaceURI("blue"));
-        assertEquals("http://www.green.com/", e.getNamespaceURI("pre1"));
-        assertEquals("http://www.yellow.com/", e.getNamespaceURI("yellow"));
+        assertEquals(
+          "http://www.green.com/", 
+          e.getNamespaceURI("green"));
+        assertEquals(
+          "http://www.blue.com/", 
+          e.getNamespaceURI("blue"));
+        assertEquals(
+          "http://www.green.com/", 
+          e.getNamespaceURI("pre1"));
+        assertEquals(
+          "http://www.yellow.com/", 
+          e.getNamespaceURI("yellow"));
         
         
-        Element e2 = new Element("mauve:child", "http://www.mauve.com");
+        Element e2 = new Element(
+          "mauve:child", "http://www.mauve.com");
         e.appendChild(e2);
-        assertEquals("http://www.red.com/", e2.getNamespaceURI("red"));
-        assertEquals("http://www.blue.com/", e2.getNamespaceURI("blue"));
-        assertEquals("http://www.green.com/", e2.getNamespaceURI("green"));
-        assertEquals("http://www.green.com/", e2.getNamespaceURI("pre1"));
-        assertEquals("http://www.yellow.com/", e2.getNamespaceURI("yellow"));
+        assertEquals(
+          "http://www.red.com/", 
+          e2.getNamespaceURI("red"));
+        assertEquals(
+          "http://www.blue.com/", 
+          e2.getNamespaceURI("blue"));
+        assertEquals(
+          "http://www.green.com/", 
+          e2.getNamespaceURI("green"));
+        assertEquals(
+          "http://www.green.com/", 
+          e2.getNamespaceURI("pre1"));
+        assertEquals(
+          "http://www.yellow.com/", 
+          e2.getNamespaceURI("yellow"));
         assertNull(e2.getNamespaceURI("head"));
         
         
@@ -402,8 +435,8 @@ public class ElementTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
         
-        // can't add conflicting attribute from different namespace
-        // even with identical QName
+        // can't add conflicting attribute from 
+        // different namespace even with identical QName
         try {
             Attribute a4 = new Attribute(
               "pre1:green", "http://www.example.com/", "data");
@@ -417,7 +450,9 @@ public class ElementTest extends XOMTestCase {
         e.removeNamespaceDeclaration("green");
         assertNull(e.getNamespaceURI("green"));
         e.addNamespaceDeclaration("green", "http://www.green2.com/");
-        assertEquals("http://www.green2.com/", e.getNamespaceURI("green"));
+        assertEquals(
+          "http://www.green2.com/", 
+          e.getNamespaceURI("green"));
          
     }
 
@@ -434,7 +469,9 @@ public class ElementTest extends XOMTestCase {
         e.addAttribute(a1);
         e.addAttribute(a2);
 
-        assertEquals(a2, e.getAttribute("green", "http://www.green.com/"));
+        assertEquals(
+          a2, 
+          e.getAttribute("green", "http://www.green.com/"));
         assertEquals(a1, e.getAttribute("name"));
         assertEquals(a1, e.getAttribute("name", ""));
         assertEquals(e, a1.getParent());
@@ -511,7 +548,8 @@ public class ElementTest extends XOMTestCase {
         assertEquals(e.getValue(), "data moredata");
         e.appendChild(new Comment(" moredata"));
         assertEquals(e.getValue(), "data moredata");
-        e.appendChild(new ProcessingInstruction("target", " moredata"));
+        e.appendChild(
+          new ProcessingInstruction("target", " moredata"));
         assertEquals(e.getValue(), "data moredata");
         
         Element e2 = new Element("child");
@@ -659,7 +697,9 @@ public class ElementTest extends XOMTestCase {
     }
     
 
-    public void testSetNamespaceURIConflictsWithAdditionalNamespaceDeclaration() {
+    public void 
+      testSetNamespaceURIConflictsWithAdditionalNamespaceDeclaration() 
+      {
         
         String name = "red:sakjdhjhd";
         String uri = "http://www.red.com/";
@@ -682,7 +722,8 @@ public class ElementTest extends XOMTestCase {
         String name = "red:sakjdhjhd";
         String uri = "http://www.red.com/";
         Element e = new Element(name, uri);
-        e.addAttribute(new Attribute("red:test", "http://www.red.com/", "value"));
+        e.addAttribute(
+          new Attribute("red:test", "http://www.red.com/", "value"));
         
         try {
             e.setNamespaceURI("http://www.example.com");
@@ -704,11 +745,12 @@ public class ElementTest extends XOMTestCase {
         element.addAttribute(new Attribute("green:money", 
          "http://example.com/", "value"));
         element.addNamespaceDeclaration("purple", uri);
-        element.addAttribute(new Attribute("mauve:money", uri, "value"));
+        element.addAttribute(
+          new Attribute("mauve:money", uri, "value"));
         
         try {
             element.setNamespacePrefix("blue");
-            fail("Conflicting prefix allowed against additional namespace declaration");  
+            fail("Conflicting prefix allowed against additional " +                "namespace declaration");  
         }
         catch (NamespaceException ex) {
             // success   
@@ -763,9 +805,11 @@ public class ElementTest extends XOMTestCase {
         String uri = "http://www.red.com/";
         Element e = new Element(name, uri);
         
-        Element e2 = new Element("mauve:child", "http://www.mauve.com");
+        Element e2 = new Element(
+          "mauve:child", "http://www.mauve.com");
         e.insertChild(e2, 0);
-        Element e3 = new Element("mauve:child", "http://www.mauve.com");
+        Element e3 = new Element(
+          "mauve:child", "http://www.mauve.com");
         e.insertChild(e3, 0);
 
         e.insertChild("Hello", 0);
@@ -809,11 +853,11 @@ public class ElementTest extends XOMTestCase {
         String uri = "http://www.red.com/";
         Element e = new Element(name, uri);
         
-        Element e2 = new Element("mauve:child", "http://www.mauve.com");
+        Element e2 = new Element("mv:child", "http://www.mauve.com");
         e.insertChild(e2, 0);
-        Element e3 = new Element("mauve:child", "http://www.mauve.com");
+        Element e3 = new Element("mv:child", "http://www.mauve.com");
         e.insertChild(e3, 0);
-        Element e4 = new Element("mauve:child", "http://www.mauve.com");
+        Element e4 = new Element("mv:child", "http://www.mauve.com");
         e3.insertChild(e4, 0);
         
         assertEquals(e3, e.getChild(0));
@@ -1036,7 +1080,7 @@ public class ElementTest extends XOMTestCase {
             element.addAttribute(
               new Attribute("pre:att", "ftp://example.com/", "value")
             );
-            fail("added attribute that conflicts with additional namespace declaration");
+            fail("added attribute that conflicts with " +                "additional namespace declaration");
         }
         catch (NamespaceException ex) {
             // success   
@@ -1049,18 +1093,24 @@ public class ElementTest extends XOMTestCase {
         assertEquals(3, element.getAttributeCount());
 
         try {
-            element.addNamespaceDeclaration("ok", "http://www.example.net");
-            fail("added namespace declaration that conflicts with attribute");
+            element.addNamespaceDeclaration(
+              "ok", "http://www.example.net");
+            fail("added namespace declaration that " +                "conflicts with attribute");
         }
         catch (NamespaceException ex) {
             // success   
             assertNotNull(ex.getMessage());
         }
         
-        assertEquals("ftp://example.com/", element.getNamespaceURI("ok"));
-        assertEquals("http://www.w3.org/TR/1999/xlink", element.getNamespaceURI("xlink"));
-        assertEquals("http://www.example.com", element.getNamespaceURI("pre"));
-
+        assertEquals(
+          "ftp://example.com/", 
+          element.getNamespaceURI("ok"));
+        assertEquals(
+          "http://www.w3.org/TR/1999/xlink", 
+          element.getNamespaceURI("xlink"));
+        assertEquals(
+          "http://www.example.com", 
+          element.getNamespaceURI("pre"));
         
     }    
 
@@ -1074,26 +1124,32 @@ public class ElementTest extends XOMTestCase {
         e.addNamespaceDeclaration("blue", "http://www.blue.com");
         e.addNamespaceDeclaration("green", "http://www.green.com");
         Attribute a1 = new Attribute("test", "test");
-        Attribute a2 = new Attribute("pre1:green", "http://www.green.com/", "data");
-        Attribute a3 = new Attribute("yellow:sfsdadf", "http://www.yellow.com/", "data");
+        Attribute a2 = new Attribute("pre1:green", 
+          "http://www.green.com/", "data");
+        Attribute a3 = new Attribute("yellow:sfsdadf", 
+          "http://www.yellow.com/", "data");
         e.addAttribute(a1);
         e.addAttribute(a2);
         e.addAttribute(a3);
         
         
-        Element e2 = new Element("mauve:child", "http://www.mauve.com");
+        Element e2 = new Element("mv:child", "http://www.mauve.com");
         e.appendChild(e2);
         
-        Element e3 = new Element("mauve:child", "http://www.mauve.com");
+        Element e3 = new Element("mv:child", "http://www.mauve.com");
         e.insertChild(e3, 0);
-        Element e4 = new Element("mauve:child", "http://www.mauve.com");
+        Element e4 = new Element("mv:child", "http://www.mauve.com");
         e3.insertChild(e4, 0);
         e.setBaseURI(baseURI);
         
         Element copy = (Element) e.copy();
         
-        assertEquals(e.getNamespaceURI("red"), copy.getNamespaceURI("red"));
-        assertEquals(e.getNamespaceURI("blue"), copy.getNamespaceURI("blue"));
+        assertEquals(
+          e.getNamespaceURI("red"), 
+          copy.getNamespaceURI("red"));
+        assertEquals(
+          e.getNamespaceURI("blue"), 
+          copy.getNamespaceURI("blue"));
         assertEquals(e.getValue(), copy.getValue());
         assertEquals(e.getAttribute("test").getValue(), 
           copy.getAttribute("test").getValue());
@@ -1109,11 +1165,11 @@ public class ElementTest extends XOMTestCase {
         Attribute a1 = new Attribute("test", "test");       
         e.addAttribute(a1);
         
-        Element e2 = new Element("mauve:child", "http://www.mauve.com");
+        Element e2 = new Element("mv:child", "http://www.mauve.com");
         e.insertChild(e2, 0);
-        Element e3 = new Element("mauve:child", "http://www.mauve.com");
+        Element e3 = new Element("mv:child", "http://www.mauve.com");
         e.insertChild(e3, 0);
-        Element e4 = new Element("mauve:child", "http://www.mauve.com");
+        Element e4 = new Element("mv:child", "http://www.mauve.com");
         e3.insertChild(e4, 0);
   
   
@@ -1141,11 +1197,14 @@ public class ElementTest extends XOMTestCase {
         
         e.addAttribute(new Attribute("test", "value"));
         e.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "http://www.example.com/"));
+          "http://www.w3.org/XML/1998/namespace", 
+          "http://www.example.com/"));
         
         assertEquals("value", e.getAttributeValue("test"));
-        assertEquals("http://www.example.com/", e.getAttributeValue("base", 
-          "http://www.w3.org/XML/1998/namespace"));
+        assertEquals(
+          "http://www.example.com/", 
+          e.getAttributeValue("base", 
+            "http://www.w3.org/XML/1998/namespace"));
         assertNull(e.getAttributeValue("xml:base"));
         assertNull(e.getAttributeValue("base"));
         assertNull(e.getAttributeValue("test", 
