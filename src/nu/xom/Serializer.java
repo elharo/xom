@@ -314,8 +314,9 @@ public class Serializer {
      */
     protected void write(Element element) throws IOException {
 
+        boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
         if (escaper.isIndenting() 
-          && !escaper.isPreserveSpace() 
+          && !wasPreservingWhiteSpace 
           && !escaper.justBroke()) {
             escaper.breakLine();
         }
@@ -336,7 +337,6 @@ public class Serializer {
         if (hasRealChildren) {
             writeStartTag(element);
             // adjust for xml:space
-            boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
             String newXMLSpaceValue = element.getAttributeValue(
               "space", "http://www.w3.org/XML/1998/namespace");
             if  (newXMLSpaceValue != null) {
