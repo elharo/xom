@@ -185,7 +185,15 @@ public class EncodingTest extends XOMTestCase {
 
     public void testUCS2() throws ParsingException, IOException {
         checkAll("ISO-10646-UCS-2");
+    }
+    
+    // Test that with an encoding XOM does not specifically support
+    // but the VM does, everything still works.
+    public void testUnsupportedEncoding() 
+      throws ParsingException, IOException {
+        checkAll("Cp1252");
     } 
+    
 
     // Sun's Java 1.4.2 and earlier has some nasty bugs in input for 
     // EBCDIC. Specifically it maps NEL to linefeed. Therefore checkAll
