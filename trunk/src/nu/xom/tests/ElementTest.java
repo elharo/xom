@@ -208,13 +208,14 @@ public class ElementTest extends XOMTestCase {
 
     
     public void testToXML2() throws ParsingException, IOException {
+        
         Builder builder = new Builder();
         File f = new File("data/soapresponse.xml");   
         Document doc = builder.build(f); 
         Element root = doc.getRootElement();
         String  form = root.toXML();
         Document doc2 
-          = builder.build(form, "file://" + f.getCanonicalPath());
+          = builder.build(form, f.toURL().toExternalForm());
         Element root2 = doc2.getRootElement();
         assertEquals(root, root2);
          
