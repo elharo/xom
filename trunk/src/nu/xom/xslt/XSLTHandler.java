@@ -175,8 +175,24 @@ class XSLTHandler
                 String currentValue 
                   = element.getNamespaceURI(namespacePrefix); 
                 if (!namespaceName.equals(currentValue)) {
-                    element.addNamespaceDeclaration(namespacePrefix, 
-                     namespaceName);
+                    try {
+                        element.addNamespaceDeclaration(namespacePrefix, 
+                         namespaceName);
+                    }
+                    catch (NamespaceConflictException ex) {
+                       // work around Bug 27937 in Xalan
+                       // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27937
+                       // Xalan somtimes use the XML namespace 
+                       // http://www.w3.org/XML/1998/namespace where it
+                       // should use the empty string
+                       if ("http://www.w3.org/XML/1998/namespace".equals(namespaceName)
+                         && "".equals(namespacePrefix)) {
+                            element.addNamespaceDeclaration("", "");                           
+                       }
+                       else {
+                           throw ex;
+                       }
+                    }
                 }                
             }             
         }        
@@ -274,12 +290,22 @@ class XSLTHandler
 
     
     public void endPrefixMapping(String prefix) {
+        
         Stack uris = (Stack) prefixes.get(prefix);
+        // The if statement works around Bug 27937 in Xalan
+        // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27937
+        // Xalan somtimes use the XML namespace 
+        // http://www.w3.org/XML/1998/namespace where it
+        // should use the empty string
+        // Without this bug we could pop without the check
+        if (uris.isEmpty()) return;
         uris.pop();
+        
     }
     
     
     public void startPrefixMapping(String prefix, String uri) {
+        
         if (uri == null) uri = "";
         Stack uris = (Stack) prefixes.get(prefix);
         if (uris == null) {
