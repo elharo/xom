@@ -119,12 +119,72 @@ public class IDTest extends XOMTestCase {
     }
     
     
-    public void testNameSetXmlIdAttributeHasTypeId() 
-      throws ParsingException, IOException {
+    public void testNamespaceSetXmlIdAttributeHasTypeId() {
         
         Attribute id = new Attribute("id", "p2");
         id.setNamespace("xml", "http://www.w3.org/XML/1998/namespace");
         assertEquals(Attribute.Type.ID, id.getType());
+        
+    }
+
+    
+    public void testNameSetXmlIdAttributeHasTypeId() {
+        
+        Attribute id = new Attribute("xml:space", 
+          "http://www.w3.org/XML/1998/namespace", "preserve");
+        id.setLocalName("id");
+        assertEquals(Attribute.Type.ID, id.getType());
+        
+    }
+
+    
+    public void testNameSetXmlIdAttributeMustBeNCName() {
+        
+        Attribute id = new Attribute("xml:space", 
+          "http://www.w3.org/XML/1998/namespace", "not a name");
+        try {
+            id.setLocalName("id");
+            fail("Allowed non-NCNAME ID");
+        }
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testCantChangeTypeOfXMLIDAttribute() {
+        
+        Attribute id = new Attribute("xml:id", 
+          "http://www.w3.org/XML/1998/namespace", "p2");
+        
+        try {
+            id.setType(Attribute.Type.CDATA);
+            fail("changed xml:id attribute to CDATA");
+        }
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
+        assertEquals(Attribute.Type.ID, id.getType());
+        
+    }
+
+    
+    public void testCantChangeValueOfXMLIDAttributeToNonNCName() {
+        
+        Attribute id = new Attribute("xml:id", 
+          "http://www.w3.org/XML/1998/namespace", "p2");
+        Attribute id2 = new Attribute(id);
+        try {
+            id.setValue("not a name");
+            fail("Allowed non-name for xml:id");
+        }
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+        // nothing changed
+        assertEquals(id, id2);
         
     }
 
@@ -145,4 +205,5 @@ public class IDTest extends XOMTestCase {
         
     }
 
+    
 }
