@@ -81,7 +81,7 @@ public class BuilderTest extends XOMTestCase {
       = "<!ENTITY hatch-pic SYSTEM " +
         "\"http://www.example.com/images/cup.gif\" NDATA gif>";
     private String unparsedEntityDeclarationPublic
-      = "<!ENTITY public-pic PUBLIC \"public ID\"" +
+      = "<!ENTITY public-pic PUBLIC \"public ID\" " +
         "\"http://www.example.com/images/cup.gif\" NDATA gif>";
     private String internalEntityDeclaration 
       = "<!ENTITY Pub-Status \"" +        "This is a pre-release of the specification.\">";
@@ -95,7 +95,7 @@ public class BuilderTest extends XOMTestCase {
      = "<!NOTATION ISODATE SYSTEM "
      + "\"http://www.iso.ch/cate/d15903.html\">";
     private String notationDeclarationPublicAndSystem 
-     = "<!NOTATION DATE PUBLIC \"DATE PUBLIC ID\""
+     = "<!NOTATION DATE PUBLIC \"DATE PUBLIC ID\" "
      + "\"http://www.iso.ch/cate/d15903.html\">";
     private String notationDeclarationPublic = "<!NOTATION gif PUBLIC "
     + "\"-//Textuality//TEXT Standard open-hatch boilerplate//EN\">";
