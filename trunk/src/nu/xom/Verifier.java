@@ -197,66 +197,8 @@ final class Verifier {
      * @throws MalformedURIException if this is not a legal URI
      */
     private static void checkURI(String uri) {
-        // URIs can be null or empty
-        if (uri == null) return;
-        int uriLength =  uri.length();
-        if (uriLength == 0) return;
-        
-        char[] data = uri.toCharArray();
-        int leftBrackets = 0;
-        int rightBrackets = 0;
-        for (int i = 0; i < uriLength; i++) {
-            char test = data[i];
-            if (!isURICharacter(test)) {
-                String msgNumber = "0x" + Integer.toHexString(test);
-                if (test <= 0x09) {
-                    msgNumber = "0x0" + Integer.toHexString(test);
-                } 
-                throw new MalformedURIException("URIs cannot contain "
-                    + msgNumber);
-            } // end if
-            else if (test == '%') { 
-               // must be followed by two hexadecimal digits
-                   try {
-                       char firstDigit = uri.charAt(i+1);
-                       char secondDigit = uri.charAt(i+2);
-                       if (!isHexDigit(firstDigit) 
-                        || !isHexDigit(secondDigit)) {
-                           throw new MalformedURIException(
-                            "Percent signs in URIs must be followed "
-                            + "by exactly two hexadecimal digits.");    
-                       }
-          
-                   }
-                   catch (StringIndexOutOfBoundsException ex) {
-                       throw new MalformedURIException(
-                        "Percent signs in URIs must be followed by "
-                        + "exactly two hexadecimal digits.");    
-                   }
-            }
-            else if (test == '[') {
-                leftBrackets++;  
-                if (rightBrackets >= leftBrackets) {
-                    throw new MalformedURIException(
-                        "Bad use of square brackets"
-                    );                                       
-                } 
-            }
-            else if (test == ']') {
-                rightBrackets++;   
-            }
-        } // end for
-
-        if (leftBrackets != rightBrackets || leftBrackets > 1) {
-            throw new MalformedURIException(
-                "Bad use of square brackets"
-            );                   
-        }
-
-        // If we got here, everything is OK
-        return;
+        checkIRIOrURI(uri, true);
     }
-
 
     /**
      * <p>
@@ -268,6 +210,10 @@ final class Verifier {
      * @throws MalformedURIException if this is not a legal IRI
      */
     static void checkIRI(String iri) {
+        checkIRIOrURI(iri, false);
+    }
+
+    private static void checkIRIOrURI(String iri, boolean checkForURI) {
         // IRIs can be null or empty
         if ((iri == null) || iri.length() == 0) {
             return;
@@ -277,13 +223,21 @@ final class Verifier {
         int rightBrackets = 0;
         for (int i = 0; i < iri.length(); i++) {
             char test = iri.charAt(i);
-            if (!isIRICharacter(test)) {
+            if (checkForURI && !isURICharacter(test)) {
+                String msgNumber = "0x" + Integer.toHexString(test);
+                if (test <= 0x09) {
+                    msgNumber = "0x0" + Integer.toHexString(test);
+                } 
+                throw new MalformedURIException("URIs cannot contain "
+                  + msgNumber);                
+            }
+            else if (!isIRICharacter(test)) {
                 String msgNumber = "0x" + Integer.toHexString(test);
                 if (test <= 0x09) {
                     msgNumber = "0x0" + Integer.toHexString(test);
                 } 
                 throw new MalformedURIException("IRIs cannot contain "
-                    + msgNumber);
+                  + msgNumber);
             } // end if
             if (test == '%') { 
             // must be followed by two hexadecimal digits
