@@ -1,25 +1,24 @@
-// Copyright 2002-2004 Elliotte Rusty Harold
-// 
-// This library is free software; you can redistribute 
-// it and/or modify it under the terms of version 2.1 of 
-// the GNU Lesser General Public License as published by  
-// the Free Software Foundation.
-// 
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-// GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General 
-// Public License along with this library; if not, write to the 
-// Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
-// Boston, MA  02111-1307  USA
-// 
-// You can contact Elliotte Rusty Harold by sending e-mail to
-// elharo@metalab.unc.edu. Please include the word "XOM" in the
-// subject line. The XOM home page is temporarily located at
-// http://www.cafeconleche.org/XOM/  but will eventually move
-// to http://www.xom.nu/
+/* Copyright 2002-2004 Elliotte Rusty Harold
+   
+   This library is free software; you can redistribute it and/or modify
+   it under the terms of version 2.1 of the GNU Lesser General Public 
+   License as published by the Free Software Foundation.
+   
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+   GNU Lesser General Public License for more details.
+   
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the 
+   Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+   Boston, MA 02111-1307  USA
+   
+   You can contact Elliotte Rusty Harold by sending e-mail to
+   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   subject line. The XOM home page is temporarily located at
+   http://www.cafeconleche.org/XOM/  but will eventually move
+   to http://www.xom.nu/  */
 
 package nu.xom.tests;
 
@@ -96,7 +95,8 @@ public class SerializerTest extends XOMTestCase {
             "http://www.w3.org/XML/1998/namespace", 
             "preserve"));
         String value =  
-          "This is a long sentence with plenty of opportunities for " +          "breaking from beginning to end.";
+          "This is a long sentence with plenty of opportunities for " +
+          "breaking from beginning to end.";
         root.appendChild(value);    
         Serializer serializer = new Serializer(out, "UTF-8");
         serializer.setMaxLength(20);
@@ -187,7 +187,8 @@ public class SerializerTest extends XOMTestCase {
             "preserve"));
         Element child1 = new Element("preserve");
         String value = 
-          "This is a long sentence with plenty of opportunities for " +          "breaking from beginning to end.";
+          "This is a long sentence with plenty of opportunities for " +
+          "breaking from beginning to end.";
         child1.appendChild(value);    
         Element child2 = new Element("default");
         root.appendChild(child1);
@@ -198,11 +199,13 @@ public class SerializerTest extends XOMTestCase {
             "http://www.w3.org/XML/1998/namespace", 
             "default"));
         String value2 = 
-            "This is another very long sentence with plenty" +            " of opportunities for breaking from beginning to end.";
+            "This is another very long sentence with plenty" +
+            " of opportunities for breaking from beginning to end.";
         child2.appendChild(value2);
 
         String value3 = 
-          "This is still another very long sentence with plenty of " +          "opportunities for breaking from beginning to end.";
+          "This is still another very long sentence with plenty of " +
+          "opportunities for breaking from beginning to end.";
         Element preserveAgain = new Element("test");
         preserveAgain.appendChild(value3);
         child2.appendChild(preserveAgain);
@@ -284,7 +287,8 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
         String result = out.toString("UTF-8");
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
-          + "<root xml:space=\"preserve\">" +            "<child xml:space=\"default\"/></root>\r\n",
+          + "<root xml:space=\"preserve\">" +
+            "<child xml:space=\"default\"/></root>\r\n",
            result); 
         
     }
@@ -311,7 +315,9 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
         String result = out.toString("UTF-8");
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
-          + "<root xml:space=\"preserve\">" +            "<child xml:space=\"default\">\r\n    <differentLine/>\r\n" +            "  </child></root>\r\n",
+          + "<root xml:space=\"preserve\">" +
+            "<child xml:space=\"default\">\r\n    <differentLine/>\r\n" +
+            "  </child></root>\r\n",
            result); 
         
     }
@@ -608,9 +614,11 @@ public class SerializerTest extends XOMTestCase {
         String breaks 
           = "This\nstring\rcontains\r\rseveral\n\nweird line breaks.";
         String breaksHalfEscaped 
-          = "This\nstring&#x0D;contains&#x0D;&#x0D;several" +            "\n\nweird line breaks.";
+          = "This\nstring&#x0D;contains&#x0D;&#x0D;several" +
+            "\n\nweird line breaks.";
         String breaksEscaped 
-          = "This&#x0A;string&#x0D;contains&#x0D;&#x0D;several" +            "&#x0A;&#x0A;weird line breaks.";
+          = "This&#x0A;string&#x0D;contains&#x0D;&#x0D;several" +
+            "&#x0A;&#x0A;weird line breaks.";
         root.appendChild(breaks);
             
         Serializer serializer = new Serializer(out, "UTF-8");

@@ -1,25 +1,24 @@
-// Copyright 2002-2004 Elliotte Rusty Harold
-// 
-// This library is free software; you can redistribute 
-// it and/or modify it under the terms of version 2.1 of 
-// the GNU Lesser General Public License as published by  
-// the Free Software Foundation.
-// 
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
-// GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General 
-// Public License along with this library; if not, write to the 
-// Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
-// Boston, MA  02111-1307  USA
-// 
-// You can contact Elliotte Rusty Harold by sending e-mail to
-// elharo@metalab.unc.edu. Please include the word "XOM" in the
-// subject line. The XOM home page is temporarily located at
-// http://www.cafeconleche.org/XOM/  but will eventually move
-// to http://www.xom.nu/
+/* Copyright 2002-2004 Elliotte Rusty Harold
+   
+   This library is free software; you can redistribute it and/or modify
+   it under the terms of version 2.1 of the GNU Lesser General Public 
+   License as published by the Free Software Foundation.
+   
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+   GNU Lesser General Public License for more details.
+   
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the 
+   Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+   Boston, MA 02111-1307  USA
+   
+   You can contact Elliotte Rusty Harold by sending e-mail to
+   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   subject line. The XOM home page is temporarily located at
+   http://www.cafeconleche.org/XOM/  but will eventually move
+   to http://www.xom.nu/  */
 
 package nu.xom.tests;
 
@@ -177,13 +176,16 @@ public class BuilderTest extends XOMTestCase {
       = "<!ENTITY public-pic PUBLIC \"public ID\" " +
         "\"http://www.example.com/images/cup.gif\" NDATA gif>";
     private String internalEntityDeclaration 
-      = "<!ENTITY Pub-Status \"" +        "This is a pre-release of the specification.\">";
+      = "<!ENTITY Pub-Status \"" +
+        "This is a pre-release of the specification.\">";
     private String externalEntityDeclarationPublic = 
       "<!ENTITY open-hatch " 
-      + "PUBLIC \"-//Textuality//TEXT Standard " +        "open-hatch boilerplate//EN\" "
+      + "PUBLIC \"-//Textuality//TEXT Standard " +
+        "open-hatch boilerplate//EN\" "
       + "\"http://www.textuality.com/boilerplate/OpenHatch.xml\">";
     private String externalEntityDeclarationSystem = 
-      "<!ENTITY test SYSTEM " +      "\"http://www.textuality.com/boilerplate/OpenHatch.xml\">";
+      "<!ENTITY test SYSTEM " +
+      "\"http://www.textuality.com/boilerplate/OpenHatch.xml\">";
     private String notationDeclarationSystem 
      = "<!NOTATION ISODATE SYSTEM "
      + "\"http://www.iso.ch/cate/d15903.html\">";
@@ -215,7 +217,8 @@ public class BuilderTest extends XOMTestCase {
      + "<span xlink:type='simple'>here&apos;s the link</span>\r\n"
      + "<svg:svg xmlns:svg='http://www.w3.org/TR/2000/svg'>"
      + "<svg:text>text in a namespace</svg:text></svg:svg>\r\n"
-     + "<svg xmlns='http://www.w3.org/TR/2000/svg'><text>text in a "      +   "namespace</text></svg></test>\r\n<!--epilog-->";
+     + "<svg xmlns='http://www.w3.org/TR/2000/svg'><text>text in a " 
+     +   "namespace</text></svg></test>\r\n<!--epilog-->";
      
     private String validDoc = "<!DOCTYPE test [\r\n"
      + "<!ELEMENT test (#PCDATA)>\n" 
@@ -1230,7 +1233,8 @@ public class BuilderTest extends XOMTestCase {
     public void testJavaEncodings() 
       throws IOException, ParsingException {
         
-        String str = "<?xml version='1.0' encoding='ISO8859_1'?>" +            "<root>é</root>"; 
+        String str = "<?xml version='1.0' encoding='ISO8859_1'?>" +
+            "<root>é</root>"; 
         byte[] data = str.getBytes("8859_1"); 
         InputStream in = new ByteArrayInputStream(data);
         Document doc = builder.build(in);
