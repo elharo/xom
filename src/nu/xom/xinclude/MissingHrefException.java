@@ -31,17 +31,9 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  */
 public class MissingHrefException extends XIncludeException {
-
-    /**
-     * <p>
-     * Constructs a <code>MissingHrefException</code> 
-     * with <code>null</code> as its error detail message.
-     * </p>
-     */
-    public MissingHrefException() {}
 
     /**
      * <p>
