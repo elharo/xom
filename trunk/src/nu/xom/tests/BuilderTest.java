@@ -68,7 +68,7 @@ public class BuilderTest extends XOMTestCase {
     
     // flag to turn on and off tests based on 
     // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=24124
-    private boolean xercesBroken = true;
+    private boolean xercesBroken = false;
     
     private String elementDeclaration = "<!ELEMENT root (#PCDATA)>";
     private String defaultAttributeDeclaration 
@@ -650,7 +650,7 @@ public class BuilderTest extends XOMTestCase {
                 assertTrue(success.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
-                Document doc = builder.build(reader); 
+                Document doc = builder.build(new StringReader(source)); 
                 this.verify(success.getDocument());
                 assertEquals(doc, success.getDocument());
             }
@@ -728,7 +728,7 @@ public class BuilderTest extends XOMTestCase {
                 assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
-                Document doc = builder.build(reader1, base); 
+                Document doc = builder.build(new StringReader(source), base); 
                 this.verify(ex.getDocument());
                 assertEquals(doc, ex.getDocument());
             }
@@ -753,7 +753,7 @@ public class BuilderTest extends XOMTestCase {
                 assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
-                Document doc = builder.build(in, base); 
+                Document doc = builder.build(new ByteArrayInputStream(source.getBytes("UTF-8")), base); 
                 this.verify(ex.getDocument());
                 assertEquals(doc, ex.getDocument());
             }
@@ -777,7 +777,7 @@ public class BuilderTest extends XOMTestCase {
                 assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
-                Document doc = builder.build(in); 
+                Document doc = builder.build(new ByteArrayInputStream(source.getBytes("UTF-8"))); 
                 this.verify(ex.getDocument());
                 assertEquals(doc, ex.getDocument());
             }
