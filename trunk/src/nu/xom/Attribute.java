@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.1d6
  * 
  */
 public class Attribute extends Node {
@@ -430,17 +430,17 @@ public class Attribute extends Node {
      * @param URI the new namespace URI
      * 
      * @throws MalformedURIException if <code>URI</code> is 
-     *     not an RFC2396 URI reference
+     *     not an RFC 3986 URI reference
      * @throws IllegalNameException if
      *  <ul>
-     *      <li>The prefix is <code>xmlns</code></li>
+     *      <li>The prefix is <code>xmlns</code>.</li>
      *      <li>The prefix is null or the empty string.</li>
      *      <li>The URI is null or the empty string.</li>
      * </ul>
      * @throws NamespaceConflictException if
      *  <ul>
      *      <li>The prefix is <code>xml</code> and the namespace URI is
-     *          not <code>http://www.w3.org/XML/1998/namespace</code></li>
+     *          not <code>http://www.w3.org/XML/1998/namespace</code>.</li>
      *      <li>The prefix conflicts with an existing declaration
      *          on the attribute's parent element.</li>
      * </ul>
