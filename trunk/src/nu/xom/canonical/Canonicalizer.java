@@ -892,8 +892,7 @@ public class Canonicalizer {
      * 
      * <pre><code> Canonicalizer canonicalizer 
      *   = new Canonicalizer(System.out, Canonicalizer.CANONICAL_XML);
-     * XPathContext context = new XPathContext("n1", "http://example.net");
-     * Nodes result = doc.query(" (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context);
+     * Nodes result = doc.query("//. | //@* | //namespace::*");
      * canonicalizer.write(result);  
      * </code></pre>
      * 
@@ -987,8 +986,16 @@ public class Canonicalizer {
             }
             sort(list, namespaces, out, (ParentNode) root);
             if (! list.isEmpty() ) {
-                throw new CanonicalizationException(
-                  "Cannot canonicalize subsets that contain nodes from more than one document");
+                // Are these just duplicates; or is there really a node
+                // from a different document?
+                Iterator iterator = list.iterator();
+                while (iterator.hasNext()) {
+                    Node next = (Node) iterator.next();
+                    if (root != next.getDocument()) {
+                        throw new CanonicalizationException(
+                          "Cannot canonicalize subsets that contain nodes from more than one document");
+                    }
+                }
             }
             return out;
         }
