@@ -68,8 +68,9 @@ class ISOHebrewWriter extends TextWriter {
             // prefer XOM to work correctly with earlier versions of
             // of Java; and it's not incorrect to output a character 
             // reference even if you don't have to. It is an issue if a
-            // macron is used in a name, a comment, or a PI though.
-            // Is this a legal name character????
+            // macron is used in a a comment or a processing 
+            // instruction though. The macron is not a name character
+            // so that's not an issue though.
             case 0x00AF: return true;  // MACRON
             case 0x00B0: return false; // DEGREE SIGN
             case 0x00B1: return false; // PLUS-MINUS SIGN
