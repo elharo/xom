@@ -36,7 +36,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0b3
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -113,7 +113,7 @@ public class AttributeTest extends XOMTestCase {
         
         try {
             a.setLocalName("pre:a");
-            fail("Allowed local attriubte name contianing colon");
+            fail("Allowed local attribute name containing colon");
         }
         catch (IllegalNameException success) {
             assertNotNull(success.getMessage());
@@ -162,7 +162,7 @@ public class AttributeTest extends XOMTestCase {
         
         // Now try with namespace URI from errata
         try {
-             new Attribute("xmlns:pre", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/");
+            new Attribute("xmlns:pre", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/");
             fail("created xmlns:pre attribute");
          }
          catch (IllegalNameException success) {
@@ -351,7 +351,7 @@ public class AttributeTest extends XOMTestCase {
     public void testEquals() {
         Attribute c1 = new Attribute("test", "limit");
         Attribute c2 = new Attribute("test", "limit");
-        Attribute c3 = new Attribute("skjlchsakdjh", "sajdh sajh ");
+        Attribute c3 = new Attribute("retina", "retina test");
 
         assertEquals(c1, c1);
         assertEquals(c1.hashCode(), c1.hashCode());
