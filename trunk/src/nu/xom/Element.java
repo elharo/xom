@@ -82,7 +82,7 @@ public class Element extends ParentNode {
      * @param uri the namespace URI of the element
      * 
      * @throws IllegalNameException if <code>name</code>  
-     *     is not a legal XML 1.0 non-colonized name
+     *     is not a legal XML 1.0 name
      * @throws NamespaceConflictException if <code>name</code>'s prefix  
      *     cannot be used with <code>uri</code>
      * @throws MalformedURIException if <code>uri</code>  
