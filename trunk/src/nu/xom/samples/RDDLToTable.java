@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -127,7 +127,7 @@ public class RDDLToTable extends NodeFactory {
         
     }
     
-    protected Nodes finishMakingElement(Element element) {
+    public Nodes finishMakingElement(Element element) {
         
         element.removeNamespaceDeclaration("rddl");
         element.removeNamespaceDeclaration("xlink");
