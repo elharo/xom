@@ -497,16 +497,11 @@ public class DOMConverter {
       Element xomElement, org.w3c.dom.Document document) {
         
         org.w3c.dom.Element domResult = makeElement(xomElement, document);
-        org.w3c.dom.Element domParent = domResult;
+        org.w3c.dom.Node domParent = domResult;
         Node xomCurrent = xomElement;
         int index = 0;
         boolean end = false;
         while (true) {
-            
-            String debug = "no";
-            if (xomCurrent instanceof Element) {
-                debug = ((Element) xomCurrent).getLocalName();
-            }
             
             if (!end && xomCurrent.getChildCount() > 0) {
                xomCurrent = xomCurrent.getChild(0);
@@ -516,8 +511,9 @@ public class DOMConverter {
                 boolean wasEnd = end;
                 end = false;
                 ParentNode xomParent = xomCurrent.getParent();
-                if (domParent.getParentNode().getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
-                    domParent = (org.w3c.dom.Element) domParent.getParentNode();
+                if (domParent.getParentNode().getNodeType() == org.w3c.dom.Node.ELEMENT_NODE
+                  && xomCurrent instanceof Element) {
+                    domParent = domParent.getParentNode();
                 }
                 if (xomParent.getChildCount() - 1 == index) {
                     xomCurrent = xomParent;
