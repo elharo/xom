@@ -38,7 +38,7 @@ import java.util.Iterator;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  * 
  */
 final class Attributes {
@@ -180,7 +180,6 @@ final class Attributes {
         
         Attributes result = new Attributes();
         result.attributes.ensureCapacity(this.size());
-        Iterator iterator = this.attributes.iterator();
         for (int i = 0; i < this.attributes.size(); i++) {
             result.attributes.add(this.get(i).copy());
         }

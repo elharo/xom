@@ -342,8 +342,8 @@ public class Serializer {
             }
             escaper.decrementIndent();
             if (escaper.getIndent() > 0 && !escaper.isPreserveSpace()) {
-                Node firstChild = element.getChild(0);
-                /* if (! firstChild.isText() || "".equals(firstChild.getValue().trim()) ) {
+                /* Node firstChild = element.getChild(0);
+                if (! firstChild.isText() || "".equals(firstChild.getValue().trim()) ) {
                      escaper.breakLine();
                 } */
                 if (hasNonTextChildren(element)) {

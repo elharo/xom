@@ -222,29 +222,6 @@ public class Element extends ParentNode {
     }
 
 
-    private static Element copyTag(Element original) {
-    
-        Element copy = new Element();
-        copy.prefix = original.prefix;
-        copy.localName = original.localName;
-        copy.URI = original.URI;
-        
-        // Attach additional namespaces
-        if (original.namespaces != null) {
-            copy.namespaces = original.namespaces.copy();
-        }
-        
-        // Attach clones of attributes
-        if (original.attributes != null) {
-            copy.attributes = original.attributes.copy();
-        } 
-        
-        copy.setActualBaseURI(original.getActualBaseURI());
-        return copy;
-        
-    }
-
-
     /**
      * <p>
      * Returns a list of the child elements of 
@@ -1221,7 +1198,7 @@ public class Element extends ParentNode {
      * @param URI the new base URI for this node
      * 
      * @throws MalformedURIException if <code>URI</code> is 
-     *     not a legal RFC 2396 URI
+     *     not a legal RFC 2396 absolute URI
      */
     public void setBaseURI(String URI) { 
         setActualBaseURI(URI);       
@@ -1271,7 +1248,7 @@ public class Element extends ParentNode {
      * Since this definition is necessarily application-dependent, failing
      * to define the base URI using one of the other methods may result in
      * the same content being interpreted differently by different types of
-     * application." Based on this, if the URI
+     * application." Based on this, if the URI FIXME
      * </p>
      * 
      * @return the base URI of this element 
