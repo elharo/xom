@@ -34,7 +34,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  * 
  */
 public class Comment extends Node {
@@ -46,8 +46,8 @@ public class Comment extends Node {
      * <p>
      * Creates a new <code>Comment</code> object from string data. 
      * The data is checked for legality according to XML 1.0 rules. 
-     * Characters like the form feed and null are not allowed. 
-     * Furthermore, the two hyphen string "--" is not allowed 
+     * Illegal characters such as the form feed and null are not
+     * allowed. Furthermore, the two hyphen string "--" is not allowed;
      * and the last character of the comment may not be a hyphen.
      * </p>
      * 
@@ -89,8 +89,6 @@ public class Comment extends Node {
      * </p>
      * 
      * @return the content of the comment
-     * 
-     * @see nu.xom.Node#getValue()
      */
     public final String getValue() {
         return data;
@@ -103,8 +101,8 @@ public class Comment extends Node {
      * to the specified string.
      * This string is checked for legality according to XML 1.0 rules. 
      * Characters that can be serialized such as &lt; and &amp;  
-     * are allowed. However, characters like the form feed and 
-     * unmatched halves of surrogate pairs are not allowed.
+     * are allowed. However, illegal characters such as the form feed  
+     * and unmatched halves of surrogate pairs are not allowed.
      * Furthermore, the string may not contain a double hyphen 
      * (<code>--</code>) and may not end with a hyphen.
      * </p>
@@ -180,8 +178,6 @@ public class Comment extends Node {
      * </p>
      * 
      * @return zero
-     * 
-     * @see nu.xom.Node#getChildCount()
      */
     public final int getChildCount() {
         return 0;   
@@ -213,8 +209,6 @@ public class Comment extends Node {
      * 
      * @return a <code>String</code> containing a well-formed 
      *     XML comment
-     * 
-     * @see nu.xom.Node#toXML()
      */
     public final String toXML() {
         StringBuffer result = new StringBuffer("<!--");
@@ -233,8 +227,6 @@ public class Comment extends Node {
      * 
      * @return a representation of the <code>Comment</code> 
      *     as a <code>String</code>
-     * 
-     * @see java.lang.Object#toString()
      */
     public final String toString() {
         
