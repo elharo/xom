@@ -117,7 +117,7 @@ class XSLTHandler
               attributeName, 
               namespace, 
               value, 
-              getType(attributes.getType(i))
+              Attribute.Type.UNDECLARED
             ); 
             Attribute attribute = (Attribute) nodes.get(0); // assumes default factory
             element.addAttribute(attribute);    
@@ -136,27 +136,6 @@ class XSLTHandler
                 }
             }
         }
-    }
-    
-    private Attribute.Type getType(String saxType) {
-    
-        if (saxType.equals("CDATA")) return Attribute.Type.CDATA;
-        if (saxType.equals("ID")) return Attribute.Type.ID;
-        if (saxType.equals("IDREF")) return Attribute.Type.IDREF;
-        if (saxType.equals("IDREFS")) return Attribute.Type.IDREFS;
-        if (saxType.equals("NMTOKEN")) return Attribute.Type.NMTOKEN;
-        if (saxType.equals("NMTOKENS")) return Attribute.Type.NMTOKENS;
-        if (saxType.equals("ENTITY")) return Attribute.Type.ENTITY;
-        if (saxType.equals("ENTITIES")) return Attribute.Type.ENTITIES;
-        if (saxType.equals("NOTATION")) return Attribute.Type.NOTATION;
-        // non-standard but some parsers use this
-        if (saxType.equals("ENUMERATION")) {
-            return Attribute.Type.ENUMERATION;
-        }
-        if (saxType.startsWith("(")) return Attribute.Type.ENUMERATION;
-    
-        return Attribute.Type.UNDECLARED;
-        
     }
   
     public void endElement(String namespaceURI, String localName, 
