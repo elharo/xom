@@ -61,8 +61,9 @@ class XPointer {
         boolean found = false;
         
         xptr = decode(xptr);
-        try { // Is this a shorthand XPointer
-            new Element(xptr);
+        try { // Is this a shorthand XPointer?
+            // Need to include a URI in case this is a colonized scheme name 
+            new Element(xptr, "http://www.example.com");
             Element identified = findByID(doc.getRootElement(), xptr); 
             if (identified != null) {
                 result.append(identified);   
