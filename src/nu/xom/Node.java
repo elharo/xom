@@ -337,6 +337,10 @@ public abstract class Node {
      * No variables are bound. 
      * </p>
      * 
+     * <p>
+     * The context position is ????. The context size is ????. 
+     * </p>
+     * 
      * @param xpath the XPath expression to evaluate
      * @param namespaces a collection of namespace prefix bindings used in the 
      *     XPath expression
@@ -367,7 +371,7 @@ public abstract class Node {
             return new Nodes(results);
         }
         catch (JaxenException ex) {
-            throw new XPathException("XPath error???? " + ex.getMessage(), ex);
+            throw new XPathException("XPath error: " + ex.getMessage(), ex);
         }
         
     }
@@ -378,16 +382,6 @@ public abstract class Node {
      * Returns the nodes selected by the XPath expression in the 
      * context of this node. This XPath expression must not contain
      * any namespace prefixes.
-     * </p>
-     * 
-     * <p>
-     * Note that XPath expressions operate on the XPath data model,
-     * not the XOM data model. XPath counts all adjacent 
-     * <code>Text</code> objects as a single text node, and does not
-     * consider empty <code>Text</code> objects. For instance, an 
-     * element that has exactly three text children in XOM, will
-     * have exactly one text child in XPath, whose value is the 
-     * concatenation of all three XOM <code>Text</code> objects. 
      * </p>
      * 
      * <p>
