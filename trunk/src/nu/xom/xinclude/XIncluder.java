@@ -444,8 +444,6 @@ public class XIncluder {
                     }
                     else {
                         Nodes originals = XPointer.resolve(element.getDocument(), xpointer);
-                        // do I need to further resolve any elements in this?
-                        // write a unit test to see????
                         replacements = new Nodes(); 
                         for (int i = 0; i < originals.size(); i++) {
                             Node original = originals.get(i);
