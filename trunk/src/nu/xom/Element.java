@@ -632,12 +632,13 @@ public class Element extends ParentNode {
      */
     public final String getNamespaceURI(String prefix) {
         
+        Element current = this;
         String result = getLocalNamespaceURI(prefix);
-        if (result == null 
-          && getParent() != null 
-          && getParent().isElement()) {
-            Element parent = (Element) getParent();
-            result = parent.getNamespaceURI(prefix);
+        while (result == null) {
+            ParentNode parent = current.getParent();
+            if (parent == null || parent.isDocument()) break;
+            current = (Element) parent; 
+            result = current.getLocalNamespaceURI(prefix);
         }
         if (result == null && "".equals(prefix)) result = "";
         return result;
