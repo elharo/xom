@@ -350,7 +350,7 @@ public class DOMConverterTest extends XOMTestCase {
     }
 
    
-    public void testChildElementAddsNamespace() throws Exception {
+    public void testChildElementAddsNamespace() {
         Element root = new Element("root");
         Element child = new Element("pre:child", "http://www.example.org/");
         child.addAttribute(new Attribute("xlink:type", "http://www.w3.org/1999/xlink", "simple"));
@@ -359,4 +359,24 @@ public class DOMConverterTest extends XOMTestCase {
         
         assertEquals(doc, DOMConverter.convert(DOMConverter.convert(doc, impl)));
     }
+    
+    
+    public void testChildElementUsesSameNamespace() {
+        Element root = new Element("pre:root", "http://www.example.org/");
+        Element child = new Element("pre:child", "http://www.example.org/");
+        root.appendChild(child);
+        Document doc = new Document(root);  
+        assertEquals(doc, DOMConverter.convert(DOMConverter.convert(doc, impl)));
+    }
+    
+    
+    public void testPrefixMappingChanges() {
+        Element root = new Element("pre:root", "http://www.example.org/");
+        Element child = new Element("pre:child", "http://www.example.net/");
+        root.appendChild(child);
+        Document doc = new Document(root);  
+        assertEquals(doc, DOMConverter.convert(DOMConverter.convert(doc, impl)));
+    }
+    
+    
 }
