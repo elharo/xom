@@ -68,7 +68,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b1
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -95,6 +95,23 @@ public class XSLTransformTest extends XOMTestCase {
      + "</test>\r\n"
      + "<!--epilog-->";
 
+    
+    // primarily this makes sure the XSLTHandler can handle various
+    // edge cases
+    public void testIdentityTransform() throws XSLException {
+        
+        File stylesheet = new File("data/xslt/input/identity.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Element root = new Element("root", "http://www.example.org");
+        root.appendChild(new Text("some data"));
+        root.appendChild(new Element("something"));
+        root.addAttribute(new Attribute("test", "test"));
+        root.addAttribute(new Attribute("pre:red", "http://www.red.com/", "value"));
+        Document input = new Document(root);
+        Nodes output = xform.transform(input);
+        assertEquals(root, output.get(0));
+        
+    }
     
     public void testPrefixMappingIssues() 
       throws XSLException, ParsingException, IOException {
@@ -564,22 +581,7 @@ public class XSLTransformTest extends XOMTestCase {
     } 
 
     
-    // primarily this makes sure the XSLTHandler can handle various
-    // edge cases
-    public void testIdentityTransform() throws XSLException {
-        
-        File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
-        Element root = new Element("root", "http://www.example.org");
-        root.appendChild(new Text("some data"));
-        root.appendChild(new Element("something"));
-        root.addAttribute(new Attribute("test", "test"));
-        root.addAttribute(new Attribute("pre:red", "http://www.red.com/", "value"));
-        Document input = new Document(root);
-        Nodes output = xform.transform(input);
-        assertEquals(root, output.get(0));
-        
-    } 
+
     
     
     public void testTriple() 
