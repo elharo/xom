@@ -1320,5 +1320,15 @@ public class SerializerTest extends XOMTestCase {
           result
         );       
     }
+    
+    public void testNullOutputStream() {
+        try {
+            Serializer serializer = new Serializer(null);
+            fail("Allowed null output stream");   
+        }   
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());   
+        }
+    }
 
 }
