@@ -206,6 +206,7 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
+
     
     public void testCircle1() 
       throws ParseException, IOException, XIncludeException {
@@ -320,16 +321,28 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
-    public void testXPointerBareNameMatchesNothing() 
+    public void testShorthandXPointerMatchesNothing() 
       throws ParseException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/xptridtest2.xml");
         Document doc = builder.build(input);
-        Document result = XIncluder.resolve(doc);
+        try {
+            Document result = XIncluder.resolve(doc);
+            fail("Resolved a document with an XPointer that selects no subresource");
+        }
+        catch (XIncludeException ex) {
+            // success   
+        }
+        
+        
+        /* I used to think this case included nothing.
+           Now I think an XPointer that matches no
+           subresource, and does not have a fallback is in error.
         Document expectedResult = builder.build(
           new File("data/xinclude/output/xptridtest2.xml")
         );
         assertEquals(expectedResult, result);
+        */
         
     }
     
@@ -362,6 +375,24 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    // Test with 2 element schemes in the XPointer.
+    // The first one uses an ID that doesn't exist 
+    // and points to nothing. The second one
+    // selects something.
+    public void testXPointerDoubleTumbler() 
+      throws ParseException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/xptrdoubletumblertest.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/xptrtumblertest.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+
+
     // Make sure XPointer failures are treated as a resource error,
     // not a fatal error.
     public void testXPointerFailureIsAResourceError() 
@@ -381,15 +412,16 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
-    // Make sure XPointer syntax errors are treated as a resource error,
-    // not a fatal error.???? see section 4.2 of XInclude CR
+    // Make sure XPointer syntax errors are treated as a resource 
+    // error, not a fatal error per section 4.2 of XInclude CR
     /* Resources that are unavailable for any reason 
       (for example the resource doesn't exist, connection 
       difficulties or security restrictions prevent it from being 
       fetched, the URI scheme isn't a fetchable one, the resource 
       is in an unsuppored encoding, the resource is determined 
       through implementation-specific mechanisms not to be XML, or a 
-      syntax error in an [XPointer Framework]) result in a resource error.  */
+      syntax error in an [XPointer Framework]) result in a resource 
+      error.  */
     public void testXPointerSyntaxErrorIsAResourceError() 
       throws ParseException, IOException, XIncludeException {
       
@@ -444,6 +476,21 @@ public class XIncludeTest extends XOMTestCase {
       
         try {
             File input = new File("data/xinclude/input/badxptr.xml");
+            Document doc = builder.build(input);
+            XIncluder.resolve(doc);
+        }
+        catch (XIncludeException ex) {
+            // success   
+        }
+        
+    }
+    
+    public void testAnotherMalformedXPointer() 
+      throws ParseException, IOException, XIncludeException {
+        
+        // testing use of non NCNAME as ID
+        try {
+            File input = new File("data/xinclude/input/badxptr2.xml");
             Document doc = builder.build(input);
             XIncluder.resolve(doc);
         }
@@ -556,6 +603,7 @@ public class XIncludeTest extends XOMTestCase {
                     File input = new File("data/XInclude-Test-Suite/" 
                       + basedir + '/' + testcase.getAttributeValue("href"));
                     Element output = testcase.getFirstChildElement("output");
+                    System.out.println("Test case: " + input);
                     if (output == null) { // test failure   
                         try {
                             Document doc = builder.build(input);
@@ -570,14 +618,6 @@ public class XIncludeTest extends XOMTestCase {
                         }
                         catch (ParseException ex) {
                            // success   
-                        }
-                        catch (NullPointerException ex) {
-                           // success  
-                           // This generally happens as a result of an element
-                           // scheme that doesn't point anywhere; but is that the right
-                           // exception? Should it throw a more specific exception?
-                           // Probably, but I can't fix this until I publicly expose the 
-                           // XPointer package. ???? 
                         }
                     }
                     else {
