@@ -1,0 +1,8 @@
+<test xmlns:xinclude="http://www.w3.org/2001/XInclude">
+  <xinclude:include href="utf8.xml" parse="text">
+    <xinclude:fallback>
+      Not activated because the top level element succeeds.
+      <xinclude:include href="utf8.xml#test" />
+    </xinclude:fallback>
+  </xinclude:include>
+</test>
