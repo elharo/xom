@@ -61,7 +61,7 @@ import org.w3c.dom.NamedNodeMap;
 public class DOMConverter {
 
     // prevent instantiation
-    private DOMConverter() {};
+    private DOMConverter() {}
     
     /**
      * <p>
@@ -196,7 +196,7 @@ public class DOMConverter {
      * exception.
      * </p>
      * 
-     * @param text the DOM <code>Attr</code> to translate
+     * @param attribute the DOM <code>Attr</code> to translate
      * @return the equivalent XOM <code>Attribute</code>
      * 
      * @throws XMLException if the DOM <code>Attr</code>  
@@ -223,7 +223,7 @@ public class DOMConverter {
      * thus cannot be converted to XOM.
      * </p>
      * 
-     * @param text the DOM <code>ProcessingInstruction</code> to 
+     * @param pi the DOM <code>ProcessingInstruction</code> to 
      *    convert
      * @return a XOM <code>ProcessingInstruction</code>
      * 
@@ -247,7 +247,7 @@ public class DOMConverter {
      * thus cannot be converted to XOM.
      * </p>
      * 
-     * @param text the DOM <code>DocumentType</code> to convert
+     * @param doctype the DOM <code>DocumentType</code> to convert
      * @return the equivalent XOM <code>DocType</code>
      * 
      * @throws XMLException if the DOM <code>DocumentType</code> 
@@ -280,7 +280,7 @@ public class DOMConverter {
      * namespace well-formed XML, and thus cannot be converted to XOM.
      * </p>
      * 
-     * @param text the DOM <code>Element</code> to convert
+     * @param element the DOM <code>Element</code> to convert
      * @return the equivalent XOM <code>Element</code>
      * 
      * @throws XMLException if the DOM <code>Element</code> 
