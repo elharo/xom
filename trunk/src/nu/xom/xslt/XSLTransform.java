@@ -280,10 +280,21 @@ public final class XSLTransform {
      * <code>{@link nu.xom.NodeFactory nu.xom.NodeFactory}</code>.
      * </p>
      * 
+     * <p>
+     * Because an XSL transformation generates a list of nodes rather
+     * than a document, the factory's <code>startMakingDocument</code> 
+     * and <code>finishMakingDocument</code> methods are not called.
+     * </p>
+     * 
      * @param factory the node factory used to construct
      *     nodes in the output tree
      */
     public void setNodeFactory(NodeFactory factory) {
+        
+        // If at some point in the future it becomes necessary to 
+        // signal the start and end of each transform, I can add 
+        // begin() and end() methods to the NodeFactory that are
+        // do-nothing by default. 
         if (factory == null) this.factory = new NodeFactory();
         else this.factory = factory;
     }
