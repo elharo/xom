@@ -63,7 +63,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b1
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1440,6 +1440,18 @@ public class BuilderTest extends XOMTestCase {
             + "  <!ATTLIST doc a2 CDATA #IMPLIED>\r\n"
             + "]>\r\n"
             + "<doc a1=\"v1\" />\r\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        
+    }
+    
+    
+    public void testBuildDocumentThatUndeclaresDefaultNamespace()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/undeclare.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\r\n"
+            + "<root xmlns=\"http://www.example.org\" xmlns:pre=\"http://www.red.com/\" test=\"test\" pre:red=\"value\">some data<something xmlns=\"\" /></root>\r\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         
