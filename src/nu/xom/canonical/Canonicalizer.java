@@ -90,7 +90,7 @@ public class Canonicalizer {
     
     /**
      * <p>
-     *   Creates a <code>Serializer</code> that outputs a 
+     *   Creates a <code>Canonicalizer</code> that outputs a 
      *   canonical XML document with comments.
      * </p>
      * 
@@ -104,7 +104,7 @@ public class Canonicalizer {
     
     /**
      * <p>
-     *   Creates a <code>Serializer</code> that outputs a 
+     *   Creates a <code>Canonicalizer</code> that outputs a 
      *   canonical XML document with or without comments.
      * </p>
      * 

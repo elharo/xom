@@ -82,8 +82,8 @@ public class Builder {
     
     /**
      * <p>
-     * This constructor uses the default factory and
-     * chooses any available SAX2 parser in the
+     * Creates a <code>Builder</code> that uses the default node 
+     * factory and chooses among any available SAX2 parsers in the
      * following order:
      * </p>
      * 
@@ -119,8 +119,7 @@ public class Builder {
     
     /**
      * <p>
-     * This constructor creates a <code>Builder</code> 
-     * based on a fully validating
+     * Creates a <code>Builder</code> based on a fully validating
      * parser. If the <code>validate</code> argument 
      * is true, then a validity error while
      * parsing will cause a fatal error; that is,
@@ -140,7 +139,7 @@ public class Builder {
     
     /**
      * <p>
-     * This constructor creates a <code>Builder</code> based on a fully
+     * Creates a <code>Builder</code> based on a fully
      * validating parser that builds node objects with the supplied 
      * factory. If the <code>validate</code> argument is true, then 
      * a validity error while parsing will cause a fatal error; that 
@@ -278,7 +277,7 @@ public class Builder {
     
     /**
      * <p>
-     * Creates a new <code>Builder</code> based 
+     * Creates a <code>Builder</code> based 
      * on the specified SAX parser <code>XMLReader</code>.
      * Custom SAX features and properties such as  
      * schema validation can be set on this <code>XMLReader</code> 
@@ -298,7 +297,7 @@ public class Builder {
     
     /**
      * <p>
-     * Creates a new <code>Builder</code> that uses 
+     * Creates a <code>Builder</code> that uses 
      * the specified <code>NodeFactory</code> to create
      * node objects.
      * </p>
@@ -316,7 +315,7 @@ public class Builder {
 
     /**
      * <p>
-     * Creates a new <code>Builder</code> based 
+     * Creates a <code>Builder</code> based 
      * on the specified parser object.
      * Custom SAX features and properties such 
      * as schema validation can be set on this
@@ -343,21 +342,20 @@ public class Builder {
     
     /**
      * <p>
-     * This constructor creates a <code>Builder</code> based 
-     * on the specified parser object.
-     * Custom SAX features and properties such   
-     * as schema validation can be set on this
-     * <code>XMLReader</code> before passing 
-     * it to this method.
+     * Creates a <code>Builder</code> that reads data
+     * from the specified parser object and constructs new nodes using
+     * the specified factory object. Custom SAX features and properties   
+     * such as schema validation can be set on this 
+     * <code>XMLReader</code> before passing it to this method.
      * </p>
      * 
      * <p>
      * If the validate argument is true, then a validity error
-     *  while parsing will cause a fatal error; that is, 
+     * while parsing will cause a fatal error; that is, 
      * it will throw a <code>ParsingException</code>
      * </p>
      * 
-     * @param parser The SAX2 <code>XMLReader</code> that parses 
+     * @param parser the SAX2 <code>XMLReader</code> that parses 
      *     the document
      * @param validate true if the parser should validate the 
      *     document while parsing
@@ -436,7 +434,7 @@ public class Builder {
     
     /**
      * <p>
-     * This method parses the document at the specified URL.
+     * Parses the document at the specified URL.
      * </p>
      * 
      * <p>
@@ -475,7 +473,7 @@ public class Builder {
     
     /**
      * <p>
-     * This method reads the document from an input stream.
+     * Reads the document from an input stream.
      * </p>
      * 
      * @param in the <code>InputStream</code> from which the 
@@ -500,7 +498,7 @@ public class Builder {
 
     /**
      * <p>
-     * This method reads the document from an input stream while
+     * Reads the document from an input stream while
      * allowing a base URI to be specified.
      * </p>
      * 
@@ -543,7 +541,7 @@ public class Builder {
     
     /**
      * <p>
-     * This method reads the document from a file.
+     * Reads the document from a file.
      * The base URI of the document is set to the 
      * location of the file. 
      * </p>
@@ -581,7 +579,7 @@ public class Builder {
     
     /**
      * <p>
-     * This method reads the document from a reader.
+     * Reads the document from a reader.
      * </p>
      * 
      * @param in the <code>Reader</code> from which the 
@@ -606,7 +604,7 @@ public class Builder {
     
     /**
      * <p>
-     * This method reads the document from an input stream while
+     * Reads the document from an input stream while
      * allowing a base URI to be specified.
      * </p>
      * 
@@ -635,8 +633,7 @@ public class Builder {
     
     /**
      * <p>
-     * This method reads the document from the contents of a 
-     * <code>String</code>.
+     * Reads the document from the contents of a <code>String</code>.
      * </p>
      * 
      * @param document the <code>String</code> that contains 
@@ -682,8 +679,7 @@ public class Builder {
     
     /**
      * <p>
-     * This method reads the document from a 
-     * SAX <code>InputSource</code>.
+     * Reads the document from a SAX <code>InputSource</code>.
      * </p>
      * 
      * @param in the <code>InputSource</code> from 
