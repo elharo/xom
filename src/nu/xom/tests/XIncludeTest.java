@@ -51,10 +51,6 @@ import nu.xom.xinclude.XIncluder;
  */
 public class XIncludeTest extends XOMTestCase {
 
-    // need to write some unit tests that use XPointer to
-    // grab a part of the document that contains an include element
-    // and make sure that's fully resolved too????
-
     public XIncludeTest(String name) {
         super(name);
     }
@@ -94,6 +90,39 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
+
+    // Tests that use XPointer to
+    // grab a part of the document that contains an include element
+    // and make sure that's fully resolved too
+    public void testResolveThroughXPointer() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/resolvethruxpointer.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        // For debugging
+        dumpResult(input, result); 
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/resolvethruxpointer.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    /* public void testResolveNodes() 
+      throws IOException, ParsingException, XIncludeException {
+        File dir = new File("data/xinclude/input/");
+        Element include = new Element("xi:include", XIncluder.XINCLUDE_NS);
+        include.setBaseURI(dir.toURL().toExternalForm());
+        include.addAttribute(new Attribute("href", "disclaimer.xml"));
+        Nodes in = new Nodes(include);  
+        Nodes out = XIncluder.resolve(in);
+        assertEquals(1, out.size());
+        Element result = (Element) out.get(0);
+        assertEquals("disclaimer",result.getQualifiedName());
+    } */
+
+    // need to test this method resolve(nodes) when it returns more than one node????
     
     private void dumpResult(File original, Document result)
       throws IOException {

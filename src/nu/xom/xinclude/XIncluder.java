@@ -72,7 +72,7 @@ public class XIncluder {
      * </p>
      */
     public final static String XINCLUDE_NS 
-     = "http://www.w3.org/2003/XInclude";
+      = "http://www.w3.org/2003/XInclude";
 
     /**
      * <p>
@@ -110,11 +110,11 @@ public class XIncluder {
      *     fallback was available
      * @throws XIncludeException if the document violates the
      *     syntax rules of XInclude
-     * @throws XOMException if resolving an include element would 
+     * @throws XMLException if resolving an include element would 
      *      result in a malformed document,
      */
      public static Document resolve(Document in)  
-      throws BadParseAttributeException, CircularIncludeException, 
+       throws BadParseAttributeException, CircularIncludeException, 
              IOException, MissingHrefException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         return resolve(in, new Builder());   
@@ -158,11 +158,11 @@ public class XIncluder {
      *     fallback was available
      * @throws XIncludeException if the document violates the
      *     syntax rules of XInclude
-     * @throws XOMException if resolving an include element would 
+     * @throws XMLException if resolving an include element would 
      *      result in a malformed document,
      */
      public static Document resolve(Document in, Builder builder)  
-      throws BadParseAttributeException, CircularIncludeException, 
+       throws BadParseAttributeException, CircularIncludeException, 
              IOException, MissingHrefException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         Document copy = new Document(in);
@@ -205,7 +205,7 @@ public class XIncluder {
      *     fallback was available
      * @throws XIncludeException if the document violates the
      *     syntax rules of XInclude
-     * @throws XOMException if resolving an include element would 
+     * @throws XMLException if resolving an include element would 
      *     result in a malformed document
      */
     public static void resolveInPlace(Document in) 
@@ -249,14 +249,14 @@ public class XIncluder {
      *     fallback was available
      * @throws XIncludeException if the document violates the
      *     syntax rules of XInclude
-     * @throws XOMException if resolving an include element would 
+     * @throws XMLException if resolving an include element would 
      *     result in a malformed document
      */
     public static void resolveInPlace(Document in, Builder builder) 
       throws BadParseAttributeException, CircularIncludeException,  
              IOException, MissingHrefException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
-        resolveInPlace(in, builder, new Stack());
+        resolveInPlace(in, builder, new Stack()); /**&&**/
     }
 
     /**
@@ -293,10 +293,151 @@ public class XIncluder {
      *     fallback was available
      * @throws XIncludeException if the document violates the
      *     syntax rules of XInclude
-     * @throws XOMException if resolving an include element would 
+     * @throws XMLException if resolving an include element would 
      *     result in a malformed document
      */
-    public static void resolveInPlace(Nodes in) 
+    /* private static void resolveInPlace(Nodes in) 
+      throws IOException, ParsingException, XIncludeException { 
+        resolveInPlace(in, new Builder());
+    } */
+
+    /**
+     * <p>
+     * Modifies a <code>Nodes</code> object by replacing all 
+     * XInclude elements with their referenced content.
+     * Resolution is recursive; that is, include elements
+     * in the included documents are themselves resolved.
+     * Furthermore, include elements that are children or 
+     * descendants of elements in this list are also resolved.
+     * The <code>Nodes</code> object returned contains no
+     * include elements.
+     * </p>
+     * 
+     * @param in the <code>Nodes</code> object in which include 
+     *     elements should be resolved.
+     * 
+     * @throws BadParseAttributeException if an <code>include</code>  
+     *     element has a <code>parse</code> attribute
+     *     with any value other than <code>text</code> 
+     *     or <code>parse</code>
+     * @throws CircularIncludeException if this <code>Element</code> 
+     *     contains an XInclude element that attempts to include a  
+     *     document in which this element is directly or indirectly 
+     *     included
+     * @throws IOException if an included document could not be loaded,
+     *     and no fallback was available
+     * @throws MissingHrefException if an <code>xinclude:include</code>
+     *     element does not have an <code>href</code> attribute.
+     * @throws ParsingException if an included XML document 
+     *     was malformed
+     * @throws UnsupportedEncodingException if an included document 
+     *     used an encoding this parser does not support, and no 
+     *     fallback was available
+     * @throws XIncludeException if the document violates the
+     *     syntax rules of XInclude
+     * @throws XMLException if resolving an include element would 
+     *     result in a malformed document
+     */
+    /* private static void resolveInPlace(Nodes in, Builder builder) 
+      throws IOException, ParsingException, XIncludeException { 
+        for (int i = 0; i < in.size(); i++) {
+            Node child = in.get(i);
+            if (child instanceof Element) { 
+                if (isIncludeElement((Element) child)) {
+                    // Need to replace the old nodes with the result
+                    // of including this element????
+                }
+                else {
+                    resolve((Element) child, builder, new Stack());
+                }
+            }
+            else if (child instanceof Document) {
+                resolveInPlace((Document) child, builder,  new Stack());   
+            }
+        }
+    } */
+
+    /**
+     * <p>
+     * Returns a <code>Nodes</code> object in which all 
+     * <code>xinclude:include</code> elements have been replaced
+     * by their referenced content. Resolution is deep; that is, 
+     * include elements that are descendants of nodes in this list
+     * are replaced as well.
+     * </p>
+     * 
+     * @param in the <code>Nodes</code> object in which include 
+     *     elements should be resolved
+     * 
+     * @return a new Nodes object which does not contain any 
+     *   <code>xinclude:include</code> elements
+     * 
+     * @throws BadParseAttributeException if an <code>include</code>  
+     *     element has a <code>parse</code> attribute
+     *     with any value other than <code>text</code> 
+     *     or <code>parse</code>
+     * @throws CircularIncludeException if this <code>Element</code> 
+     *     contains an XInclude element that attempts to include a  
+     *     document in which this element is directly or indirectly 
+     *     included
+     * @throws IOException if an included document could not be loaded,
+     *     and no fallback was available
+     * @throws MissingHrefException if an <code>xinclude:include</code>
+     *     element does not have an <code>href</code> attribute
+     * @throws ParsingException if an included XML document 
+     *     was malformed
+     * @throws UnsupportedEncodingException if an included document 
+     *     used an encoding this parser does not support, and no 
+     *     fallback was available
+     * @throws XIncludeException if the document violates the
+     *     syntax rules of XInclude
+     * @throws XMLException if resolving an include element would 
+     *     result in a malformed document
+     * 
+     */
+    private static Nodes resolve(Nodes in) 
+      throws IOException, ParsingException, XIncludeException { 
+        return resolve(in, new Builder());
+    }
+
+    /**
+     * <p>
+     * Modifies a <code>Nodes</code> object by replacing all 
+     * <code>xinclude:include</code> elements with their referenced 
+     * content. Resolution is recursive; that is, include elements
+     * in the included documents are themselves resolved.
+     * Furthermore, include elements that are children or 
+     * descendants of elements in this list are also resolved.
+     * The <code>Nodes</code> object returned contains no
+     * include elements.
+     * </p>
+     * 
+     * @param in the <code>Nodes</code> object in which include 
+     *     elements should be resolved.
+     * 
+     * @throws BadParseAttributeException if an <code>include</code>  
+     *     element has a <code>parse</code> attribute
+     *     with any value other than <code>text</code> 
+     *     or <code>parse</code>
+     * @throws CircularIncludeException if this <code>Element</code> 
+     *     contains an XInclude element that attempts to include a  
+     *     document in which this element is directly or indirectly 
+     *     included
+     * @throws IOException if an included document could not be loaded,
+     *     and no fallback was available
+     * @throws MissingHrefException if an <code>xinclude:include</code>
+     *     element does not have an <code>href</code> attribute.
+     * @throws ParsingException if an included XML document 
+     *     was malformed
+     * @throws UnsupportedEncodingException if an included document 
+     *     used an encoding this parser does not support, and no 
+     *     fallback was available
+     * @throws XIncludeException if the document violates the
+     *     syntax rules of XInclude
+     * @throws XMLException if resolving an include element would 
+     *     result in a malformed document
+     */
+    private static void resolveInPlace(Nodes in) 
       throws IOException, ParsingException, XIncludeException { 
         resolveInPlace(in, new Builder());
     }
@@ -335,20 +476,99 @@ public class XIncluder {
      *     fallback was available
      * @throws XIncludeException if the document violates the
      *     syntax rules of XInclude
-     * @throws XOMException if resolving an include element would 
+     * @throws XMLException if resolving an include element would 
      *     result in a malformed document
      */
-    public static void resolveInPlace(Nodes in, Builder builder) 
+    private static void resolveInPlace(Nodes in, Builder builder) 
       throws IOException, ParsingException, XIncludeException { 
         for (int i = 0; i < in.size(); i++) {
             Node child = in.get(i);
-            if (child instanceof Element) {       
-                resolve((Element) child, builder, new Stack());
+            if (child instanceof Element) {
+                Element element = (Element) child;
+                if (isIncludeElement(element)) {
+                    Nodes nodes = resolveSilently(element, builder, new Stack());
+                    in.remove(i);
+                    for (int j = 0; j < nodes.size(); j++) {
+                        in.insert(nodes.get(j), i++);
+                    }
+                }
+                else {       
+                    resolve((Element) child, builder, new Stack());
+                }
             }
             else if (child instanceof Document) {
                 resolveInPlace((Document) child, builder,  new Stack());   
             }
         }
+    }
+
+    // could any of the resolve(nodes) methods be removed????
+
+    /**
+     * <p>
+     * Returns a <code>Nodes</code> object in which all 
+     * <code>xinclude:include</code> elements have been replaced
+     * by their referenced content. Resolution is deep; that is, 
+     * include elements that are descendants of nodes in this list
+     * are replaced as well.
+     * </p>
+     * 
+     * @param in the <code>Nodes</code> object in which include 
+     *     elements should be resolved
+     * 
+     * @return a new Nodes object which contains no 
+     *   <code>xinclude:include</code> elements
+     * 
+     * @throws BadParseAttributeException if an <code>include</code>  
+     *     element has a <code>parse</code> attribute
+     *     with any value other than <code>text</code> 
+     *     or <code>parse</code>
+     * @throws CircularIncludeException if this <code>Element</code> 
+     *     contains an XInclude element that attempts to include a  
+     *     document in which this element is directly or indirectly 
+     *     included
+     * @throws IOException if an included document could not be loaded,
+     *     and no fallback was available
+     * @throws MissingHrefException if an <code>xinclude:include</code>
+     *     element does not have an <code>href</code> attribute
+     * @throws ParsingException if an included XML document 
+     *     was malformed
+     * @throws UnsupportedEncodingException if an included document 
+     *     used an encoding this parser does not support, and no 
+     *     fallback was available
+     * @throws XIncludeException if the document violates the
+     *     syntax rules of XInclude
+     * @throws XMLException if resolving an include element would 
+     *     result in a malformed document
+     */
+    private static Nodes resolve(Nodes in, Builder builder) 
+      throws IOException, ParsingException, XIncludeException {
+          
+        Nodes result = new Nodes(); 
+        for (int i = 0; i < in.size(); i++) {
+            Node child = in.get(i).copy();
+            if (child instanceof Element) { 
+                Document doc = new Document((Element) child);
+                resolveInPlace(doc, builder, new Stack());
+                for (int j = 0; j < doc.getChildCount(); j++) {
+                    Node kid = doc.getChild(j);
+                    result.append(kid);
+                    if (kid instanceof Element) {
+                        doc.setRootElement(new Element("temp"));
+                    } 
+                    kid.detach();
+                }                  
+            }
+            else if (child instanceof Document) {
+                resolveInPlace((Document) child, builder,  new Stack());
+                result.append(child);  
+            }
+            else {
+                result.append(child);   
+            }
+            
+        }
+        return result;
     }
 
     private static boolean contains(ParentNode ancestor, Node descendant) {
@@ -375,14 +595,146 @@ public class XIncluder {
         baseURLs.pop();
     }
 
+    private static Nodes resolveSilently(Element element, Builder builder, Stack baseURLs)
+      throws IOException, ParsingException, XIncludeException {
+        
+        if (isIncludeElement(element)) {
+            String parse = element.getAttributeValue("parse");
+            if (parse == null) parse = "xml";
+            String xpointer = element.getAttributeValue("xpointer");
+            String encoding = element.getAttributeValue("encoding");
+            String href = element.getAttributeValue("href");
+            if (href == null && xpointer == null) {
+                throw new MissingHrefException(
+                  "Missing href attribute", 
+                  element.getDocument().getBaseURI()
+                );   
+            }
+            if (href != null) href = convertToURI(href);
+            
+            testForMultipleFallbacks(element);
+
+            // ParentNode parent = element.getParent();
+            String base = element.getBaseURI();
+            URL baseURL = null;
+            if (base != null) {
+                try {
+                    baseURL = new URL(base);     
+                }
+                catch (MalformedURLException ex) {
+                   // don't use base   
+                }
+            }
+            URL url = null;
+            try {
+                // xml:base attributes added to maintain the 
+                // base URI should not have fragment IDs
+
+                if (baseURL != null && href != null) url = new URL(baseURL, href);
+                else if (href != null) url = new URL(href);                
+                if (parse.equals("xml")) {
+                    Nodes replacements;
+                    if (url != null) { 
+                        replacements  = downloadXMLDocument(url, xpointer, builder, baseURLs);
+                        // Add base URIs. Base URIs added by XInclusion require
+                        // the element to maintain the same base URI as it had  
+                        // in the original document. Since its base URI in the 
+                        // original document does not contain a fragment ID,
+                        // therefore its base URI after inclusion shouldn't, 
+                        // and this special case is unnecessary. Base URI fixup
+                        // should not add the fragment ID. 
+                        for (int i = 0; i < replacements.size(); i++) {
+                            Node child = replacements.get(i);
+                            if (child instanceof Element) {
+                                String noFragment = url.toExternalForm();
+                                if (noFragment.indexOf('#') >= 0) {
+                                    noFragment = noFragment.substring(
+                                      0, noFragment.indexOf('#'));
+                                }
+                                Element baseless = (Element) child;
+                                Attribute baseAttribute = new Attribute(
+                                  "xml:base", 
+                                  "http://www.w3.org/XML/1998/namespace", 
+                                  noFragment 
+                                );
+                                baseless.addAttribute(baseAttribute);   
+                            }
+                        }  
+                    }
+                    else {
+                        Nodes originals = XPointer.resolve(element.getDocument(), xpointer);
+                        replacements = new Nodes(); 
+                        for (int i = 0; i < originals.size(); i++) {
+                            Node original = originals.get(i);
+                            if (original instanceof Element) {
+                                if (contains((Element) original, element)) {
+                                    throw new CircularIncludeException("Element tried to include itself"); 
+                                }  
+                            }
+                            replacements.append(original.copy());        
+                        }  
+                        replacements = resolve(replacements, builder);  
+                        // Write a unit test where an xpointer includes itself
+                        // indirectly through intermediary documents???? to make
+                        // sure it still throws CircularIncludeException                         
+                    }
+                    return replacements; 
+                }  // end parse="xml"
+                else if (parse.equals("text")) {                   
+                    Text replacement 
+                      = downloadTextDocument(url, encoding, builder);
+                    return new Nodes(replacement);
+                }
+                else {
+                   throw new BadParseAttributeException(
+                     "Bad value for parse attribute: " + parse, 
+                     element.getDocument().getBaseURI());   
+                }
+            
+            }
+            catch (IOException ex) {
+                return processFallback(element, builder, baseURLs, ex);
+            }
+            catch (XPointerSyntaxException ex) {
+                return processFallback(element, builder, baseURLs, ex);
+            }
+            catch (XPointerResourceException ex) {
+                // Process fallbacks;  I'm not sure this is correct 
+                // behavior. Possibly this should include nothing. See
+                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0000.html
+                // Daniel Veillard thinks this is correct. See
+                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0001.html
+                return processFallback(element, builder, baseURLs, ex);
+            }
+            
+        }
+        else if (isFallbackElement(element)) {
+            throw new MisplacedFallbackException(
+              "Fallback element outside include element", 
+              element.getDocument().getBaseURI()
+            );
+        }
+        else {
+            Elements children = element.getChildElements();
+            for (int i = 0; i < children.size(); i++) {
+                resolve(children.get(i), builder, baseURLs);   
+            } 
+            return new Nodes(element);
+        }
+        
+    }
+
+    // Should this method simply return a Nodes and not do any
+    // of the detaching and adding and so forth???? leaving that
+    // till higher in the call chain????
     private static void resolve(
       Element element, Builder builder, Stack baseURLs)
       throws IOException, ParsingException, XIncludeException {
         
         if (isIncludeElement(element)) {
             String parse = element.getAttributeValue("parse");
-            String xpointer = element.getAttributeValue("xpointer");
             if (parse == null) parse = "xml";
+            String xpointer = element.getAttributeValue("xpointer");
             String encoding = element.getAttributeValue("encoding");
             String href = element.getAttributeValue("href");
             if (href == null && xpointer == null) {
@@ -454,9 +806,10 @@ public class XIncluder {
                             }
                             replacements.append(original.copy());        
                         }  
-                        resolveInPlace(replacements, builder);  
+                        replacements = resolve(replacements, builder);  
                         // Write a unit test where an xpointer includes itself
-                        // indirectly through intermediary documents????
+                        // indirectly through intermediary documents???? to make
+                        // sure it still throws CircularIncludeException
                                                  
                     }
                       
@@ -474,6 +827,9 @@ public class XIncluder {
                             parent.insertChild(child, position+i); 
                         }
                         element.detach();
+                    }
+                    else if (parent == null) {
+                        // what to do????   
                     }
                     else {  // root element needs special treatment
                         Document doc = (Document) parent;
@@ -553,8 +909,6 @@ public class XIncluder {
      *   in the case where there's no resource error.
      *   I've requested clarification from the working group.
      * </p>
-     * 
-     * @param element
      */
     private static void testForMultipleFallbacks(Element element) 
       throws XIncludeException {
@@ -609,6 +963,41 @@ public class XIncluder {
            element.detach();
     }
 
+    private static Nodes processFallback(
+      Element element, Builder builder, Stack baseURLs, Exception ex)
+        throws XIncludeException, IOException, ParsingException {
+           Elements fallbacks 
+              = element.getChildElements("fallback", XINCLUDE_NS);
+           if (fallbacks.size() == 0) {
+                if (ex instanceof IOException) throw (IOException) ex;
+                XIncludeException ex2 = new XIncludeException(
+                  ex.getMessage(), element.getDocument().getBaseURI());
+                ex2.initCause(ex);
+                throw ex2;
+           }
+           else if (fallbacks.size() > 1) {
+                throw new XIncludeException("Multiple fallbacks", 
+                   element.getDocument().getBaseURI());
+           }
+             
+           Element fallback = fallbacks.get(0); 
+           Nodes result = new Nodes();
+           for (int i = 0; i < fallback.getChildCount(); i++) {
+                Node child = fallback.getChild(0);
+                if (child instanceof Element) {
+                    Nodes nodes = resolveSilently((Element) child, builder, baseURLs);
+                    for (int j = 0; j < nodes.size(); j++) {
+                        result.append(nodes.get(j));   
+                    }
+                } 
+                else {
+                    result.append(child);   
+                } 
+           }
+           return result;
+
+    }
+
    
 
     private static Nodes downloadXMLDocument(
@@ -621,8 +1010,8 @@ public class XIncluder {
           
         Nodes included;
         if (xpointer != null && xpointer.length() != 0) {
-            included = XPointer.resolve(doc, xpointer);
-            resolveInPlace(included);
+            included = XPointer.resolve(doc, xpointer); 
+            resolveInPlace(included, builder);
         }
         else {
             resolveInPlace(doc, builder, baseURLs); // remove include elements
