@@ -295,21 +295,18 @@ public class DOMConverter {
             org.w3c.dom.Attr attribute = (org.w3c.dom.Attr) attributes.item(i);
             String name = attribute.getName();
             String uri = attribute.getNamespaceURI();
+            String value = attribute.getValue();
             if (uri == null) uri = "";
             if (uri.equals(XMLNS_NAMESPACE)) { 
                 if (name.equals("xmlns")) continue;
                 String prefix = name.substring(name.indexOf(':') + 1);
-                String currentPrefix = result.getNamespaceURI(prefix);
-                if (!prefix.equals(currentPrefix)) {
-                    result.addNamespaceDeclaration(prefix, attribute.getValue()); 
+                String currentURI = result.getNamespaceURI(prefix);
+                if (!value.equals(currentURI)) {
+                    result.addNamespaceDeclaration(prefix, value); 
                 }
             }
             else { 
-                result.addAttribute(
-                  new Attribute(
-                    name, uri, attribute.getValue()
-                  )
-                );
+                result.addAttribute(new Attribute(name, uri, value));
             }
         }
         
