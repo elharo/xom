@@ -81,7 +81,10 @@ class TextWriterFactory {
             || encodingUpperCase.equals("EBCDIC-CP-TR")
             || encodingUpperCase.equals("CP1037")) {
             return new Latin5Writer(out, encodingUpperCase); 
-        }         
+        }           
+        else if (encoding.equals("ISO-8859-10")) {
+            return new Latin6Writer(out, encoding); 
+        }          
         else if (encodingUpperCase.equals("ISO-8859-11")
                 || encodingUpperCase.equals("TIS-620")
                 || encodingUpperCase.equals("TIS620")) {
@@ -91,10 +94,16 @@ class TextWriterFactory {
         // nor is there likely to be one in the future.        
         else if (encodingUpperCase.equals("ISO-8859-13")) {
             return new Latin7Writer(out, encodingUpperCase); 
-        }           
+        }   
+        else if (encoding.equals("ISO-8859-14")) {
+            return new Latin8Writer(out, encoding); 
+        }       
         else if (encodingUpperCase.equals("ISO-8859-15")) {
             return new Latin9Writer(out, encodingUpperCase); 
-        }   
+        }          
+        else if (encoding.equals("ISO-8859-16")) {
+            return new Latin10Writer(out, encoding); 
+        }
         else if (encodingUpperCase.endsWith("ASCII")) {
             return new ASCIIWriter(out, encodingUpperCase); 
         }
