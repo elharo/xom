@@ -26,12 +26,8 @@ package nu.xom;
 
 /**
  * <p>
- *   This class represents an XML document type declaration such as 
- * </p>
- * 
- * <p><code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"></code></p> 
- * 
- * <p>
+ * Represents an XML document type declaration such as 
+ * <code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"></code>.
  * Note that this is not the same thing as a document
  * type <em>definition</em> (DTD). XOM does not currently model 
  * the DTD. The document type declaration contains or points to 

@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -25,7 +25,7 @@ package nu.xom;
 
 /**
  * <p>
- *  This is the generic superclass for all the
+ *  The generic superclass for all the
  *  checked exceptions thrown in XOM. The general
  *  principle followed is that anything that could
  *  plausibly be detected by testing such as 
@@ -37,7 +37,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a4
  *
  */
 public class ParsingException extends Exception {
@@ -52,7 +52,7 @@ public class ParsingException extends Exception {
      * and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param ex the original cause of this exception
      */
     public ParsingException(String message, Throwable ex) {
@@ -66,7 +66,7 @@ public class ParsingException extends Exception {
      * and line and column numbers.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param lineNumber the approximate line number 
      *     where the problem occurs
      * @param columnNumber the approximate column number 
@@ -85,7 +85,7 @@ public class ParsingException extends Exception {
      * message, line and column numbers, and an underlying exception.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param lineNumber the approximate line number 
      *     where the problem occurs
      * @param columnNumber the approximate column number 
@@ -105,7 +105,7 @@ public class ParsingException extends Exception {
      * Creates a new <code>ParsingException</code> with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public ParsingException(String message) {
         super(message);

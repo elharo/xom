@@ -31,7 +31,7 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  */
 public class InclusionLoopException extends XIncludeException {
 
@@ -54,7 +54,7 @@ public class InclusionLoopException extends XIncludeException {
      * that caused the exception.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
      */
     public InclusionLoopException(String message, String uri) {

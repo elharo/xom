@@ -30,14 +30,13 @@ import org.xml.sax.SAXParseException;
 
 /**
  * <p>
- *  A <code>ValidityException</code> is thrown to
- *  report a validity error in a document being parsed.
+ *  Signals a validity error in a document being parsed.
  *  These are not thrown by default, unless you specifically 
- *  request that the <code>Builder</code> validate.
+ *  request that the builder validate.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  *
  */
 public class ValidityException extends ParsingException {
@@ -52,7 +51,7 @@ public class ValidityException extends ParsingException {
      * with a detail message and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
     public ValidityException(String message, Throwable cause) {
@@ -66,7 +65,7 @@ public class ValidityException extends ParsingException {
      * with a detail message and line and column numbers.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param lineNumber the approximate line number 
      *     where the problem occurs
      * @param columnNumber the approximate column number
@@ -87,7 +86,7 @@ public class ValidityException extends ParsingException {
      * and an underlying exception.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param lineNumber the approximate line number 
      *     where the problem occurs
      * @param columnNumber the approximate column number 
@@ -109,7 +108,7 @@ public class ValidityException extends ParsingException {
      * with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public ValidityException(String message) {
         super(message);
@@ -165,7 +164,9 @@ public class ValidityException extends ParsingException {
      * </p>
      * 
      * @param n the index of the validity error to report
-     * @return a message describing the n<i>th</i> validity error
+     * 
+     * @return a string describing the n<i>th</i> validity error
+     * 
      * @throws IndexOutOfBoundsException if <code>n</code> is greater
      *     than or equal to the number of errors detected
      */
@@ -189,6 +190,7 @@ public class ValidityException extends ParsingException {
      * @param n the index of the validity error to report
      * @return the approximate line number where the n<i>th</i> 
      *     validity error was detected
+     * 
      * @throws IndexOutOfBoundsException if <code>n</code> is greater
      *     than or equal to the number of errors detected
      */
@@ -210,8 +212,10 @@ public class ValidityException extends ParsingException {
      * </p>
      * 
      * @param n the index of the validity error to report
+     * 
      * @return the approximate column where the n<i>th</i> 
      *     validity error was detected
+     * 
      * @throws IndexOutOfBoundsException if <code>n</code> is greater
      *     than or equal to the number of errors detected
      */
@@ -220,4 +224,5 @@ public class ValidityException extends ParsingException {
         return ex.getColumnNumber();  
     }
 
+    
 }

@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -29,14 +29,14 @@ import java.util.List;
 /**
  * 
  * <p>
- * Implements a read-only list of elements for traversal purposes.
+ * A read-only list of elements for traversal purposes.
  * Changes to the document from which this list was generated
  * are not reflected in this list. Changes to the individual 
  * <code>Element</code> objects in the list are reflected.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d13
+ * @version 1.0a4
  * 
  *
  */

@@ -44,7 +44,7 @@ public class IllegalCharacterDataException extends IllegalDataException {
      * with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public IllegalCharacterDataException(String message) {
         super(message);
@@ -57,7 +57,7 @@ public class IllegalCharacterDataException extends IllegalDataException {
      * with a detail message and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
     public IllegalCharacterDataException(String message, Throwable cause) {

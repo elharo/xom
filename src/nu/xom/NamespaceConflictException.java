@@ -24,17 +24,15 @@
 package nu.xom;
 
 /**
- * 
  * <p>
- * A <code>NamespaceConflictException</code> signals an attempt 
- * to set a namespace in a way that conflicts with an existing 
- * namespace; for instance, adding an attribute to
+ * Signals an attempt to set a namespace in a way that conflicts with  
+ * an existing namespace; for instance, adding an attribute to
  * an element that has the same prefix as the element but maps it
  * to a different URI. 
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  *
  */
 public class NamespaceConflictException 
@@ -47,7 +45,7 @@ public class NamespaceConflictException
      * with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public NamespaceConflictException(String message) {
         super(message);
@@ -60,7 +58,7 @@ public class NamespaceConflictException
      * with a detail message and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
     public NamespaceConflictException(

@@ -26,10 +26,9 @@ package nu.xom;
 
 /**
  * <p>
- *  This is the generic superclass for all the
- *  runtime exceptions thrown in <code>nu.xom</code>. The general
- *  principle followed is that anything that could
- *  plausibly be detected by testing such as 
+ *  The generic superclass for most runtime exceptions thrown in 
+ *  <code>nu.xom</code>. The genera principle followed is that anything
+ *  that can normally be detected by testing such as 
  *  using spaces in an element name is a runtime exception.
  *  Exceptions that depend on environmental conditions,
  *  such as might occur when parsing an external file,
@@ -38,7 +37,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  *
  */
 public class XMLException extends RuntimeException {
@@ -51,7 +50,7 @@ public class XMLException extends RuntimeException {
      * Creates a new <code>XMLException</code> 
      * with the specified detail message
      * and an underlying root cause.
-     *  </p>
+     * </p>
      *
      * @param message information about the cause of the exception
      * @param cause the nested exception that caused this exception

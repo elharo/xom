@@ -25,7 +25,7 @@ package nu.xom;
 
 /**
  * <p>
- *  An <code>IllegalTargetException</code> indicates an attempt to
+ *  Indicates an attempt to
  *  assign a processing instruction target that is not a 
  *  legal XML 1.0 processing instruction target.
  *  This is either because the proposed target is not a legal
@@ -34,9 +34,8 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a4
  * 
- *
  */
 public class IllegalTargetException extends IllegalNameException {
 
@@ -46,7 +45,7 @@ public class IllegalTargetException extends IllegalNameException {
      * with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      */
     public IllegalTargetException(String message) {
         super(message);
@@ -59,7 +58,7 @@ public class IllegalTargetException extends IllegalNameException {
      * with a detail message and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
     public IllegalTargetException(String message, Throwable cause) {
