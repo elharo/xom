@@ -50,11 +50,14 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class NodeFactoryTest extends XOMTestCase {
 
+    
+    private File data = new File("data");
+    
     
     public NodeFactoryTest(String name) {
         super(name);
@@ -161,6 +164,7 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals(3, root.getChildCount());
         Element b = (Element) root.getChild(1);
         assertEquals("c", b.getQualifiedName());
+        
     }    
 
     
@@ -174,7 +178,8 @@ public class NodeFactoryTest extends XOMTestCase {
     }
 
     
-    public void testMakeRoot() throws IOException, ParsingException {       
+    public void testMakeRoot() throws IOException, ParsingException {   
+        
         String data = "<a><b>18</b></a>";
         Builder builder = new Builder(new CallsMakeRoot());
         Document doc = builder.build(data, "http://www.example.org/");
@@ -183,6 +188,7 @@ public class NodeFactoryTest extends XOMTestCase {
         
         // make sure the other elements aren't changed
         assertNotNull(root.getFirstChildElement("b"));
+        
     }
 
     
@@ -266,7 +272,7 @@ public class NodeFactoryTest extends XOMTestCase {
     public void testMinimalizedDocument() 
       throws IOException, ParsingException {
         
-        File input = new File("data/entitytest.xml");
+        File input = new File(data, "entitytest.xml");
         Builder builder = new Builder(new MinimizingFactory());
         Document doc = builder.build(input);
         assertEquals(1, doc.getChildCount());
@@ -344,7 +350,7 @@ public class NodeFactoryTest extends XOMTestCase {
     public void testNullRootNotAllowed() 
       throws IOException, ParsingException {
         
-        File input = new File("data/entitytest.xml");
+        File input = new File(data, "entitytest.xml");
         Builder builder = new Builder(new NullElementFactory());
         try {
             builder.build(input);
@@ -372,7 +378,7 @@ public class NodeFactoryTest extends XOMTestCase {
     public void testNullDocumentNotAllowed() 
       throws IOException, ParsingException {
         
-        File input = new File("data/entitytest.xml");
+        File input = new File(data, "entitytest.xml");
         Builder builder = new Builder(new NullDocumentFactory());
         try {
             builder.build(input);
@@ -419,7 +425,7 @@ public class NodeFactoryTest extends XOMTestCase {
     public void testDontReportCommentsAndProcessingInstructionsInExternalDTDSubset() 
       throws IOException, ParsingException {
         
-        File input = new File("data/contentindtd.xml");
+        File input = new File(data, "contentindtd.xml");
         Builder builder = new Builder(new Counter());
         builder.build(input); 
         assertEquals(0, numNodesInExternalDTDSubset);

@@ -50,7 +50,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b7
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -59,23 +59,29 @@ public class CanonicalizerTest extends XOMTestCase {
       System.getProperty("java.version").substring(0,3)
     );
     
+    private File canonical;
+    private File input;
+    private File output;
     
     public CanonicalizerTest(String name) {
         super(name);
     }
 
     
-    private Builder builder;
+    private Builder builder = new Builder(); 
     
     
-    protected void setUp() {        
-        builder = new Builder();       
+    protected void setUp() { 
+        File data = new File("data");
+        canonical = new File(data, "canonical");
+        input = new File(canonical, "input");
+        output = new File(canonical, "output");
     }
 
     
     public void testWithComments() throws ParsingException, IOException {
       
-        File tests = new File("data/canonical/input/");
+        File tests = input;
         String[] inputs = tests.list(new XMLFilter());
         for (int i = 0; i < inputs.length; i++) {
             File input = new File(tests, inputs[i]);   
@@ -90,8 +96,7 @@ public class CanonicalizerTest extends XOMTestCase {
             }            
             byte[] actual = out.toByteArray();  
             
-            File expected = new File(
-              "data/canonical/output/" + input.getName() + ".out");
+            File expected = new File(output, input.getName() + ".out");
             assertEquals(
               input.getName(), expected.length(), actual.length);
             byte[] expectedBytes = new byte[actual.length];
@@ -115,7 +120,7 @@ public class CanonicalizerTest extends XOMTestCase {
     public void testWithoutComments() 
       throws ParsingException, IOException {
       
-        File tests = new File("data/canonical/input/");
+        File tests = input;
         String[] inputs = tests.list(new XMLFilter());
         for (int i = 0; i < inputs.length; i++) {
             File input = new File(tests, inputs[i]); 
@@ -134,14 +139,14 @@ public class CanonicalizerTest extends XOMTestCase {
             byte[] actual = out.toByteArray();
             
             // for debugging
-            /* File debug = new File("data/canonical/debug/" 
+            /* File debug = new File(canonical, "debug/" 
              + input.getName() + ".dbg");
             OutputStream fout = new FileOutputStream(debug);
             fout.write(actual);
             fout.close(); */
             
-            File expected = new File("data/canonical/wocommentsoutput/" 
-              + input.getName() + ".out");
+            File expected = new File(canonical, "wocommentsoutput/");
+            expected = new File(expected, input.getName() + ".out");
             byte[] expectedBytes = new byte[actual.length];
             InputStream fin = new FileInputStream(expected);
             DataInputStream in =  new DataInputStream(fin);
@@ -173,9 +178,8 @@ public class CanonicalizerTest extends XOMTestCase {
             serializer.write(doc);
             fail("Canonicalized document with relative namespace URI");
         }
-        catch (XMLException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
         }    
         
     }
@@ -392,11 +396,14 @@ public class CanonicalizerTest extends XOMTestCase {
         String normalizedResult = Normalizer.normalize(rawResult, Normalizer.NFC);
         assertEquals("Parser doesn't use NFC when converting from " + encoding, 
           normalizedResult, rawResult);
+        
     }
 
+    
     // make sure null pointer exception doesn't cause any output
     public void testNullDocument() 
       throws IOException {
+        
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out);
         try {
@@ -432,7 +439,8 @@ public class CanonicalizerTest extends XOMTestCase {
     public void testXMLConformanceTestSuiteDocuments() 
       throws ParsingException, IOException {
       
-        File masterList = new File("data/canonical/xmlconf/xmlconf.xml");
+        File masterList = new File(canonical, "xmlconf");
+        masterList = new File(masterList, "xmlconf.xml");
         if (masterList.exists()) {
             Document xmlconf = builder.build(masterList);
             Elements testcases = xmlconf.getRootElement().getChildElements("TESTCASES");
@@ -446,6 +454,7 @@ public class CanonicalizerTest extends XOMTestCase {
     // of parsers 
     private void processTestCases(Elements testcases) 
       throws ParsingException, IOException {
+        
         for (int i = 0; i < testcases.size(); i++) {
               Element testcase = testcases.get(i); 
               Elements tests = testcase.getChildElements("TEST");
@@ -453,7 +462,8 @@ public class CanonicalizerTest extends XOMTestCase {
               Elements level2 = testcase.getChildElements("TESTCASES");
               // need to be recursive to handle recursive IBM test cases
               processTestCases(level2);
-          }
+        }
+        
     }
 
 
@@ -505,7 +515,7 @@ public class CanonicalizerTest extends XOMTestCase {
                   expected[j], actual[j]);
             }
             
-          }
+        }
         
     }
 
