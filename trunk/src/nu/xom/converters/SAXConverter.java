@@ -214,7 +214,11 @@ public class SAXConverter {
         if (parent != null && uri.equals(parent.getNamespaceURI(prefix))) {
             return;   
         }
- //       System.err.println(prefix + " mapped to " + uri); // XXX
+        else if (parent == null && "".equals(uri)) {
+            // Do not fire startPrefixMapping event for no namespace
+            // on root element
+            return;
+        }
         contentHandler.startPrefixMapping(prefix, element.getNamespaceURI(prefix)); 
         
     }
@@ -237,15 +241,12 @@ public class SAXConverter {
              i++) {
             String prefix = element.getNamespacePrefix(i);
             convertNamespace(element, prefix);
-            /* contentHandler.startPrefixMapping(prefix, 
-              element.getNamespaceURI(prefix));  */
         }
         if (parent != null) {
             // now handle element's prefix if not declared on ancestor
             String prefix = element.getNamespacePrefix();
             if (!element.getNamespaceURI(prefix)
               .equals(parent.getNamespaceURI(prefix))) {
-//                System.err.println(prefix + " mapped to "); // XXX
                 contentHandler.startPrefixMapping(prefix, 
                   element.getNamespaceURI(prefix));  
             }
@@ -260,7 +261,6 @@ public class SAXConverter {
                   .equals(attPrefix)
                   // SAX never calls startPrefixMapping for the xml prefix
                   && !"xml".equals(attPrefix)) {
-//                    System.err.println(attPrefix + " mapped to "); // XXX
                     contentHandler.startPrefixMapping(attPrefix, 
                       element.getNamespaceURI(attPrefix));  
                 }
@@ -269,7 +269,6 @@ public class SAXConverter {
         else { // declare all prefixes
             String prefix = element.getNamespacePrefix();
             if (!prefix.equals("") && !"xml".equals(prefix)) {
-//                System.err.println(prefix + " mapped to "); // XXX
                 contentHandler.startPrefixMapping(prefix, 
                   element.getNamespaceURI());  
             }
@@ -283,7 +282,6 @@ public class SAXConverter {
                 }
                 else if (!attPrefix.equals("") &&
                   !attPrefix.equals(element.getNamespacePrefix())){
-//                    System.err.println(attPrefix + " mapped to "); // XXX
                     contentHandler.startPrefixMapping(attPrefix, 
                       att.getNamespaceURI());  
                 }
@@ -321,6 +319,10 @@ public class SAXConverter {
              i++) {
             String prefix = element.getNamespacePrefix(i);
             if ("xml".equals(prefix)) continue;
+            if (parent == null) {
+                String uri = element.getNamespaceURI(prefix);
+                if ("".equals(uri)) continue;
+            }
             contentHandler.endPrefixMapping(prefix);  
         }
         if (parent != null) {
@@ -346,11 +348,12 @@ public class SAXConverter {
         }
         else { // undeclare all prefixes
             String prefix = element.getNamespacePrefix();
+            String uri = element.getNamespaceURI();
             if (!prefix.equals("")  && !"xml".equals(prefix)) {
                 contentHandler.endPrefixMapping(prefix);  
             }
             
-         // Handle attributes' prefixes if not declared on ancestor
+            // Handle attributes' prefixes if not declared on ancestor
             for (int i = 0; i < element.getAttributeCount(); i++) {
                 Attribute att = element.getAttribute(i);
                 String attPrefix = att.getNamespacePrefix();
