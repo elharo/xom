@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -301,20 +301,19 @@ public class SAXConverter {
         }
     }
     
-    // should I use equals() method here????
     private static String getSAXType(Attribute attribute) {
 
         Attribute.Type type = attribute.getType();
-        if (type == Attribute.Type.UNDECLARED) return "CDATA";
-        if (type == Attribute.Type.CDATA)      return "CDATA";
-        if (type == Attribute.Type.ID)         return "ID";
-        if (type == Attribute.Type.IDREF)      return "IDREF";
-        if (type == Attribute.Type.IDREFS)     return "IDREFS";
-        if (type == Attribute.Type.NMTOKEN)    return "NMTOKEN";
-        if (type == Attribute.Type.NMTOKENS)   return "NMTOKENS";
-        if (type == Attribute.Type.ENTITY)     return "ENTITY";
-        if (type == Attribute.Type.ENTITIES)   return "ENTITIES";
-        if (type == Attribute.Type.NOTATION)   return "NOTATION";
+        if (type.equals(Attribute.Type.UNDECLARED)) return "CDATA";
+        if (type.equals(Attribute.Type.CDATA))      return "CDATA";
+        if (type.equals(Attribute.Type.ID))         return "ID";
+        if (type.equals(Attribute.Type.IDREF))      return "IDREF";
+        if (type.equals(Attribute.Type.IDREFS))     return "IDREFS";
+        if (type.equals(Attribute.Type.NMTOKEN))    return "NMTOKEN";
+        if (type.equals(Attribute.Type.NMTOKENS))   return "NMTOKENS";
+        if (type.equals(Attribute.Type.ENTITY))     return "ENTITY";
+        if (type.equals(Attribute.Type.ENTITIES))   return "ENTITIES";
+        if (type.equals(Attribute.Type.NOTATION))   return "NOTATION";
         
         return "CDATA";
     }
