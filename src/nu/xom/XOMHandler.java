@@ -497,6 +497,13 @@ class XOMHandler
       String attributeName, String type, String mode, 
       String defaultValue)  {
     
+        // workaround for Crimson bug
+        if (type.startsWith("NOTATION ")) {
+            if (type.indexOf('(') == -1 && ! type.endsWith(")")) {
+                type = "NOTATION (" + type.substring("NOTATION ".length()) + ")";
+            }
+        }
+        
         if (!inExternalSubset && doctype != null) {
             internalDTDSubset.append("  <!ATTLIST ");
             internalDTDSubset.append(elementName);
