@@ -387,4 +387,38 @@ public class ProcessingInstructionTest extends XOMTestCase {
         
     }
 
+    
+    public void testColonsNotAllowedInTargets() {
+
+        try {
+            new ProcessingInstruction("pre:target", "data"); 
+            fail("allowed processing instruction with target that uses a prefixed name");
+        }
+        catch (IllegalTargetException success) {
+            assertEquals("pre:target", success.getData());
+            assertNotNull(success.getMessage());   
+        }
+
+        try {
+            new ProcessingInstruction("pre:", "data"); 
+            fail("allowed processing instruction with trailing colon in target");
+        }
+        catch (IllegalTargetException success) {
+            assertEquals("pre:", success.getData());
+            assertNotNull(success.getMessage());   
+        }
+
+        try {
+            new ProcessingInstruction(":target", "data"); 
+            fail("allowed processing instruction with initial colon in target");
+        }
+        catch (IllegalTargetException success) {
+            assertEquals(":target", success.getData());
+            assertNotNull(success.getMessage());   
+        }
+
+        
+    }
+
+
 }
