@@ -349,6 +349,16 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals("Data", data.getValue());
         
     }
+    
+    public void testToString() 
+      throws ParsingException, IOException, XSLException {
+        
+        File stylesheet = new File("data/xslt/input/singlestring.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+        assertTrue(xform.toString().startsWith("[nu.xom.xslt.XSLTransform: "));
+        
+    }    
+    
 
     // Make sure that method="text" doesn't affect what we get
     // since this is not a serialized transform
