@@ -160,6 +160,15 @@ public class SAXConverterTest extends XOMTestCase {
         convertAndCompare(doc); 
     }
     
+    public void testChildElementAddsNamespace() throws Exception {
+        Element root = new Element("root");
+        Element child = new Element("pre:child", "http://www.example.org/");
+        child.addAttribute(new Attribute("xlink:type", "http://www.w3.org/1999/xlink", "simple"));
+        root.appendChild(child);
+        Document doc = new Document(root);  
+        convertAndCompare(doc); 
+    }
+    
     public void testAttributes() throws Exception {
         Element root = new Element("root");
         root.addAttribute(new Attribute("a", "test"));
