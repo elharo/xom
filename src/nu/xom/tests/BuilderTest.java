@@ -32,6 +32,8 @@ import java.io.InputStream;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
@@ -501,6 +503,31 @@ public class BuilderTest extends XOMTestCase {
         Document document2 = builder.build(reader2);  
         assertEquals(document2, document);     
     }
+
+    
+    public void testWarningDoesNotStopBuild()
+      throws IOException, ParsingException, SAXException {
+        XMLReader xerces;
+        try {
+            xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        // This document generates a warning due to the duplicate
+        // attribute declaration
+        xerces.setFeature("http://apache.org/xml/features/validation/warn-on-duplicate-attdef", true);
+        Builder builder = new Builder(xerces, true);
+        Document document = builder.build("<!DOCTYPE root [" +
+                "<!ELEMENT root ANY>" +
+                "<!ATTLIST root b CDATA #IMPLIED>" +
+                "<!ATTLIST root b NMTOKEN #REQUIRED>" +
+                "]><root b='test'/>", base); 
+        // The main test is that the document is built successfully.
+        assertEquals(2, document.getChildCount());
+        assertEquals("root", document.getRootElement().getQualifiedName());
+    }   
     
     public void testValidateFromStringWithNullBase()
       throws IOException, ParsingException {
