@@ -25,9 +25,8 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * An <code>InclusionLoopException</code> is thrown when
- * an included document attempts to include itself or 
- * one of its ancestor documents.
+ * Indicates that an included document attempts to include itself or 
+ * one of its ancestor documents, directly or indirectly.
  * </p>
  *
  * @author Elliotte Rusty Harold
@@ -35,18 +34,20 @@ package nu.xom.xinclude;
  */
 public class InclusionLoopException extends XIncludeException {
 
+    
     /**
      * <p>
      * Constructs an <code>InclusionLoopException</code> with  
      * the specified detail message. 
      * </p>
      * 
-     * @param message the detail message
+     * @param message a string indicating the specific problem
      */
     public InclusionLoopException(String message) {
         super(message);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>InclusionLoopException</code> with a detail 
@@ -61,4 +62,5 @@ public class InclusionLoopException extends XIncludeException {
         super(message, uri);
     }
 
+    
 }

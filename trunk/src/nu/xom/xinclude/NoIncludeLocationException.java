@@ -25,8 +25,9 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * Thrown when an <code>xinclude:include</code> element has neither an 
- * <code>href</code> nor an <code>xpointer</code> attribute.
+ * Indicates that an <code>xinclude:include</code> element has neither 
+ * an <code>href</code> attribute nor an <code>xpointer</code> 
+ * attribute.
  * </p>
  *
  * @author Elliotte Rusty Harold

@@ -25,9 +25,8 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * A <code>MisplacedFallbackException</code> is thrown when
- * an <code>xinclude:fallback</code> element is found outside 
- * of an <code>xinclude:include</code> element.
+ * Indicates that an <code>xinclude:fallback</code> element  
+ * was found outside of an <code>xinclude:include</code> element.
  * </p>
  *
  * @author Elliotte Rusty Harold

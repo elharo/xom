@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  *
  */
 public class XIncluder {
@@ -84,8 +84,8 @@ public class XIncluder {
 
     /**
      * <p>
-     * Returns a copy of the argument <code>Document</code> 
-     * in which all <code>xinclude:include</code> elements have been  
+     * Returns a copy of the document in which all 
+     * <code>xinclude:include</code> elements have been  
      * replaced by their referenced content. The original 
      * <code>Document</code> object is not modified.
      * Resolution is recursive; that is, include elements
@@ -94,10 +94,10 @@ public class XIncluder {
      * include elements.
      * </p>
      * 
-     * @param in the <code>Document</code> in which include elements
+     * @param in the document in which include elements
      *     should be resolved
      * 
-     * @return copy of the argument <code>Document</code> in which
+     * @return copy of the document in which
      *     all <code>xinclude:include</code> elements
      *     have been replaced by their referenced content
      * 
@@ -111,7 +111,7 @@ public class XIncluder {
      * @throws IOException if an included document could not be loaded,
      *     and no fallback was available
      * @throws NoIncludeLocationException if an <code>xinclude:include</code> 
-     *      element does not have an <code>href</code> attribute.
+     *      element does not have an <code>href</code> attribute
      * @throws ParsingException if an included XML document 
      *     was malformed
      * @throws UnsupportedEncodingException if an included document 
@@ -134,22 +134,21 @@ public class XIncluder {
 
     /**
      * <p>
-     * Returns a copy of the argument <code>Document</code> 
-     * in which all <code>xinclude:include</code> elements have been  
-     * replaced by their referenced content. The original 
-     * <code>Document</code> object is not modified.
+     * Returns a copy of the document in which all 
+     * <code>xinclude:include</code> elements have been  
+     * replaced by their referenced content as loaded by the builder.
+     * The original <code>Document</code> object is not modified.
      * Resolution is recursive; that is, include elements
      * in the included documents are themselves resolved.
-     * The <code>Document</code> returned contains no
-     * include elements.
+     * The document returned contains no <code>include</code> elements.
      * </p>
      * 
-     * @param in the <code>Document</code> in which include elements
+     * @param in the document in which include elements
      *     should be resolved
-     * @param builder the <code>Builder</code> used to build the
+     * @param builder the builder used to build the
      *     nodes included from other documents
      * 
-     * @return copy of the argument <code>Document</code> in which
+     * @return copy of the document in which
      *     all <code>xinclude:include</code> elements
      *     have been replaced by their referenced content
      * 
@@ -185,12 +184,12 @@ public class XIncluder {
 
     /**
      * <p>
-     * Modifies a <code>Document</code> by replacing all  
+     * Modifies a document by replacing all  
      * <code>xinclude:include</code> elements 
      * by their referenced content. 
      * Resolution is recursive; that is, include elements
      * in the included documents are themselves resolved.
-     * The resolved <code>Document</code> contains no
+     * The resolved document contains no
      * <code>xinclude:include</code> elements.
      * </p>
      * 
@@ -200,7 +199,7 @@ public class XIncluder {
      * may be left in a partially resolved state.
      * </p>
      * 
-     * @param in the <code>Document</code> in which include elements
+     * @param in the document in which include elements
      *     should be resolved
      *
      * @throws BadParseAttributeException if an <code>include</code>  
@@ -214,7 +213,7 @@ public class XIncluder {
      * @throws IOException if an included document could not be loaded,
      *     and no fallback was available
      * @throws NoIncludeLocationException if an <code>xinclude:include</code>
-     *     element does not have an <code>href</code> attribute.
+     *     element does not have an <code>href</code> attribute
      * @throws ParsingException if an included XML document
      *    was malformed
      * @throws UnsupportedEncodingException if an included document 
@@ -234,30 +233,30 @@ public class XIncluder {
 
     /**
      * <p>
-     * Modifies a <code>Document</code> by replacing all 
+     * Modifies a document by replacing all 
      * <code>xinclude:include</code> elements with their referenced 
-     * content. Resolution is recursive; that is, include elements
-     * in the included documents are themselves resolved.
-     * The resolved <code>Document</code> contains no
+     * content as loaded by the builder. Resolution is recursive; 
+     * that is, <code>include</code> elements in the included documents 
+     * are themselves resolved. The resolved document contains no 
      * <code>xinclude:include</code> elements.
      * </p>
      * 
      * <p>
-     * If the inclusion fails for any reason--XInclude syntax
-     * error, missing resource with no fallback, etc.--the document
-     * may be left in a partially resolved state.
+     * If the inclusion fails for any reason &mdash; XInclude syntax
+     * error, missing resource with no fallback, etc. &mdash; the 
+     * document may be left in a partially resolved state.
      * </p>
      * 
-     * @param in the <code>Document</code> in which include elements
+     * @param in the document in which include elements
      *     should be resolved
-     * @param builder the <code>Builder</code> used to build the
+     * @param builder the builder used to build the
      *     nodes included from other documents
      * 
      * @throws BadParseAttributeException if an <code>include</code>  
      *     element has a <code>parse</code> attribute
      *     with any value other than <code>text</code> 
      *     or <code>parse</code>
-     * @throws InclusionLoopException if this <code>Element</code> 
+     * @throws InclusionLoopException if this element 
      *     contains an XInclude element that attempts to include a  
      *     document in which this element is directly or indirectly 
      *     included
@@ -333,9 +332,6 @@ public class XIncluder {
             }
             if (href != null) {
                 href = convertToURI(href);
-                // XXX asked working group if this is correct;
-                // i.e. should I throw this exception or should I just 
-                // ignore the fragment ID
                 if (href.indexOf('#') > -1) {
                     // XXX asked working group if it's OK for the href
                     // attribute to end with # but not have a fragment ID

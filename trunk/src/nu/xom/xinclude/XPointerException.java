@@ -25,12 +25,11 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * <code>XPointerException</code> is a checked exception
- * that indicates an error as defined by the XPoiner specification.
+ * Indicates an error as defined by the XPoiner specification.
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  */
 class XPointerException extends Exception {
 
@@ -42,19 +41,20 @@ class XPointerException extends Exception {
      * specified detail message.
      * </p>
      *
-     * @param message the detail message
+     * @param message a string indicating the specific problem
      */
     XPointerException(String message) {
         super(message);
     }
 
+    
     /**
      * <p>
      * Constructs an <code>XPointerException</code> with the 
      * specified detail message and root cause.
      * </p>
      * 
-     * @param message the detail message
+     * @param message a string indicating the specific problem
      * @param cause the initial exception which caused this 
      *     <code>XPointerException</code>
      */
@@ -63,6 +63,7 @@ class XPointerException extends Exception {
         initCause(cause);
     }
 
+    
     /**
      * <p>
      * When an <code>IOException</code>,  
@@ -76,16 +77,18 @@ class XPointerException extends Exception {
      *</p>
      * 
      * @return the underlying exception which 
-     *     caused the XPointerSyntaxException to be thrown
+     *     caused this XPointerSyntaxException to be thrown
      */
     public Throwable getCause() {
         return this.cause;  
     }
 
+    
     // null is insufficient for detecting an unset cause.
     // The cause may be set to null whicn may not then be reset.
     private boolean causeSet = false;
 
+    
     /**
      * <p>
      * When an <code>IOException</code>,  
@@ -116,4 +119,5 @@ class XPointerException extends Exception {
         return this;
     }
 
+    
 }
