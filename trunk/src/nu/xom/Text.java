@@ -78,7 +78,6 @@ public class Text extends LeafNode {
     
     static Text build(String data) {
         Text result = new Text();
-        if (data == null) data = "";
         try {
             result.data = data.getBytes("UTF8");   
         }
