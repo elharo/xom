@@ -524,7 +524,7 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/metafallbacktest3.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Allowed bad parse attribute");
         }
         catch (BadParseAttributeException success) {
@@ -540,7 +540,7 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/metafallbacktest4.xml");
         Document doc = builder.build(input);
         try {
-            Document result = XIncluder.resolve(doc);
+            XIncluder.resolve(doc);
             fail("Allowed bad parse attribute");
         }
         catch (NoIncludeLocationException success) {
@@ -1744,7 +1744,6 @@ public class XIncludeTest extends XOMTestCase {
           "data/xinclude/input/lineends.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
-        String data = result.getValue();
         Document expected = builder.build(
           new File("data/xinclude/output/lineends.xml")
         );

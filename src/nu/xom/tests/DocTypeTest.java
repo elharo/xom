@@ -87,8 +87,7 @@ public class DocTypeTest extends XOMTestCase {
           + "\r\n<test />\r\n";  
         Document doc = (new Builder()).build(data, null);
         String result = doc.toXML();
-        assertEquals(data, doc.toXML()
-        );    
+        assertEquals(data, result);    
     }  
     
     
