@@ -43,26 +43,26 @@ public class ProcessingInstructionTest extends XOMTestCase {
         super(name);
     }
     
-    private ProcessingInstruction c1;
+    private ProcessingInstruction pi;
     
     protected void setUp() {
-        c1 = new ProcessingInstruction("test", "test");  
+        pi = new ProcessingInstruction("test", "test");  
     }
 
     public void testToXML() {
-        assertEquals("<?test test?>", c1.toXML());
+        assertEquals("<?test test?>", pi.toXML());
     }
 
     public void testToString() {
         assertEquals(
           "[nu.xom.ProcessingInstruction: target=\"test\"; data=\"test\"]", 
-          c1.toString());
+          pi.toString());
     }
 
     public void testConstructor() {
 
-        assertEquals("test", c1.getValue());
-        assertEquals("test", c1.getTarget());
+        assertEquals("test", pi.getValue());
+        assertEquals("test", pi.getTarget());
 
         try {
           new ProcessingInstruction("test:test", "test");
@@ -89,31 +89,37 @@ public class ProcessingInstructionTest extends XOMTestCase {
         catch (IllegalTargetException success) {}
         
         // test empty data allowed
-        ProcessingInstruction pi = new ProcessingInstruction("test", "");
+        pi = new ProcessingInstruction("test", "");
         assertEquals("", pi.getValue());
-        
-        // what should happen with null data????
+
 
     }
 
     public void testSetter() {
 
         try {
-          c1.setValue("kjsahdj ?>");
+          pi.setValue("kjsahdj ?>");
           fail("Should raise an IllegalDataException");
         }
         catch (IllegalDataException success) {}
         try {
-          c1.setValue("?>");
+          pi.setValue("?>");
           fail("Should raise an IllegalDataException");
         }
         catch (IllegalDataException success) {}
         try {
-          c1.setValue("kjsahdj ?> skhskjlhd");
+          pi.setValue("kjsahdj ?> skhskjlhd");
           fail("Should raise an IllegalDataException");
         }
         catch (IllegalDataException success) {}
-
+        try {
+            pi.setValue(null);
+            fail("Allowed null data");   
+        }
+        catch (IllegalDataException ex) {
+            // success   
+        }
+        
         // These should all work
         String[] testData = {"<html></html>",
           "name=value",
@@ -123,59 +129,59 @@ public class ProcessingInstructionTest extends XOMTestCase {
             "<?", "? >", " -- "
         };
         for (int i = 0; i < testData.length; i++) {
-          c1.setValue(testData[i]);
-          assertEquals(testData[i], c1.getValue());
+          pi.setValue(testData[i]);
+          assertEquals(testData[i], pi.getValue());
         }
 
      }
 
     public void testNames() {
-        assertEquals("test", c1.getTarget());
+        assertEquals("test", pi.getTarget());
      }
 
 
     public void testEquals() {
-        ProcessingInstruction c1 
+        ProcessingInstruction pi1 
           = new ProcessingInstruction("test", "afaf");
-        ProcessingInstruction c2
+        ProcessingInstruction pi2
           = new ProcessingInstruction("test", "afaf");
-        ProcessingInstruction c3 
+        ProcessingInstruction pi3 
           = new ProcessingInstruction("tegggst", "afaf");
-        ProcessingInstruction c4
+        ProcessingInstruction pi4
           = new ProcessingInstruction("test", "1234");
 
-        assertEquals(c1, c1);
-        assertEquals(c1.hashCode(), c1.hashCode());
-        assertTrue(!c1.equals(c2));
-        assertTrue(!c1.equals(c3));
-        assertTrue(!c3.equals(c4));
-        assertTrue(!c2.equals(c4));
-        assertTrue(!c2.equals(c3));
+        assertEquals(pi1, pi1);
+        assertEquals(pi1.hashCode(), pi1.hashCode());
+        assertTrue(!pi1.equals(pi2));
+        assertTrue(!pi1.equals(pi3));
+        assertTrue(!pi3.equals(pi4));
+        assertTrue(!pi2.equals(pi4));
+        assertTrue(!pi2.equals(pi3));
     }
 
     public void testCopy() {
         Element test = new Element("test");
-        test.appendChild(c1);
-        ProcessingInstruction c2 = (ProcessingInstruction) c1.copy();
+        test.appendChild(pi);
+        ProcessingInstruction c2 = (ProcessingInstruction) pi.copy();
 
-        assertEquals(c1, c2);
-        assertEquals(c1.getValue(), c2.getValue());
-        assertTrue(!c1.equals(c2));
+        assertEquals(pi, c2);
+        assertEquals(pi.getValue(), c2.getValue());
+        assertTrue(!pi.equals(c2));
         assertNull(c2.getParent());
     }
 
     // Check passing in a string with correct surrogate pairs
     public void testCorrectSurrogates() {
         String goodString = "test: \uD8F5\uDF80  ";
-        c1.setValue(goodString);
-        assertEquals(goodString, c1.getValue());       
+        pi.setValue(goodString);
+        assertEquals(goodString, pi.getValue());       
     }
 
     // Check passing in a string with broken surrogate pairs
     public void testSurrogates() {
 
         try {
-            c1.setValue("test \uD8F5\uD8F5 test");
+            pi.setValue("test \uD8F5\uD8F5 test");
             fail("Allowed two high halves");
         }
         catch (IllegalDataException ex) {
@@ -183,7 +189,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         
         try {
-            c1.setValue("test \uDF80\uDF80 test");
+            pi.setValue("test \uDF80\uDF80 test");
             fail("Allowed two low halves");
         }
         catch (IllegalDataException ex) {
@@ -191,7 +197,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
         
         try {
-            c1.setValue("test \uD8F5 \uDF80 test");
+            pi.setValue("test \uD8F5 \uDF80 test");
             fail("Allowed two halves split by space");
         }
         catch (IllegalDataException ex) {
@@ -199,7 +205,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         }
 
         try {
-            c1.setValue("test \uDF80\uD8F5 test");
+            pi.setValue("test \uDF80\uD8F5 test");
             fail("Allowed reversed pair");
         }
         catch (IllegalDataException ex) {
@@ -210,24 +216,24 @@ public class ProcessingInstructionTest extends XOMTestCase {
 
     public void testLeafNode() {
 
-        assertEquals(0, c1.getChildCount());
-        assertTrue(!c1.hasChildren());
+        assertEquals(0, pi.getChildCount());
+        assertTrue(!pi.hasChildren());
         try {
-            c1.getChild(0);
+            pi.getChild(0);
             fail("Didn't throw IndexOutofBoundsException");
         }
         catch (IndexOutOfBoundsException ex) {
             // success   
         }
         
-        assertNull(c1.getParent());
+        assertNull(pi.getParent());
 
         Element element = new Element("test");
-        element.appendChild(c1); 
-        assertEquals(element, c1.getParent());
-        assertEquals(c1, element.getChild(0));
+        element.appendChild(pi); 
+        assertEquals(element, pi.getParent());
+        assertEquals(pi, element.getChild(0));
 
-        element.removeChild(c1);
+        element.removeChild(pi);
         assertTrue(!element.hasChildren());
 
     }
