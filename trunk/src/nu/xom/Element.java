@@ -33,8 +33,8 @@ import java.util.TreeSet;
 
 /**
  * <p>
- * Represents an XML element. Each element has
- * the following properties:
+ * This class represents an XML element. Each 
+ * element has the following properties:
  * </p>
  * 
  * <ul>
@@ -248,14 +248,14 @@ public class Element extends ParentNode {
 
     /**
      * <p>
-     * Returns a list of the immediate child elements of 
+     * Returns a list of the child elements of 
      * this element with the specified name in no namespace.
      * </p>
      * 
      * @param name the name of the elements included in the list
      * 
      * @return a comatose list containing the  
-     *    child elements of this element with a certain name
+     *    child elements of this element with the specified name
      */
     public final Elements getChildElements(String name) {
         return getChildElements(name, "");
@@ -305,7 +305,7 @@ public class Element extends ParentNode {
     
     /**
      * <p>
-     * Returns a list of all the immediate child elements 
+     * Returns a list of all the child elements 
      * of this element.
      * </p>
      * 
@@ -354,8 +354,8 @@ public class Element extends ParentNode {
      * @param localName the local name of the element to return
      * @param namespaceURI the namespace URI of the element to return
      * 
-     * @return the first child with the specified local name in 
-     *      no namespace, or null if there is no such element
+     * @return the first child with the specified local name in the
+     *      specified namespace, or null if there is no such element
      */
     public final Element getFirstChildElement(String localName, 
      String namespaceURI) {
@@ -383,7 +383,8 @@ public class Element extends ParentNode {
      * 
      * @param attribute the attribute to add
      * 
-     * @throws IllegalAddException if the attribute already has a parent
+     * @throws MultipleParentException if the attribute is already
+     *      attached to an element
      * @throws NamespaceConflictException if the attribute's prefix   
      *      is mapped to a different namespace URI than the same prefix
      *      is mapped to by the element itself, another attribute of 
@@ -394,7 +395,7 @@ public class Element extends ParentNode {
     public final void addAttribute(Attribute attribute) {
 
         if (attribute.getParent() != null) {
-            throw new IllegalAddException(
+            throw new MultipleParentException(
               "Attribute already has a parent");
         }
         
@@ -866,11 +867,11 @@ public class Element extends ParentNode {
      * http://www.w3.org/TR/2000/svg/.
      * </p>
      * 
-     * @param URI the new URI of the element.
+     * @param uri the new namespace URI of the element.
      * 
      * @throws XMLException if the namespace URI is disallowed
      */
-    protected void checkNamespaceURI(String URI) {}
+    protected void checkNamespaceURI(String uri) {}
 
     
     /**
@@ -1165,7 +1166,7 @@ public class Element extends ParentNode {
      * <p>
      * Subclasses can override this method to perform additional 
      * checks on the specific namespace declarations 
-     * added to this element beyond what Namespaces in XML 
+     * added to this element beyond what <cite>Namespaces in XML</cite>
      * requires.
      * </p>
      * 
@@ -1355,7 +1356,7 @@ public class Element extends ParentNode {
     /**
      * 
      * <p>
-     * Returns the base URI against which relative URLs in this
+     * Returns the base URI against which relative URIs in this
      * element should be resolved.
      * <code>xml:base</code> attributes take precedence over the
      * actual base URI.

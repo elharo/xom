@@ -253,9 +253,8 @@ public class ElementTest extends XOMTestCase {
             e.appendChild(new DocType(name));
             fail("Appended a document type declaration to an element");
         }
-        catch (IllegalAddException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
@@ -1084,7 +1083,7 @@ public class ElementTest extends XOMTestCase {
             element2.addAttribute(a1);
             fail("added attribute with existing parent");
         }
-        catch (IllegalAddException success) {
+        catch (MultipleParentException success) {
             assertNotNull(success.getMessage());
         }
         
