@@ -668,54 +668,48 @@ public class SerializerTest extends XOMTestCase {
             serializer.setLineSeparator("r");
             fail("Allowed illegal separator character");
         }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (IllegalArgumentException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             serializer.setLineSeparator("n");
             fail("Allowed illegal separator character");
         }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (IllegalArgumentException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             serializer.setLineSeparator(" ");
             fail("Allowed illegal separator character");
         }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (IllegalArgumentException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             serializer.setLineSeparator("rn");
             fail("Allowed illegal separator character");
         }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (IllegalArgumentException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             serializer.setLineSeparator("<");
             fail("Allowed illegal separator character");
         }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (IllegalArgumentException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             serializer.setLineSeparator("\u0085");
             fail("Allowed NEL separator character");
         }
-        catch (IllegalArgumentException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (IllegalArgumentException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
@@ -1230,7 +1224,8 @@ public class SerializerTest extends XOMTestCase {
         
     }
     
-    public void testIndentAndBreakBeforeProcessingInstruction() throws IOException {
+    public void testIndentAndBreakBeforeProcessingInstruction() 
+      throws IOException {
         Element items = new Element("itemSet");
         items.appendChild(new ProcessingInstruction("target", "value"));
         Document doc = new Document(items);
@@ -1626,4 +1621,25 @@ public class SerializerTest extends XOMTestCase {
         }  
     }
 
+    public void testTurnLineFeedInAttributeValueIntoSpaceWhenIndenting() 
+      throws IOException {
+        Element root = new Element("a");
+        root.appendChild("c"); 
+        root.addAttribute(new Attribute("name", "value1\nvalue2")); 
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setMaxLength(245);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<a name=\"value1 value2\">c</a>\r\n", 
+          result
+        );       
+    }
+    
 }
