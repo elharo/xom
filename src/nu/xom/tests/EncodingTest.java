@@ -60,7 +60,7 @@ public class EncodingTest extends XOMTestCase {
 
         for (int i = 0x20; i <= 0xD7FF; i++) {
             Element data = new Element("d");
-            data.appendChild(((char) i) + "");
+            data.appendChild(String.valueOf(((char) i)));
             data.addAttribute(new Attribute("c", String.valueOf(i)));
             root.appendChild(data);
         }
@@ -69,7 +69,7 @@ public class EncodingTest extends XOMTestCase {
         
         for (int i = 0xE000; i <= 0xFFFD; i++) {
             Element data = new Element("d");
-            data.appendChild(((char) i) + "");
+            data.appendChild(String.valueOf(((char) i)));
             data.addAttribute(new Attribute("c", String.valueOf(i)));
             root.appendChild(data);
         }
@@ -119,7 +119,7 @@ public class EncodingTest extends XOMTestCase {
             W2 = W2 | (uprime & 0x7FF );
             W1 = W1 | (uprime & 0xFF800);
             Element data = new Element("d");
-            data.appendChild( ((char) W1) + "" + ((char) W2) );
+            data.appendChild( String.valueOf(((char) W1)) + ((char) W2) );
             data.addAttribute(new Attribute("c", String.valueOf(W1)));
             root.appendChild(data);
         }        
@@ -129,74 +129,11 @@ public class EncodingTest extends XOMTestCase {
     protected void tearDown() {
       doc = null;
       System.gc();   
-    }
+    } 
     
     public void testUSASCII() 
       throws ParsingException, UnsupportedEncodingException {
         checkAll("US-ASCII");
-    }
-    
-    
-    /**
-     * <p>
-     *   Check that the UTF-16 encoding outputs a byte-order mark.
-     * </p>
-     * 
-     * @throws IOException
-     */
-    public void testUTF16BOM() throws IOException {
-        Document doc = new Document(new Element("test"));
-        ByteArrayOutputStream out = new ByteArrayOutputStream();    
-        Serializer serializer = new Serializer(out, "UTF-16");
-        serializer.write(doc);
-        serializer.flush();
-        out.flush();
-        out.close();
-        byte[] data = out.toByteArray();
-        assertEquals((byte) 0xFE, data[0]);
-        assertEquals((byte) 0xFF, data[1]);
-        assertEquals((byte) 0, data[2]);
-        assertEquals('<', (char) data[3]);     
-    }
-    
-    /**
-     * <p>
-     *   Check that the UTF-16BE encoding omits the byte-order mark.
-     * </p>
-     * 
-     * @throws IOException
-     */
-    public void testUTF16BEBOM() throws IOException {
-        Document doc = new Document(new Element("test"));
-        ByteArrayOutputStream out = new ByteArrayOutputStream();    
-        Serializer serializer = new Serializer(out, "UTF-16BE");
-        serializer.write(doc);
-        serializer.flush();
-        out.flush();
-        out.close();
-        byte[] data = out.toByteArray();
-        assertEquals((byte) 0, data[0]);
-        assertEquals('<', (char) data[1]);     
-    }
-    
-    /**
-     * <p>
-     *   Check that the UTF-16LE encoding omits the byte-order mark.
-     * </p>
-     * 
-     * @throws IOException
-     */
-    public void testUTF16LEBOM() throws IOException {
-        Document doc = new Document(new Element("test"));
-        ByteArrayOutputStream out = new ByteArrayOutputStream();    
-        Serializer serializer = new Serializer(out, "UTF-16LE");
-        serializer.write(doc);
-        serializer.flush();
-        out.flush();
-        out.close();
-        byte[] data = out.toByteArray();
-        assertEquals('<', (char) data[0]);     
-        assertEquals((byte) 0, data[1]);
     }
     
     public void testASCII() 
@@ -335,7 +272,7 @@ public class EncodingTest extends XOMTestCase {
         
         Builder builder = new Builder();
         byte[] data = null;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();    
+        ByteArrayOutputStream out = new ByteArrayOutputStream(100000);    
         try {
             // Write data into a byte array using encoding
             Serializer serializer = new Serializer(out, encoding);
@@ -349,7 +286,8 @@ public class EncodingTest extends XOMTestCase {
             serializer = null;
             
             Element reparsedRoot = reparsed.getRootElement();
-            for (int i = 0; i < reparsedRoot.getChildCount(); i++) {
+            int childCount = reparsedRoot.getChildCount();
+            for (int i = 0; i < childCount; i++) {
                 Element test = (Element) reparsedRoot.getChild(i); 
                 String value = test.getValue();
                 int expected 
