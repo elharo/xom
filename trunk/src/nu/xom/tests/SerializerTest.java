@@ -33,6 +33,7 @@ import nu.xom.Comment;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Attribute;
+import nu.xom.UnavailableCharacterException;
 import nu.xom.XMLException;
 
 import java.io.ByteArrayInputStream;
@@ -1704,12 +1705,14 @@ public class SerializerTest extends XOMTestCase {
         Document doc = new Document(root);
         serializer.write(doc);
         String result = out.toString("UTF-8");
-        assertTrue(result.endsWith("<root name=\"&quot;\"/>\r\n"));  
+        assertTrue(result.endsWith("<root name=\"&quot;\"/>\r\n"));
+        
     }
 
     
     public void testSerializeUnavailableCharacterInMarkup() 
       throws IOException {
+        
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out, "ISO-8859-1");
         Element root = new Element("\u0419");
@@ -1718,14 +1721,18 @@ public class SerializerTest extends XOMTestCase {
             serializer.write(doc);
             fail("Wrote bad character: " + out.toString("ISO-8859-1"));
         }
-        catch (XMLException success) {
-            assertNotNull(success.getMessage());   
+        catch (UnavailableCharacterException success) {
+            assertNotNull(success.getMessage()); 
+            assertEquals('\u0419', success.getCharacter());
+            assertEquals("ISO-8859-1", success.getEncoding());
         }  
+        
     }
 
     
     public void testTurnLineFeedInAttributeValueIntoSpaceWhenIndenting() 
       throws IOException {
+        
         Element root = new Element("a");
         root.appendChild("c"); 
         root.addAttribute(new Attribute("name", "value1\nvalue2")); 

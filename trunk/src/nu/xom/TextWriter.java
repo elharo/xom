@@ -35,7 +35,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 abstract class TextWriter {
@@ -67,26 +67,30 @@ abstract class TextWriter {
         skipFollowingLinefeed = false; 
     }
 
+    
     private boolean lastCharacterWasSpace = false;
     
     /**
      * Indicates whether a linefeed is just half of a \r\n pair
      * used for a line break.
-     * 
      */
     private boolean skipFollowingLinefeed = false;
     
     private int highSurrogate;
     
+    
     private boolean isHighSurrogate(int c) {
         return c >= 0xD800 && c <= 0xDBFF;  
     }
+    
     
     private boolean isLowSurrogate(int c) {
         return c >= 0xDC00 && c <= 0xDFFF;  
     }
     
+    
     final void writePCDATA(char c) 
+    
       throws IOException {
         if (needsEscaping(c)) {
             if (isHighSurrogate(c)) {
@@ -151,12 +155,15 @@ abstract class TextWriter {
             skipFollowingLinefeed = true;
         }
         else write(c); 
+        
     }
+    
     
     private boolean adjustingWhiteSpace() {
         return maxLength > 0 || indent > 0;
     }
 
+    
     // This is the same as writePCDATA except that it
     // also needs to escape " as &quot;
     // I'm not escaping the single quote because Serializer
@@ -164,6 +171,7 @@ abstract class TextWriter {
     // values.
     final void writeAttributeValue(char c) 
       throws IOException {
+        
         if (needsEscaping(c)) {
             if (isHighSurrogate(c)) {
                 //store and wait for low half
@@ -269,6 +277,7 @@ abstract class TextWriter {
         else write(c); 
     }
 
+    
     private void write(char c) throws IOException {
       // Carriage returns are completely handled by
       // writePCDATA and writeAttributeValue. They never
@@ -311,6 +320,7 @@ abstract class TextWriter {
         }            
     }
 
+    
     private void writeLineSeparator(char c) 
       throws IOException {
         
@@ -339,12 +349,14 @@ abstract class TextWriter {
         return column >= maxLength - 10;   
     }
 
+    
     final void breakLine() throws IOException {
         out.write(lineSeparator);
         out.write(indentString);
         column = indentString.length();
         lastCharacterWasSpace = true;
     }
+    
     
     final void escapeBreakLine() throws IOException {
         if ("\n".equals(lineSeparator)) {
@@ -367,24 +379,27 @@ abstract class TextWriter {
     // only called for ASCII characters like <, >, and the space, 
     // which should be OK
     protected final void writeMarkup(char c) throws IOException {
+        
         if (needsEscaping(c)) {
-            throw new XMLException("Cannot use the character &0x" 
-              + Integer.toHexString(c) + "; in the " 
-              + getEncoding() + " encoding.");
+            throw new UnavailableCharacterException(c, encoding);
         }
         write(c);   
 
     }
 
+    
     final void writePCDATA(String s) throws IOException {
+        
         if (normalize) {
             s = Normalizer.normalize(s, Normalizer.NFC);   
         }
         for (int i=0; i < s.length(); i++) {
             writePCDATA(s.charAt(i));
         }   
+        
     }
 
+    
     final void writeAttributeValue(String s) 
       throws IOException {
         if (normalize) {
@@ -395,6 +410,7 @@ abstract class TextWriter {
         }   
     }
 
+    
     final void writeMarkup(String s) throws IOException {
         if (normalize) {
             s = Normalizer.normalize(s, Normalizer.NFC);   
@@ -426,6 +442,7 @@ abstract class TextWriter {
         
     }
     
+    
     void decrementIndent() {
         if (fakeIndents > 0) fakeIndents --;        
         else {
@@ -440,6 +457,7 @@ abstract class TextWriter {
         return this.encoding;   
     }
 
+    
     /**
      * <p>
      * Returns the String used as a line separator.
@@ -452,6 +470,7 @@ abstract class TextWriter {
         return lineSeparator;
     }
 
+    
     /**
      * <p>
      * Sets the lineSeparator. This  
@@ -479,6 +498,7 @@ abstract class TextWriter {
         }  
     }
 
+    
     /**
      * <p>
      * Returns the number of spaces this serializer indents.
@@ -515,6 +535,7 @@ abstract class TextWriter {
         this.maxLength = maxLength;
     }
 
+    
    /**
      * <p>
      * Sets the number of spaces to indent each 
@@ -540,8 +561,10 @@ abstract class TextWriter {
         out.flush();    
     }
 
+    
     abstract boolean needsEscaping(char c);
 
+    
     /**
      * <p>
      *  Used to track the current status of xml:space.
@@ -559,6 +582,7 @@ abstract class TextWriter {
         return preserveSpace;
     }
 
+    
     /**
      * @param preserveSpace whether to preserve all white space
      */
@@ -566,6 +590,7 @@ abstract class TextWriter {
         this.preserveSpace = preserveSpace;
     }
 
+    
     /**
      * @return the current column number
      */
@@ -573,6 +598,7 @@ abstract class TextWriter {
         return this.column;
     }
 
+    
     /**
      * <p>
      *   If true, this property indicates serialization will
@@ -609,4 +635,5 @@ abstract class TextWriter {
         return this.normalize;   
     }
 
+    
 }
