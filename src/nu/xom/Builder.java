@@ -464,7 +464,6 @@ public class Builder {
         // they're supposed to. :-(
         // XXX test this line
         if (parserName.equals("gnu.xml.aelfred2.XmlReader")) return false;
-        // XXX test this line
         if (parserName.equals("net.sf.saxon.aelfred.SAXDriver")) return false;
         if (parserName.equals("com.icl.saxon.aelfred.SAXDriver")) return false;
         
