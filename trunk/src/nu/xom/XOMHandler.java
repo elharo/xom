@@ -134,7 +134,32 @@ class XOMHandler
                  }
             } 
             
-            // Attach the attributes and namespaces
+            // Attach the attributes; this must be done before the
+            // namespaces are attached.
+            for (int i = 0; i < attributes.getLength(); i++) {
+                String qName = attributes.getQName(i);
+                if (qName.startsWith("xmlns:") || qName.equals("xmlns")) {               
+                    continue;               
+                }             
+                else {
+                    String namespace = attributes.getURI(i);
+                    String value = attributes.getValue(i);
+                    Attribute attribute = factory.makeAttribute(
+                      qName, 
+                      namespace, 
+                      value, 
+                      convertStringToType(attributes.getType(i))
+                    );
+                    // It is possible for a factory to return
+                    // an attribute with the same name twice.
+                    // The second one returned overwrites the first.
+                    // It might be OK for the regular NonVerifyingNodeFactory
+                    // to do the fastAdding itself, and then return null????
+                    if (attribute != null) element.addAttribute(attribute);
+                }
+            }
+
+            // Attach the namespaces
             for (int i = 0; i < attributes.getLength(); i++) {
                 String qName = attributes.getQName(i);
                 if (qName.startsWith("xmlns:")) {               
@@ -142,11 +167,6 @@ class XOMHandler
                     String namespacePrefix = qName.substring(6);
                     String currentValue
                        = element.getNamespaceURI(namespacePrefix); 
-                    // What if this is the prefix of an attribute
-                    // that hasn't been added yet?
-                    // Should all regular attributes be added first?
-                    // Then xmlns attributes? That would fix the problem;
-                    // Can this be unit tested????
                     if (!namespaceName.equals(currentValue)) {
                         element.addNamespaceDeclaration(
                           namespacePrefix, namespaceName);
@@ -162,24 +182,8 @@ class XOMHandler
                          namespaceName);
                     }                
                 }             
-                else {
-                    String namespace = attributes.getURI(i);
-                    String value = attributes.getValue(i);
-                    Attribute attribute = factory.makeAttribute(
-                      qName, 
-                      namespace, 
-                      value, 
-                      convertStringToType(attributes.getType(i))
-                    );
-                    // is it possible for a factory to return
-                    // an attribute with the same name twice?
-                    // if so then fastAdd may not be OK.
-                    // Need to write a unit test???? 
-                    // It might be OK for the regular NonVerifyingNodeFactory
-                    // to do the fastAdding itself, and then return null
-                    if (attribute != null) element.addAttribute(attribute);
-                }
             }
+
             
             // this is the new parent
             parent = element;

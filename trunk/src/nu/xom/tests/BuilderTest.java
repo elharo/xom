@@ -30,6 +30,13 @@ import java.io.StringReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.XMLFilterImpl;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Comment;
@@ -655,5 +662,47 @@ public class BuilderTest extends XOMTestCase {
         Builder builder = new Builder(factory);   
         assertEquals(factory, builder.getNodeFactory());
     }
+    
+    // Make sure additional namespaces aren't added for 
+    // attributes. This test is flaky because it assumes 
+    // the parser reports attributes in the correct order,
+    // which is not guaranteed. I use a custom SAX Filter to 
+    // make sure the namespace declaration comes before the attribute.
+    public void testAttributesVsNamespaces() 
+      throws ParsingException, IOException, SAXException {
+          
+       XMLFilter filter = new OrderingFilter();
+       filter.setParent(XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser"));
+       Builder builder = new Builder(filter);
+       String data ="<a/>"; 
+       Document doc = builder.build(data, null);
+       Element root = doc.getRootElement();
+       root.removeAttribute(root.getAttribute(0));
+       assertNull(root.getNamespaceURI("pre"));
+    }
+
+    private static class OrderingFilter extends XMLFilterImpl {
+        
+        public void startElement(String namespaceURI, String localName,
+          String qualifiedName, Attributes atts) throws SAXException {    
+    
+            AttributesImpl newAttributes = new AttributesImpl();
+            newAttributes.addAttribute(
+              "",
+              "pre",
+              "xmlns:pre",
+              "CDATA",
+              "http://www.example.com/");
+            newAttributes.addAttribute(
+              "http://www.example.com/",
+              "name",
+              "pre:name",
+              "CDATA",
+              "value");
+            super.startElement(namespaceURI, localName, qualifiedName, 
+              newAttributes);
+
+        }        
+    } 
 
 }
