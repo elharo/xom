@@ -41,7 +41,7 @@ import nu.xom.Text;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1d7
  *
  */
 public class XOMTestCase extends TestCase {
@@ -363,12 +363,19 @@ public class XOMTestCase extends TestCase {
         }
         
         if (expected.getChildCount() != actual.getChildCount()) {
-           // combine text nodes; this modifies the elements
-           // but shouldn't be a big problem as long as 
-           // this is only used for unit testing  
-           combineTextNodes(expected);
-           combineTextNodes(actual);
+           Element expectedCopy = combineTextNodes(expected);
+           Element actualCopy = combineTextNodes(actual);
+           compareChildren(message, expectedCopy, actualCopy);
         }
+        else {
+            compareChildren(message, expected, actual);
+        }
+
+    }
+    
+    
+    private static void compareChildren(String message, Element expected, Element actual) {
+
         assertEquals(message,
           expected.getChildCount(), actual.getChildCount());
         for (int i = 0; i < expected.getChildCount(); i++) {
@@ -376,12 +383,12 @@ public class XOMTestCase extends TestCase {
             Node child2 = actual.getChild(i);
             assertEquals(message, child1, child2);
         }
-
+        
     }
-    
-    
-    private static void combineTextNodes(Element element) {
 
+    private static Element combineTextNodes(Element element) {
+
+        element = (Element) element.copy();
         for (int i = 0; i < element.getChildCount()-1; i++) {
             Node child = element.getChild(i);
             if (child instanceof Text) {
@@ -395,7 +402,8 @@ public class XOMTestCase extends TestCase {
                   }
             }
         }        
-
+        return element;
+        
     }
 
     
