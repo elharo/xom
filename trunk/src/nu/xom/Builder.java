@@ -133,7 +133,7 @@ public class Builder {
     
     /**
      * <p>
-     * Creates a <code>Builder</code> based on a fully validating
+     * Creates a <code>Builder</code> based on an optionally validating
      * parser. If the <code>validate</code> argument 
      * is true, then a validity error while
      * parsing will cause a fatal error; that is,
@@ -153,7 +153,7 @@ public class Builder {
     
     /**
      * <p>
-     * Creates a <code>Builder</code> based on a fully
+     * Creates a <code>Builder</code> based on an optionally
      * validating parser that builds node objects with the supplied 
      * factory. If the <code>validate</code> argument is true, then 
      * a validity error while parsing will cause a fatal error; that 
@@ -318,7 +318,7 @@ public class Builder {
      * @param parser the SAX2 <code>XMLReader</code> that  
      *     parses the document
      * 
-     * @throws XMLException if parser does not support the  
+     * @throws XMLException if <code>parser</code> does not support the
      *     features XOM requires
      */ 
     public Builder(XMLReader parser) {
@@ -336,8 +336,8 @@ public class Builder {
      * @param factory the <code>NodeFactory</code> that creates 
      *     the node objects for this <code>Builder</code>
      * 
-     * @throws XMLException if parser does not support the  
-     *     features XOM requires
+     * @throws XMLException if no satisfactory parser is 
+     *     installed in the local class path
      */ 
     public Builder(NodeFactory factory) {
         this(findParser(false), false, factory);
@@ -346,16 +346,15 @@ public class Builder {
 
     /**
      * <p>
-     * Creates a optionally validating <code>Builder</code> based 
+     * Creates a optionally validating <code>Builder</code> based
      * on the specified parser object. Custom SAX features and  
      * properties such as schema validation can be set on this
-     * <code>XMLReader</code> before passing it 
-     * to this method.
+     * <code>XMLReader</code> before passing it to this method.
      * </p>
      * 
      * <p>
      * If the validate argument is true, then a validity error
-     *  while parsing will cause a fatal error; that is, it 
+     * while parsing will cause a fatal error; that is, it 
      * will throw a <code>ParsingException</code>
      * </p>
      * 
@@ -391,7 +390,7 @@ public class Builder {
      * @param factory the <code>NodeFactory</code> 
      *     this builder uses to create objects in the tree
      * 
-     * @throws XMLException if parser does not support 
+     * @throws XMLException if <code>parser</code> does not support
      *     the features XOM requires
      * 
      */ 
@@ -562,7 +561,7 @@ public class Builder {
     /**
      * <p>
      * Reads the document from an input stream while specifying 
-     * a base URI (which need not be the stream's actual URI.)
+     * a base URI (which need not be the stream's actual URI).
      * </p>
      * 
      * @param in the input stream from which the document is read
@@ -612,11 +611,11 @@ public class Builder {
      * 
      * @return the parsed <code>Document</code>
      * 
+     * @throws ValidityException if a validity error is detected. This 
+     *   is only thrown if the builder has been instructed to validate.
      * @throws ParsingException if a well-formedness error is detected
      * @throws IOException if an I/O error such as a bad disk 
      *     prevents the file from being read
-     * @throws ValidityException if a validity error is detected. This 
-     *   is only thrown if the builder has been instructed to validate.
      */
     public Document build(File in) 
       throws ParsingException, ValidityException, IOException {
@@ -645,16 +644,15 @@ public class Builder {
      * Reads the document from a reader.
      * </p>
      * 
-     * @param in the <code>Reader</code> from which the 
-     *   document is read
+     * @param in the reader from which the document is read
      * 
      * @return the parsed <code>Document</code>
      * 
+     * @throws ValidityException if a validity error is detected. This 
+     *   is only thrown if the builder has been instructed to validate.
      * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk
      *     prevents the document from being fully read
-     * @throws ValidityException if a validity error is detected. This 
-     *   is only thrown if the builder has been instructed to validate.
      */
     public Document build(Reader in) 
       throws ParsingException, ValidityException, IOException {
@@ -677,12 +675,12 @@ public class Builder {
      * 
      * @return the parsed <code>Document</code>
      * 
-     * @throws ParsingException  if a well-formedness error is detected
-     * @throws IOException       if an I/O error such as a bad disk 
-     *     prevents the document from being completely read
      * @throws ValidityException if a validity error is detected. This 
      *     is only thrown if the builder has been instructed to 
      *     validate.
+     * @throws ParsingException  if a well-formedness error is detected
+     * @throws IOException       if an I/O error such as a bad disk 
+     *     prevents the document from being completely read
      */
     public Document build(Reader in, String baseURI) 
       throws ParsingException, ValidityException, IOException {
@@ -706,12 +704,12 @@ public class Builder {
      * 
      * @return  the parsed <code>Document</code>
      * 
-     * @throws IOException       if an I/O error such as a bad disk 
-     *     prevents the document's external DTD subset from being read
-     * @throws ParsingException  if a well-formedness error is detected
      * @throws ValidityException if a validity error is detected. This 
      *     is only thrown if the builder has been instructed to 
      *     validate.
+     * @throws ParsingException  if a well-formedness error is detected
+     * @throws IOException       if an I/O error such as a bad disk 
+     *     prevents the document's external DTD subset from being read
      */
     public Document build(String document, String baseURI) 
       throws ParsingException, ValidityException, IOException {
@@ -751,12 +749,12 @@ public class Builder {
      * 
      * @return the parsed <code>Document</code>
      * 
-     * @throws ParsingException  if a well-formedness error is detected
-     * @throws IOException       if an I/O error such as a bad disk
-     *     prevents the document from being read
      * @throws ValidityException if a validity error is detected. This 
      *     is only thrown if the builder has been instructed to 
      *     validate.
+     * @throws ParsingException  if a well-formedness error is detected
+     * @throws IOException       if an I/O error such as a bad disk
+     *     prevents the document from being read
      */
     private Document build(InputSource in) 
       throws ParsingException, ValidityException, IOException {
@@ -892,14 +890,11 @@ public class Builder {
     // of NonVerifyingFactory.
     /**
      * <p>
-     *   If a custom <code>NodeFactory</code> was passed to the 
-     *   constructor, then this method returns a reference to it.
-     *   If no <code>NodeFactory</code> was passed to the 
-     *   constructor, then this method returns null.
+     * Returns this builder's <code>NodeFactory</code>, or null if
+     * a factory was not supplied when the builder was created.
      * </p>
      * 
-     * @return the node factory this builder uses, or null
-     *     if none was specified in the constructor
+     * @return the node factory that was specified in the constructor
      */
     public NodeFactory getNodeFactory() {
         
