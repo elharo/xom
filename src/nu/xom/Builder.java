@@ -56,7 +56,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b1
+ * @version 1.0b2
  * 
  */
 public class Builder {
@@ -166,7 +166,7 @@ public class Builder {
     // These are stored in the order of preference.
     private static String[] parsers = {
         "nu.xom.XML1_0Parser",
-        "nu.xom.JDK15XML1_0Parser",
+        "nu.xom.JDK15XML1_0Parser" ,
         "org.apache.xerces.parsers.SAXParser",
         "com.sun.org.apache.xerces.internal.parsers.SAXParser",
         "gnu.xml.aelfred2.XmlReader",
@@ -197,11 +197,32 @@ public class Builder {
         catch (NoClassDefFoundError err) {
             // Xerces is not available; look for next one
         } 
+
+        try {
+            parser = (XMLReader) Class.forName("nu.xom.JDK15XML1_0Parser").newInstance();
+            setupParser(parser, validate);
+            return parser;
+        } 
+        catch (SAXException ex) {
+            // look for next one
+        }
+        catch (InstantiationException ex) {
+            // look for next one
+        } 
+        catch (ClassNotFoundException ex) {
+            // look for next one
+        }
+        catch (IllegalAccessException ex) {
+            // look for next one
+        }
+        catch (NoClassDefFoundError err) {
+            // Xerces is not available; look for next one
+        } 
         
         // XMLReaderFactory.createXMLReader never returns
         // null. If it can't locate the parser, it throws
         // a SAXException.
-        for (int i = 1; i < parsers.length; i++) {
+        for (int i = 2; i < parsers.length; i++) {
             try { 
                 parser = XMLReaderFactory.createXMLReader(parsers[i]);
                 setupParser(parser, validate);
@@ -209,7 +230,10 @@ public class Builder {
             }
             catch (SAXException ex) {
                 // try the next one 
-            }       
+            }      
+            catch (NoClassDefFoundError err) {
+                // try the next one 
+            }      
         }
         
         try { // default
