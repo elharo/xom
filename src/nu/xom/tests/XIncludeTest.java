@@ -1413,5 +1413,33 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testAcceptPlainText() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/acceptplaintext.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/acceptplaintext.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testAcceptHTML() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/accepthtml.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/accepthtml.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
  
 }
