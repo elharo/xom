@@ -48,6 +48,7 @@ import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.XPathContext;
+import nu.xom.canonical.CanonicalizationException;
 import nu.xom.canonical.Canonicalizer;
 
 /**
@@ -96,7 +97,7 @@ public class CanonicalizerTest extends XOMTestCase {
         Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
-        canonicalizer.write(doc, "//@*", null);  
+        canonicalizer.write(doc.query("//@*"));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -106,7 +107,7 @@ public class CanonicalizerTest extends XOMTestCase {
     }
 
     
-    public void testCanonicalizeOnlyNamespacees() throws IOException {
+    public void testCanonicalizeOnlyNamespaces() throws IOException {
         
         Element pdu = new Element("doc", "http://www.example.com");
         
@@ -115,7 +116,7 @@ public class CanonicalizerTest extends XOMTestCase {
         Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
-        canonicalizer.write(doc, "//namespace::node()", null);  
+        canonicalizer.write(doc.query("//namespace::node()"));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -135,7 +136,7 @@ public class CanonicalizerTest extends XOMTestCase {
         Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
-        canonicalizer.write(doc, "//namespace::node()", null);  
+        canonicalizer.write(doc.query("//namespace::node()"));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -159,7 +160,7 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out);
         
-        canonicalizer.write(doc, "//comment()", null);  
+        canonicalizer.write(doc.query("//comment()"));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -206,7 +207,7 @@ public class CanonicalizerTest extends XOMTestCase {
         Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
-        canonicalizer.write(doc, "//@*", null);  
+        canonicalizer.write(doc.query("//@*"));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -226,7 +227,7 @@ public class CanonicalizerTest extends XOMTestCase {
         Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
-        canonicalizer.write(doc, "//@*", null);  
+        canonicalizer.write(doc.query("//@*"));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -312,7 +313,7 @@ public class CanonicalizerTest extends XOMTestCase {
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         Document doc = new Document(pdu);
-        canonicalizer.write(doc, "//* | //namespace::node()", null);  
+        canonicalizer.write(doc.query("//* | //namespace::node()"));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -511,7 +512,7 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
-            serializer.write(doc, "/*/child312", null);
+            serializer.write(doc.query("/*/child312"));
         }
         finally {
             out.close();
@@ -537,7 +538,7 @@ public class CanonicalizerTest extends XOMTestCase {
         try {
             Canonicalizer serializer = new Canonicalizer(out, 
               Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
-            serializer.write(doc, "/*/child312", null);
+            serializer.write(doc.query("/*/child312"));
         }
         finally {
             out.close();
@@ -563,9 +564,8 @@ public class CanonicalizerTest extends XOMTestCase {
             Canonicalizer serializer = new Canonicalizer(out,
               Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
             XPathContext context = new XPathContext("pre", "http://www.example.org/");
-            serializer.write(doc, 
-             "/*/pre:child312 | /*/pre:child312/namespace::node()", 
-             context);
+            serializer.write(doc.query("/*/pre:child312 | /*/pre:child312/namespace::node()", 
+             context));
         }
         finally {
             out.close();
@@ -591,7 +591,7 @@ public class CanonicalizerTest extends XOMTestCase {
             XPathContext context = new XPathContext("pre", "http://www.example.org/");
             Canonicalizer serializer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
-            serializer.write(doc, "/*/pre:child312 | /*/pre:child312/namespace::node()", context);
+            serializer.write(doc.query("/*/pre:child312 | /*/pre:child312/namespace::node()", context));
         }
         finally {
             out.close();
@@ -657,7 +657,7 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
-            serializer.write(doc, xpath, context);
+            serializer.write(doc.query(xpath, context));
         }
         finally {
             out.close();
@@ -684,7 +684,7 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
-            serializer.write(doc, xpath, null);
+            serializer.write(doc.query(xpath));
         }
         finally {
             out.close();
@@ -721,7 +721,7 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
-            serializer.write(doc, xpath, context);
+            serializer.write(doc.query(xpath, context));
         }
         finally {
             out.close();
@@ -757,7 +757,7 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
-            serializer.write(doc, xpath, context);
+            serializer.write(doc.query(xpath, context));
         }
         finally {
             out.close();
@@ -938,7 +938,7 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out);
         try {
-            canonicalizer.write(null);  
+            canonicalizer.write((Document) null);  
             fail("Wrote null document"); 
         }   
         catch (NullPointerException success) {
@@ -1067,7 +1067,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
         XPathContext context = new XPathContext("n1", "http://b.example");
         Document doc = new Document(pdu);
-        canonicalizer.write(doc, "(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context);  
+        canonicalizer.write(doc.query("(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -1098,7 +1098,7 @@ and expect to see
         Canonicalizer canonicalizer = new Canonicalizer(out, Canonicalizer.CANONICAL_XML);
         
         Document doc = new Document(root);
-        canonicalizer.write(doc, "/root//node()", null);  
+        canonicalizer.write(doc.query("/root//node()"));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -1123,7 +1123,7 @@ and expect to see
         
         XPathContext context = new XPathContext("n1", "http://b.example");
         Document doc = new Document(pdu);
-        canonicalizer.write(doc, "(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context, "n0");  
+        canonicalizer.write(doc.query("(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context), "n0");  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -1150,7 +1150,7 @@ and expect to see
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         XPathContext context = new XPathContext("n1", "http://example.net");
-        canonicalizer.write(doc, " (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context);  
+        canonicalizer.write(doc.query(" (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -1176,8 +1176,7 @@ and expect to see
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         XPathContext context = new XPathContext("n1", "http://example.net");
-        canonicalizer.write(doc, 
-          " (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context);  
+        canonicalizer.write(doc.query(" (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context));  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -1405,6 +1404,67 @@ and expect to see
         byte[] actual = out.toByteArray();
         byte[] expected = "<!--pre:foo-->".getBytes("UTF-8");
         assertEquals(expected, actual);
+        
+    }
+    
+    
+    public void testUnsupportedAlgorithm() throws IOException {
+     
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            new Canonicalizer(out, "http://www.example.org/canonical");
+            fail("Allowed unrecognized algorithm");
+        }
+        catch (CanonicalizationException success) {
+            assertNotNull(success.getMessage());
+        } 
+        finally {
+            out.close();
+        }
+        
+    }
+    
+    
+    public void testCanonicalizeDetachedNodes() throws IOException {
+     
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Element e = new Element("test");
+        Nodes nodes = new Nodes(e);
+        Canonicalizer serializer = new Canonicalizer(out);
+        try {
+            serializer.write(nodes);
+            fail("Canonicalized detached node");
+        }
+        catch (CanonicalizationException success) {
+            assertNotNull(success.getMessage());
+        } 
+        finally {
+            out.close();
+        }
+        
+    }
+    
+    
+    public void testCanonicalizeNodesFromTwoDocuments() throws IOException {
+     
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Element e1 = new Element("test");
+        Document d1 = new Document(e1);
+        Element e2 = new Element("test");
+        Document d2 = new Document(e2);
+        Nodes nodes = new Nodes(e1);
+        nodes.append(e2);
+        Canonicalizer serializer = new Canonicalizer(out);
+        try {
+            serializer.write(nodes);
+            fail("Canonicalized multiple document nodes");
+        }
+        catch (CanonicalizationException success) {
+            assertNotNull(success.getMessage());
+        } 
+        finally {
+            out.close();
+        }
         
     }
     
