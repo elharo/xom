@@ -1354,4 +1354,10 @@ public class SerializerTest extends XOMTestCase {
         }
     }
 
+    public void testGetEncoding() 
+      throws UnsupportedEncodingException {
+        Serializer serializer = new Serializer(System.out, "ISO-8859-1");
+        assertEquals("ISO-8859-1", serializer.getEncoding());
+    }
+
 }
