@@ -24,6 +24,11 @@ package nu.xom.tests;
 
 import java.io.IOException;
 
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
+import org.xml.sax.helpers.XMLFilterImpl;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import nu.xom.Builder;
 import nu.xom.DocType;
 import nu.xom.Document;
@@ -39,7 +44,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b9
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -110,6 +115,23 @@ public class DocTypeTest extends XOMTestCase {
     }  
     
     
+    public void testToXMLWithCommentsInInternalDTDSubsetAndVerifyingBuilder() 
+      throws ValidityException, ParsingException, IOException, SAXException {
+        
+        String data = "<?xml version=\"1.0\"?>\n" 
+          + "<!DOCTYPE root [\n" +
+                "  <!--comment-->\n  <!ELEMENT test (#PCDATA)>" +
+            "\n  <!--comment-->\n]>"
+          + "\n<test />\n";  
+        XMLFilter filter = new XMLFilterImpl();
+        filter.setParent(XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser"));
+        Document doc = (new Builder(filter)).build(data, null);
+        String result = doc.toXML();
+        assertEquals(data, result);    
+        
+    }  
+    
+    
     public void testToXMLWithProcessingInstructionsInInternalDTDSubset() 
       throws ValidityException, ParsingException, IOException {
         
@@ -119,6 +141,23 @@ public class DocTypeTest extends XOMTestCase {
             "\n  <?target?>\n]>"
           + "\n<test />\n";  
         Document doc = (new Builder()).build(data, null);
+        String result = doc.toXML();
+        assertEquals(data, result);    
+        
+    }  
+    
+    
+    public void testToXMLWithProcessingInstructionsInInternalDTDSubsetAndNonverifyingBuilder() 
+      throws ValidityException, ParsingException, IOException, SAXException {
+        
+        String data = "<?xml version=\"1.0\"?>\n" 
+          + "<!DOCTYPE root [\n" +
+                "  <?target data?>\n  <!ELEMENT test (#PCDATA)>" +
+            "\n  <?target?>\n]>"
+          + "\n<test />\n";  
+        XMLFilter filter = new XMLFilterImpl();
+        filter.setParent(XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser"));
+        Document doc = (new Builder(filter)).build(data, null);
         String result = doc.toXML();
         assertEquals(data, result);    
         
