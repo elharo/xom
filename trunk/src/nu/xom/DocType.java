@@ -428,7 +428,7 @@ public class DocType extends LeafNode {
         else if (systemID != null) {
             result.append(" SYSTEM \"");
             result.append(systemID);
-            result.append('"');;
+            result.append('"');
         } 
         
         if (internalDTDSubset.length() != 0) {
