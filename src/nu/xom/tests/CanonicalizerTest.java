@@ -40,7 +40,6 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.ParsingException;
-import nu.xom.XMLException;
 import nu.xom.canonical.Canonicalizer;
 
 /**
@@ -177,7 +176,7 @@ public class CanonicalizerTest extends XOMTestCase {
             serializer.write(doc);
             fail("Canonicalized document with relative namespace URI");
         }
-        catch (XMLException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());
         }    
         
