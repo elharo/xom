@@ -291,7 +291,6 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c2.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc, new Builder(new TextFilter()));
         Document expectedResult = builder.build(
@@ -315,7 +314,6 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c2.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc, new Builder(new TextToComment()));
         Document expectedResult = builder.build(
@@ -339,7 +337,6 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c2.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc, new Builder(new TextToAttribute()));
         Document expectedResult = builder.build(
@@ -354,7 +351,6 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c2.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc, new Builder(new TextToElements()));
         Document expectedResult = builder.build(
@@ -390,7 +386,6 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException {
       
         File input = new File("data/xinclude/input/unrecognizedscheme.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         try {
             XIncluder.resolve(doc);
@@ -408,7 +403,6 @@ public class XIncludeTest extends XOMTestCase {
       
         File input = new File("data/xinclude/input/unrecognizedschemewithfallback.xml");
         File output = new File("data/xinclude/output/unrecognizedschemewithfallback.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Document actual = XIncluder.resolve(doc);
         Document expected = builder.build(output);
@@ -421,7 +415,6 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c1.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc, new Builder(new NodeFactoryTest.CFactory()));
         Document expectedResult = builder.build(
@@ -436,7 +429,6 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c1.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc, new Builder(new NodeFactoryTest.MinimizingFactory()));
         Document expectedResult = builder.build(
@@ -451,7 +443,6 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/d1.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc, new Builder(new NodeFactoryTest.BFilter()));
         Document expectedResult = builder.build(
@@ -466,7 +457,6 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File("data/xinclude/input/c1.xml");
-        Builder builder = new Builder();
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc, 
           new Builder(new NodeFactoryTest.TripleElementFilter()));
