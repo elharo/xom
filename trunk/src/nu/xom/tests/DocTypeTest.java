@@ -23,8 +23,13 @@
 
 package nu.xom.tests;
 
+import java.io.IOException;
+
+import nu.xom.Builder;
 import nu.xom.DocType;
+import nu.xom.Document;
 import nu.xom.IllegalNameException;
+import nu.xom.ParsingException;
 import nu.xom.WellformednessException;
 
 /**
@@ -33,7 +38,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -69,6 +74,20 @@ public class DocTypeTest extends XOMTestCase {
           "<!DOCTYPE " + name + ">",
           doctypeRootOnly.toXML()
         );    
+    }
+    
+    public void testInternalDTDSubset() 
+      throws ParsingException, IOException {
+        String data = "<!DOCTYPE root [ <!ELEMENT root EMPTY> ]><test/>";   
+        Builder builder = new Builder();
+        Document doc = builder.build(data, "http://www.example.com");
+        DocType doctype = doc.getDocType();
+        assertEquals("root", doctype.getRootElementName());
+        String internalSubset =   doctype.getInternalDTDSubset();
+        assertEquals("  <!ELEMENT root EMPTY>", internalSubset);
+        assertTrue(doctype.toXML().indexOf("[") > 0);
+        assertTrue(doctype.toXML().indexOf("]") > 0);
+        assertTrue(doctype.toXML().indexOf("<!ELEMENT root EMPTY>") > 0);
     }
 
     public void testToString() {
