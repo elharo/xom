@@ -52,7 +52,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -459,8 +459,8 @@ public class CanonicalizerTest extends XOMTestCase {
             if ("not-wf".equals(type)) continue;
             String uri = test.getAttributeValue("URI");
             String base = test.getBaseURI();
-            // need to remove dependence on URI class????
-            URI baseURI= new URI(base);
+            // XXX need to remove dependence on URI class 
+            URI baseURI = new URI(base);
             URI testURI = baseURI.resolve(uri);
               
             Document doc = builder.build(testURI.toString());
