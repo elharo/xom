@@ -49,7 +49,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b4
  *
  */
 public abstract class Node {
@@ -121,18 +121,20 @@ public abstract class Node {
      * </p>
      * 
      * <ul>
-     *   <li>If the element has an <code>xml:base</code> attribute,
-     *        then the value of that attribute is 
-     *        converted from an IRI to a URI, absolutized if possible,
-     *        and returned.
-     *    </li>
-     *   <li>Otherwise, if any ancestor element of the element loaded
-     *       from the same entity has an <code>xml:base</code> 
-     *       attribute, then the value of that attribute from the
-     *        nearest such ancestor is converted from an IRI to a URI, 
-     *       absolutized if possible, and returned. 
-     *       <em><code>xml:base</code> attributes from other entities are
-     *       not considered.</em>
+     *   <li>
+     *     If the element has an <code>xml:base</code> attribute,
+     *     then the value of that attribute is 
+     *     converted from an IRI to a URI, absolutized if possible,
+     *     and returned.
+     *   </li>
+     *   <li>
+     *      Otherwise, if any ancestor element of the element loaded
+     *      from the same entity has an <code>xml:base</code> 
+     *      attribute, then the value of that attribute from the
+     *      nearest such ancestor is converted from an IRI to a URI, 
+     *      absolutized if possible, and returned. 
+     *      <em><code>xml:base</code> attributes from other entities are
+     *      not considered.</em>
      *    </li>
      *    <li>
      *      Otherwise, if <code>setBaseURI()</code> has been invoked on 
@@ -151,7 +153,7 @@ public abstract class Node {
      *      rather then being parsed from an existing document), the
      *      base URI of the nearest ancestor that does have a base URI
      *      is returned. If no ancestors have a base URI, then the
-     *       empty string is returned.
+     *      empty string is returned.
      *    </li>
      * </ul>
      * 
@@ -159,8 +161,8 @@ public abstract class Node {
      *   Absolutization takes place as specified by the 
      *   <a href="http://www.w3.org/TR/xmlbase/">XML 
      *   Base specification</a>. However, it is not always possible to
-     *   absolutize a relative URI, in which case only the relative 
-     *   URI will be returned. 
+     *   absolutize a relative URI, in which case the empty string will 
+     *   be returned. 
      * </p> 
      * 
      * @return the base URI of this node 
