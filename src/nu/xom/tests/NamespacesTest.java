@@ -628,4 +628,15 @@ public class NamespacesTest extends XOMTestCase {
         }
     }
 
+    public void testURIReferenceCantHavetwoFragmentIDs() {
+        String namespace = "uri:schemespecificdata#test#id";
+        try {
+            new Element("test", namespace);
+            fail("Allowed scheme name to contain multiple fragment IDs");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
+
 }
