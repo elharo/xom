@@ -43,11 +43,16 @@ class ISOArabicWriter extends TextWriter {
     boolean needsEscaping(char c) {
         if (c <= 0xA0) return false;        
         switch (c) {
-            case 0x00A4: return false; // CURRENCY SIGN
             case 0x060C: return false; // ARABIC COMMA
-            case 0x00AD: return false; // SOFT HYPHEN
+            case 0x060D: return true;  // place holder to allow table lookup                        
+            case 0x060E: return true;  // place holder to allow table lookup                        
+            case 0x061A: return true;  // place holder to allow table lookup                        
             case 0x061B: return false; // ARABIC SEMICOLON
+            case 0x061C: return true;  // place holder to allow table lookup            
+            case 0x061D: return true;  // place holder to allow table lookup            
+            case 0x061E: return true;  // place holder to allow table lookup            
             case 0x061F: return false; // ARABIC QUESTION MARK
+            case 0x0620: return true;  // place holder to allow table lookup
             case 0x0621: return false; // ARABIC LETTER HAMZA
             case 0x0622: return false; // ARABIC LETTER ALEF WITH MADDA ABOVE
             case 0x0623: return false; // ARABIC LETTER ALEF WITH HAMZA ABOVE
@@ -93,6 +98,10 @@ class ISOArabicWriter extends TextWriter {
             case 0x0650: return false; // ARABIC KASRA
             case 0x0651: return false; // ARABIC SHADDA
             case 0x0652: return false; // ARABIC SUKUN
+        }
+        switch (c) { // random overlap with Latin-1
+            case 0x00A4: return false; // CURRENCY SIGN
+            case 0x00AD: return false; // SOFT HYPHEN
         }
         return true;
     }
