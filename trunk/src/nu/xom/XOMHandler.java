@@ -518,7 +518,7 @@ class XOMHandler
             if (defaultValue != null) {
                 internalDTDSubset.append(' ');
                 internalDTDSubset.append('"');
-                internalDTDSubset.append(escapeReservedCharacters(defaultValue));
+                internalDTDSubset.append(escapeReservedCharactersInDefaultAttributeValues(defaultValue));
                 internalDTDSubset.append("\"");         
             }
             internalDTDSubset.append(">\n");   
@@ -540,7 +540,7 @@ class XOMHandler
                 internalDTDSubset.append(name); 
             }
             internalDTDSubset.append(" \""); 
-            internalDTDSubset.append(escapeReservedCharactersInEntityDeclaration(value)); 
+            internalDTDSubset.append(escapeReservedCharactersInDeclarations(value)); 
             internalDTDSubset.append("\">\n"); 
         }
         
@@ -550,6 +550,8 @@ class XOMHandler
     public void externalEntityDecl(String name, 
        String publicID, String systemID) {
      
+        // can I really ignore these or might they be required by
+        // external DTD subset????
         if (!inExternalSubset && doctype != null) {
             if (!name.startsWith("%")) { // ignore parameter entities
                 internalDTDSubset.append("  <!ENTITY ");
@@ -575,10 +577,15 @@ class XOMHandler
     public void notationDecl(String name, String publicID, 
       String systemID) {
         
+        if (systemID != null) {
+            systemID = escapeReservedCharactersInDeclarations(systemID);
+        }
+        
         if (!inExternalSubset && doctype != null) {
             internalDTDSubset.append("  <!NOTATION ");
             internalDTDSubset.append(name); 
             if (publicID != null) {
+                publicID = escapeReservedCharactersInDeclarations(publicID);
                 internalDTDSubset.append(" PUBLIC \""); 
                 internalDTDSubset.append(publicID);
                 internalDTDSubset.append('"'); 
@@ -602,6 +609,7 @@ class XOMHandler
     public void unparsedEntityDecl(String name, String publicID, 
      String systemID, String notationName) {
         
+        // escapable characters????
         if (!inExternalSubset && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (publicID != null) { 
@@ -626,7 +634,7 @@ class XOMHandler
     }
     
     
-    private static String escapeReservedCharactersInEntityDeclaration(String s) {
+    private static String escapeReservedCharactersInDeclarations(String s) {
         
         int length = s.length();
         StringBuffer result = new StringBuffer(length);
@@ -637,14 +645,14 @@ class XOMHandler
                 case '\r': 
                     result.append("&#x0D;");
                     break;
+                case '"': 
+                    result.append("&#x22;");
+                    break;
                 case '%': 
                     result.append("&#x25;");
                     break;
                 case '&': 
                     result.append("&#x26;");
-                    break;
-                case '"': 
-                    result.append("&quot;");
                     break;
                 default:
                     result.append(c);
@@ -656,7 +664,7 @@ class XOMHandler
     }
 
     
-    private static String escapeReservedCharacters(String s) {
+    private static String escapeReservedCharactersInDefaultAttributeValues(String s) {
         
         int length = s.length();
         StringBuffer result = new StringBuffer(length);

@@ -766,6 +766,20 @@ public class DocTypeTest extends XOMTestCase {
     }
 
     
+    public void testQuotationMarksInNotationDeclarationInInternalDTDSubset() 
+      throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String data = "<!DOCTYPE root [\n"
+          + "<!NOTATION not2 SYSTEM 'a b\"\"\"'>\n"
+          + "]><root />";
+        Document doc = builder.build(data, null);
+        String internalDTDSubset = doc.getDocType().getInternalDTDSubset(); 
+        assertEquals("  <!NOTATION not2 SYSTEM \"a b&#x22;&#x22;&#x22;\">\n", internalDTDSubset);
+        
+    }
+
+    
     public void testAmpersandInEntityReplacementTextInInternalDTDSubset() 
       throws ParsingException, IOException {
      
