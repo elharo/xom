@@ -58,7 +58,7 @@ import org.w3c.dom.NodeList;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b7
  *
  */
 public class DOMConverter {
@@ -520,7 +520,7 @@ public class DOMConverter {
                     if (xomCurrent == xomElement) break;
                     ParentNode tp = xomCurrent.getParent();
                     if (tp == null) break;
-                    index = xomCurrent.getParent().indexOf(xomCurrent);
+                    index = tp.indexOf(xomCurrent);
                     end = true;
                     continue;
                 }
