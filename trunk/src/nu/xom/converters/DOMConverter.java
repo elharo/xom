@@ -241,11 +241,13 @@ public class DOMConverter {
      *     is a namespace declaration or is not a well-formed 
      *     XML attribute
      */
-    public static Attribute convert(Attr attribute) {       
+    public static Attribute convert(Attr attribute) {
+        
         String name = attribute.getName();
         String uri = attribute.getNamespaceURI();
         if (uri == null) uri = "";
-        return new Attribute(name, uri, attribute.getNodeValue());       
+        return new Attribute(name, uri, attribute.getNodeValue()); 
+        
     }
 
 
@@ -325,7 +327,7 @@ public class DOMConverter {
         Element result = makeElement(element);
         ParentNode parent = result;
         boolean backtracking = false;
-        while (current != null) {
+        while (true) {
             if (current.hasChildNodes() && !backtracking) {
                 current = current.getFirstChild();
                 backtracking = false;
@@ -363,6 +365,7 @@ public class DOMConverter {
  
     
     private static Element makeElement(org.w3c.dom.Element element) {
+        
         String namespaceURI = element.getNamespaceURI();
         String tagName = element.getTagName();
         Element result = new Element(tagName, namespaceURI);
@@ -388,6 +391,7 @@ public class DOMConverter {
             }
         }
         return result;
+        
     }
 
 
@@ -507,10 +511,8 @@ public class DOMConverter {
                 if (xomParent.getChildCount() - 1 == index) {
                     xomCurrent = xomParent;
                     if (xomCurrent == xomElement) break;
-                    if (xomCurrent instanceof Element) {
-                        // switch parent up
-                        domParent = (org.w3c.dom.Element) domParent.getParentNode();
-                    }
+                    // switch parent up
+                    domParent = (org.w3c.dom.Element) domParent.getParentNode();
                     index = xomCurrent.getParent().indexOf(xomCurrent);
                     end = true;
                     continue;
