@@ -1,4 +1,4 @@
-// Copyright 2002, 2003, 2004 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -29,13 +29,11 @@ import java.util.Map;
 import java.util.Stack;
 
 import nu.xom.Attribute;
-import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
-import nu.xom.WellformednessException;
 import nu.xom.XMLException;
 
 import org.xml.sax.Attributes;
@@ -64,7 +62,7 @@ class XSLTHandler
     private Nodes        result;
     private Stack        parents;
     private NodeFactory  factory;
-    private Map          prefixes; // In scope right now
+    private Map          prefixes; // in scope right now
     private StringBuffer buffer;
     
     
@@ -97,7 +95,7 @@ class XSLTHandler
           = factory.startMakingElement(qualifiedName, namespaceURI);
         
         if (parents.isEmpty()) {
-          // won't append until finishmakingElement
+          // won't append until finishMakingElement()
            current = element; 
         }
         else {
@@ -165,20 +163,15 @@ class XSLTHandler
         else {
             Nodes nodes = factory.finishMakingElement(element);
             ParentNode parent = element.getParent();
-            if (parent != null) {
-                element.detach();
-                for (int i = 0; i < nodes.size(); i++) {
-                    Node node = nodes.get(i);
-                    if (node instanceof Attribute) {
-                        ((Element) parent).addAttribute((Attribute) node);
-                    }
-                    else {
-                        parent.appendChild(node);
-                    }
+            element.detach();
+            for (int i = 0; i < nodes.size(); i++) {
+                Node node = nodes.get(i);
+                if (node instanceof Attribute) {
+                    ((Element) parent).addAttribute((Attribute) node);
                 }
-            }
-            else {
-                // ????
+                else {
+                    parent.appendChild(node);
+                }
             }
         }
 
@@ -214,8 +207,8 @@ class XSLTHandler
             throw new SAXException("continue");   
         }
         
+        flushText();
         Nodes nodes = factory.makeProcessingInstruction(target, data);
-        if (nodes.size() > 0) flushText();
         addToResultTree(nodes);
 
     }
@@ -284,9 +277,8 @@ class XSLTHandler
 
     
     public void comment(char[] text, int start, int length) {
-        Nodes nodes = factory.makeComment(new String(text, start, length));
-        if (nodes.size() > 0) flushText();
-        addToResultTree(nodes);
+        flushText();
+        addToResultTree(factory.makeComment(new String(text, start, length)));
     } 
         
 }
