@@ -370,11 +370,15 @@ public class XOMTestCase extends TestCase {
     private static boolean hasAdjacentTextNodes(Element element) {
 
         boolean previousWasText = false;
-        for (int i = 0; i < element.getChildCount(); i++) {
+        int count = element.getChildCount();
+        for (int i = 0; i < count; i++) {
             Node child = element.getChild(i);
             if (child instanceof Text) {
                 if (previousWasText) return true;
                 else previousWasText = true;
+            }
+            else {
+                previousWasText = false;
             }
         }
         return false;
@@ -386,17 +390,24 @@ public class XOMTestCase extends TestCase {
 
         Element expectedCopy = expected;
         Element actualCopy = actual;
-        if (hasAdjacentTextNodes(expected)) expectedCopy = combineTextNodes(expected);
-        if (hasAdjacentTextNodes(actual)) actualCopy = combineTextNodes(actual);
+        if (hasAdjacentTextNodes(expected)) {
+            expectedCopy = combineTextNodes(expected);
+        }
+        if (hasAdjacentTextNodes(actual)) {
+            actualCopy = combineTextNodes(actual);
+        }
 
         assertEquals(message,
           expectedCopy.getChildCount(), actualCopy.getChildCount());
-        int nonTextNodes = expectedCopy.getChildCount();
-        for (int i = 0; i < expectedCopy.getChildCount(); i++) {
+        int count = expectedCopy.getChildCount();
+        int nonTextNodes = count;
+        for (int i = 0; i < count; i++) {
             Node child1 = expectedCopy.getChild(i);
-            Node child2 = actualCopy.getChild(i);
+            // could remove this instanceof Test by having combineTextNodes
+            // set a list of text indices
             if (child1 instanceof Text) {
                 nonTextNodes--;
+                Node child2 = actualCopy.getChild(i);
                 assertEquals(message, child1, child2);
             }
         }
@@ -415,7 +426,8 @@ public class XOMTestCase extends TestCase {
     private static Node getNonTextNode(Element element, int index) {
 
         int nonTextCount = 0;
-        for (int i = 0; i < element.getChildCount(); i++) {
+        int count = element.getChildCount();
+        for (int i = 0; i < count; i++) {
             Node child = element.getChild(i);
             if (! (child instanceof Text) ) {
                 if (nonTextCount == index) return child;
@@ -427,23 +439,36 @@ public class XOMTestCase extends TestCase {
         
     }
 
+    /* We only need to make an element that has the combined text
+     * nodes, and something as a child placeholder.
+     * It does need to have the other pieces. 
+     */
     private static Element combineTextNodes(Element element) {
 
-        element = (Element) element.copy();
-        for (int i = 0; i < element.getChildCount()-1; i++) {
+        Element stub = new Element("a");
+        Comment stubc = new Comment("c");
+        StringBuffer sb = new StringBuffer();
+        int count = element.getChildCount();
+        for (int i = 0; i < count; i++) {
             Node child = element.getChild(i);
             if (child instanceof Text) {
-                  Node followingSibling = element.getChild(i+1);
-                  if (followingSibling instanceof Text) {
-                      Text combined = new Text(child.getValue() 
-                        + followingSibling.getValue());
-                      element.replaceChild(child, combined);
-                      element.removeChild(followingSibling);
-                      i--;
-                  }
+                sb.setLength(0);
+                do {
+                    sb.append(child.getValue());
+                    i++;
+                    if (i == count) {
+                        break;
+                    }
+                    child = element.getChild(i);
+                } while (child instanceof Text);
+                i--;
+                stub.appendChild(sb.toString());
+            }
+            else {
+                stub.appendChild(stubc.copy());
             }
         }        
-        return element;
+        return stub;
         
     }
 
