@@ -25,6 +25,7 @@ public class XPathException extends RuntimeException {
     
     
     private String expression;
+    private Throwable cause;
 
     
     public XPathException() {
@@ -33,19 +34,69 @@ public class XPathException extends RuntimeException {
 
 
     public XPathException(String message) {
-
         super(message);
-        // ???? Auto-generated constructor stub
     }
 
 
     public XPathException(String message, Throwable cause) {
-        super(message, cause);
+        super(message);
+        this.initCause(cause);
     }
 
 
-// XXX fill in initCause
+    /**
+     * <p>
+     *  Return the original cause that led to this exception,
+     *  or null if there was no original exception.
+     * </p>
+     *
+     * @return the root cause of this exception
+     */
+    public Throwable getCause() {
+        return this.cause;  
+    }
 
+    
+    // null is insufficient for detecting an uninitialized cause.
+    // The cause may be set to null which may not then be reset.
+    private boolean causeSet = false;
+
+    
+    /**
+     * <p>
+     * Sets the root cause of this exception. This may 
+     * only be called once. Subsequent calls throw an 
+     * <code>IllegalStateException</code>.
+     * </p>
+     * 
+     * <p>
+     * This method is unnecessary in Java 1.4 where it could easily be
+     * inherited from the superclass. However, including it here
+     * allows this  method to be used in Java 1.3 and earlier.
+     * </p>
+     *
+     * @param cause the root cause of this exception
+     * 
+     * @return this <code>XMLException</code>
+     * 
+     * @throws IllegalArgumentException if the cause is this exception
+     *   (An exception cannot be its own cause.)
+     * @throws IllegalStateException if this method is called twice
+     */
+    public Throwable initCause(Throwable cause) {
+        
+        if (causeSet) {
+            throw new IllegalStateException("Can't overwrite cause");
+        } 
+        else if (cause == this) {
+            throw new IllegalArgumentException("Self-causation not permitted"); 
+        }
+        else this.cause = cause;
+        causeSet = true;
+        return this;
+        
+    }
+    
 // XXX add setXPath
     
 }
