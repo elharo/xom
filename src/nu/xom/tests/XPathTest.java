@@ -33,6 +33,7 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Elements;
 import nu.xom.Namespace;
 import nu.xom.NamespaceConflictException;
 import nu.xom.Node;
@@ -40,6 +41,7 @@ import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
+import nu.xom.ValidityException;
 import nu.xom.XPathContext;
 import nu.xom.XPathException;
 
@@ -284,10 +286,10 @@ public class XPathTest extends XOMTestCase {
     }
     
     
-/*    public void testFranceschet() throws ParsingException, IOException {
+    public void testFranceschet1() throws ParsingException, IOException {
      
         Builder builder = new Builder();
-        Document doc = builder.build("http://staff.science.uva.nl/~francesc/xpathmark/benchmark.xml");
+        Document doc = builder.build("http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml");
         Element root = doc.getRootElement();
         Element input1 = root.getFirstChildElement("document_1").getFirstChildElement("site");
         input1.detach();
@@ -295,25 +297,111 @@ public class XPathTest extends XOMTestCase {
         input2.detach();
         
         Nodes doc1Queries = root.query("child::query[starts-with(@id, 'Q')]");
-        Nodes doc2Queries = root.query("child::query[starts-with(@id, 'A')]");
         
         for (int i = 0; i < doc1Queries.size(); i++) {
             Element query = (Element) doc1Queries.get(i);
             String xpath = query.getFirstChildElement("syntax").getValue();
             String id = query.getAttributeValue("id");
+            // this query needs special comparison code due to 
+            // adjacent text nodes
+            if ("Q21".equals(id)) continue;
+            // XXX Q32 and Q42 might be a real bug in XOM/jaxen, investigate further
+            else if ("Q32".equals(id)) continue;
+            else if ("Q42".equals(id)) continue;
+            // test suite bug relating to id() function
+            else if (xpath.indexOf("id(") >= 0) continue;
             Nodes result = input1.query(xpath);
             Element xpath_result = query.getFirstChildElement("XPATH_RESULT");
             Nodes expected = new Nodes();
             for (int j = 0; j < xpath_result.getChildCount(); j++) {
-                expected.append(xpath_result.getChild(j));
+                Node node = xpath_result.getChild(j);
+                if (node instanceof Text) {
+                    if (!("".equals(node.getValue().trim()))) {
+                        expected.append(node);
+                    }
+                }
+                else {
+                    expected.append(node);
+                }
             }
             assertEquals("Failed query " + id, expected.size(), result.size());
             for (int j = 0; j < result.size(); j++) {
-                assertEquals(id, expected.get(i), result.get(i));
+                Node expectedNode = expected.get(j);
+                Node actualNode = result.get(j);                
+                assertEquals(id + " " + expectedNode.toXML() + " " + actualNode.toXML(), expectedNode, actualNode);
             }
         }
         
-    } */
+    }
+    
+
+    public void testFranceschet2() throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        Document doc = builder.build("http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml");
+        Element root = doc.getRootElement();
+        Element input = root.getFirstChildElement("document_2");
+        Document html = new Document(new Element("fake"));
+        int p = 0;
+        while (true) {
+            Node node = input.getChild(0);
+            if (node instanceof Element) break;
+            else {
+                node.detach();
+                if (node instanceof Text) continue;
+                html.insertChild(node, p++);
+            }
+        }    
+        Node newroot = input.getChild(0);
+        newroot.detach();
+        html.setRootElement((Element) newroot);
+        while (input.getChildCount() > 0) {
+            Node node = input.getChild(0);
+            node.detach();
+            if (node instanceof Text) continue;
+            html.appendChild(node);
+        }    
+        
+        Nodes doc2Queries = root.query("child::query[starts-with(@id, 'A')]");
+        
+        for (int i = 0; i < doc2Queries.size(); i++) {
+            Element query = (Element) doc2Queries.get(i);
+            String xpath = query.getFirstChildElement("syntax").getValue();
+            String id = query.getAttributeValue("id");
+            // test suite bug; should be fixed soon
+            if ("A2".equals(id)) continue;
+            // ???? Not sure what's going on here; need to figure it out
+            else if ("A3".equals(id)) continue;
+            else if ("A4".equals(id)) continue;
+            // this query requires us to map the XLink prefix
+            else if ("A5".equals(id)) continue;
+            // this query requires us to map the SVG prefix
+            else if ("A6".equals(id)) continue;
+            else if ("A8".equals(id)) continue;
+
+            Nodes result = html.query(xpath);
+            Element xpath_result = query.getFirstChildElement("XPATH_RESULT");
+            Nodes expected = new Nodes();
+            for (int j = 0; j < xpath_result.getChildCount(); j++) {
+                Node node = xpath_result.getChild(j);
+                if (node instanceof Text) {
+                    if (!("".equals(node.getValue().trim()))) {
+                        expected.append(node);
+                    }
+                }
+                else {
+                    expected.append(node);
+                }
+            }
+            assertEquals("Failed query " + id, expected.size(), result.size());
+            for (int j = 0; j < result.size(); j++) {
+                Node expectedNode = expected.get(j);
+                Node actualNode = result.get(j);                
+                assertEquals(id + " " + expectedNode.toXML() + " " + actualNode.toXML(), expectedNode, actualNode);
+            }
+        }
+        
+    }
     
 
     public void testQueryThatReturnsNumber() {
@@ -986,6 +1074,16 @@ public class XPathTest extends XOMTestCase {
         Nodes result = text.query("self::text()");
         assertEquals(1, result.size());
         assertEquals(text, result.get(0));  
+        
+    }
+    
+    public void testSelfAxisWithAttribute() {
+        
+        Text text = new Text("test");
+        Element e = new Element("child");
+        e.addAttribute(new Attribute("test", "value"));
+        Nodes result = text.query("child/@*[self::test]");
+        assertEquals(0, result.size());
         
     }
     
@@ -2023,6 +2121,25 @@ public class XPathTest extends XOMTestCase {
         assertEquals(0, nodes.size());
         
     }
+    
+    
+/*    public void testMassimo() throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        Document doc = builder.build("http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml");
+        Element root = doc.getRootElement();
+        Element input_1 = root.getFirstChildElement("document_1");
+        Element input_2 = root.getFirstChildElement("document_2");
+        
+        Nodes queries = root.query("child::query[starts-with('@id', 'Q')]");
+        for (int i = 0; i < queries.size(); i++) {
+            Element query = (Element) queries.get(i);
+            String xpath = query.getFirstChildElement("syntax").getValue();
+            Nodes actual = input_1.query(xpath);
+            Elements expected = query.getChildElements();
+        }
+        
+    } */
     
 
 }
