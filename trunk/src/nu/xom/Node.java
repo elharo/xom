@@ -87,7 +87,7 @@ public abstract class Node {
      * this node.
      * </p>
      * 
-     * @return the <code>Document</code> which this node is a part of
+     * @return the document this node is a part of
      */
     public final Document getDocument() {
         Node parent = this;
@@ -140,11 +140,6 @@ public abstract class Node {
      *      is absolutized if possible and returned.
      *    </li>
      *    <li>
-     *      Otherwise, if <code>setBaseURI()</code> was invoked on this
-     *      element with a non-null value, then the URI of that entity 
-     *      is returned.
-     *    </li>
-     *    <li>
      *      Otherwise, if the element comes from an externally
      *      parsed entity or the document entity, and the 
      *      original base URI has not been changed by invoking 
@@ -155,8 +150,8 @@ public abstract class Node {
      *      Otherwise, (the element was created by a constructor
      *      rather then being parsed from an existing document), the
      *      base URI of the nearest ancestor that does have a base URI
-     *      is returned. If no ancestors have a base URI, then null is
-     *      returned.
+     *      is returned. If no ancestors have a base URI, then the
+     *       empty string is returned.
      *    </li>
      * </ul>
      * 
@@ -186,8 +181,8 @@ public abstract class Node {
      * or null if this node does not have a parent.
      * </p>
      * 
-     * @return the parent <code>Element</code> 
-     *     or <code>Document</code> that contains this node 
+     * @return the element or document that most immediately
+     *     contains this node
      */
     public final ParentNode getParent() {
         return this.parent; 
