@@ -45,7 +45,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d8
+ * @version 1.0d21
  *
  */
 class XSLTHandler 
@@ -65,17 +65,23 @@ class XSLTHandler
     }   
     
     NodeList getResult() {
+        flushText(); // to handle case where there's no endDocument
         return result;
     }
     
     public void setDocumentLocator(Locator locator) {}
 
+    // As currently designed this class is non-public and never
+    // reused. A new XSLTHanlder is used for each call to transform().
+    // Therefore we do not actually need to reset. This is important
+    // because some XSLT processors call startDocument() and 
+    // endDocument() and some don't, especially when the output
+    // of a transform is a document frgament.
     public void startDocument() {
-        reset();
+        // reset();
     }
   
     public void reset() {
-     //   System.err.println("resetting ");
         result = new NodeList();
         parents = new Stack();
         buffer = new StringBuffer();
@@ -171,7 +177,7 @@ class XSLTHandler
         buffer.append(text, start, length); 
     }
  
-    // acumulate all text that's in the buffer into a text node
+    // accumulate all text that's in the buffer into a text node
     private void flushText() {
         if (buffer.length() > 0) {
             Text data = factory.makeText(buffer.toString());

@@ -31,8 +31,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * <p>
- * This class doesn't really work yet.
- * Please ignore it for the time being. Thanks!
+ * 
  * </p>
  * 
  * 
@@ -44,9 +43,8 @@ class XOMResult extends SAXResult {
 
   /**
    * <p>
-   *  Used to determine if a 
-   *  <code>TransformerFactory</code> natively supports XOM output.
-   *  Factories that do not natively support XOM
+   *  Used to determine if a <code>TransformerFactory</code> natively 
+   *  supports XOM output. Factories that do not natively support XOM
    *  can use <code>XOMResult</code> objects as instances of
    *  <code>SAXResult</code> instead.
    * <p>

@@ -55,9 +55,9 @@ public class XSLException extends Exception {
      * @param message information about the cause of the exception
      * @param ex the nested exception that caused this exception
      */
-    public XSLException(String message, Throwable ex) {
+    public XSLException(String message, Throwable cause) {
         super(message);
-        this.initCause(ex);
+        this.initCause(cause);
     }
     
     /**
@@ -101,7 +101,8 @@ public class XSLException extends Exception {
             throw new IllegalStateException("Can't overwrite cause");
         } 
         else if (cause == this) {
-            throw new IllegalArgumentException("Self-causation not permitted"); 
+            throw new IllegalArgumentException(
+              "Self-causation not permitted"); 
         }
         else this.cause = cause;
         causeSet = true;
