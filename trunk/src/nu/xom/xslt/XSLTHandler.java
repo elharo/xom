@@ -54,7 +54,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b5
  *
  */
 class XSLTHandler 
@@ -276,6 +276,11 @@ class XSLTHandler
         // to understand why we need to work around Saxon here
         if ("saxon:warning".equals(target)) {
             throw new SAXException("continue");   
+        }
+        else if ("javax.xml.transform.disable-output-escaping".equals(target)
+          || "javax.xml.transform.enable-output-escaping".equals(target)) { 
+            // Xalan workaround
+            return;   
         }
         
         flushText();
