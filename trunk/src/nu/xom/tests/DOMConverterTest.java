@@ -46,11 +46,9 @@ import nu.xom.Text;
 import nu.xom.XMLException;
 import nu.xom.converters.DOMConverter;
 
-import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.DocumentFragment;
-import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -548,6 +546,18 @@ public class DOMConverterTest extends XOMTestCase {
         org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
         org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
         assertTrue(domRoot.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns"));
+        
+    }
+ 
+    
+    public void testConvertSingleElementDocument() {
+     
+        Element root = new Element("root");
+        Document xomDocIn = new Document(root);
+        org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
+        org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
+        assertEquals(0, domRoot.getChildNodes().getLength());
+        assertEquals("root", domRoot.getNodeName());
         
     }
  
