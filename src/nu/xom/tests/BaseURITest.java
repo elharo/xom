@@ -24,6 +24,9 @@
 package nu.xom.tests;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -111,6 +114,45 @@ public class BaseURITest extends XOMTestCase {
         assertEquals(ipv6, root.getBaseURI());
     }
 
+    public void testUppercaseBase() {
+        String base = "HTTP://WWW.EXAMPLE.COM/TEST.XML";
+        Element root = new Element("test");
+        root.setBaseURI(base);
+        assertEquals(base, root.getBaseURI());
+    }
+
+    public void testBaseWithUnusualParts() {
+        String base = "HTTP://user@host:WWW.EXAMPLE.COM:65130/TEST-2+final.XML?name=value&name2=value2";
+        Element root = new Element("test");
+        root.setBaseURI(base);
+        assertEquals(base, root.getBaseURI());
+    }
+
+    public void testBaseWithEscapedParts() {
+        String base = "http://www.example.com/test%20test";
+        Element root = new Element("test");
+        root.setBaseURI(base);
+        assertEquals(base, root.getBaseURI());
+    }
+
+    public void testBaseWithUnreservedCharacters() {
+        String base = "http://www.example.com/()-_.!~*'";
+        Element root = new Element("test");
+        root.setBaseURI(base);
+        assertEquals(base, root.getBaseURI());
+    }
+
+    public void testBaseWithNonASCIICharacters() 
+      throws UnsupportedEncodingException, URISyntaxException {
+        String omega = "\u03A9";
+        String base = "http://www.example.com/" + omega;
+        Element root = new Element("test");
+        root.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", base));
+        // This is a Java 1.4 dependence
+        URI uri = new URI(root.getBaseURI());
+        assertEquals("/" + omega, uri.getPath());
+    }
+    
     public void testBadIPv6Base() {
         Element root = new Element("test");
         try {
