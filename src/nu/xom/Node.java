@@ -168,7 +168,7 @@ public abstract class Node {
      * </p>
      * 
      * @return the parent <code>Element</code> 
-     *         or <code>Document</code> that contains this node 
+     *     or <code>Document</code> that contains this node 
      */
     public final ParentNode getParent() {
         return this.parent; 
@@ -185,12 +185,10 @@ public abstract class Node {
      * to a different parent node or document.
      * </p>
      * 
-     * @throws XMLException if subclass constraints prohibit this
-     *     node from being detached
+     * @throws XMLException if the parent refuses to detach this node
      */
     public final void detach() {
 
-        checkDetach();
         if (parent == null) return;
         else if (this.isAttribute()) {
             Element element = (Element) parent;
@@ -200,21 +198,6 @@ public abstract class Node {
             parent.removeChild(this);
         }
 
-    }
- 
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks beyond what XML 1.0 requires. For example, an 
-     * <code>HTMLDocument</code> subclass might not allow the 
-     * body element to be detached.
-     * </p>
-     * 
-     * @throws XMLException if local constraints in a subclass do not
-     *     allow this node to be detached
-     */
-    protected void checkDetach() {
     }
 
 
@@ -246,7 +229,7 @@ public abstract class Node {
     /**
      * <p>
      * Returns a deep copy of this node with no parent,
-     * that can be added to this document or a different one.
+     * that can be added to the current document or a different one.
      * </p>
      * 
      * <p>
@@ -259,8 +242,7 @@ public abstract class Node {
      * subclasses that can return an instance of the subclass.
      * </p> 
      * 
-     * @return a copy of this node without a parent and unattached to 
-     *     any document
+     * @return a copy of this node without a parent
      */
     public abstract Node copy();        
 
