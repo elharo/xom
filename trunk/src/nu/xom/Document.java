@@ -257,6 +257,8 @@ public class Document extends ParentNode {
      * <p>
      * Sets the URI from which this node was loaded,
      * and against which relative URLs in this node will be resolved.
+     * Setting the base URI to null or the empty string removes any
+     * existing base URI.
      * </p>
      * 
      * @param URI the base URI of this document 
