@@ -1355,6 +1355,23 @@ public class SerializerTest extends XOMTestCase {
         }
     }
 
+    // make sure null pointer exception doesn't cause any output
+    public void testNullDocument() 
+      throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "UTF-16");
+        try {
+            out.write(null);  
+            fail("Wrote null document"); 
+        }   
+        catch (NullPointerException success) {
+            // success   
+        }
+        byte[] result = out.toByteArray();
+        assertEquals(0, result.length);
+        
+    }
+
     public void testGetEncoding() 
       throws UnsupportedEncodingException {
         Serializer serializer = new Serializer(System.out, "ISO-8859-1");

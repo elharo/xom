@@ -341,4 +341,21 @@ public class CanonicalizerTest extends XOMTestCase {
           normalizedResult, rawResult);
     }
 
+    // make sure null pointer exception doesn't cause any output
+    public void testNullDocument() 
+      throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer serializer = new Canonicalizer(out);
+        try {
+            out.write(null);  
+            fail("Wrote null document"); 
+        }   
+        catch (NullPointerException success) {
+            // success   
+        }
+        byte[] result = out.toByteArray();
+        assertEquals(0, result.length);
+        
+    }
+
 }
