@@ -41,6 +41,10 @@ catalog support????
 
 xml:id support
 
+document subset canonicalization (does this depend on XPath????)
+
+exclusive XML canonicalization 
+
 1.0.1:
 --------
 
@@ -100,25 +104,25 @@ see if they make sense
 
 register XOM as a trademark
 
-Add documentation describing Infoset mapping
 
-Before beta:
+Before Beta:
 -----------
 
-Use more fixtures to clean up unit tests.
+Test on Windows
 
-Finish XSLT test suite????
-Post a "Punch bull in fac" note on cafe con Leche
-saying XSLT 1.0 suite had been discontinued?
+===============
+Done 1.0a5:
+===============
 
-cowan suggests always escaping C1 controls????
-helpful with files misidentified Cp1252 perhaps?
-or just for 8859 sets? yes, just 8859-X; not an issue for UTF-8 or UTF-16
-because those character sets use double bytes for 
-control codes (still easier to handle in an editor when non-printing characters
-are escaped)
+ParsingException and ValidityException now supply the URI of the document that caused 
+the exception if it's available
 
-Might be able to work around some of the bugs in Oracle 10
+OASIS XSLT conformance tests are now included in the unit test suite
+
+Handling of additional namespaces in transforms now works with
+recent versions of Xalan
+
+Improved compatibility with pre-1.4 VMs
 
 ===============
 Done 1.0a4:
