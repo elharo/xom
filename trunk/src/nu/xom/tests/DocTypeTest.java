@@ -36,11 +36,11 @@ import nu.xom.WellformednessException;
 
 /**
  * <p>
- *  Various basic tests for the <code>DocType</code> class.
+ *  Various tests for the <code>DocType</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a2
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -443,15 +443,19 @@ public class DocTypeTest extends XOMTestCase {
     }
     
     
-    public void testLegalSystemIDs() {
+    public void testSystemIDWithDollarSignAndComma() {
 
-        // one that contains a dollar sign and a comma
         String systemID = "http://www.example.com/test$red/limit,data.xml";
         DocType doctype = new DocType("root", systemID);
         assertEquals(systemID, doctype.getSystemID());
-        // one that contains a semicolon
-        systemID = "smb://domain;user:pass@server/share/path/to/file";
-        doctype = new DocType("root", systemID);
+        
+    }
+    
+    
+    public void testSystemIDWithSemicolon() {
+
+        String systemID = "smb://domain;user:pass@server/share/path/to/file";
+        DocType doctype = new DocType("root", systemID);
         assertEquals(systemID, doctype.getSystemID());
         
     }
