@@ -240,7 +240,8 @@ public class CanonicalizerTest extends XOMTestCase {
    
         String expected = "<doc></doc>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        Canonicalizer canonicalizer = new Canonicalizer(out, 
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         Document doc = new Document(pdu);
         canonicalizer.write(doc);  
@@ -262,7 +263,8 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<doc a1=\"v1\" a2=\"v2\"></doc>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         Document doc = new Document(pdu);
         canonicalizer.write(doc);  
@@ -282,7 +284,8 @@ public class CanonicalizerTest extends XOMTestCase {
    
         String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         Document doc = new Document(pdu);
         canonicalizer.write(doc);  
@@ -302,7 +305,8 @@ public class CanonicalizerTest extends XOMTestCase {
    
         String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        Canonicalizer canonicalizer = new Canonicalizer(out, 
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         Document doc = new Document(pdu);
         canonicalizer.write(doc, "//* | //namespace::node()", null);  
@@ -528,7 +532,8 @@ public class CanonicalizerTest extends XOMTestCase {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-            Canonicalizer serializer = new Canonicalizer(out, false, true);
+            Canonicalizer serializer = new Canonicalizer(out, 
+              Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
             serializer.write(doc, "/*/child312", null);
         }
         finally {
@@ -552,9 +557,12 @@ public class CanonicalizerTest extends XOMTestCase {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
-            Canonicalizer serializer = new Canonicalizer(out, false, true);
+            Canonicalizer serializer = new Canonicalizer(out,
+              Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
             XPathContext context = new XPathContext("pre", "http://www.example.org/");
-            serializer.write(doc, "/*/pre:child312 | /*/pre:child312/namespace::node()", context);
+            serializer.write(doc, 
+             "/*/pre:child312 | /*/pre:child312/namespace::node()", 
+             context);
         }
         finally {
             out.close();
@@ -578,7 +586,8 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             XPathContext context = new XPathContext("pre", "http://www.example.org/");
-            Canonicalizer serializer = new Canonicalizer(out, false, true);
+            Canonicalizer serializer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
             serializer.write(doc, "/*/pre:child312 | /*/pre:child312/namespace::node()", context);
         }
         finally {
@@ -1050,7 +1059,8 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<n1:elem1 xmlns:n1=\"http://b.example\">content</n1:elem1>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         XPathContext context = new XPathContext("n1", "http://b.example");
         Document doc = new Document(pdu);
@@ -1082,7 +1092,7 @@ and expect to see
         
         String expected = "<a xml:lang=\"en\"><b>test</b></a>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, false, false);
+        Canonicalizer canonicalizer = new Canonicalizer(out, Canonicalizer.CANONICAL_XML);
         
         Document doc = new Document(root);
         canonicalizer.write(doc, "/root//node()", null);  
@@ -1105,7 +1115,8 @@ and expect to see
         String expected = "<n1:elem1 xmlns:n0=\"http://a.example\""
           + " xmlns:n1=\"http://b.example\">content</n1:elem1>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         XPathContext context = new XPathContext("n1", "http://b.example");
         Document doc = new Document(pdu);
@@ -1132,7 +1143,8 @@ and expect to see
         String expected = "<n1:elem2 xmlns:n1=\"http://example.net\" xml:lang=\"en\">" +
                 "<n3:stuff xmlns:n3=\"ftp://example.org\"></n3:stuff></n1:elem2>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         XPathContext context = new XPathContext("n1", "http://example.net");
         canonicalizer.write(doc, " (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context);  
@@ -1157,7 +1169,8 @@ and expect to see
         String expected = "<n1:elem2 xmlns:n1=\"http://example.net\" xml:lang=\"en\">"
             + "<n3:stuff xmlns:n3=\"ftp://example.org\"></n3:stuff></n1:elem2>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
         XPathContext context = new XPathContext("n1", "http://example.net");
         canonicalizer.write(doc, 
