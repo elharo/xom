@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -79,6 +79,7 @@ public class Builder {
         }
     }
     
+    
     /**
      * <p>
      * This constructor uses the default factory and
@@ -115,6 +116,7 @@ public class Builder {
         this(false);     
     }
     
+    
     /**
      * <p>
      * This constructor creates a <code>Builder</code> 
@@ -135,6 +137,7 @@ public class Builder {
          this(findParser(validate), validate, null); 
     }
 
+    
     /**
      * <p>
      * This constructor creates a <code>Builder</code> based on a fully
@@ -156,6 +159,7 @@ public class Builder {
         this(findParser(validate), validate, factory); 
     }
 
+    
     // These are stored in the order of preference.
     private static String[] parsers = {
         "org.apache.xerces.parsers.SAXParser",
@@ -168,6 +172,7 @@ public class Builder {
         "org.dom4j.io.aelfred.SAXDriver"
     };
 
+    
     private static XMLReader findParser(boolean validate) {
         
         // XMLReaderFactory.createXMLReader never returns
@@ -198,6 +203,7 @@ public class Builder {
         }
         
     }    
+    
     
     private static void setupParser(XMLReader parser, boolean validate)
       throws SAXNotRecognizedException, SAXNotSupportedException {
@@ -251,20 +257,22 @@ public class Builder {
                 // We can live without this feature.   
             }
             // See http://nagoya.apache.org/bugzilla/show_bug.cgi?id=23768
-            // If this bug gets fixed, we could uncomment this
-            /*
+            // if you care to know why this line breaks unit tests on 
+            // versions of Xerces prior to 2.7
             try {
                 parser.setFeature(
-                 "http://apache.org/xml/features/standard-uri-conformant", true);
+                 "http://apache.org/xml/features/standard-uri-conformant", 
+                 true);
             }
             catch (SAXException ex) {
-                // Possibly an earlier version of Xerces; no big deal.
-                // We can live without these.   
-            } 
-            */
+                // Possibly an earlier version of Xerces, or a 
+                // or a non-Xerces parser;  no big deal.
+                // We can live without this.   
+            }
         }
         
     }        
+    
     
     /**
      * <p>
@@ -284,6 +292,7 @@ public class Builder {
     public Builder(XMLReader parser) {
         this(parser, false);
     }
+    
     
     /**
      * <p>
@@ -321,7 +330,6 @@ public class Builder {
      * 
      * @param parser the SAX2 <code>XMLReader</code> that parses
      *     the document
-     * 
      * @param validate true if the parser should validate 
      *     the document while parsing
      * 
@@ -329,6 +337,7 @@ public class Builder {
     public Builder(XMLReader parser, boolean validate) {
         this(parser, validate, null);
     }
+    
     
     /**
      * <p>
@@ -354,7 +363,7 @@ public class Builder {
      *     this builder uses to create objects in the tree
      * 
      * @throws XMLException if parser does not support 
-     *   the features XOM requires
+     *     the features XOM requires
      * 
      */ 
     public Builder(
@@ -422,6 +431,7 @@ public class Builder {
         
     }
     
+    
     /**
      * <p>
      * This method parses the document at the specified URL.
@@ -460,6 +470,7 @@ public class Builder {
         
     }
 
+    
     /**
      * <p>
      * This method reads the document from an input stream.
@@ -499,9 +510,9 @@ public class Builder {
      * 
      * @throws ValidityException if a validity error is detected; 
      *     only thrown if the builder has been instructed to validate
-     * @throws ParsingException  if a well-formedness error is detected
-     * @throws IOException  if an I/O error such as a broken
-     *       socket prevents the document from being fully read.
+     * @throws ParsingException if a well-formedness error is detected
+     * @throws IOException if an I/O error such as a broken
+     *       socket prevents the document from being fully read
      */
     public Document build(InputStream in, String baseURI) 
       throws ParsingException, ValidityException, IOException {
@@ -513,6 +524,7 @@ public class Builder {
         
     }
 
+    
     // Nasty hack to make sure we get the right form
     // of file URLs on Windows
     private static String fileURLPrefix = "file://";
@@ -526,6 +538,7 @@ public class Builder {
         }
     }
 
+    
     /**
      * <p>
      * This method reads the document from a file.
@@ -588,6 +601,7 @@ public class Builder {
         
     }
 
+    
     /**
      * <p>
      * This method reads the document from an input stream while
@@ -615,6 +629,7 @@ public class Builder {
         return build(source);
         
     }
+    
     
     /**
      * <p>
@@ -661,6 +676,7 @@ public class Builder {
             return uri;
         }
     }
+    
     
     /**
      * <p>
@@ -718,6 +734,7 @@ public class Builder {
         
     }
     
+    
     private static class ValidityRequired implements ErrorHandler {
 
         ValidityException vexception = null;
@@ -753,6 +770,7 @@ public class Builder {
         
     }
 
+    
     // Because Crimson doesn't report namespace errors as fatal    
     private static class NamespaceWellformednessRequired 
       implements ErrorHandler {
@@ -773,6 +791,7 @@ public class Builder {
         
     }
 
+    
     // I added this because XIncluder needed it.
     // Note that this method is careful to not return an instance
     // of NonVerifyingFactory.
@@ -794,4 +813,5 @@ public class Builder {
         
     }
 
+    
 }
