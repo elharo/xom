@@ -622,23 +622,6 @@ final class Verifier {
     /**
      * <p>
      * This is a utility function for determining whether a specified 
-     * character is a letter or digit according to productions 84 
-     * and 88 of the XML 1.0 specification.
-     * </p>
-     * 
-     * @param c <code>char</code> to check
-     * @return true if <code>c</code> is a letter or digit, 
-     *     false otherwise
-     */
-    public static boolean isXMLLetterOrDigit(char c) {
-    
-      return (isXMLLetter(c) || isXMLDigit(c));
-    
-    }
-
-    /**
-     * <p>
-     * This is a utility function for determining whether a specified 
      * character is a letter according to production 84 of the 
      * XML 1.0 specification.
      * </p>
