@@ -36,7 +36,7 @@ import org.xml.sax.SAXParseException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  *
  */
 public class ValidityException extends ParsingException {
@@ -105,6 +105,51 @@ public class ValidityException extends ParsingException {
     /**
      * <p>
      * Creates a new <code>ValidityException</code> 
+     * with a detail message, the URI of the document that contained
+     * the error, and approximate line and column numbers of the
+     * first validity error.
+     * </p>
+     * 
+     * @param message a string indicating the specific problem
+     * @param lineNumber the approximate line number 
+     *     where the problem occurs
+     * @param columnNumber the approximate column number
+     *     where the problem occurs
+     */
+    public ValidityException(String message, String uri,
+      int lineNumber, int columnNumber) {
+        super(message, uri, lineNumber, columnNumber);
+    }
+
+    
+    /**
+     * <p>
+     * Creates a new <code>ValidityException</code> 
+     * with a detail message, URI of the document containing the
+     * validity error, line and column numbers of the error, 
+     * and an underlying exception.
+     * </p>
+     * 
+     * @param message a string indicating the specific problem
+     * @param lineNumber the approximate line number 
+     *     where the problem occurs
+     * @param columnNumber the approximate column number 
+     *     where the problem occurs
+     * @param cause the original cause of this exception
+     */
+    public ValidityException(
+        String message,
+        String uri,
+        int lineNumber,
+        int columnNumber,
+        Throwable cause) {
+        super(message, uri, lineNumber, columnNumber, cause);
+    }
+    
+    
+    /**
+     * <p>
+     * Creates a new <code>ValidityException</code> 
      * with a detail message.
      * </p>
      * 
@@ -114,6 +159,7 @@ public class ValidityException extends ParsingException {
         super(message);
     }
 
+    
     /**
      * <p>
      * Returns a <code>Document</code> object for the document that

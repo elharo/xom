@@ -169,7 +169,7 @@ public class Builder {
         "org.apache.xerces.parsers.SAXParser",
         "gnu.xml.aelfred2.XmlReader",
         "org.apache.crimson.parser.XMLReaderImpl",
-        "com.bluecast.xml.Piccolo",
+        "com.bluecast.xml.Piccolo", 
         "oracle.xml.parser.v2.SAXParser",
         "com.jclark.xml.sax.SAX2Driver",
         "net.sf.saxon.aelfred.SAXDriver",
@@ -194,7 +194,7 @@ public class Builder {
         }
         catch (NoClassDefFoundError err) {
             // Xerces is not available; look for next one
-        }
+        } 
         
         // XMLReaderFactory.createXMLReader never returns
         // null. If it can't locate the parser, it throws
@@ -420,7 +420,6 @@ public class Builder {
         // In general, a filter may violate the constraints of XML 1.0.
         // However, I specifically trust Norm Walsh not to do that, so 
         // if his filters are being used we look at the parent instead.
-        // XXX This needs to be tested.
         if (parserName.equals("org.apache.xml.resolver.tools.ResolvingXMLReader")
           || parserName.equals("org.apache.xml.resolver.tools.ResolvingXMLFilter")) {
             XMLFilter filter = (XMLFilter) parser;
@@ -616,7 +615,7 @@ public class Builder {
             // In fact, the platform default is likely to be UTF-8; 
             // at least in Java 1.4. I've verified this on  
             // Mac OS X 10.2, Windows 2000, and Linux. In other words,
-            // it loks like URLEncoder on these platforms uses UTF-8 
+            // it looks like URLEncoder on these platforms uses UTF-8 
             // to encode the URL, whatever the underlying encoding is.
             // (I'm not sure whether it's UTF-8 or not.)
             // In other words, this works on the three major platforms,
@@ -758,6 +757,7 @@ public class Builder {
         catch (SAXParseException ex) {
             ParsingException pex = new ParsingException(
                 ex.getMessage(),
+                ex.getSystemId(),
                 ex.getLineNumber(),
                 ex.getColumnNumber(),
                 ex.getException());
@@ -765,41 +765,53 @@ public class Builder {
         }
         catch (SAXException ex) {
             ParsingException pex 
-              = new ParsingException(ex.getMessage(), ex);
+              = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
             throw pex;
         }
         catch (ArrayIndexOutOfBoundsException ex) {
             // Work-around for non-conformant parsers, especially Piccolo
             ParsingException pex 
-              = new ParsingException(ex.getMessage(), ex);
+              = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
             throw pex;
         }
         catch (NegativeArraySizeException ex) {
             // Work-around for non-conformant parsers, especially Piccolo
             ParsingException pex 
-              = new ParsingException(ex.getMessage(), ex);
+              = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
             throw pex;
         }
         catch (NullPointerException ex) {
             // Work-around for non-conformant parsers, especially Piccolo
             // This also affects factories that return null where they shouldn't
             ParsingException pex 
-              = new ParsingException(ex.getMessage(), ex);
+              = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
             throw pex;
         }
         catch (UTFDataFormatException ex) {
             // Work-around for non-conformant parsers, especially Xerces
             // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27583
             ParsingException pex 
-              = new ParsingException(ex.getMessage(), ex);
+              = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
             throw pex;
         }
         catch (CharConversionException ex) {
             // Work-around for non-conformant parsers, especially Xerces
             // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27583
             ParsingException pex 
-              = new ParsingException(ex.getMessage(), ex);
+              = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
             throw pex;
+        }
+        catch (IOException ex) {
+            // Work-around for Xerces; I don't want to just catch
+            // org.apache.xerces.util.URI.MalformedURIException
+            // because that would introduce a dependence on Xerces
+            if (ex.getClass().getName().equals(
+              "org.apache.xerces.util.URI$MalformedURIException")) {
+                throw new ParsingException(ex.getMessage(), in.getSystemId(), ex);
+            }
+            else {
+                throw ex;
+            }
         }
         
         XOMHandler handler = (XOMHandler) (parser.getContentHandler());
@@ -838,6 +850,7 @@ public class Builder {
             if (vexception == null) {
                 vexception = new ValidityException(
                   exception.getMessage(),
+                  exception.getSystemId(),
                   exception.getLineNumber(), 
                   exception.getColumnNumber(), 
                   exception);
