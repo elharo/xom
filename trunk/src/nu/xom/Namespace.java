@@ -32,14 +32,13 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1d5
  *
  */
 public final class Namespace extends Node {
     
     private String prefix;
     private String uri;
-    private Element parent;
     
     /**
      * Namespace URI specified for <code>xml</code> prefix
