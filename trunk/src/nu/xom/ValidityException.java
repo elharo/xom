@@ -23,6 +23,11 @@
 
 package nu.xom;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.xml.sax.SAXParseException;
+
 /**
  * <p>
  *  A <code>ValidityException</code> is thrown to
@@ -36,6 +41,8 @@ package nu.xom;
  *
  */
 public class ValidityException extends ParsingException {
+    
+    private List saxExceptions = new ArrayList();
 
     /**
      * <p>
@@ -110,6 +117,107 @@ public class ValidityException extends ParsingException {
      */
     public ValidityException(String message) {
         super(message);
+    }
+
+    /**
+     * <p>
+     * Returns a <code>Document</code> object for the document that
+     * caused this exception. This is useful if you want notification
+     * of validity errors, but nonetheless wish to further process 
+     * the invalid document.
+     * </p>
+     * 
+     * @return the invalid document
+     */
+    public Document getDocument() {
+        return document;    
+    }
+    
+    private Document document;
+    
+    void setDocument(Document doc) {
+        this.document = doc;
+    }
+    
+    void addError(SAXParseException ex) {
+        saxExceptions.add(ex);
+    }
+    
+    /**
+     * <p>
+     *   Returns the number of validity errors the parser detected
+     *   in the document. This is likely to not be consistent from one
+     *   parser to another.
+     * </p>
+     * 
+     * @return the number of validity errors the parser detected
+     */
+    public int getErrorCount() {
+        return saxExceptions.size();   
+    }
+    
+    /**
+     * <p>
+     *   Returns a message indicating a specific validity problem
+     *   in the input document as detected by the parser. Normally,
+     *   these will be in the order they appear in the document.
+     *   For instance, an error in the root element is likely
+     *   to appear before an error in a child element. However, this
+     *   depends on the underlying parser and is not guaranteed.
+     * </p>
+     * 
+     * @param n the index of the validity error to report
+     * @return a message describing the n<i>th</i> validity error
+     * @throws IndexOutOfBoundsException if <code>n</code> is greater
+     *     than or equal to the number of errors detected
+     */
+    public String getValidityError(int n) {
+        Exception ex = (Exception) saxExceptions.get(n); 
+        return ex.getMessage();  
+    }
+
+    /**
+     * <p>
+     *   Returns the line number of the <i>n</i>th validity
+     *   error. It returns -1 if this is not known. This number
+     *   may be helpful for debugging, but should not be relied on.
+     *   Different parsers may set it differently. For instance 
+     *   a problem with an element might be reported using the 
+     *   line number of the start-tag or the line number of the 
+     *   end-tag. 
+     * </p>
+     * 
+     * @param n the index of the validity error to report
+     * @return the approximate line number where the n<i>th</i> 
+     *     validity error was detected
+     * @throws IndexOutOfBoundsException if <code>n</code> is greater
+     *     than or equal to the number of errors detected
+     */
+    public int getLineNumber(int n) {
+        SAXParseException ex = (SAXParseException) saxExceptions.get(n);
+        return ex.getLineNumber();  
+    }
+
+    /**
+     * <p>
+     *   Returns the column number of the <i>n</i>th validity
+     *   error. It returns -1 if this is not known. This number
+     *   may be helpful for debugging, but should not be relied on.
+     *   Different parsers may set it differently. For instance 
+     *   a problem with an element might be reported using the 
+     *   column of the <code>&lt;</code> or the <code>&gt;</code>
+     *   of the start-tag 
+     * </p>
+     * 
+     * @param n the index of the validity error to report
+     * @return the approximate column where the n<i>th</i> 
+     *     validity error was detected
+     * @throws IndexOutOfBoundsException if <code>n</code> is greater
+     *     than or equal to the number of errors detected
+     */
+    public int getColumnNumber(int n) {
+        SAXParseException ex = (SAXParseException) saxExceptions.get(n);
+        return ex.getColumnNumber();  
     }
 
 }

@@ -60,6 +60,7 @@ public class Builder {
 
     private XMLReader   parser;
     private NodeFactory factory;
+    private boolean     validate = false;
     
     /**
      * <p>
@@ -254,7 +255,7 @@ public class Builder {
     // SAXness is exposed. What if the object is changed after
     // being passed to this method? Wrong features set, etc.????
     // Could/should I eliminate this? Perhaps after adding
-    // get/setFeature/property? Would it then be necesdsary to
+    // get/setFeature/property? Would it then be necessary to
     // add a variation in SAXConverter to handle special, non-XML 
     // reader like my SQLReader?
     
@@ -312,7 +313,7 @@ public class Builder {
      * </p>
      * 
      * @param parser the SAX2 <code>XMLReader</code> that parses
-     *               the document.
+     *               the document
      * 
      * @param validate true if the parser should validate 
      *   the document while parsing
@@ -338,7 +339,8 @@ public class Builder {
      * it will throw a <code>ParsingException</code>
      * </p>
      * 
-     * @param parser The SAX2 XMLReader that parses the document.
+     * @param parser The SAX2 <code>XMLReader</code> that parses 
+     *     the document
      * @param validate true if the parser should validate the 
      *     document while parsing
      * @param factory the <code>NodeFactory</code> 
@@ -350,7 +352,8 @@ public class Builder {
      */ 
     public Builder(
       XMLReader parser, boolean validate, NodeFactory factory) {
-                    
+               
+        this.validate = validate;     
         try { 
             setupParser(parser, validate);
         }
@@ -676,33 +679,12 @@ public class Builder {
         try {
             parser.parse(in);
         }
-        catch (SAXInvalidException ex) {
-            // This should only be thrown if validation 
-            // was requested from the constructor 
-            ValidityException vex = new ValidityException(
-                ex.getMessage(),
-                ex.getLineNumber(),
-                ex.getColumnNumber(),
-                ex);
-            throw vex;
-        }
         catch (SAXParseException ex) {
-            // yet another work around for a Crimson bug
-            Exception nested = ex.getException();
-            if (nested instanceof SAXInvalidException) {
-                ValidityException vex = new ValidityException(
-                    nested.getMessage(),
-                    ((SAXInvalidException) nested).getLineNumber(),
-                    ((SAXInvalidException) nested).getColumnNumber(),
-                    nested); 
-                throw vex;               
-            }
-            // end workaround
             ParsingException pex = new ParsingException(
                 ex.getMessage(),
                 ex.getLineNumber(),
                 ex.getColumnNumber(),
-                ex);
+                ex.getException());
             throw pex;
         }
         catch (SAXException ex) {
@@ -712,27 +694,54 @@ public class Builder {
         }
 
         XOMHandler handler = (XOMHandler) (parser.getContentHandler());
-        return handler.getDocument();
+        ErrorHandler errorHandler = parser.getErrorHandler();
+        Document result = handler.getDocument();
+        
+        if (errorHandler instanceof ValidityRequired) {
+            ValidityRequired validityHandler 
+              = (ValidityRequired) errorHandler;
+            if (!validityHandler.isValid())  {
+                ValidityException vex = validityHandler.vexception;
+                vex.setDocument(result);
+                validityHandler.reset();
+                throw vex;
+            }      
+        }        
+        return result;
         
     }
     
     private static class ValidityRequired implements ErrorHandler {
 
+        ValidityException vexception = null;
+
+        void reset() {
+            vexception = null;   
+        }
+
         public void warning(SAXParseException exception) {
             // ignore warnings
         }
       
-        public void error(SAXParseException exception) 
-          throws SAXInvalidException {           
-            throw new SAXInvalidException(exception.getMessage(),
-              exception.getLineNumber(), 
-              exception.getColumnNumber(), 
-              exception);            
+        public void error(SAXParseException exception) { 
+              
+            if (vexception == null) {
+                vexception = new ValidityException(
+                  exception.getMessage(),
+                  exception.getLineNumber(), 
+                  exception.getColumnNumber(), 
+                  exception);
+            }
+            vexception.addError(exception);           
         }
       
         public void fatalError(SAXParseException exception) 
           throws SAXParseException {
             throw exception;            
+        } 
+        
+        boolean isValid() {
+            return vexception == null;   
         }        
         
     }
