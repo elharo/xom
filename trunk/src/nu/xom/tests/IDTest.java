@@ -112,6 +112,38 @@ public class IDTest extends XOMTestCase {
     }
 
     
+    public void testBuilderDoesNotOvernormalizeXmlIdAttributes() 
+      throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        String data = "<root xml:id='&#x0D;  p2  '/>";
+        try {
+            builder.build(data, null);
+            fail("Allowed carriage return in xml:id");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testBuilderDoesNotOvernormalizeXmlIdAttributes2() 
+      throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        String data = "<root xml:id='&#x0A;  p2  '/>";
+        try {
+            builder.build(data, null);
+            fail("Allowed linefeed in xml:id");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
     public void testBuiltXmlIdAttributeHasTypeId() 
       throws ParsingException, IOException {
         
