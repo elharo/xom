@@ -937,6 +937,8 @@ public class XSLTransformTest extends XOMTestCase {
                         // XXX For the moment let's just skip all tests
                         // that specify indent="yes" for the output;
                         // we can fix this with special comparison later.
+                        // Could we simply build actual and expected with
+                        // a white space stripping filter?
                         if (indentYes(styleDoc)) continue;
                         XSLTransform xform = new XSLTransform(styleDoc);
                         Nodes result = xform.transform(inputDoc);
@@ -1131,7 +1133,7 @@ public class XSLTransformTest extends XOMTestCase {
                     Document styleDoc = builder.build(style);
                     // XXX For the moment let's just skip all tests
                     // that specify indent="yes" for the output;
-                    // we can fix this with special comparison later.
+                    // we can fix this with a white space stripping nodefactory later.
                     if (indentYes(styleDoc)) {
                         continue;
                     }
@@ -1290,13 +1292,13 @@ public class XSLTransformTest extends XOMTestCase {
                                 // http://lists.oasis-open.org/archives/xslt-conformance-comment/200409/msg00017.html
                             }
                             else if ("Keys_MultipltKeysInclude".equals(id) ) {
-                               // XXX I don't understand what fails in this case; figure it out 
-                               // involves keys
-                            }
+                               // Xalan bug
+                               // http://nagoya.apache.org/jira/browse/XALANJ-1956
+                            } 
                             else if ("Keys_PerfRepro3".equals(id) ) {
-                               // XXX I don't understand what fails in this case; figure it out 
-                               // involves keys
-                            }
+                               // Suspected Xalan bug 
+                               // http://nagoya.apache.org/jira/browse/XALANJ-1955
+                            } 
                             else if ("Number__84683".equals(id)) {
                                // test suite bug
                             }
@@ -1351,7 +1353,7 @@ public class XSLTransformTest extends XOMTestCase {
                             else {
                                 Document expectedResult = builder.build(output);
                                 Document actualResult = XSLTransform.toDocument(result);
-                                /* if ("Number_ValueAsEmptyNodeset".equals(id) ) {
+                                /* if ("Keys_MultipltKeysInclude".equals(id) ) {
                                    System.out.println(expectedResult.toXML());
                                    System.out.println();
                                    System.out.println(actualResult.toXML());
