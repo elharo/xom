@@ -36,6 +36,7 @@ import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.MalformedURIException;
+import nu.xom.Node;
 import nu.xom.ParsingException;
 import nu.xom.Text;
 
@@ -95,7 +96,7 @@ public class BaseURITest extends XOMTestCase {
  
     }
 
-    
+     
     public void testDocBase() {
         assertEquals(base1, doc.getBaseURI());
     }
@@ -840,6 +841,19 @@ public class BaseURITest extends XOMTestCase {
         root.appendChild(child);
         child.detach();
         assertEquals("http://www.example.com", child.getBaseURI());
+        
+    }
+    
+    
+    public void testCopiedElementRetainsBaseURI() {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com");
+        Element child = new Element("child");
+        root.appendChild(child);
+        Node copy = child.copy();
+        assertEquals("http://www.example.com", copy.getBaseURI());
         
     }
     
