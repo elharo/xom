@@ -47,20 +47,13 @@ import org.xml.sax.ext.LexicalHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b7
  *
  */
 class XOMReader implements XMLReader {
 
-    private Nodes nodes;
     private SAXConverter converter;
-    
-    
-    XOMReader(Nodes nodes) {
-        this.nodes = nodes;
-    }
-    
-    
+        
     public boolean getFeature(String uri) 
       throws SAXNotRecognizedException, SAXNotSupportedException {
         
