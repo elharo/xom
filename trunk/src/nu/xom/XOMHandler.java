@@ -34,7 +34,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b6
  *
  */
 class XOMHandler 
@@ -52,6 +52,7 @@ class XOMHandler
     private ParentNode   current;
     private Stack        parents;
     private boolean      inProlog;
+    private boolean      inDTD;
     private int          position; // current number of items in prolog
     private Locator      locator; 
     private DocType      doctype;
@@ -75,6 +76,8 @@ class XOMHandler
 
     
     public void startDocument() {
+        
+        inDTD = false;
         document = factory.startMakingDocument();
         parent = document;
         current = document;
@@ -92,6 +95,7 @@ class XOMHandler
             // but some parsers including Xerces seem to get this wrong, so we'll 
             document.setBaseURI(documentBaseURI);
         }
+        
     }
   
     
@@ -298,6 +302,7 @@ class XOMHandler
     
     // accumulate all text that's in the buffer into a text node
     private void flushText() {
+        
         if (buffer.length() > 0) {
             Nodes result;
             if (!inCDATA) {
@@ -319,6 +324,7 @@ class XOMHandler
         }
         inCDATA = false;
         finishedCDATA = false;
+        
     }
   
     
@@ -376,11 +382,9 @@ class XOMHandler
     
     
     // LexicalHandler events
-    
-    private boolean inDTD = false;
-
     public void startDTD(String rootName, String publicID, 
       String systemID) {
+        
         inDTD = true;
         Nodes result = factory.makeDocType(rootName, publicID, systemID);
         for (int i = 0; i < result.size(); i++) {
@@ -393,14 +397,17 @@ class XOMHandler
                 this.doctype = doctype;
             }
         }
+        
     }
      
     
     public void endDTD() {
+        
         inDTD = false;
         if (doctype != null) {
             doctype.setInternalDTDSubset(internalDTDSubset.toString());
         }
+        
     }
 
     
@@ -473,6 +480,7 @@ class XOMHandler
     
     
     public void elementDecl(String name, String model) {
+        
         if (!inExternalSubset && doctype != null) {
             internalDTDSubset.append("  <!ELEMENT ");
             internalDTDSubset.append(name); 
@@ -480,6 +488,7 @@ class XOMHandler
             internalDTDSubset.append(model); 
             internalDTDSubset.append(">\n"); 
         }
+        
     }
   
     
@@ -506,11 +515,13 @@ class XOMHandler
             }
             internalDTDSubset.append(">\n");   
         }
+        
     }
   
     
     public void internalEntityDecl(String name, 
        String value) {   
+        
         if (!inExternalSubset && doctype != null) {
             if (!name.startsWith("%")) { // ignore parameter entities
                 internalDTDSubset.append("  <!ENTITY ");
@@ -520,6 +531,7 @@ class XOMHandler
                 internalDTDSubset.append("\">\n"); 
             }
         }
+        
     }
   
     
@@ -544,6 +556,7 @@ class XOMHandler
                 internalDTDSubset.append("\">\n"); 
             }
         }
+        
     }
     
     
@@ -576,6 +589,7 @@ class XOMHandler
     
     public void unparsedEntityDecl(String name, String publicID, 
      String systemID, String notationName) {
+        
         if (!inExternalSubset && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (publicID != null) { 
