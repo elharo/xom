@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.Locale;
 
 /**
  * <p>
@@ -41,7 +42,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b6
  * 
  */
 class GenericWriter extends TextWriter {
@@ -58,7 +59,7 @@ class GenericWriter extends TextWriter {
         super(out, encoding);
         bout = new ByteArrayOutputStream(32);
         wout = new OutputStreamWriter(bout, encoding);
-        encoding = encoding.toUpperCase();
+        encoding = encoding.toUpperCase(Locale.ENGLISH);
         if (encoding.indexOf("EUC-JP") > -1
           || encoding.startsWith("EUC_JP")
           || encoding.equals("SHIFT_JIS")

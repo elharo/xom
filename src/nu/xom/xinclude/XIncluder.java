@@ -33,6 +33,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Locale;
 import java.util.Stack;
 
 import nu.xom.Attribute;
@@ -62,7 +63,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b6
  *
  */
 public class XIncluder {
@@ -798,7 +799,7 @@ public class XIncluder {
             if (encodingFromHeader != null) encoding = encodingFromHeader;
             else {
                 if (contentType != null) {
-                    contentType = contentType.toLowerCase();
+                    contentType = contentType.toLowerCase(Locale.ENGLISH);
                     if (contentType.equals("text/xml") 
                       || contentType.equals("application/xml")   
                       || (contentType.startsWith("text/") 
