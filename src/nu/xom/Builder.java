@@ -34,6 +34,7 @@ import java.io.UTFDataFormatException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.AccessControlException;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -56,7 +57,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  * 
  */
 public class Builder {
@@ -92,9 +93,16 @@ public class Builder {
             IBMVM14 = true;
         }
         else if (xercesVersion >= 2.4) {
-            System.setProperty(
-              "org.apache.xerces.xni.parser.XMLParserConfiguration", 
-              "nu.xom.xerces.XML1_0ParserConfiguration"); 
+            try {
+                // According to //http://java.sun.com/sfaq this won't  
+                // work in an applet. Ask Xerces to provide alternative means????
+                System.setProperty(
+                  "org.apache.xerces.xni.parser.XMLParserConfiguration", 
+                  "nu.xom.xerces.XML1_0ParserConfiguration");
+            }
+            catch (AccessControlException ex) {
+                // ex.printStackTrace();
+            }
         }
         
     }
