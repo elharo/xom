@@ -453,6 +453,7 @@ public class Builder {
         // In general, a filter may violate the constraints of XML 1.0.
         // However, I specifically trust Norm Walsh not to do that, so 
         // if his filters are being used we look at the parent instead.
+        // XXX test this line; but be prepared for NoSuchClassDefError
         if (parserName.equals("org.apache.xml.resolver.tools.ResolvingXMLReader")
           || parserName.equals("org.apache.xml.resolver.tools.ResolvingXMLFilter")) {
             XMLFilter filter = (XMLFilter) parser;
@@ -461,7 +462,9 @@ public class Builder {
         
         // These two parsers are known to not make all the checks
         // they're supposed to. :-(
+        // XXX test this line; but be prepared for NoSuchClassDefError
         if (parserName.equals("gnu.xml.aelfred2.XmlReader")) return false;
+        // XXX test this line; but be prepared for NoSuchClassDefError
         if (parserName.equals("net.sf.saxon.aelfred.SAXDriver")) return false;
         
         if (parserName.equals("org.apache.xerces.parsers.SAXParser")
@@ -608,6 +611,9 @@ public class Builder {
     
     static {
         String os = System.getProperty("os.name", "Unix");
+        // I could do System.setProperty("os.name" "Windows") to test 
+        // this, but I'd need to us ea frsh ClassLoader to rerun the
+        // static initializer block.
         if (os.indexOf("Windows") >= 0) {
             fileURLPrefix = "file:/";
             isWindows = true;
@@ -1118,21 +1124,11 @@ public class Builder {
               = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
             throw pex;
         }
-        catch (ArrayIndexOutOfBoundsException ex) {
-            // Work-around for non-conformant parsers, especially Piccolo
-            ParsingException pex 
-              = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
-            throw pex;
+        catch (XMLException ex) {
+            throw ex;
         }
-        catch (NegativeArraySizeException ex) {
+        catch (RuntimeException ex) {
             // Work-around for non-conformant parsers, especially Piccolo
-            ParsingException pex 
-              = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
-            throw pex;
-        }
-        catch (NullPointerException ex) {
-            // Work-around for non-conformant parsers, especially Piccolo
-            // This also affects factories that return null where they shouldn't
             ParsingException pex 
               = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
             throw pex;
