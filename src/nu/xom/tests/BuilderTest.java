@@ -78,7 +78,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b9
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1651,6 +1651,29 @@ public class BuilderTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
             assertNull(ex.getURI());
         }
+        
+    }   
+    
+    
+    public void testBuildFunkyNamespacesWithUntrustedParser() 
+      throws ParsingException, IOException, SAXException {
+        
+        Reader reader = new StringReader(
+          "<root xmlns='http://example.org/'>" +
+          "<pre:a xmlns:pre='http://www.root.org/' " +
+          "xmlns='http://www.red.com'>" +
+          "<b/>" +
+          "</pre:a></root>");
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        XMLFilter filter = new XMLFilterImpl();
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        Document doc = builder.build(reader);  
+        Element root = doc.getRootElement();
+        Element prea = (Element) root.getChild(0);
+        Element b = (Element) prea.getChild(0);
+        assertEquals("http://www.red.com", b.getNamespaceURI());
         
     }   
     
