@@ -44,7 +44,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d5
  *
  */
 class FastReproducer {
@@ -103,7 +103,8 @@ class FastReproducer {
     
     private Element copy(Element original, Element parent) {
 
-        Element copy = new Element(original.getQualifiedName(), new String(original.getNamespaceURI()));
+        Element copy = new Element(original.getQualifiedName(), 
+          new String(original.getNamespaceURI()));
         if (parent != null) parent.appendChild(copy);
         for (int i = original.getAttributeCount()-1; i >= 0; i--) {
             Attribute att = original.getAttribute(i);
@@ -163,7 +164,10 @@ class FastReproducer {
 
     
     private Node copy(DocType doctype) {
-        return new DocType(doctype.getRootElementName(), doctype.getPublicID(), doctype.getSystemID());
+        return new DocType(
+          doctype.getRootElementName(), 
+          doctype.getPublicID(), 
+          doctype.getSystemID());
     }
 
     
@@ -177,25 +181,5 @@ class FastReproducer {
         
     }
 
-    
-    private void warmup(Document doc, int numPasses) 
-      throws IOException, ParsingException {
-        
-        for (int i = 0; i < numPasses; i++) {
-            copy(doc);
-        }
-        
-    }
-    
-    
-
-    // note use of recursion
-    private void followNode(Node node) throws IOException {
-    
-        for (int i = 0; i < node.getChildCount(); i++) {
-            followNode(node.getChild(i));
-        }
-    
-    }
 
 }
