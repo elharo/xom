@@ -28,17 +28,16 @@ import nu.xom.tests.XOMTestCase;
 
 /**
  * <p>
- *   This class provides unit tests for for the XIncludeException
- *   class.
+ *   Unit tests for the <code>XIncludeException</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class XIncludeExceptionTest extends XOMTestCase {
     
-    private Exception ex;
+    private XIncludeException ex;
     private Exception cause;
     
     protected void setUp() {
@@ -73,7 +72,7 @@ public class XIncludeExceptionTest extends XOMTestCase {
 
     public void testNullInitCause() {
         
-        Exception ex = new XIncludeException(null, null);
+        XIncludeException ex = new XIncludeException(null, null);
         assertNull(ex.getCause());
         
         try {
