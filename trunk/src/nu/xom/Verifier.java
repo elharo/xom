@@ -840,7 +840,7 @@ final class Verifier {
 
     private final static class URICache {
      
-        private final static int LOAD = 4;
+        private final static int LOAD = 6;
         private String[] cache = new String[LOAD];
         private int position = 0;
         
@@ -852,11 +852,9 @@ final class Verifier {
                 // break if they haven't been. Using equals() instead 
                 // of == is faster when the namespace URIs haven't been
                 // interned but slower if they have.
-                if (s == cache[i]) return true;
-            }
-            // We missed the cache so let's look more carefully
-            for (int i = 0; i < LOAD; i++) {
-                if (s.equals(cache[i])) return true;
+                if (s == cache[i]) {
+                    return true;
+                }
             }
             return false;
             
