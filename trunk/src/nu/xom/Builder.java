@@ -482,7 +482,13 @@ public class Builder {
     private void setHandlers(NodeFactory factory) {
         
         this.factory = factory;
-        XOMHandler handler = new XOMHandler(factory);
+        XOMHandler handler;
+        if (factory instanceof NonVerifyingFactory) {
+            handler = new NonVerifyingHandler(factory);
+        }
+        else {
+            handler = new XOMHandler(factory);
+        }
         parser.setContentHandler(handler);
         parser.setDTDHandler(handler);
         
@@ -1159,7 +1165,7 @@ public class Builder {
             }
         }
         
-        XOMHandler handler = (XOMHandler) (parser.getContentHandler());
+        XOMHandler handler = (XOMHandler) parser.getContentHandler();
         ErrorHandler errorHandler = parser.getErrorHandler();
         Document result = handler.getDocument();
         if (result != null && "".equals(result.getBaseURI())) {
