@@ -59,7 +59,7 @@ public class Document extends ParentNode {
      * 
      * @param doc the Document to copy
      * 
-     * @throws NullPointerException if doc is null
+     * @throws NullPointerException if <code>doc</code> is null
      */
     public Document(Document doc) {
 
@@ -98,9 +98,11 @@ public class Document extends ParentNode {
         }
         else if (child.isElement()) {
             if (getChildCount() == 0) return;
-            throw new IllegalAddException(
-             "Cannot add a second root element to a Document."
-            );
+            else {
+                throw new IllegalAddException(
+                  "Cannot add a second root element to a Document."
+                );
+            }
         }
         else {
             throw new IllegalAddException("Cannot add a "
@@ -121,6 +123,40 @@ public class Document extends ParentNode {
         throw new WellformednessException("Missing root element");
     }
 
+    
+    /**
+     * <p>
+     * Replaces an existing child with a new child node.
+     * If <code>oldChild</code> is not a child of this node, 
+     * then a <code>NoSuchChildException</code> is thrown. 
+     * The root element can only be replaced by another element.
+     * </p>
+     * 
+     * @param oldChild the node removed from the tree
+     * @param newChild the node inserted into the tree
+     * 
+     * @throws MultipleParentException if <code>newChild</code> already
+     *     has a parent
+     * @throws NoSuchChildException if <code>oldChild</code> 
+     *     is not a child of this node
+     * @throws NullPointerException if either argument is null
+     * @throws IllegalAddException if this node cannot have children 
+     *     of the type of <code>newChild</code>
+     * @throws XMLException if the subclass rejects the removal of
+     *     oldChild or the insertion of newChild
+     */
+    public final void replaceChild(Node oldChild, Node newChild) {
+        
+        if (oldChild == getRootElement() && newChild != null && newChild.isElement()) {
+            setRootElement((Element) newChild);
+        } 
+        else {
+            super.replaceChild(oldChild, newChild);
+        }
+        
+    }
+    
+    
     /**
      * <p>
      * Returns this document's document type declaration, 

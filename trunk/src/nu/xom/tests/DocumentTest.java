@@ -208,6 +208,18 @@ public class DocumentTest extends XOMTestCase {
     }
 
     
+    public void testReplaceRootWithDifferentElementUsingReplaceChild() {
+        
+        Element newRoot = new Element("newRoot");
+        Element oldRoot = doc.getRootElement();
+        doc.replaceChild(oldRoot, newRoot);
+        assertEquals(newRoot, doc.getRootElement());
+        assertNull(oldRoot.getParent());
+        assertEquals(doc, newRoot.getParent());
+        
+    }
+
+    
     public void testDetach() {
         Comment comment 
           = new Comment("This will be attached then detached");
