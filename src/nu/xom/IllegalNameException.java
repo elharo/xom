@@ -25,16 +25,15 @@ package nu.xom;
 
 /**
  * <p>
- *  An <code>IllegalNameException</code> indicates an attempt to
- *  assign a name that is not a legal XML name.
- *  For example, this might be a name that begins with a digit 
+ * Indicates an attempt to assign a name that is not a legal XML name.
+ * For example, this might be a name that begins with a digit 
  * such as <code>7pins</code> or a name that contains an asterisk such as 
  * <code>pt*</code>. In some contexts, this also includes names that are
  * not legal non-colonized names as defined by <cite>Namespaces in XML</cite>.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a4
  *
  */
 

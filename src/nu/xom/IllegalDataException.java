@@ -25,14 +25,14 @@ package nu.xom;
 
 /**
  * <p>
- *  An <code>IllegalDataException</code> indicates an attempt to
+ *  Indicates an attempt to
  *  set some value to malformed content; for instance
  *  by adding a string containing a null or a vertical tab
  *  to a text node, or using white space in an element name.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a4
  *
  */
 public class IllegalDataException extends WellformednessException {

@@ -25,15 +25,14 @@ package nu.xom;
 
 /**
  * <p>
- *  An <code>IllegalCharacterDataException</code> indicates an attempt 
- *  to create text content that is not allowed in XML 1.0.
- *  For example, this could be a text node that contains a vertical tab
- *  or an attribute value that contains an unmatched surrogate 
- *  character.
+ *  Indicates an attempt to create text content that is not allowed in
+ *  XML 1.0. For example, this could be a text node that contains a 
+ *  vertical tab or an attribute value that contains an unmatched 
+ *  surrogate character.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a4
  *
  */
 

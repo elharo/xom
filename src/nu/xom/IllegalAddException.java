@@ -25,13 +25,12 @@ package nu.xom;
 
 /**
  * <p>
- *  An <code>IllegalAddException</code> indicates an attempt to
- *  add a node in a wrong place; for instance adding a 
- *  <code>Text</code> node to a <code>Document</code> object.
+ * Indicates an attempt to add a node in a wrong place; for instance 
+ * adding a <code>Text</code> node to a <code>Document</code> object.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  *
  */
 
