@@ -336,6 +336,7 @@ public class NodeFactoryTest extends XOMTestCase {
         Builder builder = new Builder(new MinimizingFactory());
         Document doc = builder.build(data, "http://www.example.com");
         assertEquals("", doc.getValue());
+        
     }
 
     
@@ -348,10 +349,10 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(input);
             fail("Allowed null root");
         }
-        catch (NullPointerException success) {
-           // success 
+        catch (ParsingException success) {
            assertNotNull(success.getMessage());  
-        }        
+        }
+        
     }
 
     
@@ -376,9 +377,10 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(input);
             fail("Allowed null document");
         }
-        catch (NullPointerException success) {
-           // success 
-        }        
+        catch (ParsingException success) {
+           assertTrue(success.getCause() instanceof NullPointerException); 
+        }  
+        
     }
 
     
