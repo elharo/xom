@@ -61,7 +61,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a3
  *
  */
 public class XIncluder {
@@ -349,13 +349,11 @@ public class XIncluder {
             ParentNode parent = element.getParent();
             String base = element.getBaseURI();
             URL baseURL = null;
-            if (base != null) {
-                try {
-                    baseURL = new URL(base);     
-                }
-                catch (MalformedURLException ex) {
-                   // don't use base   
-                }
+            try {
+                baseURL = new URL(base);     
+            }
+            catch (MalformedURLException ex) {
+               // don't use base   
             }
             URL url = null;
             try {
