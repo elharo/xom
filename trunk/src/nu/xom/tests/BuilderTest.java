@@ -324,6 +324,88 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(base, document.getBaseURI());  
     }
     
+    public void testBuildFromInvalidDoc()
+      throws IOException, ParsingException {
+        try {
+            validator.build(source, base);
+            fail("Built invalid doc");
+        }
+        catch (ValidityException ex) {
+            Document document = ex.getDocument();
+            // Can't do a full verify just yet due to bugs in Xerces
+            // verify(ex.getDocument());
+            assertTrue(document.getChild(1) instanceof ProcessingInstruction);
+            assertTrue(document.getChild(2) instanceof Comment);        
+            DocType doctype = document.getDocType();
+            Element root = document.getRootElement();
+    
+            // assertEquals(1, root.getAttributeCount());
+            // assertEquals("value", root.getAttributeValue("name"));
+            assertEquals("test", root.getQualifiedName());
+            assertEquals("test", root.getLocalName());
+            assertEquals("", root.getNamespaceURI());
+            
+            assertTrue(doctype != null);
+            assertTrue(document.getChild(0) instanceof DocType);
+            assertTrue(document.getChild(4) instanceof Comment);
+            assertTrue(document.getChild(2) instanceof Comment);
+            assertEquals(" test ", document.getChild(2).getValue());
+            assertEquals("epilog", document.getChild(4).getValue());
+            assertTrue(document.getChild(1) instanceof ProcessingInstruction);
+            assertEquals("test", doctype.getRootElementName());
+            assertNull(doctype.getPublicID());
+            assertNull(doctype.getSystemID());
+            
+            String internalDTDSubset = doctype.getInternalDTDSubset();
+            assertTrue(
+              internalDTDSubset, 
+              internalDTDSubset.indexOf(elementDeclaration) > 0
+            );
+            assertTrue(
+              internalDTDSubset, 
+              internalDTDSubset.indexOf(attributeDeclaration) > 0
+            );
+            assertTrue(
+              internalDTDSubset, 
+              internalDTDSubset.indexOf(attributeDeclaration2) > 0
+            );
+            assertTrue(
+              internalDTDSubset, 
+              internalDTDSubset.indexOf(internalEntityDeclaration) > 0
+            );
+            assertTrue(
+              internalDTDSubset, 
+              internalDTDSubset.indexOf(externalEntityDeclarationPublic) > 0
+            );
+            assertTrue(
+              internalDTDSubset, 
+              internalDTDSubset.indexOf(externalEntityDeclarationSystem) > 0
+            );
+            assertTrue(
+              internalDTDSubset,
+              internalDTDSubset.indexOf(unparsedEntityDeclaration) > 0
+            );
+            assertTrue(
+              internalDTDSubset,
+              internalDTDSubset.indexOf(unparsedEntityDeclarationPublic) > 0
+            );
+            assertTrue(
+              internalDTDSubset, 
+              internalDTDSubset.indexOf(notationDeclarationPublic) > 0
+            );
+            assertTrue(
+              internalDTDSubset, 
+              internalDTDSubset.indexOf(notationDeclarationSystem) > 0
+            );
+            assertTrue(
+              internalDTDSubset, 
+              internalDTDSubset.indexOf(notationDeclarationPublicAndSystem) > 0
+            );
+            
+        }  
+    }
+    
+    
     public void testBuildFromStringWithNullBase()
       throws IOException, ParsingException {
         Document document = builder.build(source, null);
@@ -847,6 +929,10 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("", doctype.getInternalDTDSubset());
     }
 
+    // Not realy ignore, simple resolve, and not 
+    // treat specially otherwise; i.e. don't copy
+    // parameter entity declarations into the internal
+    // DTD subset string
     public void testIgnoreInternalParameterEntitiesInInternalDTDSubset()
       throws IOException, ParsingException {
         Builder builder = new Builder(false);
