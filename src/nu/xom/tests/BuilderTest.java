@@ -653,6 +653,41 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
+    public void testBuildDocumentThatDeclaresStandardEntityReferences()
+      throws IOException, ParsingException {
+        
+        String data = "<!DOCTYPE doc [\n"
+            + "<!ELEMENT doc (#PCDATA)>"
+            + "<!ENTITY lt     \"&#38;#60;\">\n"
+            + "<!ENTITY gt     \"&#62;\">\n"
+            + "<!ENTITY amp    \"&#38;#38;\">\n"
+            + "<!ENTITY apos   \"&#39;\">\n"
+            + "<!ENTITY quot   \"&#34;\">\n"
+            + "]><root />";
+        
+        Document document = builder.build(data, null);
+        Document roundtrip = builder.build(document.toXML(), null);
+        assertEquals(document, roundtrip);
+        
+    }
+    
+    
+    public void testBuildDocumentThatUsesAmpersandNumericCharacterReferenceInEntityDeclaration()
+      throws IOException, ParsingException {
+        
+        String data = "<!DOCTYPE doc [\n"
+            + "<!ELEMENT doc (#PCDATA)>"
+            + " <!ENTITY e \"&#x26;\">\n"
+            + "]><root />";
+        
+        Document document = builder.build(data, null);
+ 
+        Document roundtrip = builder.build(document.toXML(), null);
+        assertEquals(document, roundtrip);
+        
+    }
+    
+    
     public void testBuildDocumentThatUsesDoubleQuoteNumericCharacterReferenceInAttributeDeclaration()
       throws IOException, ParsingException {
         
@@ -1432,8 +1467,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("", doctype.getInternalDTDSubset());
         
     }
-    
-    
+
     
     /* <?xml version="1.0"?>
 <!DOCTYPE root [

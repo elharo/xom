@@ -775,7 +775,7 @@ public class DocTypeTest extends XOMTestCase {
           + "]><root/>";
         Document doc = builder.build(data, null);
         String internalDTDSubset = doc.getDocType().getInternalDTDSubset();
-        assertTrue(internalDTDSubset.indexOf("<!ENTITY amp2 \"&amp;\">") > 1);
+        assertTrue(internalDTDSubset.indexOf("<!ENTITY amp2 \"&#x26;amp;\">") > 1);
         
     }
 
@@ -869,7 +869,7 @@ public class DocTypeTest extends XOMTestCase {
           + "]><root/>";
         Document doc = builder.build(data, null);
         String internalDTDSubset = doc.getDocType().getInternalDTDSubset();
-        assertTrue(internalDTDSubset.indexOf("<!ENTITY q2 \"&quot;\">") > 1);
+        assertTrue(internalDTDSubset.indexOf("<!ENTITY q2 \"&#x26;quot;\">") > 1);
         
     }
     
