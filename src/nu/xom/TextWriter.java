@@ -33,7 +33,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b8
+ * @version 1.0
  *
  */
 abstract class TextWriter {

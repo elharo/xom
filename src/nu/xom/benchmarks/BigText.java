@@ -31,13 +31,12 @@ import nu.xom.ParsingException;
 
 /**
  * <p>
- *   Simple memory benchmark focusing on a big document
- *   with lots of text covering all of Unicode.
+ * Simple memory benchmark focusing on a big document
+ * with lots of text covering all of Unicode.
  * </p>
  * 
- * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0
  *
  */
 class BigText {

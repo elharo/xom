@@ -36,7 +36,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * </p>
  *
  * @author David Megginson, Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0
  */
 class XMLWriter extends XMLFilterImpl implements LexicalHandler {
 

@@ -29,7 +29,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0
  *
  */
 public class ParsingExceptionTest extends XOMTestCase {

@@ -39,8 +39,8 @@ import nu.xom.ParsingException;
  *   we filter out all the elements in the RDDL namespace.
  * </p>
  * 
- *  @author Elliotte Rusty Harold
- *  @version 1.0d23
+ * @author Elliotte Rusty Harold
+ * @version 1.0
  * 
  */
 public class RDDLFilter extends NodeFactory {

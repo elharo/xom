@@ -27,7 +27,7 @@ import java.util.Locale;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0
  */
 class TextWriterFactory {
 

@@ -29,7 +29,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0
  * @see ParentNode#removeChild(Node)
  *
  */

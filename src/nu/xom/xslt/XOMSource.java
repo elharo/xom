@@ -31,7 +31,7 @@ import org.xml.sax.XMLReader;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0
  *
  */
 class XOMSource extends SAXSource {

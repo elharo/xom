@@ -37,7 +37,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0
  *
  */
 public class HelloXMLBase {

@@ -25,7 +25,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0
  * 
  */
 class ASCIIWriter extends TextWriter {

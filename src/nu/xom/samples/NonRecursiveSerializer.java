@@ -42,7 +42,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0
  *
  */
 public final class NonRecursiveSerializer extends Serializer {

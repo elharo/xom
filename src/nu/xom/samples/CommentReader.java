@@ -35,8 +35,8 @@ import nu.xom.ParsingException;
  *   and reading their contents.
  * </p>
  * 
- *  @author Elliotte Rusty Harold
- *  @version 1.0d22
+ * @author Elliotte Rusty Harold
+ * @version 1.0
  *
  */
 public class CommentReader {

@@ -36,7 +36,7 @@ import nu.xom.Text;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0
  *
  */
 public class StreamingROT13 extends NodeFactory {

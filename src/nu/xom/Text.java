@@ -31,7 +31,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0b8
+ * @version 1.0
  *
  */
 public class Text extends Node {

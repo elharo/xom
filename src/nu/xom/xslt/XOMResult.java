@@ -33,7 +33,7 @@ import org.xml.sax.ext.LexicalHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0
  *
  */
 class XOMResult extends SAXResult {

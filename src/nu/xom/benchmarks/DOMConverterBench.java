@@ -40,7 +40,7 @@ import nu.xom.converters.DOMConverter;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0
  *
  */
 class DOMConverterBench {

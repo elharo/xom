@@ -58,7 +58,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0
  *
  */
 public class DOMConverterTest extends XOMTestCase {

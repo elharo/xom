@@ -42,7 +42,7 @@ import java.util.List;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0
  *
  */
 public final class Nodes {

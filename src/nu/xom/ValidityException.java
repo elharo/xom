@@ -34,7 +34,7 @@ import org.xml.sax.SAXParseException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0
  *
  */
 public class ValidityException extends ParsingException {

@@ -44,7 +44,7 @@ import org.apache.xerces.parsers.DTDConfiguration;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0
  * 
  */
 class XML1_0Parser extends SAXParser {

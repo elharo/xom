@@ -39,8 +39,8 @@ import nu.xom.ParsingException;
  *   lots of objects we don't actually need.
  * </p>
  * 
- *  @author Elliotte Rusty Harold
- *  @version 1.0d23
+ * @author Elliotte Rusty Harold
+ * @version 1.0
  *
  */
 public class StreamingCommentReader extends NodeFactory {

@@ -39,8 +39,8 @@ import nu.xom.ProcessingInstruction;
  * nodes thus saving memory and time.
  * </p>
  * 
- *  @author Elliotte Rusty Harold
- *  @version 1.0b3
+ * @author Elliotte Rusty Harold
+ * @version 1.0
  *
  */
 public class StreamingProcessingInstructionLister extends NodeFactory {

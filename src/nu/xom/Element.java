@@ -46,7 +46,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b11
+ * @version 1.0
  *
  */
 public class Element extends ParentNode {

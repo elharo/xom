@@ -33,7 +33,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0
  *
  */
 public class NodesTest extends XOMTestCase {

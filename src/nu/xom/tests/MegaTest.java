@@ -41,7 +41,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0
  *
  */
 public class MegaTest extends XOMTestCase {

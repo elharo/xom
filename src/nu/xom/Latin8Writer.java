@@ -31,7 +31,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0
  *
  */
 class Latin8Writer extends TextWriter {

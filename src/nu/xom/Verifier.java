@@ -32,7 +32,7 @@ import java.util.StringTokenizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b8
+ * @version 1.0
  * 
  */
 final class Verifier {
