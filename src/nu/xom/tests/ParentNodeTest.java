@@ -42,7 +42,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0b3
  *
  */
 public class ParentNodeTest extends XOMTestCase {
@@ -273,7 +273,7 @@ public class ParentNodeTest extends XOMTestCase {
         // Test replacing node with a sibling
         try {
             empty.replaceChild(new1, new2);
-            fail("replaced a node wiht its sibling");
+            fail("replaced a node with its sibling");
         }
         catch (MultipleParentException success) {
             assertNotNull(success.getMessage());
