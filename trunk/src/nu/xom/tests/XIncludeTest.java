@@ -2065,9 +2065,93 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/basewithfragmentid.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
-        System.out.println(result.toXML());
         Document expectedResult = builder.build(
           new File("data/xinclude/output/basewithfragmentid.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testIncludeLowerCaseFileNames() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/lowercasealphabet.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/lowercasealphabet.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testIncludeUpperCaseFileNames() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/uppercasealphabet.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/uppercasealphabet.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testIncludeDigitFileNames() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/numeric.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/numeric.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testIncludeHighPunctuationFileNames() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/punctuation.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/punctuation.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testIncludeMiddlePunctuationFileNames() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/middlepunctuation.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        System.out.println(result.toXML());
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/middlepunctuation.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testIncludeLowerPunctuationFileNames() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/lowerpunctuation.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/lowerpunctuation.xml")
         );
         assertEquals(expectedResult, result);
         
