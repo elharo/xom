@@ -1325,7 +1325,7 @@ public class SerializerTest extends XOMTestCase {
     
     public void testNullOutputStream() {
         try {
-            Serializer serializer = new Serializer(null);
+            new Serializer(null);
             fail("Allowed null output stream");   
         }   
         catch (NullPointerException success) {
@@ -1336,7 +1336,7 @@ public class SerializerTest extends XOMTestCase {
     public void testNullOutputStreamWithEncoding() 
       throws UnsupportedEncodingException {
         try {
-            Serializer serializer = new Serializer(null, "UTF-8");
+            new Serializer(null, "UTF-8");
             fail("Allowed null output stream");   
         }   
         catch (NullPointerException success) {
@@ -1347,7 +1347,7 @@ public class SerializerTest extends XOMTestCase {
     public void testNullEncoding() 
       throws UnsupportedEncodingException {
         try {
-            Serializer serializer = new Serializer(System.out, null);
+            new Serializer(System.out, null);
             fail("Allowed null encoding");   
         }   
         catch (NullPointerException success) {
@@ -1361,7 +1361,7 @@ public class SerializerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out, "UTF-16");
         try {
-            out.write(null);  
+            serializer.write(null);  
             fail("Wrote null document"); 
         }   
         catch (NullPointerException success) {
