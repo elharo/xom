@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<root xmlns:xi="http://www.w3.org/2001/XInclude">
-<p xml:base="file:/home/elharo/XOM/data/xinclude/input/a/a.xml">This is from file a.xml in directory a</p>
-<p xml:base="file:/home/elharo/XOM/data/xinclude/input/b/b.xml">This is from file B in directory b</p>
-</root>
-

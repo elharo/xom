@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<root>
-   There should be a resource error resolving this due to
-   the illegal XPointer syntax which causes the fallback to 
-   be used:
-  Fallback worked!
-</root>
-
