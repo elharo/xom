@@ -71,7 +71,4 @@ class EBCDICWriter extends OutputStreamWriter {
         write(text.toCharArray());      
     }
 
-
-    
-
 }
