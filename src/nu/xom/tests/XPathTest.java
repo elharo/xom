@@ -178,6 +178,27 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testIDFunction() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child1");
+        Element child2 = new Element("child2");
+        Element child3 = new Element("child3");
+        Attribute id = new Attribute("a", "anchor");
+        id.setType(Attribute.Type.ID);
+        child2.addAttribute(id);
+        
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        parent.appendChild(child3);
+        
+        Nodes result = parent.query("id('anchor')");
+        assertEquals(1, result.size());     
+        assertEquals(child2, result.get(0));
+        
+    }
+    
+
     public void testFollowingSiblingAxis() {
         
         Element parent = new Element("Test");

@@ -81,13 +81,68 @@ class JaxenNavigator extends DefaultNavigator {
     
     public Object getElementById(Object node, String id) {
         
-        Document doc = ((Node) node).getDocument();
-        // find highest parent node????
-        // FIXME
-        return null;
+        Node original = (Node) node;
+        ParentNode parent;
+        if (original.isElement() || original.isDocument()) {
+            parent = (ParentNode) original;
+        }
+        else {
+            parent = original.getParent();
+        }
+        
+        // no elements in the tree
+        if (parent == null) return null;
+        
+        // find highest parent node
+        ParentNode high = parent;
+        while (parent != null) {
+            high = parent;
+            parent = parent.getParent();
+        }
+        
+        // Now search down from the highest point for the requested ID
+        Element root;
+        if (high.isDocument()) {
+            root = ((Document) high).getRootElement();
+        }
+        else {
+            root = (Element) high;
+        }
+        
+        return findByID(root, id);
+        
     }
     
     
+    // recursion????
+    public static Element findByID(Element top, String id) {
+        
+        if (hasID(top, id)) return top;
+        else {
+            Elements children = top.getChildElements();
+            for (int i = 0; i < children.size(); i++) {
+                Element result = findByID(children.get(i), id);
+                if (result != null) return result;
+            }
+        }
+        return null;
+        
+    }
+    
+    
+    private static boolean hasID(Element top, String id) {
+
+        for (int i = 0; i < top.getAttributeCount(); i++) {
+            Attribute a = top.getAttribute(i);
+            if (Attribute.Type.ID == a.getType()) {
+                // ???? really need to fully normalize here
+                return a.getValue().trim().equals(id);
+            }
+        }
+        return false;
+    }
+
+
     public String getNamespacePrefix(Object o) {
         
         if (o instanceof Element) return ((Element) o).getNamespacePrefix();
