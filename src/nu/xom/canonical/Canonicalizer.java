@@ -603,8 +603,9 @@ public class Canonicalizer {
         private Attribute[] sortAttributes(Element element) {
     
             Map nearest = new TreeMap();
-            // add in any inherited xml: attributes 
-            if (!exclusive && nodes != null && indexOf(element) != -1) {
+            // add in any inherited xml: attributes
+            if (!exclusive && nodes != null && nodes.contains(element) 
+              && ! nodes.contains(element.getParent())) {
                 // grab all xml: attributes
                 Nodes attributes = element.query("ancestor::*/@xml:*", xmlcontext);
                 if (attributes.size() != 0) {
@@ -617,7 +618,7 @@ public class Canonicalizer {
                         }
                         if (! nearest.containsKey(name)) {
                             Element parent = (Element) a.getParent();
-                            if (indexOf(parent) == -1) {
+                            if (! nodes.contains(parent)) {
                                 nearest.put(name, a);
                             }
                             else {

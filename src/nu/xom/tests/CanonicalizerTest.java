@@ -53,7 +53,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.1d6
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -1062,6 +1062,37 @@ public class CanonicalizerTest extends XOMTestCase {
         assertEquals(expected, s);
         
     }
+    
+    /* <root xml:lang="en"><a><b>test</b></a></root>
+
+Choose the document subset selected by /root//node()
+
+and expect to see
+
+<a xml:lang="en"><b>test</b></a> */
+    public void testInheritanceOfXMLLang() throws IOException {
+     
+        Element root = new Element("root");
+        root.addAttribute(new Attribute("xml:lang", Namespace.XML_NAMESPACE, "en"));
+        Element a = new Element("a");
+        Element b = new Element("b");
+        b.appendChild("test");
+        a.appendChild(b);
+        root.appendChild(a);
+        
+        String expected = "<a xml:lang=\"en\"><b>test</b></a>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, false, false);
+        
+        Document doc = new Document(root);
+        canonicalizer.write(doc, "/root//node()", null);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }    
         
 
     public void testExclusiveWithInclusiveNamespaces() throws IOException {
