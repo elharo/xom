@@ -44,7 +44,7 @@ package nu.xom;
  *   Subclasses can also filter content while building.
  *   For example, namespaces could be added to or changed 
  *   on all elements. Comments could be deleted. Processing
- *   instrcutions can be changed into elements. An 
+ *   instructions can be changed into elements. An 
  *   <code>xinclude:include</code> element could be replaced
  *   with the content it references. All such changes must be 
  *   consistent with the usual rules of well-formedness. For example,
@@ -174,7 +174,7 @@ public class NodeFactory {
      * <p>
      * Creates a new <code>Document</code> object. 
      * The root element of this document is initially set to 
-     * <code><&lt;root xmlns=http://www.xom.nu/fakeRoot""/></code>.
+     * <code>&lt;root xmlns=http://www.xom.nu/fakeRoot""/></code>.
      * This is only temporary. As soon as the real root element's
      * start-tag is read, this element is replaced by the real root.
      * This fake root should never be exposed.
@@ -182,7 +182,7 @@ public class NodeFactory {
      * 
      * <p>
      *  The <code>Builder</code> calls this method at the beginning of
-     *  each document, before it calls any other mehtod in this class.
+     *  each document, before it calls any other method in this class.
      *  Thus this is a useful place to perform per-document 
      *  initialization tasks.
      * </p>
