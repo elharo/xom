@@ -649,6 +649,7 @@ public class BuilderTest extends XOMTestCase {
         }
         
     }
+ 
     
     public void testInvalidDocFromInputStreamWithBase()
       throws IOException, ParsingException {
@@ -673,6 +674,7 @@ public class BuilderTest extends XOMTestCase {
         }
     }
     
+    
     public void testInvalidDocFromInputStreamWithoutBase()
       throws IOException, ParsingException {
         InputStream in = new ByteArrayInputStream(source.getBytes("UTF-8"));
@@ -696,6 +698,7 @@ public class BuilderTest extends XOMTestCase {
         }
     }
 
+    
     public void testInvalidDocFromStringWithBase()
       throws IOException, ParsingException {
         try {
@@ -762,6 +765,7 @@ public class BuilderTest extends XOMTestCase {
         }
     }
     
+    
     public void testJavaEncodings() 
       throws IOException, ParsingException {
         String str = "<?xml version='1.0' encoding='ISO8859_1'?>" +            "<root>é</root>"; 
@@ -772,6 +776,7 @@ public class BuilderTest extends XOMTestCase {
         
     }
 
+    
     // Crimson improperly converts 0x0D and 0x0A to spaces
     // even when the attribute type is not CDATA.
     // This bug explains why the canonicalizer tests fail
@@ -788,10 +793,12 @@ public class BuilderTest extends XOMTestCase {
           document.getRootElement().getAttributeValue("name"));  
     }
     
+    
     public void testBaseRelativeResolution()
       throws IOException, ParsingException {
         builder.build(new File("data/baserelative/test.xml"));
     }
+    
     
     // make sure transcoders on input are using normalization
     // form C when converting from other encodings
@@ -804,14 +811,15 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(0xE9, s.charAt(0));
     }
     
-   // This tests XOM's workaround for a bug in Crimson, Xerces,
-   // and possibly other parsers
-   public void testBaseRelativeResolutionRemotely()
+    
+    // This tests XOM's workaround for a bug in Crimson, Xerces,
+    // and possibly other parsers
+    public void testBaseRelativeResolutionRemotely()
       throws IOException, ParsingException {
         builder.build("http://www.cafeconleche.org");
-   }
+    }
     
-   public void testExternalEntityResolution()
+    public void testExternalEntityResolution()
       throws IOException, ParsingException {
         File input = new File("data/entitytest.xml");
         Builder builder = new Builder(false);
@@ -819,7 +827,7 @@ public class BuilderTest extends XOMTestCase {
         Element root = doc.getRootElement();
         Element external = root.getFirstChildElement("external");
         assertEquals("Hello from an entity!", external.getValue());
-   }
+    }
      
     // This test exposes a bug in Crimson but not Xerces.
     // It's testing whether the external DTD subset is read,
@@ -838,6 +846,19 @@ public class BuilderTest extends XOMTestCase {
         DocType doctype = doc.getDocType();
         assertEquals("", doctype.getInternalDTDSubset());
     }
+
+    public void testIgnoreInternalParameterEntitiesInInternalDTDSubset()
+      throws IOException, ParsingException {
+        Builder builder = new Builder(false);
+        Document doc = builder.build("<!DOCTYPE root [" +
+                "<!ENTITY % name \"PCDATA\">" +
+                "]><root/>", "http://www.example.com/");
+        assertEquals(2, doc.getChildCount());
+        DocType doctype = doc.getDocType();
+        assertEquals("", doctype.getInternalDTDSubset());
+    }
+    
+    
     
     /* <?xml version="1.0"?>
 <!DOCTYPE root [
