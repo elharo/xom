@@ -31,18 +31,9 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  */
 public class CircularIncludeException extends XIncludeException {
-
-    /**
-     * <p>
-     * Constructs a <code>CircularIncludeException</code> 
-     * with <code>null</code>
-     * as its error detail message.
-     * </p>
-     */
-    public CircularIncludeException() {}
 
     /**
      * <p>

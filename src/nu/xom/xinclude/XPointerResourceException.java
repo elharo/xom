@@ -33,17 +33,9 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  */
 class XPointerResourceException extends XPointerException {
-
-    /**
-     * <p>
-     * Constructs an <code>XPointerResourceException</code> 
-     * with <code>null</code> as its error detail message.
-     * </p>
-     */
-    public XPointerResourceException() {}
 
     /**
      * <p>
