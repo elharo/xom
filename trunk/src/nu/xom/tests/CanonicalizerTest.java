@@ -37,11 +37,13 @@ import com.ibm.icu.text.Normalizer;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
+import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Namespace;
 import nu.xom.ParsingException;
+import nu.xom.ProcessingInstruction;
 import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
 
@@ -78,8 +80,201 @@ public class CanonicalizerTest extends XOMTestCase {
         input = new File(canonical, "input");
         output = new File(canonical, "output");
     }
+    
+    
+    public void testCanonicalizeOnlyAttributes() throws IOException {
+        
+        Element pdu = new Element("doc");
+        pdu.addAttribute(new Attribute("a1", "v1"));
+        pdu.addAttribute(new Attribute("a2", "v2"));
+        
+        String expected = " a1=\"v1\" a2=\"v2\"";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc, "//@*", null);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
 
     
+    public void testCanonicalizeOnlyNamespacees() throws IOException {
+        
+        Element pdu = new Element("doc", "http://www.example.com");
+        
+        String expected = " xmlns=\"http://www.example.com\"";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc, "//namespace::node()", null);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+
+    
+    public void testCanonicalizeOnlyPrefixedNamespacees() 
+      throws IOException {
+        
+        Element pdu = new Element("pre:doc", "http://www.example.com");
+        
+        String expected = " xmlns:pre=\"http://www.example.com\"";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc, "//namespace::node()", null);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+
+    
+    public void testCanonicalizeCommentsInPrologAndEpilog() throws IOException {
+        
+        Element pdu = new Element("doc");
+        
+        Document doc = new Document(pdu);
+        doc.insertChild(new Comment("comment 1"), 0);
+        doc.insertChild(new Comment("comment 2"), 1);
+        doc.appendChild(new Comment("comment 3"));
+        doc.appendChild(new Comment("comment 4"));
+        
+        String expected = "<!--comment 1-->\n<!--comment 2-->\n\n<!--comment 3-->\n<!--comment 4-->";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        
+        canonicalizer.write(doc, "//comment()", null);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+
+    
+    public void testCanonicalizePrologAndEpilog() throws IOException {
+        
+        Element pdu = new Element("doc");
+        
+        Document doc = new Document(pdu);
+        doc.insertChild(new ProcessingInstruction("target", "value"), 0);
+        doc.insertChild(new Comment("comment 2"), 1);
+        doc.appendChild(new Comment("comment 3"));
+        doc.appendChild(new ProcessingInstruction("target", "value"));
+        
+        String expected = "<?target value?>\n<!--comment 2-->\n<doc></doc>\n<!--comment 3-->\n<?target value?>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        
+        canonicalizer.write(doc);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+
+    
+    public void testCanonicalizeOnlyAttributesOnDifferentElements() throws IOException {
+        
+        Element pdu = new Element("doc");
+        pdu.addAttribute(new Attribute("a2", "v1"));
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("a1", "v2"));
+        pdu.appendChild(child);
+        
+        String expected = " a2=\"v1\" a1=\"v2\"";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc, "//@*", null);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+
+    
+    public void testCanonicalizeAttributesWithFunkyCharacters() throws IOException {
+        
+        Element pdu = new Element("doc");
+        pdu.addAttribute(new Attribute("a2", "v1&<>\"\t\r\n"));
+        
+        String expected = " a2=\"v1&amp;&lt;>&quot;&#x9;&#xD;&#xA;\"";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc, "//@*", null);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+
+    
+    public void testExclusiveEmptyRootElementInNoNamespace() 
+      throws IOException {
+     
+        Element pdu = new Element("doc");
+   
+        String expected = "<doc></doc>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
+    public void testExclusiveEmptyRootElementInNoNamespaceWithTwoAttributes() 
+      throws IOException {
+     
+        Element pdu = new Element("doc");
+        pdu.addAttribute(new Attribute("a1", "v1"));
+        pdu.addAttribute(new Attribute("a2", "v2"));
+        
+        String expected = "<doc a1=\"v1\" a2=\"v2\"></doc>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
     public void testExclusiveDoesntRenderUnusedPrefix() throws IOException {
      
         Element pdu = new Element("n0:tuck", "http://a.example");
@@ -918,5 +1113,90 @@ public class CanonicalizerTest extends XOMTestCase {
         
     }
         
+    
+    // compare to output generated by Apache XML Security code
+    public void testExclusiveXMLConformanceTestSuiteDocuments() 
+      throws ParsingException, IOException {
+      
+        File masterList = new File(canonical, "xmlconf");
+        masterList = new File(masterList, "xmlconf.xml");
+        if (masterList.exists()) {
+            Document xmlconf = builder.build(masterList);
+            Elements testcases = xmlconf.getRootElement().getChildElements("TESTCASES");
+            processExclusiveTestCases(testcases);
+        }
 
+    }
+
+    
+    // xmlconf/xmltest/valid/sa/097.xml appears to be screwed up by a lot
+    // of parsers 
+    private void processExclusiveTestCases(Elements testcases) 
+      throws ParsingException, IOException {
+        
+        for (int i = 0; i < testcases.size(); i++) {
+              Element testcase = testcases.get(i); 
+              Elements tests = testcase.getChildElements("TEST");
+              processExclusiveTests(tests);
+              Elements level2 = testcase.getChildElements("TESTCASES");
+              // need to be recursive to handle recursive IBM test cases
+              processExclusiveTestCases(level2);
+        }
+        
+    }
+
+
+    private void processExclusiveTests(Elements tests) 
+      throws ParsingException, IOException  {
+        
+        for (int i = 0; i < tests.size(); i++) {
+            Element test = tests.get(i);
+            String namespace = test.getAttributeValue("NAMESPACE");
+            if ("no".equals(namespace)) continue;
+            String type = test.getAttributeValue("TYPE");
+            if ("not-wf".equals(type)) continue;
+            String uri = test.getAttributeValue("URI");
+            String base = test.getBaseURI();
+            // Hack because URIUtil isn't public; and I don't want to
+            // depend on 1.4 only java.net.URI
+            Element parent = new Element("e");
+            parent.setBaseURI(base);
+            Element child = new Element("a");
+            child.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace", uri));
+            parent.appendChild(child);
+            String resolvedURI = child.getBaseURI();
+            
+            Document doc = builder.build(resolvedURI);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            try {
+                Canonicalizer serializer = new Canonicalizer(
+                  out, 
+                  Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS
+                );
+                serializer.write(doc);
+            }
+            finally {
+                out.close();
+            }           
+            byte[] actual = out.toByteArray();
+            
+            File input = new File(resolvedURI.substring(5) + ".exc");
+            byte[] expected = new byte[(int) input.length()];
+            DataInputStream in = new DataInputStream(
+              new BufferedInputStream(new FileInputStream(input)));
+            try {
+                in.readFully(expected);
+            }
+            finally {
+                in.close();
+            }
+            
+            assertEquals(resolvedURI, new String(expected, "UTF-8"), new String(actual, "UTF-8"));
+            
+        }
+        
+    }
+
+    
 }
