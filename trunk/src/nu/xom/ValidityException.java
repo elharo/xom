@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -37,12 +37,14 @@ import org.xml.sax.SAXParseException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class ValidityException extends ParsingException {
     
     private List saxExceptions = new ArrayList();
+    private transient Document document;
+    
 
     /**
      * <p>
@@ -57,6 +59,7 @@ public class ValidityException extends ParsingException {
         super(message, cause);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>ValidityException</code> 
@@ -76,6 +79,7 @@ public class ValidityException extends ParsingException {
         super(message, lineNumber, columnNumber);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>ValidityException</code> 
@@ -98,6 +102,7 @@ public class ValidityException extends ParsingException {
         super(message, lineNumber, columnNumber, cause);
     }
 
+    
     /**
      * <p>
      * Creates a new <code>ValidityException</code> 
@@ -124,15 +129,16 @@ public class ValidityException extends ParsingException {
         return document;    
     }
     
-    private Document document;
     
     void setDocument(Document doc) {
         this.document = doc;
     }
     
+    
     void addError(SAXParseException ex) {
         saxExceptions.add(ex);
     }
+    
     
     /**
      * <p>
@@ -146,6 +152,7 @@ public class ValidityException extends ParsingException {
     public int getErrorCount() {
         return saxExceptions.size();   
     }
+    
     
     /**
      * <p>
@@ -167,6 +174,7 @@ public class ValidityException extends ParsingException {
         return ex.getMessage();  
     }
 
+    
     /**
      * <p>
      *   Returns the line number of the <i>n</i>th validity
@@ -189,6 +197,7 @@ public class ValidityException extends ParsingException {
         return ex.getLineNumber();  
     }
 
+    
     /**
      * <p>
      *   Returns the column number of the <i>n</i>th validity
