@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0a5"/>
+    <property name="version" value="1.0b1"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -256,7 +256,7 @@ XOM Build file
   <target name="zip" depends="jar, javadoc, samples" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, clover_html/**,  clover/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, clover_html/**,  clover/**, xom.gif, data/XInclude-Test-Suite/**, data/canonical/xmlconf/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
@@ -268,7 +268,7 @@ XOM Build file
   <target name="tar" depends="jar, javadoc, samples" description="Build tar file for distro">
     <tar destfile="${dist.dir}/${name}-${version}.tar">
       <tarfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
