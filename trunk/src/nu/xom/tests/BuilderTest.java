@@ -63,7 +63,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b1
+ * @version 1.0b4
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1433,13 +1433,13 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         Document doc = builder.build(new File("data/097.xml"));
-        String expectedResult = "<?xml version=\"1.0\"?>\r\n"
-            + "<!DOCTYPE doc [\r\n"
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<!DOCTYPE doc [\n"
             + "  <!ELEMENT doc (#PCDATA)>\r\n"
             + "  <!ATTLIST doc a1 CDATA \"v1\">\r\n"
             + "  <!ATTLIST doc a2 CDATA #IMPLIED>\r\n"
-            + "]>\r\n"
-            + "<doc a1=\"v1\" />\r\n";
+            + "]>\n"
+            + "<doc a1=\"v1\" />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         
@@ -1450,8 +1450,8 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         Document doc = builder.build(new File("data/undeclare.xml"));
-        String expectedResult = "<?xml version=\"1.0\"?>\r\n"
-            + "<root xmlns=\"http://www.example.org\" xmlns:pre=\"http://www.red.com/\" test=\"test\" pre:red=\"value\">some data<something xmlns=\"\" /></root>\r\n";
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<root xmlns=\"http://www.example.org\" xmlns:pre=\"http://www.red.com/\" test=\"test\" pre:red=\"value\">some data<something xmlns=\"\" /></root>\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         

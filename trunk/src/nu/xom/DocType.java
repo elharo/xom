@@ -468,7 +468,7 @@ public class DocType extends Node {
         } 
         
         if (internalDTDSubset.length() != 0) {
-            result.append(" [\r\n");    
+            result.append(" [\n");    
             result.append(internalDTDSubset);   
             result.append(']'); 
         }

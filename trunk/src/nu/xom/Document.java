@@ -31,7 +31,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b4
  * 
  */
 public class Document extends ParentNode {
@@ -342,8 +342,6 @@ public class Document extends ParentNode {
     }
 
     
-
-    
     /**
      * <p>
      * Replaces an existing child with a new child node.
@@ -417,12 +415,12 @@ public class Document extends ParentNode {
         StringBuffer result = new StringBuffer();
 
         // XML declaration
-        result.append("<?xml version=\"1.0\"?>\r\n");
+        result.append("<?xml version=\"1.0\"?>\n");
         
         // children
         for (int i = 0; i < getChildCount(); i++) {
             result.append(getChild(i).toXML());
-            result.append("\r\n");  
+            result.append("\n");  
         }
         
         return result.toString();
