@@ -25,7 +25,7 @@ package nu.xom.tests;
 
 import java.io.File;
 import java.io.IOException;
-import nu.xom.ParseException;
+import nu.xom.ParsingException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -52,7 +52,7 @@ import nu.xom.Text;
 public class NodeFactoryTest extends XOMTestCase {
 
     public void testSkippingComment() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         
         String data = "<a>1<!--tetetwkfjkl-->8</a>";
         Builder builder = new Builder(new CommentFilter());
@@ -74,7 +74,7 @@ public class NodeFactoryTest extends XOMTestCase {
     }
 
     public void testCantAddOneElementMultipleTimes() 
-        throws IOException, ParseException {
+        throws IOException, ParsingException {
         
         String data = "<a><b>18</b></a>";
         Builder builder = new Builder(new SingleElementFactory());
@@ -100,7 +100,7 @@ public class NodeFactoryTest extends XOMTestCase {
     }
     
     public void testChangingElementName() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         
         String data 
           = "<a>1<b>2<a>3<b>4<a>innermost</a>5</b>6</a>7</b>8</a>";
@@ -123,7 +123,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
-    public void testMakeRoot() throws IOException, ParseException {       
+    public void testMakeRoot() throws IOException, ParsingException {       
         String data = "<a><b>18</b></a>";
         Builder builder = new Builder(new CallsMakeRoot());
         Document doc = builder.build(data, "http://www.example.org/");
@@ -144,7 +144,7 @@ public class NodeFactoryTest extends XOMTestCase {
     }
 
     public void testSkippingProcessingInstruction()
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         
         String data = "<a>1<?test some data?>8</a>";
         Builder builder = new Builder(new ProcessingInstructionFilter());
@@ -170,7 +170,7 @@ public class NodeFactoryTest extends XOMTestCase {
     }
 
     public void testSkippingIgnorableWhiteSpace() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         
         String data = "<!DOCTYPE root [ ";
         data += "<!ELEMENT root (p*)> ";
@@ -196,7 +196,7 @@ public class NodeFactoryTest extends XOMTestCase {
     }
 
 
-    public void testSkipping2() throws IOException, ParseException {
+    public void testSkipping2() throws IOException, ParsingException {
         
         String data 
           = "<a>1<b>2<a>3<b>4<a>innermost</a>5</b>6</a>7</b>8</a>";
@@ -234,7 +234,7 @@ public class NodeFactoryTest extends XOMTestCase {
         
     
     public void testMinimalizedDocument() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         
         File input = new File("data/entitytest.xml");
         Builder builder = new Builder(new MinimalizingFactory());
@@ -289,7 +289,7 @@ public class NodeFactoryTest extends XOMTestCase {
     }
 
     public void testNullRootNotAllowed() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         
         File input = new File("data/entitytest.xml");
         Builder builder = new Builder(new NullElementFactory());
@@ -314,7 +314,7 @@ public class NodeFactoryTest extends XOMTestCase {
     }
         
     public void testNullDocumentNotAllowed() 
-      throws IOException, ParseException {
+      throws IOException, ParsingException {
         
         File input = new File("data/entitytest.xml");
         Builder builder = new Builder(new NullDocumentFactory());
@@ -337,7 +337,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
-    public void testSkipping() throws IOException, ParseException {
+    public void testSkipping() throws IOException, ParsingException {
         
         String data = "<a>data<b>data<a>data</a>data</b>data</a>";
         Builder builder = new Builder(new BFilter());
@@ -355,7 +355,7 @@ public class NodeFactoryTest extends XOMTestCase {
     }
 
     public void testCoalesceTextNodes() 
-      throws IOException, ParseException {  
+      throws IOException, ParsingException {  
         String data = "<a>data<!-- comment--> data</a>";
         Builder builder = new Builder(new CommentFilter());
         Document doc = builder.build(data, "http://www.example.org/");
