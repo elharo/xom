@@ -57,7 +57,7 @@ to http://www.xom.nu/
     <property name="clover.dir"     value="./clover"/>
 
     <property name="xml-apis.jar"   value="${lib.dir}/xmlParserAPIs.jar"/>
-    <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
+    <property name="parser.jar"     value="$/opt/xerces-2_6_2/xercesImpl.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
     <property name="tagsoup.jar"    value="${lib.dir}/tagsoup-0.10.2.jar"/>
@@ -66,6 +66,7 @@ to http://www.xom.nu/
     <property name="xom-core"       value="${build.dest}"/>
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"    value="${lib.dir}/servlet.jar"/>
+  
 
     <property name="test.outputFormat" value="xml"/>    
     
@@ -146,6 +147,7 @@ XOM Build file
            deprecation="${deprecation}"
            target="1.2"
            source="1.3"
+           encoding="UTF-8"
            excludes="nu/xom/pantry/CatalogTest.java">
        <classpath refid="compile.class.path"/>
     </javac>
@@ -156,7 +158,7 @@ XOM Build file
   </target>
 
   
-  <!-- This task requires Java 1.5 to complete sucessfully -->
+  <!-- This task requires Java 1.5 to complete successfully -->
   <target name="compile15" depends="prepare" description="Compile the JDK15XML1_0Parser" >
     <javac srcdir="${src15.dir}"
            destdir="${build15.dir}"
@@ -165,6 +167,7 @@ XOM Build file
            deprecation="${deprecation}"
            target="1.2"
            source="1.3"
+           encoding="UTF-8"
            failonerror="false">
        <classpath refid="compile.class.path"/>
     </javac>
@@ -426,7 +429,7 @@ XOM Build file
          </fileset>
       </batchtest>
     </junit>
-  </target>  
+  </target> 
   
 </project>
 
