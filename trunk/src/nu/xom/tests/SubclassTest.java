@@ -40,13 +40,13 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class SubclassTest extends XOMTestCase {
 
-    Element root;
-    Document doc;
+    private Element root;
+    private Document doc;
     
     protected void setUp() {
         root = new Element("root");
