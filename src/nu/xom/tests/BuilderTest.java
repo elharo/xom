@@ -25,12 +25,15 @@ package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.Writer;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -67,7 +70,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -130,7 +133,7 @@ public class BuilderTest extends XOMTestCase {
         
     }
     
-    
+
     public BuilderTest(String name) {
         super(name);   
     }
@@ -1338,6 +1341,7 @@ public class BuilderTest extends XOMTestCase {
 */
     public void testInternalDTDSubset() 
       throws ValidityException, ParsingException, IOException {
+        
         File input = new File("data/internaldtdsubsettest.xml");
         Builder builder = new Builder(false);
         Document doc = builder.build(input);
@@ -1354,6 +1358,7 @@ public class BuilderTest extends XOMTestCase {
         assertTrue(internalSubset.indexOf("picture.jpg\" NDATA JPEG>") > 0);
         assertTrue(internalSubset.indexOf("<!NOTATION JPEG SYSTEM ") > 0);
         assertTrue(internalSubset.indexOf("image/jpeg\">") > 0);
+        
     }
     
 
@@ -1455,6 +1460,7 @@ public class BuilderTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
             assertNull(ex.getURI());
         }
+        
     }    
 
     
@@ -1633,11 +1639,35 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsNonASCIICharacterInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/resumé.xml"));
-        String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<resumé />\n";
-        String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
+        File f = new File("data/resumé.xml");
+        try {
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("<resumé />");
+            out.flush();
+            out.close();
+            Document doc = builder.build(f);
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<resumé />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+        }
+        finally {
+            if (f.exists()) f.delete();
+        }
+        
+    }
+    
+    
+    private File makeFile(String name) throws IOException {
+        
+        File f = new File("data/" + name);
+        Writer out = new OutputStreamWriter(
+          new FileOutputStream(f), "UTF8");
+        out.write("<data/>");
+        out.flush();
+        out.close();
+        return f;
         
     }
   
@@ -1645,13 +1675,16 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsSpaceInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/space file.xml"));
+        File f = makeFile("space file.xml");
+        Document doc = builder.build(f);
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
+        f.delete();
         assertEquals(expectedResult, actual);
         assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/space%" + Integer.toHexString(' ') + "file.xml"));
+        assertTrue(doc.getBaseURI().endsWith("data/space%" 
+          + Integer.toHexString(' ') + "file.xml"));
         
     }
   
@@ -1683,11 +1716,14 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsDoubleQuoteInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/\"file.xml"));
-        String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<data />\n";
+        File f = makeFile("\"file\".xml");
+        Document doc = builder.build(f);
+        f.delete();
+        String expectedResult = "<?xml version=\"1.0\"?>\n<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%22file%22.xml"));
         
     }
   
@@ -1695,11 +1731,15 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsSingleQuoteInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/'file.xml"));
+        File f = makeFile("'file'.xml");
+        Document doc = builder.build(f);
+        f.delete();
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/'file'.xml"));
         
     }
   
@@ -1753,7 +1793,9 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsVerticalBarInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/|file.xml"));
+        File f = makeFile("|file.xml");
+        Document doc = builder.build(f);
+        f.delete();
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1766,12 +1808,13 @@ public class BuilderTest extends XOMTestCase {
         
     }
 
-  
     
     public void testBuildFromFileThatContainsAsteriskInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/*file.xml"));
+        File f = makeFile("*file.xml");
+        Document doc = builder.build(f);
+        f.delete();
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1828,7 +1871,9 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsAngleBracketsInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/<file>.xml"));
+        File f = makeFile("<file>.xml");
+        Document doc = builder.build(f);
+        f.delete();
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
@@ -1872,7 +1917,9 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsQuestionMarkInName()
       throws ParsingException, IOException {
         
-        Document doc = builder.build(new File("data/?file.xml"));
+        File f = makeFile("?file.xml");
+        Document doc = builder.build(f);
+        f.delete();
         String expectedResult = "<?xml version=\"1.0\"?>\n"
             + "<data />\n";
         String actual = doc.toXML();
