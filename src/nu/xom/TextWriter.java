@@ -35,7 +35,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 abstract class TextWriter {
@@ -113,6 +113,7 @@ abstract class TextWriter {
                 column += s.length();
                 lastCharacterWasSpace = false;
                 skipFollowingLinefeed = false;
+                justBroke = false;
             }
             else {
                 String s = "&#x" + Integer.toHexString(c).toUpperCase() + ';';
@@ -120,30 +121,35 @@ abstract class TextWriter {
                 column += s.length();
                 lastCharacterWasSpace = false;
                 skipFollowingLinefeed = false;
+                justBroke=false;
             }
         }
         else if (c == '&') {
             out.write("&amp;");
             column += 5;
             lastCharacterWasSpace = false;
-            skipFollowingLinefeed = false;
+            skipFollowingLinefeed = false; 
+            justBroke = false;
         }
         else if (c == '<') {
             out.write("&lt;");
             column += 4;
             lastCharacterWasSpace = false; 
-            skipFollowingLinefeed = false;           
+            skipFollowingLinefeed = false;
+            justBroke = false;
         }
         else if (c == '>') {
             out.write("&gt;");
             column += 4;
             lastCharacterWasSpace = false;  
-            skipFollowingLinefeed = false;                      
+            skipFollowingLinefeed = false;
+            justBroke = false;
         }
         else if (c == '\r') {
             if (!adjustingWhiteSpace()  && !lineSeparatorSet) {
                 out.write("&#x0D;");
                 column += 6;
+                justBroke=false;
             }
             else if (!adjustingWhiteSpace()  && lineSeparatorSet) {
                 escapeBreakLine();
@@ -154,7 +160,9 @@ abstract class TextWriter {
             }
             skipFollowingLinefeed = true;
         }
-        else write(c); 
+        else {
+            write(c);   
+        }
         
     }
     
@@ -193,6 +201,7 @@ abstract class TextWriter {
                 column += s.length();
                 lastCharacterWasSpace = false;
                 skipFollowingLinefeed = false;
+                justBroke=false;
             }
             else {
                 String s = "&#x" + Integer.toHexString(c).toUpperCase() + ';';
@@ -200,6 +209,7 @@ abstract class TextWriter {
                 column += s.length();
                 lastCharacterWasSpace = false;
                 skipFollowingLinefeed = false;
+                justBroke=false;
             }
         }
         // Handle white space that the parser might normalize
@@ -211,6 +221,7 @@ abstract class TextWriter {
             column += 6;
             lastCharacterWasSpace = true;
             skipFollowingLinefeed = false;
+            justBroke=false;
         }
         else if (c == '\n') {
             if (skipFollowingLinefeed) {
@@ -219,7 +230,8 @@ abstract class TextWriter {
             }
             else if (adjustingWhiteSpace()) {
                 out.write(" ");
-                lastCharacterWasSpace = true;                
+                lastCharacterWasSpace = true;
+                justBroke=false;
             }
             else {
                 if (lineSeparatorSet) {
@@ -227,7 +239,8 @@ abstract class TextWriter {
                 }
                 else {
                     out.write("&#x0A;");
-                    column += 6;
+                    column += 6; 
+                    justBroke=false;
                 }
                 lastCharacterWasSpace = true;
             }
@@ -237,12 +250,14 @@ abstract class TextWriter {
             column += 6;
             lastCharacterWasSpace = false;
             skipFollowingLinefeed = false;
+            justBroke=false;
         }
         else if (c == '\r') {
             if (adjustingWhiteSpace()) {
                 out.write(" ");
                 lastCharacterWasSpace = true;
-                skipFollowingLinefeed = true;              
+                skipFollowingLinefeed = true;  
+                justBroke=false;
             }
             else {
                 if (lineSeparatorSet) {
@@ -251,6 +266,7 @@ abstract class TextWriter {
                 else {
                     out.write("&#x0D;");
                     column += 6;
+                    justBroke=false;
                 }
                 skipFollowingLinefeed = true; 
             }
@@ -261,20 +277,25 @@ abstract class TextWriter {
             column += 5;
             lastCharacterWasSpace = false;
             skipFollowingLinefeed = false;
+            justBroke=false;
         }
         else if (c == '<') {
             out.write("&lt;");
             column += 4;
             lastCharacterWasSpace = false; 
-            skipFollowingLinefeed = false;           
+            skipFollowingLinefeed = false; 
+            justBroke=false;
         }
         else if (c == '>') {
             out.write("&gt;");
             column += 4;
             lastCharacterWasSpace = false;  
-            skipFollowingLinefeed = false;                      
+            skipFollowingLinefeed = false;
+            justBroke=false;
         }
-        else write(c); 
+        else {
+            write(c);  
+        }            
     }
 
     
@@ -294,6 +315,7 @@ abstract class TextWriter {
                     out.write(c);
                     skipFollowingLinefeed = false;
                     column++;
+                    justBroke=false;
                 } 
                 else { // (c == '\n')
                     if (!lineSeparatorSet ||
@@ -308,6 +330,7 @@ abstract class TextWriter {
                 out.write(' ');
                 column++;
                 skipFollowingLinefeed = false;
+                justBroke=false;
             }
             lastCharacterWasSpace = true;
         }
@@ -317,7 +340,9 @@ abstract class TextWriter {
             if (c < 0xd800 || c > 0xDBFF) column++; 
             lastCharacterWasSpace = false;
             skipFollowingLinefeed = false;
-        }            
+            justBroke=false;
+        } 
+      
     }
 
     
@@ -340,21 +365,31 @@ abstract class TextWriter {
 
 
     private boolean needsBreak() {
+        
         if (maxLength <= 0 || preserveSpace) return false;
         // Better algorithm needed:
         // Should look ahead in the stream,
         // see if there's a white space character 
-        // between here and the maxLength????
+        // between here and the maxLength XXX
         
-        return column >= maxLength - 10;   
+        return column >= maxLength - 10; 
+        
     }
-
+    
+    private boolean justBroke = false;
+    
+    boolean justBroke() {
+        return justBroke;
+    }
     
     final void breakLine() throws IOException {
+        
         out.write(lineSeparator);
         out.write(indentString);
         column = indentString.length();
         lastCharacterWasSpace = true;
+        justBroke = true;
+        
     }
     
     
