@@ -43,7 +43,7 @@ import nu.xom.Serializer;
  * test this????
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public final class NonRecursiveSerializer extends Serializer {

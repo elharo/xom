@@ -34,11 +34,12 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public class ProcessingInstructionTest extends XOMTestCase {
 
+    
     public ProcessingInstructionTest(String name) {
         super(name);
     }
