@@ -47,7 +47,7 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class VerifierTest extends XOMTestCase {
@@ -341,6 +341,62 @@ public class VerifierTest extends XOMTestCase {
              }  
          }
          
+    }
+    
+    
+    public void testAttributeNameThatEndsWithAColon() {
+        
+        try {
+            new Attribute("name:", "http://www.example.com", "value", Attribute.Type.CDATA);
+            fail("Allowed attribute name that ends with a colon");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+            assertEquals("name:", success.getData());
+        }
+        
+    }
+
+
+    public void testAttributeNameThatBeginsWithAColon() {
+        
+        try {
+            new Attribute(":name", "http://www.example.com", "value", Attribute.Type.CDATA);
+            fail("Allowed attribute name that begins with a colon");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+            assertEquals(":name", success.getData());
+        }
+        
+    }
+
+
+    public void testElementNameThatEndsWithAColon() {
+        
+        try {
+            new Element("name:", "http://www.example.com");
+            fail("Allowed element name that ends with a colon");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+            assertEquals("name:", success.getData());
+        }
+        
+    }
+
+
+    public void testElementNameThatBeginsWithAColon() {
+        
+        try {
+            new Element(":name", "http://www.example.com");
+            fail("Allowed element name that begins with a colon");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+            assertEquals(":name", success.getData());
+        }
+        
     }
 
 
