@@ -8,7 +8,7 @@
   <test3 xmlns:xlink="http://www.w3.org/2000/xlink" xlink:type="simple">
      Make sure the XLinks come across
   </test3>
-<test xmlns:xinclude="http://www.w3.org/2001/XInclude">
+<test xmlns:xinclude="http://www.w3.org/2003/XInclude">
   <latin1>
     <firstElement/>
     trjsagdkasgdhasdgashgdhsadgashdg

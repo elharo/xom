@@ -1,5 +1,5 @@
 <simple>
-<test xmlns:xinclude="http://www.w3.org/2001/XInclude">
+<test xmlns:xinclude="http://www.w3.org/2003/XInclude">
   <latin1>
     <firstElement/>
     <xinclude:include href="utf8.xml" parse="text"/>
