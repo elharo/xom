@@ -29,6 +29,7 @@ import java.util.Stack;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
+import nu.xom.NamespaceConflictException;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -52,7 +53,7 @@ import org.xml.sax.ext.LexicalHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 class XSLTHandler 
@@ -94,8 +95,8 @@ class XSLTHandler
           = factory.startMakingElement(qualifiedName, namespaceURI);
         
         if (parents.isEmpty()) {
-          // won't append until finishMakingElement()
-           current = element; 
+            // won't append until finishMakingElement()
+            current = element; 
         }
         else {
             ParentNode parent = (ParentNode) parents.peek();
@@ -123,7 +124,22 @@ class XSLTHandler
             for (int j=0; j < nodes.size(); j++) {
                 Node node = nodes.get(j);
                 if (node instanceof Attribute) {
-                    element.addAttribute((Attribute) node);
+                    Attribute attribute = (Attribute) node;
+                    while (true) {
+                        try {
+                            element.addAttribute(attribute);
+                            break;
+                        }
+                        catch (NamespaceConflictException ex) {
+                            // According to section 7.1.3 of XSLT spec we 
+                            // need to remap the prefix here; ideally the
+                            // XSLT processor should do this but many don't
+                            attribute.setNamespace(
+                              "p"+attribute.getNamespacePrefix(), 
+                              attribute.getNamespaceURI()
+                            );
+                        }
+                    }
                 }
                 else {
                     element.appendChild(node);   
@@ -140,8 +156,17 @@ class XSLTHandler
                 String currentValue
                    = element.getNamespaceURI(namespacePrefix); 
                 if (!namespaceName.equals(currentValue)) {
-                    element.addNamespaceDeclaration(
-                      namespacePrefix, namespaceName);
+                    try {
+                        element.addNamespaceDeclaration(
+                          namespacePrefix, namespaceName);
+                    }
+                    catch (NamespaceConflictException ex) {
+                        // skip it; see attribset40 test case;
+                        // This should only happen if an attribute's
+                        // namespace conflicts with the element's 
+                        // namespace; in which case we alreayd remapped
+                        // the prefix when adding the attribute
+                    }
                 }              
             }   
             else if (qName.equals("xmlns")) {               
@@ -253,6 +278,7 @@ class XSLTHandler
         uris.pop();
     }
     
+    
     public void startPrefixMapping(String prefix, String uri) {
         if (uri == null) uri = "";
         Stack uris = (Stack) prefixes.get(prefix);
@@ -291,5 +317,6 @@ class XSLTHandler
         flushText();
         addToResultTree(factory.makeComment(new String(text, start, length)));
     } 
-        
+     
+    
 }
