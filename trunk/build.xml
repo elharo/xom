@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0b1"/>
+    <property name="version" value="1.0b2"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -65,6 +65,7 @@ to http://www.xom.nu/
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
+    <property name="tagsoup.jar"    value="${lib.dir}/tagsoup-0.9.7.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
@@ -79,6 +80,7 @@ to http://www.xom.nu/
       <pathelement location="${normalizer.jar}"/>
       <pathelement location="${servlet.jar}"/>
       <pathelement location="${junit.jar}"/>
+      <pathelement location="${tagsoup.jar}"/>
     </path>
 
     <path id="run.class.path">
@@ -89,9 +91,15 @@ to http://www.xom.nu/
       <pathelement location="${xslt.jar}"/>
     </path>
     
-   <path id="test.class.path">
+    <path id="test.class.path">
       <path refid="run.class.path"/>
       <pathelement location="${junit.jar}"/>
+    </path>
+    
+    <path id="doc.class.path">
+      <path refid="test.class.path"/>
+      <pathelement location="${build.dest}"/>
+      <pathelement location="${tagsoup.jar}"/>
     </path>
     
   </target>
@@ -167,9 +175,9 @@ XOM Build file
     <jar jarfile="${build.dir}/${name}-${version}.jar"
          basedir="${build.dest}"
          index="no"
-		 compress="yes"
+		     compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
-         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/*">
+         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Main-Class" value="nu.xom.Info"/>
@@ -199,14 +207,16 @@ XOM Build file
          index="yes"
 		 compress="no"
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
-         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/pantry/* nu/xom/pantry">
+         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/pantry/*">
     </jar>
   </target>
 
   
   <target name="javadoc" depends="prepare"
           description="Generate the API documentation">
+          
     <mkdir dir="${build.javadocs}"/>
+    
     <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
              sourcepath="${build.src}"
              destdir="${build.javadocs}"
@@ -231,7 +241,7 @@ XOM Build file
       
     </javadoc>
   </target>
-
+  
   
   <!-- I can never remember the exact target name -->
   <target name="javadocs"   depends="javadoc" />
@@ -240,7 +250,7 @@ XOM Build file
   <target name="betterdocs" depends="betterdoc"/>
 
   <!-- This task requires Ant 1.6 -->
-  <target name="betterdoc" depends="prepare"
+  <target name="betterdoc" depends="prepare, compile"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
@@ -265,8 +275,13 @@ XOM Build file
     <fileset dir="${build.src}" defaultexcludes="yes">
       <include name="nu/xom/tests/XOMTestCase.java" />
     </fileset>
-      
     </javadoc>
+    
+    <java classname="nu.xom.tools.XHTMLJavaDoc" fork="yes"> 
+      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xmlParserAPIs.jar:lib/xalan.jar"/> 
+      <classpath refid="doc.class.path" />
+      <arg value="build/apidocs"/> 
+    </java>
   </target>
 
   
