@@ -52,7 +52,7 @@ import java.util.List;
  */
 public abstract class ParentNode extends Node {
 
-    private List   children; 
+            List   children; 
     private String actualBaseURI;
 
     /**
