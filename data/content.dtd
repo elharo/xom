@@ -1,5 +1,0 @@
-<!-- comment before -->
-<?PI before?>
-<!ELEMENT root (#PCDATA)>
-<!-- a comment -->
-<?PI after?>
