@@ -516,16 +516,12 @@ public class DOMConverter {
                 boolean wasEnd = end;
                 end = false;
                 ParentNode xomParent = xomCurrent.getParent();
+                if (domParent.getParentNode().getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+                    domParent = (org.w3c.dom.Element) domParent.getParentNode();
+                }
                 if (xomParent.getChildCount() - 1 == index) {
                     xomCurrent = xomParent;
                     if (xomCurrent == xomElement) break;
-                    // switch parent up
-                    org.w3c.dom.Node temp = domParent.getParentNode();
-                    if (temp.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
-                        domParent = (org.w3c.dom.Element) temp;
-                    }
-                    
-                    
                     index = xomCurrent.getParent().indexOf(xomCurrent);
                     end = true;
                     continue;
@@ -533,10 +529,6 @@ public class DOMConverter {
                 else {
                     index++;
                     xomCurrent = xomParent.getChild(index);
-                    if (wasEnd 
-                      && domParent.getParentNode().getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
-                        domParent = (org.w3c.dom.Element) domParent.getParentNode();
-                    }
                 }
             }
             
