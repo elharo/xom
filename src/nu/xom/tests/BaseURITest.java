@@ -211,7 +211,7 @@ public class BaseURITest extends XOMTestCase {
 
         try {
             root.setBaseURI("http://www.w3.org/\u00A9testing");
-            fail("Allowed URI containing latin-1 character");
+            fail("Allowed URI containing Latin-1 character");
         }
         catch (MalformedURIException ex) {
             // success
@@ -230,6 +230,15 @@ public class BaseURITest extends XOMTestCase {
         try {
             root.setBaseURI("http://www.w3.org/%Atesting");
             fail("Allowed URI containing half percent");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+        try {
+            root.setBaseURI("http://www.w3.org/%A");
+            fail("Allowed URI containing half percent at end of path");
         }
         catch (MalformedURIException ex) {
             // success
@@ -263,8 +272,108 @@ public class BaseURITest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
 
+        try {
+            root.setBaseURI("http://www.w3.org/\u0000testing");
+            fail("Allowed URI containing unwise null C0 control character");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+        try {
+            root.setBaseURI("http://www.w3.org/\u0007testing");
+            fail("Allowed URI containing unwise BEL C0 control character");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
     }
 
+    // Note that the xml:base attribute can contain an IRI,
+    // not a URI, so this is a little different than the failures
+    // on setBaseURI
+    public void testXMLBaseFailures() {
+        Attribute base = new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", "base.html");
+        
+        try { // check IRI draft????
+            base.setValue("http://www.w3.org/ testing");
+            fail("Allowed URI containing space");
+        }
+        catch (MalformedURIException ex) { // should this be a malformedIRIException????
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+        try {
+            base.setValue("http://www.w3.org/tes%ting");
+            fail("Allowed URI containing unescaped %");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+        try {
+            base.setValue("http://www.w3.org/%Atesting");
+            fail("Allowed IRI containing half percent escape");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+        try {
+            base.setValue("http://www.w3.org/%A");
+            fail("Allowed IRI containing half percent at end of path");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+        try {
+            base.setValue("http://www.w3.org/^testing");
+            fail("Allowed URI containing unwise character");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+        try {
+            base.setValue("http://www.w3.org/<testing");
+            fail("Allowed URI containing unwise < character");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+        try {
+            base.setValue("http://www.w3.org/\u0000testing");
+            fail("Allowed URI containing unwise null C0 control character");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+        try {
+            base.setValue("http://www.w3.org/\u0007testing");
+            fail("Allowed URI containing unwise BEL C0 control character");
+        }
+        catch (MalformedURIException ex) {
+            // success
+            assertNotNull(ex.getMessage());
+        }
+
+    }
+    
+    
     public void testInheritBaseFromDoc() {
         assertEquals(base1, doc.getRootElement().getBaseURI());
      }
