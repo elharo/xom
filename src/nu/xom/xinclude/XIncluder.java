@@ -109,7 +109,7 @@ public class XIncluder {
      *     included.
      * @throws IOException if an included document could not be loaded,
      *     and no fallback was available
-     * @throws MissingHrefException if an <code>xinclude:include</code> 
+     * @throws NoIncludeLocationException if an <code>xinclude:include</code> 
      *      element does not have an <code>href</code> attribute.
      * @throws ParsingException if an included XML document 
      *     was malformed
@@ -123,7 +123,7 @@ public class XIncluder {
      */
      public static Document resolve(Document in)  
        throws BadParseAttributeException, InclusionLoopException, 
-             IOException, MissingHrefException, ParsingException, 
+             IOException, NoIncludeLocationException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         return resolve(in, new Builder());   
     }
@@ -157,7 +157,7 @@ public class XIncluder {
      *     included.
      * @throws IOException if an included document could not be loaded,
      *     and no fallback was available
-     * @throws MissingHrefException if an <code>xinclude:include</code> 
+     * @throws NoIncludeLocationException if an <code>xinclude:include</code> 
      *      element does not have an href attribute.
      * @throws ParsingException if an included XML document 
      *     was malformed
@@ -171,7 +171,7 @@ public class XIncluder {
      */
      public static Document resolve(Document in, Builder builder)  
        throws BadParseAttributeException, InclusionLoopException, 
-             IOException, MissingHrefException, ParsingException, 
+             IOException, NoIncludeLocationException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         Document copy = new Document(in);
         resolveInPlace(copy, builder);
@@ -210,7 +210,7 @@ public class XIncluder {
      *     included
      * @throws IOException if an included document could not be loaded,
      *     and no fallback was available
-     * @throws MissingHrefException if an <code>xinclude:include</code>
+     * @throws NoIncludeLocationException if an <code>xinclude:include</code>
      *     element does not have an <code>href</code> attribute.
      * @throws ParsingException if an included XML document
      *    was malformed
@@ -224,7 +224,7 @@ public class XIncluder {
      */
     public static void resolveInPlace(Document in) 
       throws BadParseAttributeException, InclusionLoopException,  
-             IOException, MissingHrefException, ParsingException, 
+             IOException, NoIncludeLocationException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
         resolveInPlace(in, new Builder());
     }
@@ -260,7 +260,7 @@ public class XIncluder {
      *     included
      * @throws IOException if an included document could not be loaded,
      *     and no fallback was available
-     * @throws MissingHrefException if an <code>xinclude:include</code>
+     * @throws NoIncludeLocationException if an <code>xinclude:include</code>
      *     element does not have an <code>href</code> attribute.
      * @throws ParsingException if an included XML document
      *    was malformed
@@ -274,7 +274,7 @@ public class XIncluder {
      */
     public static void resolveInPlace(Document in, Builder builder) 
       throws BadParseAttributeException, InclusionLoopException,  
-             IOException, MissingHrefException, ParsingException, 
+             IOException, NoIncludeLocationException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {       
         resolveInPlace(in, builder, new Stack()); 
     }
@@ -316,7 +316,7 @@ public class XIncluder {
             // empty string href is same as no href attribute
             if ("".equals(href)) href = null;
             if (href == null && xpointer == null) {
-                throw new MissingHrefException(
+                throw new NoIncludeLocationException(
                   "Missing href attribute", 
                   element.getDocument().getBaseURI()
                 );   
@@ -590,7 +590,7 @@ public class XIncluder {
             
             if ("".equals(href)) href = null;
             if (href == null && xpointer == null) {
-                throw new MissingHrefException(
+                throw new NoIncludeLocationException(
                   "Missing href attribute", 
                   element.getDocument().getBaseURI()
                 );   

@@ -43,7 +43,7 @@ import nu.xom.Serializer;
 import nu.xom.Text;
 import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.InclusionLoopException;
-import nu.xom.xinclude.MissingHrefException;
+import nu.xom.xinclude.NoIncludeLocationException;
 import nu.xom.xinclude.XIncludeException;
 import nu.xom.xinclude.XIncluder;
 
@@ -668,7 +668,7 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("allowed missing href");
         }
-        catch (MissingHrefException ex) {
+        catch (NoIncludeLocationException ex) {
             // success   
             assertNotNull(ex.getMessage());
             assertEquals(doc.getBaseURI(), ex.getURI());           
@@ -1290,7 +1290,7 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("Missing HREF not detected");
         }
-        catch (MissingHrefException success) {
+        catch (NoIncludeLocationException success) {
             assertNotNull(success.getMessage());
             URL u1 = error.toURL();
             URL u2 = new URL(success.getURI());
