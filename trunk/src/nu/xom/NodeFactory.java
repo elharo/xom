@@ -399,4 +399,9 @@ public class NodeFactory {
     }
   
     
+    void insertChild(Element element, Node child, int position) {
+        element.insertChild(child, position);
+    }
+  
+    
 }

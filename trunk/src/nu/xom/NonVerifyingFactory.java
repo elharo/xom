@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -160,5 +160,9 @@ class NonVerifyingFactory extends NodeFactory {
     }
   
     
+    void insertChild(Element element, Node child, int position) {
+        element.fastInsertChild(child, position);
+    }
 
+    
 }

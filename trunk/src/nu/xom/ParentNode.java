@@ -117,6 +117,11 @@ public abstract class ParentNode extends Node {
     // constructors should not call overridable methods
     final void _insertChild(Node child, int position) {
         insertionAllowed(child, position);
+        fastInsertChild(child, position);
+    }
+
+
+    void fastInsertChild(Node child, int position) {
         if (children == null) children = new ArrayList(1);
         children.add(position, child);
         child.setParent(this);
