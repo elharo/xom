@@ -38,11 +38,11 @@ import nu.xom.IllegalNameException;
 import nu.xom.MalformedURIException;
 import nu.xom.MultipleParentException;
 import nu.xom.NamespaceException;
+import nu.xom.NoSuchAttributeException;
 import nu.xom.Node;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
-import nu.xom.XMLException;
 
 
 /**
@@ -527,9 +527,28 @@ public class ElementTest extends XOMTestCase {
             e.removeAttribute(a1);
             fail("Removed Attribute that didn't belong");
         }
-        catch (XMLException ex) {
+        catch (NoSuchAttributeException ex) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertTrue(ex.getMessage().indexOf(a1.getQualifiedName()) > 0);
+        }
+        
+    }
+
+    public void testRemoveAttributeFromElementWithDifferentAttributes() {
+        
+        String name = "red:sakjdhjhd";
+        String uri = "http://www.red.com/";
+        Element e = new Element(name, uri);
+        e.addAttribute(new Attribute("name", "value"));
+        Attribute a1 = new Attribute("name", "simple");
+
+        try {
+            e.removeAttribute(a1);
+            fail("Removed Attribute that didn't belong");
+        }
+        catch (NoSuchAttributeException ex) {
+            // success   
+            assertTrue(ex.getMessage().indexOf(a1.getQualifiedName()) > 0);
         }
         
     }
