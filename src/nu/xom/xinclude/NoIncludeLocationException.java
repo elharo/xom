@@ -59,7 +59,7 @@ public class NoIncludeLocationException extends XIncludeException {
      * </p>
      * 
      * @param message indicates the specific problem
-     * @param cause the initial exception which caused this 
+     * @param cause the initial exception that caused this 
      *     <code>NoIncludeLocationException</code>
      */
     public NoIncludeLocationException(String message, Throwable cause) {
