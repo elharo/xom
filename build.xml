@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0b6"/>
+    <property name="version" value="1.0b7"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -61,7 +61,7 @@ to http://www.xom.nu/
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
-    <property name="tagsoup.jar"    value="${lib.dir}/tagsoup-0.10.2.jar"/>
+    <property name="tagsoup.jar"    value="${lib.dir}/tagsoup-1.0rc1.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
@@ -183,22 +183,34 @@ XOM Build file
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*">
       <manifest>
+        <attribute name="Sealed" value="true"/>
         <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Specification-Title"    value="XOM"/>
+        <attribute name="Specification-Version"  value="${version}"/>
+        <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
+        <attribute name="Implementation-Title"   value="XOM"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
         <attribute name="Main-Class" value="nu.xom.Info"/>
         <section name="nu/xom/">
-          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM core classes"/>
+          <attribute name="Implementation-Title"  value="nu.xom"/>
         </section>
         <section name="nu/xom/xslt/">
-          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM XSLT interface"/>
+          <attribute name="Implementation-Title"  value="nu.xom.xslt"/>
         </section>
         <section name="nu/xom/xinclude/">
-          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM XInclude engine"/>
+          <attribute name="Implementation-Title"  value="nu.xom.xinclude"/>
         </section>
         <section name="nu/xom/converters/">
-          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM converters to other object models"/>
+          <attribute name="Implementation-Title"  value="nu.xom.converters"/>
         </section>
         <section name="nu/xom/canonical/">
-          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM Canonical XML support"/>
+          <attribute name="Implementation-Title"  value="nu.xom.canonical"/>
         </section>
       </manifest>
     </jar>
@@ -294,7 +306,7 @@ XOM Build file
   <target name="zip" depends="jar, betterdoc, samples" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, clover_html/**,  clover/**, xom.gif, data/XInclude-Test-Suite/**, data/canonical/xmlconf/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, clover_html/**,  clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/canonical/xmlconf/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
@@ -306,7 +318,7 @@ XOM Build file
   <target name="tar" depends="jar, betterdoc, samples" description="Build tar file for distro">
     <tar destfile="${dist.dir}/${name}-${version}.tar">
       <tarfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
