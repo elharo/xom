@@ -31,7 +31,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.1d6"/>
+    <property name="version" value="1.1a1"/>
     <property name="year"    value="2005"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -342,9 +342,21 @@ XOM Build file
     <jar jarfile="${build.dir}/${name}-samples.jar"
          basedir="${build.dest}"
          index="yes"
-		     compress="no"
+		 compress="yes"
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
          excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/pantry/*">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Specification-Title"    value="XOM Samples"/>
+        <attribute name="Specification-Version"  value="${version}"/>
+        <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
+        <attribute name="Implementation-Title"   value="XOM Samples"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+<!-- I can't get this to work yet
+        <attribute name="Main-Class" value="nu.xom.samples.XMLPrinter"/>
+        <attribute name="Class-Path" value="${name}-${version}.jar"/> -->
+      </manifest>
     </jar>
   </target>
 
@@ -596,6 +608,31 @@ XOM Build file
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
            <exclude name="**/pantry/*.java" />
+           <exclude name="**/MegaTest.java" />
+           <exclude name="**/benchmarks/*.java" />
+           <exclude name="**/tools/*.java" />
+           <exclude name="**/EBCDICTest.java" />
+	       <exclude name="nu/xom/tests/FastTests.java"/>
+	       <exclude name="nu/xom/tests/XOMTests.java"/>
+         </fileset>
+      </batchtest>
+    </junit>
+  </target> 
+
+  <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
+  <target name="fastclover" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
+    <junit printsummary="on" fork="no">
+       <classpath refid="test.class.path" />
+        <classpath>
+          <pathelement path="${ant-home}/lib/clover.jar"/>
+        </classpath>
+        <formatter type="${test.outputFormat}" />
+       <batchtest fork="yes" todir="${testoutput.dir}">
+         <fileset dir="${build.src}">
+           <include name="**/*Test.java" />
+           <exclude name="**/pantry/*.java" />
+           <exclude name="**/EncodingTest.java" />
+           <exclude name="**/XIncludeTest.java" />
            <exclude name="**/MegaTest.java" />
            <exclude name="**/benchmarks/*.java" />
            <exclude name="**/tools/*.java" />

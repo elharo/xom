@@ -18,6 +18,12 @@ RELAX NG?
 1.1:
 -------
 
+Profile AllTests (or maybe FastTests). 
+
+Add Class-Path entries to manifest
+
+Do Serializer and canonicalizer need setOutputStream methods?
+
 Add more XPath samples based on XOM
 
 A util package with the most useful samples and contribs
@@ -135,6 +141,14 @@ cvs [rtag aborted]: received abort signal
 cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
+
+===============
+Done 1.1a1:
+===============
+
+A few small speed ups
+
+Some bug fixes in XOMTestCase
 
 ===============
 Done 1.1d6:
