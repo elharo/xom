@@ -47,13 +47,13 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0b3
  *
  */
 public class FibonacciXOMSOAPServlet extends HttpServlet 
   implements SingleThreadModel {
 
-  // Fault codes   
+    // Fault codes   
     public final static String MALFORMED_REQUEST_DOCUMENT 
       = "MalformedRequest";
     public final static String INVALID_REQUEST_DOCUMENT 
@@ -87,7 +87,7 @@ public class FibonacciXOMSOAPServlet extends HttpServlet
       HttpServletResponse servletResponse)
       throws ServletException, IOException {
     
-        servletResponse.setContentType("text/xml; charset=UTF-8");               
+        servletResponse.setContentType("application/soap+xml; charset=UTF-8");               
         OutputStreamWriter out = new OutputStreamWriter(
           servletResponse.getOutputStream(), "UTF-8");
         InputStream in = servletRequest.getInputStream();
