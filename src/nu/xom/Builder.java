@@ -34,7 +34,6 @@ import java.io.UTFDataFormatException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.security.AccessControlException;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -66,14 +65,14 @@ public class Builder {
     private NodeFactory factory;
     
     private static boolean IBMVM14 = false;
-
+    private static double  xercesVersion = 2.6;
+    
     static {  
         
         String vendor = System.getProperty("java.vendor");
         String version = System.getProperty("java.version");
         String majorVersion = version.substring(0, 3);
-        
-        double xercesVersion = 2.6;
+
         try {
             String versionString = Version.getVersion();
             versionString = versionString.substring(9, 12);
@@ -87,22 +86,9 @@ public class Builder {
             // Xerces not installed, so none of this matters
         }
         
-        
         // turn off XML 1.1
         if (vendor.startsWith("IBM") && majorVersion.equals("1.4")) {
             IBMVM14 = true;
-        }
-        else if (xercesVersion >= 2.4) {
-            try {
-                // According to //http://java.sun.com/sfaq this won't  
-                // work in an applet. See also http://nagoya.apache.org/jira/browse/XERCESJ-976
-                System.setProperty(
-                  "org.apache.xerces.xni.parser.XMLParserConfiguration", 
-                  "nu.xom.xerces.XML1_0ParserConfiguration");
-            }
-            catch (AccessControlException ex) {
-                // ex.printStackTrace();
-            }
         }
         
     }
@@ -189,6 +175,7 @@ public class Builder {
     
     // These are stored in the order of preference.
     private static String[] parsers = {
+        "nu.xom.xerces.XML1_0Parser",
         "org.apache.xerces.parsers.SAXParser",
         "gnu.xml.aelfred2.XmlReader",
         "org.apache.crimson.parser.XMLReaderImpl",
@@ -203,11 +190,16 @@ public class Builder {
     
     private static XMLReader findParser(boolean validate) {
         
+        // first look for Xerces; we only trust Xerces if
+        // we set it up; and we need to configure it specially
+        // so we can't load it with the XMLReaderFactory
+        XMLReader parser; /* = findXerces();
+        if (parser != null) return parser;
+        System.err.println("Couldn't load Xerces!"); */
+        
         // XMLReaderFactory.createXMLReader never returns
         // null. If it can't locate the parser, it throws
         // a SAXException.
-        
-        XMLReader parser;
         for (int i = 0; i < parsers.length; i++) {
             try { 
                 parser = XMLReaderFactory.createXMLReader(parsers[i]);
@@ -230,8 +222,8 @@ public class Builder {
         }
         
     }    
-    
-    
+
+
     private static void setupParser(XMLReader parser, boolean validate)
       throws SAXNotRecognizedException, SAXNotSupportedException {
         
@@ -273,8 +265,8 @@ public class Builder {
         }
         
         // A couple of Xerces specific properties
-        if (parser.getClass().getName().equals(  
-            "org.apache.xerces.parsers.SAXParser")) {
+        if (parser.getClass().getName().equals("nu.xom.xerces.XML1_0Parser") 
+         || parser.getClass().getName().equals("org.apache.xerces.parsers.SAXParser")) {
             try {
                 parser.setFeature(
                  "http://apache.org/xml/features/allow-java-encodings", true);
@@ -446,6 +438,11 @@ public class Builder {
         // they're supposed to. :-(
         if (parserName.equals("gnu.xml.aelfred2.XmlReader")) return false;
         if (parserName.equals("net.sf.saxon.aelfred.SAXDriver")) return false;
+        
+        if (parserName.equals("org.apache.xerces.parsers.SAXParser")
+            && xercesVersion >= 2.4) {
+            return false;
+        }
         
         for (int i = 0; i < parsers.length; i++) {
             if (parserName.equals(parsers[i])) return true;
@@ -639,7 +636,7 @@ public class Builder {
      * @param in the <code>Reader</code> from which the 
      *   document is read
      * 
-     * @return  the parsed <code>Document</code>
+     * @return the parsed <code>Document</code>
      * 
      * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk
@@ -666,7 +663,7 @@ public class Builder {
      *     is read
      * @param baseURI the base URI for this document
      * 
-     * @return  the parsed <code>Document</code>
+     * @return the parsed <code>Document</code>
      * 
      * @throws ParsingException  if a well-formedness error is detected
      * @throws IOException       if an I/O error such as a bad disk 
