@@ -358,6 +358,42 @@ public class XPathTest extends XOMTestCase {
         assertEquals(child, result.get(2));
         
     }
+  
+    
+    /* <a>
+<x>1</x>
+<b>
+<x>2</x>
+<x>3</x>
+</b>
+<x>4</x>
+</a> */
+    public void testDescendantAxisOrder() {
+        
+        Element a = new Element("a");
+        Document doc = new Document(a);
+        Element x1 = new Element("x");
+        x1.appendChild("1");
+        Element x2 = new Element("x");
+        x2.appendChild("2");
+        Element x3 = new Element("x");
+        x3.appendChild("3");
+        Element x4 = new Element("x");
+        x4.appendChild("4");
+        a.appendChild(x1);
+        Element b = new Element("b");
+        b.appendChild(x2);
+        b.appendChild(x3);
+        a.appendChild(b);
+        a.appendChild(x4);
+        Nodes result = doc.query("//x");
+        assertEquals(4, result.size());
+        assertEquals(x1, result.get(0));   
+        assertEquals(x2, result.get(1));
+        assertEquals(x3, result.get(2));
+        assertEquals(x4, result.get(3));
+        
+    }
     
 
     public void testGetElementQName() {
