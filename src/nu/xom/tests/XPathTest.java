@@ -50,7 +50,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.1a3
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -290,10 +290,8 @@ public class XPathTest extends XOMTestCase {
         Builder builder = new Builder();
         Document doc = builder.build("http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml");
         Element root = doc.getRootElement();
-        Element input1 = root.getFirstChildElement("document_1").getFirstChildElement("site");
-        input1.detach();
-        Element input2 = root.getFirstChildElement("document_2");
-        input2.detach();
+        Element input = root.getFirstChildElement("document_1").getFirstChildElement("site");
+        input.detach();
         
         Nodes doc1Queries = root.query("child::query[starts-with(@id, 'Q')]");
         
@@ -310,7 +308,7 @@ public class XPathTest extends XOMTestCase {
             else if ("Q42".equals(id)) continue;
             // test suite bug relating to id() function
             else if (xpath.indexOf("id(") >= 0) continue;
-            Nodes result = input1.query(xpath);
+            Nodes result = input.query(xpath);
             Element xpath_result = query.getFirstChildElement("XPATH_RESULT");
             Nodes expected = new Nodes();
             for (int j = 0; j < xpath_result.getChildCount(); j++) {
@@ -364,6 +362,10 @@ public class XPathTest extends XOMTestCase {
         
         Nodes doc2Queries = root.query("child::query[starts-with(@id, 'A')]");
         
+        XPathContext context = new XPathContext();
+        context.addNamespace("svg", "http://www.w3.org/2000/svg");
+        context.addNamespace("xlink", "http://www.w3.org/1999/xlink");
+        
         for (int i = 0; i < doc2Queries.size(); i++) {
             Element query = (Element) doc2Queries.get(i);
             String xpath = query.getFirstChildElement("syntax").getValue();
@@ -373,13 +375,8 @@ public class XPathTest extends XOMTestCase {
             // ???? Not sure what's going on here; need to figure it out
             else if ("A3".equals(id)) continue;
             else if ("A4".equals(id)) continue;
-            // this query requires us to map the XLink prefix
-            else if ("A5".equals(id)) continue;
-            // this query requires us to map the SVG prefix
-            else if ("A6".equals(id)) continue;
-            else if ("A8".equals(id)) continue;
 
-            Nodes result = html.query(xpath);
+            Nodes result = html.query(xpath, context);
             Element xpath_result = query.getFirstChildElement("XPATH_RESULT");
             Nodes expected = new Nodes();
             for (int j = 0; j < xpath_result.getChildCount(); j++) {
