@@ -42,6 +42,7 @@ import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.Text;
+
 import nu.xom.xinclude.BadHTTPHeaderException;
 import nu.xom.xinclude.BadHrefAttributeException;
 import nu.xom.xinclude.BadParseAttributeException;
@@ -56,7 +57,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a3
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -535,6 +536,60 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
 
     }  
+    
+    
+    public void testBadIRIIsAFatalError() 
+      throws IOException, ParsingException, XIncludeException {
+     
+        String data = "<document xmlns:xi='http://www.w3.org/2001/XInclude'>"
+          + "<xi:include href='http://www.example.com/a%5.html'>"
+          + "<xi:fallback>Ooops!</xi:fallback></xi:include></document>";
+        Reader reader = new StringReader(data);
+        Document doc = builder.build(reader);
+        try {
+            XIncluder.resolve(doc);
+            fail("Resolved fallback when encountering a syntactically incorrect URI");
+        }
+        catch (BadHrefAttributeException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testBadIRIWithUnrecognizedSchemeIsAFatalError() 
+      throws IOException, ParsingException, XIncludeException {
+     
+        String data = "<doc xmlns:xi='http://www.w3.org/2001/XInclude'>"
+          + "<xi:include href='scheme://www.example.com/a%5.html'>"
+          + "<xi:fallback>Ooops!</xi:fallback></xi:include></doc>";
+        Reader reader = new StringReader(data);
+        Document doc = builder.build(reader);
+        try {
+            XIncluder.resolve(doc);
+            fail("Resolved fallback when encountering a syntactically incorrect URI");
+        }
+        catch (BadHrefAttributeException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testGoodIRIWithUnrecognizedSchemeIsAResourceError() 
+      throws IOException, ParsingException, XIncludeException {
+     
+        String data = "<document xmlns:xi='http://www.w3.org/2001/XInclude'>"
+          + "<xi:include href='scheme://www.example.com/a.html'>"
+          + "<xi:fallback>Correct!</xi:fallback></xi:include></document>";
+        Reader reader = new StringReader(data);
+        Document doc = builder.build(reader);
+        Document result = XIncluder.resolve(doc);
+        assertEquals("<?xml version=\"1.0\"?>\r\n" 
+                + "<document xmlns:xi=\"http://www.w3.org/2001/XInclude\">Correct!</document>\r\n", 
+                result.toXML());
+        
+    }
     
     
     public void testBadAcceptAttribute() 

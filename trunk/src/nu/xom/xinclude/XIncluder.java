@@ -41,6 +41,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import nu.xom.MalformedURIException;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -124,8 +125,11 @@ public class XIncluder {
      public static Document resolve(Document in)  
        throws BadParseAttributeException, InclusionLoopException, 
              IOException, NoIncludeLocationException, ParsingException, 
-             UnsupportedEncodingException, XIncludeException {        
-        return resolve(in, new Builder());   
+             UnsupportedEncodingException, XIncludeException {  
+         
+        Builder builder = new Builder();
+        return resolve(in, builder);
+        
     }
 
     /**
@@ -274,8 +278,11 @@ public class XIncluder {
     public static void resolveInPlace(Document in, Builder builder) 
       throws BadParseAttributeException, InclusionLoopException,  
              IOException, NoIncludeLocationException, ParsingException, 
-             UnsupportedEncodingException, XIncludeException {       
-        resolveInPlace(in, builder, new Stack()); 
+             UnsupportedEncodingException, XIncludeException {
+        
+        Stack stack = new Stack();
+        resolveInPlace(in, builder, stack);
+        
     }
 
     
@@ -289,14 +296,9 @@ public class XIncluder {
             base = "file:/" + base.substring(8);
         }
         
-        // this is the wrong place to test this. It's too late
-        /*if (baseURLs.indexOf(base) != -1) {
-            throw new InclusionLoopException(
-              "Tried to include the already included document " + base +
-              " from " + baseURLs.peek(), (String) baseURLs.peek());
-        } */
-        baseURLs.push(base);       
-        resolve(in.getRootElement(), builder, baseURLs);
+        baseURLs.push(base);   
+        Element root = in.getRootElement();
+        resolve(root, builder, baseURLs);
         baseURLs.pop();
         
     }
@@ -342,6 +344,7 @@ public class XIncluder {
                       (String) baseURLs.peek()
                     );
                 }
+
             }
             
             testForForbiddenChildElements(element);
@@ -360,8 +363,13 @@ public class XIncluder {
                 // xml:base attributes added to maintain the 
                 // base URI should not have fragment IDs
 
-                if (baseURL != null && href != null) url = new URL(baseURL, href);
-                else if (href != null) url = new URL(href);  
+                if (baseURL != null && href != null) {
+                    url = absolutize(baseURL, href);
+                }
+                else if (href != null) {
+                    testURISyntax(href);
+                    url = new URL(href); 
+                }
                 
                 String accept = element.getAttributeValue("accept");
                 checkHeader(accept);
@@ -527,6 +535,48 @@ public class XIncluder {
         
     }
     
+    
+    // hack because URIUtil isn't public
+    private static URL absolutize(URL baseURL, String href) 
+      throws MalformedURLException {
+        
+        Element parent = new Element("c");
+        parent.setBaseURI(baseURL.toExternalForm());
+        Element child = new Element("c");
+        parent.appendChild(child);
+        child.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", href));
+        return new URL(child.getBaseURI());
+        
+    }
+
+    private static void testURISyntax(URL url, String href) 
+      throws BadHrefAttributeException {
+        
+        if (url == null) return;
+        try {
+            Element e = new Element("e");
+            e.setNamespaceURI(url.toExternalForm());
+        }
+        catch (MalformedURIException ex) {
+            throw new BadHrefAttributeException("Illegal IRI in href attribute", href);
+        }
+        
+    }
+
+    
+    private static void testURISyntax(String href) 
+      throws BadHrefAttributeException {
+        
+        try {
+            Element e = new Element("e");
+            e.setNamespaceURI(href);
+        }
+        catch (MalformedURIException ex) {
+            throw new BadHrefAttributeException("Illegal IRI in href attribute", href);
+        }
+        
+    }
+
     
     private static String getXMLLangValue(Element element) {
         
@@ -720,6 +770,11 @@ public class XIncluder {
                 }
             
             }
+            // XXX how to distinguish between syntactically incorrect and unsupported scheme?
+            // use URIUtil?
+            /* catch (MalformedURLException ex) {
+                throw new BadHrefAttributeException("Syntactically incorrect IRI", href);
+            } */
             catch (IOException ex) {
                 return processFallbackSilently(element, builder, baseURLs, ex);
             }
