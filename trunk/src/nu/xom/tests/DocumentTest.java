@@ -265,6 +265,58 @@ public class DocumentTest extends XOMTestCase {
     }
 
     
+    public void testReplaceDocTypeWithParentedDocTypeUsingReplaceChild() {
+        
+        DocType newDocType = new DocType("new");
+        DocType oldDocType = new DocType("old");
+        Document temp = new Document(new Element("root"));
+        temp.setDocType(newDocType);
+        
+        doc.setDocType(oldDocType);
+        try {
+            doc.replaceChild(oldDocType, newDocType);
+            fail("Missed MultipleParentException");
+        }
+        catch (MultipleParentException success) {
+            assertEquals(2, doc.getChildCount());
+            assertEquals(2, temp.getChildCount());
+        }
+        
+        assertEquals(oldDocType, doc.getDocType());
+        assertNotNull(oldDocType.getParent());
+        assertEquals(doc, oldDocType.getParent());
+        assertEquals(newDocType, temp.getDocType());
+        assertNotNull(oldDocType.getParent());
+        assertEquals(temp, newDocType.getParent());
+        
+    }
+
+    
+    public void testReplaceRootElementWithParentedElementUsingReplaceChild() {
+        
+        Element oldRoot = new Element("oldRoot");
+        Element newRoot = new Element("newRoot");
+        Document doc = new Document(oldRoot);
+        Element temp = new Element("temp");
+        temp.appendChild(newRoot);
+        
+        try {
+            doc.replaceChild(oldRoot, newRoot);
+            fail("Missed MultipleParentException");
+        }
+        catch (MultipleParentException success) {
+            assertEquals(1, doc.getChildCount());
+            assertEquals(1, temp.getChildCount());
+        }
+        
+        assertEquals(oldRoot, doc.getRootElement());
+        assertEquals(newRoot, temp.getChild(0));
+        assertNotNull(oldRoot.getParent());
+        assertEquals(temp, newRoot.getParent());
+        
+    }
+
+    
     public void testReplaceNonDocTypeWithDocTypeUsingReplaceChild() {
         
         Comment c = new Comment("Not a doctype");
