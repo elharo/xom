@@ -390,13 +390,17 @@ public class Element extends ParentNode {
      * 
      * @param attribute the attribute to remove
      * 
+     * @return the attribute that was removed
+     * 
      * @throws NullPointerException if the argument is null
-     * @throws XMLException if this element is not the parent 
-     *     of attribute, or if removing the attribute 
+     * @throws NoSuchAttributeException if this element is not the  
+     *     parent of attribute
+     * @throws XMLException if removing the attribute 
      *     does not satisfy the local constraints
      * 
      */
-    public final void removeAttribute(Attribute attribute) {
+    public final Attribute removeAttribute(Attribute attribute) {
+        
         checkRemoveAttribute(attribute);
         if (attributes == null) {
             throw new NoSuchAttributeException( "Tried to remove attribute "
@@ -405,6 +409,8 @@ public class Element extends ParentNode {
         }        
         attributes.remove(attribute);
         attribute.setParent(null);
+        return attribute;
+        
     }
 
     
@@ -955,16 +961,34 @@ public class Element extends ParentNode {
 
     /**
      * <p>
-     * Detaches all children from this node.
+     * Detaches all children from this node. This method either removes
+     * all the children or none of them (if a subclass throws an 
+     * exception). It will never remove only some of the nodes.
      * </p>
      * 
+     * @return a list of all the children removed in the order they
+     *     appeared in the element
+     * 
+     * @throws XMLException if a subclass refuses to remove any of the
+     *     child nodes
      */
-    public final void removeChildren() {
+    public final Nodes removeChildren() {
         
         int length = this.getChildCount();
-        for (int i = length-1; i >= 0; i--) {
-            getChild(i).detach();
+        // First make sure we can remove all the children
+        for (int i = 0; i < length; i++) {
+            checkRemoveChild(getChild(i), i);
         }   
+
+        Nodes result = new Nodes();
+        for (int i = 0; i < length; i++) {
+            Node child = getChild(i);
+            child.setParent(null);
+            result.append(child);
+        }   
+        this.children = null;
+        
+        return result;
         
     }
 

@@ -40,6 +40,7 @@ import nu.xom.MultipleParentException;
 import nu.xom.NamespaceConflictException;
 import nu.xom.NoSuchAttributeException;
 import nu.xom.Node;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
@@ -1238,32 +1239,39 @@ public class ElementTest extends XOMTestCase {
 
     
     public void testRemoveChildren() {
+        
         String name = "red:sakjdhjhd";
         String uri = "http://www.red.com/";
-        Element e = new Element(name, uri);
+        Element parent = new Element(name, uri);
 
         Attribute a1 = new Attribute("test", "test");       
-        e.addAttribute(a1);
+        parent.addAttribute(a1);
         
-        Element e2 = new Element("mv:child", "http://www.mauve.com");
-        e.insertChild(e2, 0);
-        Element e3 = new Element("mv:child", "http://www.mauve.com");
-        e.insertChild(e3, 0);
-        Element e4 = new Element("mv:child", "http://www.mauve.com");
-        e3.insertChild(e4, 0);
+        Element child1 = new Element("mv:child", "http://www.mauve.com");
+        parent.appendChild(child1);
+        Element child2 = new Element("mv:child", "http://www.mauve.com");
+        parent.appendChild(child2);
+        Element grandchild = new Element("mv:child", "http://www.mauve.com");
+        child2.insertChild(grandchild, 0);
   
   
-        assertEquals(e3, e4.getParent());
-        assertEquals(e, e2.getParent());
-        assertEquals(e, e3.getParent());
+        assertEquals(child2, grandchild.getParent());
+        assertEquals(parent, child1.getParent());
+        assertEquals(parent, child2.getParent());
        
-        e.removeChildren();
+        Nodes result = parent.removeChildren();
  
-        assertEquals(0, e.getChildCount());
-        assertNull(e2.getParent());
-        assertNull(e3.getParent());
-        assertEquals(e3, e4.getParent());
-        assertEquals(e, a1.getParent());
+        assertEquals(0, parent.getChildCount());
+        assertNull(child1.getParent());
+        assertNull(child2.getParent());
+        assertEquals(child2, grandchild.getParent());
+        assertEquals(parent, a1.getParent());
+        
+        assertEquals(2, result.size());
+        assertEquals(child1, result.get(0));
+        assertEquals(child2, result.get(1));
+        assertEquals(grandchild, child2.getChild(0));
+        assertEquals(child2, grandchild.getParent());
         
     }
 
