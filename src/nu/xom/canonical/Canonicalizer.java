@@ -188,8 +188,9 @@ public class Canonicalizer {
      *     is written onto
      * @param algorithm the URI for the canonicalization algorithm
      * 
-     * @throws IllegalArgumentException if the algorithm is 
+     * @throws CanonicalizationException if the algorithm is 
      *     not recognized
+     * @throws NullPointerException if the algorithm is null
      * 
      */
     public Canonicalizer(
@@ -837,6 +838,7 @@ public class Canonicalizer {
             }
             
         }
+        
         
         private void write(Namespace namespace) throws IOException {
             
