@@ -54,7 +54,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d24
+ * @version 1.0d25
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -964,7 +964,7 @@ public class XIncludeTest extends XOMTestCase {
         Document doc = builder.build(input);
         try {
             XIncluder.resolve(doc);
-            fail("allowed multiple fallback elements`");
+            fail("allowed multiple fallback elements");
         }
         catch (XIncludeException success) {
             assertNotNull(success.getMessage());          
@@ -979,7 +979,7 @@ public class XIncludeTest extends XOMTestCase {
         Document doc = builder.build(input);
         try {
             XIncluder.resolve(doc);
-            fail("allowed multiple fallback elements`");
+            fail("allowed multiple fallback elements");
         }
         catch (XIncludeException success) {
             assertNotNull(success.getMessage());          
