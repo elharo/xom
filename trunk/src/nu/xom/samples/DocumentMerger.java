@@ -49,11 +49,11 @@ public class DocumentMerger {
             Document doc = builder.build(args[0]);
             System.out.println(doc.toXML());
         }
-        catch (IOException e) {
-            System.err.println(e);
+        catch (IOException ex) {
+            System.err.println(ex);
         }    
-        catch (ParsingException e) {
-            System.err.println(e);
+        catch (ParsingException ex) {
+            System.err.println(ex);
         }        
         
     }

@@ -48,7 +48,7 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class PoliteSpider {
@@ -57,8 +57,10 @@ public class PoliteSpider {
     private Builder parser = new Builder();
     private List queue = new LinkedList();
     
-    public static final String XLINK_NS = "http://www.w3.org/1999/xlink";
-    public static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
+    public static final String XLINK_NS 
+     = "http://www.w3.org/1999/xlink";
+    public static final String XML_NS 
+     = "http://www.w3.org/XML/1998/namespace";
     
     public void search(URL url) {
         
@@ -134,7 +136,7 @@ public class PoliteSpider {
                     queue.add(discovered);   
                 }
             }
-            catch (MalformedURLException e) {
+            catch (MalformedURLException ex) {
                 // skip this one   
             }
         }
@@ -152,8 +154,8 @@ public class PoliteSpider {
             try { 
                 spider.search(new URL(args[i]));
             }
-            catch (MalformedURLException e) {
-                System.err.println(e);   
+            catch (MalformedURLException ex) {
+                System.err.println(ex);   
             }
         }
       

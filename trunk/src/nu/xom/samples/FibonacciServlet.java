@@ -60,7 +60,7 @@ public class FibonacciServlet extends HttpServlet {
         try {
             numberOfGenerations = Integer.parseInt(generations);
         }
-        catch (Exception e) { // NumberFormat or NullPointerException
+        catch (Exception ex) { // NumberFormat or NullPointerException
               // use default value of 10 
         }
      

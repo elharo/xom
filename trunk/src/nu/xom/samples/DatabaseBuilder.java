@@ -255,10 +255,10 @@ public class DatabaseBuilder  {
           out.write(doc);
           out.flush();
       }
-      catch (InstantiationException e) { 
+      catch (InstantiationException ex) { 
           System.out.println(driverClass + " could not be instantiated");
       }
-      catch (ClassNotFoundException e) { 
+      catch (ClassNotFoundException ex) { 
           System.out.println(driverClass + " could not be found");
       }
       catch (Exception ex) { // SQL, SAX, and IO

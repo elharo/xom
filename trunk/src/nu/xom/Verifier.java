@@ -63,7 +63,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d13
+ * @version 1.0d22
  * 
  */
 final class Verifier {
@@ -168,7 +168,7 @@ final class Verifier {
                  result = (high-0xD800)*0x400 + (low-0xDC00) + 0x10000;
                  i++;
                }
-               catch (IndexOutOfBoundsException e) {
+               catch (IndexOutOfBoundsException ex) {
                    throw new IllegalDataException(
                      "Bad surrogate pair"
                    );
@@ -231,7 +231,7 @@ final class Verifier {
                        }
           
                    }
-                   catch (StringIndexOutOfBoundsException e) {
+                   catch (StringIndexOutOfBoundsException ex) {
                        throw new MalformedURIException(
                         "Percent signs in URIs must be followed by "
                         + "exactly two hexadecimal digits.");    
@@ -299,7 +299,7 @@ final class Verifier {
                        }
           
                    }
-                   catch (StringIndexOutOfBoundsException e) {
+                   catch (StringIndexOutOfBoundsException ex) {
                        throw new MalformedURIException(
                         "Percent signs in IRIs must be followed by "
                         + "exactly two hexadecimal digits.");    

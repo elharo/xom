@@ -96,17 +96,17 @@ public class FibonacciXOMXMLRPCServlet extends HttpServlet
         BigInteger result = calculateFibonacci(numberOfGenerations);
         response = makeResponseDocument(result);
     }
-    catch (XMLException e) {  
-      response = makeFaultDocument(MALFORMED_REQUEST_DOCUMENT, e.getMessage());
+    catch (XMLException ex) {  
+      response = makeFaultDocument(MALFORMED_REQUEST_DOCUMENT, ex.getMessage());
     }
-    catch (NullPointerException e) {  
-      response = makeFaultDocument(INDEX_MISSING, e.getMessage());
+    catch (NullPointerException ex) {  
+      response = makeFaultDocument(INDEX_MISSING, ex.getMessage());
     }
-    catch (NumberFormatException e) {  
-      response = makeFaultDocument(BAD_INTEGER_FORMAT, e.getMessage());
+    catch (NumberFormatException ex) {  
+      response = makeFaultDocument(BAD_INTEGER_FORMAT, ex.getMessage());
     }
-    catch (Exception e) {  
-      response = makeFaultDocument(UNEXPECTED_PROBLEM, e.getMessage());
+    catch (Exception ex) {  
+      response = makeFaultDocument(UNEXPECTED_PROBLEM, ex.getMessage());
     }
     
     // Transform onto the OutputStream

@@ -106,8 +106,8 @@ public class FlatXMLBudget {
       List results = BudgetData.parse(in);
       convert(results, out);
     }
-    catch (IOException e) {
-      System.err.println(e);       
+    catch (IOException ex) {
+      System.err.println(ex);       
     }
   
   }

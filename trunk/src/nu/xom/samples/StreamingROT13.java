@@ -99,9 +99,9 @@ public class StreamingROT13 extends NodeFactory {
       "Due to an IOException, the parser could not encode " + args[0]
       ); 
     }
-    catch (ParsingException e) { 
-      System.out.println(e); 
-      e.printStackTrace(); 
+    catch (ParsingException ex) { 
+      System.out.println(ex); 
+      ex.printStackTrace(); 
     }
      
   } // end main

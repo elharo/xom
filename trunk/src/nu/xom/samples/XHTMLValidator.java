@@ -61,12 +61,12 @@ public class XHTMLValidator {
       try {
         document = builder.build(source); 
       }
-      catch (ParsingException e) {  
+      catch (ParsingException ex) {  
         System.out.println(source 
          + " is invalid XML, and thus not XHTML."); 
         return; 
       }
-      catch (IOException e) {  
+      catch (IOException ex) {  
         System.out.println("Could not read: " + source); 
         return; 
       }

@@ -149,7 +149,7 @@ public class Text extends LeafNode {
     public final String getValue() {
         try {
             return new String(data, "UTF8");
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException ex) {
             throw new RuntimeException(
               "Bad VM! Does not support UTF-8"
             );

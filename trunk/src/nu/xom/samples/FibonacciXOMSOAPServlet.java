@@ -47,7 +47,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class FibonacciXOMSOAPServlet extends HttpServlet 
@@ -114,25 +114,25 @@ public class FibonacciXOMSOAPServlet extends HttpServlet
       BigInteger result = calculateFibonacci(numberOfGenerations);
       response = makeResponseDocument(result);
     }
-    catch (WellformednessException e) {  
+    catch (WellformednessException ex) {  
       response = makeFaultDocument(MALFORMED_REQUEST_DOCUMENT, 
-       e.getMessage());
+       ex.getMessage());
     }
-    catch (NullPointerException e) {  
+    catch (NullPointerException ex) {  
       response = makeFaultDocument(INDEX_MISSING, 
-       e.getMessage());
+       ex.getMessage());
     }
-    catch (NumberFormatException e) {  
+    catch (NumberFormatException ex) {  
       response = makeFaultDocument(BAD_INTEGER_FORMAT, 
-       generations + e.getMessage());
+       generations + ex.getMessage());
     }
-    catch (IndexOutOfBoundsException e) {  
+    catch (IndexOutOfBoundsException ex) {  
       response = makeFaultDocument(NON_POSITIVE_INDEX, 
-       e.getMessage());
+       ex.getMessage());
     }
-    catch (Exception e) {  
+    catch (Exception ex) {  
       response = makeFaultDocument(UNEXPECTED_PROBLEM, 
-       e.getMessage());
+       ex.getMessage());
     }
     
     // Transform onto the OutputStream

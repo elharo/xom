@@ -97,13 +97,13 @@ public class ROT13XML {
       System.out.println(document.toXML());
 
     }
-    catch (IOException e) { 
+    catch (IOException ex) { 
       System.out.println(
       "Due to an IOException, the parser could not encode " + url
       ); 
     }
-    catch (ParsingException e) { 
-      System.out.println(e);
+    catch (ParsingException ex) { 
+      System.out.println(ex);
     }
      
   } // end main
