@@ -26,6 +26,7 @@ import java.io.PrintStream;
 
 import nu.xom.Attribute;
 import nu.xom.Comment;
+import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
@@ -256,6 +257,38 @@ public class XPathTest extends XOMTestCase {
         // ???? appears to be a bug where root node is considered to
         // be of principle node type on parent axis
         assertEquals(0, result.size());
+        
+    }
+    
+    
+    public void testDocTypeIsNotAnXPathNode() {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        DocType doctype = new DocType("root");
+        doc.setDocType(doctype);
+        
+        Nodes result = doc.query("child::node()[1]");
+        assertEquals(1, result.size());
+        assertEquals(root, result.get(0));
+        
+    }
+    
+
+    public void testCantUseDocTypeAsXPathContextNode() {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        DocType doctype = new DocType("root");
+        doc.setDocType(doctype);
+        
+        try {
+            doctype.query("/");
+            fail("Allowed DocType as context node");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
     
