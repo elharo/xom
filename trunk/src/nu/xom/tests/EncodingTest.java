@@ -44,7 +44,7 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a3
  *
  */
 public class EncodingTest extends XOMTestCase {
@@ -75,7 +75,7 @@ public class EncodingTest extends XOMTestCase {
         }
 
         // Test Plane-1 characters. These are tricky because Java 
-        // strings  encode them as surrogate pairs. We'll test with
+        // strings encode them as surrogate pairs. We'll test with
         // the characters from 1D100 to 1D1FF (the musical symbols)
         for (int i = 0; i < 256; i++) {
             int u = 0x1D100 + i;
@@ -185,6 +185,10 @@ public class EncodingTest extends XOMTestCase {
 
     public void testGB18030() throws ParsingException, IOException {
         if (java14OrLater) checkAll("GB18030");
+    } 
+
+    public void Big5() throws ParsingException, IOException {
+        checkAll("Big5");
     } 
 
     // These encodings are not installed in all distributions by 

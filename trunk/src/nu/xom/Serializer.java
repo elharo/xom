@@ -114,6 +114,7 @@ public class Serializer {
      *   <li>IBM037 (a.k.a. CP037, EBCDIC-CP-US, EBCDIC-CP-CA, 
      *         EBCDIC-CP-WA, EBCDIC-CP-NL, and CSIBM037)</li>
      *   <li>GB18030</li>
+     *   <li>Big5</li>
      * </ul>
      * 
      * <p>
