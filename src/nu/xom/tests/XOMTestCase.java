@@ -134,7 +134,6 @@ public class XOMTestCase extends TestCase {
      * considered equal if one might be a relative form of the other.
      * </p>
      * 
-     * @param message printed if the nodes are not equal
      * @param expected the node the test should producee
      * @param actual the node the test does produce
      * 
