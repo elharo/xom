@@ -520,6 +520,22 @@ public class XIncludeTest extends XOMTestCase {
     }
         
     
+    public void testFallbackInIncludedDocumentWithMissingHrefAndParseAttributes() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/metafallbacktest4.xml");
+        Document doc = builder.build(input);
+        try {
+            Document result = XIncluder.resolve(doc);
+            fail("Allowed bad parse attribute");
+        }
+        catch (NoIncludeLocationException success) {
+            assertNotNull(success.getMessage());
+        }
+
+    }
+        
+    
     public void testFallbackInIncludedDocumentWithFragmentID() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -528,6 +544,20 @@ public class XIncludeTest extends XOMTestCase {
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File("data/xinclude/output/metafallbacktest.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }
+    
+
+    public void testXPointerResourceErrorInIncludedDocument() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/metafallbacktest5.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/metafallbacktest5.xml")
         );
         assertEquals(expectedResult, result);
 
