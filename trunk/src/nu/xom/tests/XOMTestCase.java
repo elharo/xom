@@ -41,7 +41,7 @@ import nu.xom.Text;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.1d7
+ * @version 1.1a2
  *
  */
 public class XOMTestCase extends TestCase {
@@ -417,7 +417,7 @@ public class XOMTestCase extends TestCase {
         for (int i = 0; i < nonTextNodes; i++) {
             Node expectedChild = getNonTextNode(expected, i);
             Node actualChild = getNonTextNode(actual, i);
-            assertEquals(expectedChild, actualChild);
+            assertEquals(message, expectedChild, actualChild);
         }
         
     }
