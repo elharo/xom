@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.jaxen.BaseXPath;
+import org.jaxen.FunctionContext;
 import org.jaxen.JaxenException;
+import org.jaxen.XPathFunctionContext;
 
 
 /**
@@ -36,10 +38,15 @@ import org.jaxen.JaxenException;
  *
  */
 class JaxenConnector extends BaseXPath {
+    
+    
+    private static FunctionContext functionContext = new XPathFunctionContext();
 
     
     JaxenConnector(String expression) throws JaxenException {
         super(expression, new JaxenNavigator());
+        // possible thread-safety issue????
+        this.setFunctionContext(functionContext);
     }
 
     
@@ -55,6 +62,7 @@ class JaxenConnector extends BaseXPath {
                 List l = (List) next;
                 // replace the list with the first item in the list
                 iterator.set(l.get(0));
+                // insert any subsequent Text objects into the list
                 if (l.size() > 1) {
                     Iterator texts = l.listIterator(1);
                     while (texts.hasNext()) {
