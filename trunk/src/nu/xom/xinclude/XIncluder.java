@@ -51,16 +51,12 @@ import nu.xom.Text;
  *   <a href="http://www.w3.org/TR/2002/CR-xinclude-20020917">September
  *   17, 2002 2nd Candidate Recommendation of <cite>XML Inclusions
  *   (XInclude) Version 1.0</cite></a>. Fallbacks are supported.
- *   The XPointer element() scheme and bare names are also supported.   
+ *   The XPointer <code>element()</code> scheme and shorthand XPointers
+ *   are also supported.   
  * </p>
  * 
- * send e-mail to XInclude to add this to implementation list????
- * 
- * add XML Inlcusion test suite to my unit tests????
- * http://www.w3.org/XML/Test/XInclude/
- * 
  * @author Elliotte Rusty Harold
- * @version 1.0d17
+ * @version 1.0d21
  *
  */
 public class XIncluder {
@@ -202,9 +198,7 @@ public class XIncluder {
      *     result in a malformed document
      */
     public static void resolveInPlace(NodeList in) 
-      throws BadParseAttributeException, CircularIncludeException,  
-             IOException, MissingHrefException, ParseException, 
-             UnsupportedEncodingException, XIncludeException { 
+      throws IOException, ParseException, XIncludeException { 
         for (int i = 0; i < in.size(); i++) {
             Node child = in.get(i);
             if (child instanceof Element) {       
@@ -258,21 +252,34 @@ public class XIncluder {
             }
             URL url;
             try {
+                // xml:base attributes added to maintain the 
+                // base URI should not have fragment IDs
+
                 if (baseURL != null) url = new URL(baseURL, href);
                 else url = new URL(href);                
                 if (parse.equals("xml")) {
                     NodeList replacements 
                       = downloadXMLDocument(url, baseURLs);
                       
-                    // Add base URIs
+                // Add base URIs. Base URIs added by XInclusion require
+                // the element to maintain the same base URI as it had in 
+                // the original document. Since its
+                // base URI in the original document does not contain a fragment 
+                // ID, therefore its base URI after inclusion shouldn't, 
+                // and this special case is unnecessary. Base URI fixup
+                // should not add the fragment ID. 
                     for (int i = 0; i < replacements.size(); i++) {
                         Node child = replacements.get(i);
                         if (child instanceof Element) {
+                            String noFragment = url.toExternalForm();
+                            if (noFragment.indexOf('#') >= 0) {
+                                noFragment = noFragment.substring(0, noFragment.indexOf('#'));
+                            }
                             Element baseless = (Element) child;
                             Attribute baseAttribute = new Attribute(
                               "xml:base", 
                               "http://www.w3.org/XML/1998/namespace", 
-                              url.toExternalForm() // href????
+                              noFragment 
                             );
                             baseless.addAttribute(baseAttribute);   
                         }
@@ -281,7 +288,10 @@ public class XIncluder {
                     // Will fail if we're replacing the root element with 
                     // a node list containing zero or multiple elements,
                     // but that should fail. However, I may wish to 
-                    // adjust the type of exception thrown????
+                    // adjust the type of exception thrown. This is only
+                    // relevant if I add support for the xpointer scheme
+                    // since otherwise you can only point at one element
+                    // or document.
                     if (parent instanceof Element) {
                         int position = parent.indexOf(element);
                         for (int i = 0; i < replacements.size(); i++) {
@@ -334,12 +344,17 @@ public class XIncluder {
             catch (XPointerSyntaxException ex) {
                 processFallback(element, baseURLs, parent, ex);
             }
+            catch (XPointerResourceException ex) {
+                // Process fallbacks;  I'm not sure this is correct 
+                // behavior. Possibly this should include nothing. See
+                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0000.html
+                // ????
+                processFallback(element, baseURLs, parent, ex);
+            }
             
         }
         else if (isFallbackElement(element)) {
-            // fallbacks aren't allowed outside of include elements
-            // add a misplaced fallback element exception????
-            throw new XIncludeException(
+            throw new MisplacedFallbackException(
                 "Fallback element outside include element"
             );
         }
@@ -390,8 +405,8 @@ public class XIncluder {
                 /* if (ex instanceof XPointerSyntaxException) {
                     ex.printStackTrace();   
                 } */
-                XIncludeException ex2 = new XIncludeException(ex.getMessage());
-                ex2.initCause(ex);
+                XIncludeException ex2 
+                  = new XIncludeException(ex.getMessage(), ex);
                 throw ex2;
            }
            else if (fallbacks.size() > 1) {
@@ -415,11 +430,12 @@ public class XIncluder {
 
     private static NodeList downloadXMLDocument(
       URL source, Stack baseURLs) 
-      throws IOException, ParseException, XIncludeException, XPointerSyntaxException {
+      throws IOException, ParseException, XIncludeException, 
+             XPointerSyntaxException, XPointerResourceException {
     
         Builder builder = new Builder();
-        Document doc 
-          = builder.build(source.openStream(), source.toExternalForm()); 
+        Document doc = builder.build(
+          source.openStream(), source.toExternalForm()); 
           
         String fragmentID = source.getRef();
         NodeList included;
