@@ -37,6 +37,12 @@ public class GenericWriter extends TextWriter {
               "Impossible to have an IOException when writing to a byte array"
             );
         }
+        catch (Error err) {
+            // This appears to be a wrapper around an undocumented
+            // sun.io.UnknownCharacterException or some such. In any
+            // case Java doesn't know how to output this character.
+            return true;
+        }
         finally {
             bout.reset();
         }
