@@ -80,7 +80,7 @@ public class StreamingXHTMLPurifier extends NodeFactory {
     private boolean inXHTML() {
         if (namespaces.isEmpty()) return true; // document prolog
         String currentNamespace = (String) (namespaces.peek());
-        if (XHTML_NAMESPACE.equals(XHTML_NAMESPACE)) return true;
+        if (XHTML_NAMESPACE.equals(currentNamespace)) return true;
         return false;
     }   
 

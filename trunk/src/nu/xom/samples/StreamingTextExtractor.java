@@ -83,13 +83,11 @@ public class StreamingTextExtractor extends NodeFactory {
     }
     
     public Element startMakingElement(String name, String namespace) {
-        Element result = new Element(name, namespace);  
         return null;    
     }
 
     public Nodes makeAttribute(String name, String namespace, 
       String value, Attribute.Type type) {
-        Attribute att = new Attribute(name, namespace, value, type);  
         return empty;
     }
 

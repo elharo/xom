@@ -26,7 +26,6 @@ package nu.xom.samples;
 import java.io.IOException;
 
 import nu.xom.Builder;
-import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Attribute;
 import nu.xom.Nodes;
@@ -64,7 +63,7 @@ public class StreamingElementLister extends NodeFactory{
         Builder builder = new Builder(new StreamingElementLister());
      
         try {
-            Document doc = builder.build(args[0]);
+            builder.build(args[0]);
         }
         // indicates a well-formedness error
         catch (ParsingException ex) { 
