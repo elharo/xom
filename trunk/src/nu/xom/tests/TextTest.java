@@ -34,7 +34,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class TextTest extends XOMTestCase {
@@ -68,19 +68,19 @@ public class TextTest extends XOMTestCase {
           " ampersands & &&& &name; "  
         };
 
-        Text a1 = new Text("name");
+        Text t = new Text("name");
         
         // Things that shouldn't cause an exception
         for (int i = 0; i < legal.length; i++) {
-            a1.setValue(legal[i]);   
-            assertEquals(legal[i], a1.getValue());
+            t.setValue(legal[i]);   
+            assertEquals(legal[i], t.getValue());
         }
         
-        a1.setValue(null);
-        assertEquals("", a1.getValue());
+        t.setValue(null);
+        assertEquals("", t.getValue());
         
         try {
-            a1.setValue("test \u0000 test ");
+            t.setValue("test \u0000 test ");
             fail("Should raise an IllegalCharacterDataException");
         }
         catch (IllegalCharacterDataException success) {
@@ -102,27 +102,37 @@ public class TextTest extends XOMTestCase {
           " both double and single \"\'\"\' quotes"  
         };
 
-        Text a1 = new Text("name");
+        Text t = new Text("name");
         
         // Things that shouldn't cause an exception
         for (int i = 0; i < easyCases.length; i++) {
-            a1.setValue(easyCases[i]);   
-            assertEquals(easyCases[i], a1.toXML());
+            t.setValue(easyCases[i]);   
+            assertEquals(easyCases[i], t.toXML());
         }
         
-        a1.setValue("<>");
-        assertEquals("&lt;&gt;", a1.toXML());
-        a1.setValue("&amp;");
-        assertEquals("&amp;amp;", a1.toXML());
-        a1.setValue("]]>");
-        assertEquals("]]&gt;", a1.toXML());
-        a1.setValue("\r");
-        assertEquals("&#x0D;", a1.toXML());
+        t.setValue("<>");
+        assertEquals("&lt;&gt;", t.toXML());
+        t.setValue("&amp;");
+        assertEquals("&amp;amp;", t.toXML());
+        t.setValue("]]>");
+        assertEquals("]]&gt;", t.toXML());
+        t.setValue("\r");
+        assertEquals("&#x0D;", t.toXML());
+        
+    }
+
+    
+    public void testPunctuationCharactersInToXML() {
+        
+        String data = "=,.!@#$%^*()_-\"'[]{}+/?;:`|\\";
+        Text t = new Text(data);
+        assertEquals(data, t.toXML());
         
     }
 
     
     public void testEquals() {
+        
         Text c1 = new Text("test");
         Text c2 = new Text("test");
         Text c3 = new Text("skjlchsakdjh");
@@ -131,10 +141,12 @@ public class TextTest extends XOMTestCase {
         assertEquals(c1.hashCode(), c1.hashCode());
         assertTrue(!c1.equals(c2));
         assertTrue(!c1.equals(c3));
+        
     }
 
     
     public void testCopy() {
+        
         Text c1 = new Text("test");
         Text c2 = (Text) c1.copy();
 
