@@ -279,40 +279,56 @@ public class EncodingTest extends XOMTestCase {
         String majorVersion = version.substring(0, 3);
         double versionNumber = Double.parseDouble(majorVersion);
         if (versionNumber >= 1.4) java14OrLater = true; 
-    }
+    }   
     
-    
-    /* public void testLatin6()  
-      throws ParsingException, UnsupportedEncodingException {
-        checkAll("ISO-8859-10");
-    } */
-
     public void testLatin7()  
       throws ParsingException, UnsupportedEncodingException {
         if (java14OrLater) checkAll("ISO-8859-13");
     }
-        
-    /* public void testLatin8()  
-      throws ParsingException, UnsupportedEncodingException {
-        checkAll("ISO-8859-14");
-    } */
-    
-    /* public void testLatin10()  
-      throws ParsingException, UnsupportedEncodingException {
-        checkAll("ISO-8859-16");
-    } */
     
     public void testLatin9()  
       throws ParsingException, UnsupportedEncodingException {
         if (java14OrLater) checkAll("ISO-8859-15");
     } 
+        
+    private static boolean extendedCharsetsAvailable = false;
+    
+    static {
+        // hack to avoid using 1.4 classes
+        try {
+            "data".getBytes("ISO-8859-10");
+            extendedCharsetsAvailable = true;
+        }
+        catch (UnsupportedEncodingException ex) {
+            extendedCharsetsAvailable = false;   
+        }
+        
+    }
+       
+    // These encodings are not installed in all distributions by default 
+    public void testLatin6()  
+      throws ParsingException, UnsupportedEncodingException {
+        if (extendedCharsetsAvailable) checkAll("ISO-8859-10");
+    } 
+
+    public void testLatin8()  
+      throws ParsingException, UnsupportedEncodingException {
+        if (extendedCharsetsAvailable) checkAll("ISO-8859-14");
+    }
+
 
 
 // Java 1.4 does not yet support these encodings
 /*    public void testUCS4() throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-10646-UCS-4");
     } 
-*/
+
+    public void testLatin10()  
+      throws ParsingException, UnsupportedEncodingException {
+        checkAll("ISO-8859-16");
+    } */
+    
+
 
     
     private void checkAll(String encoding) 
