@@ -1083,7 +1083,7 @@ public class Element extends ParentNode {
      * The return value is guaranteed to be positive.
      * </p>
      * 
-     * @return the number of namespace declarations in this list
+     * @return the number of namespaces declsred by this element
      */
     public final int getNamespaceDeclarationCount() {
         
@@ -1109,9 +1109,10 @@ public class Element extends ParentNode {
      * Returns the index<sup>th</sup> namespace prefix declared on
      * this element. The index is purely for convenience, and has no
      * meaning in itself. This includes the namespaces of the element
-     * name and of all attributes' names as well as additional 
-     * declarations made for attribute values and element content.
-     * However, prefixes used multiple times (e.g. on several
+     * name and of all attributes' names (except for those with the 
+     * prefix <code>xml</code> such as <code>xml:space</code>) as well 
+     * as additional declarations made for attribute values and element 
+     * content. However, prefixes used multiple times (e.g. on several
      * attribute values) are only reported once. The default
      * namespace is reported with an empty string prefix if present.
      * Like most lists in Java, the first prefix is at index 0.
@@ -1148,7 +1149,7 @@ public class Element extends ParentNode {
         for (int i = 0; i < getAttributeCount(); i++) {
             Attribute att = getAttribute(i);
             String attPrefix = att.getNamespacePrefix();
-            if (attPrefix.length() != 0) {
+            if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
                 allPrefixes.add(attPrefix);    
             }
         }

@@ -244,8 +244,6 @@ public class ElementTest extends XOMTestCase {
         
     }
 
-
-
     public void testXMLNamespace() {
         
         String name = "red:sakjdhjhd";
@@ -308,7 +306,6 @@ public class ElementTest extends XOMTestCase {
     }
 
 
-
     public void testUnsetDefaultNamespaceWithAttribute() {
         
         String name = "sakjdhjhd";
@@ -362,9 +359,39 @@ public class ElementTest extends XOMTestCase {
         assertEquals("html", element.getNamespacePrefix());
         
     }
+    
+    public void testToXMLWithXMLAttributes() {
+        Element e = new Element("test");
+        e.addAttribute(
+          new Attribute("xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "preserve"));
+        e.addAttribute(
+          new Attribute("zzz:zzz", "http://www.example.org", "preserve"));
+        String result = e.toXML();
+        assertEquals("<test xmlns:zzz=\"http://www.example.org\" xml:space=\"preserve\" zzz:zzz=\"preserve\" />", result);
+    }
 
+    public void testGetNamespacePrefixInt() {
+        Element e = new Element("test");
+        e.addAttribute(
+          new Attribute("xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "preserve"));
+        e.addAttribute(
+          new Attribute("zzz:zzz", "http://www.example.org", "preserve"));
+        assertEquals(2, e.getNamespaceDeclarationCount());
+        try {
+            String prefix = e.getNamespacePrefix(2);
+            fail("Got prefix beyond bounds");
+        }
+        catch (IndexOutOfBoundsException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
 
-
+    
+    
     public void testNamespaceMappings() {
         
         String name = "red:sakjdhjhd";
