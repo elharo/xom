@@ -58,7 +58,7 @@ import org.w3c.dom.NodeList;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a2
  *
  */
 public class DOMConverter {
@@ -70,7 +70,7 @@ public class DOMConverter {
     
     /**
      * <p>
-     * DOM violates the namespaces specification by mapping  
+     * DOM violates the namespaces 1.0 specification by mapping
      * the <code>xmlns</code> prefix to the namespace URI
      * <code>http://www.w3.org/2000/xmlns/</code>.
      * </p>
@@ -489,46 +489,51 @@ public class DOMConverter {
 
     
     private static org.w3c.dom.Element convert(
-      Element element, org.w3c.dom.Document document) {
+      Element xomElement, org.w3c.dom.Document document) {
         
-        org.w3c.dom.Element result = makeElement(element, document);
-        org.w3c.dom.Element parent = result;
-        Node current = element;
+        org.w3c.dom.Element domResult = makeElement(xomElement, document);
+        org.w3c.dom.Element domParent = domResult;
+        Node xomCurrent = xomElement;
         int index = 0;
         boolean end = false;
         while (true) {
-            if (!end && current.getChildCount() > 0) {
-               current = current.getChild(0);
+            if (!end && xomCurrent.getChildCount() > 0) {
+               xomCurrent = xomCurrent.getChild(0);
                index = 0;
             }
             else {
                 end = false;
-                ParentNode parentNode = current.getParent();
-                if (parentNode.getChildCount() - 1 == index) {
-                    current = parentNode;
-                    if (current == element) break;
-                    index = current.getParent().indexOf(current);
+                ParentNode xomParent = xomCurrent.getParent();
+                if (xomParent.getChildCount() - 1 == index) {
+                    xomCurrent = xomParent;
+                    if (xomCurrent == xomElement) break;
+                    if (xomCurrent instanceof Element) {
+                        // switch parent up
+                        domParent = (org.w3c.dom.Element) domParent.getParentNode();
+                    }
+                    index = xomCurrent.getParent().indexOf(xomCurrent);
                     end = true;
                     continue;
                 }
                 else {
                     index++;
-                    current = parentNode.getChild(index);
+                    xomCurrent = xomParent.getChild(index);
                 }
             }
             
-            if (current instanceof Element) {
-                org.w3c.dom.Node child = makeElement((Element) current, document);
-                parent.appendChild(child);                
+            if (xomCurrent instanceof Element) {
+                org.w3c.dom.Element child = makeElement((Element) xomCurrent, document);
+                domParent.appendChild(child); 
+                domParent = child;
             }
             else {
-                org.w3c.dom.Node child = convert(current, document);
-                parent.appendChild(child);
+                org.w3c.dom.Node child = convert(xomCurrent, document);
+                domParent.appendChild(child);
             }
             
         }
         
-        return result;  
+        return domResult;  
         
     }
 
