@@ -134,6 +134,23 @@ public class XPathTest extends XOMTestCase {
         
     }
     
+    
+    public void testChildWildCard() {
+     
+        Element a = new Element("a");
+        Element b = new Element("b");
+        Element c = new Element("c");
+        Element d = new Element("d");
+        
+        a.appendChild(b);
+        b.appendChild(c);
+        c.appendChild(d);
+        
+        Nodes result = a.query("/a/b/*/d");
+        assertEquals(d, result.get(0));
+        
+    }
+    
 
     public void testLongs() {
         
@@ -265,6 +282,38 @@ public class XPathTest extends XOMTestCase {
         }
         
     }
+    
+    
+/*    public void testFranceschet() throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        Document doc = builder.build("http://staff.science.uva.nl/~francesc/xpathmark/benchmark.xml");
+        Element root = doc.getRootElement();
+        Element input1 = root.getFirstChildElement("document_1").getFirstChildElement("site");
+        input1.detach();
+        Element input2 = root.getFirstChildElement("document_2");
+        input2.detach();
+        
+        Nodes doc1Queries = root.query("child::query[starts-with(@id, 'Q')]");
+        Nodes doc2Queries = root.query("child::query[starts-with(@id, 'A')]");
+        
+        for (int i = 0; i < doc1Queries.size(); i++) {
+            Element query = (Element) doc1Queries.get(i);
+            String xpath = query.getFirstChildElement("syntax").getValue();
+            String id = query.getAttributeValue("id");
+            Nodes result = input1.query(xpath);
+            Element xpath_result = query.getFirstChildElement("XPATH_RESULT");
+            Nodes expected = new Nodes();
+            for (int j = 0; j < xpath_result.getChildCount(); j++) {
+                expected.append(xpath_result.getChild(j));
+            }
+            assertEquals("Failed query " + id, expected.size(), result.size());
+            for (int j = 0; j < result.size(); j++) {
+                assertEquals(id, expected.get(i), result.get(i));
+            }
+        }
+        
+    } */
     
 
     public void testQueryThatReturnsNumber() {
