@@ -45,6 +45,8 @@ import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import org.apache.xerces.impl.Version;
+
 /**
  * <p>
  * This class is responsible for creating XOM <code>Document</code> 
@@ -61,6 +63,25 @@ public class Builder {
 
     private XMLReader   parser;
     private NodeFactory factory;
+    
+    private static double xercesVersion = 2.6;
+    
+    static {  
+
+        try {
+            String versionString = Version.getVersion();
+            versionString = versionString.substring(9, 12);
+            xercesVersion = Double.valueOf(versionString).doubleValue();
+        }
+        catch (Exception ex) {
+            // The version string format changed so presumably it's
+            // 2.6 or later 
+        }
+        catch (Error err) {
+            // Xerces not installed, so none of this matters
+        }
+        
+    }
     
     
     /**
@@ -407,17 +428,17 @@ public class Builder {
         
         // These two parsers are known to not make all the checks
         // they're supposed to. :-(
-        if (parserName.equals("gnu.xml.aelfred2.XmlReader")) {
-            return false;
-        }
-        if (parserName.equals("net.sf.saxon.aelfred.SAXDriver")) {
+        if (parserName.equals("gnu.xml.aelfred2.XmlReader")) return false;
+        if (parserName.equals("net.sf.saxon.aelfred.SAXDriver")) return false;
+        
+        if (parserName.equals("org.apache.xerces.parsers.SAXParser")
+            && xercesVersion >= 2.4) {
             return false;
         }
         
         for (int i = 0; i < parsers.length; i++) {
             if (parserName.equals(parsers[i])) return true;
         }
-        
         return false;
         
     }
