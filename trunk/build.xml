@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0a1"/>
+    <property name="version" value="1.0a2"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -76,6 +76,7 @@ to http://www.xom.nu/
       <pathelement location="${parser.jar}"/>
       <pathelement location="${normalizer.jar}"/>
       <pathelement location="${servlet.jar}"/>
+      <pathelement location="${junit.jar}"/>
     </path>
 
     <path id="run.class.path">
@@ -283,8 +284,8 @@ XOM Build file
  
   <!-- This task requires the ANT optional.jar -->
   <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
-    <junit printsummary="on" fork="no">
-       <classpath refid="run.class.path" />
+    <junit printsummary="on" fork="yes">
+       <classpath refid="test.class.path" />
        <formatter type="${test.outputFormat}" />
        <batchtest fork="yes" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
@@ -322,7 +323,7 @@ XOM Build file
   <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
     <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
       <sysproperty key="org.xml.sax.driver" value="org.apache.parsers.SAXParser"/> 
-      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xmlParserAPIs.jar"/> 
+      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xmlParserAPIs.jar:lib/xalan.jar"/> 
       <classpath refid="test.class.path" />
       <arg value="nu.xom.tests.XOMTests"/> 
     </java>
