@@ -34,7 +34,7 @@ import nu.xom.Nodes;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1a2
  *
  */
 public class NamespaceNodeTest extends XOMTestCase {
@@ -80,6 +80,42 @@ public class NamespaceNodeTest extends XOMTestCase {
         Nodes result = root.query("namespace::pre");
         Namespace namespace = (Namespace) result.get(0);
         assertEquals("xmlns:pre=\"http://www.example.org/\"", namespace.toXML());
+        
+    }
+
+    
+    public void testGetChildCount() {
+     
+        Element root = new Element("pre:root", "http://www.example.org/");
+        Nodes result = root.query("namespace::pre");
+        Namespace namespace = (Namespace) result.get(0);
+        assertEquals(0, namespace.getChildCount());
+        
+    }
+
+    
+    public void testGetChild() {
+     
+        Element root = new Element("pre:root", "http://www.example.org/");
+        Nodes result = root.query("namespace::pre");
+        Namespace namespace = (Namespace) result.get(0);
+        try {
+            namespace.getChild(0);
+            fail("Got namespace child");
+        }
+        catch (IndexOutOfBoundsException success) {
+            assertEquals("Namespaces do not have children", success.getMessage());
+        }
+        
+    }
+
+    
+    public void testToXMLOnDefaultNamespace() {
+     
+        Element root = new Element("root", "http://www.example.org/");
+        Nodes result = root.query("namespace::*[name() != 'xml']");
+        Namespace namespace = (Namespace) result.get(0);
+        assertEquals("xmlns=\"http://www.example.org/\"", namespace.toXML());
         
     }
 
