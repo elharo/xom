@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -38,7 +38,7 @@ import org.xml.sax.ext.LexicalHandler;
  *
  */
 class XOMHandler 
- implements ContentHandler, LexicalHandler, DeclHandler, DTDHandler {
+  implements ContentHandler, LexicalHandler, DeclHandler, DTDHandler {
 
     private Document     document;
     private String       documentBaseURI;
@@ -132,8 +132,7 @@ class XOMHandler
             } 
             
             // Attach the attributes; this must be done before the
-            // namespaces are attached.
-            
+            // namespaces are attached.           
             for (int i = 0; i < attributes.getLength(); i++) {
                 String qName = attributes.getQName(i);
                 if (qName.startsWith("xmlns:") || qName.equals("xmlns")) {               
@@ -203,6 +202,8 @@ class XOMHandler
             flushText();
             ParentNode temp = current.getParent();
             Nodes result = factory.finishMakingElement((Element) current);
+            // might speed things up for common case by checking here
+            // if result only contains current, in which case just return????
             if (!temp.isDocument()) {
                 temp.removeChild(temp.getChildCount() - 1);
                 for (int i=0; i < result.size(); i++) {
@@ -330,6 +331,8 @@ class XOMHandler
                     parent.insertChild(node, position);
                     position++;
                 }
+                // what is this node is an attribute???? write unit test and fix
+                // same question for comment????
                 else {
                     parent.appendChild(node);
                 }
@@ -355,6 +358,7 @@ class XOMHandler
     public void endPrefixMapping(String prefix) {}
 
     public void skippedEntity(String name) {
+        flushText();
         throw new XMLException("Could not resolve entity " + name);                        
     }
     
