@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -23,10 +23,8 @@ package nu.xom;
 
 /**
  * <p>
- *  A <code>WellformednessException</code> indicates an attempt to
- *  do or create something that could not possibly 
- *  be serialized in a namespace well-formed XML 1.0 
- *  document.
+ * Indicates an attempt to do or create something that could not  
+ * possibly be serialized in a namespace well-formed XML 1.0 document.
  * </p>
 
  * @author Elliotte Rusty Harold
