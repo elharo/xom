@@ -58,7 +58,6 @@ subject line. The XOM home page is http://www.xom.nu/
 
     <property name="xml-apis.jar"   value="${lib.dir}/xmlParserAPIs.jar"/>
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
-    <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
     <property name="jaxen.jar"      value="${lib.dir}/jaxen-1.1-min.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.0rc1.jar"/>
@@ -98,7 +97,6 @@ subject line. The XOM home page is http://www.xom.nu/
      <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
-      <pathelement location="${normalizer.jar}"/>
       <pathelement location="${junit.jar}"/>
       <pathelement location="${jaxen.jar}"/>
       <pathelement location="${servlet.jar}"/>
@@ -107,7 +105,6 @@ subject line. The XOM home page is http://www.xom.nu/
     <path id="run.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
-      <pathelement location="${normalizer.jar}"/>
       <pathelement location="${xom-core}"/>
       <pathelement location="${jaxen.jar}"/>
       <pathelement location="${xslt.jar}"/>
