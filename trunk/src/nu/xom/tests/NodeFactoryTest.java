@@ -50,7 +50,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public class NodeFactoryTest extends XOMTestCase {
@@ -575,8 +575,8 @@ public class NodeFactoryTest extends XOMTestCase {
         Document doc = builder.build(data, "http://www.example.org/");
         Element root = doc.getRootElement();
         assertEquals(2, root.getChildCount());
-        Element name = (Element) root.getChild(0);
-        Element value = (Element) root.getChild(1);
+        Element name = root.getFirstChildElement("name");
+        Element value = root.getFirstChildElement("value");
         assertEquals("test", name.getValue());         
         assertEquals("data", value.getValue());         
         assertEquals("name", name.getLocalName());         
