@@ -48,7 +48,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public class Element extends ParentNode {
@@ -971,6 +971,7 @@ public class Element extends ParentNode {
         Nodes result = new Nodes();
         for (int i = 0; i < length; i++) {
             Node child = getChild(i);
+            if (child.isElement()) fillInBaseURI((Element) child);
             child.setParent(null);
             result.append(child);
         }   
@@ -1057,7 +1058,7 @@ public class Element extends ParentNode {
         
     }
 
-
+    
     /**
      * <p>
      * Removes the mapping of the specified prefix. This method only
@@ -1235,6 +1236,7 @@ public class Element extends ParentNode {
      */
     public final String getBaseURI() {
         
+        // XXX remove recursion
         // Check to see if this element has an xml:base
         // attribute. If so, this takes precedence over
         // everything else.
@@ -1249,7 +1251,7 @@ public class Element extends ParentNode {
             // The base attribute contains an IRI, not a URI.
             // Thus the first thing we have to do is escape it
             // to convert illegal characters to hexadecimal escapes.
-            base = toURI(base);  // ???? move this method to URIUtil
+            base = toURI(base);  // XXX move this method to URIUtil
             
             if (!URIUtil.isAbsolute(base)) {
                 // absolutize the URI if possible
@@ -1711,7 +1713,7 @@ public class Element extends ParentNode {
         
     }*/
     
-    // might optimize by caching index, as we're iterating through in order????
+    // XXX might optimize by caching index, as we're iterating through in order
     public final String toXML() {
         
         StringBuffer result = new StringBuffer();

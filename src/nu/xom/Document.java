@@ -31,7 +31,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  * 
  */
 public class Document extends ParentNode {
@@ -239,6 +239,7 @@ public class Document extends ParentNode {
               + " already has a parent");
         }
         
+        fillInBaseURI(oldRoot);
         int index = indexOf(oldRoot);
         
         oldRoot.setParent(null);
