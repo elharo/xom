@@ -34,7 +34,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b8
  *
  */
 abstract class TextWriter {
@@ -140,8 +140,6 @@ abstract class TextWriter {
     
     private void writeEscapedChar(char c) throws IOException {
 
-        // XXX combine with writeAttributeValue(char) into a 
-      // writeescapedChar method
         if (isHighSurrogate(c)) {
             //store and wait for low half
             highSurrogate = c;
@@ -172,6 +170,7 @@ abstract class TextWriter {
             skipFollowingLinefeed = false;
             justBroke=false;
         }
+        
     }
 
 
@@ -407,6 +406,10 @@ abstract class TextWriter {
         write(c);   
 
     }
+    
+    // XXX should we have a special package protected 
+    // method to be used only for ASCII characters we know don't need escaping or
+    // normalization such as <, /, A-Z, etc.?
 
     
     final void writePCDATA(String s) throws IOException {
@@ -414,7 +417,8 @@ abstract class TextWriter {
         if (normalize) {
             s = Normalizer.normalize(s, Normalizer.NFC);   
         }
-        for (int i=0; i < s.length(); i++) {
+        int length = s.length();
+        for (int i=0; i < length; i++) {
             writePCDATA(s.charAt(i));
         }   
         
@@ -423,22 +427,28 @@ abstract class TextWriter {
     
     final void writeAttributeValue(String s) 
       throws IOException {
+        
         if (normalize) {
             s = Normalizer.normalize(s, Normalizer.NFC);   
         }
-        for (int i=0; i < s.length(); i++) {
+        int length = s.length();
+        for (int i=0; i < length; i++) {
             writeAttributeValue(s.charAt(i));
-        }   
+        }
+        
     }
 
     
     final void writeMarkup(String s) throws IOException {
+        
         if (normalize) {
             s = Normalizer.normalize(s, Normalizer.NFC);   
         }
-        for (int i=0; i < s.length(); i++) {
+        int length = s.length();
+        for (int i=0; i < length; i++) {
             writeMarkup(s.charAt(i));
-        }   
+        }
+        
     }
     
     
@@ -466,7 +476,7 @@ abstract class TextWriter {
     
     
     void decrementIndent() {
-        if (fakeIndents > 0) fakeIndents --;        
+        if (fakeIndents > 0) fakeIndents--;
         else {
             indentString = indentString.substring(
               0, indentString.length()-indent
@@ -508,6 +518,7 @@ abstract class TextWriter {
      * 
      */
     void setLineSeparator(String lineSeparator) {
+        
         if (lineSeparator.equals("\n") 
           || lineSeparator.equals("\r")
           || lineSeparator.equals("\r\n")) { 
@@ -518,6 +529,7 @@ abstract class TextWriter {
             throw new IllegalArgumentException(
               "Illegal Line Separator");
         }  
+        
     }
 
     
@@ -594,7 +606,7 @@ abstract class TextWriter {
      * </p>
      *
      * 
-     * @return true if an <ocde>xml:space="true"</code> attribute 
+     * @return true if an <code>xml:space="true"</code> attribute 
      *      is in-scope
      */
     boolean isPreserveSpace() {
