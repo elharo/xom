@@ -22,17 +22,11 @@
 // to http://www.xom.nu/
 package nu.xom.tests;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.util.MissingResourceException;
 
@@ -110,10 +104,13 @@ public class XSLTransformTest extends XOMTestCase {
     
     // primarily this makes sure the XSLTHandler can handle various
     // edge cases
-    public void testIdentityTransform() throws XSLException {
+    public void testIdentityTransform() 
+      throws ParsingException, IOException, XSLException {
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Element root = new Element("root", "http://www.example.org");
         root.appendChild(new Text("some data"));
         root.appendChild(new Element("something"));
@@ -125,6 +122,7 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
     
+    
     public void testPrefixMappingIssues() 
       throws XSLException, ParsingException, IOException {
         
@@ -133,42 +131,15 @@ public class XSLTransformTest extends XOMTestCase {
            + "<span xmlns:b='http://www.example.net'/>"
            + "</test>"; 
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
-        
         Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Document input = builder.build(doc, "http://example.org/");
         Nodes result = xform.transform(input);
         assertEquals(input.getRootElement(), result.get(0));
         
     }
     
-    
-    public void testReaderConstructor() {
-        
-        try {
-            new XSLTransform(new StringReader(notAStyleSheet));
-            fail("Compiled non-stylesheet");
-        }
-        catch (XSLException success) {
-            assertNotNull(success.getMessage());
-        }
-        
-    }
-
-    
-    public void testInputStreamConstructor() throws IOException {
-        
-        try {
-            byte[] data = notAStyleSheet.getBytes("UTF-8");
-            new XSLTransform(new ByteArrayInputStream(data));
-            fail("Compiled non-stylesheet");
-        }
-        catch (XSLException success) {
-            assertNotNull(success.getMessage());
-        }
-        
-    }
-
     
     public void testDocumentConstructor() 
       throws ParsingException, IOException {
@@ -183,34 +154,6 @@ public class XSLTransformTest extends XOMTestCase {
             fail("Compiled non-stylesheet");
         }
         catch (XSLException success) { 
-            assertNotNull(success.getMessage());
-        }
-        
-    }
-
-    
-    public void testFileConstructor() {
-        
-        try {
-            File f = new File("data/schematest.xml");
-            new XSLTransform(f);
-            fail("Compiled non-stylesheet");
-        }
-        catch (XSLException success) {  
-            assertNotNull(success.getMessage());
-        }
-        
-    }
-
-    
-    public void testURLConstructor() throws IOException {
-        
-        try {
-            File f = new File("data/schematest.xml");
-            new XSLTransform(f.toURL().toExternalForm());
-            fail("Compiled non-stylesheet");
-        }
-        catch (XSLException success) {  
             assertNotNull(success.getMessage());
         }
         
@@ -241,7 +184,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/fragment.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Document input = builder.build(doc);
         Nodes output = xform.transform(input);
         assertEquals(6, output.size());
@@ -261,7 +205,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-1.xml");
         File stylesheet = new File("data/xslt/input/8-8.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Document result = new Document((Element) (output.get(0)));
@@ -278,7 +223,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-1.xml");
         File stylesheet = new File("data/xslt/input/8-8.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new NodeFactoryTest.CFactory());
         
         Nodes output = xform.transform(builder.build(doc));
@@ -306,7 +252,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/fragment.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new NodeFactoryTest.CommentFilter());
         
         Document input = builder.build(doc);
@@ -336,7 +283,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/fragment.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new NodeFactoryTest.ProcessingInstructionFilter());
         
         Document input = builder.build(doc);
@@ -365,7 +313,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/fragment.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new NodeFactoryTest.UncommentFilter());
         
         Document input = builder.build(doc);
@@ -387,7 +336,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-1.xml");
         File stylesheet = new File("data/xslt/input/8-12.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Document result = new Document((Element) (output.get(0)));
@@ -398,38 +348,6 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     
-    public void testTransformFromInputStream() 
-      throws ParsingException, IOException, XSLException {
-        
-        File doc = new File("data/xslt/input/8-1.xml");
-        InputStream stylesheet = new FileInputStream("data/xslt/input/8-12.xsl");
-        Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet, doc.toURL().toExternalForm());
-        Nodes output = xform.transform(builder.build(doc));
-        assertEquals(1, output.size());
-        Document result = new Document((Element) (output.get(0)));
-        
-        Document expected = builder.build("data/xslt/output/8-12.xml");
-        assertEquals(expected, result);
-        
-    }
-
-    
-    public void testTransformFromReader() 
-      throws ParsingException, IOException, XSLException {
-        
-        File doc = new File("data/xslt/input/8-1.xml");
-        Reader stylesheet = new FileReader("data/xslt/input/8-12.xsl");
-        Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
-        Nodes output = xform.transform(builder.build(doc));
-        assertEquals(1, output.size());
-        Document result = new Document((Element) (output.get(0)));
-        Document expected = builder.build("data/xslt/output/8-12.xml");
-        assertEquals(expected, result);
-        
-    }
-
     
     // For debugging
     private static void dumpResult(Document result, String filename) 
@@ -468,7 +386,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-1.xml");
         Builder builder = new Builder();
         String stylesheet = "data/xslt/input/8-12.xsl";
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Document result = new Document((Element) (output.get(0)));
@@ -485,7 +404,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/8-15.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Document input = builder.build(doc);
         Nodes output = xform.transform(input);
         assertEquals(1, output.size());
@@ -503,7 +423,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/singlestring.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Document input = builder.build(doc);
         Nodes output = xform.transform(input);
         assertEquals(1, output.size());
@@ -512,10 +433,14 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
     
-    public void testToString() throws XSLException {
+    
+    public void testToString() 
+      throws XSLException, ParsingException, IOException {
         
         File stylesheet = new File("data/xslt/input/singlestring.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         assertTrue(xform.toString().startsWith("[nu.xom.xslt.XSLTransform: "));
         
     }    
@@ -530,7 +455,8 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/textmethod.xsl");
         Builder builder = new Builder(); 
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Document input = builder.build(doc);
         Nodes output = xform.transform(input);
         assertEquals(6, output.size());
@@ -544,10 +470,13 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     
-    public void testCommentWithParent() throws XSLException {
+    public void testCommentWithParent() 
+      throws XSLException, ParsingException, IOException {
         
+        Builder builder = new Builder();
         File stylesheet = new File("data/xslt/input/commentwithparent.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Document input = new Document(new Element("root"));
         Nodes output = xform.transform(input);
         assertEquals(1, output.size());
@@ -561,10 +490,12 @@ public class XSLTransformTest extends XOMTestCase {
 
     
     public void testProcessingInstructionWithParent() 
-      throws XSLException {
+      throws XSLException, ParsingException, IOException {
         
+        Builder builder = new Builder();
         File stylesheet = new File("data/xslt/input/piwithparent.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Document input = new Document(new Element("root"));
         Nodes output = xform.transform(input);
         assertEquals(1, output.size());
@@ -578,11 +509,14 @@ public class XSLTransformTest extends XOMTestCase {
     } 
 
     
-    public void testTransformNodes() throws XSLException {
+    public void testTransformNodes()
+      throws XSLException, ParsingException, IOException {
         
         File stylesheet = new File("data/xslt/input/piwithparent.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
         Nodes input = new Nodes(new Element("root"));
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Nodes output = xform.transform(input);
         assertEquals(1, output.size());
         assertEquals("", output.get(0).getValue());
@@ -599,11 +533,12 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException {
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new NodeFactoryTest.TripleElementFilter());
 
         String data = "<a><b><c/></b></a>";
-        Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
         
         Nodes result = xform.transform(doc);
@@ -626,11 +561,12 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException { 
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new NodeFactoryTest.TripleElementFilter());
 
         String data = "<a><b><c/></b></a>";
-        Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
         
         xform.setNodeFactory(null);        
@@ -652,7 +588,9 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException {  
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
        
         Nodes result = xform.transform(new Nodes());
         
@@ -665,12 +603,13 @@ public class XSLTransformTest extends XOMTestCase {
       throws XSLException, ParsingException, IOException {
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new NodeFactoryTest.MinimizingFactory());
         
-        Builder builder = new Builder();
         Document input = builder.build("<!-- test--><test>" +
-                "<em>data</em>\r\n<psan>test</psan></test>" +
+                "<em>data</em>\r\n<span>test</span></test>" +
                 "<?target data?>", "http://example.org/");
         Nodes output = xform.transform(input);
         assertEquals(0, output.size());
@@ -678,10 +617,13 @@ public class XSLTransformTest extends XOMTestCase {
     } 
     
     
-    public void testIllegalTransform() throws XSLException {
+    public void testIllegalTransform() 
+      throws XSLException, ParsingException, IOException {
         
         File stylesheet = new File("data/xslt/input/illegaltransform.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         Element root = new Element("root", "http://www.example.org");
         Document input = new Document(root);
         try {
@@ -699,11 +641,12 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException { 
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
 
         String data = "<a xmlns:pre='http://www.example.org/'>" +
                 "<b xmlns:pre='http://www.example.org/'>in B</b></a>";
-        Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
         
         Nodes result = xform.transform(doc);
@@ -717,11 +660,12 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException {  
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new AttributeFactory());
 
         String data = "<a><b>in B<c>in C</c></b></a>";
-        Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
         
         Nodes result = xform.transform(doc);
@@ -754,11 +698,12 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException {  
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new AttributesToElements());
 
         String data = "<a name='value'><b x='y' a='b'/></a>";
-        Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
         
         Nodes result = xform.transform(doc);
@@ -796,10 +741,11 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException {
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
 
         String data = "<a><!--test--></a>";
-        Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
         
         Nodes result = xform.transform(doc);
@@ -820,7 +766,9 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException {
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
         xform.setNodeFactory(new NodeFactory() {
             public Nodes makeComment(String text) {
                 return new Nodes(new Attribute("comment", text));   
@@ -828,7 +776,6 @@ public class XSLTransformTest extends XOMTestCase {
         });
 
         String data = "<a><!--test--></a>";
-        Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
         
         Nodes result = xform.transform(doc);
@@ -849,11 +796,12 @@ public class XSLTransformTest extends XOMTestCase {
       throws IOException, ParsingException, XSLException {  
         
         File stylesheet = new File("data/xslt/input/identity.xsl");
-        XSLTransform xform = new XSLTransform(stylesheet);
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
 
         String data = "<pre:a xmlns:pre='http://www.example.org' " +
                 "xmlns='http://www.example.net'>data</pre:a>";
-        Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
         
         Nodes result = xform.transform(doc);
@@ -1656,8 +1604,5 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
     
-    
-
-
     
 }
