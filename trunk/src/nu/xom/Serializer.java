@@ -47,7 +47,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b3
  * 
  */
 public class Serializer {
@@ -236,9 +236,9 @@ public class Serializer {
      * @throws IOException if the underlying output stream
      *      encounters an I/O error
      * @throws NullPointerException if <code>doc</code> is null
-     * @throws UnavailableCharacterException if the document contains an unescapable
-     *     character (e.g. in an element name) that is not available 
-     *     in the current encoding
+     * @throws UnavailableCharacterException if the document contains 
+     *     an unescapable character (e.g. in an element name) that is 
+     *     not available in the current encoding
      */
     public void write(Document doc) throws IOException {
         
@@ -841,14 +841,14 @@ public class Serializer {
  
     
     /** <p>
-     *   Writes a string onto the underlying output stream.
-     *   Non-ASCII characters that are not available in the
-     *   current character set are hexadecimally escaped.
-     *   The three reserved characters &lt;, &gt;, and &amp; 
-     *   are escaped using the standard entity references 
-     *   <code>&amp;lt;</code>, <code>&amp;gt;</code>, 
-     *   and <code>&amp;amp;</code>.
-     *   Double and single quotes are not escaped.
+     * Writes a string onto the underlying output stream.
+     * Non-ASCII characters that are not available in the
+     * current character set are encoded with numeric character
+     * references. The three reserved characters &lt;, &gt;, and &amp; 
+     * are escaped using the standard entity references 
+     * <code>&amp;lt;</code>, <code>&amp;gt;</code>, 
+     * and <code>&amp;amp;</code>.
+     * Double and single quotes are not escaped.
      * </p> 
      * 
      * @param text the parsed character data to serialize
@@ -1168,8 +1168,8 @@ public class Serializer {
      * 
      * <p>
      *   If all your data is in the first 256 code points of Unicode
-     *   (i.e. the ISO-8859-1, Latin-1 character set) then it's already
-     *   in normalization form C and renormalizing won't change 
+     *   (i.e. the ISO-8859-1, Latin-1 character set), then it's 
+     *   already in normalization form C and normalizing won't change
      *   anything.
      * </p>
      * 
