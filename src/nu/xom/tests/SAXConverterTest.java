@@ -245,6 +245,18 @@ public class SAXConverterTest extends XOMTestCase {
     }
 
     
+    public void testNoPrefixMappingEventsForDefaultEmptyNamespace() 
+      throws ParsingException, IOException, SAXException {
+     
+        String data = "<root/>";
+        Document doc = builder.build(data, null);
+        ContentHandler handler = new XMLPrefixTester2();
+        SAXConverter converter = new SAXConverter(handler);
+        converter.convert(doc);
+        
+    }
+    
+    
     public void testNoPrefixMappingEventsForXMLPrefix() 
       throws ParsingException, IOException, SAXException {
      
@@ -283,6 +295,21 @@ public class SAXConverterTest extends XOMTestCase {
             if ("xml".equals(prefix)) {
                 throw new SAXException("end mapped prefix xml");
             }
+        }
+        
+    }
+    
+    
+    private static class XMLPrefixTester2 extends DefaultHandler {
+        
+        public void startPrefixMapping(String prefix, String uri) 
+          throws SAXException {
+            throw new SAXException("start mapped prefix " + prefix);
+        }
+        
+        public void endPrefixMapping(String prefix) 
+          throws SAXException {
+            throw new SAXException("end mapped prefix " + prefix);
         }
         
     }
