@@ -36,7 +36,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a3
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -104,6 +104,33 @@ public class AttributeTest extends XOMTestCase {
 
     }
 
+    
+    public void testSetLocalName() {
+        
+        Attribute a = new Attribute("name", "value");
+        a.setLocalName("newname");
+        assertEquals("newname", a.getLocalName());
+        
+        try {
+            a.setLocalName("pre:a");
+            fail("Allowed local attriubte name contianing colon");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testSetLocalNameInNamespaceQualifiedAttribute() {
+        
+        Attribute a = new Attribute("pre:name", "http://www.example.org", "value");
+        a.setLocalName("newname");
+        assertEquals("newname", a.getLocalName());
+        assertEquals("pre:newname", a.getQualifiedName());
+        
+    }
+    
     
     // No xmlns attributes or xmlns:prefix attributes are allowed
     public void testXmlns() {
