@@ -80,6 +80,19 @@ public class CommentTest extends XOMTestCase {
            
     }
     
+    // This is a problem becuase it cannot be serialized
+    // since character and entity references aren't
+    // recognized in comment data
+    public void testCarriageReturnInCommentData() {
+        try {
+            Comment c = new Comment("data\rdata");
+            fail("Allowed carriage return in comment");
+        }
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
+    }
+    
     public void testSetter() {
 
         Comment c1 = new Comment("test");
@@ -201,7 +214,7 @@ public class CommentTest extends XOMTestCase {
 
     }
 
-   public void testGetDocument() {
+    public void testGetDocument() {
 
         Comment c1 = new Comment("data");
         assertNull(c1.getDocument());
@@ -211,6 +224,12 @@ public class CommentTest extends XOMTestCase {
         Document doc = new Document(root);
         assertEquals(doc, c1.getDocument());
 
+    }
+
+    public void testAllowReservedCharactersInData() {
+        Comment comment = new Comment("<test>&amp;&greater;");
+        String xml = comment.toXML();
+        assertEquals("<!--<test>&amp;&greater;-->", xml);  
     }
 
 }

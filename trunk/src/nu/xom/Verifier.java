@@ -100,7 +100,7 @@ final class Verifier {
      * other than <code>xmlns</code>.
      * </p>
      * 
-     * @param name <code>String</code> name to check.
+     * @param name <code>String</code> name to check
      * 
      * @throws IllegalNameException if this is not a legal 
      *     attribute name
@@ -137,7 +137,7 @@ final class Verifier {
      * the value is serialized. 
      * </p>
      *
-     * @param text <code>String</code> value to check.
+     * @param text <code>String</code> value to check
      * 
      * @throws IllegalDataException if <code>text</code> is not 
      *     legal PCDATA
@@ -267,7 +267,7 @@ final class Verifier {
      * Both absolute and relative IRIs are supported.
      * </p>
      * 
-     * @param iri <code>String</code> to check.
+     * @param iri <code>String</code> to check
      * @throws MalformedURIException if this is not a legal IRI
      */
     public static void checkIRI(String iri) {
@@ -317,7 +317,7 @@ final class Verifier {
      * use as a <code>{@link ProcessingInstruction}</code> target.
      *</p>
      * 
-     * @param target <code>String</code> target to check.
+     * @param target <code>String</code> target to check
      * 
      * @throws IllegalTargetException if this is not a legal target
      */
@@ -351,12 +351,14 @@ final class Verifier {
     }
 
    /**
+     * <p>
      * This will check the supplied data to see if it is legal for use
      * as <code>{@link ProcessingInstruction}</code> data. Besides 
      * checking that all the characters are allowed in XML, this also 
      * checks that the data does not contain the PI end-string "?&gt;".
-     *
-     * @param data <code>String</code> data to check.
+     * </p>
+     * 
+     * @param data <code>String</code> data to check
      * @throws IllegalDataException if this is not legal data
      */
     public static void checkProcessingInstructionData(String data) {
@@ -368,8 +370,13 @@ final class Verifier {
               "Processing instructions cannot contain the string \"?>\""
             );
         }
+        if (data.indexOf('\r') >= 0) {
+            throw new IllegalDataException(
+              "Processing instructions cannot contain carriage returns"
+            );
+        }
 
-         return;
+        return;
     }
 
     /**
@@ -378,24 +385,29 @@ final class Verifier {
      * <code>{@link Comment}</code> data.
      *  </p>
      * 
-     * @param data <code>String</code> data to check.
+     * @param data <code>String</code> data to check
      */
     public static void checkCommentData(String data) {
         checkCharacterData(data);
 
         if (data.indexOf("--") != -1) {
             throw new IllegalDataException(
-             "Comments cannot contain double hyphens (--)");
+             "Comments cannot contain double hyphens (--).");
+        }
+
+        if (data.indexOf('\r') != -1) {
+            throw new IllegalDataException(
+             "Comments cannot contain carriage returns.");
         }
 
         if (data.startsWith("-")) {
             throw new IllegalDataException(
-             "Comment data cannot start with a hyphen");
+             "Comment data cannot start with a hyphen.");
         }
 
         if (data.endsWith("-")) {
             throw new IllegalDataException(
-             "Comment data cannot end with a hyphen");
+             "Comment data cannot end with a hyphen.");
         }
 
         return;
@@ -429,7 +441,7 @@ final class Verifier {
      * is legal.
      * </p>
      * 
-     * @param publicID <code>String</code> public ID to check.
+     * @param publicID <code>String</code> public ID to check
      */
     public static void checkPublicID(String publicID) {
 
@@ -541,8 +553,8 @@ final class Verifier {
      * before calling this function.
      * </p>
      * 
-     * @param c <code>int</code> to check for XML compliance.
-     * @return true if <code>c</code> is a character, false otherwise.
+     * @param c <code>int</code> to check for XML compliance
+     * @return true if <code>c</code> is a character, false otherwise
      */
     private static boolean isXMLCharacter(int c) {
         
@@ -571,9 +583,9 @@ final class Verifier {
      * XML 1.0 specification.
      * </p>
      * 
-     * @param c <code>char</code> to check for XML name compliance.
+     * @param c <code>char</code> to check for XML name compliance
      * @return true if <code>c</code> is a name character, 
-     *                                false otherwise.
+     *     false otherwise
      */
     public static boolean isXMLNameCharacter(char c) {
     
@@ -591,9 +603,9 @@ final class Verifier {
      * disallows. 
      * </p>
      * 
-     * @param c <code>char</code> to check for XML name start compliance.
+     * @param c <code>char</code> to check for XML name start compliance
      * @return true if <code>c</code> is a name start character, 
-     *                                false otherwise.
+     *     false otherwise
      */
     public static boolean isXMLNameStartCharacter(char c) {
     
@@ -602,12 +614,15 @@ final class Verifier {
     }
 
     /**
+     * <p>
      * This is a utility function for determining whether a specified 
-     * character is a letter or digit according to productions 84 and 88
-     * of the XML 1.0 specification.
-     *
-     * @param c <code>char</code> to check.
-     * @return true if <code>c</code> is a letter or digit, false otherwise.
+     * character is a letter or digit according to productions 84 
+     * and 88 of the XML 1.0 specification.
+     * </p>
+     * 
+     * @param c <code>char</code> to check
+     * @return true if <code>c</code> is a letter or digit, 
+     *     false otherwise
      */
     public static boolean isXMLLetterOrDigit(char c) {
     
@@ -616,11 +631,14 @@ final class Verifier {
     }
 
     /**
-     * This is a utility function for determining whether a specified character
-     * is a letter according to production 84 of the XML 1.0 specification.
-     *
-     * @param c <code>char</code> to check for XML name compliance.
-     * @return <code>String</code> - true if it's a letter, false otherwise.
+     * <p>
+     * This is a utility function for determining whether a specified 
+     * character is a letter according to production 84 of the 
+     * XML 1.0 specification.
+     * </p>
+     * 
+     * @param c <code>char</code> to check for XML name compliance
+     * @return <code>String</code> - true if it's a letter, false otherwise
      */
     public static boolean isXMLLetter(char c) {
         // Note that order is very important here.  The search proceeds 
@@ -840,13 +858,13 @@ final class Verifier {
 
     /**
      * <p>
-     * This is a utility function for determining whether a specified character
-     * is a combining character according to production 87
+     * This is a utility function for determining whether a specified 
+     * character is a combining character according to production 87
      * of the XML 1.0 specification.
      * </p>
      * 
-     * @param c <code>char</code> to check.
-     * @return true if <code>c</code> is a combining character, false otherwise.
+     * @param c <code>char</code> to check
+     * @return true if <code>c</code> is a combining character, false otherwise
      */
     public static boolean isXMLCombiningChar(char c) {
         // CombiningChar
@@ -981,8 +999,8 @@ final class Verifier {
      * production 88 of the XML 1.0 specification.
      * </p>
      * 
-     * @param c <code>char</code> to check.
-     * @return true if it's an extender, false otherwise.
+     * @param c <code>char</code> to check
+     * @return true if it's an extender, false otherwise
      */
     public static boolean isXMLExtender(char c) {
 
@@ -1014,7 +1032,7 @@ final class Verifier {
      * </p>
      * 
      * @param c <code>char</code> to check for XML digit compliance.
-     * @return true if it's a digit, false otherwise.
+     * @return true if it's a digit, false otherwise
      */
     public static boolean isXMLDigit(char c) {
       
@@ -1087,7 +1105,7 @@ final class Verifier {
      * Absolute URIs may not contain fragment identifiers.
      * </p>
      * 
-     * @param uri <code>String</code> to check.
+     * @param uri <code>String</code> to check
      * 
      * @throws MalformedURIException if this is not an absolute URI
      */
@@ -1113,7 +1131,7 @@ final class Verifier {
      * reference. URI references can contain fragment identifiers.
      * </p>
      * 
-     * @param uri <code>String</code> to check.
+     * @param uri <code>String</code> to check
      * 
      * @throws MalformedURIException if this is not a legal 
      *     URI reference

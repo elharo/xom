@@ -247,4 +247,23 @@ public class ProcessingInstructionTest extends XOMTestCase {
 
     }
 
+    // This is a problem becuase it cannot be serialized
+    // since character and entity references aren't
+    // recognized in comment data
+    public void testCarriageReturnInProcessingInstructionData() {
+        try {
+            ProcessingInstruction pi = new ProcessingInstruction("target", "data\rdata");
+            fail("Allowed carriage return in processing instruction data");
+        }
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }   
+    }
+
+    public void testAllowReservedCharactersInData() {
+        ProcessingInstruction pi = new ProcessingInstruction("target", "<test>&amp;&greater;");
+        String xml = pi.toXML();
+        assertEquals("<?target <test>&amp;&greater;?>", xml);  
+    }
+
 }

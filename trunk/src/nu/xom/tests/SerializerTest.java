@@ -41,6 +41,10 @@ import java.io.InputStream;
 import java.io.StringReader;
 
 /**
+ * <p>
+ *   Tests for <code>Serializer</code> functionality.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d22
  *
@@ -436,9 +440,7 @@ public class SerializerTest extends XOMTestCase {
         String breaks = 
           "This\nstring\rcontains\r\nseveral\r\rweird line breaks.";
         root.appendChild(breaks);
-        doc.insertChild(new Comment(breaks), 0);
         root.addAttribute(new Attribute("test", breaks));
-        root.appendChild(new ProcessingInstruction("target", breaks));
             
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out, "UTF-8");
@@ -486,20 +488,6 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
         String result = out.toString("UTF-8");
         assertTrue(result.indexOf(breaksHalfEscaped) > 0);
-        
-        root = new Element("root");
-        doc = new Document(root);
-        doc.insertChild(new Comment(breaks), 0);
-            
-        out = new ByteArrayOutputStream();
-        serializer = new Serializer(out, "UTF-8");
-        serializer.write(doc);
-        result = out.toString("UTF-8");
-        assertTrue(result.indexOf('\n') > 0);
-        assertTrue(result.indexOf('\r') > 0);
-        assertTrue(result.indexOf("\r\r") > 0);
-        assertTrue(result.indexOf("\n\n") > 0);
-        assertTrue(result.indexOf(breaks) > 0);
 
         root = new Element("root");
         doc = new Document(root);
@@ -509,21 +497,7 @@ public class SerializerTest extends XOMTestCase {
         serializer = new Serializer(out, "UTF-8");
         serializer.write(doc);
         result = out.toString("UTF-8");
-        assertTrue(result.indexOf(breaksEscaped) > 0);
-
-        root = new Element("root");
-        doc = new Document(root);
-        root.appendChild(new ProcessingInstruction("target", breaks));
-            
-        out = new ByteArrayOutputStream();
-        serializer = new Serializer(out, "UTF-8");
-        serializer.write(doc);
-        result = out.toString("UTF-8");
-        assertTrue(result.indexOf('\n') > 0);
-        assertTrue(result.indexOf('\r') > 0);
-        assertTrue(result.indexOf("\r\r") > 0);
-        assertTrue(result.indexOf("\n\n") > 0);
-        assertTrue(result.indexOf(breaks) > 0);        
+        assertTrue(result.indexOf(breaksEscaped) > 0);        
         
     }
     
