@@ -53,7 +53,8 @@ import nu.xom.Text;
  *   10, 2003 2nd Last Call Working Draft of <cite>XML Inclusions
  *   (XInclude) Version 1.0</cite></a>. Fallbacks are supported.
  *   The XPointer <code>element()</code> scheme and shorthand XPointers
- *   are also supported.   
+ *   are also supported. The XPointer <code>xpointer()</code> scheme
+ *   is not supported.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -350,6 +351,14 @@ public class XIncluder {
         }
     }
 
+    private static boolean contains(ParentNode ancestor, Node descendant) {
+        
+        for (Node parent = descendant; parent != null; parent=parent.getParent()) {
+            if (parent == ancestor) return true;  
+        }    
+        
+        return false;   
+    }
 
     private static void resolveInPlace(
       Document in, Builder builder, Stack baseURLs) 
@@ -435,10 +444,22 @@ public class XIncluder {
                     }
                     else {
                         Nodes originals = XPointer.resolve(element.getDocument(), xpointer);
+                        // do I need to further resolve any elements in this?
+                        // write a unit test to see????
                         replacements = new Nodes(); 
                         for (int i = 0; i < originals.size(); i++) {
-                            replacements.append(originals.get(i).copy());         
-                        }    
+                            Node original = originals.get(i);
+                            if (original instanceof Element) {
+                                if (contains((Element) original, element)) {
+                                    throw new CircularIncludeException("Element tried to include itself"); 
+                                }  
+                            }
+                            replacements.append(original.copy());        
+                        }  
+                        resolveInPlace(replacements, builder);  
+                        // Write a unit test where an xpointer includes itself
+                        // indirectly through intermediary documents????
+                        
                         // deliberately not updating the base here since
                         // we're in the same document; however, that may be flaky
                         // in the presence of xml:base attributes????
