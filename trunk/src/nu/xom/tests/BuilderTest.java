@@ -2646,8 +2646,7 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (SAXException ex) {
             // Can't test SAXON if you can't load it
-            throw ex;
-            // return;
+            return;
         }
         Builder builder = new Builder(parser);
         
@@ -2656,6 +2655,34 @@ public class BuilderTest extends XOMTestCase {
             // colon in processing instruction targets
             builder.build("<?test:data ?><data/>", null);
             fail("Didn't verify Saxon's input");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+   public void testGNUJAXPIsVerified() 
+      throws SAXException, IOException {
+        
+        XMLReader parser;
+        try {
+          parser = XMLReaderFactory.createXMLReader(
+            "gnu.xml.aelfred2.XmlReader"
+          );
+        }
+        catch (SAXException ex) {
+            // Can't test GNU JAXP if you can't load it
+            return;
+        }
+        Builder builder = new Builder(parser);
+        
+        try {
+            // known bug in AElfred: doesn't catch 
+            // colon in processing instruction targets
+            builder.build("<?test:data ?><data/>", null);
+            fail("Didn't verify GNU JAXP's input");
         }
         catch (ParsingException success) {
             assertNotNull(success.getMessage());
