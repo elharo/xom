@@ -533,7 +533,6 @@ public class DOMConverterTest extends XOMTestCase {
         String data = "<root><top><empty />ABCD</top></root>";
         Builder builder = new Builder();
         Document xomDocIn = builder.build(data, null);
-        int xomRootNumber = xomDocIn.getRootElement().getChildCount(); 
         org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
         org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
         org.w3c.dom.Node domTop = domRoot.getFirstChild();
