@@ -67,9 +67,9 @@ import nu.xom.Text;
  */
 public class XIncluder {
     
-    // XXX rewrite this to handle only elements in documents (no parentless
-    // elements) and then add code to handle Nodes and parentless elements
-    // by sticking each one in a Document
+    // could rewrite this to handle only elements in documents 
+    // (no parentless elements) and then add code to handle Nodes 
+    // and parentless elements by sticking each one in a Document
 
     // prevent instantiation
     private XIncluder() {}
