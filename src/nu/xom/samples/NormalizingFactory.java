@@ -23,8 +23,14 @@
 
 package nu.xom.samples;
 
+import java.io.IOException;
+
 import nu.xom.Attribute;
+import nu.xom.Builder;
+import nu.xom.Document;
 import nu.xom.NodeFactory;
+import nu.xom.ParseException;
+import nu.xom.Serializer;
 import nu.xom.Text;
 
 /**
@@ -35,13 +41,17 @@ import nu.xom.Text;
  *   space, converting all tabs, carriage returns, and line feeds to a 
  *   single space each, and then converting all remaining runs of white 
  *   space to a single space. Text nodes that contain nothing after
- *   this process is applied are not created.
+ *   this process is applied are not created. This may be useful for 
+ *   record-like XML.
  * </p>
  * 
- * needs testing????
+ * <p>
+ *   This class does <strong>not</strong> perform 
+ *   Unicode normalization.
+ * </p>
  * 
  *  @author Elliotte Rusty Harold
- *  @version 1.0d18
+ *  @version 1.0d21
  *
  */
 public class NormalizingFactory extends NodeFactory {
@@ -79,6 +89,33 @@ public class NormalizingFactory extends NodeFactory {
         }
         
         return result.toString();
+    }
+    
+    public static void main(String[] args) {
+  
+        if (args.length == 0) {
+          System.out.println(
+            "Usage: java nu.xom.samples.NormalizingFactory URL"
+          );
+          return;
+        } 
+          
+        Builder builder = new Builder(new NormalizingFactory());
+         
+        try {
+            Document doc = builder.build(args[0]);      
+            Serializer serializer = new Serializer(System.out);
+            serializer.write(doc);
+        }
+        // indicates a well-formedness error
+        catch (ParseException ex) { 
+            System.out.println(args[0] + " is not well-formed.");
+            System.out.println(ex.getMessage());
+        }  
+        catch (IOException ex) { 
+            System.out.println(ex);
+        }  
+      
     }
 
 }
