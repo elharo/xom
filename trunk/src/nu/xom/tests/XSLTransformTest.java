@@ -394,7 +394,9 @@ public class XSLTransformTest extends XOMTestCase {
     private static void dumpResult(Document result, String filename) 
       throws IOException {
         
-        File debug = new File("data/xslt/debug/" + filename);
+        File debug = new File("data");
+        debug = new File(debug, "xslt");
+        debug = new File(debug, "debug/" + filename);
         OutputStream out = new FileOutputStream(debug);
         Serializer serializer = new Serializer(out);
         serializer.write(result);
