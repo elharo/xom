@@ -24,7 +24,11 @@ package nu.xom.tests;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringReader;
 
 import nu.xom.Builder;
@@ -222,6 +226,92 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals(expected, result);
         
     }
+
+    public void testTransformFromInputStream() 
+      throws ParsingException, IOException, XSLException {
+        
+        File doc = new File("data/xslt/input/8-1.xml");
+        InputStream stylesheet = new FileInputStream("data/xslt/input/8-12.xsl");
+        Builder builder = new Builder();
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Nodes output = xform.transform(builder.build(doc));
+        assertEquals(1, output.size());
+        Document result = new Document((Element) (output.get(0)));
+        // For debugging
+     /* File debug = new File("data/xslt/debug/8-12.xml");
+        FileOutputStream out = new FileOutputStream(debug);
+        Serializer serializer = new Serializer(out);
+        serializer.write(result); */
+
+        Document expected = builder.build("data/xslt/output/8-12.xml");
+        assertEquals(expected, result);
+        
+    }
+
+    public void testTransformFromReader() 
+      throws ParsingException, IOException, XSLException {
+        
+        File doc = new File("data/xslt/input/8-1.xml");
+        Reader stylesheet = new FileReader("data/xslt/input/8-12.xsl");
+        Builder builder = new Builder();
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Nodes output = xform.transform(builder.build(doc));
+        assertEquals(1, output.size());
+        Document result = new Document((Element) (output.get(0)));
+        // For debugging
+     /* File debug = new File("data/xslt/debug/8-12.xml");
+        FileOutputStream out = new FileOutputStream(debug);
+        Serializer serializer = new Serializer(out);
+        serializer.write(result); */
+
+        Document expected = builder.build("data/xslt/output/8-12.xml");
+        assertEquals(expected, result);
+        
+    }
+
+    public void testTransformFromDocument() 
+      throws ParsingException, IOException, XSLException {
+        
+        File doc = new File("data/xslt/input/8-1.xml");
+        Builder builder = new Builder();
+        Document stylesheet = builder.build("data/xslt/input/8-12.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Nodes output = xform.transform(builder.build(doc));
+        assertEquals(1, output.size());
+        Document result = new Document((Element) (output.get(0)));
+        // For debugging
+     /* File debug = new File("data/xslt/debug/8-12.xml");
+        FileOutputStream out = new FileOutputStream(debug);
+        Serializer serializer = new Serializer(out);
+        serializer.write(result); */
+
+        Document expected = builder.build("data/xslt/output/8-12.xml");
+        assertEquals(expected, result);
+        
+    }
+
+    public void testTransformFromSystemID() 
+      throws ParsingException, IOException, XSLException {
+        
+        File doc = new File("data/xslt/input/8-1.xml");
+        Builder builder = new Builder();
+        String stylesheet = "data/xslt/input/8-12.xsl";
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Nodes output = xform.transform(builder.build(doc));
+        assertEquals(1, output.size());
+        Document result = new Document((Element) (output.get(0)));
+        // For debugging
+     /* File debug = new File("data/xslt/debug/8-12.xml");
+        FileOutputStream out = new FileOutputStream(debug);
+        Serializer serializer = new Serializer(out);
+        serializer.write(result); */
+
+        Document expected = builder.build("data/xslt/output/8-12.xml");
+        assertEquals(expected, result);
+        
+    }
+
+
 
     public void testTransformWithNamespaces() 
       throws ParsingException, IOException, XSLException {
