@@ -538,10 +538,9 @@ public class XIncludeTest extends XOMTestCase {
     public void testXIncludeTestSuite()  
       throws ParseException, IOException, XIncludeException {
         
-        File dir = new File("data/XInclude-Test-Suite");
-        if (dir.exists() && dir.isDirectory()) {
-            File f = new File("data/XInclude-Test-Suite/testdescr.xml");
-            Document master = builder.build(f);
+        File testDescription = new File("data/XInclude-Test-Suite/testdescr.xml");
+        if (testDescription.exists()) {
+            Document master = builder.build(testDescription);
             Element testsuite = master.getRootElement();
             Elements testcases = testsuite.getChildElements("testcases");
             for (int i = 0; i < testcases.size(); i++) {
