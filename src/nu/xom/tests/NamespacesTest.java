@@ -29,11 +29,11 @@ import nu.xom.NamespaceException;
 
 /**
  * <p>
- * 
+ *   Tests that namespace well-formedness is maintained.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class NamespacesTest extends XOMTestCase {
@@ -60,7 +60,8 @@ public class NamespacesTest extends XOMTestCase {
         someNamespaces.addNamespaceDeclaration("xsl", 
          "http://www.w3.org/1999/xslt");
          
-        severalNamespaces = new Element("test", "http://www.example.com/");
+        severalNamespaces 
+          = new Element("test", "http://www.example.com/");
         severalNamespaces.addAttribute(
           new Attribute("xlink:type", 
          "http://www.w3.org/2001/xlink", "simple"));
