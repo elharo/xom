@@ -21,6 +21,7 @@
 
 package nu.xom.tests;
 
+import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.Serializer;
 import nu.xom.Element;
@@ -1553,6 +1554,52 @@ public class SerializerTest extends XOMTestCase {
     }
 
 
+    public void testUnicodeNFCTestSuite() 
+      throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        Document doc = builder.build("data/nfctests.xml");
+        Elements tests = doc.getRootElement().getChildElements("test");
+        for (int i = 0; i < tests.size(); i++) {
+            System.out.println(i);
+            Element test = tests.get(i);
+            test.detach();
+            Document testdoc = new Document(test);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            Serializer serializer = new Serializer(out);
+            serializer.setUnicodeNormalizationFormC(true);
+            serializer.write(testdoc);
+            serializer.flush();
+            String result = new String(out.toByteArray(), "UTF-8");
+            Document resultDoc = builder.build(result, null);
+            Element root = resultDoc.getRootElement();
+            String c1 = root.getAttributeValue("c1");
+            String c2 = root.getAttributeValue("c2");
+            String c3 = root.getAttributeValue("c3");
+            String c4 = root.getAttributeValue("c4");
+            String c5 = root.getAttributeValue("c5");
+            String v1 = root.getAttributeValue("v1");
+            String v2 = root.getAttributeValue("v2");
+            String v3 = root.getAttributeValue("v3");
+            String v4 = root.getAttributeValue("v4");
+            String v5 = root.getAttributeValue("v5");
+            
+            assertEquals(c1, c2);
+            assertEquals(c2, c3);
+            // I'm not sure the v's are correct past the BMP
+            //assertEquals(root.getValue(), c1, v1);
+            // assertEquals(c1, v2);
+            // assertEquals(c1, v3);
+            
+            assertEquals(c4, c5);
+            // assertEquals(c4, v4);
+            // assertEquals(c4, v5);
+            
+        }
+        
+    }
+
+    
     public void testNFCInAttribute() throws IOException {
         
         root.addAttribute(new Attribute("c\u0327", "c\u0327")); // c with combining cedilla
@@ -1643,6 +1690,25 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(
           "<?xml version=\"1.0\" encoding=\"ISO-8859-5\"?>\r\n"
           + "<root>&#xE7;</root>\r\n", 
+          result
+        );    
+        
+    }
+
+    
+    public void testNFCFollowingEntityReference() 
+      throws IOException {
+        
+        root.appendChild("<\u0338"); // < followed by not
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<root>\u226E</root>\r\n", 
           result
         );    
         
@@ -2009,7 +2075,7 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(element); 
         serializer.flush();
         String result = out.toString("UTF-8");
-        assertEquals("<a xmlns=\"http://www.example.org\" />", result);
+        assertEquals("<a xmlns=\"http://www.example.org\"/>", result);
         
     }    
 
