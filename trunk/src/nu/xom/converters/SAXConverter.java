@@ -46,14 +46,12 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
   * 
  * @author Elliotte Rusty Harold
- * @version 1.0d16
+ * @version 1.0d23
  * 
  */
 public class SAXConverter {
 
     private ContentHandler contentHandler;
-/*    private DeclHandler    declHandler;
-    private DTDHandler     dtdHandler; */
     private LexicalHandler lexicalHandler;
 
     /**
@@ -70,15 +68,6 @@ public class SAXConverter {
     public SAXConverter(ContentHandler handler) {
         setContentHandler(handler);
     }
-
-/* Hold in case we add notations and entities
-    public void setDTDHandler(DTDHandler handler) {
-        this.dtdHandler = handler;
-    }
-
-    public DTDHandler getDTDHandler() {
-        return this.dtdHandler;
-    }*/
 
     /**
      * <p>
@@ -111,14 +100,6 @@ public class SAXConverter {
         return this.contentHandler;
     }
 
-/*
-    public void setDeclHandler(DeclHandler handler) {
-        this.declHandler = handler;
-    }
-
-    public DeclHandler getDeclHandler() {
-        return this.declHandler;
-    } */
 
     /**
      * <p>
