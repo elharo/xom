@@ -500,12 +500,18 @@ public class DOMConverter {
         org.w3c.dom.Node domParent = domResult;
         Node xomCurrent = xomElement;
         int index = 0;
+        int[] indexes = new int[10];
+        int top = 0;
+        indexes[0] = 0;
         boolean end = false;
         while (true) {
             
             if (!end && xomCurrent.getChildCount() > 0) {
                xomCurrent = xomCurrent.getChild(0);
                index = 0;
+               top++;
+               indexes = grow(indexes, top);
+               indexes[top] = 0;
             }
             else {
                 boolean wasEnd = end;
@@ -518,15 +524,18 @@ public class DOMConverter {
                 }
                 if (xomParent.getChildCount() - 1 == index) {
                     xomCurrent = xomParent;
+                    top--;
                     if (xomCurrent == xomElement) break;
                     ParentNode tp = xomCurrent.getParent();
                     if (tp == null) break;
-                    index = tp.indexOf(xomCurrent);
+                    index = indexes[top];
+                    // index = tp.indexOf(xomCurrent);
                     end = true;
                     continue;
                 }
                 else {
                     index++;
+                    indexes[top] = index;
                     xomCurrent = xomParent.getChild(index);
                 }
             }
@@ -545,6 +554,16 @@ public class DOMConverter {
         } // end while
         
         return domResult;  
+        
+    }
+        
+    
+    private static int[] grow(int[] indexes, int top) {
+        
+        if (top < indexes.length) return indexes;
+        int[] result = new int[indexes.length*2];
+        System.arraycopy(indexes, 0, result, 0, indexes.length);
+        return result;
         
     }
 
