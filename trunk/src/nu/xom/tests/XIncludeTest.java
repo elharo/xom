@@ -42,6 +42,7 @@ import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.Text;
+import nu.xom.xinclude.BadHTTPHeaderException;
 import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.InclusionLoopException;
 import nu.xom.xinclude.NoIncludeLocationException;
@@ -443,6 +444,46 @@ public class XIncludeTest extends XOMTestCase {
           new File("data/xinclude/output/c1.xml")
         );
         assertEquals(expectedResult, result);
+
+    }  
+    
+    
+    public void testBadAcceptAttribute() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        String data = "<document xmlns:xi='http://www.w3.org/2001/XInclude'>"
+          + "\n  <p>120 MHz is adequate for an average home user.</p>"
+          + "\n  <xi:include href='http://www.example.com' " 
+          + "accept='text/html&#x0D;&#x0A;Something: bad'/>\n</document>";
+        Reader reader = new StringReader(data);
+        Document doc = builder.build(reader);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed accept header containing carriage return linefeed");
+        }
+        catch (BadHTTPHeaderException success) {
+            assertNotNull(success.getMessage());
+        }
+
+    }  
+    
+    
+    public void testBadAcceptAttributeWithLatin1Character() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        String data = "<document xmlns:xi='http://www.w3.org/2001/XInclude'>"
+          + "\n  <p>120 MHz is adequate for an average home user.</p>"
+          + "\n  <xi:include href='http://www.example.com' " 
+          + "accept='text/html&#xA0;Something: bad'/>\n</document>";
+        Reader reader = new StringReader(data);
+        Document doc = builder.build(reader);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed accept header containing non-ASCII character");
+        }
+        catch (BadHTTPHeaderException success) {
+            assertNotNull(success.getMessage());
+        }
 
     }  
     
@@ -1004,6 +1045,7 @@ public class XIncludeTest extends XOMTestCase {
     
     public void testInclusionLoopWithLength2Cycle() 
       throws ParsingException, IOException, XIncludeException {
+        
         File input = new File("data/xinclude/input/circle2a.xml");
         File errorFile = new File("data/xinclude/input/circle2b.xml");
         Document doc = builder.build(input);
@@ -1016,11 +1058,13 @@ public class XIncludeTest extends XOMTestCase {
             assertTrue(success.getMessage().indexOf(input.toURL().toExternalForm()) > 1);           
             assertEquals(errorFile.toURL().toExternalForm(), success.getURI());           
         }
+        
     }
     
     
     public void testMissingHref() 
       throws ParsingException, IOException, XIncludeException {
+        
         File input = new File("data/xinclude/input/missinghref.xml");
         Document doc = builder.build(input);
         try {
@@ -1031,11 +1075,13 @@ public class XIncludeTest extends XOMTestCase {
             assertNotNull(success.getMessage());
             assertEquals(doc.getBaseURI(), success.getURI());           
         }
+        
     }
     
     
     public void testBadParseAttribute() 
       throws ParsingException, IOException, XIncludeException {
+        
         File input = new File("data/xinclude/input/badparseattribute.xml");
         Document doc = builder.build(input);
         try {
@@ -1048,6 +1094,7 @@ public class XIncludeTest extends XOMTestCase {
             URL u2 = new URL(success.getURI());
             assertEquals(u1, u2);
         }
+        
     }
     
     
@@ -1062,11 +1109,13 @@ public class XIncludeTest extends XOMTestCase {
         catch (IOException success) {
             assertNotNull(success.getMessage());  
         }
+        
     }
     
     
     public void testFallback() 
       throws ParsingException, IOException, XIncludeException {
+        
         File input = new File("data/xinclude/input/fallbacktest.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
@@ -1074,6 +1123,7 @@ public class XIncludeTest extends XOMTestCase {
           new File("data/xinclude/output/fallbacktest.xml")
         );
         assertEquals(expectedResult, result);
+        
     }
     
     
@@ -1599,7 +1649,8 @@ public class XIncludeTest extends XOMTestCase {
                         Document expected = builder.build(in);
                         Document doc = builder.build(input);
                         XIncluder.resolveInPlace(doc);
-                        assertEquals(expected, doc);
+                        assertEquals("Error when processing  " 
+                          + in.getName(), expected, doc);
                     }
                 }          
             }
@@ -1826,34 +1877,6 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
-    
-    
-    public void testAcceptJIS() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File("data/xinclude/input/acceptjis.xml");
-        Document doc = builder.build(input);
-        Document result = XIncluder.resolve(doc);
-        Document expectedResult = builder.build(
-          new File("data/xinclude/output/acceptjis.xml")
-        );
-        assertEquals(expectedResult, result);
-        
-    }
-    
-    
-    public void testAcceptEUC() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File("data/xinclude/input/acceptascii.xml");
-        Document doc = builder.build(input);
-        Document result = XIncluder.resolve(doc);
-        Document expectedResult = builder.build(
-          new File("data/xinclude/output/acceptascii.xml")
-        );
-        assertEquals(expectedResult, result);
-        
-    } 
     
  
 }

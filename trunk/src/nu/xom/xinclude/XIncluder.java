@@ -353,7 +353,9 @@ public class XIncluder {
                 else if (href != null) url = new URL(href);  
                 
                 String accept = element.getAttributeValue("accept");
+                checkHeader(accept);
                 String acceptLanguage = element.getAttributeValue("accept-language"); 
+                checkHeader(acceptLanguage);
                 
                 if (parse.equals("xml")) {
                     Nodes replacements;
@@ -863,7 +865,7 @@ public class XIncluder {
     private static Nodes downloadTextDocument(
       URL source, String encoding, Builder builder,
       String accept, String language) 
-      throws IOException {
+      throws IOException, XIncludeException {
          
         if (encoding == null || encoding.length() == 0) {
             encoding = "UTF-8"; 
@@ -929,13 +931,32 @@ public class XIncluder {
     
     
     private static void setHeaders(URLConnection uc, String accept, 
-      String language) {
+      String language) throws BadHTTPHeaderException {
       
         if (accept != null) {
+            checkHeader(accept);
             uc.setRequestProperty("accept", accept);
         }
         if (language != null) {
+            checkHeader(language);
             uc.setRequestProperty("accept-language", language);
+        }
+        
+    }
+    
+    
+    private static void checkHeader(String header) 
+      throws BadHTTPHeaderException {
+     
+        if (header == null) return;
+        int length = header.length();
+        for (int i = 0; i < length; i++) {
+            char c = header.charAt(i);
+            if (c < 0x20 || c > 0x7E) {
+                throw new BadHTTPHeaderException(
+                  "Header contains illegal character 0x" 
+                  + Integer.toHexString(c).toUpperCase());
+            }
         }
         
     }
