@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -38,7 +38,7 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d13
+ * @version 1.0a1
  * 
  */
 public abstract class LeafNode extends Node {
@@ -46,17 +46,6 @@ public abstract class LeafNode extends Node {
     // prevent direct subclassing from outside this package
     LeafNode() {}
 
-    /**
-     * <p>
-     * Returns false because leaf nodes do not have children.
-     * </p>
-     * 
-     * @return false
-     * @see nu.xom.ParentNode#hasChildren()
-     */
-    public final boolean hasChildren() {
-        return false;   
-    }
 
     /**
      * <p>
@@ -77,13 +66,14 @@ public abstract class LeafNode extends Node {
           "LeafNodes do not have children");        
     }
 
+    
     /**
      * <p>
      * Returns 0 because leaf nodes do not have children.
      * </p>
      * 
      * @return zero
-     * @see nu.xom.ParentNode#getChildCount()
+     * @see nu.xom.Node#getChildCount()
      */
     public final int getChildCount() {
         return 0;   

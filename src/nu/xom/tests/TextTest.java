@@ -34,20 +34,23 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class TextTest extends XOMTestCase {
 
+    
     public TextTest(String name) {
         super(name);
     }
 
+    
     public void testConstructor() {       
         Text a1 = new Text("test");
         assertEquals("test", a1.getValue());
     }
 
+    
     public void testSetter() {
         
         String[] legal = {
@@ -244,7 +247,6 @@ public class TextTest extends XOMTestCase {
 
         Text c1 = new Text("data");
         assertEquals(0, c1.getChildCount());
-        assertTrue(!c1.hasChildren());
         try {
             c1.getChild(0);
             fail("Didn't throw IndexOutofBoundsException");
@@ -261,10 +263,11 @@ public class TextTest extends XOMTestCase {
         assertEquals(c1, element.getChild(0));
 
         element.removeChild(c1);
-        assertTrue(!element.hasChildren());
+        assertEquals(0, element.getChildCount());
 
     }
 
+    
     public void testToString() {
         
         Text c1 = new Text("content");

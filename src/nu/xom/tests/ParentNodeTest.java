@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -41,7 +41,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class ParentNodeTest extends XOMTestCase {
@@ -50,9 +50,11 @@ public class ParentNodeTest extends XOMTestCase {
         super(name);
     }
     
+    
     private Element empty;
     private Element notEmpty;
     private Text child;
+    
     
     protected void setUp() {
         empty = new Element("Empty");
@@ -61,6 +63,7 @@ public class ParentNodeTest extends XOMTestCase {
         notEmpty.appendChild(child);
     }
 
+    
     public void testDetach() {
         Text text = new Text("This will be attached then detached");
         empty.appendChild(text);
@@ -70,15 +73,10 @@ public class ParentNodeTest extends XOMTestCase {
     }
 
     
-    public void testHasChildren() {       
-        assertTrue(notEmpty.hasChildren());
-        assertTrue(!empty.hasChildren());       
-    } 
-
     public void testAppendChild() {      
         Element child = new Element("test");
         empty.appendChild(child);
-        assertTrue(empty.hasChildren());
+        assertEquals(1, empty.getChildCount());
         assertEquals(empty.getChild(0), child);
         child.detach();
         
@@ -87,6 +85,7 @@ public class ParentNodeTest extends XOMTestCase {
         assertTrue(notEmpty.getChild(1).equals(child));
     } 
 
+    
     public void testAppendChildToItself() {      
         Element child = new Element("test");
         try {
@@ -94,11 +93,11 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Appended node to itself");
         }
         catch (CycleException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
     } 
 
+    
     public void testCycle() {      
         Element a = new Element("test");
         Element b = new Element("test");
@@ -120,7 +119,7 @@ public class ParentNodeTest extends XOMTestCase {
         // Test insert into empty element
         Element child1 = new Element("child");
         parent.insertChild(child1, 0);
-        assertTrue(parent.hasChildren());
+        assertTrue(parent.getChildCount() > 0);
         assertEquals(0, parent.indexOf(child1));
         
         // Test insert at beginning
@@ -191,6 +190,7 @@ public class ParentNodeTest extends XOMTestCase {
 
     } 
 
+    
     public void testAppendChild2() {
         
         try {
@@ -213,6 +213,7 @@ public class ParentNodeTest extends XOMTestCase {
 
     } 
 
+    
     public void testReplaceChild() {
         
         Element old1 = new Element("old1");
@@ -254,6 +255,7 @@ public class ParentNodeTest extends XOMTestCase {
 
     } 
 
+    
     public void testIndexOf() {
         
         Element child1 = new Element("old1");
@@ -274,6 +276,7 @@ public class ParentNodeTest extends XOMTestCase {
 
     } 
 
+    
     public void testGetChild() {
         
         Element old1 = new Element("old1");
@@ -308,17 +311,16 @@ public class ParentNodeTest extends XOMTestCase {
 
     } 
 
-   public void testRemoveChild() {
+    
+    public void testRemoveChild() {
         
         try {
             empty.removeChild(0);
             fail("Removed child from empty element");   
         }
         catch (IndexOutOfBoundsException success) {
-            // success
             assertNotNull(success.getMessage());
         }
-        
 
         Element old1 = new Element("old1");
         Element old2 = new Element("old2");
@@ -329,7 +331,6 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Removed non-existent child from empty element");   
         }
         catch (NoSuchChildException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
 
@@ -346,7 +347,6 @@ public class ParentNodeTest extends XOMTestCase {
             fail("No IndexOutOfBoundsException");   
         }
         catch (IndexOutOfBoundsException success) {
-            // success
             assertNotNull(success.getMessage());
         }
         
@@ -372,7 +372,6 @@ public class ParentNodeTest extends XOMTestCase {
     } 
 
 
-
     public void testReplaceChildFailures() {
         
         Element old1 = new Element("old1");
@@ -389,7 +388,6 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Replaced non-existent child");
         }
         catch (NoSuchChildException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
 
@@ -406,11 +404,11 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Replaced null");
         }
         catch (NoSuchChildException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
 
     } 
+    
     
     public void testReplaceChildInEmptyParent() {
         
@@ -425,4 +423,5 @@ public class ParentNodeTest extends XOMTestCase {
         } 
     }
 
+    
 }

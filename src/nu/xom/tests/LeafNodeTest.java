@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -32,33 +32,34 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0a1
  *
  */
 public class LeafNodeTest extends XOMTestCase {
 
+    
     public LeafNodeTest(String name) {
         super(name);
     }
     
-    private Text parent;
+    
+    private Text leaf;
+    
     
     protected void setUp() {
-        parent = new Text("parent");
+        leaf = new Text("parent");
     }
     
+    
     public void testHasChildren() {      
-        assertTrue(!parent.hasChildren());       
+        assertEquals(0, leaf.getChildCount());       
     } 
 
-    public void testAppendChild() {
-        assertTrue(!parent.hasChildren());
-    } 
-
+    
     public void testGetChild() {
 
         try {
-            parent.getChild(0);
+            leaf.getChild(0);
             fail("No index exception");   
         }
         catch (IndexOutOfBoundsException success) {
@@ -67,10 +68,9 @@ public class LeafNodeTest extends XOMTestCase {
 
     }  
 
+    
     public void testGetChildCount() {
-
-        assertEquals(0, parent.getChildCount());
-
+        assertEquals(0, leaf.getChildCount());
     }  
 
 }

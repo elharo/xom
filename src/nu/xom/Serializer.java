@@ -47,7 +47,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d24
+ * @version 1.0a1
  * 
  */
 public class Serializer {
@@ -55,6 +55,7 @@ public class Serializer {
     private TextWriter escaper;
     private boolean preserveBaseURI = false;
 
+    
     /**
      * <p>
      * Create a new serializer that uses the UTF-8 encoding.
@@ -78,6 +79,7 @@ public class Serializer {
               "The VM is broken. It does not understand UTF-8.");
         }
     }
+    
     
     /**
      * <p>
@@ -145,6 +147,7 @@ public class Serializer {
         this.setOutputStream(out, encoding);
         
     }
+    
     
     /**
      * <p>
@@ -300,7 +303,7 @@ public class Serializer {
             escaper.breakLine();
         }
         
-        if (element.hasChildren()) {
+        if (element.getChildCount() > 0) {
             writeStartTag(element);
             // adjust for xml:space
             boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
@@ -343,6 +346,7 @@ public class Serializer {
         
     }
 
+    
     /**
      * <p>
      *   This method writes the end-tag for an element in the form
@@ -360,6 +364,7 @@ public class Serializer {
         escaper.writeMarkup(">");
     }
 
+    
     /**
      * 
      * <p>
@@ -384,6 +389,7 @@ public class Serializer {
         escaper.writeMarkup('>');
     }
 
+    
     /**
      * 
      * <p>
@@ -416,6 +422,7 @@ public class Serializer {
         escaper.writeMarkup("/>");
     }
 
+    
     // This just extracts the commonality between writeStartTag  
     // and writeEmptyElementTag
     private void writeTagBeginning(Element element) 
@@ -477,6 +484,7 @@ public class Serializer {
         }  
     }
 
+    
     /**
      * <p>
      *   This method writes all the namespace declaration
@@ -547,6 +555,7 @@ public class Serializer {
         escaper.writeMarkup('\"');
     }
 
+    
     /**
      * <p>
      *   This method writes an attribute in the form 
@@ -565,6 +574,7 @@ public class Serializer {
         escaper.writeAttributeValue(attribute.getValue());
         escaper.writeMarkup("\"");  
     }
+    
     
     /**
      * <p>
@@ -590,6 +600,7 @@ public class Serializer {
         escaper.writeMarkup(comment.getValue());
         escaper.writeMarkup("-->");
     }
+    
     
     /**
      * <p>
@@ -738,6 +749,7 @@ public class Serializer {
 
     }   
 
+    
     /**
      * <p>
      * Serializes a child node onto the output stream using the  
@@ -779,7 +791,8 @@ public class Serializer {
         
     }
  
-   /** <p>
+    
+    /** <p>
      *   Writes a string onto the underlying <code>OutputStream</code>.
      *   Non-ASCII characters that are not available in the
      *   current character set are hexadecimally escaped.
@@ -799,7 +812,7 @@ public class Serializer {
         escaper.writePCDATA(text);
     }   
  
-   /** <p>
+    /** <p>
      *   Writes a string onto the underlying <code>OutputStream</code>.
      *   Non-ASCII characters that are not available in the
      *   current character set are escaped using hexadeicmal numeric
@@ -823,7 +836,8 @@ public class Serializer {
         escaper.writeAttributeValue(value);
     }   
  
-   /** <p>
+    
+    /** <p>
      *   Writes a string onto the underlying <code>OutputStream</code>.
      *   without escaping any characters.
      *   Non-ASCII characters that are not available in the
@@ -840,7 +854,8 @@ public class Serializer {
         escaper.writeMarkup(text);
     }   
  
-   /** <p>
+    
+    /** <p>
      *   Writes the current line break string
      *   onto the underlying <code>OutputStream</code> and indents
      *   as specified by the current level and the indent property.
@@ -852,6 +867,7 @@ public class Serializer {
     protected final void breakLine() throws IOException {
         escaper.breakLine();
     }   
+    
     
     /**
      * <p>
@@ -869,6 +885,7 @@ public class Serializer {
         escaper.flush();    
     }
 
+    
     /**
      * <p>
      * Returns the number of spaces this serializer indents.
@@ -931,6 +948,7 @@ public class Serializer {
         escaper.setIndent(indent);
     }
 
+    
     /**
      * <p>
      * Returns the <code>String</code> used as a line separator.
@@ -944,6 +962,7 @@ public class Serializer {
         return escaper.getLineSeparator();
     }
 
+    
     /**
      * <p>
      * Sets the lineSeparator. This can only be one of the 
@@ -973,6 +992,7 @@ public class Serializer {
         escaper.setLineSeparator(lineSeparator);  
     }
 
+    
     /**
      * <p>
      * Returns the preferred maximum line length.
@@ -984,6 +1004,7 @@ public class Serializer {
         return escaper.getMaxLength();
     }
 
+    
     /**
      * <p>
      * Sets the suggested maximum line length for this serializer.
@@ -1028,6 +1049,7 @@ public class Serializer {
         escaper.setMaxLength(maxLength);
     }
 
+    
     /**
      * <p>
      * Returns true if this serializer preserves the original
@@ -1042,6 +1064,7 @@ public class Serializer {
         return preserveBaseURI;
     }
 
+    
     /**
      * <p>
      * Determines whether this <code>Serializer</code> inserts
@@ -1060,6 +1083,7 @@ public class Serializer {
     public void setPreserveBaseURI(boolean preserve) {
         this.preserveBaseURI = preserve;
     }
+    
     
     /**
      * <p>
@@ -1121,6 +1145,7 @@ public class Serializer {
     public boolean getUnicodeNormalizationFormC() {
         return escaper.getNFC();   
     }
+    
     
     /**
      * <p>
