@@ -53,7 +53,6 @@ package nu.xom;
  * @version 1.0d23
  * 
  */
-// Need to update Javadoc????
 public class NodeFactory {
 
     /**
@@ -114,6 +113,8 @@ public class NodeFactory {
     
     // check that you can't use this method to bypass
     // add's checks on multiple parentage????
+    
+    // should finishmakingElement be called for the root element????
     
     /**
      * <p>
