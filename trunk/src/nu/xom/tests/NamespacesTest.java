@@ -34,7 +34,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class NamespacesTest extends XOMTestCase {
@@ -816,6 +816,20 @@ public class NamespacesTest extends XOMTestCase {
             catch (MalformedURIException success) {
                 assertNotNull(success.getMessage());
             }
+        }
+        
+    }
+    
+    
+    public void testSetPrefixOnElementInNoNamespace() {
+        
+        Element e = new Element("Seq");
+        try {
+            e.setNamespacePrefix("rdf");
+            fail("Set prefix on element in no namespace");
+        }
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
