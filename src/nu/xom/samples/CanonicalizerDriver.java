@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -33,7 +33,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0b4
  *
  */
 public class CanonicalizerDriver {
@@ -44,12 +44,14 @@ public class CanonicalizerDriver {
       * </p>
       *
       * @param args <code>args[0]</code> contains the URL or  
-      *      file name of the first document to be processed. 
+      *      file name of the first document to be processed
       */
     public static void main(String[] args) {
   
         if (args.length == 0) {
-            System.out.println("Usage: java nu.xom.samples.CanonicalizerDriver URL");
+            System.out.println(
+              "Usage: java nu.xom.samples.CanonicalizerDriver URL"
+            );
             return;
         }
         
