@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -322,32 +322,6 @@ public class NodeFactory {
         return makeText(data);  
     } 
 
-    /**
-     * <p>
-     * Returns a new <code>Nodes</code> object containing a 
-     * <code>Text</code> node with the specified content.
-     * The <code>Builder</code> calls this method
-     * to create text nodes composed of white space
-     * in places where the DTD says only child elements may appear.
-     * SAX calls this ignorable white space, and the XML specification
-     * calls this white space in element content.
-     * </p>
-     * 
-     * <p>
-     * The default implementation of this method merely delegates
-     * to the <code>makeText</code> method. However, a subclass might
-     * eliminate white space in element content from the constructed
-     * tree by overriding this method so it always returns an empty
-     * <code>Nodes</code> object.  
-     * </p>
-     * 
-     * @param data the complete text content of the node
-     * 
-     * @return the nodes to be added to the tree
-     */
-    public String makeWhiteSpaceInElementContent(String data) {
-        return "";  
-    }
 
     /**
      * <p>

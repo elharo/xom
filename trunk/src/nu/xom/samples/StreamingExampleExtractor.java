@@ -116,10 +116,6 @@ public class StreamingExampleExtractor extends NodeFactory {
         return empty;    
     }
 
-    public Nodes makeWhiteSpaceInElementContent(String data) {
-        return makeText(data);  
-    }
-
     public Nodes makeProcessingInstruction(
       String target, String data) {
         return empty; 
