@@ -55,8 +55,10 @@ public class XLinkSpider {
     private Builder parser = new Builder();
     private List queue = new LinkedList();
     
-    public static final String XLINK_NS = "http://www.w3.org/1999/xlink";
-    public static final String XML_NS = "http://www.w3.org/XML/1998/namespace";
+    public static final String XLINK_NS 
+      = "http://www.w3.org/1999/xlink";
+    public static final String XML_NS 
+      = "http://www.w3.org/XML/1998/namespace";
     
     public void search(URL url) {
         
@@ -83,10 +85,13 @@ public class XLinkSpider {
         Attribute href = element.getAttribute("href", XLINK_NS); 
         Attribute xmlbase = element.getAttribute("base", XML_NS);
         try {
-            if (xmlbase != null) base = new URL(base, xmlbase.getValue());
+            if (xmlbase != null) {
+                base = new URL(base, xmlbase.getValue());
+            }
         }
         catch (MalformedURLException ex) {
-            //Java can't handle the kind of URLs used inside this element
+            // Probably just no protocol handler for the 
+            // kind of URLs used inside this element
             return;
         }
         if (href != null) {
@@ -101,7 +106,8 @@ public class XLinkSpider {
                   discovered.getFile()
                 );
                 
-                if (!spidered.contains(discovered) && !queue.contains(discovered)) {
+                if (!spidered.contains(discovered) 
+                  && !queue.contains(discovered)) {
                     queue.add(discovered);   
                 }
             }
