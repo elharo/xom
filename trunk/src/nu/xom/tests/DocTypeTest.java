@@ -216,8 +216,9 @@ public class DocTypeTest extends XOMTestCase {
                 fail("Allowed bad public ID character " 
                   + Integer.toHexString(c));
             }
-            catch (WellformednessException ex) {
-                // successfully detected bad public ID    
+            catch (WellformednessException success) {
+                // successfully detected bad public ID 
+                assertNotNull(success.getMessage());   
             }
         } 
         for (char c = '~'; c < 1000; c++) {

@@ -236,8 +236,8 @@ public class DocumentTest extends XOMTestCase {
             new Document(nullDoc);
             fail("allowed null doc!");
         }
-        catch (NullPointerException ex) {
-            // success   
+        catch (NullPointerException success) {
+            // success  
         }
         
     }

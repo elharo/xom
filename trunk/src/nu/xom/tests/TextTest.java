@@ -224,7 +224,6 @@ public class TextTest extends XOMTestCase {
         assertEquals("[nu.xom.Text: content]", c1.toString());          
         
         c1.setValue("012345678901234567890123456789012345678901234567890123456789");
-        String s = c1.toString();
         assertEquals(
           "[nu.xom.Text: 01234567890123456789012345678901234...]", 
           c1.toString()

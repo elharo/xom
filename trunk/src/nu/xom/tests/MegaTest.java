@@ -31,7 +31,6 @@ import java.io.Writer;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
-import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -103,7 +102,7 @@ public class MegaTest extends XOMTestCase {
     public void testMegaFile() 
       throws IOException, ParsingException {
 
-        Document doc = builder.build(in);
+        builder.build(in);
         assertEquals(expectedResult, actualResult);
 
     } 

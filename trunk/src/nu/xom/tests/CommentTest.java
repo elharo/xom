@@ -89,11 +89,11 @@ public class CommentTest extends XOMTestCase {
     // recognized in comment data
     public void testCarriageReturnInCommentData() {
         try {
-            Comment c = new Comment("data\rdata");
+            new Comment("data\rdata");
             fail("Allowed carriage return in comment");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
     }
     
@@ -107,22 +107,22 @@ public class CommentTest extends XOMTestCase {
           c1.setValue("test -- test");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
         try {
           c1.setValue("-test");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
         try {
           c1.setValue("test-");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
 
         c1.setValue(null);
@@ -165,8 +165,8 @@ public class CommentTest extends XOMTestCase {
           new Comment("test: \uD8F5\uDBF0  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
 
 
@@ -175,8 +175,8 @@ public class CommentTest extends XOMTestCase {
           new Comment("test: \uD8F5\uD8F5  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
 
         // One high-half
@@ -184,8 +184,8 @@ public class CommentTest extends XOMTestCase {
            new Comment("test: \uD8F5  ");
            fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
 
         // One low half
@@ -193,8 +193,8 @@ public class CommentTest extends XOMTestCase {
             new Comment("test: \uDF80  ");
             fail("Should raise an IllegalDataException");
          }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
 
         // Low half before high half
@@ -202,8 +202,8 @@ public class CommentTest extends XOMTestCase {
             new Comment("test: \uDCF5\uD8F5  ");
             fail("Should raise an IllegalDataException");
          }
-        catch (IllegalDataException ex) {
-            assertNotNull(ex.getMessage());   
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());   
         }   
 
 
@@ -218,9 +218,9 @@ public class CommentTest extends XOMTestCase {
             c1.getChild(0);
             fail("Didn't throw IndexOutofBoundsException");
         }
-        catch (IndexOutOfBoundsException ex) {
+        catch (IndexOutOfBoundsException success) {
             // success  
-            assertNotNull(ex.getMessage()); 
+            assertNotNull(success.getMessage()); 
         }
         
         assertNull(c1.getParent());

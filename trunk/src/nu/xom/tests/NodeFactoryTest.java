@@ -85,13 +85,12 @@ public class NodeFactoryTest extends XOMTestCase {
         String data = "<a><b>18</b></a>";
         Builder builder = new Builder(new SingleElementFactory());
         try {
-            Document doc = builder.build(data,
-              "http://www.example.org/");
+            builder.build(data, "http://www.example.org/");
             fail("Allowed one element in several places");
         }
-        catch (CycleException ex) {
+        catch (CycleException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
                 
     }
@@ -102,13 +101,12 @@ public class NodeFactoryTest extends XOMTestCase {
         String data = "<a test=\"value\" name=\"data\"></a>";
         Builder builder = new Builder(new SingleAttributeFactory());
         try {
-            Document doc = builder.build(data,
-              "http://www.example.org/");
+            builder.build(data, "http://www.example.org/");
             fail("Allowed one attribute twice");
         }
-        catch (IllegalAddException ex) {
+        catch (IllegalAddException success) {
             // success   
-            assertNotNull(ex.getMessage());
+            assertNotNull(success.getMessage());
         }
                 
     }
@@ -339,11 +337,12 @@ public class NodeFactoryTest extends XOMTestCase {
         File input = new File("data/entitytest.xml");
         Builder builder = new Builder(new NullElementFactory());
         try {
-            Document doc = builder.build(input);
+            builder.build(input);
             fail("Allowed null root");
         }
-        catch (NullPointerException ex) {
-           // success   
+        catch (NullPointerException success) {
+           // success 
+           assertNotNull(success.getMessage());  
         }        
     }
 
@@ -364,11 +363,11 @@ public class NodeFactoryTest extends XOMTestCase {
         File input = new File("data/entitytest.xml");
         Builder builder = new Builder(new NullDocumentFactory());
         try {
-            Document doc = builder.build(input);
+            builder.build(input);
             fail("Allowed null document");
         }
-        catch (NullPointerException ex) {
-           // success   
+        catch (NullPointerException success) {
+           // success 
         }        
     }
 
