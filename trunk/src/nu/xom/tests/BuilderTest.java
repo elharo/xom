@@ -2618,6 +2618,34 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (SAXException ex) {
             // Can't test SAXON if you can't load it
+            return;
+        }
+        Builder builder = new Builder(parser);
+        
+        try {
+            // known bug in Saxon: doesn't catch 
+            // colon in processing instruction targets
+            builder.build("<?test:data ?><data/>", null);
+            fail("Didn't verify Saxon's input");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testSaxon7sAElfredIsVerified() 
+      throws SAXException, IOException {
+        
+        XMLReader parser;
+        try {
+          parser = XMLReaderFactory.createXMLReader(
+            "net.sf.saxon.aelfred.SAXDriver"
+          );
+        }
+        catch (SAXException ex) {
+            // Can't test SAXON if you can't load it
             throw ex;
             // return;
         }
@@ -2634,4 +2662,6 @@ public class BuilderTest extends XOMTestCase {
         }
         
     }
+    
+    
 }
