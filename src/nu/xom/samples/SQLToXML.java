@@ -151,7 +151,7 @@ public class SQLToXML {
   
   private static void writeAccounts(Element parent, Connection conn, 
    String agencyCode, String bureauCode)
-   throws IOException, SQLException {
+   throws SQLException {
 
     String query = "SELECT DISTINCT AccountName, AccountCode "
      + "FROM BudgetAuthorizationTable WHERE AgencyCode='" 
@@ -179,7 +179,7 @@ public class SQLToXML {
   
   private static void writeSubfunctions(Element parent,  
    Connection conn, String agencyCode, String bureauCode, 
-   String accountCode) throws IOException, SQLException {
+   String accountCode) throws SQLException {
 
     String query = "SELECT * FROM BudgetAuthorizationTable"
      + " WHERE AgencyCode='" + agencyCode + "' AND BureauCode='" 
