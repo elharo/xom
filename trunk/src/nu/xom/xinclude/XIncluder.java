@@ -453,18 +453,25 @@ public class XIncluder {
                     }
                 }
                 else if (parse.equals("text")) {                   
-                    Nodes replacement 
+                    Nodes replacements 
                       = downloadTextDocument(url, encoding, builder, accept, acceptCharset, acceptLanguage); 
-                    if (replacement.size() == 0) {  // need to test branch????
+                    if (replacements.size() == 0) {  // need to test branch????
                         parent.removeChild(element);
                     }
                     else {
-                        parent.replaceChild(element, replacement.get(0));
+                        Node replacement = replacements.get(0);
+                        if (replacement instanceof Attribute) {
+                            ((Element) parent).addAttribute((Attribute) replacement);
+                            parent.removeChild(element);
+                        }
+                        else {
+                            parent.replaceChild(element, replacement);
+                        }
                     }
-                    if (replacement.size() > 1) { // need to test branch????
-                        int position = parent.indexOf(replacement.get(0));
-                        for (int j = 1; j < replacement.size(); j++) {
-                            parent.insertChild(replacement.get(j), position+j);
+                    if (replacements.size() > 1) { // need to test branch????
+                        int position = parent.indexOf(replacements.get(0));
+                        for (int j = 1; j < replacements.size(); j++) {
+                            parent.insertChild(replacements.get(j), position+j);
                         }
                     }
                 }
@@ -968,7 +975,7 @@ URI reference by escaping all disallowed characters as follows: ]
     private static String convertToURI(String iri) {
         
         try {
-            byte[] utf8Data = iri.getBytes("UTF-8");
+            byte[] utf8Data = iri.getBytes("UTF8");
             StringBuffer uri = new StringBuffer(utf8Data.length);
             for (int i = 0; i < utf8Data.length; i++) {
                 if (needsEscaping(utf8Data[i])) {
@@ -990,6 +997,7 @@ URI reference by escaping all disallowed characters as follows: ]
     }
     
     
+    // could switch to lookup table????
     private static boolean needsEscaping(byte c) {
         
         // This first test includes high-byte characters
