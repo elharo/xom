@@ -1251,9 +1251,10 @@ public class XSLTransformTest extends XOMTestCase {
                         continue;
                     } 
                     else if ("Sorting_SortExprWithCurrentInsideForEach1".equals(id)) {
-                        // Xalan bug: XXX verify and report
+                        // Xalan bug
+                        // http://issues.apache.org/jira/browse/XALANJ-1970
                         continue;
-                    } 
+                    }
                     else if ("BVTs_bvt041".equals(id) || "BVTs_bvt063".equals(id)
                         || "BVTs_bvt070".equals(id)) {
                         // Xalan bundled with JDK 1.4.2_05 does not recover 
