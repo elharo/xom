@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -550,25 +550,29 @@ class XOMHandler
     public void externalEntityDecl(String name, 
        String publicID, String systemID) {
      
-        // can I really ignore these or might they be required by
-        // external DTD subset????
         if (!inExternalSubset && doctype != null) {
-            if (!name.startsWith("%")) { // ignore parameter entities
-                internalDTDSubset.append("  <!ENTITY ");
-                if (publicID != null) { 
-                    internalDTDSubset.append(name); 
-                    internalDTDSubset.append(" PUBLIC \""); 
-                    internalDTDSubset.append(publicID); 
-                    internalDTDSubset.append("\" \""); 
-                    internalDTDSubset.append(systemID);       
-                }
-                else {
-                    internalDTDSubset.append(name); 
-                    internalDTDSubset.append(" SYSTEM \""); 
-                    internalDTDSubset.append(systemID); 
-                }
-                internalDTDSubset.append("\">\n"); 
+            internalDTDSubset.append("  <!ENTITY ");
+            if (name.startsWith("%")) { 
+                internalDTDSubset.append("% ");
+                internalDTDSubset.append(name.substring(1));
             }
+            else {
+                internalDTDSubset.append(name);
+            }
+               
+            if (publicID != null) { 
+                internalDTDSubset.append(" PUBLIC \""); 
+                internalDTDSubset.append(publicID); 
+                internalDTDSubset.append("\" \""); 
+                internalDTDSubset.append(systemID);       
+            }
+            else {
+                // need to escape system ID????
+                internalDTDSubset.append(" SYSTEM \""); 
+                internalDTDSubset.append(systemID); 
+            }
+            internalDTDSubset.append("\">\n");
+            
         }
         
     }
