@@ -23,10 +23,12 @@
 
 package nu.xom.tests;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -545,10 +547,7 @@ public class BaseURITest extends XOMTestCase {
     public void testXMLBaseRelative() {
         Element e = doc.getRootElement().getFirstChildElement("child4");
         String u = e.getBaseURI();
-        assertEquals(
-          "http://www.base1.com/base3.html", 
-          u
-        );
+        assertEquals("http://www.base1.com/base3.html", u);
     }
 
     
@@ -592,10 +591,12 @@ public class BaseURITest extends XOMTestCase {
         Element parent = new Element("parent");
         parent.setBaseURI("http://www.cafeconleche.org/");
         Element child = new Element("child");
+        child.setBaseURI("http://www.example.com/");
         parent.appendChild(child);
         child.addAttribute(new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", "/test/data/"));
-        assertEquals("/test/data/", child.getBaseURI());
+        String base = child.getBaseURI();
+        assertEquals("http://www.example.com/test/data/", base);
     }
     
     
@@ -712,4 +713,19 @@ public class BaseURITest extends XOMTestCase {
     }
 
     
+    public void testXMLBaseUsedToResolveHref() 
+      throws ParsingException, IOException {
+      
+        File input = new File("data/xmlbasetest.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Element root = doc.getRootElement();
+        String base = root.getBaseURI();
+        // This only works if we have an absolute URI. I can't assert
+        // equality with the expected absolute URI because that varies 
+        // from one installation to the next
+        URL u = new URL(base); 
+        assertTrue(base.startsWith("file:/"));
+                
+    }    
 }
