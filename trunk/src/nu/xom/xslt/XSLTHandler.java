@@ -347,8 +347,21 @@ class XSLTHandler
 
     
     public void comment(char[] text, int start, int length) {
+        
         flushText();
-        addToResultTree(factory.makeComment(new String(text, start, length)));
+        
+        String data = new String(text, start, length);
+        // Xalan should add spaces as necessary to split up double hyphens
+        // in commnts but it doesn't
+        int position = data.indexOf("--");
+        while (position != -1) {
+            data = data.substring(0, position) + "- -" + data.substring(position+2);
+            position = data.indexOf("--");
+        }
+        if (data.endsWith("-")) data += ' ';
+        
+        addToResultTree(factory.makeComment(data));
+        
     } 
      
     
