@@ -340,12 +340,16 @@ public class AttributeTest extends XOMTestCase {
         assertTrue(!c1.equals(c2));
         assertTrue(!c1.equals(c3));
         assertTrue(!c1.equals(null));
+        assertFalse(c1.equals("limit"));
+        assertFalse(c1.equals(new Element("test")));
     }
 
     public void testTypeEquals() {
         assertEquals(Attribute.Type.CDATA, Attribute.Type.CDATA);
         assertTrue(!Attribute.Type.CDATA.equals(Attribute.Type.NMTOKEN));
         assertTrue(!Attribute.Type.CDATA.equals(null));
+        assertFalse(Attribute.Type.CDATA.equals("CDATA"));
+        assertFalse(Attribute.Type.CDATA.equals(new Element("CDATA")));
     }
 
     public void testCopyConstructor() {
