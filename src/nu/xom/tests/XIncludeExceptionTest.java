@@ -24,6 +24,7 @@
 package nu.xom.tests;
 
 import nu.xom.xinclude.MisplacedFallbackException;
+import nu.xom.xinclude.MissingHrefException;
 import nu.xom.xinclude.XIncludeException;
 
 /**
@@ -125,6 +126,19 @@ public class XIncludeExceptionTest extends XOMTestCase {
         String message = "message";
         Exception ex = new MisplacedFallbackException(message);
         assertEquals(message, ex.getMessage());
+    }
+
+    public void testMissingHrefException() {
+        String message = "message";
+        XIncludeException ex = new MissingHrefException(message);
+        assertEquals(message, ex.getMessage());
+        assertNull(ex.getCause());
+        
+        Exception cause = new Exception();
+        ex = new MissingHrefException(message, cause);
+        assertEquals(message, ex.getMessage());
+        assertEquals(cause, ex.getCause());
+        
     }
 
 }
