@@ -1792,11 +1792,13 @@ public class Element extends ParentNode {
         StringBuffer result = new StringBuffer();
         Node current = this;
         boolean end = false;
+        int index = -1;
         while (true) {
             
             if (!end && current.getChildCount() > 0) {
                writeStartTag((Element) current, result);
                current = current.getChild(0);
+               index = 0;
             }
             else {
               if (end) {
@@ -1804,21 +1806,25 @@ public class Element extends ParentNode {
                  if (current == this) break;
               }
               else if (current.isElement()) {
-                  writeStartTag((Element) current, result);
+                 writeStartTag((Element) current, result);
                  if (current == this) break;
               }
               else {
                   result.append(current.toXML());
               }
               end = false;
-              int next = getNextSibling(current);
-              if (next == -2) break;
-              else if (next == -1) {
-                current = current.getParent();
+              ParentNode parent = current.getParent();
+              if (parent.getChildCount() - 1 == index) {
+                current = parent;
+                if (current != this) {
+                    parent = current.getParent();
+                    index = parent.indexOf(current);
+                }
                 end = true;
               }
               else {
-                 current = current.getParent().getChild(next);
+                 index++;
+                 current = parent.getChild(index);
               }
               
             }
@@ -1886,13 +1892,7 @@ public class Element extends ParentNode {
     }
 
     
-    private void writeEmptyElementTag(Element element, StringBuffer result) {
-        
-        
-    }
-
-    
-    private int getNextSibling(Node n) {
+ /*   private int getNextSibling(Node n) {
     
        ParentNode parent = n.getParent();
        if (parent == null) return -2;
@@ -1900,7 +1900,7 @@ public class Element extends ParentNode {
        if (parent.getChildCount() - 1 == index) return -1;
        return index+1;
     
-    }    
+    }    */
     
 
     // could this be made non-recursive????
