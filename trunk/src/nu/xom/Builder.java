@@ -95,7 +95,7 @@ public class Builder {
         else if (xercesVersion >= 2.4) {
             try {
                 // According to //http://java.sun.com/sfaq this won't  
-                // work in an applet. Ask Xerces to provide alternative means????
+                // work in an applet. See also http://nagoya.apache.org/jira/browse/XERCESJ-976
                 System.setProperty(
                   "org.apache.xerces.xni.parser.XMLParserConfiguration", 
                   "nu.xom.xerces.XML1_0ParserConfiguration");
@@ -415,7 +415,7 @@ public class Builder {
         if (factory != null) {
             setHandlers(factory);             
         }
-        else if (parser instanceof XMLFilter || IBMVM14) {
+        else if (IBMVM14) {
             setHandlers(new NodeFactory()); 
         }
         else if (knownGoodParser(parser)) {
@@ -431,6 +431,16 @@ public class Builder {
     private static boolean knownGoodParser(XMLReader parser) {
          
         String parserName = parser.getClass().getName();
+        
+        // In general, a filter may violate the constraints of XML 1.0.
+        // However, I specifically trust Norm Walsh not to do that, so 
+        // if his filters are being used we look at the parent instead.
+        // XXX This needs to be tested.
+        if (parserName.equals("org.apache.xml.resolver.tools.ResolvingXMLReader")
+          || parserName.equals("org.apache.xml.resolver.tools.ResolvingXMLFilter")) {
+            XMLFilter filter = (XMLFilter) parser;
+            parserName = filter.getParent().getClass().getName();
+        }
         
         // These two parsers are known to not make all the checks
         // they're supposed to. :-(
