@@ -167,15 +167,21 @@ public class Document extends ParentNode {
      * </p>
      * 
      * @param doctype the document type declaration
+     * 
+     * @throws MultipleParentException if doctype belongs to 
+     *     another document
+     * @throws NullPointerException if doctype is null
+     * 
      */
     public final void setDocType(DocType doctype) {
-        DocType oldDocType = getDocType(); 
+        DocType oldDocType = getDocType();
         if (oldDocType == null) {
             super.insertChild(doctype, 0);            
         } 
+        else if (doctype == oldDocType) return; 
         else {
             super.insertChild(doctype, this.indexOf(oldDocType));
-            if (oldDocType != doctype) oldDocType.detach();
+            oldDocType.detach();
         }
     }
 
