@@ -54,8 +54,18 @@ a setInternalDTDSubset mehod that simply uses a parser to check the subset????
 should Builder have an option to cache all external entities so it doesn't keep reloading them, perhaps via a SAX EntityResolver.
 
 
+A getAttributeValueInScope() method that searches up the tree for the nearest 
+ancestor element with the specified attribute. This would be useful for xml:lang, xml:space, and many other cases!!!!
+
+Does XSLTransform need a setParameter method to set values of xsl:params?
+
+Should Builder/NodeFactory have a build(Document) method that allows one to pass an existing document through a node factory without reserializing? 
+
+
 1.0.1:
 --------
+
+Could DOMConversion be done in parallel in two separate threads?
 
 DHollenbeck suggests that implementing Array lists directly in ParentNode
 rather than using Collections API would save memory and time.
@@ -84,77 +94,51 @@ and escape all non-interoperable characters?
 
 A streaming serializer based on a  NodeFactory that can serialize arbitrarily large documents without having the entire document in memory
 
+should I synchronize a single static TransformerFactory object inside XSLTransform?
+
+
 Before 1.0:
 -----------
 
 register XOM as a trademark
 
-There are some weird issues in some of the more obscure code pages w.r.t round tripping
-Do an exhaustive test and report bugs to Sun. Note especially
+Move history to a new page, and rewrite main page
 
-
-    public void testIBMCP33722() throws ParsingException, IOException {
-        checkAll("CP33722");
-    } 
-
-
-    public void testIBMCp942() throws ParsingException, IOException {
-        checkAll("Cp942");
-    } 
-
-
-    public void testIBMCp943() throws ParsingException, IOException {
-        checkAll("Cp943");
-    } 
-    
-    
-    send %escape test case for XInclude to W3C 
-
-
-submit toUpperCase toLowerCase with no Locale as a code smell to various testing tools due to Turkish issues. (but not toHesString.toUpperCase)
-
-get xom.nu working and upgraeded to latest apache httpd
 
 Before 1.0RC1:
 -----------
 
 Update all versions to 1.0
 
-Look into a code beautifier for the line length
-Line length corrections; would jalopy help?
+move servlets.jar to lib2?
+move tagsoup.jar to lib2?
 
-Add a class hierarchy diagram to nu.xom package.html
+===============
+Done 1.0b7:
+===============
 
-Add information about O(1), O(length) etc. to JavaDoc
+Comments whose data begins with a hyphen are now allowed. 
 
-redo copyright and license notice to use /* */ instead of //
-comments????
+Builder is considerably more robust against buggy parsers. It converts all
+runtime exceptions thrown by such a parser 
+(including XOM XMLExceptions thrown by a NodeFactory) 
+into ParsingExceptions.
+It uses a verifying factory for Saxon 7's AElfred derivative.
 
-Look at the order of the methods in the various classes;
-see if they make sense
+XIncluder treats bad encoding attributes as fatal errors
 
-    
-Add a tools package for the character table generator
+Various optimizations have sped up a lot of common operations
+including getValue(), toXML(), DOM and SAX conversion, canonicalization,
+and XSL transformation
 
-Write 
-# Projects
-# Unit tests
-# Sample Programs
-for web site
+The zip archives and CVS no longer contain files with names that are problematic on Windows.
 
-The new PR adds the following text: "The value of this attribute is an EncName as defined in XML specification, section 4.3.3, rule [81]"
+The manifest file is now versioned.
 
-OK. That seems eminently reasonable. Looking in the XML spec I find:
+In keeping with the recommendation in RFC2396bis that "For consistency, URI producers and normalizers should use uppercase hexadecimal digits for all percent-encodings", XOM now uses uppercase percent encodings for base URIs. There may still be a few places where lower case escapes are used. 
+Holler if you spot any. 
 
-EncName	   ::=   	[A-Za-z] ([A-Za-z0-9._] | '-')*
-
-No surprises. Ann encoding name contains ASCII alphanumeric characters, period, underscore, and hyphen. Nothing unexpected here.
-
-However, what should I do if the encoding attribute does not satisfy this production? e.g. it's encoding="ISO 8859 1"?
-
-Is this a resource error? A fatal error? Should the processor simply ignore the encoding attribute? or treat it as if it's an unrecognized encoding? 
-
-I don't know that this requires going back to CR, but it should be clarified. Also there should probably be a test case for this.
+Fixed bug where base URIs were not encoded in UTF-8 on all platforms. Mac OS X 10.3 was the particular offender here. Surprisingly the problem did not manifest on Mac OS X 10.2. 
 
 ===============
 Done 1.0b6:
