@@ -468,7 +468,8 @@ final class Verifier {
     }
 
     // [13] PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] |
-    // [-'()+,./:=?;*#@$_%]
+    // [-'()+,./:=?;*#@$_%] but space is normalized so only
+    // sing;le spaces are round-trippable
     private static boolean isXMLPublicIDCharacter(char c) {
 
         if (c >= 'a' && c <= 'z') return true;
@@ -482,8 +483,6 @@ final class Verifier {
         if (c == '$') return true;
         if (c == '_') return true;
         if (c == '%') return true;
-        if (c == '\n') return true;
-        if (c == '\r') return true;
 
         return false;
     }
@@ -499,19 +498,38 @@ final class Verifier {
     static void checkPublicID(String publicID) {
 
         if (publicID == null) return;
+        if (publicID.length() == 0) return;
         // This indicates there is no public ID
 
+        
+        if (isXMLSpaceCharacter(publicID.charAt(0))) {
+            throw new IllegalDataException("Initial white space in " +
+              "public IDs is not round trippable.");           
+        }
+        if (isXMLSpaceCharacter(publicID.charAt(publicID.length() - 1))) {
+            throw new IllegalDataException("Trailing white space in " +
+              "public IDs is not round trippable.");           
+        }
+        
         for (int i = 0; i < publicID.length(); i++) {
           char c = publicID.charAt(i);
           if (!isXMLPublicIDCharacter(c)) {
-            throw new IllegalDataException(c 
-             + " is not a legal character in public IDs");
+              throw new IllegalDataException(c 
+                + " is not a legal character in public IDs");
+          }
+          if (c == ' ' && publicID.charAt(i-1) == ' ') {
+              throw new IllegalDataException("Multiple consecutive " +
+                "spaces in public IDs are not round trippable.");  
           }
         }
 
         return;
     }
 
+
+    private static boolean isXMLSpaceCharacter(char c) {
+        return c == ' ' || c == '\n' || c == '\r' || c == '\t';
+    }
 
     /**
      * <p>

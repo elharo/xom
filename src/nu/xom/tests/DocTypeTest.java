@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -236,19 +236,82 @@ public class DocTypeTest extends XOMTestCase {
 
     }
     
+    
     public void testLegalPublicIDs() {
 
         // PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
-        // should public IDs allow initial and trailing space????
-        checkPublicIDCharacter(" ");
-        checkPublicIDCharacter("\r");
-        checkPublicIDCharacter("\n");
+        // should public IDs allow initial and trailing space? No. 
+        // These are normalized like attribute values according to 
+        // section 4.2.2 of the XML spec.
+        // This also means charriage returns and linefeeds are 
+        // not roundtrippable. They can appear in the document but not
+        // the infoset so XOM forbids them.
         checkPublicIDCharacter("-'()+,./:=?;!*#@$_%");
         for (char c = 'a'; c < 'z'; c++) checkPublicIDCharacter(c + "");
         for (char c = 'A'; c < 'Z'; c++) checkPublicIDCharacter(c + "");
         for (char c = '0'; c < '9'; c++) checkPublicIDCharacter(c + "");
 
     }
+    
+
+    public void testSpaceContainingPublicIDs() {
+
+        // According to section 4.2.2 of the XML spec, public IDs are
+        // normalized like attribute values of non-CDATA type
+        try {
+            new DocType("root", " test", "http://www.example.org");
+            fail("allowed initial space in public ID");
+        }
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
+        }
+
+        try {
+            new DocType("root", "test ", "http://www.example.org");
+            fail("allowed trailing space in public ID");
+        }
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
+        }
+
+        try {
+            new DocType("root", "test\ntest", "http://www.example.org");
+            fail("allowed linefeed public ID");
+        }
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
+        }
+
+        try {
+            new DocType("root", "test\rtest", "http://www.example.org");
+            fail("allowed carriage return in public ID");
+        }
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
+        }
+
+        try {
+            new DocType("root", "test\r\ntest", "http://www.example.org");
+            fail("allowed carriage return linefeed pair public ID");
+        }
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
+        }
+
+        try {
+            new DocType("root", "test  test", "http://www.example.org");
+            fail("allowed multiple consecutive spaces in public ID");
+        }
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+        // one space is legal
+        DocType test = new DocType("root", "test test", "http://www.example.org");
+        assertEquals(test.getPublicID(), "test test");
+
+    }
+    
     
     public void testLegalSystemIDs() {
 
