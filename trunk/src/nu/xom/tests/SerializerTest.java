@@ -1163,9 +1163,7 @@ public class SerializerTest extends XOMTestCase {
             assertTrue(line.length() + ": " + line, 
               line.length() <= length);    
         }
-    }
-    
-
+    }   
     
     public void testPrettyXML() throws IOException {
         Element items = new Element("itemSet");
@@ -1182,6 +1180,28 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
           + "<itemSet>\r\n    <item1/>\r\n    <item2/>\r\n"
+          + "</itemSet>\r\n", 
+          result
+        );
+        
+    }
+    
+    public void testDontBreakLineInElementWithSimpleContent() throws IOException {
+        Element items = new Element("itemSet");
+        Element item1 = new Element("item1");
+        items.appendChild(item1);
+        item1.appendChild("content");
+        Document doc = new Document(items);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<itemSet>\r\n    <item1>content</item1>\r\n"
           + "</itemSet>\r\n", 
           result
         );
