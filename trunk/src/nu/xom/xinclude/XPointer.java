@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -43,13 +43,13 @@ import nu.xom.XMLException;
 /**
  * 
  * <p>
- *   Right now this is just for experiemnts,
- *   and hence is non-public. Once it's more baked it will
- *   probably become public and move to a package of its own.
+ *   Right now this is just for XInclude, and hence is non-public.
+ *   Once it's more baked it will probably become public and move 
+ *   to a package of its own.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 class XPointer {
@@ -104,8 +104,7 @@ class XPointer {
                       doc.getRootElement(), currentData); 
                     if (identified != null) {
                         if (!found) result.append(identified); 
-                        found = true;  
-                        // return result;                
+                        found = true;                
                     }
                 }
                 else if (!currentData.startsWith("/")) {
@@ -135,10 +134,9 @@ class XPointer {
                     if (current == null) break;
                 }
             
-                if (current != null) {
+                if (current != doc && current != null) {
                     if (!found) result.append(current); 
-                    found = true;  
-                    // return result;
+                    found = true;
                 }
               
             }
@@ -290,6 +288,7 @@ class XPointer {
         
         Elements children = element.getChildElements();
         for (int i = 0; i < children.size(); i++) {
+            // ???? try and remove recursion here
             Element result = findByID(children.get(i), id);
             if (result != null) return result; 
         }
