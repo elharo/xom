@@ -47,6 +47,28 @@ import java.util.ArrayList;
 class JaxenNavigator extends DefaultNavigator {
 
     
+    public Iterator getSelfAxisIterator(Object contextNode) {
+        
+        if (contextNode instanceof Text) {
+            XOMList temp = new XOMList();
+            temp.add(contextNode);
+            contextNode = temp;
+        }
+        List l = new ArrayList(1);
+        l.add(contextNode);
+        return l.iterator();
+    }
+    
+    
+    public Object getElementById(Object node, String id) {
+        
+        Document doc = ((Node) node).getDocument();
+        // find highest parent node????
+        // FIXME
+        return null;
+    }
+    
+    
     public String getNamespacePrefix(Object o) {
         
         if (o instanceof Element) return ((Element) o).getNamespacePrefix();

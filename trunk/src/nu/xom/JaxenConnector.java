@@ -37,9 +37,9 @@ class JaxenConnector extends BaseXPath {
     }
 
     
-    public List selectNodes(Object o) throws JaxenException {
+    public List selectNodes(Object expression) throws JaxenException {
         
-        List initial = super.selectNodes(o);
+        List initial = super.selectNodes(expression);
         List result = new ArrayList();
         Iterator iterator = initial.iterator();
         while (iterator.hasNext()) {
@@ -55,8 +55,6 @@ class JaxenConnector extends BaseXPath {
         return result; 
         
     }
-    
-    // XXX selectNodes with Context
 
     
 } 

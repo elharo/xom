@@ -352,7 +352,22 @@ public abstract class Node {
      * </p>
      * 
      * <p>
+     * Note that XPath expressions operate on the XPath data model,
+     * not the XOM data model. XPath counts all adjacent 
+     * <code>Text</code> objects as a single text node, and does not
+     * consider empty <code>Text</code> objects. For instance, an 
+     * element that has exactly three text children in XOM, will
+     * have exactly one text child in XPath, whose value is the 
+     * concatenation of all three XOM <code>Text</code> objects. 
+     * </p>
+     * 
+     * <p>
      * No variables are bound. No namespace prefixes are bound.
+     * </p>
+     * 
+     * <p>
+     * XPath node-sets are unordered. I make no promises about the
+     * order in which selected nodes will appear in the result.
      * </p>
      * 
      * @param xpath the XPath location path to search for
