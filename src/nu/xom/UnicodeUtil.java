@@ -1074,6 +1074,7 @@ final class UnicodeUtil {
         if (c >= 0x1D100 && c <= 0x1D126) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
         if (c >= 0x1D12A && c <= 0x1D164) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
         if (c >= 0x1D16A && c <= 0x1D16C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c == 0x1D16D) return CANONICAL_COMBINING_CLASS_RIGHT;
         if (c >= 0x1D173 && c <= 0x1D17A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
         if (c >= 0x1D183 && c <= 0x1D184) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
         if (c >= 0x1D18C && c <= 0x1D1A9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
@@ -1366,7 +1367,7 @@ final class UnicodeUtil {
 
         // Post Composition Version precomposed characters
 
-        if (c == 0x2ADC) return true; // FORKING
+        if (c == 0x2ADC)  return true; // FORKING
         if (c == 0x1D15E) return true; // MUSICAL SYMBOL HALF NOTE
         if (c == 0x1D15F) return true; // MUSICAL SYMBOL QUARTER NOTE
         if (c == 0x1D160) return true; // MUSICAL SYMBOL EIGHTH NOTE

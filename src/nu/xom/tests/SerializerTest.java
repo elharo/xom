@@ -82,7 +82,30 @@ public class SerializerTest extends XOMTestCase {
         // LATIN CAPITAL LETTER D WITH DOT BELOW, COMBINING DOT ABOVE
         String input = "<a>&#x1E0A;&#x0323;</a>";
         // LATIN CAPITAL LETTER D WITH DOT ABOVE, COMBINING DOT BELOW
-        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<a>&#x1E0C;&#x307;</a>\r\n";  
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n"
+          + "<a>&#x1E0C;&#x307;</a>\r\n";  
+            
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(output, result);
+            
+    }
+    
+
+    public void testMultipleCombiningCharactersWithDifferentCombiningClassesNFC() 
+      throws ParsingException, IOException {
+    
+        // LATIN SMALL LETTER A, COMBINING GRAVE ACCENT, HEBREW ACCENT ZINOR, 
+        // MUSICAL SYMBOL COMBINING AUGMENTATION DOT, HEBREW ACCENT ZINOR, 
+        // LATIN SMALL LETTER B
+        String input = "<a>&#x0061;&#x0300;&#x05AE;&#x1D16D;&#x05AE;&#x0062;</a>";
+        // There was a bug where 1D16D was not listed as a combining character
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n"
+          + "<a>&#xE0;&#x1D16D;&#x5AE;&#x5AE;b</a>\r\n";  
             
         Document doc = parser.build(input, null);
         Serializer serializer = new Serializer(out, "US-ASCII");
@@ -1712,7 +1735,7 @@ public class SerializerTest extends XOMTestCase {
             String v4 = root.getAttributeValue("v4");
             String v5 = root.getAttributeValue("v5"); */
             
-            assertEquals(c1, c2);
+            assertEquals(root.getValue(), c1, c2);
             assertEquals(c2, c3);
             // I'm not sure the v's are correct past the BMP
             //assertEquals(root.getValue(), c1, v1);
