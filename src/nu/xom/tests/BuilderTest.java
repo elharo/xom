@@ -58,9 +58,11 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Elements;
 import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
+import nu.xom.Serializer;
 import nu.xom.ValidityException;
 import nu.xom.WellformednessException;
 import nu.xom.XMLException;
@@ -1467,24 +1469,6 @@ public class BuilderTest extends XOMTestCase {
     }
 
     
-    // Not really ignore, simple resolve, and not 
-    // treat specially otherwise; i.e. don't copy
-    // parameter entity declarations into the internal
-    // DTD subset string
-    public void testIgnoreInternalParameterEntitiesInInternalDTDSubset()
-      throws IOException, ParsingException {
-        
-        Builder builder = new Builder(false);
-        Document doc = builder.build("<!DOCTYPE root [" +
-                "<!ENTITY % name \"PCDATA\">" +
-                "]><root/>", "http://www.example.com/");
-        assertEquals(2, doc.getChildCount());
-        DocType doctype = doc.getDocType();
-        assertEquals("", doctype.getInternalDTDSubset());
-        
-    }
-    
-    
     public void testIgnoreExternalParameterEntitiesInInternalDTDSubset()
       throws IOException, ParsingException {
         
@@ -2879,7 +2863,106 @@ public class BuilderTest extends XOMTestCase {
             // Need a trusted parser to test this
         }
 
-   }
+    }
+   
     
+    // XML conformance test case xmlconf/xmltest/valid/not-sa/014.ent
+    // shows how this can be necessary. In brief, the internal DTD 
+    // subset can define or override parameter entities used in the
+    // external DTD subset, and that the external DTD subset depends
+    // on for well-formedness
+    public void testPreserveParameterEntitiesInInternalDTDSubset() 
+      throws ParsingException, IOException {
+       
+        String data = "<!DOCTYPE doc [\n" 
+          + "<!ENTITY % e 'INCLUDE'>]><doc />";
+        Document doc = builder.build(data, null);
+        String subset = doc.getDocType().getInternalDTDSubset();
+        System.out.println(subset);
+        assertEquals("  <!ENTITY % e \"INCLUDE\">\n", subset);
+        
+    }
+    
+   
+    public void testXMLConformanceTestSuiteDocuments() 
+      throws ParsingException, IOException {
+      
+        File data = new File("data");
+        File canonical = new File(data, "canonical");
+        File masterList = new File(canonical, "xmlconf");
+        masterList = new File(masterList, "xmlconf.xml");
+        if (masterList.exists()) {
+            Document xmlconf = builder.build(masterList);
+            Elements testcases = xmlconf.getRootElement().getChildElements("TESTCASES");
+            processTestCases(testcases);
+        }
+
+    }
+
+    
+    // xmlconf/xmltest/valid/sa/097.xml appears to be screwed up by a lot
+    // of parsers 
+    private void processTestCases(Elements testcases) 
+      throws ParsingException, IOException {
+        
+        for (int i = 0; i < testcases.size(); i++) {
+              Element testcase = testcases.get(i); 
+              Elements tests = testcase.getChildElements("TEST");
+              processTests(tests);
+              Elements level2 = testcase.getChildElements("TESTCASES");
+              // need to be recursive to handle recursive IBM test cases
+              processTestCases(level2);
+        }
+        
+    }
+
+
+    private void processTests(Elements tests) 
+      throws ParsingException, IOException  {
+        
+        for (int i = 0; i < tests.size(); i++) {
+            Element test = tests.get(i);
+            String namespace = test.getAttributeValue("NAMESPACE");
+            if ("no".equals(namespace)) continue;
+            String type = test.getAttributeValue("TYPE");
+            if ("not-wf".equals(type)) continue;
+            String uri = test.getAttributeValue("URI");
+            String base = test.getBaseURI();
+            // Hack because URIUtil isn't public; and I don't want to
+            // depend on 1.4 only java.net.URI
+            Element parent = new Element("e");
+            parent.setBaseURI(base);
+            Element child = new Element("a");
+            child.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace", uri));
+            parent.appendChild(child);
+            String resolvedURI = child.getBaseURI();
+            
+            Document doc = builder.build(resolvedURI);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            try {
+                Serializer serializer = new Serializer(out);
+                serializer.write(doc);
+            }
+            finally {
+                out.close();
+            }           
+            byte[] actual = out.toByteArray();
+            
+            InputStream in = new ByteArrayInputStream(actual);
+            try {
+                Document roundTrip = builder.build(in, resolvedURI);
+                assertEquals("Failed to roundtrip " + uri, doc, roundTrip);
+            }
+            catch (ParsingException ex) {
+                System.out.println(ex.getURI());
+                throw ex;
+            }
+            finally {
+                in.close();
+            }
+        }
+        
+    }
     
 }
