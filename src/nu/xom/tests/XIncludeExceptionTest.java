@@ -24,7 +24,6 @@
 package nu.xom.tests;
 
 import nu.xom.xinclude.XIncludeException;
-import nu.xom.tests.XOMTestCase;
 
 /**
  * <p>
