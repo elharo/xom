@@ -151,21 +151,20 @@ class JaxenNavigator extends DefaultNavigator {
 
 
     public String getNamespacePrefix(Object o) {
-        NamespaceNode ns = (NamespaceNode) o;
+        XPathNamespaceNode ns = (XPathNamespaceNode) o;
         return ns.prefix;
     }
     
     
     public String getNamespaceStringValue(Object o) {
-        NamespaceNode ns = (NamespaceNode) o;
+        XPathNamespaceNode ns = (XPathNamespaceNode) o;
         return ns.uri;
     }
 
     
-    // ???? rename XPathNamespaceNode
-    static class NamespaceNode {
+    static class XPathNamespaceNode {
         
-        NamespaceNode(String prefix, String uri) {
+        XPathNamespaceNode(String prefix, String uri) {
             this.prefix = prefix;
             this.uri = uri;
         }
@@ -185,13 +184,13 @@ class JaxenNavigator extends DefaultNavigator {
             Iterator iterator = bindings.keySet().iterator();
             List result = new ArrayList(bindings.size()+1);
             // ???? write unit test for this
-            result.add(new NamespaceNode("xml", "http://www.w3.org/XML/1998/namespace"));
+            result.add(new XPathNamespaceNode("xml", "http://www.w3.org/XML/1998/namespace"));
 
             while (iterator.hasNext()) {
                 String prefix = (String) iterator.next();
                 String uri = (String) bindings.get(prefix);
                 if (! "".equals(prefix) || ! "".equals(uri)) {
-                    NamespaceNode ns = new NamespaceNode(prefix, uri);
+                    XPathNamespaceNode ns = new XPathNamespaceNode(prefix, uri);
                     result.add(ns);
                 }
             }
@@ -484,7 +483,7 @@ class JaxenNavigator extends DefaultNavigator {
 
     
     public boolean isNamespace(Object object) {
-        return object instanceof NamespaceNode;
+        return object instanceof XPathNamespaceNode;
     }
 
     

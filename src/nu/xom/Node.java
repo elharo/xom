@@ -405,7 +405,7 @@ public abstract class Node {
             Iterator iterator = results.iterator();
             while (iterator.hasNext()) {
                 Object o = iterator.next();
-                if (o instanceof JaxenNavigator.NamespaceNode || o instanceof DocumentFragment) {
+                if (o instanceof JaxenNavigator.XPathNamespaceNode || o instanceof DocumentFragment) {
                     iterator.remove();
                 }
                 else if (!(o instanceof Node)) {
