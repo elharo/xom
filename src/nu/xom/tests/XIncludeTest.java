@@ -54,7 +54,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0d24
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -987,7 +987,7 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
-    public void testCircle1() 
+    public void testDocumentIncludesItself() 
       throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/circle1.xml");
         Document doc = builder.build(input);
@@ -1002,17 +1002,18 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
-    public void testCircle2() 
+    public void testInclusionLoopWithLength2Cycle() 
       throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/circle2a.xml");
         File errorFile = new File("data/xinclude/input/circle2b.xml");
         Document doc = builder.build(input);
         try {
             XIncluder.resolve(doc);
-            fail("allowed parsed include of self");
+            fail("allowed circular include, cycle length 1");
         }
         catch (InclusionLoopException success) {
-            assertNotNull(success.getMessage());
+            assertTrue(success.getMessage().indexOf(errorFile.toURL().toExternalForm()) > 1);           
+            assertTrue(success.getMessage().indexOf(input.toURL().toExternalForm()) > 1);           
             assertEquals(errorFile.toURL().toExternalForm(), success.getURI());           
         }
     }
@@ -1026,10 +1027,9 @@ public class XIncludeTest extends XOMTestCase {
             XIncluder.resolve(doc);
             fail("allowed missing href");
         }
-        catch (NoIncludeLocationException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
-            assertEquals(doc.getBaseURI(), ex.getURI());           
+        catch (NoIncludeLocationException success) {
+            assertNotNull(success.getMessage());
+            assertEquals(doc.getBaseURI(), success.getURI());           
         }
     }
     
