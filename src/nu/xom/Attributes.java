@@ -132,8 +132,10 @@ final class Attributes {
         }
         boolean removed = attributes.remove(attribute);
         if (!removed) {
-            throw new XMLException(
-              "Tried to remove attribute from non-parent element");
+            throw new NoSuchAttributeException(
+              "Tried to remove attribute " 
+              + attribute.getQualifiedName() 
+              + " from non-parent element");
         }
     }
 

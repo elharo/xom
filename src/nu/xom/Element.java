@@ -391,7 +391,7 @@ public class Element extends ParentNode {
     public final void removeAttribute(Attribute attribute) {
         checkRemoveAttribute(attribute);
         if (attributes == null) {
-            throw new XMLException( "Tried to remove attribute "
+            throw new NoSuchAttributeException( "Tried to remove attribute "
               + attribute.getQualifiedName() 
               + " from non-parent element");
         }        
