@@ -34,6 +34,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Namespace;
+import nu.xom.NamespaceConflictException;
 import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
@@ -48,7 +49,7 @@ import nu.xom.XPathException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1d6
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -376,6 +377,47 @@ public class XPathTest extends XOMTestCase {
         assertEquals(2, result.size());
         assertEquals(child1, result.get(0));   
         assertEquals(child4, result.get(1));   
+        
+    }
+    
+
+    public void testXMLPrefixIsAlwaysBound() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child");
+        child1.addAttribute(new Attribute("xml:lang", 
+          "http://www.w3.org/XML/1998/namespace", "en"));
+        parent.appendChild(child1);
+        Element child2 = new Element("child");
+        child2.appendChild("2");
+        child2.addAttribute(new Attribute("xml:lang", 
+          "http://www.w3.org/XML/1998/namespace", "fr"));
+        parent.appendChild(child2);
+        Element child3 = new Element("child");
+        child3.appendChild("3");
+        parent.appendChild(child3);
+        Element child4 = new Element("child");
+        child4.appendChild("4");
+        child4.addAttribute(new Attribute("xml:lang", 
+          "http://www.w3.org/XML/1998/namespace", "en-US"));
+        parent.appendChild(child4);
+        
+        Nodes result = parent.query("child::*/@xml:lang");
+        assertEquals(3, result.size());   
+        
+    }
+    
+    
+    public void testCantRebindXMLPrefix() {
+        
+        XPathContext context = new XPathContext();
+        try {
+            context.addNamespace("xml", "http://www.example.org");
+            fail("Rebound xml prefix");
+        }
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
     
