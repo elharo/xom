@@ -74,16 +74,16 @@ public class XOMTestCase extends TestCase {
         if ("xml:base".equals(expected.getQualifiedName())) {
             // Using endsWith to handle possibility that one is relative
             // and other is not
-            assertTrue(value1 + " " + value2, 
+            assertTrue(message, 
               value1.endsWith(value2) || value2.endsWith(value1));
         } 
         else { 
-            assertEquals(value1, value2);
-            assertEquals(expected.getLocalName(), actual.getLocalName());
-            assertEquals(
+            assertEquals(message, value1, value2);
+            assertEquals(message, expected.getLocalName(), actual.getLocalName());
+            assertEquals(message,
               expected.getQualifiedName(), actual.getQualifiedName()
             );
-            assertEquals(
+            assertEquals(message,
               expected.getNamespaceURI(), actual.getNamespaceURI()
             );
         }
