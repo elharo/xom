@@ -21,6 +21,7 @@
 
 package nu.xom;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.jaxen.JaxenException;
@@ -316,25 +317,53 @@ public abstract class Node {
     
     /**
      * <p>
-     * ????. This node is the context node.
+     * Returns the nodes selected by the XPath expression in the 
+     * context of this node. All namespace prefixes used in the 
+     * expression should be bound to namespace URIs by the 
+     * second argument. 
+     * </p>
+     * 
+     * <p>
+     * Note that XPath expressions operate on the XPath data model,
+     * not the XOM data model. XPath counts all adjacent 
+     * <code>Text</code> objects as a single text node, and does not
+     * consider empty <code>Text</code> objects. For instance, an 
+     * element that has exactly three text children in XOM, will
+     * have exactly one text child in XPath, whose value is the 
+     * concatenation of all three XOM <code>Text</code> objects. 
      * </p>
      * 
      * <p>
      * No variables are bound. 
      * </p>
      * 
-     * @param xpath the XPath location path to search for
+     * @param xpath the XPath expression to evaluate
      * @param namespaces a collection of namespace prefix bindings used in the 
      *     XPath expression
      * 
      * @return a list of all matched nodes; possibly empty
+     * 
+     * @throws XPathException if there's a syntax error in the 
+     *     expression; or the query returns something other than
+     *     a node-set
+     * 
      */
     public Nodes query(String xpath, XPathContext namespaces) {
         
         try {
             XPath xp = new JaxenConnector(xpath);
-            xp.setNamespaceContext(namespaces.getJaxenContext());
+            if (namespaces != null) {
+                xp.setNamespaceContext(namespaces.getJaxenContext());
+            }
             List results = xp.selectNodes(this);
+            Iterator iterator = results.iterator();
+            while (iterator.hasNext()) {
+                Object o = iterator.next();
+                if (!(o instanceof Node)) {
+                    throw new XPathException("XPath expression " 
+                      + xpath + " did not return a node-set.");
+                }
+            }
             return new Nodes(results);
         }
         catch (JaxenException ex) {
@@ -346,7 +375,9 @@ public abstract class Node {
     
     /**
      * <p>
-     * ????. This node is the context node.
+     * Returns the nodes selected by the XPath expression in the 
+     * context of this node. This XPath expression must not contain
+     * any namespace prefixes.
      * </p>
      * 
      * <p>
@@ -364,26 +395,20 @@ public abstract class Node {
      * </p>
      * 
      * <p>
-     * XPath node-sets are unordered. I make no promises about the
+     * XPath node-sets are unordered. XOM makes no promises about the
      * order in which selected nodes will appear in the result.
      * </p>
      * 
-     * @param xpath the XPath location path to search for
+     * @param xpath the XPath expression to evaluate
      * 
      * @return a list of all matched nodes; possibly empty
-     * @throws XPathException if the query is syntactically incorrect
+     * 
+     * @throws XPathException if there's a syntax error in the 
+     *     expression; or the query returns something other than
+     *     a node-set
      */
     public Nodes query(String xpath) {
-        
-        try {
-            XPath xp = new JaxenConnector(xpath);
-            List results = xp.selectNodes(this);
-            return new Nodes(results);
-        }
-        catch (JaxenException ex) {
-            throw new XPathException("XPath error???? " + ex.getMessage(), ex);
-        }
-        
+        return query(xpath, null);
     }
     
     
