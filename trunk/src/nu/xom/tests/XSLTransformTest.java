@@ -123,6 +123,19 @@ public class XSLTransformTest extends XOMTestCase {
     }
     
     
+    /*( public void testBVT02() 
+      throws ParsingException, IOException, XSLException {
+        
+        File stylesheet = new File("data/oasis-xslt-testsuite/TESTS/MSFT_Conformance_Tests/BVTs/attr-dup.xsl");
+        Builder builder = new Builder();
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
+        Document input = builder.build(new File("data/oasis-xslt-testsuite/TESTS/MSFT_Conformance_Tests/BVTs/data.xml"));
+        Nodes output = xform.transform(input);
+        
+    } */
+    
+    
     public void testPrefixMappingIssues() 
       throws XSLException, ParsingException, IOException {
         
@@ -841,7 +854,8 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals(2, a.getNamespaceDeclarationCount());
         
     }
-
+    
+    
 
     private static boolean indentYes(Document styleDoc) {
         
@@ -851,8 +865,11 @@ public class XSLTransformTest extends XOMTestCase {
              "http://www.w3.org/1999/XSL/Transform");
         if (output == null) return false;
         
-        String indent = output.getAttributeValue("indent"); // trim????
-        if ("yes".equals(indent)) return true;
+        String indent = output.getAttributeValue("indent");
+        if ("yes".equals(indent)) {
+            // System.out.println("Indent Yes: " + styleDoc.getBaseURI());
+            return true;
+        }
         else return false;
         
     }
@@ -944,41 +961,45 @@ public class XSLTransformTest extends XOMTestCase {
                                   || id.equals("copy_copy60")
                                   || id.equals("copy_copy59")) {
                                     // Xalan bug;
-                                    // XXX diagnose and report
+                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1081
+                                    // Also see erratum E27 to the XSLT spec.
                                 } 
                                 else if (id.equals("expression_expression02")) {
                                     // requires unparsed entities XOM doesn't support
                                 } 
-                                else if (id.equals("idkey_idkey31")
-                                  || id.equals("idkey_idkey59")
-                                  || id.equals("idkey_idkey61")
+                                else if (id.equals("idkey_idkey31")) {
+                                    // Known Xalan bug
+                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1325
+                                } 
+                                else if (id.equals("idkey_idkey61")
                                   || id.equals("idkey_idkey62")) {
-                                    // Xalan bug?;
-                                    // XXX diagnose and report
+                                    // Xalan bug. Fixed in more recent 
+                                    // version than bundled with the JDK 1.4.2_05
+                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1318
                                 } 
                                 else if (id.equals("impincl_impincl11")) {
-                                    // Xalan bug?;
-                                    // XXX diagnose and report
+                                    // Test case bug; reported 2004-09-18
+                                    // See http://lists.oasis-open.org/archives/xslt-conformance-comment/200409/msg00001.html
                                 }
                                 else if (id.equals("math_math110")
                                   || id.equals("math_math111")) {
-                                    // Xalan or test suite bug?;
-                                    // XXX diagnose and report
+                                    // Xalan bug. Fixed in more recent 
+                                    // version than bundled with the JDK 1.4.2_05
+                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1278
                                 }
                                 else if (id.equals("position_position104")) {
-                                    // test suite bug; Xalan is right,
-                                    // sample output is incorrect; report????
+                                    // Xalan bug. Fixed in more recent 
+                                    // version than bundled with the JDK 1.4.2_05
                                 }
                                 else if (id.equals("position_position106")) {
-                                    // test suite bug and xsltproc; Xalan is right,
-                                    // sample output is incorrect; report for test suite????
-                                    // already reported for libxslt
+                                    // Xalan bug. Fixed in more recent 
+                                    // version than bundled with the JDK 1.4.2_05
                                 }
-                                else if (id.equals("whitespace_whitespace17")
-                                  || id.equals("position_position107")
+                                else if (id.equals("position_position107")
                                   || id.equals("position_position109")) {
-                                    // tests indent="yes" which is not
-                                    // not relevant within XOM
+                                    // Xalan bug. Fixed in more recent 
+                                    // version than bundled with the JDK 1.4.2_05
+                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1289
                                 } 
                                 else {
                                     assertEquals("Problem with " + id,
@@ -989,22 +1010,18 @@ public class XSLTransformTest extends XOMTestCase {
                                 // a few of the test cases generate 
                                 // text or HTML output rather than 
                                 // well-formed XML. For the moment, I 
-                                // just skip these; but could I compare
-                                // the raw text to the value of the 
-                                // document object instead????
+                                // just skip these.
                                 continue;
                             }
                             catch (IllegalAddException ex) {
                                 // A few of the test cases generate 
                                 // incomplete documents so we can't
                                 // compare output. Perhaps I could
-                                // wrap in an element,t hen get children
-                                // to build a Node object rather than a
+                                // wrap in an element, then get children
+                                // to build a Nodes object rather than a
                                 // Document???? i.e. a fragment parser?
                                 // Could use a SequenceInputStream to hack this
                             }
-                            // XXX report issues in test suite with indent="yes" in stylesheets
-                            // where indenting is not specifically being tested
                         }
                         
                     }
@@ -1040,9 +1057,10 @@ public class XSLTransformTest extends XOMTestCase {
                             }
                             else if ("numberformat_numberformat45".equals(id)
                               || "numberformat_numberformat46".equals(id)) {  
-                                // Test case uses illegal number format pattern
-                                // Xalan catches this. Test case is in error.
-                                // report this????
+                                // This has been fixed in Xalan 2.5.2.
+                                // However, it's a bug in earlier versions of Xalan
+                                // including the one bundled with the JDK 1.4.2_05
+                                // See http://nagoya.apache.org/jira/browse/XALANJ-805
                                 continue;
                             }
                             
@@ -1057,7 +1075,7 @@ public class XSLTransformTest extends XOMTestCase {
             
         }
      
-    }
+    } 
     
    
     public void testOASISMicrosoftConformanceSuite()  
@@ -1114,17 +1132,23 @@ public class XSLTransformTest extends XOMTestCase {
                     // XXX For the moment let's just skip all tests
                     // that specify indent="yes" for the output;
                     // we can fix this with special comparison later.
-                    if (indentYes(styleDoc)) continue;
-                    else if ("BVTs_bvt002".equals(id)) {
-                        // Xalan bug report????;
+                    if (indentYes(styleDoc)) {
                         continue;
                     }
+                    else if ("BVTs_bvt002".equals(id)) {
+                        // This has been fixed at least as of Xalan 2.6.0.
+                        // However, it's a bug in earlier versions of Xalan
+                        // including the one bundled with the JDK 1.4.2_05
+                        continue;
+                    } 
                     else if ("BVTs_bvt041".equals(id) || "BVTs_bvt063".equals(id)
                         || "BVTs_bvt070".equals(id)) {
-                        // Xalan does not recover from this error involving multiple
-                        // conflicting xsl:output at same import precedence
+                        // Xalan bunlded with JDK 1.4.2_05 does not recover 
+                        // from this error involving multiple conflicting 
+                        // xsl:output at same import precedence, though
+                        // 2.6.0 does
                         continue;
-                    }
+                    } 
                     Document inputDoc = builder.build(input);
                     XSLTransform xform = new XSLTransform(styleDoc);
                     Nodes result = xform.transform(inputDoc);
@@ -1160,43 +1184,48 @@ public class XSLTransformTest extends XOMTestCase {
                           ) {
                             // test follows namespace errata we don't accept
                         }
-                        else if ("AttributeSets_RefToUndefinedAttributeSet".equals(id)
-                          || "Namespace__77665".equals(id)
+                        else if ("AttributeSets_RefToUndefinedAttributeSet".equals(id)) {
+                            // I think the test case is wrong; I see 
+                            // nothing in the spec that says this is
+                            // an error.
+                        }
+                        else if ("Namespace__77665".equals(id)
                           || "Namespace__77675".equals(id)
                           ) {
                             // I think the test case is wrong; I see 
                             // nothing in the spec that says this is
-                            // an error
-                            // XXX Verify and report
+                            // an error. See
+                            // http://lists.oasis-open.org/archives/xslt-conformance-comment/200409/msg00007.html
                         }
                         else if ("Variables__84633".equals(id)
                           || "Variables__84634".equals(id)
                           || "Variables__84697".equals(id)
                           || "Variables__84710".equals(id)
                           ) {
-                            // And error. See 11.4
+                            // An error. See 11.4
                             // but are processors allowed to recover?
-                            // Hmm acording to section 17, the processor may signal these errors
+                            // Hmm according to section 17, the 
+                            // processor must signal these errors
                             // and may but need not recover from them. 
-                            // XXX Verify and report
+                            // Xalan recovers. Microsoft doesn't.
                         }
-                        else if ("Output__78176".equals(id)
-                          ) {
+                        else if ("Output__78176".equals(id)) {
                             // I think the test case is wrong; I see 
                             // nothing in the spec that says this is
-                            // an error
-                            // XXX Verify and report
+                            // an error.
                         }
                         else if (id.startsWith("XSLTFunctions__100")) {
-                            // I think the test case is wrong; I see 
-                            // nothing in the spec that says this is
-                            // an error. These are all about the unparsed entity
-                            // function.
-                            // XXX Verify and report
+                            // I think these test cases are all wrong  
+                            // except perhaps XSLTFunctions__10026; I  
+                            // see nothing in the spec that says this 
+                            // is an error. These are all about the 
+                            // unparsed-entity-uri function.
                         }
                         else if ("Namespace__78027".equals(id)) {
-                            // XXX Possible Xalan bug; Verify and report
-                        }
+                            // Test case is incorrect. This should 
+                            // operate in forwards compatible mode.
+                            // Xalan gets this right.
+                        } 
                         else if ("Output_Output_UseStandAloneAttributeWithMultipleRoots".equals(id)) {
                             // Error only appears when document is serialized;
                             // not before
@@ -1208,20 +1237,17 @@ public class XSLTransformTest extends XOMTestCase {
                     }
                     else { 
                         try { 
-                            if ("Attributes_xsl_attribute_dup_attr_with_namespace_conflict".equals(id)) {
-                               // I think this test case is wrong;
-                               // XXX document and report   
-                            }
-                            else if ("BVTs_bvt041".equals(id)) {
-                               // I think this test case output is wrong;
-                               // XXX document and report   
+                            if ("Attributes_xsl_attribute_dup_attr_with_namespace_conflict".equals(id)
+                               || "BVTs_bvt057".equals(id)) {
+                                // This test case requires namespace prefix rewriting,
+                                // so the output won't be exactly the same between processors
+                                continue;
                             }
                             else if ("Comment_DisableOutputEscaping_XslTextInXslComment".equals(id)) {
-                               // I think this test case output is wrong;
-                               // XXX document and report   
-                            }
-                            else if ("Output__77927".equals(id) 
-                              || "Output__77927".equals(id)
+                               // Test case output is wrong
+                                continue;
+                            } 
+                            else if ("Output__77927".equals(id)
                               || "Output__77928".equals(id)
                               || "Output__84304".equals(id)
                               || "Output__84305".equals(id)
@@ -1230,23 +1256,13 @@ public class XSLTransformTest extends XOMTestCase {
                               || "Output__84620".equals(id)
                               || "Output_EntityRefInAttribHtml".equals(id)
                             ) {
-                               // I think this test case output is wrong;
-                               // XXX document and report   
-                            }
-                            else if ("BVTs_bvt057".equals(id)) {
-                               // I think this test case requires remapping prefixes
-                               // so output isn't quite identical
-                               // XXX verify
-                                continue;
-                            }
-                            else if ("Output_DoctypePublicAndSystemAttribute".equals(id)) {
-                               // This test case uses non-URI system identifier
-                               // XXX possible Xerces bug and test suite bug; report verify
+                                // These test cases have incorrect line 
+                                //  breaks in the reference output.
                                 continue;
                             }
                             else if ("Output_Modified84433".equals(id)) {
-                               // This test case uses disable output escaping
-                               // so the results don't match up
+                                // This test case uses disable output escaping
+                                // so the results don't match up
                                 continue;
                             }
                             else if ("Sorting_Sort_SortTextWithNonTextCharacters".equals(id)) {
@@ -1255,11 +1271,9 @@ public class XSLTransformTest extends XOMTestCase {
                                 continue;
                             }
                             else if ("Text_DoeWithCdataInText".equals(id)) {
-                               // XXX explore further but I think this is an issue
-                               // with consecutive text nodes in result tree vs. 
-                               // parsed tree
+                               // Requires disable-output-escaping 
                                 continue;
-                            }
+                            } 
                             else if ("Whitespaces__91434".equals(id)
                               || "Whitespaces__91436".equals(id)        
                               || "Whitespaces__91442".equals(id)        
@@ -1267,43 +1281,82 @@ public class XSLTransformTest extends XOMTestCase {
                               || "Whitespaces__91446".equals(id)        
                               || "Whitespaces__91450".equals(id)        
                             ) {
-                               // XXX explore further; may be a Xalan bug
+                                // May be a Xalan bug
+                                // See http://nagoya.apache.org/jira/browse/XALANJ-1946 
                                 continue;
+                            } 
+                            else if ("AVTs__77591".equals(id)) {
+                                // test suite bug; doesn't escape tabs in output. See
+                                // http://lists.oasis-open.org/archives/xslt-conformance-comment/200409/msg00017.html
                             }
-                            else if ("AVTs__77591".equals(id) 
-                              || "Copying_ResultTreeFragmentWithEscapedText".equals(id)
-                              || "Keys_MultipltKeysInclude".equals(id)
-                              || "Keys_PerfRepro3".equals(id)
-                              || "Number__84683".equals(id)
-                              || "Number__84687".equals(id)
-                              || "Number__84692".equals(id)
-                              || "Number__84694".equals(id)
-                              || "Number__84699".equals(id)
-                              || "Number__84700".equals(id)
-                              || "Number__84716".equals(id)
-                              || "Number__84717".equals(id)
-                              || "Number__84722".equals(id)
+                            else if ("Keys_MultipltKeysInclude".equals(id) ) {
+                               // XXX I don't understand what fails in this case; figure it out 
+                               // involves keys
+                            }
+                            else if ("Keys_PerfRepro3".equals(id) ) {
+                               // XXX I don't understand what fails in this case; figure it out 
+                               // involves keys
+                            }
+                            else if ("Number__84683".equals(id)) {
+                               // test suite bug
+                            }
+                            else if ("Number__84687".equals(id)) {
+                               // test suite bug
+                            }
+                            else if ("Number__84692".equals(id)) {
+                               // test suite bug
+                            }
+                            else if ("Number__84694".equals(id)) {
+                               // Test suite expects Roman number for zero
+                               // to be the empty string while Xalan uses 0
+                            }
+                            else if ("Number__84699".equals(id)) {
+                               // Xalan bug
+                            }
+                            else if ("Number__84700".equals(id)) {
+                               // Xalan bug; extra whitespace. Possibly
+                               // the same as 
+                            }
+                            else if ("Number__84716".equals(id)) {
+                               // Xalan doesn't support Russian
+                                // number formatting
+                            }
+                            else if ("Number__84717".equals(id)) {
+                               // Xalan supports more Japanese than the
+                               // test case does
+                            }
+                            else if ("Number__84722".equals(id)
                               || "Number__84723".equals(id)
                               || "Number__84724".equals(id)
                               || "Number__84725".equals(id)
-                              || "Number_NaNOrInvalidValue".equals(id)
-                              || "Number_ValueAsNodesetTest1".equals(id)
-                              || "Number_ValueAsEmptyNodeset".equals(id)
                             ) {
-                               // XXX I don't understand what fails in these cases; figure it out 
-                                // a lot of these are probably just differences in locales supported
+                                // Acceptable locale support differences
+                            }
+                            else if ("Number_NaNOrInvalidValue".equals(id)) {
+                                // Double bug! Test case is wrong and 
+                                // Xalan gets this wrong!
+                            }
+                            else if ("Number_ValueAsNodesetTest1".equals(id)
+                              || "Number_ValueAsEmptyNodeset".equals(id)) {
+                                // Another double bug! Test case is wrong and 
+                                // Xalan gets this wrong!
                             }
                             else if (id.equals("XSLTFunctions_BooleanFunction")) {
                                 // I think the test case is wrong; or perhaps unspecified
-                                // XXX Verify and report
-                            }
+                            } 
                             else if (id.equals("XSLTFunctions_TestIdFuncInComplexStruct")) {
-                                // I think the test case output white space is wrong; 
-                                // XXX Verify and report
+                                // I think the Xalan output white space is wrong; 
+                                // http://nagoya.apache.org/jira/browse/XALANJ-1947
                             }
                             else {
                                 Document expectedResult = builder.build(output);
                                 Document actualResult = XSLTransform.toDocument(result);
+                                /* if ("Number_ValueAsEmptyNodeset".equals(id) ) {
+                                   System.out.println(expectedResult.toXML());
+                                   System.out.println();
+                                   System.out.println(actualResult.toXML());
+                                   // return;
+                                } */
                                 assertEquals("Mismatch with " + id,
                                   expectedResult, actualResult);
                             }
@@ -1312,9 +1365,7 @@ public class XSLTransformTest extends XOMTestCase {
                             // a few of the test cases generate 
                             // text or HTML output rather than 
                             // well-formed XML. For the moment, I 
-                            // just skip these; but could I compare
-                            // the raw text to the value of the 
-                            // document object instead????
+                            // just skip these.
                             continue;
                         }
                         catch (IllegalAddException ex) {
@@ -1344,7 +1395,6 @@ public class XSLTransformTest extends XOMTestCase {
                     String operation = scenario.getAttributeValue("operation");
                     if (!"execution-error".equals(operation)) {
                         if ("Namespace_XPath_PredefinedPrefix_XML".equals(id)) {
-                            // XXX double check
                             // uses relative namespace URIs
                         }
                         else if ("Sorting__78191".equals(id)
@@ -1372,37 +1422,31 @@ public class XSLTransformTest extends XOMTestCase {
                             continue;
                         }
                         else if (cause instanceof MissingResourceException) {
-                            // XXX Number__84705 is either a Xalan bug or a problem with your Xalan jar file
-                            // fix either way
-                        }
-                        else if ("Include_Include_IncludedStylesheetShouldHaveDifferentBaseUri".equals(id)
-                          || "Include_RelUriTest1".equals(id)
-                          || "Include_RelUriTest2".equals(id)
-                          || "Include_RelUriTest3".equals(id)
-                          || "Include_RelUriTest4".equals(id)
-                          || "Include_RelUriTest5".equals(id)
-                          || "Include_RelUriTest6".equals(id)
-                        ) {
-                           // I think this test case is wrong; Uses backslash in URI
-                           // XXX verify, document and report   
+                            // Xalan bug;
+                            // http://nagoya.apache.org/jira/secure/ManageAttachments.jspa?id=27366
+                        } 
+                        else if ("Include_Include_IncludedStylesheetShouldHaveDifferentBaseUri".equals(id)) {
+                           // This test case is wrong; Uses backslash in URI
                         }
                         else if ("Elements__89070".equals(id)) {
                             // bug fixed in later versions of Xalan
                         }
                         else if ("Namespace-alias_Namespace-Alias_NSAliasForDefaultWithExcludeResPref".equals(id)) {
-                           // I think this test case is wrong; 
-                           // XXX verify, document and report   
+                           // This test case is wrong; it uses a backslash in a URI 
                         }
-                        else if ("Variables_VariableWithinVariable".equals(id)
-                          ) {
+                        else if ("Variables_VariableWithinVariable".equals(id)) {
                             // Xalan does not recover from this one
                         }
-                        else if ("BVTs_bvt054".equals(id)
-                          || "BVTs_bvt094".equals(id)) {
-                           // I think this test case output is wrong;
-                           // XXX document and report   
+                        else if ("BVTs_bvt054".equals(id)) {
+                            // Xalan bug 
+                            // http://nagoya.apache.org/jira/browse/XALANJ-1952 
                             continue;
-                        }
+                        } 
+                        else if ("BVTs_bvt094".equals(id)) {
+                            // Xalan bug 
+                            // http://nagoya.apache.org/jira/browse/XALANJ-1953 
+                            continue;
+                        } 
                         else if ("Output__78177".equals(id)
                           || "Output__84009".equals(id)) {
                            // Xalan does not recover from this error 
@@ -1414,7 +1458,7 @@ public class XSLTransformTest extends XOMTestCase {
                           || "Comment_Comment_LineOfAllHyphens".equals(id)
                           || "Comment_Comment_SingleHyphenOnly".equals(id)
                           || "Comment_Comment_DoubleHyphenONLY".equals(id)) {
-                           // Begins comment data with hyphen, which XOM doesn't allow   
+                           // Begins comment data with hyphen, which XOM doesn't allow 
                             continue;
                         }
                         else if ("ProcessingInstruction_ValueOfandTextWithDoeInProcInstr".equals(id)) {
@@ -1430,11 +1474,15 @@ public class XSLTransformTest extends XOMTestCase {
                            // Xalan doesn't recover from these, though recovery is allowed   
                             continue;
                         }
-                        else if ("Output__84306".equals(id))
-                          {
-                           // XXX I think this one's a Xalan bug; report it   
+                        else if ("Output__84306".equals(id)) {
+                            // Xalan bug
+                            // http://nagoya.apache.org/jira/browse/XALANJ-1954
                             continue;
                         }
+                        else if ("Output__84014".equals(id)) {
+                            // Fixed in later version of Xalan than is bundled with JDK  
+                            continue;
+                        } 
                         else if (cause != null
                           && cause instanceof MalformedURIException) {
                             // Some of the tests generate relative namespace URIs
