@@ -649,7 +649,30 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File(inputDir, "id_transform.xsl");
         Builder builder = new Builder();
         Element root = new Element("root");
-        root.addAttribute(new Attribute("xml:base", Namespace.XML_NAMESPACE, "http://www.example.org/"));
+        root.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.org/"));
+        Document input = new Document(root);
+        Document stylesheetDoc = builder.build(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
+        Nodes output = xform.transform(input);
+        assertEquals(1, output.size());
+        assertEquals("", output.get(0).getValue());
+        Element rootOut = (Element) output.get(0);
+        assertEquals(0, rootOut.getChildCount());
+        assertEquals(1, rootOut.getAttributeCount());
+        assertEquals("http://www.example.org/", rootOut.getBaseURI());
+        
+    } 
+    
+    
+    public void testCopyXMLLangAttribute()
+      throws XSLException, ParsingException, IOException {
+        
+        File stylesheet = new File(inputDir, "id_transform.xsl");
+        Builder builder = new Builder();
+        Element root = new Element("root");
+        root.addAttribute(new Attribute("xml:lang", 
+          Namespace.XML_NAMESPACE, "http://www.example.org/"));
         Document input = new Document(root);
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
