@@ -35,7 +35,7 @@ import nu.xom.IllegalCharacterDataException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 public class CommentTest extends XOMTestCase {
@@ -47,19 +47,19 @@ public class CommentTest extends XOMTestCase {
 
     
     public void testConstructor() {
-         Comment c1 = new Comment("test");
-         assertEquals("test", c1.getValue());
-         Comment c2 = new Comment("");
-         assertEquals("", c2.getValue());
+        Comment c1 = new Comment("test");
+        assertEquals("test", c1.getValue());
+        Comment c2 = new Comment("");
+        assertEquals("", c2.getValue());
     }
 
     
     public void testCopyConstructor() {
-         Comment c1 = new Comment("test");
-         Comment c2 = new Comment(c1);
-         assertEquals("test", c2.getValue());
-         assertEquals(c1.getValue(), c2.getValue());
-         assertTrue(c1 != c2);
+        Comment c1 = new Comment("test");
+        Comment c2 = new Comment(c1);
+        assertEquals("test", c2.getValue());
+        assertEquals(c1.getValue(), c2.getValue());
+        assertTrue(c1 != c2);     
     }
 
     
@@ -137,15 +137,7 @@ public class CommentTest extends XOMTestCase {
         catch (IllegalDataException success) {
             assertEquals("test -- test", success.getData());
             assertNotNull(success.getMessage());   
-        }   
-        try {
-          c1.setValue("-test");
-          fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {
-            assertEquals("-test", success.getData());
-            assertNotNull(success.getMessage());   
-        }  
         
         try {
           c1.setValue("test-");
@@ -163,6 +155,7 @@ public class CommentTest extends XOMTestCase {
 
 
     public void testEquals() {
+        
         Comment c1 = new Comment("test");
         Comment c2 = new Comment("test");
         Comment c3 = new Comment("skjlchsakdjh");
@@ -171,6 +164,7 @@ public class CommentTest extends XOMTestCase {
         assertEquals(c1.hashCode(), c1.hashCode());
         assertTrue(!c1.equals(c2));
         assertTrue(!c1.equals(c3));
+        
     }
 
     
@@ -320,5 +314,10 @@ public class CommentTest extends XOMTestCase {
           
     }
 
+    
+    public void testCommentDataCanStartWithAHyphen() {
+        Comment c = new Comment("- - ");
+        assertEquals("- - ", c.getValue());
+    }
 
 }
