@@ -34,15 +34,18 @@ import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Attribute;
 import nu.xom.UnavailableCharacterException;
+import nu.xom.ValidityException;
 import nu.xom.XMLException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -51,7 +54,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -164,6 +167,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals('<', (char) data[1]);     
     }
 
+    
     public void testXMLSpaceDefault() throws IOException {
         Element root = new Element("test");
         root.addAttribute(
@@ -691,7 +695,6 @@ public class SerializerTest extends XOMTestCase {
     } 
     
     
-    
     public void testSetLineSeparator() {
         Serializer serializer = new Serializer(System.out);
         
@@ -888,6 +891,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(original, reparsed);
     }
     
+    
     public void testTabInAttributeValueWithDefaultOptions() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -953,6 +957,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("Tab not normalized to space", " ", result);
     }
 
+    
     public void testCRLFInAttributeValueWithLineSeparatorCR() 
       throws IOException, ParsingException {        
         Element root = new Element("root");
@@ -1018,6 +1023,7 @@ public class SerializerTest extends XOMTestCase {
           result
         );
     }
+    
     
     public void testCRLFInAttributeValueWithIndenting() 
       throws IOException, ParsingException {        
@@ -1188,8 +1194,8 @@ public class SerializerTest extends XOMTestCase {
 
     
     public void testSetIndent() {
-        Serializer serializer = new Serializer(System.out);
         
+        Serializer serializer = new Serializer(System.out);
         serializer.setIndent(72);
         assertEquals(72, serializer.getIndent());
         serializer.setIndent(720);
@@ -1202,9 +1208,8 @@ public class SerializerTest extends XOMTestCase {
             serializer.setIndent(-1);
             fail("Allowed negative indent");
         }
-        catch (IllegalArgumentException ex) {
-           // success    
-            assertNotNull(ex.getMessage());
+        catch (IllegalArgumentException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
@@ -1268,6 +1273,7 @@ public class SerializerTest extends XOMTestCase {
     
     
     public void testPrettyXML() throws IOException {
+        
         Element items = new Element("itemSet");
         items.appendChild(new Element("item1"));
         items.appendChild(new Element("item2"));
@@ -1356,6 +1362,7 @@ public class SerializerTest extends XOMTestCase {
     
     
     public void testPrettyXMLWithSetOutputStream() throws IOException {
+        
         Element items = new Element("itemSet");
         items.appendChild(new Element("item1"));
         items.appendChild(new Element("item2"));
@@ -1618,8 +1625,8 @@ public class SerializerTest extends XOMTestCase {
 
     
     // make sure null pointer exception doesn't cause any output
-    public void testNullDocument() 
-      throws IOException {
+    public void testNullDocument() throws IOException {
+        
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out, "UTF-16");
         try {
@@ -1672,11 +1679,13 @@ public class SerializerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out);
         Document doc = new Document(new Element("a"));
-        doc.setDocType(new DocType("b", "-//W3C//DTD XHTML 1.0 Transitional//EN", "example.dtd"));
+        doc.setDocType(new DocType("b", 
+          "-//W3C//DTD XHTML 1.0 Transitional//EN", "example.dtd"));
         serializer.write(doc);
         String result = out.toString("UTF-8");
         assertTrue(result.endsWith("<a/>\r\n"));
-        assertTrue(result.indexOf("<!DOCTYPE b PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"example.dtd\">") > 0);         
+        assertTrue(result.indexOf(
+          "<!DOCTYPE b PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"example.dtd\">") > 0);         
     }
 
     
@@ -1755,6 +1764,7 @@ public class SerializerTest extends XOMTestCase {
     
     public void testConflictBetweenMaxLengthAndIndent() 
       throws IOException {
+        
         Element root = new Element("a");
         Element b = new Element("b");
         Element c = new Element("c");
@@ -1952,6 +1962,27 @@ public class SerializerTest extends XOMTestCase {
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
                 "<a>\r\n    <b> </b>\r\n</a>\r\n", result);
 
+    }
+    
+    
+    public void testEndTagsOfElementsWithContentGoOnSeparateLine() 
+      throws ParsingException, IOException {
+      
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      Serializer serializer = new Serializer(out, "ISO-8859-1");
+      serializer.setIndent(4);
+      serializer.setMaxLength(64);
+      serializer.setPreserveBaseURI(true);
+      serializer.flush();
+
+      File f = new File("data/prettyxml.xml");
+      Builder builder = new Builder();
+      Document doc = builder.build(f);
+      serializer.write(doc);
+      String result = out.toString("UTF-8");
+      System.out.println(result);
+      assertTrue(result.endsWith("\r\n</html>\r\n"));
+      
     }
 
     
