@@ -331,6 +331,7 @@ public class DOMConverterTest extends XOMTestCase {
                  
     }
 
+    
     public void testConvertDocType() 
       throws SAXException, IOException, ParserConfigurationException {
 
@@ -348,4 +349,14 @@ public class DOMConverterTest extends XOMTestCase {
                  
     }
 
+   
+    public void testChildElementAddsNamespace() throws Exception {
+        Element root = new Element("root");
+        Element child = new Element("pre:child", "http://www.example.org/");
+        child.addAttribute(new Attribute("xlink:type", "http://www.w3.org/1999/xlink", "simple"));
+        root.appendChild(child);
+        Document doc = new Document(root);  
+        
+        assertEquals(doc, DOMConverter.convert(DOMConverter.convert(doc, impl)));
+    }
 }
