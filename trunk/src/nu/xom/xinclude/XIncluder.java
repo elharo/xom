@@ -602,15 +602,6 @@ public class XIncluder {
     }
 
     
-    // resolveSilently seems to be primarily used for resolving
-    // elements selected by an XPointer
-    private static Nodes resolveSilently(
-      Element element, Builder builder, Stack baseURLs) 
-      throws IOException, ParsingException, XIncludeException {
-        return resolveSilently(element, builder, baseURLs, null);
-    }
-    
-    
     private static Nodes resolveSilently(
       Element element, Builder builder, Stack baseURLs, Document originalDoc)
       throws IOException, ParsingException, XIncludeException {
