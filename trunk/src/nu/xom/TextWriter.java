@@ -34,7 +34,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  *
  */
 abstract class TextWriter {
@@ -90,40 +90,10 @@ abstract class TextWriter {
     }
     
     
-    final void writePCDATA(char c) 
-    
-      throws IOException {
+    final void writePCDATA(char c) throws IOException {
+        
         if (needsEscaping(c)) {
-            if (isHighSurrogate(c)) {
-                //store and wait for low half
-                highSurrogate = c;
-            }
-            else if (isLowSurrogate(c)) {
-                // decode and write entity reference
-                // I am assuming here that nothing allows the
-                // text to be created with a malformed surrogate
-                // pair such as a low surrogate that is not immediately
-                // preceded by a high surrogate
-                int high =  highSurrogate & 0x7FF;
-                int low = c - 0xDC00;
-                int highShifted = high << 10;
-                int combined = highShifted | low; 
-                int uchar = combined + 0x10000;
-                String s = "&#x" + Integer.toHexString(uchar).toUpperCase() + ';';
-                out.write(s);
-                column += s.length();
-                lastCharacterWasSpace = false;
-                skipFollowingLinefeed = false;
-                justBroke = false;
-            }
-            else {
-                String s = "&#x" + Integer.toHexString(c).toUpperCase() + ';';
-                out.write(s);
-                column += s.length();
-                lastCharacterWasSpace = false;
-                skipFollowingLinefeed = false;
-                justBroke=false;
-            }
+            writeEscapedChar(c);
         }
         else if (c == '&') {
             out.write("&amp;");
@@ -168,6 +138,43 @@ abstract class TextWriter {
     }
     
     
+    private void writeEscapedChar(char c) throws IOException {
+
+        // XXX combine with writeAttributeValue(char) into a 
+      // writeescapedChar method
+        if (isHighSurrogate(c)) {
+            //store and wait for low half
+            highSurrogate = c;
+        }
+        else if (isLowSurrogate(c)) {
+            // decode and write entity reference
+            // I am assuming here that nothing allows the
+            // text to be created with a malformed surrogate
+            // pair such as a low surrogate that is not immediately
+            // preceded by a high surrogate
+            int high =  highSurrogate & 0x7FF;
+            int low = c - 0xDC00;
+            int highShifted = high << 10;
+            int combined = highShifted | low; 
+            int uchar = combined + 0x10000;
+            String s = "&#x" + Integer.toHexString(uchar).toUpperCase() + ';';
+            out.write(s);
+            column += s.length();
+            lastCharacterWasSpace = false;
+            skipFollowingLinefeed = false;
+            justBroke = false;
+        }
+        else {
+            String s = "&#x" + Integer.toHexString(c).toUpperCase() + ';';
+            out.write(s);
+            column += s.length();
+            lastCharacterWasSpace = false;
+            skipFollowingLinefeed = false;
+            justBroke=false;
+        }
+    }
+
+
     private boolean adjustingWhiteSpace() {
         return maxLength > 0 || indent > 0;
     }
@@ -182,36 +189,7 @@ abstract class TextWriter {
       throws IOException {
         
         if (needsEscaping(c)) {
-            if (isHighSurrogate(c)) {
-                //store and wait for low half
-                highSurrogate = c;
-            }
-            else if (isLowSurrogate(c)) {
-                // decode and write entity reference
-                // I am assuming here that nothing allows the
-                // text to be created with a malformed surrogate
-                // pair such as a low surrogate that is not immediately
-                // preceded by a high surrogate
-                int high =  highSurrogate & 0x7FF;
-                int low = c - 0xDC00;
-                int highShifted = high << 10;
-                int combined = highShifted | low; 
-                int uchar = combined + 0x10000;
-                String s = "&#x" + Integer.toHexString(uchar).toUpperCase() + ';';
-                out.write(s);
-                column += s.length();
-                lastCharacterWasSpace = false;
-                skipFollowingLinefeed = false;
-                justBroke=false;
-            }
-            else {
-                String s = "&#x" + Integer.toHexString(c).toUpperCase() + ';';
-                out.write(s);
-                column += s.length();
-                lastCharacterWasSpace = false;
-                skipFollowingLinefeed = false;
-                justBroke=false;
-            }
+            writeEscapedChar(c);
         }
         // Handle white space that the parser might normalize
         // on roundtrip. We only escape them if the serializer
