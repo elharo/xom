@@ -27,13 +27,14 @@ package nu.xom;
  * <p>
  * Indicates an attempt to assign a name that is not a legal XML name.
  * For example, this might be a name that begins with a digit 
- * such as <code>7pins</code> or a name that contains an asterisk such as 
- * <code>pt*</code>. In some contexts, this also includes names that are
- * not legal non-colonized names as defined by <cite>Namespaces in XML</cite>.
+ * such as <code>7pins</code> or a name that contains an asterisk such 
+ * as <code>pt*</code>. In some contexts, this also includes names that
+ * are not legal non-colonized names as defined by <cite>Namespaces in 
+ * XML</cite>.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b3
  *
  */
 public class IllegalNameException extends IllegalDataException {
