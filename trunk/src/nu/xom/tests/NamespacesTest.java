@@ -25,6 +25,7 @@ package nu.xom.tests;
 
 import nu.xom.Element;
 import nu.xom.Attribute;
+import nu.xom.MalformedURIException;
 import nu.xom.NamespaceException;
 
 /**
@@ -119,6 +120,35 @@ public class NamespacesTest extends XOMTestCase {
         }
         
     }
+    
+    public void testUnmappingPrefix() {
+        
+        try {
+            noNamespaces.addNamespaceDeclaration("pre", "");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());   
+        }
+        
+    }
+    
+    public void testAllowCapitalSchemes() {       
+        noNamespaces.addNamespaceDeclaration("pre", "HTTP://WWW.EXAMPLE.COM/");
+        assertEquals(noNamespaces.getNamespaceURI("pre"), "HTTP://WWW.EXAMPLE.COM/"); 
+    }
+
+    public void testBadSchemes() {   
+        
+        try {
+            noNamespaces.addNamespaceDeclaration("pre", "uri!urn:somedata");
+            fail("Allowed illegal characters in scheme");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());   
+        }
+    }
+
+
     
     public void testXMLPrefixNotAllowedWithWrongURI() {
         
