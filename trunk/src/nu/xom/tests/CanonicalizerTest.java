@@ -42,7 +42,6 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Namespace;
 import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
 
@@ -819,7 +818,29 @@ public class CanonicalizerTest extends XOMTestCase {
         Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
         
         XPathContext context = new XPathContext("n1", "http://b.example");
-        canonicalizer.write(new Document(pdu), "(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context);  
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc, "(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
+    public void testExclusiveDoesntRenderUnusedPrefix() throws IOException {
+     
+        Element pdu = new Element("n0:tuck", "http://a.example");
+        pdu.addNamespaceDeclaration("pre", "http://www.example.org/");
+   
+        String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        
+        XPathContext context = new XPathContext("n1", "http://b.example");
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc, "//. | //@* | //namespace::*", context);  
         
         byte[] result = out.toByteArray();
         out.close();
