@@ -328,6 +328,37 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+ 
+    public void testUnrecognizedXPointerScheme() 
+      throws ParsingException, IOException {
+      
+        File input = new File("data/xinclude/input/unrecognizedscheme.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed unrecognized scheme");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+     
+    
+    public void testUnrecognizedXPointerSchemeWithFallback() 
+      throws IOException, ParsingException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/unrecognizedschemewithfallback.xml");
+        File output = new File("data/xinclude/output/unrecognizedschemewithfallback.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Document actual = XIncluder.resolve(doc);
+        Document expected = builder.build(output);
+        assertEquals(expected, actual);
+        
+    }
+     
     
     public void testIncludeTextWithCustomNodeFactoryThatChangesElementNames() 
       throws ParsingException, IOException, XIncludeException {
