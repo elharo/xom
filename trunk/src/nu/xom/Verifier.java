@@ -29,12 +29,12 @@ import java.util.StringTokenizer;
 
 /**
  * <p>
- * <code>Verifier</code>checks names and data for 
+ * <code>Verifier</code> checks names and data for 
  * compliance with XML 1.0 and Namespaces in XML rules.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0a3
  * 
  */
 final class Verifier {
@@ -851,71 +851,7 @@ final class Verifier {
         catch (MalformedURIException ex) {
             ex.setData(uri);
             throw ex;
-        }   
-        
-        // Next test is necessary if we're really testing URI 
-        // references but not for namespace URIs
-        /* if (uri == null || uri.length() == 0) {
-            throwMalformedURIException(uri, 
-              "Absolute URIs cannot be empty"
-            );   
         }
-        
-        if (!isAlpha(uri.charAt(0))) {
-            throwMalformedURIException(uri,
-              "Absolute URIs must begin with an ASCII letter");
-        }
-        
-        int colonLocation = -1;
-        for (int i = 1; i < uri.length(); i++) {
-             char c = uri.charAt(i);
-             if (c == ':') {
-                colonLocation = i;
-                break;               
-             }
-             if (!isSchemeCharacter(c)) {
-                throwMalformedURIException(uri,
-                  "URI schemes cannot contain " + c);   
-             }
-        }
-        
-        if (colonLocation == -1) {
-             throwMalformedURIException(uri,
-                "Namespace URIs should be absolute.");   
-        }
-        int numberSharps = 0;
-        for (int i = colonLocation+1; i < uri.length(); i++) {
-            char c = uri.charAt(i);
-            if (c == '%') {
-                try {
-                    char c1 = uri.charAt(i+1);
-                    char c2 = uri.charAt(i+2);
-                    if (!isHexDigit(c1) || !isHexDigit(c2)) {
-                        throwMalformedURIException(uri,
-                          ("Bad hexadecimal escape sequence %" 
-                          + c1) + c2);   
-                    }                      
-                }
-                catch (IndexOutOfBoundsException ex) {
-                    throwMalformedURIException(uri,
-                      "Bad hexadecimal escape sequence %");   
-                }
-            }
-            else if (c == '#') {
-                numberSharps++;
-                if (numberSharps > 1) {
-                    throwMalformedURIException(uri,
-                      "Multiple fragments #"
-                    );
-                }
-            }
-            else if (!isURICharacter(c)) {
-                throwMalformedURIException(uri,
-                  "URIs cannot contain " + c
-                );
-            }
-            
-        }    */   
    
     }
 
@@ -981,11 +917,14 @@ final class Verifier {
             case 'y': return true;
             case 'z': return true;
         }
+        
         return false;
+        
     } 
     
     
     static boolean isSchemeCharacter(char c) {
+        
         switch(c) {
             case '+': return true;
             case ',': return false;
@@ -1068,110 +1007,9 @@ final class Verifier {
             case 'y': return true;
             case 'z': return true;
         }
-        return false;
-    }   
-    
-
-    private static boolean isURICharacter(int c) {
         
-        switch(c) {
-            case '!': return true;
-            case '"': return false;
-            // really checking for URI references
-            case '#': return true;
-            case '$': return true;
-            case '%': return true;
-            case '&': return true;
-            case '\'': return true;
-            case '(': return true;
-            case ')': return true;
-            case '*': return true;
-            case '+': return true;
-            case ',': return true;
-            case '-': return true;
-            case '.': return true;
-            case '/': return true;
-            case '0': return true;
-            case '1': return true;
-            case '2': return true;
-            case '3': return true;
-            case '4': return true;
-            case '5': return true;
-            case '6': return true;
-            case '7': return true;
-            case '8': return true;
-            case '9': return true;
-            case ':': return true;
-            case ';': return true;
-            case '<': return false;
-            case '=': return true;
-            case '>': return false;
-            case '?': return true;
-            case '@': return true;
-            case 'A': return true;
-            case 'B': return true;
-            case 'C': return true;
-            case 'D': return true;
-            case 'E': return true;
-            case 'F': return true;
-            case 'G': return true;
-            case 'H': return true;
-            case 'I': return true;
-            case 'J': return true;
-            case 'K': return true;
-            case 'L': return true;
-            case 'M': return true;
-            case 'N': return true;
-            case 'O': return true;
-            case 'P': return true;
-            case 'Q': return true;
-            case 'R': return true;
-            case 'S': return true;
-            case 'T': return true;
-            case 'U': return true;
-            case 'V': return true;
-            case 'W': return true;
-            case 'X': return true;
-            case 'Y': return true;
-            case 'Z': return true;
-            case '[': return true;
-            case '\\': return false;
-            case ']': return true;
-            case '^': return false;
-            case '_': return true;
-            case '`': return false;
-            case 'a': return true;
-            case 'b': return true;
-            case 'c': return true;
-            case 'd': return true;
-            case 'e': return true;
-            case 'f': return true;
-            case 'g': return true;
-            case 'h': return true;
-            case 'i': return true;
-            case 'j': return true;
-            case 'k': return true;
-            case 'l': return true;
-            case 'm': return true;
-            case 'n': return true;
-            case 'o': return true;
-            case 'p': return true;
-            case 'q': return true;
-            case 'r': return true;
-            case 's': return true;
-            case 't': return true;
-            case 'u': return true;
-            case 'v': return true;
-            case 'w': return true;
-            case 'x': return true;
-            case 'y': return true;
-            case 'z': return true;
-            case '{': return false;
-            case '|': return false;
-            case '}': return false;
-            case '~': return true;
-        }
         return false;
+        
     }
 
 
@@ -1273,6 +1111,7 @@ final class Verifier {
             case '}': return false;
             case '~': return true;
         }
+        
         return false;
         
     }
@@ -1376,7 +1215,9 @@ final class Verifier {
             case '}': return false;
             case '~': return true;
         }
+        
         return false;
+        
     }
     
         
