@@ -47,7 +47,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b9
  *
  */
 public class NodeFactoryTest extends XOMTestCase {
@@ -915,6 +915,7 @@ public class NodeFactoryTest extends XOMTestCase {
     
     public void testReplaceProcessingInstructionWithAttribute() 
       throws ParsingException, IOException {
+        
         String data = "<root><?target data?></root>";   
         Builder builder = new Builder(new NodeFactory() {
             
@@ -928,6 +929,26 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals(0, root.getChildCount());
         assertEquals(1, root.getAttributeCount());
         assertEquals("value", root.getAttribute("name").getValue());
+
+    }
+ 
+    
+    public void testReplaceProcessingInstructionWithText() 
+      throws ParsingException, IOException {
+        
+        String data = "<root><?target data?></root>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes makeProcessingInstruction(String target, String data) {
+                return new Nodes(new Text(data));   
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        assertEquals(1, root.getChildCount());
+        assertEquals(0, root.getAttributeCount());
+        assertEquals("data", root.getValue());
 
     }
  
