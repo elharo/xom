@@ -89,7 +89,6 @@ final class Verifier {
              + " is illegal because NCNames cannot contain colons");
         }
 
-        return;
     }
 
     /**
@@ -115,7 +114,6 @@ final class Verifier {
         }
 
         // If we got here, everything is OK
-        return;
     }
     
     /**
@@ -186,7 +184,6 @@ final class Verifier {
         }
 
         // If we got here, everything is OK
-        return;
     }
 
 
@@ -1176,8 +1173,8 @@ final class Verifier {
         
         if (colonLocation == -1) {
              throw new MalformedURIException(
-                  "Namespace URIs should be absolute.");   
-             };
+                "Namespace URIs should be absolute.");   
+        }
         int numberSharps = 0;
         for (int i = colonLocation+1; i < uri.length(); i++) {
             char c = uri.charAt(i);
