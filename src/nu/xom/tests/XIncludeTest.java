@@ -499,6 +499,19 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    public void testUnrecognizedColonizedSchemeNameBackedUpByTumbler() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/colonizedschemename.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/xptrtumblertest.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+
     public void testXPointerSyntaxErrorInSecondPart() 
       throws ParsingException, IOException, XIncludeException {
       
