@@ -31,10 +31,11 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  */
 public class BadParseAttributeException extends XIncludeException {
 
+    
     /**
      * <p>
      * Constructs a <code>BadParseAttributeException</code> with 
@@ -47,11 +48,12 @@ public class BadParseAttributeException extends XIncludeException {
         super(message);
     }
 
+    
     /**
      * <p>
-     * Creates a new <code>BadParseAttributeException</code> with a detail 
-     * message, line and column numbers, and a URI of the document
-     * that caused the exception.
+     * Creates a new <code>BadParseAttributeException</code> with a  
+     * detail message and the URI of the document that caused 
+     * the exception.
      * </p>
      * 
      * @param message indicates the specific problem
@@ -61,4 +63,5 @@ public class BadParseAttributeException extends XIncludeException {
         super(message, uri);
     }
 
+    
 }
