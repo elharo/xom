@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -44,7 +44,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class FibonacciServlet extends HttpServlet {
@@ -60,10 +60,10 @@ public class FibonacciServlet extends HttpServlet {
             numberOfGenerations = Integer.parseInt(generations);
         }
         catch (Exception ex) { // NumberFormat or NullPointerException
-              // use default value of 10 
+            // use default value of 10 
         }
      
-         response.setContentType("text/xml; charset=UTF-8");               
+        response.setContentType("text/xml; charset=UTF-8");               
         OutputStream out = response.getOutputStream();
     
         Element root = new Element("Fibonacci_Numbers"); 
@@ -81,22 +81,26 @@ public class FibonacciServlet extends HttpServlet {
               = new Attribute("index", String.valueOf(i));
             fibonacci.addAttribute(index);
             fibonacci.appendChild(low.toString());
+            root.appendChild(fibonacci);
        
             BigInteger temp = high;
             high = high.add(low);
-             low = temp;
+            low = temp;
         }
         Serializer serializer = new Serializer(out, "UTF-8");
         serializer.write(doc);
         serializer.flush();
-         out.close();
+        out.close();
     
-  }
+    }
 
+    
     public void doPost(
       HttpServletRequest request, HttpServletResponse response)
       throws IOException {
+        
         doGet(request, response);
-      }
+        
+    }
 
 }
