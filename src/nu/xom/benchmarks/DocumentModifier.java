@@ -95,7 +95,7 @@ class DocumentModifier {
             out.close();
             byte[] data = out.toByteArray();
              
-            warmup(parser, iterator, data, 5, args[0]);
+            warmup(parser, iterator, data, 5);
             InputStream raw = new BufferedInputStream(
               new ByteArrayInputStream(data)
             );    
@@ -113,7 +113,7 @@ class DocumentModifier {
               + "ms to build the document");
 
             long prewalk = System.currentTimeMillis();
-            performTask(parser, iterator, document);;
+            performTask(iterator, document);;
             long postwalk = System.currentTimeMillis();
             
             System.out.println((postwalk - prewalk) 
@@ -129,22 +129,20 @@ class DocumentModifier {
   
     } // end main
     
-    private static void warmup(Builder parser, 
+    private static void warmup(Builder builder, 
       DocumentModifier iterator, byte[] data, 
-      int numPasses, String base)
+      int numPasses)
       throws IOException, ParsingException {
           
         InputStream in = new BufferedInputStream(
           new ByteArrayInputStream(data));
-        Builder builder = new Builder();
         Document doc = builder.build(in);  
         for (int i = 0; i < numPasses; i++) {
-            performTask(parser, iterator, doc);
+            performTask(iterator, doc);
         }
     }
 
-    private static void performTask(Builder parser,
-      DocumentModifier iterator, Document document)
+    private static void performTask(DocumentModifier iterator, Document document)
         throws ParsingException, IOException { 
         iterator.followNode(document); 
     }
