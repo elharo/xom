@@ -32,6 +32,7 @@ import nu.xom.Comment;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Attribute;
+import nu.xom.ValidityException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -1369,6 +1370,60 @@ public class SerializerTest extends XOMTestCase {
         serializer.setPreserveBaseURI(false);
         assertFalse(serializer.getPreserveBaseURI());
         
+    }
+
+    // need to add tests for serialization of doctypes with and without
+    // system and public IDs and internal DTD subsets????
+
+    public void testSerializeDocTypeWithSystemID() 
+      throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        Document doc = new Document(new Element("a"));
+        doc.setDocType(new DocType("b", "example.dtd"));
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertTrue(result.endsWith("<a/>\r\n"));
+        assertTrue(result.indexOf("<!DOCTYPE b SYSTEM \"example.dtd\">") > 0);         
+    }
+
+    public void testSerializeDocTypeWithPublicAndSystemID() 
+      throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        Document doc = new Document(new Element("a"));
+        doc.setDocType(new DocType("b", "-//W3C//DTD XHTML 1.0 Transitional//EN", "example.dtd"));
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertTrue(result.endsWith("<a/>\r\n"));
+        assertTrue(result.indexOf("<!DOCTYPE b PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"example.dtd\">") > 0);         
+    }
+
+    public void testSerializeDocTypeWithInternalDTDSubset() 
+      throws ParsingException, IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        String data = "<!DOCTYPE root [ <!ELEMENT root EMPTY> ]><test/>";   
+        Builder builder = new Builder();
+        Document doc = builder.build(data, "http://www.example.com");
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertTrue(result.endsWith("<test/>\r\n"));
+        assertTrue(result.indexOf("<!DOCTYPE root [\r\n") > 0);         
+        assertTrue(result.indexOf("\r\n]>\r\n") > 0);         
+        assertTrue(result.indexOf("<!ELEMENT root EMPTY>") > 0);         
+    }
+
+    public void testSerializeQuoteInAttributeValue() 
+      throws ParsingException, IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        Element root = new Element("root");
+        root.addAttribute(new Attribute("name", "\""));
+        Document doc = new Document(root);
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertTrue(result.endsWith("<root name=\"&quot;\"/>\r\n"));  
     }
 
 }
