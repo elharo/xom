@@ -177,18 +177,15 @@ public class Builder {
             }       
         }
         
-        if (parser == null) {
-            try { // default
-                parser = XMLReaderFactory.createXMLReader();
-                setupParser(parser, validate);
-            }
-            catch (SAXException ex) {
-                throw new XMLException(
-                  "Could not find a suitable SAX2 parser", ex);
-            }
+        try { // default
+            parser = XMLReaderFactory.createXMLReader();
+            setupParser(parser, validate);
+            return parser;
         }
-        
-        return parser;
+        catch (SAXException ex) {
+            throw new XMLException(
+              "Could not find a suitable SAX2 parser", ex);
+        }
         
     }    
     
