@@ -121,6 +121,23 @@ Wolfgang's ant build file for smaller vs. faster jars (Text class)
 
 Add tools page to web site (Ant, tagSoup, Clover, etc.)
 
+Backport Fixes to make in 1.0.1
+
+TextWriter.java
+XOMTestCase.java
+XOMHandler.java for internal DTD subset
+
+
+===============
+Done 1.1d4:
+===============
+
+XPath expressions can now return Namespace nodes
+
+Document subset canonicalization
+
+Fixed bug that prevented round tripping of \r\n in attribute values
+
 ===============
 Done 1.1d3:
 ===============
