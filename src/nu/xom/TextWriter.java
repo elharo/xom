@@ -480,10 +480,6 @@ abstract class TextWriter {
         }  
     }
 
-    String getIndentString() {
-        return indentString;
-    }
-
     /**
      * <p>
      * Returns the number of spaces this serializer indents.
