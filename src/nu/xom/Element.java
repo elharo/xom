@@ -47,7 +47,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b4
  *
  */
 public class Element extends ParentNode {
@@ -247,6 +247,7 @@ public class Element extends ParentNode {
      * <p>
      * Returns a list of the child elements of 
      * this element with the specified name in no namespace.
+     * The elements returned are in document order.
      * </p>
      * 
      * @param name the name of the elements included in the list
@@ -267,6 +268,7 @@ public class Element extends ParentNode {
      * returns all elements in the specified namespace.
      * Passing null or the empty string as the namespace URI 
      * returns elements with the specified name in no namespace.
+     * The elements returned are in document order.
      * </p>
      * 
      * @param localName the name of the elements included in the list
@@ -303,7 +305,7 @@ public class Element extends ParentNode {
     /**
      * <p>
      * Returns a list of all the child elements 
-     * of this element.
+     * of this element in document order.
      * </p>
      * 
      * @return a comatose list containing all  
@@ -544,7 +546,7 @@ public class Element extends ParentNode {
      * 
      * <p>
      * In general, you should not add attributes to or remove 
-     * attriubtes from the list while iterating across it. 
+     * attributes from the list while iterating across it. 
      * Doing so will change the indexes of the other attributes in 
      * the list. it is, however, safe to remove an attribute from 
      * either end of the list (0 or <code>getAttributeCount()-1</code>)
@@ -1006,10 +1008,10 @@ public class Element extends ParentNode {
      * </p>
      * 
      * <p>
-     *   If you do redeclare a prefix that is already used
-     *   by an element or attribute name, the additional 
-     *   namespace is added if and only if the URI is the same.
-     *   Conflicting namespace declarations will throw an exception.
+     * If you do redeclare a prefix that is already used
+     * by an element or attribute name, the additional 
+     * namespace is added if and only if the URI is the same.
+     * Conflicting namespace declarations will throw an exception.
      * </p>
      * 
      * @param prefix the prefix to declare
