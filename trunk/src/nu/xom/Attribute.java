@@ -543,48 +543,182 @@ public class Attribute extends Node {
     
     private static String escapeText(String s) {
         
-        StringBuffer result = new StringBuffer(s.length());
-        for (int i = 0; i < s.length(); i++) {
-            escapeChar(result, s.charAt(i));
+        int length = s.length();
+        // Give the string buffer enough room for a couple of escaped characters 
+        StringBuffer result = new StringBuffer(length+12);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '\t':
+                    result.append("&#x09;");
+                    break;
+                case '\n':
+                    result.append("&#x0A;");
+                    break;
+                case 11:
+                    // impossible
+                    break;
+                case 12:
+                    // impossible
+                    break;
+                case '\r':
+                    result.append("&#x0D;");
+                    break;
+                case 14:
+                    // impossible
+                    break;
+                case 15:
+                    // impossible
+                    break;
+                case 16:
+                    // impossible
+                    break;
+                case 17:
+                    // impossible
+                    break;
+                case 18:
+                    // impossible
+                    break;
+                case 19:
+                    // impossible
+                    break;
+                case 20:
+                    // impossible
+                    break;
+                case 21:
+                    // impossible
+                    break;
+                case 22:
+                    // impossible
+                    break;
+                case 23:
+                    // impossible
+                    break;
+                case 24:
+                    // impossible
+                    break;
+                case 25:
+                    // impossible
+                    break;
+                case 26:
+                    // impossible
+                    break;
+                case 27:
+                    // impossible
+                    break;
+                case 28:
+                    // impossible
+                    break;
+                case 29:
+                    // impossible
+                    break;
+                case 30:
+                    // impossible
+                    break;
+                case 31:
+                    // impossible
+                    break;
+                case ' ':
+                    result.append(' ');
+                    break;
+                case '!':
+                    result.append('!');
+                    break;
+                case '"':
+                    result.append("&quot;");
+                    break;
+                case '#':
+                    result.append('#');
+                    break;
+                case '$':
+                    result.append('$');
+                    break;
+                case '%':
+                    result.append('%');
+                    break;
+                case '&':
+                    result.append("&amp;");
+                    break;
+                case '\'':
+                    result.append('\'');
+                    break;
+                case '(':
+                    result.append('(');
+                    break;
+                case ')':
+                    result.append(')');
+                    break;
+                case '*':
+                    result.append('*');
+                    break;
+                case '+':
+                    result.append('+');
+                    break;
+                case ',':
+                    result.append(',');
+                    break;
+                case '-':
+                    result.append('-');
+                    break;
+                case '.':
+                    result.append('.');
+                    break;
+                case '/':
+                    result.append('/');
+                    break;
+                case '0':
+                    result.append('0');
+                    break;
+                case '1':
+                    result.append('1');
+                    break;
+                case '2':
+                    result.append('2');
+                    break;
+                case '3':
+                    result.append('3');
+                    break;
+                case '4':
+                    result.append('4');
+                    break;
+                case '5':
+                    result.append('5');
+                    break;
+                case '6':
+                    result.append('6');
+                    break;
+                case '7':
+                    result.append('7');
+                    break;
+                case '8':
+                    result.append('8');
+                    break;
+                case '9':
+                    result.append('9');
+                    break;
+                case ':':
+                    result.append(':');
+                    break;
+                case ';':
+                    result.append(';');
+                    break;
+                case '<':
+                    result.append("&lt;");
+                    break;
+                case '=':
+                    result.append('=');
+                    break;
+                case '>':
+                    result.append("&gt;");
+                    break;
+                default: 
+                    result.append(c);
+            }
         }
         return result.toString();
         
     }
-    
-    
-    private static void escapeChar(StringBuffer result, char c) {
-        
-        switch (c) {
-            case '<':
-                result.append("&lt;");
-                break;
-            case '>':
-                result.append("&gt;");
-                break;
-            case '&':
-                result.append("&amp;");
-                break;
-            case '"':
-                result.append("&quot;");
-                break;
-            case '\'':
-                result.append("&apos;");
-                break;
-            case '\n':
-                result.append("&#x0A;");
-                break;
-            case '\r':
-                result.append("&#x0D;");
-                break;
-            case '\t':
-                result.append("&#x09;");
-                break;
-            default: 
-                result.append(c);   
-        }
-        
-    }
- 
+
     
     boolean isAttribute() {
         return true;   
