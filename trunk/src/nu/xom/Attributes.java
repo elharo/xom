@@ -38,7 +38,7 @@ import java.util.Iterator;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d17
+ * @version 1.0d23
  * 
  */
 final class Attributes {
@@ -97,11 +97,6 @@ final class Attributes {
           attribute.getNamespaceURI());
         if (oldAttribute != null) remove(oldAttribute);
         
-        attributes.add(attribute);
-    }
-    
-    // For use with parsers
-    void fastAdd(Attribute attribute) {
         attributes.add(attribute);
     }
     
