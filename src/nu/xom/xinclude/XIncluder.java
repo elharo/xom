@@ -391,7 +391,7 @@ public class XIncluder {
                         for (int i = 0; i < replacements.size(); i++) {
                             Node child = replacements.get(i);
                             if (child instanceof Element) {
-                                String noFragment = url.toExternalForm();
+                                String noFragment = child.getBaseURI();
                                 if (noFragment.indexOf('#') >= 0) {
                                     noFragment = noFragment.substring(
                                       0, noFragment.indexOf('#'));
@@ -422,12 +422,6 @@ public class XIncluder {
                                 }  
                             }
                             Node copy = original.copy();
-                            if (copy instanceof Element) {
-                                Element copyElement = (Element) copy;
-                                // XXX can I delete this or not? copyElement.setBaseURI(original.getBaseURI());
-                                // the copy actually sets the base URI to the original's actual base URI,
-                                // not always the same as getBaseURI
-                            } 
                             replacements.append(copy);        
                         }  
                         replacements = resolveXPointerSelection(
@@ -898,7 +892,15 @@ public class XIncluder {
         // so we can detach the old root if necessary
         doc.setRootElement(new Element("f")); 
         for (int i = 0; i < included.size(); i++) {
-            included.get(i).detach();         
+            Node node = included.get(i);
+            // Take account of xml:base attribute, which we normally 
+            // don't do when detaching
+            String oldBase = node.getBaseURI();
+            node.detach();
+            if (node instanceof Element) {
+                // XXX
+                ((Element) node).setBaseURI(oldBase);
+            }
         }  
             
         return included;
