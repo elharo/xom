@@ -54,6 +54,7 @@ to http://www.xom.nu/
     <property name="build.javadocs" value="./build/apidocs"/>
     <property name="testoutput.dir" value="./testresults"/>
     <property name="dist.dir"       value="./dist"/>    
+    <property name="clover.dir"     value="./clover"/>
 
     <property name="xml-apis.jar"   value="${lib.dir}/xmlParserAPIs.jar"/>
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
@@ -376,20 +377,24 @@ XOM Build file
   <taskdef resource="clovertasks"/>
   
   <target name="with.clover" depends="init">
-    <clover-setup initString="clover/xom_coverage.db">
+    <mkdir dir="${clover.dir}"/>
+    <clover-setup initString="${clover.dir}/xom_coverage.db">
        <files>
 	       <exclude name="nu/xom/Latin6Writer.java"/>
 	       <exclude name="nu/xom/Latin8Writer.java"/>
 	       <exclude name="nu/xom/Latin10Writer.java"/>
+	       <exclude name="nu/xom/tests/FastTests.java"/>
+	       <exclude name="nu/xom/tests/XOMTests.java"/>
 	       <exclude name="nu/xom/samples/**"/>
 	       <exclude name="nu/xom/pantry/**"/>
 	       <exclude name="nu/xom/benchmarks/**"/>
+           <exclude name="nu/xom/tools/**" />
        </files>
     </clover-setup>
   </target>
 
   
-  <property name="ant-home" value="/opt/java/ant"/>
+  <property name="ant-home" value="/opt/ant"/>
 
   <target name="clover.html" depends="with.clover">
     <clover-report>
@@ -414,7 +419,10 @@ XOM Build file
            <exclude name="**/pantry/*.java" />
            <exclude name="**/MegaTest.java" />
            <exclude name="**/benchmarks/*.java" />
+           <exclude name="**/tools/*.java" />
            <exclude name="**/EBCDICTest.java" />
+	       <exclude name="nu/xom/tests/FastTests.java"/>
+	       <exclude name="nu/xom/tests/XOMTests.java"/>
          </fileset>
       </batchtest>
     </junit>
