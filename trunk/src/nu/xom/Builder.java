@@ -195,7 +195,7 @@ public class Builder {
         // null. If it can't locate the parser, it throws
         // a SAXException.
         
-        XMLReader parser = null;
+        XMLReader parser;
         for (int i = 0; i < parsers.length; i++) {
             try { 
                 parser = XMLReaderFactory.createXMLReader(parsers[i]);
@@ -203,7 +203,6 @@ public class Builder {
                 return parser;
             }
             catch (SAXException ex) {
-                parser = null;
                 // try the next one 
             }       
         }
