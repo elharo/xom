@@ -34,7 +34,7 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0b6
  *
  */
 public class ProcessingInstructionTest extends XOMTestCase {
@@ -65,6 +65,29 @@ public class ProcessingInstructionTest extends XOMTestCase {
     }
 
     
+    public void testToStringWithLineFeed() {
+        
+        ProcessingInstruction p 
+          = new ProcessingInstruction("test", "content\ncontent");
+        assertEquals(
+          "[nu.xom.ProcessingInstruction: target=\"test\"; data=\"content\\ncontent\"]", 
+          p.toString()
+        );          
+        
+    }
+    
+    
+    public void testToStringWithLotsOfData() {
+        
+        ProcessingInstruction p 
+          = new ProcessingInstruction("target", 
+          "content content 012345678901234567890123456789012345678901234567890123456789");
+        String s = p.toString();
+        assertTrue(s.endsWith("...\"]"));
+        
+    }
+
+
     public void testConstructor() {
 
         assertEquals("test", pi.getValue());

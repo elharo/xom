@@ -36,7 +36,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b6
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -269,6 +269,42 @@ public class AttributeTest extends XOMTestCase {
     }
     
     
+    public void testToStringWithLineFeed() {
+        
+        Attribute a = new Attribute("name", "content\ncontent");
+        assertEquals("[nu.xom.Attribute: name=\"content\\ncontent\"]", a.toString());          
+        
+    }
+
+
+    public void testToStringWithCarriageReturnLineFeed() {
+        
+        Attribute a = new Attribute("name", "content\r\ncontent");
+        assertEquals("[nu.xom.Attribute: name=\"content\\r\\ncontent\"]", a.toString());          
+        
+    }
+
+
+    public void testToStringWithCarriageReturn() {
+        
+       Attribute a = new Attribute("name", "content\rcontent");
+       assertEquals("[nu.xom.Attribute: name=\"content\\rcontent\"]", a.toString());          
+        
+    }
+
+
+    public void testToStringWithLotsOfData() {
+        
+       Attribute a  = new Attribute("name", 
+          "012345678901234567890123456789012345678901234567890123456789");
+       String s = a.toString();
+       assertEquals(
+         "[nu.xom.Attribute: name=\"01234567890123456789012345678901234...\"]", 
+         a.toString());          
+        
+    }
+
+
     public void testToXML() {        
         assertEquals("test=\"value\"", a1.toXML());          
         assertEquals("test=\"  value  \"", a2.toXML());                    

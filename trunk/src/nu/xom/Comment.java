@@ -34,7 +34,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b6
  * 
  */
 public class Comment extends Node {
@@ -232,11 +232,12 @@ public class Comment extends Node {
         
         String value = getValue();
         if (value.length() <= 40) {
-            return "[" + getClass().getName() + ": " + value + "]";
+            return "[" + getClass().getName() + ": " 
+              + Text.escapeLineBreaksAndTruncate(value) + "]";
         }
         
         return "[" + getClass().getName() + ": " 
-          + value.substring(0, 35) + "...]";
+          + Text.escapeLineBreaksAndTruncate(value.substring(0, 35)) + "...]";
         
     }
 

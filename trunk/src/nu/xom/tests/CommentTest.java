@@ -36,11 +36,12 @@ import nu.xom.IllegalCharacterDataException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b6
  *
  */
 public class CommentTest extends XOMTestCase {
 
+    
     public CommentTest(String name) {
         super(name);
     }
@@ -77,6 +78,24 @@ public class CommentTest extends XOMTestCase {
     }
     
     
+    public void testToStringWithLineFeed() {
+        
+        Comment c = new Comment("content\ncontent");
+        assertEquals("[nu.xom.Comment: content\\ncontent]", c.toString());         
+        
+    }
+    
+    
+    public void testToStringWithLotsOfData() {
+        
+        Comment c 
+          = new Comment("content content 012345678901234567890123456789012345678901234567890123456789");
+        String s = c.toString();
+        assertTrue(s.length() < 72);
+        
+    }
+
+
     public void testToXML() {
         
         Comment c1 = new Comment("content");
