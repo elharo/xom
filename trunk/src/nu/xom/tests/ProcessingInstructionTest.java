@@ -112,6 +112,49 @@ public class ProcessingInstructionTest extends XOMTestCase {
 
     }
     
+
+    public void testSetTarget() {
+
+        try {
+          pi.setTarget("test:test");
+          fail("Processing instruction targets cannot contain colons");
+        }
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());
+            assertEquals("test:test", success.getData());
+        }
+        
+        try {
+          pi.setTarget("");
+          fail("Processing instruction targets cannot be empty");
+        }
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());
+            assertEquals("", success.getData());
+        }
+        
+        try {
+           pi.setTarget(null);
+           fail("Processing instruction targets cannot be empty");
+        }
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());
+            assertNull(success.getData());
+        }
+        
+        try {
+           pi.setTarget("12345");
+           fail("Processing instruction targets must be NCNames");
+        }
+        catch (IllegalTargetException success) {
+            assertEquals("12345", success.getData());            
+        }
+        
+        pi.setTarget("testing123");
+        assertEquals("testing123", pi.getTarget());
+
+    }    
+    
     
     public void testCopyConstructor() {
         
