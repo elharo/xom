@@ -34,7 +34,7 @@ import java.util.StringTokenizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  * 
  */
 final class Verifier {
@@ -809,6 +809,25 @@ final class Verifier {
             case '~': return true;
         }
         return false;
+    }
+
+
+    static void checkAbsoluteURI(String uri) {
+        if (uri.indexOf('#') > -1) {
+            throwMalformedURIException(uri, 
+              "Absolute URIs cannot contain fragment identifiers"
+            );
+        }
+        try {
+            // XXX reduce to one method
+            checkAbsoluteURIReference(uri);
+            checkURI(uri);
+        }
+        catch (MalformedURIException ex) {
+            MalformedURIException ex2 = new MalformedURIException("Base URIs must be absolute");
+            ex2.setData(uri);
+            throw ex2;
+        }
     } 
 
     

@@ -66,9 +66,9 @@ import nu.xom.Text;
  */
 public class XIncluder {
     
-    // rewrite this to handle only elements in documents (no parentless
+    // XXX rewrite this to handle only elements in documents (no parentless
     // elements) and then add code to handle Nodes and parentless elements
-    // by sticking each one in a Document????
+    // by sticking each one in a Document
 
     // prevent instantiation
     private XIncluder() {}
@@ -329,7 +329,20 @@ public class XIncluder {
                   element.getDocument().getBaseURI()
                 );   
             }
-            if (href != null) href = convertToURI(href);
+            if (href != null) {
+                href = convertToURI(href);
+                // XXX asked working group if this is correct;
+                // i.e. should I throw this exception or should I just 
+                // ignore the fragment ID
+                if (href.indexOf('#') > -1) {
+                    // XXX asked working group if it's OK for the href
+                    // attribute to end with # but not have a fragment ID
+                    throw new BadHrefAttributeException(
+                      "fragment identifier in URI " + href, 
+                      (String) baseURLs.peek()
+                    );
+                }
+            }
             
             testForForbiddenChildElements(element);
 
@@ -414,7 +427,6 @@ public class XIncluder {
                                 // XXX can I delete this or not? copyElement.setBaseURI(original.getBaseURI());
                                 // the copy actually sets the base URI to the original's actual base URI,
                                 // not always the same as getBaseURI
-                                
                             } 
                             replacements.append(copy);        
                         }  

@@ -263,9 +263,10 @@ public class Document extends ParentNode {
      * @param URI the base URI of this document 
      * 
      * @throws MalformedURIException if <code>URI</code> is 
-     *     not a legal IRI
+     *     not a legal absolute IRI
      */
     public void setBaseURI(String URI) { 
+        // XXX test that IRIs are allowed or not?
         setActualBaseURI(URI);       
     }
     
@@ -281,9 +282,7 @@ public class Document extends ParentNode {
      * @return the base URI of this document 
      */
     public final String getBaseURI() {       
-        String base = getActualBaseURI(); 
-        if (base == null) return "";
-        return base;
+        return getActualBaseURI();
     }
 
     

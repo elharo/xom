@@ -230,8 +230,8 @@ public abstract class ParentNode extends Node {
     void fillInBaseURI(Element removed) {
 
         ParentNode parent = removed;
-        String actualBaseURI = null;
-        while (parent != null && actualBaseURI == null) {
+        String actualBaseURI = "";
+        while (parent != null && actualBaseURI.equals("")) {
             actualBaseURI = parent.getActualBaseURI();
             parent = parent.getParent();
         }
@@ -330,20 +330,23 @@ public abstract class ParentNode extends Node {
     /**
      * 
      * <p>
-     * Sets the URI from which this node was loaded,
-     * and against which relative URLs in this node will be resolved.
-     * Generally, it's only necessary to set this property if
+     * Sets the URI against which relative URLs in this node will be 
+     * resolved. Generally, it's only necessary to set this property if
      * it's different from a node's parent's base URI, as it may
      * be in a document assembled from multiple entities
      * or by XInclude.
      * </p>
      * 
      * <p>
-     *   Relative URIs are allowed. However, if the base
-     *   URI on an element is relative, then <code>getBaseURI</code>
-     *   will resolve the relative URI to a full absolute URI
-     *   before returning using the algorithm specified 
-     *   in <cite>XML Base</cite> if possible.
+     * Relative URIs are not allowed here. Base URIs must be absolute.
+     * However, the base URI may be set to null or the empty string
+     * to indicate that the node has no explicit base URI. In this 
+     * case, it inherits the base URI of its parent node, if any.
+     * </p>
+     * 
+     * <p>
+     * URIs with fragment identifiers are also not allowed. The value 
+     * passed to this method must be a pure URI, not a URI reference.
      * </p>
      * 
      * <p>
@@ -351,36 +354,35 @@ public abstract class ParentNode extends Node {
      *   an element in the same way you'd add any other namespaced
      *   attribute to an element. If an element's base URI 
      *   conflicts with its <code>xml:base</code> attribute,
-     *   then the value found in the 
-     *   <code>xml:base</code> attribute is used. 
+     *   then the value found in the <code>xml:base</code> attribute
+     *   is used. 
      * </p>
      * 
      * <p>
-     *   If the base URI is null and there is no
-     *   <code>xml:base</code> attribute, then the 
-     *   base URI is determined by the nearest ancestor node
-     *   which does have a base URI. Moving such a node from one
-     *   location to another can change its base URI.
-     *   To indicate that a node has a persistent lack of base
-     *   URI, even if one of its ancestors does have a base URI,
-     *   you can set the base URI to the empty string.
+     *   If the base URI is null or the empty string and there is 
+     *   no <code>xml:base</code> attribute, then the base URI is 
+     *   determined by the nearest ancestor node which does have a  
+     *   base URI. Moving such a node from one location to another 
+     *   can change its base URI.
      * </p>
      * 
      * @param URI the new base URI for this node
      *
      * @throws MalformedURIException if <code>URI</code> is 
-     *     not a legal RFC 2396 URI
+     *     not a legal RFC 2396 absolute URI
      */
     public abstract void setBaseURI(String URI);
 
 
     String getActualBaseURI() {
+        if (actualBaseURI == null) return "";
         return actualBaseURI;     
     }
 
 
     void setActualBaseURI(String uri) {
-        Verifier.checkURI(uri);
+        if (uri == null) uri = "";
+        if (!"".equals(uri)) Verifier.checkAbsoluteURI(uri);
         actualBaseURI = uri;     
     }
 

@@ -1227,7 +1227,7 @@ public class Element extends ParentNode {
      * <p>
      * If the element's <code>xml:base</code> attribute contains a 
      * value that is a syntactically illegal URI (e.g. %GF.html"),
-     * the according to the xml:base errata, the value of this element's
+     * the according to the XML Base errata, the value of this element's
      * base URI is application dependent. XOM's choice in this case is 
      * to behave as if the element did not have an <code>xml:base</code>
      * attribute. 
@@ -1279,7 +1279,7 @@ public class Element extends ParentNode {
                     // Look for nearest actual base URI
                     while (parent != null) {
                         String parentActualBase = parent.getActualBaseURI();
-                        if (parentActualBase == null) {
+                        if (parentActualBase == null || "".equals(parentActualBase)) {
                             parent = parent.getParent();
                         }
                         else {
@@ -1294,7 +1294,7 @@ public class Element extends ParentNode {
                     if (parent != null) {                   
                         String parentActualBase = parent.getActualBaseURI();
                         // can element be considered to come from same entity as its parent?
-                        if (actualBase == null || actualBase.equals(parentActualBase)) {
+                        if (actualBase == null || actualBase.equals("") || actualBase.equals(parentActualBase)) {
                             try {
                                 String parentBase = parent.getBaseURI();
                                 if (!nu.xom.URIUtil.isOpaque(parentBase)) {
@@ -1319,7 +1319,7 @@ public class Element extends ParentNode {
                 }
                 
                 try {
-                    Verifier.checkURI(base);
+                    Verifier.checkAbsoluteURIReference(base);
                 }
                 catch (MalformedURIException ex) {
                     base = "";
@@ -1340,7 +1340,7 @@ public class Element extends ParentNode {
                
         // 3. This element does not declare a base URI,
         //    so it uses its parent's base URI.
-        if (actualBase == null) return parent.getBaseURI();      
+        if (actualBase == null || "".equals(actualBase)) return parent.getBaseURI();      
                
         // 4. If the parent is loaded from the same entity,
         //    then the parent's xml:base attributes count.

@@ -102,14 +102,15 @@ public abstract class Node {
      * <p>
      * Returns the base URI of  this node as specified by 
      * <a href="http://www.w3.org/TR/xmlbase/">XML Base</a>, 
-     * or null if this is not known. In most cases, this is the URL
-     * against which relative URLs in this node should be resolved.
+     * or the empty string if this is not known. In most cases, this 
+     * is the URL against which relative URLs in this node should be 
+     * resolved.
      * </p>
      * 
      * <p>
      *  The base URI of a non-parent node is the base URI of the 
      *  element containing the node. The base URI of a document
-     *  node is the URI from whcih the document was parsed,
+     *  node is the URI from which the document was parsed,
      *  or which was set by calling <code>setBaseURI</code> on
      *  on the document. 
      * </p>
@@ -159,19 +160,19 @@ public abstract class Node {
      * </ul>
      * 
      * <p>
-     *   Absolutization takes place as specified by the XML 
-     *   Base specification. However, it is not always possible to
+     *   Absolutization takes place as specified by the 
+     *   <a href="http://www.w3.org/TR/xmlbase/">XML 
+     *   Base specification</a>. However, it is not always possible to
      *   absolutize a relative URI, in which case only the relative 
      *   URI will be returned. 
      * </p> 
-     * 
      * 
      * @return the base URI of this node 
      */
     public String getBaseURI() {
         
         ParentNode parent = this.getParent();
-        if (parent == null) return null;
+        if (parent == null) return "";
         return parent.getBaseURI();
         
     }
