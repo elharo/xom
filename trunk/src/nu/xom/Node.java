@@ -220,15 +220,14 @@ public abstract class Node {
 
     /**
      * <p>
-     *  Returns the index<sup>th</sup>
-     *   child of this node.
+     *  Returns the child of this node at the specified position.
      * </p>
      * 
      * @param position the index of the child node to return
      * 
      * @return the position<sup>th</sup> child node of this node
      * 
-     * @throws IndexOutOfBoundsException if this node does not have children.
+     * @throws IndexOutOfBoundsException if this node does not have children
      */
     public abstract Node getChild(int position);
 
@@ -340,5 +339,6 @@ public abstract class Node {
     boolean isDocType() {
         return false;   
     }
-            
+  
+    
 }
