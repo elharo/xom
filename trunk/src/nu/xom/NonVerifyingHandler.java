@@ -140,7 +140,7 @@ class NonVerifyingHandler extends XOMHandler {
  
     
     // accumulate all text that's in the buffer into a text node
-    private void flushText() {
+    protected void flushText() {
         
         if (buffer.length() > 0) {
             Text result;

@@ -33,7 +33,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b8
  *
  */
 class XOMHandler 
@@ -303,7 +303,7 @@ class XOMHandler
  
     
     // accumulate all text that's in the buffer into a text node
-    private void flushText() {
+    protected void flushText() {
         
         if (buffer.length() > 0) {
             Nodes result;
