@@ -46,10 +46,14 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class XIncludeTest extends XOMTestCase {
+
+    // need to write some unit tests that use XPointer to
+    // grab a part of the document that contains an include element
+    // and make sure that's fully resolved too????
 
     public XIncludeTest(String name) {
         super(name);
@@ -168,6 +172,36 @@ public class XIncludeTest extends XOMTestCase {
           new File("data/xinclude/output/namespacetest.xml")
         );
         assertEquals(expectedResult, result);
+        
+    }
+    
+    public void testIncludeReferencesItItself() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/internalcircular.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed include element to reference itself");
+        }
+        catch (CircularIncludeException success) {
+            assertNotNull(success.getMessage());   
+        }
+        
+    }
+    
+    public void testIncludeReferencesItsAncestor() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/internalcircularviaancestor.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed include element to reference its own ancestor");
+        }
+        catch (CircularIncludeException success) {
+            assertNotNull(success.getMessage());   
+        }
         
     }
     
