@@ -26,6 +26,8 @@ package nu.xom.tests;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 
 import nu.xom.Builder;
@@ -137,6 +139,24 @@ public class XIncludeTest extends XOMTestCase {
         Serializer serializer = new Serializer(out);
         serializer.write(result);        
     }
+
+    
+    public void testNullBaseURI() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/disclaimer.xml");
+        String data = "<document xmlns:xi='http://www.w3.org/2003/XInclude'>"
+          + "\n  <p>120 Mz is adequate for an average home user.</p>"
+          + "\n  <xi:include href='" + input.toURL() + "'/>\n</document>";
+        Reader reader = new StringReader(data);
+        Document doc = builder.build(reader);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c1.xml")
+        );
+        assertEquals(expectedResult, result);
+
+    }   
     
     
     // from the XInclude CR
@@ -154,21 +174,20 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
-    public void testCirclePointer() 
+    // same test with explicit parse="xml"
+    public void testParseEqualsXML() 
       throws ParsingException, IOException, XIncludeException {
       
-        File input = new File("data/xinclude/input/circlepointer1.xml");
+        File input = new File("data/xinclude/input/parseequalxml.xml");
         Document doc = builder.build(input);
-        try {
-            XIncluder.resolve(doc);
-            fail("Allowed circular reference via XPointer");
-        }
-        catch (CircularIncludeException success) {
-            assertNotNull(success.getMessage());   
-        }
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c1.xml")
+        );
+        assertEquals(expectedResult, result);
 
     }
-    
+
     
     // In this case the circle is OK because the XPointer
     // doesn't cover the whole xinclude:include element
@@ -1077,4 +1096,20 @@ public class XIncludeTest extends XOMTestCase {
     } 
 
     
+    public void testCirclePointer() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/circlepointer1.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed circular reference via XPointer");
+        }
+        catch (CircularIncludeException success) {
+            assertNotNull(success.getMessage());   
+        }
+
+    }
+    
+        
 }
