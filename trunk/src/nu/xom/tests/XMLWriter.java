@@ -337,8 +337,8 @@ class XMLWriter extends XMLFilterImpl implements LexicalHandler {
     	super.endDocument();
     	try {
     	    flush();
-    	} catch (IOException e) {
-    	    throw new SAXException(e);
+    	} catch (IOException ex) {
+    	    throw new SAXException(ex);
     	}
     }
     
