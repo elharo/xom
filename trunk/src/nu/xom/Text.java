@@ -32,12 +32,14 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b8
  *
  */
 public class Text extends Node {
 
+    
     private byte[] data;
+    
     
     /**
      * <p>
@@ -80,6 +82,7 @@ public class Text extends Node {
     
     
     static Text build(String data) {
+        
         Text result = new Text();
         try {
             result.data = data.getBytes("UTF8");   
@@ -90,8 +93,10 @@ public class Text extends Node {
             );
         } 
         return result;
+        
     }
 
+    
     /**
      * <p>
      * Sets the content of the <code>Text</code> object 
@@ -193,12 +198,14 @@ public class Text extends Node {
      * @return a deep copy of this text node with no parent
      */
     public Node copy() {
+        
         if (isCDATASection()) {
             return new CDATASection(this);
         }
         else {
             return new Text(this);
         }
+        
     }
 
     
@@ -444,6 +451,11 @@ public class Text extends Node {
     
     boolean isCDATASection() {
         return false;
+    }
+
+
+    boolean isEmpty() {
+        return this.data.length == 0;
     }
 
     
