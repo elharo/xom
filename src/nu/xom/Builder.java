@@ -941,6 +941,8 @@ public class Builder {
                         url.append(c);
                         break;
                     default: 
+                        // XXX This doesn't really work with characters
+                        // from beyond the BMP.
                         url.append(URLEncoder.encode(String.valueOf(c)));
                 }
             }
