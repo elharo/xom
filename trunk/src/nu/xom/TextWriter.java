@@ -26,6 +26,7 @@ package nu.xom;
 import java.io.IOException;
 import java.io.Writer;
 
+import com.ibm.icu.text.Normalizer;
 
 /**
  * <p>
@@ -34,7 +35,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 abstract class TextWriter {
@@ -52,6 +53,7 @@ abstract class TextWriter {
     private int     column = 0;
     // Is an xml:space="preserve" attribute in scope?
     private boolean preserveSpace = false;
+    private boolean normalize = false;
     
     protected TextWriter(Writer out, String encoding) {
         this.out = out; 
@@ -84,7 +86,7 @@ abstract class TextWriter {
         return c >= 0xDC00 && c <= 0xDFFF;  
     }
     
-    public final void writePCDATA(char c) 
+    final void writePCDATA(char c) 
       throws IOException {
         if (needsEscaping(c)) {
             if (isHighSurrogate(c)) {
@@ -102,14 +104,14 @@ abstract class TextWriter {
                 int highShifted = high << 10;
                 int combined = highShifted | low; 
                 int uchar = combined + 0x10000;
-                String s = "&#x" + Integer.toHexString(uchar) + ';';
+                String s = "&#x" + Integer.toHexString(uchar).toUpperCase() + ';';
                 out.write(s);
                 column += s.length();
                 lastCharacterWasSpace = false;
                 skipFollowingLinefeed = false;
             }
             else {
-                String s = "&#x" + Integer.toHexString(c) + ';';
+                String s = "&#x" + Integer.toHexString(c).toUpperCase() + ';';
                 out.write(s);
                 column += s.length();
                 lastCharacterWasSpace = false;
@@ -160,7 +162,7 @@ abstract class TextWriter {
     // I'm not escaping the single quote because Serializer
     // always uses double quotes to contain 
     // values.
-    public final void writeAttributeValue(char c) 
+    final void writeAttributeValue(char c) 
       throws IOException {
         if (needsEscaping(c)) {
             if (isHighSurrogate(c)) {
@@ -178,14 +180,14 @@ abstract class TextWriter {
                 int highShifted = high << 10;
                 int combined = highShifted | low; 
                 int uchar = combined + 0x10000;
-                String s = "&#x" + Integer.toHexString(uchar) + ';';
+                String s = "&#x" + Integer.toHexString(uchar).toUpperCase() + ';';
                 out.write(s);
                 column += s.length();
                 lastCharacterWasSpace = false;
                 skipFollowingLinefeed = false;
             }
             else {
-                String s = "&#x" + Integer.toHexString(c) + ';';
+                String s = "&#x" + Integer.toHexString(c).toUpperCase() + ';';
                 out.write(s);
                 column += s.length();
                 lastCharacterWasSpace = false;
@@ -361,7 +363,11 @@ abstract class TextWriter {
         lastCharacterWasSpace = true;
     }
     
-    public final void writeMarkup(char c) throws IOException {
+    // Note that when this method is called directly, then 
+    // normalization is not performed on c. Currently this is 
+    // only called for ASCII characters like <, >, and the space, 
+    // which should be OK
+    protected final void writeMarkup(char c) throws IOException {
         if (needsEscaping(c)) {
             throw new XMLException("Cannot use the character &0x" 
               + Integer.toHexString(c) + "; in the " 
@@ -372,6 +378,9 @@ abstract class TextWriter {
     }
 
     public final void writePCDATA(String s) throws IOException {
+        if (normalize) {
+            s = Normalizer.normalize(s, Normalizer.NFC);   
+        }
         for (int i=0; i < s.length(); i++) {
             writePCDATA(s.charAt(i));
         }   
@@ -379,12 +388,18 @@ abstract class TextWriter {
 
     public final void writeAttributeValue(String s) 
       throws IOException {
+        if (normalize) {
+            s = Normalizer.normalize(s, Normalizer.NFC);   
+        }
         for (int i=0; i < s.length(); i++) {
             writeAttributeValue(s.charAt(i));
         }   
     }
 
     public final void writeMarkup(String s) throws IOException {
+        if (normalize) {
+            s = Normalizer.normalize(s, Normalizer.NFC);   
+        }
         for (int i=0; i < s.length(); i++) {
             writeMarkup(s.charAt(i));
         }   
@@ -554,6 +569,57 @@ abstract class TextWriter {
      */
     public void setPreserveSpace(boolean preserveSpace) {
         this.preserveSpace = preserveSpace;
+    }
+
+    /**
+     * @return the current column number
+     */
+    public int getColumnNumber() {
+        return this.column;
+    }
+
+    /**
+     * <p>
+     *   If true, this property indicates serialization will
+     *   perform Unicode normalization on all data using normalization
+     *   form C (NFC). Performing Unicode normalization
+     *   does change the document's infoset. 
+     *   The default is false; do not normalize.
+     * </p>
+     * 
+     * <p>
+     *   This feature has not yet been benchmarked or optimized.
+     *   It may result in substantially slower code. 
+     * </p>
+     * 
+     * <p>
+     *   This feature only really applies in Unicode encodings
+     *   (and possibly GB18030, I need to check????). 
+     *   There's no reason to turn it on for non-Unicode encodings. 
+     *   Nothing will break if you do so. However, the output
+     *   may be noticeably slower.
+     * </p>
+     * 
+     * @param normalize true if normalization is performed; 
+     *     false if it isn't.
+     */
+    public void setNFC(boolean normalize) {
+        this.normalize = normalize;   
+    }
+
+    
+    /**
+     * <p>
+     *   If true, this property indicates serialization will
+     *   perform Unicode normalization on all data using normalization
+     *   form C (NFC). The default is false; do not normalize.
+     * </p>
+     * 
+     * @return true if this serialization performs Unicode 
+     *     normalization; false if it doesn't.
+     */
+    public boolean getNFC() {
+        return this.normalize;   
     }
 
 }
