@@ -52,7 +52,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class Canonicalizer {
@@ -193,12 +193,56 @@ public class Canonicalizer {
          */
         protected final void write(Element element) throws IOException {
             
-            writeStartTag(element, false);
+            /* writeStartTag(element, false);
             // children
             for (int i = 0; i < element.getChildCount(); i++) {
                 writeChild(element.getChild(i)); 
             }
-            writeEndTag(element);
+            writeEndTag(element); */
+            
+            
+            Node current = element;
+            boolean end = false;
+            int index = -1;
+            while (true) {
+                
+                if (!end && current.getChildCount() > 0) {
+                   writeStartTag((Element) current, false);
+                   current = current.getChild(0);
+                   index = 0;
+                }
+                else {
+                  if (end) {
+                     writeEndTag((Element) current);
+                     if (current == element) break;
+                  }
+                  else if (current instanceof Element) {
+                     writeStartTag((Element) current, false);
+                     end = true;
+                     continue;
+                  }
+                  else {
+                      writeChild(current);
+                  }
+                  end = false;
+                  ParentNode parent = current.getParent();
+                  if (parent.getChildCount() - 1 == index) {
+                    current = parent;
+                    if (current != element) {
+                        parent = current.getParent();
+                        index = parent.indexOf(current);
+                    }
+                    end = true;
+                  }
+                  else {
+                     index++;
+                     current = parent.getChild(index);
+                  }
+                  
+                }
+    
+            }        
+            
         } 
     
         
