@@ -5,7 +5,7 @@
 
   @(#)package.html	
 
-   Copyright © 2002 Elliotte Rusty Harold
+   Copyright 2002, 2004 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of version 2.1 of 
@@ -38,13 +38,24 @@ based test suite for XOM. JUnit 3.7 or later is required.
 (Earlier version don't have the <code>assertTrue</code> method
 these tests depend on.)
 </p>
+
 <p>
 The XOMTests class runs all the tests.
 Some of the tests, especially the builder tests,
 are dependent on the underlying parser, and are known to fail 
-if the parser is buggy. Xerces 2.1.0 is the only parser which is currently
-known to be able to run all the tests. Earlier versions of Xerces 2.x, including
+if the parser is buggy. Xerces 2.6.1 is the only parser which is currently
+known to be able to run all the tests. (Truth be told, there are actually a few tests
+it fails, but I've commented those out.) Earlier versions of Xerces 2.x, including
 the one bundled with the JDK 1.4, cannot successfully run all the tests.
+</p>
+
+<p>
+There are numerous public classes and methods in this package because JUnit requires
+all test cases to be public. However, the only <em>published</em> class is
+<code>XOMTestCase</code> which provides methods for asserting the equality
+of Documents, Elements, ProcessingInstructions, and other Node types.
+This may be useful for your own tests. The remainder of this package
+shoudl be treated as unstable and your code should not depend on it.
 </p>
 
 @since 1.0
