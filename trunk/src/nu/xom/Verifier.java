@@ -63,7 +63,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  * 
  */
 final class Verifier {
@@ -534,10 +534,11 @@ final class Verifier {
         for (int i=1; i < nameLength; i++) {
             char c = nameData[i];
             if (!isXMLNameCharacter(c)) {
-                throw new IllegalNameException(
-                  "XML names cannot contain the character \"" 
-                  + c + "\""
-                );
+                String message = "XML names cannot contain the " +                  "character \"" + c + "\".";
+                if (name.indexOf('/') != -1) {
+                     message += "\nPerhaps you swapped a name and a namespace URI?";
+                }
+                throw new IllegalNameException(message);
             }
         }
 
