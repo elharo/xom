@@ -63,7 +63,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b5
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -224,8 +224,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/8-8.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new NodeFactoryTest.CFactory());
+        XSLTransform xform = new XSLTransform(
+          stylesheetDoc, new NodeFactoryTest.CFactory());
         
         Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
@@ -253,8 +253,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/fragment.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new NodeFactoryTest.CommentFilter());
+        XSLTransform xform = new XSLTransform(
+          stylesheetDoc, new NodeFactoryTest.CommentFilter());
         
         Document input = builder.build(doc);
         Nodes output = xform.transform(input);
@@ -284,8 +284,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/fragment.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new NodeFactoryTest.ProcessingInstructionFilter());
+        XSLTransform xform = new XSLTransform(stylesheetDoc, 
+          new NodeFactoryTest.ProcessingInstructionFilter());
         
         Document input = builder.build(doc);
         Nodes output = xform.transform(input);
@@ -314,8 +314,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/fragment.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new NodeFactoryTest.UncommentFilter());
+        XSLTransform xform = new XSLTransform(stylesheetDoc,
+          new NodeFactoryTest.UncommentFilter());
         
         Document input = builder.build(doc);
         Nodes output = xform.transform(input);
@@ -535,8 +535,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new NodeFactoryTest.TripleElementFilter());
+        XSLTransform xform = new XSLTransform(stylesheetDoc,
+          new NodeFactoryTest.TripleElementFilter());
 
         String data = "<a><b><c/></b></a>";
         Document doc = builder.build(data, "http://www.example.org/");
@@ -563,13 +563,11 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new NodeFactoryTest.TripleElementFilter());
+        XSLTransform xform = new XSLTransform(stylesheetDoc, null);
 
         String data = "<a><b><c/></b></a>";
         Document doc = builder.build(data, "http://www.example.org/");
-        
-        xform.setNodeFactory(null);        
+      
         Nodes result = xform.transform(doc);
         
         assertEquals(1, result.size()); 
@@ -605,8 +603,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new NodeFactoryTest.MinimizingFactory());
+        XSLTransform xform = new XSLTransform(stylesheetDoc,
+          new NodeFactoryTest.MinimizingFactory());
         
         Document input = builder.build("<!-- test--><test>" +
                 "<em>data</em>\r\n<span>test</span></test>" +
@@ -662,8 +660,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new AttributeFactory());
+        XSLTransform xform = new XSLTransform(stylesheetDoc,
+          new AttributeFactory());
 
         String data = "<a><b>in B<c>in C</c></b></a>";
         Document doc = builder.build(data, "http://www.example.org/");
@@ -700,8 +698,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new AttributesToElements());
+        XSLTransform xform = new XSLTransform(stylesheetDoc,
+          new AttributesToElements());
 
         String data = "<a name='value'><b x='y' a='b'/></a>";
         Document doc = builder.build(data, "http://www.example.org/");
@@ -768,8 +766,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/identity.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setNodeFactory(new NodeFactory() {
+        XSLTransform xform = new XSLTransform(stylesheetDoc, 
+          new NodeFactory() {
             public Nodes makeComment(String text) {
                 return new Nodes(new Attribute("comment", text));   
             }
