@@ -54,7 +54,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b1
  *
  */
 class XSLTHandler 
@@ -187,6 +187,9 @@ class XSLTHandler
             }   
             else if (qName.equals("xmlns")) {               
                 String namespaceName = attributes.getValue(i);
+                if (namespaceName == null) { // Work around a Xalan bug
+                    namespaceName = "";
+                }
                 String namespacePrefix = "";
                 String currentValue 
                   = element.getNamespaceURI(namespacePrefix); 
@@ -206,7 +209,7 @@ class XSLTHandler
                             element.addNamespaceDeclaration("", "");                           
                        }
                     }
-                }                
+                } 
             }             
         }  
         
