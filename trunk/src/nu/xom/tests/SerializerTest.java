@@ -586,7 +586,7 @@ public class SerializerTest extends XOMTestCase {
         Serializer serializer = new Serializer(out, "ISO-8859-1");
         serializer.write(doc);
         String result = out.toString("ISO-8859-1");
-        assertTrue(result, result.indexOf("&#x10fffd;") > 12);
+        assertTrue(result, result.indexOf("&#x10FFFD;") > 12);
     }
       
     public void testSerializePlane1CharacterInAttributeValue() 
@@ -598,7 +598,7 @@ public class SerializerTest extends XOMTestCase {
         Serializer serializer = new Serializer(out, "ISO-8859-1");
         serializer.write(doc);
         String result = out.toString("ISO-8859-1");
-        assertTrue(result, result.indexOf("&#x1d11e;") > 12);
+        assertTrue(result, result.indexOf("&#x1D11E;") > 12);
     }
     
     public void testSerializePlane1CharacterInCharacterData() 
@@ -610,7 +610,7 @@ public class SerializerTest extends XOMTestCase {
         Serializer serializer = new Serializer(out, "ISO-8859-1");
         serializer.write(doc);
         String result = out.toString("ISO-8859-1");
-        assertTrue(result, result.indexOf("&#x1d11e;") > 12);
+        assertTrue(result, result.indexOf("&#x1D11E;") > 12);
     }
     
     public void testEscapeAttributeValue() throws IOException {        
@@ -1059,6 +1059,142 @@ public class SerializerTest extends XOMTestCase {
           + "<a b=\"data&lt;data&gt;data&amp;\"/>\r\n", 
           result
         );
+    }
+    
+    public void testSetNFC() {
+        Serializer serializer = new Serializer(System.out);
+        assertFalse(serializer.getUnicodeNormalizationFormC());
+        serializer.setUnicodeNormalizationFormC(true);
+        assertTrue(serializer.getUnicodeNormalizationFormC());
+    }
+
+    public void testNFCInElementContent() throws IOException {
+        Element root = new Element("a");
+        root.appendChild("c\u0327"); // c with combining cedilla
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<a>\u00E7</a>\r\n", 
+          result
+        );       
+    }
+
+    public void testNoNFCByDefault() throws IOException {
+        Element root = new Element("c\u0327");
+        root.appendChild("c\u0327"); // c with combining cedilla
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<c\u0327>c\u0327</c\u0327>\r\n", 
+          result
+        );       
+    }
+
+
+
+    public void testNFCInAttribute() throws IOException {
+        Element root = new Element("a");
+        root.addAttribute(new Attribute("c\u0327", "c\u0327")); // c with combining cedilla
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<a \u00E7=\"\u00E7\"/>\r\n", 
+          result
+        );       
+    }
+
+    public void testNFCInElementName() throws IOException {
+        Element root = new Element("c\u0327"); // c with combining cedilla
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<\u00E7/>\r\n", 
+          result
+        );       
+    }
+
+    public void testNFCInComment() throws IOException {
+        Element root = new Element("a"); 
+        Document doc = new Document(root);
+        doc.insertChild(new Comment("c\u0327hat"), 0); // c with combining cedilla
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<!--\u00E7hat-->\r\n"
+          + "<a/>\r\n", 
+          result
+        );       
+    }
+
+    public void testNFCInProcessingInstruction() throws IOException {
+        Element root = new Element("a"); 
+        Document doc = new Document(root);
+        doc.appendChild(new ProcessingInstruction("c\u0327hat", "c\u0327hat"));
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<a/>\r\n"
+          + "<?\u00E7hat \u00E7hat?>\r\n",
+          result
+        );       
+    }
+
+    public void testNFCInElementContentWithNonUnicodeEncoding() 
+      throws IOException {
+        Element root = new Element("a");
+        root.appendChild("c\u0327"); // c with combining cedilla
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out, "ISO-8859-5");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "ISO-8859-5");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"ISO-8859-5\"?>\r\n"
+          + "<a>&#xE7;</a>\r\n", 
+          result
+        );       
     }
 
 }
