@@ -74,11 +74,7 @@ class XOMHandler
     }
 
     public void startDocument() {
-        // Potential problem; subclassing NodeFactory now
-        // allows fauxRoot to be seen????
-        // Could we rely on the factory to make its own fauxRoot if it wants to?
-        Element fauxRoot = Element.build("fauxRoot", "");
-        document = factory.makeDocument(fauxRoot);
+        document = factory.makeDocument();
         parent = document;
         current = document;
         parents = new Stack();
