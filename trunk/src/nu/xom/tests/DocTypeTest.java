@@ -31,6 +31,7 @@ import nu.xom.Document;
 import nu.xom.IllegalDataException;
 import nu.xom.IllegalNameException;
 import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 import nu.xom.WellformednessException;
 
 /**
@@ -77,6 +78,19 @@ public class DocTypeTest extends XOMTestCase {
           doctypeRootOnly.toXML()
         );    
     }
+    
+    
+    public void testToXMLWithInternalDTDSubset() 
+      throws ValidityException, ParsingException, IOException {
+        String data = "<?xml version=\"1.0\"?>\r\n" 
+          + "<!DOCTYPE root [\r\n  <!ELEMENT test (#PCDATA)>\r\n]>"
+          + "\r\n<test />\r\n";  
+        Document doc = (new Builder()).build(data, null);
+        String result = doc.toXML();
+        assertEquals(data, doc.toXML()
+        );    
+    }  
+    
     
     public void testInternalDTDSubset() 
       throws ParsingException, IOException {
@@ -527,4 +541,5 @@ public class DocTypeTest extends XOMTestCase {
 
     }
 
+    
 }
