@@ -1727,7 +1727,7 @@ public class Element extends ParentNode {
      * @see nu.xom.Node#toXML()
      * 
      */
-    public final String toXML() {
+/*    public final String toXML() {
     
         StringBuffer result = new StringBuffer();
         
@@ -1784,9 +1784,126 @@ public class Element extends ParentNode {
         
         return result.toString();
         
+    }*/
+    
+    // might optimize by caching index, as we're iterating through in order????
+    public final String toXML() {
+        
+        StringBuffer result = new StringBuffer();
+        Node current = this;
+        boolean end = false;
+        while (true) {
+            
+            if (!end && current.getChildCount() > 0) {
+               writeStartTag((Element) current, result);
+               current = current.getChild(0);
+            }
+            else {
+              if (end) {
+                 writeEndTag((Element) current, result);
+                 if (current == this) break;
+              }
+              else if (current.isElement()) {
+                  writeStartTag((Element) current, result);
+                 if (current == this) break;
+              }
+              else {
+                  result.append(current.toXML());
+              }
+              end = false;
+              int next = getNextSibling(current);
+              if (next == -2) break;
+              else if (next == -1) {
+                current = current.getParent();
+                end = true;
+              }
+              else {
+                 current = current.getParent().getChild(next);
+              }
+              
+            }
+
+        }        
+
+        return result.toString();
+        
+    }
+    
+    
+    private static void writeStartTag(Element element, StringBuffer result) {
+        
+        result.append("<");
+        result.append(element.getQualifiedName());
+
+        ParentNode parentNode = element.getParent();
+        for (int i = 0; i < element.getNamespaceDeclarationCount(); i++) {
+            String additionalPrefix = element.getNamespacePrefix(i);
+            String uri = element.getNamespaceURI(additionalPrefix);
+            if (parentNode != null && parentNode.isElement()) {
+               Element parentElement = (Element) parentNode;   
+               if (uri.equals(
+                 parentElement.getNamespaceURI(additionalPrefix))) {
+                   continue;
+               } 
+            }
+            else if (uri.length() == 0) {
+                continue; // no need to say xmlns=""   
+            }
+            
+            result.append(" xmlns"); 
+            if (additionalPrefix.length() > 0) {
+                result.append(':'); 
+                result.append(additionalPrefix); 
+            }
+            result.append("=\""); 
+            result.append(uri);   
+            result.append('"');
+        }
+        
+        // attributes
+        if (element.attributes != null) {
+            for (int i = 0; i < element.attributes.size(); i++) {
+                Attribute attribute = element.attributes.get(i);
+                result.append(' ');
+                result.append(attribute.toXML());   
+            }       
+        }
+
+        if (element.getChildCount() > 0) {
+            result.append('>');
+        }
+        else {
+            result.append(" />");               
+        }
+        
     }
 
     
+    private static void writeEndTag(Element element, StringBuffer result) {
+        result.append("</");
+        result.append(element.getQualifiedName());
+        result.append(">");
+    }
+
+    
+    private void writeEmptyElementTag(Element element, StringBuffer result) {
+        
+        
+    }
+
+    
+    private int getNextSibling(Node n) {
+    
+       ParentNode parent = n.getParent();
+       if (parent == null) return -2;
+       int index = parent.indexOf(n);
+       if (parent.getChildCount() - 1 == index) return -1;
+       return index+1;
+    
+    }    
+    
+
+    // could this be made non-recursive????
     /**
      * <p>
      * Returns the value of the element as defined by XPath 1.0.
@@ -1836,7 +1953,7 @@ public class Element extends ParentNode {
      * the XML representation of the element.
      * </p>
      * 
-     * @return a non-XML string representation of this Element
+     * @return a non-XML string representation of this element
      */
     public final String toString() {
         return 
