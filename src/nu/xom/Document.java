@@ -31,7 +31,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b3
  * 
  */
 public class Document extends ParentNode {
@@ -169,9 +169,9 @@ public class Document extends ParentNode {
      * 
      * @param doctype the document type declaration
      * 
-     * @throws MultipleParentException if doctype belongs to 
-     *     another document
-     * @throws NullPointerException if doctype is null
+     * @throws MultipleParentException if <code>doctype</code> belongs 
+     *      to another document
+     * @throws NullPointerException if <code>doctype</code> is null
      * 
      */
     public void setDocType(DocType doctype) {
