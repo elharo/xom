@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -35,28 +35,32 @@ import nu.xom.*;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0b6
  *
  */
 public class CDATASectionTest extends XOMTestCase {
 
+    
     public CDATASectionTest(String name) {
         super(name);
     }
     
-    String data = "<test><child1><![CDATA[<&>]]></child1>"
+    
+    private String data = "<test><child1><![CDATA[<&>]]></child1>"
      + "<child2> <![CDATA[<&>]]> </child2> "
      + "<child3><![CDATA[<&>]]> </child3> "
      + "<child4><![CDATA[<&>]]> <![CDATA[<&>]]></child4> "
      + "</test>";
-    Document doc;
-    Builder builder;
+    private Document doc;
+    private Builder builder;
+    
     
     protected void setUp() 
       throws ValidityException, ParsingException, IOException {
         builder = new Builder();
         doc = builder.build(data, "http://www.base.com");   
     }
+    
     
     public void testCopy() {
         Element child1 = doc.getRootElement().getFirstChildElement("child1");
@@ -67,6 +71,7 @@ public class CDATASectionTest extends XOMTestCase {
         assertEquals("<&>", copy.getValue());  
     }
 
+    
     public void testUseCDATAWherePossible() {
         Element child1 = doc.getRootElement().getFirstChildElement("child1");
         Node cdata = child1.getChild(0);
@@ -75,6 +80,7 @@ public class CDATASectionTest extends XOMTestCase {
         assertEquals("<&>", cdata.getValue());  
     }
 
+    
     public void testDontAllowCDATASectionToSplitTextNode() {
         Element child2 = doc.getRootElement().getFirstChildElement("child2");
         assertEquals(1, child2.getChildCount());
@@ -83,6 +89,7 @@ public class CDATASectionTest extends XOMTestCase {
         assertEquals("nu.xom.Text", data.getClass().getName());  
         assertEquals(" <&> ", data.getValue());  
     }
+    
     
     public void testAccumulateTextNodeAfterCDATASection() {
         Element child3 = doc.getRootElement().getFirstChildElement("child3");
@@ -93,6 +100,7 @@ public class CDATASectionTest extends XOMTestCase {
         assertEquals("<&> ", data.getValue());  
     }
     
+    
     public void testAccumulateTextNodeAcrossMultipleCDATASections() {
         Element child4 = doc.getRootElement().getFirstChildElement("child4");
         assertEquals(1, child4.getChildCount());
@@ -102,6 +110,7 @@ public class CDATASectionTest extends XOMTestCase {
         assertEquals("<&> <&>", data.getValue());  
     }
     
+    
     public void testSerializeCDATASection() throws IOException {  
         ByteArrayOutputStream out = new ByteArrayOutputStream(); 
         Serializer serializer = new Serializer(out);  
@@ -109,8 +118,10 @@ public class CDATASectionTest extends XOMTestCase {
         byte[] data = out.toByteArray();
         String result = new String(data, "UTF8");
         assertTrue(result.indexOf("<![CDATA[<&>]]>") > 0);
+        
     }
 
+    
     public void testSerializeCDATASectionWithOutOfRangeCharacter() 
       throws ValidityException, ParsingException, IOException {  
           
@@ -123,8 +134,25 @@ public class CDATASectionTest extends XOMTestCase {
         String result = new String(output, "8859_1");
         assertEquals(-1, result.indexOf("<![CDATA[<&>]]>"));
         assertTrue(result.indexOf("&#x298;") > 1);
+        
     }
 
+    
+    public void testSerializeCDATASectionWithInRangeCharactersAndANonUnicodeEncoding() 
+      throws ValidityException, ParsingException, IOException {  
+          
+        String data = "<test><![CDATA[abcd]]></test>";
+        doc = builder.build(data, "http://www.example.com");
+        ByteArrayOutputStream out = new ByteArrayOutputStream(); 
+        Serializer serializer = new Serializer(out, "ISO-8859-1");  
+        serializer.write(doc);
+        byte[] output = out.toByteArray();
+        String result = new String(output, "8859_1");
+        assertTrue(result.indexOf("<![CDATA[abcd]]>") > 1);
+        
+    }
+
+    
     public void testSerializeCDATASectionWithCDATASectionEndDelimiter() 
       throws ValidityException, ParsingException, IOException {  
           
