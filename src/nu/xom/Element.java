@@ -199,7 +199,7 @@ public class Element extends ParentNode {
     private static void copyChildren(final Element sourceElement, 
       Element resultElement) {
         
-        // if (sourceElement.getChildCount() == 0) return;
+        if (sourceElement.getChildCount() == 0) return;
         ParentNode originalParent = sourceElement.getParent(); // may be null
         ParentNode resultParent = resultElement;
         Node sourceCurrent = sourceElement;
