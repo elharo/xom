@@ -35,14 +35,16 @@ import org.apache.xerces.xni.XNIException;
  * from accepting XML 1.1 documents. You don't need to touch it
  * or use it. XOM will configure it on Xerces automatically.
  * The only reason it's public is that otherwise Xerces can't load it.
- * Hmmm, could I hide it in a xerces package and make it non-public????
  * </p>
  * 
  * <p>
  *   XOM is not designed to handle XML 1.1. This is a feature, not a
  *   bug. You do not need to use XML 1.1 and should not use XML 1.1.
- *   If you have any questions about this see the XOM FAQ or
- *   Effective XML.
+ *   If you have any questions about this see the 
+ *   <a href="http://www.cafeconleche.org/XOM/faq.xhtml">FAQ</a> or
+ *   <a href=
+ *   "http://cafeconleche.org/books/effectivexml/chapters/03.html"
+ *   >Item 3 of Effective XML</a>.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -53,9 +55,13 @@ public class XML1_0ParserConfiguration extends XML11Configuration {
 
     /** <p>
      *  Ensure that the parser is always configured to use 
-     *  XML 1.0. 
+     *  XML 1.0 exclusively. 
      *  </p>
      * 
+     * @param complete true if the parser should finish parsing the
+     *     rest of the document
+     * @return true if more of the document remains to be parsed, 
+     *     false otherwise
      * @see org.apache.xerces.xni.parser.XMLPullParserConfiguration#parse(boolean)
      */
     public boolean parse(boolean complete) 
