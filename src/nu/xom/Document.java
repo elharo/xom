@@ -118,19 +118,17 @@ public class Document extends ParentNode {
 
     }
     
-    // could I optimize this into a while loop that doesn't call 
-    // getChildCount even once???? better yet just remove the test
-    // condition from the for loop
+
     private int getRootPosition() {
         
-        for (int i = 0; i < getChildCount(); i++) {
+        // This looks like an infinite loop but it isn't
+        // because all documents have root elements
+        for (int i = 0; ; i++) {
              Node child = getChild(i);
              if (child.isElement()) {
                 return i;
              }
          }
-        // It should not be possible to get here
-        throw new WellformednessException("Missing root element");
         
     }
     
