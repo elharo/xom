@@ -77,8 +77,8 @@ public class TextTest extends XOMTestCase {
         assertEquals("", a1.getValue());
         
         try {
-          a1.setValue("test \u0000 test ");
-          fail("Should raise an IllegalDataException");
+            a1.setValue("test \u0000 test ");
+            fail("Should raise an IllegalDataException");
         }
         catch (IllegalDataException success) {
             assertNotNull(success.getMessage());
@@ -151,13 +151,15 @@ public class TextTest extends XOMTestCase {
           new Text("test: \uD8F5\uDBF0  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
 
 
         // Two high-halves
         try {
-          new Text("test: \uD8F5\uD8F5  ");
-          fail("Should raise an IllegalDataException");
+            new Text("test: \uD8F5\uD8F5  ");
+            fail("Should raise an IllegalDataException");
         }
         catch (IllegalDataException success) {
             assertNotNull(success.getMessage());
@@ -165,27 +167,27 @@ public class TextTest extends XOMTestCase {
 
         // One high-half
         try {
-           new Text("test: \uD8F5  ");
-           fail("Should raise an IllegalDataException");
-         }
+            new Text("test: \uD8F5  ");
+            fail("Should raise an IllegalDataException");
+        }
         catch (IllegalDataException success) {
             assertNotNull(success.getMessage());
         }
 
         // One low half
-         try {
+        try {
             new Text("test: \uDF80  ");
             fail("Should raise an IllegalDataException");
-          }
+        }
         catch (IllegalDataException success) {
             assertNotNull(success.getMessage());
         }
 
         // Low half before high half
-         try {
+        try {
             new Text("test: \uDCF5\uD8F5  ");
             fail("Should raise an IllegalDataException");
-          }
+        }
         catch (IllegalDataException success) {
             assertNotNull(success.getMessage());
         }
@@ -272,7 +274,7 @@ public class TextTest extends XOMTestCase {
         String data = Character.toString((char) 0xD800);
         try {
             new Text(data);
-            fail("Allowed signle high surrogte in text node");
+            fail("Allowed single high surrogate in text node");
         }
         catch (IllegalDataException success) {
             assertNotNull(success.getMessage());
