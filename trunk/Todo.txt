@@ -14,7 +14,7 @@ DTD API?
 1.1:
 -------
 
-XPath support
+Add XPath samples based on XOM
 
 A util package with the most useful samples and contribs
 
@@ -49,9 +49,6 @@ Should XSLTransform have a constructor that takes a TrAX
 Templates or Transformer object to allow
 additional properties to be configured
 
-a setInternalDTDSubset mehod that simply uses a parser to check the subset????
-but what about entity references?
-
 should Builder have an option to cache all external entities so it doesn't keep reloading them, perhaps via a SAX EntityResolver.
 
 
@@ -68,6 +65,8 @@ except UTF-8 and UTF-16, no normalization, and does not use TextWriter
 1.0.1:
 --------
 
+Remove dependence on ICU
+
 Could DOMConversion be done in parallel in two separate threads?
 
 DHollenbeck suggests that implementing Array lists directly in ParentNode
@@ -75,9 +74,6 @@ rather than using Collections API would save memory and time.
 See http://lists.ibiblio.org/pipermail/xom-interest/2004-January/000898.html
 
 He also suggests using char[] arrays internally rather than Strings
-
-dvholten suggests zipping characters.dat to save space
-This gets almost 99% compression. How many times would I have to reload it?
 
 Can XInclude be rewritten to be non-recursive? Isn't it already?
 
@@ -125,14 +121,52 @@ could I set up JDK15Parser to compile as individual tasks
 that are only compiled when dependencies are satisfied?
 For 1.5 use ant.java.version property and an equals condition
 
-Before 1.0:
------------
-
-Add TM marks to XOM on the web page
+Wolfgang's ant build file for smaller vs. faster jars (Text class)
 
 Add tools page to web site (Ant, tagSoup, Clover, etc.)
 
+===============
+Done 1.1d2:
+===============
+
+XPath support
+
+Preserve all entity declarations in internal DTD subset
+because these may be needed by the external DTD subset
+
+Bugs Fixed:
+-----------
+
+Escape percent signs in the internal DTD subset
+to prevent accidental interpretation as parameter entity references
+
+Workaround for Crimson bug that does not use parentheses when reporting NOTATION names for attributes
+
+Can now handle &#34; and &#x26;in the internal entity declarations in the internal DTD subset
+
+Better handling of weird filters that skip expected steps like startDocument
+
+XOMTestCase.compare(Node, Node) throws ComparisonFailure when comparing nodes of different types. 
+
+XOMTestCase.compare(Node, Node) throws ComparisonFailure when comparing nodes of different types. 
+
+XOMTestCase.compare(Node, Node) can now compare attributes
+
+Parses better with parentless filters
+
+===============
+Done 1.1d1:
+===============
+
+setInternalDTDSubset
+
+===============
+Done 1.0:
+===============
+
 Update all versions to 1.0
+
+Add an example of running canoniucalizer and/or prettyprinter to README
 
 ===============
 Done 1.0b11/RC5:
