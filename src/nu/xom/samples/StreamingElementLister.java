@@ -26,11 +26,13 @@ package nu.xom.samples;
 import java.io.IOException;
 
 import nu.xom.Builder;
+import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Attribute;
 import nu.xom.Nodes;
 import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
+import nu.xom.WellformednessException;
 
 
 /**
@@ -62,8 +64,7 @@ public class StreamingElementLister extends NodeFactory{
      
         try {
             builder.build(args[0]);
-        }
-        // indicates a well-formedness error
+        }  
         catch (ParsingException ex) { 
             System.out.println(args[0] + " is not well-formed.");
             System.out.println(ex.getMessage());
@@ -93,7 +94,10 @@ public class StreamingElementLister extends NodeFactory{
     
     public Nodes finishMakingElement(Element element) {
         depth--;
-        return new Nodes(element);
+        if (element.getParent() instanceof Document) {
+            return new Nodes(element);
+        }
+        else return empty;
     }
 
     public Nodes makeAttribute(String name, String URI, 
