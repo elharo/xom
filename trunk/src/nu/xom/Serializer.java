@@ -47,7 +47,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b4
  * 
  */
 public class Serializer {
@@ -773,6 +773,7 @@ public class Serializer {
      *     a character that is not available in the current encoding
      */
     protected void write(DocType doctype) throws IOException {
+        
         escaper.writeMarkup("<!DOCTYPE ");
         escaper.writeMarkup(doctype.getRootElementName());
         if (doctype.getPublicID() != null) {
@@ -788,13 +789,14 @@ public class Serializer {
         if (!internalDTDSubset.equals("")) {
             escaper.writeMarkup(" [");    
             escaper.breakLine();
+            escaper.setInDocType(true);
             escaper.writeMarkup(internalDTDSubset); 
-            escaper.breakLine();  
+            escaper.setInDocType(false);
             escaper.writeMarkup("]"); 
         }
 
         escaper.writeMarkup(">");
-
+        
     }   
 
     
