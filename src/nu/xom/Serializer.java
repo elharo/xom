@@ -217,7 +217,7 @@ public class Serializer {
         // the byte order mark if necessary.
         writeXMLDeclaration();
         for (int i = 0; i < doc.getChildCount(); i++) {
-            write(doc.getChild(i)); 
+            writeChild(doc.getChild(i)); 
             
             // Might want to remove this line break in a 
             // non-XML serializer where it's not guranteed to be 
@@ -324,7 +324,7 @@ public class Serializer {
             escaper.incrementIndent();
             // children
             for (int i = 0; i < element.getChildCount(); i++) {
-                write(element.getChild(i)); 
+                writeChild(element.getChild(i)); 
             }
             escaper.decrementIndent();
             if (escaper.getIndent() > 0 && !escaper.isPreserveSpace()) {
@@ -748,16 +748,21 @@ public class Serializer {
 
     /**
      * <p>
-     * Serializes a node
-     * onto the output stream using the current options.
+     * Serializes a child node onto the output stream using the  
+     * current options. It is invoked when walking the tree to
+     * serialize the entire document. It is not called, and indeed
+     * should not be called, for either the <code>Document</code> 
+     * node or for attributes. 
      * </p>
      * 
      * @param node the <code>Node</code> to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *     encounters an I/O error
+     * @throws XMLException if an <code>Attribute</code> or a 
+     *     <code>Document</code> is passed to this method
      */
-    protected void write(Node node) throws IOException {
+    protected void writeChild(Node node) throws IOException {
         
         if (node.isElement()) {
             write((Element) node);
@@ -774,14 +779,10 @@ public class Serializer {
         else if (node.isDocType()) {
             write((DocType) node);
         }
-        else if (node.isDocument()) {
-            write((Document) node);
-        }
         else {
-            throw new XMLException(
-              "Serializer cannot directly serialize a " 
-              + node.getClass()
-            );    
+            throw new XMLException("Cannot write a " + 
+              node.getClass().getName() + 
+              " from the writeChildNode() method");
         }
         
     }
