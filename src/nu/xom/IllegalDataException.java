@@ -32,21 +32,11 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d7
+ * @version 1.0d23
  * 
  *
  */
 public class IllegalDataException extends WellformednessException {
-
-
-    /**
-     * <p>
-     * Creates a new <code>IllegalDataException</code>.
-     * </p>
-     */
-    public IllegalDataException() {
-        super();
-    }
 
     /**
      * <p>

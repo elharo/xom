@@ -25,43 +25,42 @@ package nu.xom;
 
 /**
  * <p>
- *  A <code>MalformedURIException</code> signals that a string
- *  intended for use as a URI reference (typically a namespace
- *  name or a base URI) is not a syntactically correct URI
- *  according to 
- *  <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>.
+ * Indicates that an attribute with a certain name and/or namespace 
+ * does not exist. This is normally thrown after an attempt to remove
+ * such a non-existent attribute.
  * </p>
-
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
- * 
  *
  */
-public class MalformedURIException extends IllegalDataException {
+public class NoSuchAttributeException extends XMLException {
 
     /**
      * <p>
-     * Creates a new <code>MalformedURIException</code> 
+     * Creates a new <code>NoSuchAttributeException</code> 
      * with a detail message.
      * </p>
      * 
-     * @param message indicates the specific problem
+     * @param message explains the reason for the exception
      */
-    public MalformedURIException(String message) {
+    public NoSuchAttributeException(String message) {
         super(message);
     }
 
     /**
      * <p>
-     * Creates a new <code>MalformedURIException</code> 
-     * with a detail message and an underlying root cause.
+     * Creates a new <code>NoSuchAttributeException</code> 
+     * with the specified detail message
+     * and an underlying root cause.
      * </p>
      * 
-     * @param message indicates the specific problem
-     * @param cause the original cause of this exception
+     * @param message explains the reason for the exception
+     * @param cause the nested exception that caused this exception
      */
-    public MalformedURIException(String message, Throwable cause) {
-        super(message, cause);
+    public NoSuchAttributeException(String message, Throwable cause) {
+        super(message);
+        this.initCause(cause);
     }
 
 }

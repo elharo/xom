@@ -34,23 +34,12 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  * 
  *
  */
 
 public class IllegalTargetException extends IllegalNameException {
-
-
-    /**
-     * <p>
-     * Creates a new <code>IllegalTargetException</code>.
-     * </p>
-     * 
-     */
-    public IllegalTargetException() {
-        super();
-    }
 
     /**
      * <p>

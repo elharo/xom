@@ -45,7 +45,7 @@ public class XIncludeExceptionTest extends XOMTestCase {
     }
 
     protected void setUp() {
-        ex = new XIncludeException();
+        ex = new XIncludeException("message");
         cause = new Exception();
     }
     
@@ -119,11 +119,6 @@ public class XIncludeExceptionTest extends XOMTestCase {
     public void testGetMessage() {      
         Exception ex = new XIncludeException("testing");
         assertEquals("testing", ex.getMessage());
-    }
-
-    public void testGetNoMessage() {      
-        Exception ex = new XIncludeException();
-        assertNull(ex.getMessage());
     }
 
 }

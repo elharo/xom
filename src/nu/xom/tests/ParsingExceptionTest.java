@@ -44,7 +44,7 @@ public class ParsingExceptionTest extends XOMTestCase {
     }
     
     protected void setUp() {
-        ex = new ParsingException();
+        ex = new ParsingException("message");
         cause = new Exception();
     }
 
@@ -118,11 +118,6 @@ public class ParsingExceptionTest extends XOMTestCase {
     public void testGetMessage() {      
         Exception ex = new ParsingException("testing");
         assertEquals("testing", ex.getMessage());
-    }
-
-    public void testGetNoMessage() {      
-        Exception ex = new ParsingException();
-        assertNull(ex.getMessage());
     }
 
 }

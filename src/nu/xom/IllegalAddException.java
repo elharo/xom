@@ -33,21 +33,11 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  *
  */
 
 public class IllegalAddException extends WellformednessException {
-
-
-    /**
-     * <p>
-     * Creates a new <code>IllegalAddException</code>.
-     * </p>
-     */
-    public IllegalAddException() {
-        super();
-    }
 
     /**
      * <p>
