@@ -279,9 +279,9 @@ public class BaseURITest extends XOMTestCase {
       throws IOException, ParsingException {
         Builder builder = new Builder();
         Document doc = builder.build(
-          "http://www.cafeconleche.org/redirecttest.xml");
+          "http://www.ibiblio.org/xml/redirecttest.xml");
         assertEquals(
-          "http://cafeconleche.org/redirected/target.xml", 
+          "http://www.ibiblio.org/xml/redirected/target.xml", 
           doc.getBaseURI()
         );
    } 
