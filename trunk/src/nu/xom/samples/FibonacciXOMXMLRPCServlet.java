@@ -47,7 +47,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d21
  *
  */
 public class FibonacciXOMXMLRPCServlet extends HttpServlet 
@@ -61,7 +61,7 @@ public class FibonacciXOMXMLRPCServlet extends HttpServlet
   public final static int BAD_INTEGER_FORMAT         = 5;
   public final static int UNEXPECTED_PROBLEM         = 255;
    
-  private Builder    parser;
+  private transient Builder parser;
   
   // Load a parser, transformer, and implementation
   public void init() throws ServletException {  
