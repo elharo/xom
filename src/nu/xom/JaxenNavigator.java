@@ -50,8 +50,27 @@ class JaxenNavigator extends DefaultNavigator {
     public Iterator getSelfAxisIterator(Object contextNode) {
         
         if (contextNode instanceof Text) {
+            // wrap text nodes in a list
+            Text node = (Text) contextNode;
             XOMList temp = new XOMList();
-            temp.add(contextNode);
+            ParentNode parent = node.getParent();
+            if (parent == null) {
+                temp.add(node);
+            }
+            else {
+                int index = parent.indexOf(node);
+                int first = index;
+                int last = index;
+                while (first > 0 && parent.getChild(first-1).isText()) {
+                    first--;
+                }
+                while (last < parent.getChildCount()-1 && parent.getChild(last+1).isText()) {
+                    last++;
+                }
+                for (int i = first; i <= last; i++) {
+                    temp.add(parent.getChild(i));
+                }
+            }
             contextNode = temp;
         }
         List l = new ArrayList(1);
