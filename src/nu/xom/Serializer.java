@@ -49,7 +49,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class Serializer {
@@ -325,7 +325,7 @@ public class Serializer {
                 write(element.getChild(i)); 
             }
             escaper.decrementIndent();
-            if (escaper.isIndenting() && !escaper.isPreserveSpace()) {
+            if (escaper.getIndent() > 0 && !escaper.isPreserveSpace()) {
                 Node firstChild = element.getChild(0);
                 if (!(firstChild.isText()) 
                   || firstChild.getValue().trim().equals("")) {
