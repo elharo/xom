@@ -74,7 +74,7 @@ public class SerializerTest extends XOMTestCase {
           new Attribute(
             "xml:space", "http://www.w3.org/XML/1998/namespace", "preserve"));
         String value =  
-          "This is a long sentence with plenty of opportunities for breaking from beginning to end.";
+          "This is a long sentence with plenty of opportunities for " +          "breaking from beginning to end.";
         root.appendChild(value);    
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out, "UTF-8");
@@ -91,7 +91,7 @@ public class SerializerTest extends XOMTestCase {
             "xml:space", "http://www.w3.org/XML/1998/namespace", "preserve"));
         Element child1 = new Element("preserve");
         String value = 
-          "This is a long sentence with plenty of opportunities for breaking from beginning to end.";
+          "This is a long sentence with plenty of opportunities for " +          "breaking from beginning to end.";
         child1.appendChild(value);    
         Element child2 = new Element("default");
         root.appendChild(child1);
@@ -99,17 +99,19 @@ public class SerializerTest extends XOMTestCase {
         child2.addAttribute(
           new Attribute(
             "xml:space", "http://www.w3.org/XML/1998/namespace", "default"));
-        String value2 = "This is another very long sentence with plenty of opportunities for breaking from beginning to end.";
+        String value2 = "This is another very long sentence with plenty" +            " of opportunities for breaking from beginning to end.";
         child2.appendChild(value2);
 
         String value3 = 
-          "This is still another very long sentence with plenty of opportunities for breaking from beginning to end.";
+          "This is still another very long sentence with plenty of " +          "opportunities for breaking from beginning to end.";
         Element preserveAgain = new Element("test");
         preserveAgain.appendChild(value3);
         child2.appendChild(preserveAgain);
         preserveAgain.addAttribute(
           new Attribute(
-            "xml:space", "http://www.w3.org/XML/1998/namespace", "preserve"));
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "preserve"));
 
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -162,11 +164,12 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(new Document(root));
         String result = out.toString("UTF-8");
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
-          + "<test xml:space=\"preserve\"><child xml:space=\"default\"/></test>\r\n",
+          + "<test xml:space=\"preserve\">" +            "<child xml:space=\"default\"/></test>\r\n",
            result);                       
     }
 
-    public void testXMLSpaceDefaultWithIndentingAndGrandchildren() throws IOException {
+    public void testXMLSpaceDefaultWithIndentingAndGrandchildren() 
+      throws IOException {
         Element root = new Element("test");
         root.addAttribute(
           new Attribute(
@@ -187,7 +190,7 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(new Document(root));
         String result = out.toString("UTF-8");
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
-          + "<test xml:space=\"preserve\"><child xml:space=\"default\">\r\n    <differentLine/>\r\n  </child></test>\r\n",
+          + "<test xml:space=\"preserve\">" +            "<child xml:space=\"default\">\r\n    <differentLine/>\r\n" +            "  </child></test>\r\n",
            result);                       
     }
 
@@ -271,7 +274,8 @@ public class SerializerTest extends XOMTestCase {
         
         assertEquals( 
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<root>"
-          + "   test   &#x0D;\n   \n  &#x0D; hello again" + "</root>\r\n",
+          + "   test   &#x0D;\n   \n  &#x0D; hello again" 
+          + "</root>\r\n",
           result);    
     }    
     
@@ -429,9 +433,9 @@ public class SerializerTest extends XOMTestCase {
         String breaks 
           = "This\nstring\rcontains\r\rseveral\n\nweird line breaks.";
         String breaksHalfEscaped 
-          = "This\nstring&#x0D;contains&#x0D;&#x0D;several\n\nweird line breaks.";
+          = "This\nstring&#x0D;contains&#x0D;&#x0D;several" +            "\n\nweird line breaks.";
         String breaksEscaped 
-          = "This&#x0A;string&#x0D;contains&#x0D;&#x0D;several&#x0A;&#x0A;weird line breaks.";
+          = "This&#x0A;string&#x0D;contains&#x0D;&#x0D;several" +            "&#x0A;&#x0A;weird line breaks.";
         root.appendChild(breaks);
             
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -1019,6 +1023,42 @@ public class SerializerTest extends XOMTestCase {
           result
         );
         
+    }
+    
+    public void testAmpersandAndLessThanInText() throws IOException {
+        Element root = new Element("a");
+        Document doc = new Document(root);
+        root.appendChild("data<data&data");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<a>data&lt;data&amp;data"
+          + "</a>\r\n", 
+          result
+        );
+    }
+
+    public void testAmpersandAndAngleBracketsInAttributeValue() 
+      throws IOException {
+        Element root = new Element("a");
+        root.addAttribute(new Attribute("b", "data<data>data&"));
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<a b=\"data&lt;data&gt;data&amp;\"/>\r\n", 
+          result
+        );
     }
 
 }
