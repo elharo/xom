@@ -158,25 +158,6 @@ public class XIncludeTest extends XOMTestCase {
         assertEquals(expectedResult, result);
         
     }
-    
-    
-    /* public void testNISTInclude33() 
-      throws ParsingException, IOException {
-        
-        File input = new File("data/XInclude-Test-Suite/Nist/test/docs/nist-include-33.xml");
-        
-        if (input.exists()) {
-            try {
-                Document doc = builder.build(input);
-                XIncluder.resolveInPlace(doc);
-                fail("Failed test Nist 33");
-            }
-            catch (XIncludeException success) {
-                assertNotNull(success.getMessage());
-            }    
-        }
-    } */
-   
 
     
     public void testIncludeDocumentThatUsesIntradocumentReferences() 
