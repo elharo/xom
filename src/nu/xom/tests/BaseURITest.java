@@ -43,7 +43,7 @@ import nu.xom.Text;
 /**
  * <p>
  *  Tests the getting and setting of base URI information
- *  on nodes. It's important to note that despite the name
+ *  on nodes. It's important to note that 
  *  this is really a URI, not an IRI. The <code>xml:base</code>
  *  attribute may contain an unescaped URI; i.e. an IRI. However,
  *  the base URI is determined after this is converted to a 
@@ -135,6 +135,7 @@ public class BaseURITest extends XOMTestCase {
     
     
     public void testBaseWithNonASCIICharacter() {
+        
         String uri = "http://www.w3.org/\u00A9testing";
         Element root = new Element("test"); 
         try {
@@ -147,6 +148,26 @@ public class BaseURITest extends XOMTestCase {
         
         root.setBaseURI("http://www.example.org/D%C3%BCrst");
         assertEquals("http://www.example.org/D%C3%BCrst", root.getBaseURI());
+        
+    }
+
+    
+    public void testDocumentBaseWithNonASCIICharacter() {
+        
+        String uri = "http://www.w3.org/\u00A9testing";
+        Element root = new Element("test"); 
+        Document doc = new Document(root);
+        try {
+            doc.setBaseURI(uri);
+            fail("Allowed base URI containing non-ASCII character");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+        doc.setBaseURI("http://www.example.org/D%C3%BCrst");
+        assertEquals("http://www.example.org/D%C3%BCrst", doc.getBaseURI());
+        
     }
 
     
