@@ -566,7 +566,8 @@ public class DOMConverter {
               namespace, element.getQualifiedName());
         }
                 
-        for (int i = 0; i < element.getAttributeCount(); i++) {
+        int attributeCount = element.getAttributeCount();
+        for (int i = 0; i < attributeCount; i++) {
             Attribute attribute = element.getAttribute(i);
             String attns = attribute.getNamespaceURI();
             Attr attr;
@@ -583,7 +584,8 @@ public class DOMConverter {
             attr.setValue(attribute.getValue());
         }
         
-        for (int i = 0; i < element.getNamespaceDeclarationCount(); i++) {
+        int namespaceCount = element.getNamespaceDeclarationCount(); 
+        for (int i = 0; i < namespaceCount; i++) {
             String additionalPrefix = element.getNamespacePrefix(i);
             String uri = element.getNamespaceURI(additionalPrefix);
 
