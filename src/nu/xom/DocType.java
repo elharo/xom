@@ -412,7 +412,7 @@ public class DocType extends Node {
      */
     public final Node getChild(int position) {
         throw new IndexOutOfBoundsException(
-          "LeafNodes do not have children");        
+          "Document type declarations do not have children");        
     }
 
     
