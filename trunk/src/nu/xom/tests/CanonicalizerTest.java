@@ -88,12 +88,12 @@ public class CanonicalizerTest extends XOMTestCase {
             byte[] actual = out.toByteArray();
             
             // for debugging
-            /* File debug = new File(
+            /*File debug = new File(
               "data/canonical/debug/" + input.getName() + ".dbg");
-            OutputStream fout = new FileOutputStream(debug);
+            java.io.OutputStream fout = new java.io.FileOutputStream(debug);
             fout.write(actual);
             fout.flush();
-            fout.close();   */   
+            fout.close(); */    
             
             File expected = new File(
               "data/canonical/output/" + input.getName() + ".out");
@@ -477,7 +477,8 @@ public class CanonicalizerTest extends XOMTestCase {
             File input = new File(testURI.toString().substring(5) + ".can");
             assertEquals(testURI.toString(), input.length(), actual.length);
             byte[] expected = new byte[actual.length];
-            DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(input)));
+            DataInputStream in = new DataInputStream(
+              new BufferedInputStream(new FileInputStream(input)));
             try {
                 in.readFully(expected);
             }
