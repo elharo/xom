@@ -590,4 +590,56 @@ public class BaseURITest extends XOMTestCase {
     }
    
 
+    // Don't use the parent to resolve the relative base URI
+    // when parent and child come from different entities
+    public void testElementsFromDifferentActualBases() {
+        Element parent = new Element("parent");
+        parent.setBaseURI("http://www.cafeconleche.org/");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        child.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", "/test/data/"));
+        assertEquals("/test/data/", child.getBaseURI());
+    }
+    
+    
+    public void testBadURIInElementsFromDifferentActualBases() {
+        Element parent = new Element("parent");
+        parent.setBaseURI("http://www.cafeconleche.org/");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        child.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace",
+          "%GF.html"));
+        String base = child.getBaseURI();
+        assertNull(base);
+    }
+    
+    
+    public void testBadURIInElementsFromSameActualBases() {
+        Element parent = new Element("parent");
+        parent.setBaseURI("http://www.cafeconleche.org/");
+        Element child = new Element("child");
+        child.setBaseURI("http://www.cafeconleche.org/");
+        parent.appendChild(child);
+        child.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace",
+          "http://www.example.com/%5.html"));
+        assertNull(child.getBaseURI());
+    }
+    
+    
+    public void testBadURIInBaseAttributeWithParent() {
+        Element parent = new Element("parent");
+        parent.setBaseURI("http://www.cafeconleche.org/");
+        Element child = new Element("child");
+        child.setBaseURI("http://www.cafeconleche.org/");
+        parent.appendChild(child);
+        child.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace",
+          "%TR.html"));
+        assertNull(child.getBaseURI());
+    }
+    
+    
 }
