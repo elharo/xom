@@ -25,6 +25,7 @@ package nu.xom.tests;
 
 import nu.xom.Comment;
 import nu.xom.CycleException;
+import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.IllegalAddException;
@@ -65,15 +66,18 @@ public class ParentNodeTest extends XOMTestCase {
 
     
     public void testDetach() {
+        
         Text text = new Text("This will be attached then detached");
         empty.appendChild(text);
         assertEquals(empty, text.getParent());
         text.detach();
         assertNull(text.getParent());
+        
     }
 
     
-    public void testAppendChild() {      
+    public void testAppendChild() {   
+        
         Element child = new Element("test");
         empty.appendChild(child);
         assertEquals(1, empty.getChildCount());
@@ -83,10 +87,12 @@ public class ParentNodeTest extends XOMTestCase {
         notEmpty.appendChild(child);
         assertTrue(!notEmpty.getChild(0).equals(child));
         assertTrue(notEmpty.getChild(1).equals(child));
+        
     } 
 
     
-    public void testAppendChildToItself() {      
+    public void testAppendChildToItself() { 
+        
         Element child = new Element("test");
         try {
             child.appendChild(child);
@@ -95,10 +101,12 @@ public class ParentNodeTest extends XOMTestCase {
         catch (CycleException success) {
             assertNotNull(success.getMessage());
         }
+        
     } 
 
     
-    public void testCycle() {      
+    public void testCycle() {  
+        
         Element a = new Element("test");
         Element b = new Element("test");
         try {
@@ -107,9 +115,9 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Allowed cycle");
         }
         catch (CycleException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
+        
     } 
 
     public void testInsertChild() {
@@ -157,7 +165,6 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Inserted null");
         }
         catch (NullPointerException success) {
-            // success
             assertNotNull(success.getMessage());
         }
 
@@ -166,7 +173,6 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Inserted null");
         }
         catch (NullPointerException success) {
-            // success
             assertNotNull(success.getMessage());
         }
 
@@ -175,7 +181,6 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Inserted null");
         }
         catch (NullPointerException success) {
-            // success
             assertNotNull(success.getMessage());
         }
 
@@ -184,7 +189,6 @@ public class ParentNodeTest extends XOMTestCase {
             fail("Inserted null");
         }
         catch (NullPointerException success) {
-            // success
             assertNotNull(success.getMessage());
         }
 
@@ -198,7 +202,6 @@ public class ParentNodeTest extends XOMTestCase {
             fail("appended a document to an element");
         }
         catch (IllegalAddException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
         
@@ -207,7 +210,6 @@ public class ParentNodeTest extends XOMTestCase {
             fail("appended a child twice");
         }
         catch (MultipleParentException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
 
@@ -239,13 +241,27 @@ public class ParentNodeTest extends XOMTestCase {
         assertEquals(new2, current2);
         assertEquals(new3, current3);
         
+        try {
+            empty.replaceChild(new1, null);
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+        try {
+            empty.replaceChild(null, old1);
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
+        }
+        
         Element new4 = new Element("new4");
+        
         try {
             empty.replaceChild(new4, new Element("test"));
             fail("Replaced Nonexistent element");     
         }
         catch (NoSuchChildException success) {
-            // success   
             assertNotNull(success.getMessage());
         }
 
@@ -253,6 +269,9 @@ public class ParentNodeTest extends XOMTestCase {
         empty.replaceChild(new1, new1);
         assertEquals(new1, empty.getChild(0));        
 
+        // what should happen if we replace new1 with new2????
+        // what should happen if we replace new1 with a child with a different parent????
+        
     } 
 
     
@@ -403,7 +422,7 @@ public class ParentNodeTest extends XOMTestCase {
             empty.replaceChild(null, new1);
             fail("Replaced null");
         }
-        catch (NoSuchChildException success) {
+        catch (NullPointerException success) {
             assertNotNull(success.getMessage());
         }
 
@@ -421,7 +440,42 @@ public class ParentNodeTest extends XOMTestCase {
         catch (NoSuchChildException success) {
             assertNotNull(success.getMessage());   
         } 
+        
     }
 
+    
+    // can't remove when insertion is legal;
+    // succeeed or fail as unit
+    public void testReplaceChildAtomicity() {
+        
+        Element parent = new Element("parent");
+        Text child = new Text("child");
+        parent.appendChild(child);
+        
+        try {
+            parent.replaceChild(child, new DocType("root"));
+            fail("allowed doctype child of element");
+        }
+        catch (IllegalAddException success) {
+            assertEquals(parent, child.getParent());
+            assertEquals(1, parent.getChildCount());
+        }
+        
+        Element e = new Element("e");
+        Text child2 = new Text("child2");
+        e.appendChild(child2);
+        try {
+            parent.replaceChild(child, child2);
+            fail("allowed replacement with existing parent");
+        }
+        catch (MultipleParentException success) {
+            assertEquals(e, child2.getParent());
+            assertEquals(parent, child.getParent());
+            assertEquals(1, parent.getChildCount());
+            assertEquals(1, e.getChildCount());
+        }
+        
+    }
+    
     
 }

@@ -883,10 +883,15 @@ public class Element extends ParentNode {
      * @throws IndexOutOfBoundsException if the position is negative 
      *     or greater than the number of children of this element.
      */
-    public final void insertChild(Node child, int position) {
+    void insertionAllowed(Node child, int position) {
         
         if (child == null) {
-            super.insertChild(child, position);            
+            throw new NullPointerException(
+             "Tried to insert a null child in the tree");
+        }
+        else if (child.getParent() != null) {
+            throw new MultipleParentException(child.toString() 
+              + " child already has a parent.");
         }
         else if (child.isElement()) {
             if (child == this) {
@@ -897,12 +902,12 @@ public class Element extends ParentNode {
                 throw new CycleException(
                   "Cannot add an ancestor as a child");                   
             }
-            super.insertChild(child, position);            
+            return;            
         }
         else if (child.isText()
           || child.isProcessingInstruction()
           || child.isComment()) {
-            super.insertChild(child, position);
+            return;
         }
         else {
             throw new IllegalAddException("Cannot add a "

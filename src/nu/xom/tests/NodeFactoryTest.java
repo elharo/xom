@@ -30,7 +30,6 @@ import nu.xom.ParsingException;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Comment;
-import nu.xom.CycleException;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -51,14 +50,16 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class NodeFactoryTest extends XOMTestCase {
 
+    
     public NodeFactoryTest(String name) {
         super(name);
     }
+    
     
     protected void setUp() {
         numNodesInExternalDTDSubset = 0;
@@ -91,6 +92,7 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
 
+    
     public void testCantAddOneElementMultipleTimes() 
         throws IOException, ParsingException {
         
@@ -100,12 +102,13 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("Allowed one element in several places");
         }
-        catch (CycleException success) {
+        catch (MultipleParentException success) {
             assertNotNull(success.getMessage());
         }
                 
     }
 
+    
     public void testCantAddOneAttributeMultipleTimes() 
         throws IOException, ParsingException {
         
@@ -121,6 +124,7 @@ public class NodeFactoryTest extends XOMTestCase {
                 
     }
 
+    
     private static class SingleElementFactory extends NodeFactory {
 
         private Element test = new Element("test");
@@ -130,6 +134,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }
 
     }
+    
     
     private static class SingleAttributeFactory extends NodeFactory {
 
@@ -141,6 +146,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }
 
     }
+    
     
     public void testChangingElementName() 
       throws IOException, ParsingException {
@@ -189,6 +195,7 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
 
+    
     public void testSkippingProcessingInstruction()
       throws IOException, ParsingException {
         
@@ -431,6 +438,7 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
     
+    
     public void testDontCoalesceTextNodes() 
       throws IOException, ParsingException {
         
@@ -482,6 +490,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }   
         
     }
+    
     
     public void testUncomment() 
       throws ParsingException, IOException {
@@ -889,6 +898,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }            
 
     }
+    
     
     public void testOrderOfCalls() 
       throws ParsingException, IOException {

@@ -40,7 +40,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class DocTypeTest extends XOMTestCase {
