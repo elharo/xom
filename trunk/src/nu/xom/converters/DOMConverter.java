@@ -29,6 +29,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
@@ -36,8 +37,10 @@ import nu.xom.XMLException;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.NodeList;
 // Many DOM interfaces such as Element and Document
 // have name conflicts with XOM classes.
 // Thus they cannot be imported, and this class
@@ -116,6 +119,37 @@ public class DOMConverter {
         }       
                        
         return xomDocument;
+    }
+
+    
+    /**
+     * <p>
+     * Translates a DOM <code>org.w3c.dom.DocumentFragment</code>  
+     * object into an equivalent <code>nu.xom.Nodes</code> object.
+     * The original DOM document fragment is not changed.
+     * Some DOM <code>DocumentFragment</code> objects cannot 
+     * be serialized as namespace well-balanced XML, and  
+     * thus cannot be converted to XOM.
+     * </p>
+     * 
+     * @param fragment the DOM document fragment to translate
+     * 
+     * @return a <code>Nodes</code> containing the converted 
+     *     fragment members
+     * 
+     * @throws XMLException if the DOM object is not a well-balanced 
+     *     XML fragment
+     */
+    public static Nodes convert(DocumentFragment fragment) {
+        
+        Nodes result = new Nodes();  
+        NodeList children = fragment.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            result.append(convert(children.item(i)));
+        }
+     
+        return result;
+        
     }
 
     
@@ -264,12 +298,6 @@ public class DOMConverter {
                 doctype.getName(),
                 doctype.getPublicId(),
                 doctype.getSystemId());
-        // Had to remove this once I moved DOMConverter out of the
-        // core nu.xom package.
-        /* String internalSubset = doctype.getInternalSubset();
-        if (internalSubset != null) {
-            result.setInternalDTDSubset(internalSubset);
-        } */
 
         return result;
 
@@ -318,7 +346,7 @@ public class DOMConverter {
             }
         }
         
-        // recurse children
+        // recurse children can I remove the recursion????
         for (org.w3c.dom.Node current = element.getFirstChild(); 
              current!= null; current = current.getNextSibling()) {
             result.appendChild(convert(current));
@@ -495,7 +523,7 @@ public class DOMConverter {
         }
         
         
-        // children
+        // children ???? remove the recursion
         for (int i = 0; i < element.getChildCount(); i++) {
             result.appendChild(convert(element.getChild(i), document)); 
         }

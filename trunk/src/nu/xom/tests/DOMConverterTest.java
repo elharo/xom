@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -37,6 +37,7 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Nodes;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.XMLException;
@@ -44,22 +45,23 @@ import nu.xom.converters.DOMConverter;
 
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.DocumentFragment;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 
 /**
  * <p>
- *   Basic tests for conversion from DOM trees
- *   to XOM trees.
+ *   Basic tests for conversion from DOM trees to XOM trees.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class DOMConverterTest extends XOMTestCase {
 
+    
     public DOMConverterTest(String name) {
         super(name);   
     }
@@ -147,7 +149,9 @@ public class DOMConverterTest extends XOMTestCase {
         }
     }
 
+    
     public void testToDOM() {      
+        
         org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocument, impl);
         org.w3c.dom.DocumentType doctype = domDoc.getDoctype();
         
@@ -157,8 +161,10 @@ public class DOMConverterTest extends XOMTestCase {
           domDoc.getFirstChild().getNodeType());
         assertEquals(org.w3c.dom.Node.COMMENT_NODE,
           domDoc.getLastChild().getNodeType());
+        
     }
 
+    
     public void testToXOM() {
         
         Document xomDoc = DOMConverter.convert(domDocument);
@@ -183,6 +189,7 @@ public class DOMConverterTest extends XOMTestCase {
        
     }
 
+    
     public void testDefaultNamespacedElement() 
       throws SAXException, IOException, ParserConfigurationException {
         byte[] data = "<root xmlns=\"http://www.example.com\"/>".getBytes();
@@ -194,6 +201,7 @@ public class DOMConverterTest extends XOMTestCase {
         assertEquals("http://www.example.com", root.getNamespaceURI());         
     }
 
+    
     public void testPrefixedElement() 
       throws SAXException, IOException, ParserConfigurationException {
         byte[] data = "<pre:root xmlns:pre=\"http://www.example.com\"/>".getBytes();
@@ -205,6 +213,7 @@ public class DOMConverterTest extends XOMTestCase {
         assertEquals("http://www.example.com", root.getNamespaceURI());         
     }
 
+    
     public void testConvertAttr() 
       throws SAXException, IOException, ParserConfigurationException {
         byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();
@@ -234,8 +243,10 @@ public class DOMConverterTest extends XOMTestCase {
                  
     }
 
+    
     public void testConvertElement() 
       throws SAXException, IOException, ParserConfigurationException {
+        
         byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();
         org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
@@ -253,6 +264,7 @@ public class DOMConverterTest extends XOMTestCase {
                  
     }
 
+    
     public void testConvertComment() 
       throws SAXException, IOException, ParserConfigurationException {
 
@@ -298,6 +310,7 @@ public class DOMConverterTest extends XOMTestCase {
                  
     }
 
+    
     public void testConvertProcessingInstruction() 
       throws SAXException, IOException, ParserConfigurationException {
 
@@ -355,5 +368,30 @@ public class DOMConverterTest extends XOMTestCase {
         assertEquals(doc, DOMConverter.convert(DOMConverter.convert(doc, impl)));
     }
     
+    
+    public void testConvertDocumentFragment() {
+     
+        DocumentFragment fragment = domDocument.createDocumentFragment();
+        org.w3c.dom.Element element = domDocument.createElement("name");
+        element.setAttribute("name", "value");
+        fragment.appendChild(element);
+        fragment.appendChild(domDocument.createComment("data"));  
+        fragment.appendChild(domDocument.createTextNode("text"));
+        
+        Nodes result = DOMConverter.convert(fragment);
+        
+        Element first = (Element) result.get(0);
+        assertEquals("name", first.getQualifiedName());
+        assertEquals("name", first.getAttribute("name").getQualifiedName());
+        assertEquals("value", first.getAttribute("name").getValue());
+        
+        Comment second = (Comment) result.get(1);
+        assertEquals("data", second.getValue());
+        
+        Text third = (Text) result.get(2);
+        assertEquals("text", third.getValue());
+        
+    }
+   
     
 }
