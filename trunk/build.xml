@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 2002, 2003 Elliotte Rusty Harold
+<!-- Copyright 2002-2004 Elliotte Rusty Harold
 
 This library is free software; you can redistribute 
 it and/or modify it under the terms of version 2.1 of 
@@ -137,8 +137,13 @@ XOM Build file
          basedir="${build.dest}"
          index="yes"
 		 compress="no"
-         excludes="nu/xom/samples/* nu/xom/tests/* nu/xom/benchmarks/* nu/xom/samples nu/xom/tests nu/xom/benchmarks nu/xom/pantry/* nu/xom/pantry"
-     />
+         excludes="nu/xom/samples/* nu/xom/tests/* nu/xom/benchmarks/* nu/xom/samples nu/xom/tests nu/xom/benchmarks nu/xom/pantry/* nu/xom/pantry">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+       <!-- <attribute name="Class-Path" value="${saxon.jar}"/>  -->
+        <attribute name="Main-Class" value="nu.xom.Info"/>
+      </manifest>
+    </jar>
   </target>
 
   <target name="javadoc" depends="prepare"
@@ -155,7 +160,7 @@ XOM Build file
              noindex="false"
              windowtitle="${Name} ${version}  API"
              doctitle="${Name} ${version}"
-             bottom="Copyright ${year} &lt;a href='http://www.elharo.com'&gt;Elliotte Rusty Harold&lt;/a&gt;
+             bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com'&gt;Elliotte Rusty Harold&lt;/a&gt;
 			 &lt;br/&gt; &lt;a href='mailto:elharo@metalab.unc.edu?Subject=XOM'&gt;elharo@metalab.unc.edu&lt;/a&gt;">
       <classpath refid="run.class.path"/>
     </javadoc>
