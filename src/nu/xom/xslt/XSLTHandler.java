@@ -24,7 +24,6 @@
 package nu.xom.xslt;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 
@@ -133,16 +132,30 @@ class XSLTHandler
         }
         
         // Attach any additional namespaces
-        Iterator iterator = prefixes.keySet().iterator();
-        while (iterator.hasNext()) {
-            String prefix = (String) iterator.next();  
-            String currentURI = element.getNamespaceURI(prefix);
-            String newURI 
-              = (String) ((Stack) prefixes.get(prefix)).peek(); 
-            if (!newURI.equals(currentURI)) {
-                element.addNamespaceDeclaration(prefix, newURI);
-            }
-        }
+        for (int i = 0; i < attributes.getLength(); i++) {
+            String qName = attributes.getQName(i);
+            if (qName.startsWith("xmlns:")) {               
+                String namespaceName = attributes.getValue(i);
+                String namespacePrefix = qName.substring(6);
+                String currentValue
+                   = element.getNamespaceURI(namespacePrefix); 
+                if (!namespaceName.equals(currentValue)) {
+                    element.addNamespaceDeclaration(
+                      namespacePrefix, namespaceName);
+                }              
+            }   
+            else if (qName.equals("xmlns")) {               
+                String namespaceName = attributes.getValue(i);
+                String namespacePrefix = "";
+                String currentValue 
+                  = element.getNamespaceURI(namespacePrefix); 
+                if (!namespaceName.equals(currentValue)) {
+                    element.addNamespaceDeclaration(namespacePrefix, 
+                     namespaceName);
+                }                
+            }             
+        }        
+
     }
   
     
