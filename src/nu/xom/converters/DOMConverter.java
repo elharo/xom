@@ -47,12 +47,15 @@ import org.w3c.dom.NamedNodeMap;
 /**
  * <p>
  * Converts XOM <code>Document</code> objects to and from DOM
- * <code>Document</code> objects.
+ * <code>Document</code> objects. This class can also
+ * convert many DOM node objects into the corresponding 
+ * XOM node objects. However, the reverse is not possible because
+ * DOM objects cannot live outside their containing 
+ * <code>Document</code>
  * </p>
  * 
  * @author Elliotte Rusty Harold
  * @version 1.0d22
- * 
  *
  */
 public class DOMConverter {
@@ -67,7 +70,7 @@ public class DOMConverter {
      * <code>http://www.w3.org/2000/xmlns/</code>.
      * </p>
      */
-    public final static String XMLNS_NAMESPACE 
+    private final static String XMLNS_NAMESPACE 
       = "http://www.w3.org/2000/xmlns/";
 
     /**
@@ -86,7 +89,7 @@ public class DOMConverter {
      * @throws XMLException if the DOM document is not a well-formed 
      *     XML document
      */
-    public static Document translate(org.w3c.dom.Document domDocument) {
+    public static Document convert(org.w3c.dom.Document domDocument) {
         
         org.w3c.dom.Element domRoot = domDocument.getDocumentElement();
         Element xomRoot = convert(domRoot);
@@ -134,27 +137,128 @@ public class DOMConverter {
         
     }
 
-    private static Comment convert(org.w3c.dom.Comment comment) {       
+    /**
+     * <p>
+     * Translates a DOM <code>org.w3c.dom.Comment</code> object 
+     * into an equivalent <code>nu.xom.Comment</code>.
+     * The original DOM object is not changed.
+     * Some DOM <code>Comment</code> objects cannot 
+     * be serialized as well-formed XML, and  
+     * thus cannot be converted to XOM.
+     * </p>
+     * 
+     * @param comment the DOM comment to translate
+     * @return a XOM comment
+     * 
+     * @throws XMLException if the DOM comment is not a well-formed 
+     *     XML comment
+     */
+    public static Comment convert(org.w3c.dom.Comment comment) {       
         return new Comment(comment.getNodeValue());
     }
 
-    private static Text convert(org.w3c.dom.Text text) {       
+    /**
+     * <p>
+     * Translates a DOM <code>org.w3c.dom.Text</code> object 
+     * into an equivalent <code>nu.xom.Text</code>.
+     * This method will also convert <code>org.w3c.dom.CDATA</code>
+     * objects. The original DOM object is not changed.
+     * Some DOM <code>Text</code> objects cannot 
+     * be serialized as well-formed XML, and  
+     * thus cannot be converted to XOM.
+     * </p>
+     * 
+     * @param text the DOM text to translate
+     * @return a XOM text
+     * 
+     * @throws XMLException if the DOM text is not a well-formed 
+     *     XML text
+     */
+    public static Text convert(org.w3c.dom.Text text) {       
         return new Text(text.getNodeValue());       
     }
 
-    private static ProcessingInstruction convert(
+    /**
+     * <p>
+     * Translates a DOM <code>org.w3c.dom.Attr</code> object 
+     * into an equivalent <code>nu.xom.Attribute</code>.
+     * The original DOM object is not changed.
+     * Some DOM <code>Attr</code> objects cannot 
+     * be serialized as well-formed XML, and  
+     * thus cannot be converted to XOM. Furthermore, DOM uses 
+     * <code>Attr</code> objects to represent namespace declarations.
+     * XOM does not. Converting an <code>Attr</code> object that
+     * represents an <code>xmlns</code> or 
+     * <code>xmlns:<i>prefix</i></code> attribute will cause an 
+     * exception.
+     * </p>
+     * 
+     * @param text the DOM <code>Attr</code> to translate
+     * @return the equivalent XOM <code>Attribute</code>
+     * 
+     * @throws XMLException if the DOM <code>Attr</code>  
+     *     is a namespace declaration or is not a well-formed 
+     *     XML attribute
+     */
+    public static Attribute convert(Attr attribute) {       
+        String name = attribute.getName();
+        String uri = attribute.getNamespaceURI();
+        if (uri == null) uri = "";
+        return new Attribute(name, uri, attribute.getNodeValue());       
+    }
+
+
+
+    /**
+     * <p>
+     * Translates a DOM <code>org.w3c.dom.ProcessingInstruction</code> 
+     * object into an equivalent 
+     * <code>nu.xom.ProcessingInstruction</code> object.
+     * The original DOM object is not changed.
+     * Some DOM <code>ProcessingInstruction</code> objects cannot 
+     * be serialized as well-formed XML, and  
+     * thus cannot be converted to XOM.
+     * </p>
+     * 
+     * @param text the DOM <code>ProcessingInstruction</code> to 
+     *    convert
+     * @return a XOM <code>ProcessingInstruction</code>
+     * 
+     * @throws XMLException if the DOM <code>ProcessingInstruction</code> 
+     *     is not a well-formed XML processing instruction
+     */
+    public static ProcessingInstruction convert(
         org.w3c.dom.ProcessingInstruction pi) {
         return new ProcessingInstruction(
           pi.getTarget(), pi.getNodeValue());
     }
 
-    private static DocType convert(org.w3c.dom.DocumentType doctype) {
+    /**
+     * <p>
+     * Translates a DOM <code>org.w3c.dom.DocumentType</code> 
+     * object into an equivalent <code>nu.xom.DocType</code> object.
+     * The original DOM object is not changed. The internal DTD subset
+     * is not converted, but the root element name, system identifier,
+     * and public identifier are.  Some DOM <code>DocumentType</code> 
+     * objects cannot  be serialized as well-formed XML, and  
+     * thus cannot be converted to XOM.
+     * </p>
+     * 
+     * @param text the DOM <code>DocumentType</code> to convert
+     * @return the equivalent XOM <code>DocType</code>
+     * 
+     * @throws XMLException if the DOM <code>DocumentType</code> 
+     *     is not a well-formed XML document type declaration
+     */
+    public static DocType convert(org.w3c.dom.DocumentType doctype) {
 
         DocType result =
             new DocType(
                 doctype.getName(),
                 doctype.getPublicId(),
                 doctype.getSystemId());
+        // Had to remove this once I moved DOMConverter out of the
+        // core nu.xom package.
         /* String internalSubset = doctype.getInternalSubset();
         if (internalSubset != null) {
             result.setInternalDTDSubset(internalSubset);
@@ -164,7 +268,22 @@ public class DOMConverter {
 
     }
 
-    private static Element convert(org.w3c.dom.Element element) {
+    /**
+     * <p>
+     * Translates a DOM <code>org.w3c.dom.Element</code> 
+     * object into an equivalent <code>nu.xom.Element</code> object.
+     * The original DOM object is not changed. Some DOM 
+     * <code>Element</code> objects cannot be serialized as
+     * namespace well-formed XML, and thus cannot be converted to XOM.
+     * </p>
+     * 
+     * @param text the DOM <code>Element</code> to convert
+     * @return the equivalent XOM <code>Element</code>
+     * 
+     * @throws XMLException if the DOM <code>Element</code> 
+     *     is not a well-formed XML element
+     */
+    public static Element convert(org.w3c.dom.Element element) {
         String namespaceURI = element.getNamespaceURI();
         String tagName = element.getTagName();
         Element result = new Element(tagName, namespaceURI);
@@ -183,7 +302,7 @@ public class DOMConverter {
                 if (!prefix.equals(currentPrefix)) {
                     result.addNamespaceDeclaration(prefix, attribute.getValue()); 
                 }
-            }    
+            }
             else { 
                 result.addAttribute(
                   new Attribute(
@@ -201,7 +320,6 @@ public class DOMConverter {
         
         return result;       
     }
-
  
     /**
      * <p>
@@ -220,7 +338,7 @@ public class DOMConverter {
      * 
      * @return a DOM document
      */
-    public static org.w3c.dom.Document translate(Document document, 
+    public static org.w3c.dom.Document convert(Document document, 
       DOMImplementation impl) {
 
         Element root = document.getRootElement();
