@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -24,8 +24,6 @@
 package nu.xom;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -1234,6 +1232,16 @@ public class Element extends ParentNode {
      * actual base URI.
      * </p>
      * 
+     * <p>
+     * If possible, this URI is made absolute before it is returned 
+     * by resolving the information in this element against the 
+     * information in its parent element and document entity.
+     * However, it is not always possible to fully absolutize the
+     * URI in all circumstances. Sometimes, a relative URI may be 
+     * returned instead. If the base URI cannot be determined,
+     * this method returns null. 
+     * </p>
+     * 
      * @return the base URI of this element 
      * 
      * @see Node#getBaseURI()
@@ -1256,21 +1264,22 @@ public class Element extends ParentNode {
             // to convert illegal characters to hexadecimal escapes.
             base = toURI(base);
             
-            if (base.indexOf(':') == -1) {
+            if (!URIUtil.isAbsolute(base)) {
                 // absolutize the URI if possible
                 if (parent != null) {                   
-                    String parentBase = parent.getActualBaseURI();
-                    // Mostly a null check
-                    if (parentBase == actualBase 
-                      || parentBase.equals(actualBase)) {
+                    String parentActualBase = parent.getActualBaseURI();
+                         // Mostly a null check
+                    if (parentActualBase == actualBase || parentActualBase.equals(actualBase)) {
                         try {
-                            URL u = new URL(
-                              new URL(parent.getBaseURI()), base
-                            );
-                            base = u.toExternalForm();
+                            String parentBase = parent.getBaseURI();
+                            if (!nu.xom.URIUtil.isOpaque(parentBase)) {
+                                base = nu.xom.URIUtil.absolutize(parentBase, base);
+                                
+                            }
                         }
-                        catch (MalformedURLException ex) {
-                            base = null;
+                        catch (MalformedURIException ex) {
+                            // System.err.println("Oops " + base);
+                            return null;
                         }
                     }
                 }
@@ -1304,7 +1313,8 @@ public class Element extends ParentNode {
                
         // The parent is loaded from a different entity.
         // Therefore just return the actual base.
-        return actualBase;       
+        return actualBase;    
+        
     }
     
 
@@ -1652,7 +1662,6 @@ public class Element extends ParentNode {
         ParentNode parentNode = getParent();
         for (int i = 0; i < getNamespaceDeclarationCount(); i++) {
             String additionalPrefix = getNamespacePrefix(i);
-            // if ("xml".equals(additionalPrefix)) continue;
             String uri = getNamespaceURI(additionalPrefix);
             if (parentNode != null && parentNode.isElement()) {
                Element parentElement = (Element) parentNode;   
@@ -1765,4 +1774,5 @@ public class Element extends ParentNode {
         return true;   
     } 
 
+    
 }

@@ -383,73 +383,67 @@ public class BaseURITest extends XOMTestCase {
             root.setBaseURI("http://www.w3.org/ testing");
             fail("Allowed URI containing space");
         }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
         }
 
         try {
             root.setBaseURI("http://www.w3.org/tes%ting");
             fail("Allowed URI containing %");
         }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
         }
 
         try {
             root.setBaseURI("http://www.w3.org/%Atesting");
             fail("Allowed URI containing half percent");
         }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
         }
 
         try {
             root.setBaseURI("http://www.w3.org/%A");
             fail("Allowed URI containing half percent at end of path");
         }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
         }
+
 
         try {
             root.setBaseURI("http://www.w3.org/^testing");
             fail("Allowed URI containing unwise character");
         }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
         }
 
         try {
             root.setBaseURI("http://www.w3.org/<testing");
             fail("Allowed URI containing unwise < character");
         }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
         }
 
         try {
             root.setBaseURI("http://www.w3.org/\u0000testing");
             fail("Allowed URI containing unwise null C0 control character");
         }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
         }
 
         try {
             root.setBaseURI("http://www.w3.org/\u0007testing");
             fail("Allowed URI containing unwise BEL C0 control character");
         }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
         }
+
 
     }
 
@@ -549,9 +543,11 @@ public class BaseURITest extends XOMTestCase {
 
     
     public void testXMLBaseRelative() {
+        Element e = doc.getRootElement().getFirstChildElement("child4");
+        String u = e.getBaseURI();
         assertEquals(
           "http://www.base1.com/base3.html", 
-          doc.getRootElement().getFirstChildElement("child4").getBaseURI()
+          u
         );
     }
 
@@ -641,5 +637,79 @@ public class BaseURITest extends XOMTestCase {
         assertNull(child.getBaseURI());
     }
     
+    
+    public void testHierarchicalURIsWithoutProtocolHandlers() {   
+        
+        String[] urls = {
+          "gopher://gopher.uminn.edu/", "GOPHER://gopher.uminn.edu/",
+          "gopher://gopher.uminn.edu", "GOPHER://gopher.uminn.edu",
+          "wais://wais.example.com:78/database", "WAIS://wais.example.com:78/database",
+          "file://vms.host.edu/disk$user/my/notes/note12345.txt", 
+          "FILE://vms.host.edu/disk$user/my/notes/note12345.txt",
+          "prospero://host.dom//pros/name", "PROSPERO://host.dom:1525//pros/name",
+          "z39.50s://melvyl.ucop.edu/cat", "Z39.50S://melvyl.ucop.edu/cat", 
+          "z39.50r://melvyl.ucop.edu/mags?elecworld.v30.n19", 
+          "Z39.50R://melvyl.ucop.edu/mags?elecworld.v30.n19", 
+          "z39.50r://cnidr.org:2100/tmf?bkirch_rules__a1;esn=f;rs=marc",
+          "Z39.50R://cnidr.org:2100/tmf?bkirch_rules__a1;esn=f;rs=marc",
+          "vemmi://zeus.mctel.fr/demo", "VEMMI://zeus.mctel.fr/demo",
+          "vemmi://mctel.fr/demo;$USERDATA=smith;account=1234",
+          "xmlrpc.beeps://stateserver.example.com/NumberToName",
+          "XMLRPC.BEEPS://stateserver.example.com/NumberToName",
+          "tn3270://login.example.com/"
+        };
+        for (int i = 0; i < urls.length; i++) {
+            Element e = new Element("test");
+            e.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace",
+              urls[i]));
+            Element child = new Element("child");
+            child.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace",
+              "TR.html"));
+            e.appendChild(child);
+            String base = child.getBaseURI();
+            assertTrue(urls[i] + " " + base, base.endsWith("/TR.html"));
+            assertTrue(base.indexOf("://") >= 4 );
+        }
+
+    }
+    
+    
+    public void testOpaqueURIs() {   
+        
+        String[] urls = {
+          "MAILTO:elharo@metalab.unc.edu?Subject=XOM%20Namespace",
+          "mailto:elharo@metalab.unc.edu?Subject=XOM%20Namespace",
+          "telnet:namespaces.ibiblio.org", "TELNET:namespaces.ibiblio.org",
+          "uri:urn:nwalsh:namespaces", "URI:urn:nwalsh:namespaces",
+          "news:comp.lang.xml", "NEWS:comp.lang.xml",
+          "mid:960830.1639@XIson.com/partA.960830.1639@XIson.com",
+          "MID:960830.1639@XIson.com/partA.960830.1639@XIson.com",
+          "cid:foo4*foo1@bar.net", "CID:foo4*foo1@bar.net",
+          "opaquelocktoken:f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+          "OPAQUELOCKTOKEN:f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+          "fax:+358.555.1234567", "FAX:+358.555.1234567",
+          "modem:+3585551234567;type=v32b?7e1;type=v110",
+          "tel:0w003585551234567;phone-context=+3585551234",
+          "tel:+1234567890;phone-context=+1234;vnd.company.option=foo",
+          "h323:user@h323.example.com", "H323:user@h323.example.com",
+        };
+        for (int i = 0; i < urls.length; i++) {
+            Element e = new Element("test");
+            e.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace",
+              urls[i]));
+            Element child = new Element("child");
+            child.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace",
+              "TR.html"));
+            e.appendChild(child);
+            String base = child.getBaseURI();
+            assertEquals("TR.html", base);
+        }
+
+    }
+
     
 }

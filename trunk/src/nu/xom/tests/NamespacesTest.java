@@ -725,8 +725,6 @@ public class NamespacesTest extends XOMTestCase {
     
     public void testVariousSchemes() {    
         
-        // what happens if xml:base uses some of these weirder
-        // ones? can getBaseURI still resolve????
         String[] urls = {
           "ftp://example.com", "FTP://example.com/pub/",
           "MAILTO:elharo@metalab.unc.edu?Subject=XOM%20Namespace",
