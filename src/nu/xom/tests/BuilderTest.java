@@ -1619,8 +1619,23 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         Document doc = builder.build(new File("data/undeclare.xml"));
+        String expectedResult = "<?xml version=\"1.0\"?>\n" 
+          + "<root xmlns=\"http://www.example.org\" " 
+          + "xmlns:pre=\"http://www.red.com/\" test=\"test\" " 
+          + "pre:red=\"value\">some data<something xmlns=\"\" />" 
+          + "</root>\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        
+    }
+    
+    
+    public void testBuildFromFileThatContainsNonASCIICharacterInFileName()
+      throws ParsingException, IOException {
+        
+        Document doc = builder.build(new File("data/resumé.xml"));
         String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<root xmlns=\"http://www.example.org\" xmlns:pre=\"http://www.red.com/\" test=\"test\" pre:red=\"value\">some data<something xmlns=\"\" /></root>\n";
+            + "<resumé />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         
