@@ -176,7 +176,6 @@ class JaxenNavigator extends DefaultNavigator {
             Map bindings = element.getNamespacePrefixesInScope();
             Iterator iterator = bindings.keySet().iterator();
             List result = new ArrayList(bindings.size()+1);
-            // ???? write unit test for this
             result.add(new XPathNamespaceNode("xml", "http://www.w3.org/XML/1998/namespace"));
 
             while (iterator.hasNext()) {
@@ -219,18 +218,7 @@ class JaxenNavigator extends DefaultNavigator {
     
         
     public Object getDocument(String url) throws FunctionCallException {
-        
-        Builder builder = new Builder();
-        try {
-            return builder.build(url);
-        }
-        catch (ParsingException ex) {
-            throw new FunctionCallException(ex.getMessage(), ex);
-        }
-        catch (IOException ex) {
-            throw new FunctionCallException(ex.getMessage(), ex);
-        }
-        
+        throw new FunctionCallException("document() function not supported");
     }
     
     public Iterator getAttributeAxisIterator(Object contextNode) {
@@ -296,12 +284,12 @@ class JaxenNavigator extends DefaultNavigator {
     
     public String getTextStringValue(Object o) {
         
-        List t = (List) o;
+        List texts = (List) o;
         String result = "";
-        // iterate this????
-        for (int i = 0; i < t.size(); i++) {
-            Object item = t.get(i);
-            result += ((Text) item).getValue();
+        Iterator iterator = texts.iterator();
+        while (iterator.hasNext()) {
+            Text text = (Text) iterator.next();
+            result += text.getValue();
         }
         return result;
         
@@ -380,7 +368,7 @@ class JaxenNavigator extends DefaultNavigator {
             }
         }
         
-        return null; // or throw exception ????
+        return null; 
         
     }
     
