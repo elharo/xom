@@ -372,6 +372,7 @@ public class XIncluder {
         
         if (isIncludeElement(element)) {
             String parse = element.getAttributeValue("parse");
+            String xpointer = element.getAttributeValue("xpointer");
             if (parse == null) parse = "xml";
             String encoding = element.getAttributeValue("encoding");
             String href = element.getAttributeValue("href");
@@ -405,7 +406,7 @@ public class XIncluder {
                 else url = new URL(href);                
                 if (parse.equals("xml")) {
                     Nodes replacements 
-                      = downloadXMLDocument(url, builder, baseURLs);
+                      = downloadXMLDocument(url, xpointer, builder, baseURLs);
                       
                 // Add base URIs. Base URIs added by XInclusion require
                 // the element to maintain the same base URI as it had  
@@ -584,17 +585,16 @@ public class XIncluder {
    
 
     private static Nodes downloadXMLDocument(
-      URL source, Builder builder, Stack baseURLs) 
+      URL source, String xpointer, Builder builder, Stack baseURLs) 
       throws IOException, ParsingException, XIncludeException, 
              XPointerSyntaxException, XPointerResourceException {
     
         Document doc = builder.build(
           source.openStream(), source.toExternalForm()); 
           
-        String fragmentID = source.getRef();
         Nodes included;
-        if (fragmentID != null && fragmentID.length() != 0) {
-            included = XPointer.resolve(doc, fragmentID);
+        if (xpointer != null && xpointer.length() != 0) {
+            included = XPointer.resolve(doc, xpointer);
             resolveInPlace(included);
         }
         else {
