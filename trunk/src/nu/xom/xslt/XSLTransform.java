@@ -37,8 +37,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import nu.xom.Document;
+import nu.xom.Element;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
+import nu.xom.XMLException;
 
 /**
  * <p>
@@ -327,6 +329,54 @@ public final class XSLTransform {
     public void setNodeFactory(NodeFactory factory) {
         if (factory == null) this.factory = new NodeFactory();
         else this.factory = factory;
+    }
+    
+    
+    /**
+     * <p>
+     * Builds a <code>Document</code> object from a 
+     * <code>Nodes</code> object. This is useful when the stylesheet
+     * is known to produce a well-formed document with a single root 
+     * element and no text or attribute nodes. If the stylesheet 
+     * produces anything else, an <code>XMLException</code> is thrown.
+     * </p>
+     * 
+     * @param nodes the nodes to be placed in the new document
+     * 
+     * @return a document containing the nodes
+     * 
+     * @throws XMLException if <code>nodes</code> does not contain
+     *     exactly one element or if it contains any text nodes or
+     *     attributes
+     */
+    public static Document toDocument(Nodes nodes) {
+        
+        Element root = null;
+        int rootPosition = 0;
+        for (int i = 0; i < nodes.size(); i++) {
+            if (nodes.get(i) instanceof Element) {
+                rootPosition = i;
+                root = (Element) nodes.get(i);
+                break;
+            }
+        }
+        
+        if (root == null) {
+            throw new XMLException("No root element");
+        }
+        
+        Document result = new Document(root);
+        
+        for (int i = 0; i < rootPosition; i++) {
+            result.insertChild(nodes.get(i), i);
+        }
+        
+        for (int i = rootPosition+1; i < nodes.size(); i++) {
+            result.appendChild(nodes.get(i));
+        }
+        
+        return result;
+        
     }
   
     
