@@ -143,6 +143,32 @@ public class DocTypeTest extends XOMTestCase {
     }
 
     
+    public void testRootElementNameBeginsWithDigit() {
+        
+        try {
+            new DocType("1Data");
+            fail("Allowed non-namestart character in root element name");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testRootElementNameBeginsWithColon() {
+        
+        try {
+            new DocType(":Data");
+            fail("Allowed colon to begin root element name");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
     public void testEmptyRootElementName() {
         
         try {
