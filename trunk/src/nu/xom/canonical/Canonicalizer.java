@@ -446,8 +446,4 @@ public class Canonicalizer {
         serializer.flush();
     }  
  
-    private static boolean isSpace(char c) {
-       return c == ' ' || c == '\t' || c == '\r' || c == '\n';   
-    } 
- 
 }
