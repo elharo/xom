@@ -511,9 +511,10 @@ public class DOMConverter {
                 boolean wasEnd = end;
                 end = false;
                 ParentNode xomParent = xomCurrent.getParent();
-                if (domParent.getParentNode().getNodeType() == org.w3c.dom.Node.ELEMENT_NODE
+                org.w3c.dom.Node grandparent = domParent.getParentNode();
+                if (grandparent.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE
                   && xomCurrent instanceof Element) {
-                    domParent = domParent.getParentNode();
+                    domParent = grandparent;
                 }
                 if (xomParent.getChildCount() - 1 == index) {
                     xomCurrent = xomParent;
