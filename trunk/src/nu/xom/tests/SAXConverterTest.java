@@ -299,9 +299,12 @@ public class SAXConverterTest extends XOMTestCase {
     
     public void testExternalDTDSubset()
       throws IOException, SAXException, ParsingException {
-        File input = new File("data/externalDTDtest.xml");
+
+        File input = new File("data");
+        input = new File(input, "externalDTDtest.xml");
         Document doc = builder.build(input);
         convertAndCompare(doc);
+        
     }
    
     
