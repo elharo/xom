@@ -59,11 +59,6 @@ public class AttributeTest extends XOMTestCase {
     public void testGetChildCount() {
         assertEquals(0, a1.getChildCount());
     }
-
-    
-    public void testHasChildren() {
-        assertTrue(!a1.hasChildren());
-    }
     
     
     public void testGetChild() {
