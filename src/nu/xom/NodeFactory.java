@@ -110,9 +110,7 @@ public class NodeFactory {
     public Element startMakingElement(String name, String namespace) {
         return new Element(name, namespace);    
     }
-    
-    // should finishMakingElement be called for the root element????
-    
+   
     /**
      * <p>
      * The <code>Builder</code> calls this method to signal the 
@@ -122,12 +120,14 @@ public class NodeFactory {
      * was passed to this method, though most often they will.
      * By default the <code>Nodes</code> returned contain
      * only the built element. However, subclasses may return
-     * a list containing any number of any type of node except
-     * for <code>Document</code> nodes, all of which will be added
-     * to the tree at the current position in the order given by the
-     * list. If this method returns an empty list, then the element
-     * (including all its contents) is not included in the
-     * finished document.
+     * a list containing any number of nodes, all of which will be 
+     * added to the tree at the current position in the order given by 
+     * the list (subject to the usual well-formedness constraints, of 
+     * course. For instance, the list may not contain a 
+     * <code>DocType</code> object unless the element is the root 
+     * element). If this method returns an empty list, then the element
+     * (including all its contents) is not included in the finished 
+     * document.
      * </p>
      * 
      * <p>
@@ -135,6 +135,10 @@ public class NodeFactory {
      * subclass so that it functions as a callback. When you're done
      * processing the <code>Element</code>, return an empty list so  
      * that it will be removed from the tree and garbage collected.
+     * be careful not to attempt to detach the root element though.
+     * That is, when the element passed to this method is the root
+     * element, the list returned must contain exactly one 
+     * <code>Element</code> object.
      * </p>
      * 
      * <p>

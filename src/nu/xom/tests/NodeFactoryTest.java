@@ -39,8 +39,10 @@ import nu.xom.MultipleParentException;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
+import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.ValidityException;
+import nu.xom.XMLException;
 
 /**
  * <p>
@@ -577,6 +579,110 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
  
+    public void testFinishMakingElementIsCalledForRootElement() 
+      throws ParsingException, IOException {
+        String doc = "<root/>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes finishMakingElement(Element element) {
+                throw new XMLException("Method was called");   
+            }
+            
+        });
+        try {
+            builder.build(doc, "http://www.example.org/");
+            fail("Did not call finishmakingElement for root");
+        }
+        catch (XMLException success) {
+            assertEquals("Method was called", success.getMessage());   
+        }            
 
+    }
+ 
+    public void testCanReplaceRootElementFromFinishMakingElement() 
+      throws ParsingException, IOException {
+        String data = "<root/>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes finishMakingElement(Element element) {
+                Nodes result = new Nodes();
+                result.append(new Comment("test"));
+                result.append(new Element("newroot"));
+                result.append(new ProcessingInstruction("test", "test"));
+                return result;   
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        assertEquals("newroot", doc.getRootElement().getQualifiedName());            
+        assertEquals(3, doc.getChildCount());            
+
+    }
+ 
+    public void testCantReplaceRootElementWithNoElement() 
+      throws ParsingException, IOException {
+        String data = "<root/>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes finishMakingElement(Element element) {
+                Nodes result = new Nodes();
+                result.append(new Comment("test"));
+                result.append(new ProcessingInstruction("test", "test"));
+                return result;   
+            }
+            
+        });
+        try {
+            Document doc = builder.build(data, "http://www.example.org/");
+            fail("Built document without root element");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage()); 
+        }            
+
+    }
+
+    public void testCantReplaceRootElementWithNothing() 
+      throws ParsingException, IOException {
+        String data = "<root/>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes finishMakingElement(Element element) {
+                return new Nodes();   
+            }
+            
+        });
+        try {
+            Document doc = builder.build(data, "http://www.example.org/");
+            fail("Built document without root element");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage()); 
+        }            
+
+    }
+ 
+    public void testCantReplaceRootElementWithTwoElements() 
+      throws ParsingException, IOException {
+        String data = "<root/>";   
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes finishMakingElement(Element element) {
+                Nodes result = new Nodes();
+                result.append(new Element("first"));
+                result.append(new Element("second"));
+                return result;   
+            }
+            
+        });
+        try {
+            builder.build(data, "http://www.example.org/");
+            fail("Built document without root element");
+        }
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage()); 
+        }            
+
+    }
  
 }
