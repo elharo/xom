@@ -165,20 +165,4 @@ final class Attributes {
         return null;
     }
     
-    /**
-     * <p>
-     * Retrieves the attribute with the specified name
-     * which is in no namespace. Unprefixed attributes never
-     * have a namespace.  
-     * </p>
-     * 
-     * @param localName the local name of the attribute to return
-     * @return the attribute with the specified name, or null if
-     *   this <code>Attributes</code> object does not contain 
-     *   such an attribute
-     */
-    public Attribute get(String localName) {
-        return get(localName, "");
-    }
-    
 }
