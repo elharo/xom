@@ -46,7 +46,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public class DocumentTest extends XOMTestCase {
@@ -313,6 +313,25 @@ public class DocumentTest extends XOMTestCase {
         assertEquals(newRoot, temp.getChild(0));
         assertNotNull(oldRoot.getParent());
         assertEquals(temp, newRoot.getParent());
+        
+    }
+
+    
+    public void testReplaceRootElementWithComment() {
+        
+        Element oldRoot = new Element("oldRoot");
+        Document doc = new Document(oldRoot);
+        
+        try {
+            doc.replaceChild(oldRoot, new Comment("c"));
+            fail("Replaced root with comment");
+        }
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+        assertEquals(oldRoot, doc.getRootElement());
+        assertEquals(doc, oldRoot.getParent());
         
     }
 
