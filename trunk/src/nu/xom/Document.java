@@ -31,7 +31,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d21
  * 
  */
 public class Document extends ParentNode {
@@ -213,6 +213,7 @@ public class Document extends ParentNode {
      * @throws NullPointerException if root is null
      */
     public final void setRootElement(Element root) {
+        if (root == this.getRootElement()) return;
         checkRoot(root);
         super.insertChild(root, getRootPosition());
         super.removeChild(getRootPosition()+1);
