@@ -56,7 +56,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a3
  * 
  */
 public class Builder {
@@ -193,14 +193,23 @@ public class Builder {
         // first look for Xerces; we only trust Xerces if
         // we set it up; and we need to configure it specially
         // so we can't load it with the XMLReaderFactory
-        XMLReader parser; /* = findXerces();
-        if (parser != null) return parser;
-        System.err.println("Couldn't load Xerces!"); */
+        XMLReader parser; 
+        // IBM's bundled Xerces doesn't work with XOM's subclass
+        // Could test Xerces version instead to resolve issue with
+        // Xerces 2.4????
+        if (!IBMVM14) {
+            try {
+                parser = XMLReaderFactory.createXMLReader("nu.xom.xerces.XML1_0Parser");
+            } 
+            catch (SAXException ex) {
+                // look for next one
+            }
+        }
         
         // XMLReaderFactory.createXMLReader never returns
         // null. If it can't locate the parser, it throws
         // a SAXException.
-        for (int i = 0; i < parsers.length; i++) {
+        for (int i = 1; i < parsers.length; i++) {
             try { 
                 parser = XMLReaderFactory.createXMLReader(parsers[i]);
                 setupParser(parser, validate);
@@ -619,6 +628,7 @@ public class Builder {
             char c = absolute.charAt(i);
             if (c == File.separatorChar) url.append('/');
             else if (c == ':' && isWindows) url.append(':');
+            // XXX should I specify UTF-8 rather than platform default?
             else url.append(URLEncoder.encode(String.valueOf(c)));
         }
         
