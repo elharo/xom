@@ -131,7 +131,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
           "name='value'",
           "name=\"value\"",
           "salkdhsalkjhdkjsadhkj sadhsajkdh",
-            "<?", "? >", " -- "
+            "<?", "? >", "--"
         };
         for (int i = 0; i < testData.length; i++) {
           pi.setValue(testData[i]);
@@ -264,6 +264,39 @@ public class ProcessingInstructionTest extends XOMTestCase {
         ProcessingInstruction pi = new ProcessingInstruction("target", "<test>&amp;&greater;");
         String xml = pi.toXML();
         assertEquals("<?target <test>&amp;&greater;?>", xml);  
+    }
+    
+    // This can't be round-tripped
+    public void testNoInitialWhiteSpace() {
+        try {
+            new ProcessingInstruction("target", "   initial spaces"); 
+            fail("allowed processing instruction data with leading space");
+        }
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }
+        try {
+            new ProcessingInstruction("target", "\tinitial tab"); 
+            fail("allowed processing instruction data with leading space");
+        }
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }
+        try {
+            new ProcessingInstruction("target", "\ninitial linefeed"); 
+            fail("allowed processing instruction data with leading space");
+        }
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }
+        try {
+            new ProcessingInstruction("target", "\r initial carriage return"); 
+            fail("allowed processing instruction data with leading space");
+        }
+        catch (IllegalDataException ex) {
+            assertNotNull(ex.getMessage());   
+        }
+        
     }
 
 }

@@ -549,7 +549,7 @@ public class ElementTest extends XOMTestCase {
         e.appendChild(new Comment(" moredata"));
         assertEquals(e.getValue(), "data moredata");
         e.appendChild(
-          new ProcessingInstruction("target", " moredata"));
+          new ProcessingInstruction("target", "moredata"));
         assertEquals(e.getValue(), "data moredata");
         
         Element e2 = new Element("child");
