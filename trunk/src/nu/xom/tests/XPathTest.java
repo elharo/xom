@@ -1860,7 +1860,7 @@ public class XPathTest extends XOMTestCase {
     }
     
 
-    public void testDoubleSlashIsIncorrect3() {
+    public void testWhiteSpaceIsAllowedBetweenTokens() {
         
         Element root = new Element("root", "http://www.example.org");
         Document doc = new Document(root);
@@ -1868,13 +1868,8 @@ public class XPathTest extends XOMTestCase {
         root.appendChild("test");
         root.addAttribute(new Attribute("test", "test"));
         
-        try {
-            Nodes nodes = doc.query("// a");
-            fail("Queried // a");
-        }
-        catch (XPathException success) {
-            assertNotNull(success.getMessage());
-        }
+        Nodes nodes = doc.query("// a");
+        assertEquals(0, nodes.size());
         
     }
     
