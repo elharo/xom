@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -52,7 +52,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -61,12 +61,15 @@ public class CanonicalizerTest extends XOMTestCase {
         super(name);
     }
 
+    
     private Builder builder;
+    
     
     protected void setUp() {        
         builder = new Builder();       
     }
 
+    
     public void testWithComments() throws ParsingException, IOException {
       
         File tests = new File("data/canonical/input/");
@@ -105,6 +108,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
     }
     
+    
     public void testWithoutComments() 
       throws ParsingException, IOException {
       
@@ -141,6 +145,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
     }    
     
+    
     public void testRelativeNamespaceURIsForbidden() 
       throws ParsingException, IOException {
         
@@ -159,6 +164,7 @@ public class CanonicalizerTest extends XOMTestCase {
         }    
         
     }
+    
     
 /*    public void testNodeList() 
       throws ParsingException, IOException {
@@ -241,63 +247,74 @@ public class CanonicalizerTest extends XOMTestCase {
         
     }
     
+    
     public void testNFCFromISO88591() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-1");
     }
+    
     
     public void testNFCFromISO88592() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-2");
     }
     
+    
     public void testNFCFromISO88593() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-3");
     }
+    
     
     public void testNFCFromISO88594() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-4");
     }
     
+    
     public void testNFCFromISO88595() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-5");
     }
+    
     
     public void testNFCFromISO88596() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-6");
     }
     
+    
     public void testNFCFromISO88597() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-7");
     }
+    
     
     public void testNFCFromISO88598() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-8");
     }
     
+    
     public void testNFCFromISO88599() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-9");
     }
+    
     
     public void testNFCFromISO885913() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-13");
     }
 
+    
     public void testNFCFromISO885915() 
       throws ParsingException, IOException {
         isoNormalizationTest("ISO-8859-15");
     }
     
-    // 14 and 16 aren't tested because Java doesn't support them yet
     
+    // 14 and 16 aren't tested because Java doesn't support them yet
     private void isoNormalizationTest(String encoding)
       throws ParsingException, IOException {
         String prolog = "<?xml version='1.0' encoding='" 
@@ -320,6 +337,7 @@ public class CanonicalizerTest extends XOMTestCase {
           normalizedResult, rawResult);
     }
 
+    
     public void testEBCDIC()
       throws ParsingException, IOException {
           
@@ -364,6 +382,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
     }
     
+    
     public void testWhiteSpaceTrimmingInNonCDATAAttribute() 
       throws IOException {
         Attribute attribute = new Attribute("name", "  value1  value2  ");
@@ -393,9 +412,11 @@ public class CanonicalizerTest extends XOMTestCase {
 
     }
 
+    
     // xmlconf/xmltest/valid/sa/097.xml appears to be screwed up by a lot
-    // of pqrsers inlcuding the DOMParser in Xerces and libxml2
-    private void processTestCases(Elements testcases) throws URISyntaxException, ParsingException, IOException {
+    // of parsers 
+    private void processTestCases(Elements testcases) 
+      throws URISyntaxException, ParsingException, IOException {
         for (int i = 0; i < testcases.size(); i++) {
               Element testcase = testcases.get(i); 
               Elements tests = testcase.getChildElements("TEST");
@@ -407,7 +428,8 @@ public class CanonicalizerTest extends XOMTestCase {
     }
 
 
-    private void processTests(Elements tests) throws URISyntaxException, ParsingException, IOException  {
+    private void processTests(Elements tests) 
+      throws URISyntaxException, ParsingException, IOException  {
         
         for (int i = 0; i < tests.size(); i++) {
             Element test = tests.get(i);
@@ -437,7 +459,7 @@ public class CanonicalizerTest extends XOMTestCase {
             for (int j = 0; j < expected.length; j++) {
                 assertEquals(testURI + " at byte " + j, expected[j], actual[j]);
             }
-            System.out.println(testURI);
+            //System.out.println(testURI);
           }
         
     }
