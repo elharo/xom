@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -71,6 +71,7 @@ public class NamespacesTest extends XOMTestCase {
         
     }
     
+    
     public void testSetNamespacePrefixInConflictWithAdditionalNamespaceDeclaration() {
         someNamespaces.setNamespaceURI("http://www.example.net");
         try {
@@ -83,6 +84,7 @@ public class NamespacesTest extends XOMTestCase {
         }
         
     }
+    
     
     public void testSetNamespaceURIInConflictWithAdditionalNamespaceDeclaration() {
         someNamespaces.setNamespaceURI("http://www.w3.org/2001/xlink");
@@ -98,6 +100,7 @@ public class NamespacesTest extends XOMTestCase {
         
     }
     
+    
     public void testXMLNamespace() {
         assertEquals(
           "http://www.w3.org/XML/1998/namespace",
@@ -108,6 +111,7 @@ public class NamespacesTest extends XOMTestCase {
           severalNamespaces.getNamespaceURI("xml")
         );    
     }
+    
     
     public void testWrongPrefixNotAllowedWithXMLURI() {
         
@@ -121,6 +125,7 @@ public class NamespacesTest extends XOMTestCase {
         
     }
     
+    
     public void testUnmappingPrefix() {
         
         try {
@@ -132,11 +137,13 @@ public class NamespacesTest extends XOMTestCase {
         
     }
     
+    
     public void testAllowCapitalSchemes() {       
         noNamespaces.addNamespaceDeclaration("pre", "HTTP://WWW.EXAMPLE.COM/");
         assertEquals(noNamespaces.getNamespaceURI("pre"), "HTTP://WWW.EXAMPLE.COM/"); 
     }
 
+    
     public void testBadSchemes() {   
         
         try {
@@ -149,7 +156,6 @@ public class NamespacesTest extends XOMTestCase {
     }
 
 
-    
     public void testXMLPrefixNotAllowedWithWrongURI() {
         
         try {
@@ -162,49 +168,56 @@ public class NamespacesTest extends XOMTestCase {
         
     }
     
+    
     public void testXMLNSNamespace() {
         assertEquals("", noNamespaces.getNamespaceURI("xmlns"));    
         assertEquals("", severalNamespaces.getNamespaceURI("xmlns"));   
     }
     
+    
     public void testCantUseXMLNSPrefix() {
+        
         try {
             noNamespaces.addNamespaceDeclaration(
               "xmlns", "http://www.w3.org/2000/xmlns/");
             fail("added xmlns prefix");  
         }  
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());
         }
+        
         try {
             noNamespaces.addNamespaceDeclaration("xmlns",
               "http://www.example.com");
             fail("added xmlns prefix");  
         }  
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) { 
+            assertNotNull(success.getMessage());
         }
+        
     }
     
+    
     public void testCantUseXMLPrefix() {
+        
         try {
             noNamespaces.addNamespaceDeclaration(
               "xml", "http://www.example.com");
             fail("added xmlns prefix");  
         }  
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) { 
+            assertNotNull(success.getMessage());
         }
+        
     }
+    
     
     public void testCanUseXMLPrefix() {
         noNamespaces.addNamespaceDeclaration(
           "xml", "http://www.w3.org/XML/1998/namespace");
         assertEquals(1, noNamespaces.getNamespaceDeclarationCount());
     }
+   
     
     public void testIndexedAccess() {
      
@@ -228,21 +241,23 @@ public class NamespacesTest extends XOMTestCase {
         
     }
 
+    
     public void testSize() {
         assertEquals(1, noNamespaces.getNamespaceDeclarationCount());
         assertEquals(3, someNamespaces.getNamespaceDeclarationCount());
         assertEquals(3, severalNamespaces.getNamespaceDeclarationCount());
-     }
+    }
 
+    
     public void testDefaultNamespace() {
         Element html = new Element("html", "http://www.w3.org/1999/xhtml");
         assertEquals(1, html.getNamespaceDeclarationCount());
         assertEquals("", html.getNamespacePrefix(0));
         assertEquals("http://www.w3.org/1999/xhtml", html.getNamespaceURI(""));
-     }
+    }
 
 
-   public void testGetByPrefix() {
+    public void testGetByPrefix() {
     
         assertEquals("http://www.w3.org/2001/xlink", 
           someNamespaces.getNamespaceURI("xlink"));
@@ -253,9 +268,9 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals("", someNamespaces.getNamespaceURI(""));
         assertEquals("", noNamespaces.getNamespaceURI(""));
 
-   }
+    }
    
-   public void testGetNamespaceDeclarationCount() {
+    public void testGetNamespaceDeclarationCount() {
         Element test = new Element("test");
         assertEquals(1, test.getNamespaceDeclarationCount());
         test.setNamespaceURI("http://www.example.com");
@@ -273,9 +288,9 @@ public class NamespacesTest extends XOMTestCase {
         test.addNamespaceDeclaration("xsi", "http://www.w3.org/2001/xmlschema-instance");
         assertEquals(3, test.getNamespaceDeclarationCount());
            
-   }
+    }
 
-   public void testRemoving() {
+    public void testRemoving() {
     
         assertEquals("http://www.w3.org/2001/xlink", 
           severalNamespaces.getNamespaceURI("xlink"));
@@ -297,6 +312,7 @@ public class NamespacesTest extends XOMTestCase {
 
     }
 
+    
     public void testAddSameNamespaceDeclaration() {
         Element e = new Element("test", "http://www.example.com");
        
@@ -314,6 +330,7 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals(1, e.getNamespaceDeclarationCount());
     } 
 
+    
     public void testAddEmptyNamespaceDeclaration() {
        Element e = new Element("test");
        
@@ -334,6 +351,7 @@ public class NamespacesTest extends XOMTestCase {
        
     } 
 
+    
     public void testAddNullPrefix() {
         Element e = new Element("test");
        
@@ -355,6 +373,7 @@ public class NamespacesTest extends XOMTestCase {
        
     } 
 
+    
     public void testAddNullURI() {
         Element parent = new Element("parent", "http://www.example.org/");
         Element e = new Element("pre:test", "http://www.example.com/"); 
@@ -363,6 +382,7 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals("", e.getNamespaceURI(""));   
     } 
 
+    
     public void testRemoveNullPrefix() {
         Element e = new Element("pre:test", "http://www.example.com/"); 
         e.addNamespaceDeclaration("", "http://www.example.net");
@@ -370,6 +390,7 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals("", e.getNamespaceURI(""));   
     } 
 
+    
     public void testUndeclareDefaultNamespace() {
         Element parent = new Element("parent", "http://www.example.org/");
         Element e2 = new Element("pre:test", "http://www.example.net");
@@ -378,6 +399,7 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals("", e2.getNamespaceURI(""));      
     } 
 
+    
     public void testForConflictWithDefaultNamespace() {
         Element e = new Element("test", "http://www.example.net");
         try {
@@ -389,6 +411,7 @@ public class NamespacesTest extends XOMTestCase {
         }
     } 
 
+    
     public void testConflictingUndeclarationOfDefaultNamespace() {
         Element e = new Element("test", "http://www.example.net");
         try {
@@ -400,6 +423,7 @@ public class NamespacesTest extends XOMTestCase {
         }
     } 
 
+    
     public void testAdding() {
     
         try {
@@ -439,6 +463,7 @@ public class NamespacesTest extends XOMTestCase {
 
     }
 
+    
     public void testReplacingNamespaceDeclaration() {
     
         assertEquals("http://www.w3.org/2001/xlink", 
@@ -462,6 +487,7 @@ public class NamespacesTest extends XOMTestCase {
 
     }
 
+    
     public void testSetPrefix() {
     
         try {
@@ -494,6 +520,7 @@ public class NamespacesTest extends XOMTestCase {
 
     }
 
+    
     public void testAttributeConflict() {
     
         Element element = new Element("test");
@@ -559,6 +586,7 @@ public class NamespacesTest extends XOMTestCase {
      
     }
 
+    
     public void testCountNamespaces() {
         Element html = new Element("html");
         assertEquals(1, html.getNamespaceDeclarationCount());
@@ -577,6 +605,7 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals(4, html.getNamespaceDeclarationCount());        
     }
 
+    
     public void testGetNamespaceURIByPrefix() {
 
         Element a = new Element("a");
@@ -594,18 +623,21 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals("urn:foo", d.getNamespaceURI("foo"));
     }
     
+    
     public void testNumbersAllowedInSchemes() {
         String namespace = "u0123456789:schemespecificdata";
         Element e = new Element("test", namespace);
         assertEquals(namespace, e.getNamespaceURI());
     }
 
+    
     public void testPunctuationMarksAllowedInSchemes() {
         String namespace = "u+-.:schemespecificdata";
         Element e = new Element("test", namespace);
         assertEquals(namespace, e.getNamespaceURI());
     }
 
+    
     public void testPunctuationMarksCantStartSchemes() {
         String namespace = "+:schemespecificdata";
         try {
@@ -617,6 +649,7 @@ public class NamespacesTest extends XOMTestCase {
         }
     }
 
+    
     public void testNumbersCantStartSchemes() {
         String namespace = "8uri:schemespecificdata";
         try {
@@ -628,7 +661,8 @@ public class NamespacesTest extends XOMTestCase {
         }
     }
 
-    public void testURIReferenceCantHavetwoFragmentIDs() {
+    
+    public void testURIReferenceCantHaveTwoFragmentIDs() {
         String namespace = "uri:schemespecificdata#test#id";
         try {
             new Element("test", namespace);
@@ -639,6 +673,7 @@ public class NamespacesTest extends XOMTestCase {
         }
     }
 
+    
     public void testHalfPercentEscape() {
         String namespace = "http://www.example.org/%ce%a";
         try {
@@ -648,9 +683,12 @@ public class NamespacesTest extends XOMTestCase {
         catch (MalformedURIException success) {
             assertNotNull(success.getMessage());
         }
+        
     }
 
+    
     public void testUnescapedPercentSign() {
+        
         String namespace = "http://www.example.org/%ce%";
         try {
             new Element("test", namespace);
@@ -659,6 +697,53 @@ public class NamespacesTest extends XOMTestCase {
         catch (MalformedURIException success) {
             assertNotNull(success.getMessage());
         }
+        
     }
 
+    
+    public void testVariousSchemes() {    
+        
+        // what happens if xml:base uses some of these weirder
+        // ones? can getBaseURI still resolve????
+        String[] urls = {
+          "ftp://example.com", "FTP://example.com/pub/",
+          "MAILTO:elharo@metalab.unc.edu?Subject=XOM%20Namespace",
+          "mailto:elharo@metalab.unc.edu?Subject=XOM%20Namespace",
+          "telnet:namespaces.ibiblio.org", "TELNET:namespaces.ibiblio.org",
+          "gopher://gopher.uminn.edu/", "GOPHER://gopher.uminn.edu/",
+          "uri:urn:nwalsh:namespaces", "URI:urn:nwalsh:namespaces",
+          "news:comp.lang.xml", "NEWS:comp.lang.xml",
+          "wais://wais.example.com:78/database", "WAIS://wais.example.com:78/database",
+          "file://vms.host.edu/disk$user/my/notes/note12345.txt", 
+          "FILE://vms.host.edu/disk$user/my/notes/note12345.txt",
+          "prospero://host.dom//pros/name", "PROSPERO://host.dom:1525//pros/name",
+          "z39.50s://melvyl.ucop.edu/cat", "Z39.50S://melvyl.ucop.edu/cat", 
+          "z39.50r://melvyl.ucop.edu/mags?elecworld.v30.n19", 
+          "Z39.50R://melvyl.ucop.edu/mags?elecworld.v30.n19", 
+          "z39.50r://cnidr.org:2100/tmf?bkirch_rules__a1;esn=f;rs=marc",
+          "Z39.50R://cnidr.org:2100/tmf?bkirch_rules__a1;esn=f;rs=marc",
+          "mid:960830.1639@XIson.com/partA.960830.1639@XIson.com",
+          "MID:960830.1639@XIson.com/partA.960830.1639@XIson.com",
+          "cid:foo4*foo1@bar.net", "CID:foo4*foo1@bar.net",
+          "vemmi://zeus.mctel.fr/demo", "VEMMI://zeus.mctel.fr/demo",
+          "vemmi://mctel.fr/demo;$USERDATA=smith;account=1234",
+          "opaquelocktoken:f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+          "OPAQUELOCKTOKEN:f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+          "fax:+358.555.1234567", "FAX:+358.555.1234567",
+          "modem:+3585551234567;type=v32b?7e1;type=v110",
+          "tel:0w003585551234567;phone-context=+3585551234",
+          "tel:+1234567890;phone-context=+1234;vnd.company.option=foo",
+          "xmlrpc.beeps://stateserver.example.com/NumberToName",
+          "XMLRPC.BEEPS://stateserver.example.com/NumberToName",
+          "h323:user@h323.example.com", "H323:user@h323.example.com",
+          "tn3270://login.example.com"
+        };
+        for (int i = 0; i < urls.length; i++) {
+            Element e = new Element("pre:test", urls[i]);
+            assertEquals(e.getNamespaceURI("pre"), urls[i]); 
+        }
+        
+    }
+    
+    
 }
