@@ -102,7 +102,8 @@ class URIUtil {
             }
             T.scheme = base.scheme;
         }
-        T.fragment = R.fragment;
+        // Fragment ID of base URI is never considered
+        T.fragment = R.fragment; 
         
         return T.toString();
         
@@ -247,10 +248,12 @@ class URIUtil {
         
             StringBuffer result = new StringBuffer(20);
             if (scheme != null) result.append(scheme + ':');
-            if (schemeSpecificPart != null) result.append(schemeSpecificPart);
+            if (schemeSpecificPart != null) {
+                result.append(schemeSpecificPart);
+            }
             else {
                 result.append("//");
-                result.append(authority);
+                if (authority != null) result.append(authority);
                 if (path != null) result.append(path);
             }
             
