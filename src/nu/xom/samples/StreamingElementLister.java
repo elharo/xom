@@ -26,13 +26,10 @@ package nu.xom.samples;
 import java.io.IOException;
 
 import nu.xom.Builder;
-import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Attribute;
-import nu.xom.Comment;
-import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
+import nu.xom.Nodes;
 import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
 
@@ -45,12 +42,15 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
+ *
+ * ???? seems not to be deindenting where it should?
  */
 public class StreamingElementLister extends NodeFactory{
 
     private int depth = 0;
+    private Nodes empty = new Nodes();
 
     public static void main(String[] args) {
   
@@ -78,13 +78,13 @@ public class StreamingElementLister extends NodeFactory{
     }
 
     // We don't need the comments.     
-    public Comment makeComment(String data) {
-        return null;  
+    public Nodes makeComment(String data) {
+        return empty;  
     }    
 
     // We don't need text nodes at all    
-    public Text makeText(String data) {
-        return null;  
+    public Nodes makeText(String data) {
+        return empty;  
     }    
 
     public Element startMakingElement(String name, String namespace) {
@@ -97,28 +97,28 @@ public class StreamingElementLister extends NodeFactory{
         return result;
     }
     
-    protected Element finishMakingElement(Element element) {
+    protected Nodes finishMakingElement(Element element) {
         depth--;
-        return element;
+        return new Nodes(element);
     }
 
-    public Attribute makeAttribute(String name, String URI, 
+    public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
-        return null;
+        return empty;
     }
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return null;    
+        return empty;    
     }
 
-    public Text makeWhiteSpaceInElementContent(String data) {
-        return null;  
+    public Nodes makeWhiteSpaceInElementContent(String data) {
+        return empty;  
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
-        return null; 
+        return empty; 
     }  
   
     private void printSpaces() {    

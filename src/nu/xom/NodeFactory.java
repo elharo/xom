@@ -34,15 +34,26 @@ package nu.xom;
  * <p>
  *   Subclasses can also filter content while building.
  *   For example, namespaces could be added to or changed 
- *   on all elements. Comments could be deleted. All such 
- *   changes must be consistent with the usual rules of 
- *   well-formedness.
+ *   on all elements. Comments could be deleted. Processing
+ *   instrcutions can be changed into elements. An 
+ *   <code>xinclude:include</code> element could be replaced
+ *   with the content it references. All such changes must be 
+ *   consistent with the usual rules of well-formedness. For example,
+ *   the <code>makeDocTypeDeclaration()</code> method could not 
+ *   return a list containing two <code>DocType</code> objects
+ *   because an XML document can have at most one document type
+ *   declaration. Nor could it return a list containing an element,
+ *   because an element cannot appear in a document prolog. However,
+ *   it could return a list containing any number of comments and
+ *   processing instructions, and not more than one 
+ *   <code>DocType</code> object.
  * </p>
  * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  * 
  */
+// Need to update Javadoc????
 public class NodeFactory {
 
     /**
@@ -87,8 +98,8 @@ public class NodeFactory {
      * However, doing so will only remove the element's start-tag and
      * end-tag from the result tree. Any content inside the element  
      * will be attached to the element's parent by default, unless it
-     * too is filtered. To remove an entire element, invoke
-     * <code>element.detach()</code> from the 
+     * too is filtered. To remove an entire element, return an empty
+     * <code>Nodes</code> object from the 
      * <code>finishMakingElement()</code> method.
      * </p>
      * 
@@ -102,17 +113,21 @@ public class NodeFactory {
     }
     
     // check that you can't use this method to bypass
-    // add's checks on multiple parentage
+    // add's checks on multiple parentage????
     
     /**
      * <p>
      * The <code>Builder</code> calls this method to signal the 
      * end of an element. This method should return the
-     * <code>Element</code> to be added to the tree.
-     * This need not be the same <code>Element</code> that 
-     * was passed to this method, though most often it will be.
-     * The default implementation returns the built element.
-     * If this method returns null, then the element
+     * <code>Nodes</code> to be added to the tree.
+     * They need not contain the <code>Element</code> that 
+     * was passed to this method, though most often they will.
+     * By default the <code>Nodes</code> returned contain
+     * only the built element. However, subclasses may return
+     * a list containing any number of any type of node except
+     * for <code>Document</code> nodes, all of which will be added
+     * to the tree at the current position in the order given by the
+     * list. If this method returns an empty list, then the element
      * (including all its contents) is not included in the
      * finished document.
      * </p>
@@ -120,8 +135,8 @@ public class NodeFactory {
      * <p>
      * To process an element at a time, override this method in a 
      * subclass so that it functions as a callback. When you're done
-     * processing the <code>Element</code>, return null so that it 
-     * will be removed from the tree and garbage collected.
+     * processing the <code>Element</code>, return an empty list so  
+     * that it will be removed from the tree and garbage collected.
      * </p>
      * 
      * <p>
@@ -132,11 +147,11 @@ public class NodeFactory {
      * 
      * @param element the finished <code>Element</code>
      * 
-     * @return the element to be added to the tree
+     * @return the nodes to be added to the tree
      * 
      */
-    protected Element finishMakingElement(Element element) {
-        return element;
+    protected Nodes finishMakingElement(Element element) {
+        return new Nodes(element);
     }
 
     /**
@@ -152,15 +167,19 @@ public class NodeFactory {
 
     /**
      * <p>
-     * Creates a new <code>Attribute</code> in the specified namespace 
+     * Returns a new <code>Nodes</code> object containing an 
+     * <code>Attribute</code> in the specified namespace 
      * with the specified name and type.
      * </p>
      * 
      * <p>
-     * Subclasses may change the name, namespace, value, type, or other
-     * characteristics of the <code>Attribute</code> returned.
-     * Subclasses may return null to indicate the 
-     * <code>Attribute</code> should not be created.
+     * Subclasses may change the nodes returned from this method.
+     * They may return a <code>Nodes</code> object containing any 
+     * number of children and attributes which are appended and 
+     * added to the current parent element. This <code>Nodes</code> 
+     * object may not contain any <code>Document</code> objects.
+     * Subclasses may return an empty <code>Nodes</code> to indicate  
+     * the <code>Attribute</code> should not be created.
      * </p>
      * 
      * @param name the prefixed name of the attribute
@@ -168,60 +187,75 @@ public class NodeFactory {
      * @param value the attribute value
      * @param type the attribute type
      * 
-     * @return the new <code>Attribute</code>
+     * @return the nodes to be added to the tree
      */
-    public Attribute makeAttribute(String name, String URI, 
+    public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
-        return new Attribute(name, URI, value, type);
+        return new Nodes(new Attribute(name, URI, value, type));
     }
 
     /**
      * <p>
-     * Creates a new <code>Comment</code>.
+     * Returns a new <code>Nodes</code> object containing a 
+     * <code>Comment</code> with the specified data.
      * </p>
      * 
      * <p>
      * Subclasses may change the content or other 
      * characteristics of the <code>Comment</code> 
-     * returned. Subclasses may return null to indicate  
-     * the <code>Comment</code> should not be created.
-     * The <code>Comment</code> returned must not
-     * have a parent.
+     * returned. 
+     * Subclasses may change the nodes returned from this method.
+     * They may return a <code>Nodes</code> object containing any 
+     * number of children and attributes which are appended and 
+     * added to the current parent element. This <code>Nodes</code> 
+     * object may not contain any <code>Document</code> objects.
+     * All of the nodes returned must be parentless.
+     * Subclasses may return an empty <code>Nodes</code> to indicate  
+     * the <code>Comment</code> should not be included in the 
+     * finished document.
      * </p>
      * 
      * @param data the complete text content of the comment
      * 
-     * @return the new <code>Comment</code>
+     * @return the nodes to be added to the tree
      */
-    public Comment makeComment(String data) {
-        return new Comment(data);   
+    public Nodes makeComment(String data) {
+        return new Nodes(new Comment(data));   
     }
 
     /**
      * <p>
-     * Creates a new <code>DocType</code> with a root element name,
-     * a system ID, and a public ID.
+     * Returns a new <code>Nodes</code> object containing a 
+     * <code>DocType</code> with the specified root element name,
+     * system ID, and public ID.
      * </p>
      * 
      * <p>
      * Subclasses may change the root element name, public ID, 
      * system ID, or other characteristics of the <code>DocType</code> 
-     * returned. Subclasses may return null to indicate the 
-     * <code>DocType</code> should not be created.
-     * The <code>DocType</code> returned must not
-     * have a parent.
+     * returned. 
+     * Subclasses may change the nodes returned from this method.
+     * They may return a <code>Nodes</code> object containing any 
+     * number of comments and processing instructions which are  
+     * appended to the current parent node. This <code>Nodes</code> 
+     * object may not contain any <code>Document</code>,
+     * <code>Element</code>, <code>Attribute</code>, or 
+     * <code>Text</code> objects. All of the nodes returned must be 
+     * parentless. Subclasses may return an empty <code>Nodes</code> to   
+     * indicate the <code>DocType</code> should not be included in the 
+     * finished document.
      * </p>
-     * 
+     *  
      * @param rootElementName the declared, qualified name 
      *   for the root element
      * @param publicID the public ID of the external DTD subset
      * @param systemID the URL of the external DTD subset
      * 
-     * @return the new <code>DocType</code>
+     * @return the nodes to be added to the document
      */
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return new DocType(rootElementName, publicID, systemID);    
+        return new Nodes(new DocType(rootElementName, publicID, systemID));    
     }
 
     /**
@@ -248,41 +282,49 @@ public class NodeFactory {
 
     /**
      * <p>
-     * Creates a new <code>Text</code> node.
+     * Returns a new <code>Nodes</code> object containing a 
+     * <code>Text</code> node with the specified content.
      * </p>
      * 
      * <p>
      * Subclasses may change the content, 
      * or other characteristics of the <code>Text</code> 
-     * returned. Subclasses may return null to indicate  
-     * the <code>Text</code> object should not be created.
-     * The <code>Text</code> returned must not have a parent.
-     * </p>
+     * returned. Subclasses may change the nodes returned from this 
+     * method. They may return a <code>Nodes</code> object containing 
+     * any  number of nodes which are added or
+     * appended to the current parent node. This <code>Nodes</code> 
+     * object may not contain any <code>Document</code> nodes. 
+     * All of the nodes returned must be parentless. Subclasses 
+     * may return an empty <code>Nodes</code> to indicate the text 
+     * should not be included in the finished document.
+     * </p> 
      * 
      * @param data the complete text content of the node
      * 
-     * @return the new <code>Text</code>
+     * @return the nodes to be added to the tree
      */
-    public Text makeText(String data) {
-        return new Text(data);  
+    public Nodes makeText(String data) {
+        return new Nodes(new Text(data));  
     }
 
     /**
      * <p>
-     * Creates a new <code>CDATASection</code> node.
+     * Returns a new <code>Nodes</code> object containing a 
+     * <code>CDATASection</code> node with the specified content.
      * </p>
      * 
      * @param data the complete text content of the node
      * 
-     * @return the new <code>CDATASection</code>
+     * @return the nodes to be added to the tree
      */
-    Text makeCDATASection(String data) {
-        return new CDATASection(data);  
-    }
+    Nodes makeCDATASection(String data) {
+        return makeText(data);  
+    } 
 
     /**
      * <p>
-     * Creates a new <code>Text</code> node.
+     * Returns a new <code>Nodes</code> object containing a 
+     * <code>Text</code> node with the specified content.
      * The <code>Builder</code> calls this method
      * to create text nodes composed of white space
      * in places where the DTD says only child elements may appear.
@@ -294,40 +336,51 @@ public class NodeFactory {
      * The default implementation of this method merely delegates
      * to the <code>makeText</code> method. However, a subclass might
      * eliminate white space in element content from the constructed
-     * tree by overriding this method so it always returns null.  
+     * tree by overriding this method so it always returns an empty
+     * <code>Nodes</code> object.  
      * </p>
      * 
      * @param data the complete text content of the node
      * 
-     * @return the new <code>Text</code>
+     * @return the nodes to be added to the tree
      */
-    public Text makeWhiteSpaceInElementContent(String data) {
+    public Nodes makeWhiteSpaceInElementContent(String data) {
         return makeText(data);  
     }
 
     /**
      * <p>
-     * Creates a new <code>ProcessingInstruction</code> with
+     * Returns a new <code>Nodes</code> object containing a 
+     * new <code>ProcessingInstruction</code> with
      * the specified target and data.
      * </p>
      * 
      * <p>
      * Subclasses may change the target, data, or other 
      * characteristics of the <code>ProcessingInstruction</code>
-     * returned. Subclasses may return null to indicate the 
-     * <code>ProcessingInstruction</code> should not be created.
-     * The <code>ProcessingInstruction</code> returned must not
-     * have a parent.
-     * </p>
+     * returned. Subclasses may change the nodes returned from this 
+     * method. They may return a <code>Nodes</code> object containing 
+     * any  number of nodes which are added or
+     * appended to the current parent node. This <code>Nodes</code> 
+     * object must not contain any <code>Document</code> nodes. 
+     * If the processing instruction appears in the prolog or epilog
+     * of the document, then it must also not contain any 
+     * <code>Element</code>, <code>Attribute</code>, or 
+     * <code>Text</code> objects.
+     * All of the nodes returned must be parentless. Subclasses 
+     * may return an empty <code>Nodes</code> to indicate the  
+     * processing instruction should not be included in the 
+     * finished document.
+     * </p> 
      * 
      * @param target the target of the processing instruction
      * @param data the data of the processing instruction
      * 
-     * @return the new <code>ProcessingInstruction</code>
+     * @return the nodes to be added to the tree
      */
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
-        return new ProcessingInstruction(target, data); 
+        return new Nodes(new ProcessingInstruction(target, data)); 
     }
 
 }

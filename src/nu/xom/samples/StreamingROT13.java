@@ -30,6 +30,7 @@ import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Builder;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
@@ -37,7 +38,7 @@ import nu.xom.Text;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class StreamingROT13 extends NodeFactory {
@@ -58,22 +59,22 @@ public class StreamingROT13 extends NodeFactory {
     }
 
     // We don't really need the comments. We just want to print them.    
-    public Comment makeComment(String data) {
-        return(new Comment(rot13(data)));
+    public Nodes makeComment(String data) {
+        return new Nodes(new Comment(rot13(data)));
     }    
 
-    public Text makeText(String data) {
-        return new Text(rot13(data));  
+    public Nodes makeText(String data) {
+        return new Nodes(new Text(rot13(data)));  
     }    
 
-    public Attribute makeAttribute(String name, String namespace, 
+    public Nodes makeAttribute(String name, String namespace, 
       String value, Attribute.Type type) {
-        return new Attribute(name, namespace, rot13(value), type);  
+        return new Nodes(new Attribute(name, namespace, rot13(value), type));  
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
-        return new ProcessingInstruction(rot13(target), rot13(data));
+        return new Nodes(new ProcessingInstruction(rot13(target), rot13(data)));
     }
 
   public static void main(String[] args) {

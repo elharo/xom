@@ -27,6 +27,7 @@ import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 
 /**
  * <p>
@@ -50,14 +51,14 @@ public class IDFilter extends NodeFactory {
         return super.makeDocument();
     }
 
-    public Element finishMakingElement(Element element) {
+    public Nodes finishMakingElement(Element element) {
         Attribute id = element.getAttribute("id");
         if (id == null) {
             id = new Attribute("id", "p" + counter);
             element.addAttribute(id);   
         }  
         counter++;
-        return element;
+        return new Nodes(element);
     }
 
 }

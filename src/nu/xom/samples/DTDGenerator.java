@@ -30,6 +30,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import java.util.List;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class DTDGenerator {
@@ -85,7 +86,7 @@ public class DTDGenerator {
             return super.startMakingElement(name, namespace);
         }
         
-        public Attribute makeAttribute(String name, String URI, 
+        public Nodes makeAttribute(String name, String URI, 
           String value, Attribute.Type type) {
               
             String comboName = currentElement + '#' + name;

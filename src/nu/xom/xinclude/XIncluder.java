@@ -634,7 +634,7 @@ public class XIncluder {
     */    
     private static Text downloadTextDocument(
       URL source, String encoding, Builder builder) 
-      throws IOException {
+      throws IOException, XIncludeException {
          
         if (encoding == null || encoding.length() == 0) {
             encoding = "UTF-8"; 
@@ -676,14 +676,27 @@ public class XIncluder {
         }
         InputStreamReader reader = new InputStreamReader(in, encoding);
         int c;
-        StringBuffer s = new StringBuffer(contentLength);
+        StringBuffer sb = new StringBuffer(contentLength);
         while ((c = reader.read()) != -1) {
-          s.append((char) c);
+          sb.append((char) c);
         }
         
         NodeFactory factory = builder.getNodeFactory();
-        if (factory != null) return factory.makeText(s.toString());
-        else return new Text(s.toString());
+        if (factory != null) {
+            Nodes results = factory.makeText(sb.toString());
+            sb = new StringBuffer(sb.length());
+            for (int i = 0; i < results.size(); i++) {
+                try {
+                    sb.append((Text) (results.get(i))); 
+                }
+                catch (ClassCastException ex) {
+                    throw new XIncludeException(
+                      "Factory made a non-text node when parse=\"text\"");   
+                }
+            }
+            
+        }
+        return new Text(sb.toString());
       
     }
     

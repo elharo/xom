@@ -32,13 +32,10 @@ import java.io.Writer;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
-import nu.xom.Comment;
-import nu.xom.DocType;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
-import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
 
 /**
  * <p>
@@ -49,23 +46,24 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class StreamingExampleExtractor extends NodeFactory {
 
     private int     chapter = 0;
     private boolean inExample = false;
+    private Nodes empty = new Nodes();
 
     // We don't need the comments.     
-    public Comment makeComment(String data) {
-        return null;  
+    public Nodes makeComment(String data) {
+        return empty;  
     }    
 
     // We need text nodes only inside examples    
-    public Text makeText(String data) {
+    public Nodes makeText(String data) {
         if (inExample) return super.makeText(data);
-        return null;  
+        return empty;  
     }    
 
     public Element makeRootElement(String name, String namespace) {
@@ -89,7 +87,7 @@ public class StreamingExampleExtractor extends NodeFactory {
         else return null;   
     }
     
-    protected Element finishMakingElement(Element element) {
+    protected Nodes finishMakingElement(Element element) {
         if (element.getQualifiedName().equals("example")) {
             try {
                 extractExample(element, chapter);
@@ -102,29 +100,29 @@ public class StreamingExampleExtractor extends NodeFactory {
             }
             inExample = false;
         }  
-        return element;   
+        return new Nodes(element);   
     }
 
-    public Attribute makeAttribute(String name, String URI, 
+    public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
         if (inExample && name.equals("id")) {
             return super.makeAttribute(name, URI, value, type);
         }
-        return null;
+        return empty;
     }
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return null;    
+        return empty;    
     }
 
-    public Text makeWhiteSpaceInElementContent(String data) {
+    public Nodes makeWhiteSpaceInElementContent(String data) {
         return makeText(data);  
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
-        return null; 
+        return empty; 
     }  
 
     private static void extractExample(Element example, int chapter) 

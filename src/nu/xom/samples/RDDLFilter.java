@@ -30,6 +30,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 
 /**
@@ -41,7 +42,9 @@ import nu.xom.ParsingException;
  * </p>
  * 
  *  @author Elliotte Rusty Harold
- *  @version 1.0d22
+ *  @version 1.0d23
+ * 
+ * ???? This is not stripping the xmlns:rddl declaration like it should
  *
  */
 public class RDDLFilter extends NodeFactory {
@@ -55,11 +58,11 @@ public class RDDLFilter extends NodeFactory {
     }
 
     // change the DOCTYPE to XHTML Basic DOCTYPE
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return new DocType("html", 
+        return new Nodes(new DocType("html", 
           "PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\"",
-          "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd");    
+          "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd"));    
     }
 
     public static void main(String[] args) {

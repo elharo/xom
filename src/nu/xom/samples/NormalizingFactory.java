@@ -29,9 +29,9 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
-import nu.xom.Text;
 
 /**
  * <p>
@@ -51,26 +51,28 @@ import nu.xom.Text;
  * </p>
  * 
  *  @author Elliotte Rusty Harold
- *  @version 1.0d22
+ *  @version 1.0d23
  *
  */
 public class NormalizingFactory extends NodeFactory {
 
+    private Nodes empty = new Nodes();
+
     // We don't need text nodes at all    
-    public Text makeText(String data) {
+    public Nodes makeText(String data) {
         data = normalizeSpace(data);
         if ("".equals(data)) return null; 
         return super.makeText(data); 
     }    
 
-    public Attribute makeAttribute(String name, String URI, 
+    public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
         value = normalizeSpace(value);
         return super.makeAttribute(name, URI, value, type);
     }
 
-    public Text makeWhiteSpaceInElementContent(String data) {
-        return null;  
+    public Nodes makeWhiteSpaceInElementContent(String data) {
+        return empty;  
     }
     
     // not the most efficient implementation

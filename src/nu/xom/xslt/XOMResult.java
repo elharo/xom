@@ -31,12 +31,12 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * <p>
- * 
+ *   Interface to TrAX.
  * </p>
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 class XOMResult extends SAXResult {
@@ -59,6 +59,12 @@ class XOMResult extends SAXResult {
         super(new XSLTHandler(new NodeFactory()));
         this.setLexicalHandler((LexicalHandler) this.getHandler());
     }
+    
+    // Currently the assumption is that only the standard NodeFactory
+    // class will be used. If we ever allow the XOMResult to have a 
+    // different subclass of NodeFactory (which might be a good idea
+    // on its own merits????) some changes will need to be made in 
+    // XSLTHandler as well as here
 
     public Nodes getResult() {
         XSLTHandler handler = (XSLTHandler) this.getHandler();

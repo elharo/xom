@@ -28,15 +28,13 @@ import java.util.Stack;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
-import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
-import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
-import nu.xom.Text;
 
 /**
  * <p>
@@ -56,25 +54,26 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  * 
  */
 
 public class StreamingXHTMLPurifier extends NodeFactory {
 
-    private Stack namespaces = new Stack();    
+    private Stack namespaces = new Stack(); 
+    private Nodes empty = new Nodes();   
     public final static String XHTML_NAMESPACE 
       = "http://www.w3.org/1999/xhtml";
 
     // We need text nodes only inside XHTML    
-    public Text makeText(String data) {
+    public Nodes makeText(String data) {
         if (inXHTML()) return super.makeText(data);
-        return null;  
+        return empty;  
     } 
 
-    public Comment makeComment(String data) {
+    public Nodes makeComment(String data) {
         if (inXHTML()) return super.makeComment(data);
-        return null;  
+        return empty;  
     }    
 
     
@@ -94,7 +93,7 @@ public class StreamingXHTMLPurifier extends NodeFactory {
         return null;
     }
     
-    protected Element finishMakingElement(Element element) {
+    protected Nodes finishMakingElement(Element element) {
         namespaces.pop(); 
         int namespaceCount = element.getNamespaceDeclarationCount();
         for (int i = 0; i < namespaceCount; i++) {
@@ -105,31 +104,31 @@ public class StreamingXHTMLPurifier extends NodeFactory {
                 namespaceCount--;   
             }
         }
-        return element;      
+        return new Nodes(element);      
     }
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return new DocType("html", 
+        return new Nodes(new DocType("html", 
           "PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\"",
-          "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd");    
+          "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd"));    
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
         if (inXHTML()) {
             return super.makeProcessingInstruction(target, data);   
         }
-        return null; 
+        return empty; 
     }  
 
-    public Attribute makeAttribute(String name, String URI, 
+    public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
         if ("".equals(URI) 
           || "http://www.w3.org/XML/1998/namespace".equals(URI)) {
             return super.makeAttribute(name, URI, value, type);
         }
-        return null;
+        return empty;
     }
 
     public static void main(String[] args) {

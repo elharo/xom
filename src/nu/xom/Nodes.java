@@ -36,21 +36,37 @@ import java.util.List;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  * 
  *
  */
 public final class Nodes {
-
     
-    private List nodes = new ArrayList();
+    private List nodes;
+    
+    // would it be quicker to lazy allocate the nodes only
+    // when the first element is appended????
     
     /**
      * <p>
      * Creates an empty node list. 
      * </p>
      */
-    public Nodes() {}
+    public Nodes() {
+        nodes = new ArrayList();
+    }
+    
+    /**
+     * <p>
+     * Creates a node list containing a single node.
+     * </p>
+     * 
+     * @param node the node to insert in the list
+     */
+    public Nodes(Node node) {
+        nodes = new ArrayList(1);
+        nodes.add(node);
+    }
     
     /**
      * <p>
