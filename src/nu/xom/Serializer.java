@@ -330,10 +330,8 @@ public class Serializer {
                 // XXX add an isEmpty method to Text to avoid calling getValue here?
                 if ("".equals(child.getValue())) continue;
             }
-            else {
-                hasRealChildren = true;
-                break;
-            }
+            hasRealChildren = true;
+            break;
         }
         
         if (hasRealChildren) {
