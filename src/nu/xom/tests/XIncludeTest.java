@@ -1746,56 +1746,61 @@ public class XIncludeTest extends XOMTestCase {
       throws ParsingException, IOException, XIncludeException {
         
         File testDescription = new File("data/XInclude-Test-Suite/testdescr.xml");
-        if (testDescription.exists()) {
-            Document master = builder.build(testDescription);
-            Element testsuite = master.getRootElement();
-            Elements testcases = testsuite.getChildElements("testcases");
-            for (int i = 0; i < testcases.size(); i++) {
-                Element group = testcases.get(i);   
-                String basedir = group.getAttributeValue("basedir");
-                Elements cases = group.getChildElements("testcase");
-                for (int j = 0; j < cases.size(); j++) {
-                    Element testcase = cases.get(j);
-                    String id = testcase.getAttributeValue("id");
-                    String features = testcase.getAttributeValue("features");
-                    if (features != null) {
-                        if (features.indexOf("unexpanded-entities") >= 0) continue;
-                        if (features.indexOf("unparsed-entities") >= 0) continue;
-                        if (features.indexOf("xpointer-scheme") >= 0) continue;
-                    }
-                    String description 
-                      = testcase.getFirstChildElement("description").getValue();
-                    File input = new File("data/XInclude-Test-Suite/" 
-                      + basedir + '/' + testcase.getAttributeValue("href"));
-                    Element output = testcase.getFirstChildElement("output");
-                    if (output == null) { // test failure   
-                        try {
-                            Document doc = builder.build(input);
-                            XIncluder.resolveInPlace(doc);
-                            fail("Failed test " + id + ": " + description);
-                        }
-                        catch (XIncludeException success) {
-                            assertNotNull(success.getMessage());
-                        }
-                        catch (IOException success) {
-                           assertNotNull(success.getMessage());  
-                        }
-                        catch (ParsingException success) {
-                            assertNotNull(success.getMessage());
-                        }
-                    }
-                    else {
-                        File in = new File("data/XInclude-Test-Suite/" 
-                          + basedir + '/' + output.getValue());
-                        Document expected = builder.build(in);
-                        Document doc = builder.build(input);
+        URL baseURL = testDescription.toURL();
+        if (!testDescription.exists()) {
+            baseURL = new URL("http://dev.w3.org/cvsweb/~checkout~/2001/XInclude-Test-Suite/testdescr.xml?content-type=text/plain&only_with_tag=HEAD");
+        }
+        Document master = builder.build(baseURL.toExternalForm());
+        Element testsuite = master.getRootElement();
+        Elements testcases = testsuite.getChildElements("testcases");
+        for (int i = 0; i < testcases.size(); i++) {
+            Element group = testcases.get(i);   
+            String basedir = group.getAttributeValue("basedir");
+            Elements cases = group.getChildElements("testcase");
+            for (int j = 0; j < cases.size(); j++) {
+                Element testcase = cases.get(j);
+                String id = testcase.getAttributeValue("id");
+                String features = testcase.getAttributeValue("features");
+                if (features != null) {
+                    if (features.indexOf("unexpanded-entities") >= 0) continue;
+                    if (features.indexOf("unparsed-entities") >= 0) continue;
+                    if (features.indexOf("xpointer-scheme") >= 0) continue;
+                }
+                String description 
+                  = testcase.getFirstChildElement("description").getValue();
+                if (!basedir.endsWith("/")) basedir += '/';
+                URL input = new URL(baseURL, basedir);
+                input = new URL(input, testcase.getAttributeValue("href"));
+                Element output = testcase.getFirstChildElement("output");
+                if (output == null) { // test failure   
+                    try {
+                        Document doc = builder.build(input.toExternalForm());
                         XIncluder.resolveInPlace(doc);
-                        assertEquals("Error when processing  " 
-                          + in.getName(), expected, doc);
+                        fail("Failed test " + id + ": " + description);
                     }
-                }          
-            }
-        } 
+                    catch (XIncludeException success) {
+                        assertNotNull(success.getMessage());
+                    }
+                    catch (IOException success) {
+                       if (baseURL.getProtocol().equals("file")) {
+                           assertNotNull("Problem processing " + input, success.getMessage());
+                       }
+                    }
+                    catch (ParsingException success) {
+                        assertNotNull(success.getMessage());
+                    }
+                }
+                else {
+                    URL result = new URL(baseURL, basedir);
+                    result = new URL(result, output.getValue());
+                    Document expected = builder.build(result.toExternalForm());
+                    Document doc = builder.build(input.toExternalForm());
+                    XIncluder.resolveInPlace(doc);
+                    assertEquals("Error when processing  " 
+                      + result, expected, doc);
+                }
+            }          
+        }
         
     } 
     
