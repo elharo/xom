@@ -140,12 +140,38 @@ class Latin8Writer extends TextWriter {
             case 0x00FD: return false; // LATIN SMALL LETTER Y WITH ACUTE
             case 0x00FE: return true;  // place holder to enable table lookup
             case 0x00FF: return false; // LATIN SMALL LETTER Y WITH DIAERESIS
-        }
-        switch (c) {         
+            case 0x0100: return true;  // place holder to enable table lookup
+            case 0x0101: return true;  // place holder to enable table lookup
+            case 0x0102: return true;  // place holder to enable table lookup
+            case 0x0103: return true;  // place holder to enable table lookup
+            case 0x0104: return true;  // place holder to enable table lookup
+            case 0x0105: return true;  // place holder to enable table lookup
+            case 0x0106: return true;  // place holder to enable table lookup
+            case 0x0107: return true;  // place holder to enable table lookup
+            case 0x0108: return true;  // place holder to enable table lookup
+            case 0x0109: return true;  // place holder to enable table lookup      
             case 0x010A: return false; // LATIN CAPITAL LETTER C WITH DOT ABOVE
             case 0x010B: return false; // LATIN SMALL LETTER C WITH DOT ABOVE
-        }  // could fill this in here????
-        switch (c) {         
+            case 0x010C: return true;  // place holder to enable table lookup
+            case 0x010D: return true;  // place holder to enable table lookup
+            case 0x010E: return true;  // place holder to enable table lookup
+            case 0x010F: return true;  // place holder to enable table lookup
+            case 0x0110: return true;  // place holder to enable table lookup
+            case 0x0111: return true;  // place holder to enable table lookup
+            case 0x0112: return true;  // place holder to enable table lookup
+            case 0x0113: return true;  // place holder to enable table lookup
+            case 0x0114: return true;  // place holder to enable table lookup
+            case 0x0115: return true;  // place holder to enable table lookup
+            case 0x0116: return true;  // place holder to enable table lookup
+            case 0x0117: return true;  // place holder to enable table lookup
+            case 0x0118: return true;  // place holder to enable table lookup
+            case 0x0119: return true;  // place holder to enable table lookup
+            case 0x011A: return true;  // place holder to enable table lookup
+            case 0x011B: return true;  // place holder to enable table lookup
+            case 0x011C: return true;  // place holder to enable table lookup
+            case 0x011D: return true;  // place holder to enable table lookup
+            case 0x011E: return true;  // place holder to enable table lookup
+            case 0x011F: return true;  // place holder to enable table lookup       
             case 0x0120: return false; // LATIN CAPITAL LETTER G WITH DOT ABOVE
             case 0x0121: return false; // LATIN SMALL LETTER G WITH DOT ABOVE
         }
@@ -187,12 +213,60 @@ class Latin8Writer extends TextWriter {
             case 0x1E1D: return true;  // place holder to enable table lookup
             case 0x1E1E: return false; // LATIN CAPITAL LETTER F WITH DOT ABOVE
             case 0x1E1F: return false; // LATIN SMALL LETTER F WITH DOT ABOVE
-        }  // could fill this in here????
-        switch (c) {         
+            case 0x1E20: return true;  // place holder to enable table lookup
+            case 0x1E21: return true;  // place holder to enable table lookup
+            case 0x1E22: return true;  // place holder to enable table lookup
+            case 0x1E23: return true;  // place holder to enable table lookup
+            case 0x1E24: return true;  // place holder to enable table lookup
+            case 0x1E25: return true;  // place holder to enable table lookup
+            case 0x1E26: return true;  // place holder to enable table lookup
+            case 0x1E27: return true;  // place holder to enable table lookup
+            case 0x1E28: return true;  // place holder to enable table lookup
+            case 0x1E29: return true;  // place holder to enable table lookup
+            case 0x1E2A: return true;  // place holder to enable table lookup
+            case 0x1E2B: return true;  // place holder to enable table lookup
+            case 0x1E2C: return true;  // place holder to enable table lookup
+            case 0x1E2D: return true;  // place holder to enable table lookup
+            case 0x1E2E: return true;  // place holder to enable table lookup
+            case 0x1E2F: return true;  // place holder to enable table lookup
+            case 0x1E30: return true;  // place holder to enable table lookup
+            case 0x1E31: return true;  // place holder to enable table lookup
+            case 0x1E32: return true;  // place holder to enable table lookup
+            case 0x1E33: return true;  // place holder to enable table lookup
+            case 0x1E34: return true;  // place holder to enable table lookup
+            case 0x1E35: return true;  // place holder to enable table lookup
+            case 0x1E36: return true;  // place holder to enable table lookup
+            case 0x1E37: return true;  // place holder to enable table lookup
+            case 0x1E38: return true;  // place holder to enable table lookup
+            case 0x1E39: return true;  // place holder to enable table lookup
+            case 0x1E3A: return true;  // place holder to enable table lookup
+            case 0x1E3B: return true;  // place holder to enable table lookup
+            case 0x1E3C: return true;  // place holder to enable table lookup
+            case 0x1E3D: return true;  // place holder to enable table lookup
+            case 0x1E3E: return true;  // place holder to enable table lookup
+            case 0x1E3F: return true;  // place holder to enable table lookup        
             case 0x1E40: return false; // LATIN CAPITAL LETTER M WITH DOT ABOVE
             case 0x1E41: return false; // LATIN SMALL LETTER M WITH DOT ABOVE
-        }  // could fill this in here????
-        switch (c) {         
+            case 0x1E42: return true;  // place holder to enable table lookup
+            case 0x1E43: return true;  // place holder to enable table lookup
+            case 0x1E44: return true;  // place holder to enable table lookup
+            case 0x1E45: return true;  // place holder to enable table lookup
+            case 0x1E46: return true;  // place holder to enable table lookup
+            case 0x1E47: return true;  // place holder to enable table lookup
+            case 0x1E48: return true;  // place holder to enable table lookup
+            case 0x1E49: return true;  // place holder to enable table lookup
+            case 0x1E4A: return true;  // place holder to enable table lookup
+            case 0x1E4B: return true;  // place holder to enable table lookup
+            case 0x1E4C: return true;  // place holder to enable table lookup
+            case 0x1E4D: return true;  // place holder to enable table lookup
+            case 0x1E4E: return true;  // place holder to enable table lookup
+            case 0x1E4F: return true;  // place holder to enable table lookup
+            case 0x1E50: return true;  // place holder to enable table lookup
+            case 0x1E51: return true;  // place holder to enable table lookup
+            case 0x1E52: return true;  // place holder to enable table lookup
+            case 0x1E53: return true;  // place holder to enable table lookup
+            case 0x1E54: return true;  // place holder to enable table lookup
+            case 0x1E55: return true;  // place holder to enable table lookup         
             case 0x1E56: return false; // LATIN CAPITAL LETTER P WITH DOT ABOVE
             case 0x1E57: return false; // LATIN SMALL LETTER P WITH DOT ABOVE
             case 0x1E58: return true;  // place holder to enable table lookup
@@ -241,7 +315,7 @@ class Latin8Writer extends TextWriter {
             case 0x1E83: return false; // LATIN SMALL LETTER W WITH ACUTE
             case 0x1E84: return false; // LATIN CAPITAL LETTER W WITH DIAERESIS
             case 0x1E85: return false; // LATIN SMALL LETTER W WITH DIAERESIS
-        }  // could fill this in here????
+        }
         switch (c) {         
             case 0x1EF2: return false; // LATIN CAPITAL LETTER Y WITH GRAVE
             case 0x1EF3: return false; // LATIN SMALL LETTER Y WITH GRAVE
