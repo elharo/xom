@@ -60,7 +60,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b7
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -97,7 +97,7 @@ public class DOMConverterTest extends XOMTestCase {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         builder = factory.newDocumentBuilder();
-        impl = factory.newDocumentBuilder().getDOMImplementation();        
+        impl = builder.getDOMImplementation();        
 
         DocType type = new DocType("test");
         Element root = new Element("test");          
