@@ -47,7 +47,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0b3
  *
  */
 class TreeWalker {
@@ -65,7 +65,7 @@ class TreeWalker {
         Builder parser = new Builder();
         try {
             // Separate out the basic I/O by parsing document,
-            // and then reserializing into a byte array.
+            // and then serializing into a byte array.
             // This caches the and removes any dependence on the DTD.
             Document doc = parser.build(args[0]);
             DocType type = doc.getDocType();

@@ -27,8 +27,8 @@ package nu.xom;
 /**
  * <p>
  *  The generic superclass for most runtime exceptions thrown in 
- *  <code>nu.xom</code>. The genera principle followed is that anything
- *  that can normally be detected by testing such as 
+ *  <code>nu.xom</code>. The general principle followed is that 
+ *  anything that can normally be detected by testing such as 
  *  using spaces in an element name is a runtime exception.
  *  Exceptions that depend on environmental conditions,
  *  such as might occur when parsing an external file,
@@ -37,7 +37,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b3
  *
  */
 public class XMLException extends RuntimeException {
@@ -87,8 +87,8 @@ public class XMLException extends RuntimeException {
     }
 
     
-    // null is insufficient for detecting an unset cause.
-    // The cause may be set to null whicn may not then be reset.
+    // null is insufficient for detecting an uninitialized cause.
+    // The cause may be set to null which may not then be reset.
     private boolean causeSet = false;
 
     

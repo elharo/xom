@@ -35,7 +35,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b3
  *
  */
 abstract class TextWriter {
@@ -477,7 +477,7 @@ abstract class TextWriter {
             newIndent.append(' ');
         }
         
-        // limit maximum indent to half of max length
+        // limit maximum indent to half of maximum line length
         if (maxLength > 0 && newIndent.length() > maxLength / 2) {
             fakeIndents++; 
         }

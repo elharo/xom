@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -63,7 +63,7 @@ import nu.xom.ParsingException;
  * </blockquote>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0b3
  *
  */
 class DocumentModifier {
@@ -81,7 +81,7 @@ class DocumentModifier {
         Builder parser = new Builder();
         try {    
             // Separate out the basic I/O by parsing document,
-            // and then reserializing into a byte array.
+            // and then serializing into a byte array.
             // This caches the and removes any dependence on the DTD.
             Document doc = parser.build(args[0]);
             DocType type = doc.getDocType();

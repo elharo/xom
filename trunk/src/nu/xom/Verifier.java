@@ -34,14 +34,14 @@ import java.util.StringTokenizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0b3
  * 
  */
 final class Verifier {
     
     private Verifier() {}
         
-    // constants for the bitflags in the characters lookup table
+    // constants for the bit flags in the characters lookup table
     private final static byte XML_CHARACTER        = 1;
     private final static byte NAME_CHARACTER       = 2;
     private final static byte NAME_START_CHARACTER = 4;
@@ -374,7 +374,7 @@ final class Verifier {
     }
 
     
-    // Besides the legal chaarcters issues, a path must
+    // Besides the legal characters issues, a path must
     // not contain two consecutive forward slashes
     private static void checkPath(String path) {
         
@@ -942,11 +942,10 @@ final class Verifier {
     static boolean isSchemeCharacter(char c) {
         
         /* The : and the ? cannot be reached here because they'll
-         * have been parsed out separately before this mehtod is
+         * have been parsed out separately before this method is
          * called. They're included here strictly for alignment
          * so the compiler will generate a table lookup.
          */
-        
         switch(c) {
             case '+': return true;
             case ',': return false;
