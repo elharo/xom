@@ -504,10 +504,13 @@ public class Canonicalizer {
             }
             else {
                 for (int i = 0; i < parent.getAttributeCount(); i++) {
-                    pfx = parent.getAttribute(i).getNamespacePrefix();
-                    if (prefix.equals(pfx)) {
-                        match = true;
-                        break;
+                    Attribute attribute = parent.getAttribute(i);
+                    if (nodes == null || nodes.contains(attribute)) {
+                        pfx = attribute.getNamespacePrefix();
+                        if (prefix.equals(pfx)) {
+                            match = true;
+                            break;
+                        }
                     }
                 }
             }
