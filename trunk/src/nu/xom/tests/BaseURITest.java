@@ -40,7 +40,8 @@ import nu.xom.Text;
 /**
  * <p>
  *  Tests the getting and setting of base URI information
- *  on nodes.
+ *  on nodes. It's important to note that despite the name
+ *  this is really an IRI. See ????
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -112,6 +113,13 @@ public class BaseURITest extends XOMTestCase {
         Element root = new Element("test");
         root.setBaseURI(ipv6);
         assertEquals(ipv6, root.getBaseURI());
+    }
+    
+    public void testBaseWithNonASCIICharacter() {
+        String uri = "http://www.w3.org/\u00A9testing";
+        Element root = new Element("test");
+        root.setBaseURI(uri);
+        assertEquals(uri, root.getBaseURI());
     }
 
     public void testUppercaseBase() {
@@ -219,15 +227,6 @@ public class BaseURITest extends XOMTestCase {
         }
 
         try {
-            root.setBaseURI("http://www.w3.org/\u00A9testing");
-            fail("Allowed URI containing Latin-1 character");
-        }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
-        }
-
-        try {
             root.setBaseURI("http://www.w3.org/tes%ting");
             fail("Allowed URI containing %");
         }
@@ -266,15 +265,6 @@ public class BaseURITest extends XOMTestCase {
         try {
             root.setBaseURI("http://www.w3.org/<testing");
             fail("Allowed URI containing unwise < character");
-        }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
-        }
-
-        try {
-            root.setBaseURI("http://www.w3.org/\uA001testing");
-            fail("Allowed URI containing unwise control character");
         }
         catch (MalformedURIException ex) {
             // success
