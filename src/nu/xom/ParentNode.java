@@ -220,7 +220,6 @@ public abstract class ParentNode extends Node {
         return children.indexOf(child);  
     }
 
-    // Possibly I could combine parts of these next two methods????
     /**
      * <p>
      * Removes the child of this node at the specified position.
