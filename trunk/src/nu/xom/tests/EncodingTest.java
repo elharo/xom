@@ -34,8 +34,6 @@ import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
-import com.ibm.icu.text.UTF16;
-
 /**
  * <p>
  *   Check serialization of almost all of Unicode
@@ -43,7 +41,7 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d7
  *
  */
 public class EncodingTest extends XOMTestCase {
@@ -55,14 +53,18 @@ public class EncodingTest extends XOMTestCase {
 
     
     private Document doc;
+    
+    private static int LEAD_OFFSET = 0xD800 - (0x10000 >> 10);
+    private static int SURROGATE_OFFSET = 0x10000 - (0xD800 << 10) - 0xDC00;
 
     protected void setUp() {
         
         Element root = new Element("root");
         doc = new Document(root);           
 
+        Element prototype = new Element("d");
         for (int i = 0x20; i <= 0xD7FF; i++) {
-            Element data = new Element("d");
+            Element data = (Element) prototype.copy();
             data.appendChild(String.valueOf(((char) i)));
             data.addAttribute(new Attribute("c", String.valueOf(i)));
             root.appendChild(data);
@@ -70,7 +72,7 @@ public class EncodingTest extends XOMTestCase {
         
         // skip surrogates between 0xD800 and 0xDFFF
         for (int i = 0xE000; i <= 0xFFFD; i++) {
-            Element data = new Element("d");
+            Element data = (Element) prototype.copy();
             data.appendChild(String.valueOf(((char) i)));
             data.addAttribute(new Attribute("c", String.valueOf(i)));
             root.appendChild(data);
@@ -79,20 +81,17 @@ public class EncodingTest extends XOMTestCase {
         // Test Plane-1 characters. These are tricky because Java 
         // strings encode them as surrogate pairs. We'll test with
         // the characters from 1D100 to 1D1FF (the musical symbols)
+        StringBuffer sb = new StringBuffer(2);
+        char high = 0xD834;
+        sb.append(high);
         for (int i = 0; i < 256; i++) {
-            int u = 0x1D100 + i;
-            // algorithm from RFC 2781
-            /* int uprime = u - 0x10000;
-            int W1 = 0xD800;
-            int W2 = 0xDC00;
-            W2 = W2 | (uprime & 0x7FF );
-            W1 = W1 | (uprime & 0xFF800); */
-            Element data = new Element("d");
-            // data.appendChild( String.valueOf(((char) W1)) + ((char) W2) );
-            String s = UTF16.valueOf(u);
+            char low = (char) (0xDD00+i);
+            sb.setLength(1);
+            sb.append(low);
+            String s = sb.toString();
+            Element data = (Element) prototype.copy();
             data.appendChild( s );
-            data.addAttribute(new Attribute("c", String.valueOf(u)));
-            // data.addAttribute(new Attribute("c", String.valueOf(W1)));
+            data.addAttribute(new Attribute("c", String.valueOf(0x1D100 + i)));
             root.appendChild(data);
         }        
         
@@ -262,8 +261,8 @@ public class EncodingTest extends XOMTestCase {
         }        
         
     }
+
        
-    
     private void checkAll(String encoding) 
       throws ParsingException, IOException {
         
@@ -295,7 +294,9 @@ public class EncodingTest extends XOMTestCase {
             }
             int actual = value.charAt(0);
             if (value.length() > 1) {
-                actual = UTF16.charAt(value, 0);
+                int high = value.charAt(0);
+                int low = value.charAt(1);
+                actual = (high << 10) + low + SURROGATE_OFFSET;
             }
             // This doesn't work for all encodings, because there are
             // a few cases where you write a Unicode compatibility 
