@@ -52,7 +52,7 @@ import org.w3c.dom.NodeList;
  * convert many DOM node objects into the corresponding 
  * XOM node objects. However, the reverse is not possible because
  * DOM objects cannot live outside their containing 
- * <code>Document</code>
+ * <code>Document</code>.
  * </p>
  * 
  * @author Elliotte Rusty Harold
