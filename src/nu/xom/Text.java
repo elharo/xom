@@ -70,8 +70,12 @@ public class Text extends LeafNode {
      * @param text the <code>Text</code> object to copy
      */
     public Text(Text text) {
-        this.data = new byte[text.data.length];
-        System.arraycopy(text.data, 0, this.data, 0, text.data.length);
+        // I'm relying here on the data array being immutable.
+        // If this ever changes, e.g. by adding an append method,
+        // this method needs to change too.
+        this.data = text.data;
+        /* this.data = new byte[text.data.length];
+        System.arraycopy(text.data, 0, this.data, 0, text.data.length);*/
     }
 
     private Text() {}
