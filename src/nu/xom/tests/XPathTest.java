@@ -125,6 +125,46 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testLongs() {
+        
+        Document doc = new Document(new Element("root"));
+        
+        Nodes result = doc.query("/*[5000000000=5000000000]");
+        assertEquals(1, result.size());
+        
+        result = doc.query("/*[5000000000 < 5000000001]");
+        assertEquals(1, result.size());
+        result = doc.query("/*[5000000000 > 5000000001]");
+        assertEquals(0, result.size());
+        result = doc.query("/*[5000000001 >= 5000000001]");
+        assertEquals(1, result.size());
+        result = doc.query("/*[5000000001 > 5000000001]");
+        assertEquals(0, result.size());
+        
+    }
+    
+
+    // JAXEN-46: http://jira.codehaus.org/browse/JAXEN-46
+    public void testHashInAttributeValue() {
+        
+        Element root = new Element("test");
+        Document doc = new Document(root);
+        Attribute test = new Attribute("test", "SUBSCRIBER");
+        Attribute test1 = new Attribute("test1", "SUBSCRIBER#");
+        root.addAttribute(test);
+        root.addAttribute(test1);
+        
+        Nodes result = doc.query("test[@test='SUBSCRIBER']");
+        assertEquals(1, result.size());
+        assertEquals(root, result.get(0));
+        
+        result = doc.query("test[@test1='SUBSCRIBER#']");
+        assertEquals(1, result.size());
+        assertEquals(root, result.get(0));
+        
+    }
+    
+
     public void testUseRootNodeWhenQueryingDocumentLessElements() {
         
         Element test = new Element("Test");
