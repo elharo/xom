@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+
+<root>
+
+    <data character="160"> </data>
+
+    <data character="161">&0xa1;</data>
+
+    <data character="162">&0xa2;</data>
+
+    <data character="163">&0xa3;</data>
+
+    <data character="164">¤</data>
+
+    <data character="165">&0xa5;</data>
+
+    <data character="166">&0xa6;</data>
+
+    <data character="167">§</data>
+
+    <data character="168">¨</data>
+
+    <data character="169">&0xa9;</data>
+
+    <data character="170">&0xaa;</data>
+
+    <data character="171">&0xab;</data>
+
+    <data character="172">&0xac;</data>
+
+    <data character="173">­</data>
+
+    <data character="174">&0xae;</data>
+
+    <data character="175">&0xaf;</data>
+
+    <data character="176">°</data>
+
+    <data character="177">&0xb1;</data>
+
+    <data character="178">&0xb2;</data>
+
+    <data character="179">&0xb3;</data>
+
+    <data character="180">´</data>
+
+    <data character="181">&0xb5;</data>
+
+    <data character="182">&0xb6;</data>
+
+    <data character="183">&0xb7;</data>
+
+    <data character="184">¸</data>
+
+    <data character="185">&0xb9;</data>
+
+    <data character="186">&0xba;</data>
+
+    <data character="187">&0xbb;</data>
+
+    <data character="188">&0xbc;</data>
+
+    <data character="189">&0xbd;</data>
+
+    <data character="190">&0xbe;</data>
+
+    <data character="191">&0xbf;</data>
+
+    <data character="192">&0xc0;</data>
+
+    <data character="193">Á</data>
+
+    <data character="194">Â</data>
+
+    <data character="195">&0xc3;</data>
+
+    <data character="196">Ä</data>
+
+    <data character="197">&0xc5;</data>
+
+    <data character="198">&0xc6;</data>
+
+    <data character="199">Ç</data>
+
+    <data character="200">&0xc8;</data>
+
+    <data character="201">É</data>
+
+    <data character="202">&0xca;</data>
+
+    <data character="203">Ë</data>
+
+    <data character="204">&0xcc;</data>
+
+    <data character="205">Í</data>
+
+    <data character="206">Î</data>
+
+    <data character="207">&0xcf;</data>
+
+    <data character="208">&0xd0;</data>
+
+    <data character="209">&0xd1;</data>
+
+    <data character="210">&0xd2;</data>
+
+    <data character="211">Ó</data>
+
+    <data character="212">Ô</data>
+
+    <data character="213">&0xd5;</data>
+
+    <data character="214">Ö</data>
+
+    <data character="215">×</data>
+
+    <data character="216">&0xd8;</data>
+
+    <data character="217">&0xd9;</data>
+
+    <data character="218">Ú</data>
+
+    <data character="219">&0xdb;</data>
+
+    <data character="220">Ü</data>
+
+    <data character="221">Ý</data>
+
+    <data character="222">&0xde;</data>
+
+    <data character="223">ß</data>
+
+    <data character="224">&0xe0;</data>
+
+    <data character="225">á</data>
+
+    <data character="226">â</data>
+
+    <data character="227">&0xe3;</data>
+
+    <data character="228">ä</data>
+
+    <data character="229">&0xe5;</data>
+
+    <data character="230">&0xe6;</data>
+
+    <data character="231">ç</data>
+
+    <data character="232">&0xe8;</data>
+
+    <data character="233">é</data>
+
+    <data character="234">&0xea;</data>
+
+    <data character="235">ë</data>
+
+    <data character="236">&0xec;</data>
+
+    <data character="237">í</data>
+
+    <data character="238">î</data>
+
+    <data character="239">&0xef;</data>
+
+    <data character="240">&0xf0;</data>
+
+    <data character="241">&0xf1;</data>
+
+    <data character="242">&0xf2;</data>
+
+    <data character="243">ó</data>
+
+    <data character="244">ô</data>
+
+    <data character="245">&0xf5;</data>
+
+    <data character="246">ö</data>
+
+    <data character="247">÷</data>
+
+    <data character="248">&0xf8;</data>
+
+    <data character="249">&0xf9;</data>
+
+    <data character="250">ú</data>
+
+    <data character="251">&0xfb;</data>
+
+    <data character="252">ü</data>
+
+    <data character="253">ý</data>
+
+    <data character="254">&0xfe;</data>
+
+    <data character="255">&0xff;</data>
+
+</root>
+

@@ -1,0 +1,220 @@
+<!-- Copyright 2002, 2003 Elliotte Rusty Harold
+
+This library is free software; you can redistribute 
+it and/or modify it under the terms of version 2.1 of 
+the GNU Lesser General Public License as published by  
+the Free Software Foundation.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General 
+Public License along with this library; if not, write to the 
+Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+Boston, MA  02111-1307  USA
+
+You can contact Elliotte Rusty Harold by sending e-mail to
+elharo@metalab.unc.edu. Please include the word "XOM" in the
+subject line. The XOM home page is temporarily located at
+http://www.cafeconleche.org/XOM/  but will eventually move
+to http://www.xom.nu/
+-->
+<project name="XOM" default="help" basedir=".">
+    <description>
+        Build XOM
+    </description>
+    
+  <!-- set global properties for this build -->
+
+  <target name="init">
+    <tstamp/>
+    <property name="Name"    value="XOM"/>
+    <property name="name"    value="xom"/>
+    <property name="version" value="1.0d20"/>
+    <property name="year"    value="2003"/>
+
+    <echo message="----------- ${Name} ${version} ------------"/>
+
+    <property name="debug"       value="on"/>
+    <property name="optimize"    value="on"/>
+    <property name="deprecation" value="on"/>
+
+    <property name="src.dir"  value="./src"/>
+    <property name="lib.dir"  value="./lib"/>
+    <property name="packages" value="nu.xom.*"/>
+
+    <property name="build.dir"      value="./build"/>
+    <property name="build.src"      value="./build/src"/>
+    <property name="build.dest"     value="./build/classes"/>
+    <property name="build.javadocs" value="./build/apidocs"/>
+    <property name="testoutput.dir" value="./testresults"/>
+    <property name="dist.dir"       value="./dist"/>    
+    
+    <filter token="year"    value="${year}"/>
+    <filter token="version" value="${version}"/>
+    <filter token="date"    value="${TODAY}"/>
+    <filter token="log"     value="true"/>
+    <filter token="verbose" value="true"/>
+
+    <property name="xml-apis.jar" value="${lib.dir}/xmlParserAPIs.jar"/>
+    <property name="parser.jar"   value="${lib.dir}/xercesImpl.jar"/>
+    <property name="junit.jar"    value="${lib.dir}/junit.jar"/>
+    <property name="xslt.jar"     value="${lib.dir}/saxon-6.5.2.jar"/>
+    <!-- only needed for servlet samples -->
+    <property name="servlet.jar"  value="${lib.dir}/servlet.jar"/>
+    <property name="xom-core"     value="${build.dest}"/>
+
+    <property name="test.outputFormat" value="xml"/>    
+    
+    <path id="compile.class.path">
+      <pathelement location="${xml-apis.jar}"/>
+      <pathelement location="${parser.jar}"/>
+      <pathelement location="${servlet.jar}"/>
+      <pathelement location="${junit.jar}"/>
+    </path>
+
+    <path id="run.class.path">
+      <path refid="compile.class.path"/>
+      <pathelement location="${xom-core}"/>
+      <pathelement location="${xslt.jar}"/>
+    </path>
+    
+  </target>
+
+  <target name="help">
+    <echo message=""/>
+    <echo message="XOM Build file"/>
+    <echo message="-------------------------------------------------------------"/>
+    <echo message=""/>
+    <echo message=" available targets are:"/>
+    <echo message=""/>
+    <echo message="   help     --> print this message"/>
+    <echo message="   jar      --> build the xom.jar file"/>
+    <echo message="   compile  --> compile the source code"/>
+    <echo message="   javadoc  --> generate the API documentation"/>
+    <echo message="   test     --> run JUnit test suite"/>
+    <echo message="   testui   --> run Junit test suite in GUI"/> 
+    <echo message="   clean    --> clean up the build directory"/>
+    <echo message="   dist     --> the zip and .tar.gz files"/>
+    <echo message=""/>
+    <echo message="-------------------------------------------------------------"/>
+    <echo message=""/>
+  </target>
+
+  <target name="prepare" depends="init">
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${testoutput.dir}"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.src}"/>
+    <mkdir dir="${build.dest}"/>
+
+    <copy todir="${build.src}" filtering="yes">
+      <fileset dir="${src.dir}"/>
+    </copy>
+    
+  </target>
+
+  <target name="compile" depends="prepare" description="Compile the source code">
+    <javac srcdir="${build.src}"
+           destdir="${build.dest}"
+           debug="${debug}"
+           optimize="${optimize}">
+      <classpath refid="compile.class.path"/>
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile" description="Create xom.jar">
+    <jar jarfile="${build.dir}/${name}-${version}.jar"
+         basedir="${build.dest}"
+         index="yes"
+		 compress="no"
+         excludes="nu/xom/samples/* nu/xom/tests/* nu/xom/benchmarks/* nu/xom/samples nu/xom/tests nu/xom/benchmarks"
+     />
+  </target>
+
+  <target name="javadoc" depends="prepare"
+          description="Generate the API documentation">
+    <mkdir dir="${build.javadocs}"/>
+    <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
+             sourcepath="${build.src}"
+             destdir="${build.javadocs}"
+             author="true"
+             version="true"
+             overview="overview.html"
+             use="true"
+             splitindex="true"
+             noindex="false"
+             windowtitle="${Name} ${version}  API"
+             doctitle="${Name} ${version}"
+             bottom="Copyright ${year} Elliotte Rusty Harold. All Rights Reserved.">
+      <classpath refid="run.class.path"/>
+    </javadoc>
+  </target>
+
+  <target name="dist" depends="zip, tar.gz" />
+
+  <!-- I can never remember the exact target name -->
+  <target name="javadocs" depends="javadoc"
+          description="Generate the API documentation" />
+  <target name="apidocs" depends="javadoc"
+          description="Generate the API documentation" />
+  <target name="apidoc" depends="javadoc"
+          description="Generate the API documentation" />
+
+  <target name="zip" depends="jar, javadoc" description="Build zip file for distro">
+    <zip destfile="${dist.dir}/${name}-${version}.zip">
+      <zipfileset prefix="XOM" dir="." 
+        excludes="**/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+      <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
+        excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
+      <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
+    </zip>
+  </target>
+  
+  <target name="tar" depends="jar, javadoc" description="Build tar file for distro">
+    <tar destfile="${dist.dir}/${name}-${version}.tar">
+      <tarfileset prefix="XOM" dir="." 
+        excludes="**/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+      <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
+        excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
+      <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
+    </tar>
+  </target>
+  
+  <target name="tar.gz" depends="tar" description="Build tar.gz file for distro">
+     <gzip src="${dist.dir}/${name}-${version}.tar" zipfile="${dist.dir}/${name}-${version}.tar.gz"/>
+  </target>
+
+ 
+  <!-- This task requires the ANT optional.jar -->
+  <target name="test" depends="compile">
+    <junit printsummary="on" fork="no">
+       <classpath refid="run.class.path" />
+       <formatter type="${test.outputFormat}" />
+       <batchtest fork="yes" todir="${testoutput.dir}">
+         <fileset dir="${build.src}">
+           <include name="**/*Test.java" />
+           <exclude name="**/MegaTest.java" />
+           <exclude name="**/EBCDICTest.java" />
+         </fileset>
+      </batchtest>
+   </junit>
+  </target>
+ 
+  <target name="testui" depends="compile">
+    <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
+      <!-- <jvmarg value="-Xbootclasspath/p:${xml-apis.jar}:${parser.jar}"/> -->
+      <sysproperty key="org.xml.sax.driver" value="org.apache.parsers.SAXParser"/> 
+      <classpath refid="run.class.path" />
+      <arg value="nu.xom.tests.XOMTests"/> 
+    </java>
+  </target>
+    
+  <target name="clean" depends="init" description="Remove build files">
+    <delete dir="${build.dir}"/>
+  </target>
+  
+</project>
+
