@@ -310,6 +310,7 @@ public class Canonicalizer {
         protected final void write(Element element) 
           throws IOException {
 
+            if (inScope == null) inScope = new NamespaceSupport();
             // treat empty elements differently to avoid an
             // instanceof test
             if (element.getChildCount() == 0) {
@@ -472,7 +473,6 @@ public class Canonicalizer {
                 if (nodes == null || nodes.contains(sorted[i]) 
                    || (sorted[i].getNamespaceURI().equals(Namespace.XML_NAMESPACE) 
                        && sorted[i].getParent() != element)) {
-                    writeRaw(" ");
                     write(sorted[i]);
                 }
             }       
@@ -579,6 +579,7 @@ public class Canonicalizer {
 
         protected void write(Attribute attribute) throws IOException {
             
+            writeRaw(" ");
             writeRaw(attribute.getQualifiedName());
             writeRaw("=\"");
             writeRaw(prepareAttributeValue(attribute));
@@ -818,8 +819,40 @@ public class Canonicalizer {
          */
         protected final void write(DocType doctype) {
             // DocType is not serialized in canonical XML
-        } 
-       
+        }
+
+
+        public void write(Node node) throws IOException {
+
+            if (node instanceof Document) {
+                write((Document) node);
+            } 
+            else if (node instanceof Attribute) {
+                write((Attribute) node);
+            }
+            else if (node instanceof Namespace) {
+                write((Namespace) node);;
+            }
+            else {
+                writeChild(node);
+            }
+            
+        }
+        
+        private void write(Namespace namespace) throws IOException {
+            
+            String prefix = namespace.getPrefix();
+            String uri = namespace.getValue();
+            writeRaw(" xmlns" );
+            if (!"".equals(prefix)) {
+                writeRaw(":");
+                writeRaw(prefix);
+            }
+            writeRaw("=\"");
+            writeAttributeValue(uri);
+            writeRaw("\"");
+            
+        }
         
     }
 
@@ -835,7 +868,7 @@ public class Canonicalizer {
      * @throws IOException if the underlying <code>OutputStream</code>
      *      encounters an I/O error
      */
-    public final void write(Document doc) throws IOException {  
+    public final void write(Node doc) throws IOException {  
         serializer.nodes = null;
         serializer.write(doc);        
         serializer.flush();
