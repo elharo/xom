@@ -166,11 +166,14 @@ public class Attribute extends Node {
      * 
      */
     public Attribute(Attribute attribute) {
-        this(
-            attribute.getQualifiedName(),
-            attribute.URI,
-            attribute.value,
-            attribute.type);
+        
+        // These are all immutable types
+        this.localName = attribute.localName;
+        this.prefix    = attribute.prefix;
+        this.URI       = attribute.URI;
+        this.value     = attribute.value;
+        this.type      = attribute.type;
+        
     }
 
     private Attribute() {}
