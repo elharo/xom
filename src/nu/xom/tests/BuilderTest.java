@@ -682,6 +682,41 @@ public class BuilderTest extends XOMTestCase {
         assertEquals("value", name.getValue());
     }
     
+    /* <?xml version="1.0"?>
+<!DOCTYPE root [
+  <!ELEMENT root (#PCDATA)>
+  <!-- comment -->
+  <?target PI data?>
+  <!NOTATION JPEG SYSTEM "image/jpeg">
+  <!ATTLIST  root source ENTITY #REQUIRED>
+  <!ENTITY picture SYSTEM "picture.jpg" NDATA JPEG>  
+]>
+<root source="picture">
+  This document is intended to test the building of
+  various constructs in the internal DTD subset.
+</root>
+*/
+    public void testInternalDTDSubset() 
+      throws ValidityException, ParsingException, IOException {
+        File input = new File("data/internaldtdsubsettest.xml");
+        Builder builder = new Builder(false);
+        Document doc = builder.build(input);
+        String internalSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalSubset.indexOf("<!-- comment -->") > 0);
+        assertTrue(internalSubset.indexOf("<?target PI data?>") > 0);
+        assertTrue(internalSubset.indexOf("<!ELEMENT root (#PCDATA)>") > 0);
+        assertTrue(internalSubset.indexOf("<!ATTLIST root source ENTITY #REQUIRED>") > 0);
+        // some confusion in the parser resolving these as relative URLs.
+        // This is in accordance with the SAX spec, see 
+        // http://www.saxproject.org/apidoc/org/xml/sax/DTDHandler.html#notationDecl(java.lang.String,%20java.lang.String,%20java.lang.String)
+        // but how does it know the notation system ID is really a URL?
+        assertTrue(internalSubset.indexOf("<!ENTITY picture SYSTEM ") > 0);
+        assertTrue(internalSubset.indexOf("picture.jpg\" NDATA JPEG>") > 0);
+        assertTrue(internalSubset.indexOf("<!NOTATION JPEG SYSTEM ") > 0);
+        assertTrue(internalSubset.indexOf("image/jpeg\">") > 0);
+    }
+    
+    
     // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
     // and possibly other parsers. I've reported the bug in Xerces,
     // and it should be fixed in Xerces 2.6.
