@@ -378,7 +378,8 @@ public class BaseURITest extends XOMTestCase {
         // In UTF-8 %ce%a9
         String base = "http://www.example.com/" + omega;
         Element root = new Element("test");
-        root.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", base));;
+        root.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", base));
         assertEquals("http://www.example.com/%CE%A9", root.getBaseURI());
         
     }
