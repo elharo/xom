@@ -126,7 +126,7 @@ public final class XSLTransform {
      * </p>
      */
     private Templates   templates;  
-    private NodeFactory factory = new NodeFactory();  
+    private NodeFactory factory;  
     
     
     // I could use one TransformerFactory field instead of local
@@ -178,7 +178,35 @@ public final class XSLTransform {
      *      is not syntactically correct XSLT
      */ 
     public XSLTransform(Document stylesheet) throws XSLException {
+        this(stylesheet, new NodeFactory()); 
+    }
+
+
+    /**
+     * <p>
+     * Creates a new <code>XSLTransform</code> by
+     * reading the stylesheet from the supplied document.
+     * The supplied factory will be used to create all nodes
+     * in the result tree, so that a transform can create 
+     * instances of subclasses of the standard XOM classes. 
+     * Because an XSL transformation generates a list of nodes rather
+     * than a document, the factory's <code>startMakingDocument</code> 
+     * and <code>finishMakingDocument</code> methods are not called.
+     * </p>
+     * 
+     * @param stylesheet document containing the stylesheet
+     * @param factory the factory used to build nodes in the result tree
+     * 
+     * @throws XSLException when the supplied document
+     *      is not syntactically correct XSLT
+     */ 
+    public XSLTransform(Document stylesheet, NodeFactory factory) 
+      throws XSLException {
+        
         this(new XOMSource(stylesheet));
+        if (factory == null) this.factory = new NodeFactory(); 
+        else this.factory = factory;
+        
     }
 
 
@@ -288,6 +316,8 @@ public final class XSLTransform {
      * 
      * @param factory the node factory used to construct
      *     nodes in the output tree
+     * @deprecated As of beta 5, replaced by 
+     *     {@link #XSLTransform(Document,NodeFactory)}
      */
     public void setNodeFactory(NodeFactory factory) {
         
