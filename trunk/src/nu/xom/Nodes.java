@@ -42,7 +42,7 @@ import java.util.List;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1d6
  *
  */
 public final class Nodes {
@@ -66,10 +66,17 @@ public final class Nodes {
      * </p>
      * 
      * @param node the node to insert in the list
+     * 
+     * @throws NullPointerException if <code>node</code> is null
      */
     public Nodes(Node node) {
+        
+        if (node == null) {
+            throw new NullPointerException("Nodes content must be non-null");
+        }
         nodes = new ArrayList(1);
         nodes.add(node);
+        
     }
     
     
@@ -102,7 +109,7 @@ public final class Nodes {
      * 
      * @return the node at the specified position
      * 
-     * @throws <code>IndexOutOfBoundsException</code> if index is  
+     * @throws IndexOutOfBoundsException if <code>index</code> is  
      *     negative or greater than or equal to the size of the list
      */
     public Node get(int index) {
@@ -137,10 +144,14 @@ public final class Nodes {
      * @param node the node to insert
      * @param index the position at which to insert the node
      * 
-     * @throws <code>IndexOutOfBoundsException</code> if index is  
+     * @throws IndexOutOfBoundsException if <code>index</code> is  
      *     negative or strictly greater than the size of the list
+     * @throws NullPointerException if <code>node</code> is null
      */
     public void insert(Node node, int index) {
+        if (node == null) {
+            throw new NullPointerException("Nodes content must be non-null");
+        }
         nodes.add(index, node);   
     }
     
@@ -151,8 +162,13 @@ public final class Nodes {
      * </p>
      * 
      * @param node the node to add to the list
+     * 
+     * @throws NullPointerException if <code>node</code> is null
      */
     public void append(Node node) {
+        if (node == null) {
+            throw new NullPointerException("Nodes content must be non-null");
+        }
         nodes.add(node);
     }
 
