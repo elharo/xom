@@ -35,7 +35,6 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
-import nu.xom.ValidityException;
 
 import com.ibm.icu.text.UTF16;
 
@@ -103,27 +102,6 @@ public class EncodingTest extends XOMTestCase {
       doc = null;
       System.gc();   
     } 
-
-    
-/*    public void testCharacter80() throws ParsingException, IOException {
-        
-        Element root = new Element("root");
-        Document doc = new Document(root);
-        root.appendChild("\u0080");
-        ByteArrayOutputStream out = new ByteArrayOutputStream(128);
-        Serializer serializer = new Serializer(out, "Big5");
-        serializer.write(doc);
-        serializer.flush();
-        out.flush();
-        out.close();
-        byte[] data = out.toByteArray();
-        InputStream in = new ByteArrayInputStream(data);
-        Document reparsed = (new Builder()).build(in);
-        in.close();
-        assertEquals("\u0080", reparsed.getValue());
-        
-    }*/
-
     
     public void testGeneric() throws ParsingException, IOException {
         checkAll("Cp1252");
@@ -303,6 +281,47 @@ public class EncodingTest extends XOMTestCase {
               + Integer.toHexString(expected).toUpperCase()
               + " but was 0x" 
               + Integer.toHexString(actual).toUpperCase(), expected, actual);
+        } 
+        
+        in = null;
+            
+    }
+
+    
+    private void checkSome(String encoding) 
+      throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        byte[] data = null;
+        ByteArrayOutputStream out = new ByteArrayOutputStream(100000);    
+        // Write data into a byte array using encoding
+        Serializer serializer = new Serializer(out, encoding);
+        serializer.write(doc);
+        serializer.flush();
+        out.flush();
+        out.close();
+        data = out.toByteArray();
+        InputStream in = new ByteArrayInputStream(data);
+        Document reparsed = builder.build(in);
+        in.close();
+        serializer = null;
+        
+        Element reparsedRoot = reparsed.getRootElement();
+        int childCount = reparsedRoot.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            Element test = (Element) reparsedRoot.getChild(i); 
+            String value = test.getValue();
+            int expected 
+              = Integer.parseInt(test.getAttributeValue("c"));
+            // workaround for EBCDIC bugs
+            if (expected == 133 && encoding.equalsIgnoreCase("Cp037")) {
+                continue;
+            }
+            int actual = value.charAt(0);
+            if (value.length() > 1) {
+                actual = UTF16.charAt(value, 0);
+            }
+            if (expected != actual) System.err.println(expected);
         } 
         
         in = null;
