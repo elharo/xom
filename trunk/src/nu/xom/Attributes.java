@@ -111,11 +111,11 @@ final class Attributes {
         int size = this.size();
         for (int i = 0; i < size; i++) {
             Attribute a = (Attribute) attributes.get(i);
-            if (a.getNamespacePrefix().equals(prefix) 
-              && !(a.getNamespaceURI().equals(namespaceURI))) {
-                throw new NamespaceConflictException(
-                 "Prefix of " + attribute.getQualifiedName() 
-                 + " conflicts with " + a.getQualifiedName());
+            if (a.getNamespacePrefix().equals(prefix)) {
+              if (a.getNamespaceURI().equals(namespaceURI)) return;
+              throw new NamespaceConflictException(
+                "Prefix of " + attribute.getQualifiedName() 
+                + " conflicts with " + a.getQualifiedName());
             }   
         }
         
@@ -181,7 +181,7 @@ final class Attributes {
         Attributes result = new Attributes();
         int size = attributes.size();
         result.attributes.ensureCapacity(size);
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size; i++) {
             result.attributes.add(this.get(i).copy());
         }
         return result;
