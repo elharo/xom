@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -304,7 +304,8 @@ abstract class TextWriter {
         }
         else {  
             out.write(c);
-            column++;
+            // don't increment column for high surrogate, only low surrogate
+            if (c < 0xd800 || c > 0xDBFF) column++; 
             lastCharacterWasSpace = false;
             skipFollowingLinefeed = false;
         }            

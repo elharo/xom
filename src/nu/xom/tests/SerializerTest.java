@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -57,13 +57,16 @@ public class SerializerTest extends XOMTestCase {
 
     private Builder parser;
 
+    
     public SerializerTest(String name) {
         super(name);
     }
 
+    
     protected void setUp() {
        parser = new Builder();  
     }
+    
     
     public void testCDATASectionEndDelimiter() throws IOException {
         Element root = new Element("test");
@@ -76,6 +79,7 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.indexOf("]]&gt;") > 0);
     }
 
+    
     public void testXMLSpacePreserve() throws IOException {
         Element root = new Element("test");
         root.addAttribute(
@@ -786,6 +790,33 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(doc);
         String result = out.toString("ISO-8859-1");
         assertTrue(result, result.indexOf("&#x1D11E;") > 12);
+    }
+    
+    
+    public void testSurrogatePairCountsAsOneCharacterForColumnCount() 
+      throws IOException {        
+        Element root = new Element("r");
+        root.appendChild("\uD834\uDD1E");
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new ColumnSerializer(out);
+        serializer.write(doc);
+    }
+    
+    private static class ColumnSerializer extends Serializer {
+     
+        ColumnSerializer(OutputStream out) {
+            super(out);
+        }
+        
+        public void write(Document doc) throws IOException {
+            for (int i = 0; i < doc.getChildCount(); i++) {
+                writeChild(doc.getChild(i)); 
+            }       
+            super.flush();
+            assertEquals(8, super.getColumnNumber());
+        }   
+        
     }
     
     public void testEscapeAttributeValue() throws IOException {        
@@ -1577,8 +1608,6 @@ public class SerializerTest extends XOMTestCase {
         
     }
 
-    // need to add tests for serialization of doctypes with and without
-    // system and public IDs and internal DTD subsets????
 
     public void testSerializeDocTypeWithSystemID() 
       throws IOException {
@@ -1592,6 +1621,7 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.indexOf("<!DOCTYPE b SYSTEM \"example.dtd\">") > 0);         
     }
 
+    
     public void testSerializeDocTypeWithPublicAndSystemID() 
       throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
