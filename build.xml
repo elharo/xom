@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0d23"/>
+    <property name="version" value="1.0d24"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -61,9 +61,9 @@ to http://www.xom.nu/
 
     <property name="xml-apis.jar"   value="${lib.dir}/xmlParserAPIs.jar"/>
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
-    <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
+    <property name="junit.jar"       value="${lib.dir}/junit.jar"/>
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"    value="${lib.dir}/servlet.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
@@ -76,13 +76,19 @@ to http://www.xom.nu/
       <pathelement location="${parser.jar}"/>
       <pathelement location="${normalizer.jar}"/>
       <pathelement location="${servlet.jar}"/>
-      <pathelement location="${junit.jar}"/>
     </path>
 
     <path id="run.class.path">
-      <path refid="compile.class.path"/>
+      <pathelement location="${xml-apis.jar}"/>
+      <pathelement location="${parser.jar}"/>
+      <pathelement location="${normalizer.jar}"/>
       <pathelement location="${xom-core}"/>
       <pathelement location="${xslt.jar}"/>
+    </path>
+    
+   <path id="test.class.path">
+      <path refid="run.class.path"/>
+      <pathelement location="${junit.jar}"/>
     </path>
     
   </target>
@@ -190,7 +196,7 @@ XOM Build file
   <target name="zip" depends="jar, javadoc" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, clover_html/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
@@ -201,7 +207,7 @@ XOM Build file
   <target name="tar" depends="jar, javadoc" description="Build tar file for distro">
     <tar destfile="${dist.dir}/${name}-${version}.tar">
       <tarfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, clover_html/**, xom.gif data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
@@ -235,7 +241,7 @@ XOM Build file
     <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
       <sysproperty key="org.xml.sax.driver" value="org.apache.parsers.SAXParser"/> 
       <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xmlParserAPIs.jar"/> 
-      <classpath refid="run.class.path" />
+      <classpath refid="test.class.path" />
       <arg value="nu.xom.tests.XOMTests"/> 
     </java>
   </target>
@@ -272,7 +278,7 @@ XOM Build file
   </target>
   
  
-  <!-- This task requires the ANT optional.jar -->
+  <!-- This task requires the ANT optional.jar and junit.jar to be installed in ANT_HOME/lib-->
   <target name="clovertest" depends="compile" description="Run JUnit tests with clover.jar in classpath">
     <junit printsummary="on" fork="no">
        <classpath refid="run.class.path" />
