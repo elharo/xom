@@ -187,23 +187,18 @@ final class Verifier {
      * @throws MalformedURIException if this is not a legal URI
      */
     static void checkURI(String uri) {
-        checkIRIOrURI(uri, true);
-    }
-
-
-    private static void checkIRIOrURI(String iri, boolean checkForURI) {
-        // IRIs can be null or empty
-        if ((iri == null) || iri.length() == 0) {
+        // URIs can be null or empty
+        if ((uri == null) || uri.length() == 0) {
             return;
         }
 
         int leftBrackets = 0;
         int rightBrackets = 0;
-        for (int i = 0; i < iri.length(); i++) {
-            int test = iri.charAt(i);
+        for (int i = 0; i < uri.length(); i++) {
+            int test = uri.charAt(i);
             if (test >= 0xD800 && test <= 0xDBFF) { 
                 try {
-                    test = decodeSurrogatePair(test, iri.charAt(i+1));
+                    test = decodeSurrogatePair(test, uri.charAt(i+1));
                     i++; // increment past low surrogate
                 }
                 catch (Exception ex) {
@@ -211,7 +206,7 @@ final class Verifier {
                 }
             }  // end if 
             
-            if (checkForURI && !isURICharacter(test)) {
+            if (!isURICharacter(test)) {
                 String msgNumber = "0x" + Integer.toHexString(test);
                 if (test <= 0x09) {
                     msgNumber = "0x0" + Integer.toHexString(test);
@@ -219,30 +214,22 @@ final class Verifier {
                 throw new MalformedURIException("URIs cannot contain "
                   + msgNumber);                
             }
-            else if (!isIRICharacter(test)) {                
-                String msgNumber = "0x" + Integer.toHexString(test);
-                if (test <= 0x09) {
-                    msgNumber = "0x0" + Integer.toHexString(test);
-                } 
-                throw new MalformedURIException("IRIs cannot contain "
-                  + msgNumber);
-            } // end if
             if (test == '%') { 
             // must be followed by two hexadecimal digits
                    try {
-                       char firstDigit = iri.charAt(i+1);
-                       char secondDigit = iri.charAt(i+2);
+                       char firstDigit = uri.charAt(i+1);
+                       char secondDigit = uri.charAt(i+2);
                        if (!isHexDigit(firstDigit) 
                         || !isHexDigit(secondDigit)) {
                            throw new MalformedURIException(
-                            "Percent signs in IRIs must be followed "
+                            "Percent signs in URIs must be followed "
                             + "by exactly two hexadecimal digits.");    
                        }
           
                    }
                    catch (StringIndexOutOfBoundsException ex) {
                        throw new MalformedURIException(
-                        "Percent signs in IRIs must be followed by "
+                        "Percent signs in URIs must be followed by "
                         + "exactly two hexadecimal digits.");    
                    }
             }
@@ -272,8 +259,8 @@ final class Verifier {
         
         if (leftBrackets == 1) { 
             // We have exactly one left and one right bracket
-            String ip6Address = iri.substring(
-              iri.indexOf('[')+1, iri.indexOf(']')
+            String ip6Address = uri.substring(
+              uri.indexOf('[')+1, uri.indexOf(']')
             );
             checkIP6Address(ip6Address);
         }
@@ -1287,61 +1274,6 @@ final class Verifier {
         // for IPv6 addresses
         if (c == '[') return true;
         if (c == ']') return true;
-        return false;
-    } 
-
-    /**
-     * <p>
-     * This is a utility function for determining 
-     * whether a specified Unicode character
-     * is legal in an IRI references as determined by 
-     * http://www.w3.org/International/iri-edit/draft-duerst-iri.html
-     * </p>
-     * 
-     * @param c <code>char</code> to check for IRI 
-     *          reference compliance.
-     * @return true if it's allowed, false otherwise.
-     * 
-     */
-    private static boolean isIRICharacter(int c) {
-        
-        if (c < ' ')     return false; // control characters not allowed
-        if (c <  0x80)   return isURICharacter(c);
-        if (c <= 0xD7FF) return true;
-        if (c <  0xF900) return false;
-        if (c <= 0xFDCF) return true;
-        if (c <  0xFDF0) return false;
-        if (c <= 0xFFEF) return true;
-        
-        if (c <  0x10000) return false;
-        if (c <= 0x1FFFD) return true;
-        if (c <  0x20000) return false;
-        if (c <= 0x2FFFD) return true;
-        if (c <  0x30000) return false;
-        if (c <= 0x3FFFD) return true;
-        if (c <  0x40000) return false;
-        if (c <= 0x4FFFD) return true;
-        if (c <  0x50000) return false;
-        if (c <= 0x5FFFD) return true;
-        if (c <  0x60000) return false;
-        if (c <= 0x6FFFD) return true;
-        if (c <  0x70000) return false;
-        if (c <= 0x7FFFD) return true;
-        if (c <  0x80000) return false;
-        if (c <= 0x8FFFD) return true;
-        if (c <  0x90000) return false;
-        if (c <= 0x9FFFD) return true;
-        if (c <  0xA0000) return false;
-        if (c <= 0xAFFFD) return true;
-        if (c <  0xB0000) return false;
-        if (c <= 0xBFFFD) return true;
-        if (c <  0xC0000) return false;
-        if (c <= 0xCFFFD) return true;
-        if (c <  0xD0000) return false;
-        if (c <= 0xDFFFD) return true;
-        if (c <  0xE1000) return false;
-        if (c <= 0xEFFFD) return true;
-
         return false;
     } 
 
