@@ -85,17 +85,14 @@ public class BuilderTest extends XOMTestCase {
     
     private File inputDir = new File("data");
 
+    
     // Custom parser to test what happens when parser supplies 
     // malformed data
-    private static class CustomReader implements XMLReader {
+    private static class CustomReader extends XMLFilterImpl {
         
         protected ContentHandler handler;
      
-        public void parse(String url) throws SAXException {}
-
-        public boolean getFeature(String uri) {
-            return false;
-        }
+        public void parse(String url) {}
 
         public void setFeature(String uri, boolean value) {}
         
@@ -107,37 +104,12 @@ public class BuilderTest extends XOMTestCase {
             this.handler = handler;
         }
         
-        public DTDHandler getDTDHandler() {
-            return null;
-        }
-
-        public void setDTDHandler(DTDHandler handler) {
-        }
-
-        public EntityResolver getEntityResolver() {
-            return null;
-        }
-        
-        public void setEntityResolver(EntityResolver resolver) {}
-
-        public ErrorHandler getErrorHandler() {
-            return null;
-        }
-
-        public void setErrorHandler(ErrorHandler handler) {}
-
         public void parse(InputSource in) throws SAXException  {
             handler.startDocument();
             handler.startElement("87", "87", "87", new AttributesImpl());
             handler.endElement("87", "87", "87");
             handler.endDocument();  
         }
-
-        public Object getProperty(String uri) {
-            return null;
-        }
-
-        public void setProperty(String uri, Object value) {}
         
     }
     
@@ -295,7 +267,6 @@ public class BuilderTest extends XOMTestCase {
             XMLReader parser = new DoNothingReader();
             Builder builder = new Builder(parser);
             Document doc = builder.build("http://www.example.org/");
-            System.err.println(doc.toXML());
             fail("built from bad data");
         }
         catch (ParsingException success) {
@@ -335,7 +306,6 @@ public class BuilderTest extends XOMTestCase {
             XMLReader parser = new EndOnlyReader();
             Builder builder = new Builder(parser);
             Document doc = builder.build("http://www.example.org/");
-            System.out.println(doc.toXML());
             fail("built from bad data");
         }
         catch (ParsingException success) {
