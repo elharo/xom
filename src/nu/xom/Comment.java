@@ -79,6 +79,24 @@ public class Comment extends Node {
         return result;
     }
 
+    
+    /**
+     * <p>
+     * Returns the value of this comment as defined by XPath 1.0. 
+     * The XPath string-value of a comment node is the string 
+     * content of the node, not including the initial  
+     * <code>&lt;--</code> and closing <code>--&gt;</code>.
+     * </p>
+     * 
+     * @return the content of the comment
+     * 
+     * @see nu.xom.Node#getValue()
+     */
+    public final String getValue() {
+        return data;
+    }
+
+    
     /**
      * <p>
      * Sets the content of this <code>Comment</code> object 
@@ -127,8 +145,7 @@ public class Comment extends Node {
             } 
             
         }
-        checkValue(data);
-        // Is <!----> a legal comment? Yes it is. 
+        checkValue(data); 
         this.data = data;
         
     }
@@ -152,33 +169,16 @@ public class Comment extends Node {
     
     /**
      * <p>
-     * Returns the value of this comment as defined by XPath 1.0. 
-     * The XPath string-value of a comment node is the string 
-     * content of the node, not including the initial  
-     * <code>&lt;--</code> and closing <code>--&gt;</code>.
-     * </p>
-     * 
-     * @return the content of the comment
-     * 
-     * @see nu.xom.Node#getValue()
-     */
-    public final String getValue() {
-        return data;
-    }
-
-    
-    /**
-     * <p>
      * Throws <code>IndexOutOfBoundsException</code> because 
-     * leaf nodes do not have children.
+     * comments do not have children.
      * </p>
      * 
-     * @return never returns because leaf nodes do not have children;
+     * @return never returns because comments do not have children;
      *     Always throws an exception.
      * 
      * @param position the index of the child node to return
      * 
-     * @throws IndexOutOfBoundsException because leaf nodes 
+     * @throws IndexOutOfBoundsException because comments 
      *     do not have children
      */
     public final Node getChild(int position) {
@@ -189,7 +189,7 @@ public class Comment extends Node {
     
     /**
      * <p>
-     * Returns 0 because leaf nodes do not have children.
+     * Returns 0 because comments do not have children.
      * </p>
      * 
      * @return zero
@@ -199,6 +199,7 @@ public class Comment extends Node {
     public final int getChildCount() {
         return 0;   
     }
+    
     
     /**
      * <p>
@@ -215,6 +216,7 @@ public class Comment extends Node {
         return new Comment(data);
     }
 
+    
     /**
      * <p>
      *   Returns a <code>String</code> containing the actual XML
@@ -248,6 +250,7 @@ public class Comment extends Node {
      * @see java.lang.Object#toString()
      */
     public final String toString() {
+        
         String value = getValue();
         if (value.length() <= 40) {
             return "[" + getClass().getName() + ": " + value + "]";
@@ -255,6 +258,7 @@ public class Comment extends Node {
         
         return "[" + getClass().getName() + ": " 
           + value.substring(0, 35) + "...]";
+        
     }
 
     

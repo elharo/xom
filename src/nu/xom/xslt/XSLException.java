@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -30,7 +30,7 @@ package nu.xom.xslt;
  * </p>
 ` * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class XSLException extends Exception {
@@ -53,7 +53,8 @@ public class XSLException extends Exception {
     
     /**
      * <p>
-     * Creates a new XSLException with the specified detail message.
+     * Creates a new <code>XSLException</code>
+     * with the specified detail message.
      * </p>
      * 
      * @param message information about the cause of the exception

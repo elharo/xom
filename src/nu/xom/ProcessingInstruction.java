@@ -26,7 +26,7 @@ package nu.xom;
 
 /**
  * <p>
- *  Represents an XML processing instruction.
+ *  This class represents an XML processing instruction.
  *  Each processing instruction has two key properties:
  * </p>
  * 
@@ -146,7 +146,7 @@ public class ProcessingInstruction extends Node {
      * <p>
      * Subclasses can override this method to perform additional 
      * checks on the data beyond what XML 1.0 requires.
-     * For example, an XMLStylesheet subclass might throw 
+     * For example, an <code>XMLStylesheet</code> subclass might throw 
      * an exception if the target were not xml-stylesheet.
      * </p>
      * 
@@ -223,16 +223,16 @@ public class ProcessingInstruction extends Node {
     /**
      * <p>
      * Throws <code>IndexOutOfBoundsException</code> because 
-     * leaf nodes do not have children.
+     * processing instructions do not have children.
      * </p>
      * 
-     * @return never returns because leaf nodes do not have children;
-     *     Always throws an exception.
+     * @return never returns because processing instructions do not 
+     *     have children; always throws an exception.
      * 
      * @param position the index of the child node to return
      * 
-     * @throws IndexOutOfBoundsException because leaf nodes 
-     *     do not have children
+     * @throws IndexOutOfBoundsException because processing  
+     *     instructions do not have children
      */
     public final Node getChild(int position) {
         throw new IndexOutOfBoundsException(
@@ -242,7 +242,7 @@ public class ProcessingInstruction extends Node {
     
     /**
      * <p>
-     * Returns 0 because leaf nodes do not have children.
+     * Returns 0 because processing instructions do not have children.
      * </p>
      * 
      * @return zero

@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -31,17 +31,14 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  */
 public class BadParseAttributeException extends XIncludeException {
 
     /**
      * <p>
      * Constructs a <code>BadParseAttributeException</code> with 
-     * the specified detail message. The error message string 
-     * <code>message</code> can later be retrieved by the 
-     * <code>{@link java.lang.Throwable#getMessage}</code>
-     * method of class <code>java.lang.Throwable</code>.
+     * the specified detail message. 
      * </p>
      *
      * @param message the detail message

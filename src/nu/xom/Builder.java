@@ -47,9 +47,8 @@ import org.apache.xerces.impl.Version;
 
 /**
  * <p>
- * The <code>Builder</code> class is responsible  
- * for creating XOM <code>Document</code> objects 
- * from a URL, file, string, or input stream by reading   
+ * This class is responsible for creating XOM <code>Document</code> 
+ * objects  from a URL, file, string, or input stream by reading   
  * an XML document. A SAX parser is used to read the   
  * document and report any well-formedness errors.
  * </p>
@@ -102,8 +101,8 @@ public class Builder {
     /**
      * <p>
      * Creates a <code>Builder</code> that uses the default node 
-     * factory and chooses among any available SAX2 parsers in the
-     * following order:
+     * factory and chooses among any available SAX2 parsers. 
+     * In order of preference, it looks for:
      * </p>
      * 
      * <ol>
@@ -296,8 +295,8 @@ public class Builder {
     
     /**
      * <p>
-     * Creates a <code>Builder</code> based 
-     * on the specified SAX parser <code>XMLReader</code>.
+     * Creates a <code>Builder</code> that uses 
+     * the specified SAX <code>XMLReader</code>.
      * Custom SAX features and properties such as  
      * schema validation can be set on this <code>XMLReader</code> 
      * before passing it to this method.
@@ -334,10 +333,9 @@ public class Builder {
 
     /**
      * <p>
-     * Creates a <code>Builder</code> based 
-     * on the specified parser object.
-     * Custom SAX features and properties such 
-     * as schema validation can be set on this
+     * Creates a optionally validating <code>Builder</code> based 
+     * on the specified parser object. Custom SAX features and  
+     * properties such as schema validation can be set on this
      * <code>XMLReader</code> before passing it 
      * to this method.
      * </p>
@@ -361,17 +359,16 @@ public class Builder {
     
     /**
      * <p>
-     * Creates a <code>Builder</code> that reads data
-     * from the specified parser object and constructs new nodes using
-     * the specified factory object. Custom SAX features and properties   
-     * such as schema validation can be set on this 
+     * Creates an optionally validating <code>Builder</code> that reads
+     * data from the specified parser object and constructs new nodes 
+     * using the specified factory object. Custom SAX features and    
+     * properties such as schema validation can be set on this 
      * <code>XMLReader</code> before passing it to this method.
      * </p>
      * 
      * <p>
-     * If the validate argument is true, then a validity error
-     * while parsing will cause a fatal error; that is, 
-     * it will throw a <code>ParsingException</code>
+     * If the <code>validate</code> argument is true, then a validity 
+     * error while parsing will throw a <code>ParsingException</code>.
      * </p>
      * 
      * @param parser the SAX2 <code>XMLReader</code> that parses 
@@ -515,8 +512,7 @@ public class Builder {
      * Reads the document from an input stream.
      * </p>
      * 
-     * @param in the <code>InputStream</code> from which the 
-     *     document is read
+     * @param in the input stream from which the document is read
      * 
      * @return the parsed <code>Document</code>
      * 
@@ -537,12 +533,11 @@ public class Builder {
 
     /**
      * <p>
-     * Reads the document from an input stream while
-     * allowing a base URI to be specified.
+     * Reads the document from an input stream while specifying 
+     * a base URI (which need not be the stream's actual URI.)
      * </p>
      * 
-     * @param in the <code>InputStream</code> from which the document
-     *    is read.
+     * @param in the input stream from which the document is read
      * @param baseURI the base URI for this document
      * 
      * @return the parsed <code>Document</code>
@@ -585,7 +580,7 @@ public class Builder {
      * location of the file. 
      * </p>
      * 
-     * @param in the <code>File</code> from which the document is read
+     * @param in the file from which the document is read
      * 
      * @return the parsed <code>Document</code>
      * 
@@ -643,12 +638,12 @@ public class Builder {
     
     /**
      * <p>
-     * Reads the document from an input stream while
-     * allowing a base URI to be specified.
+     * Reads the document from a character stream while
+     * specifying a base URI.
      * </p>
      * 
-     * @param in the <code>Reader</code> from which the document 
-     *   is read
+     * @param in the reader from which the document 
+     *     is read
      * @param baseURI the base URI for this document
      * 
      * @return  the parsed <code>Document</code>
@@ -657,7 +652,8 @@ public class Builder {
      * @throws IOException       if an I/O error such as a bad disk 
      *     prevents the document from being completely read
      * @throws ValidityException if a validity error is detected. This 
-     *   is only thrown if the builder has been instructed to validate.
+     *     is only thrown if the builder has been instructed to 
+     *     validate.
      */
     public Document build(Reader in, String baseURI) 
       throws ParsingException, ValidityException, IOException {
@@ -672,12 +668,12 @@ public class Builder {
     
     /**
      * <p>
-     * Reads the document from the contents of a <code>String</code>.
+     * Reads the document from the contents of a string.
      * </p>
      * 
-     * @param document the <code>String</code> that contains 
+     * @param document the string that contains 
      *      the XML document. 
-     * @param baseURI the base URI for this document.
+     * @param baseURI the base URI for this document
      * 
      * @return  the parsed <code>Document</code>
      * 
@@ -721,7 +717,7 @@ public class Builder {
      * Reads the document from a SAX <code>InputSource</code>.
      * </p>
      * 
-     * @param in the <code>InputSource</code> from 
+     * @param in the input source from 
      *     which the document is read. 
      * 
      * @return the parsed <code>Document</code>

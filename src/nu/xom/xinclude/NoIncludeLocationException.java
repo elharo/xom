@@ -31,7 +31,7 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  */
 public class NoIncludeLocationException extends XIncludeException {
 
@@ -39,10 +39,7 @@ public class NoIncludeLocationException extends XIncludeException {
     /**
      * <p>
      * Constructs a <code>NoIncludeLocationException</code> with the 
-     * specified message. The message string <code>message</code> 
-     * can be retrieved later by the 
-     * <code>{@link java.lang.Throwable#getMessage}</code>
-     * method of class <code>java.lang.Throwable</code>.
+     * specified message.
      * </p>
      *
      * @param message indicates the specific problem

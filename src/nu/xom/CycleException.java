@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -30,14 +30,17 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  *
  */
 public class CycleException extends IllegalAddException {
 
     /**
-     * <p>Creates a new CycleException with a detail message.</p>
+     * <p>
+     *  Creates a new <code>CycleException</code>
+     *  with a detail message.
+     * </p>
      * 
      * @param message indicates the specific problem
      */
@@ -47,7 +50,7 @@ public class CycleException extends IllegalAddException {
 
     /**
      * <p>
-     * Creates a new CycleException with a detail message
+     * Creates a new <code>CycleException</code> with a detail message
      * and an underlying root cause.
      * </p>
      * 

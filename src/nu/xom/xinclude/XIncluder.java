@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d24
+ * @version 1.0a1
  *
  */
 public class XIncluder {
@@ -98,12 +98,13 @@ public class XIncluder {
      *     should be resolved
      * 
      * @return copy of the argument <code>Document</code> in which
-     *     all XInclude have been replaced by their referenced content
+     *     all <code>xinclude:include</code> elements
+     *     have been replaced by their referenced content
      * 
      * @throws BadParseAttributeException if an <code>include</code>  
      *     element has a <code>parse</code> attribute with any value 
      *     other than <code>text</code> or <code>parse</code>
-     * @throws InclusionLoopException if this <code>Element</code>  
+     * @throws InclusionLoopException if the document  
      *     contains an XInclude element that attempts to include 
      *     a document in which this element is directly or indirectly 
      *     included.
@@ -119,7 +120,7 @@ public class XIncluder {
      * @throws XIncludeException if the document violates the
      *     syntax rules of XInclude
      * @throws XMLException if resolving an include element would 
-     *      result in a malformed document,
+     *      result in a malformed document
      */
      public static Document resolve(Document in)  
        throws BadParseAttributeException, InclusionLoopException, 
@@ -146,12 +147,13 @@ public class XIncluder {
      *     nodes included from other documents
      * 
      * @return copy of the argument <code>Document</code> in which
-     *     all XInclude have been replaced by their referenced content
+     *     all <code>xinclude:include</code> elements
+     *     have been replaced by their referenced content
      * 
      * @throws BadParseAttributeException if an <code>include</code>  
      *     element has a <code>parse</code> attribute with any value 
      *     other than <code>text</code> or <code>parse</code>
-     * @throws InclusionLoopException if this <code>Element</code>  
+     * @throws InclusionLoopException if the document 
      *     contains an XInclude element that attempts to include 
      *     a document in which this element is directly or indirectly 
      *     included.
@@ -167,7 +169,7 @@ public class XIncluder {
      * @throws XIncludeException if the document violates the
      *     syntax rules of XInclude
      * @throws XMLException if resolving an include element would 
-     *      result in a malformed document,
+     *      result in a malformed document
      */
      public static Document resolve(Document in, Builder builder)  
        throws BadParseAttributeException, InclusionLoopException, 
@@ -190,8 +192,8 @@ public class XIncluder {
      * </p>
      * 
      * <p>
-     * If the inclusion fails for any reason--XInclude syntax
-     * error, missing resource with no fallback, etc.--the document
+     * If the inclusion fails for any reason&mdash;XInclude syntax
+     * error, missing resource with no fallback, etc.&mdash;the document
      * may be left in a partially resolved state.
      * </p>
      * 
@@ -202,7 +204,7 @@ public class XIncluder {
      *     element has a <code>parse</code> attribute
      *     with any value other than <code>text</code> 
      *     or <code>parse</code>
-     * @throws InclusionLoopException if this <code>Element</code> 
+     * @throws InclusionLoopException if the document 
      *     contains an XInclude element that attempts to include a  
      *     document in which this element is directly or indirectly 
      *     included

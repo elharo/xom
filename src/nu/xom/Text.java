@@ -166,15 +166,15 @@ public class Text extends Node {
     /**
      * <p>
      * Throws <code>IndexOutOfBoundsException</code> because 
-     * leaf nodes do not have children.
+     * texts do not have children.
      * </p>
      * 
-     * @return never returns because leaf nodes do not have children;
-     *     Always throws an exception.
+     * @return never returns because texts do not have children;
+     *     always throws an exception.
      * 
      * @param position the index of the child node to return
      * 
-     * @throws IndexOutOfBoundsException because leaf nodes 
+     * @throws IndexOutOfBoundsException because texts 
      *     do not have children
      */
     public final Node getChild(int position) {
@@ -185,7 +185,7 @@ public class Text extends Node {
     
     /**
      * <p>
-     * Returns 0 because leaf nodes do not have children.
+     * Returns 0 because texts do not have children.
      * </p>
      * 
      * @return zero
