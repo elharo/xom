@@ -30,7 +30,7 @@ import nu.xom.Text;
 /**
  * 
  * <p>
- *  Basic tests for the Text class.
+ *  Basic tests for the <ocde>Text</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -85,7 +85,6 @@ public class TextTest extends XOMTestCase {
           fail("Should raise an IllegalDataException");
         }
         catch (IllegalDataException success) {}
-
 
     }
 
@@ -226,5 +225,13 @@ public class TextTest extends XOMTestCase {
         );          
         
     }
+
+    // Make sure carriage returns are escaped properly by toXML()
+    public void testCarriageReturnInText() {
+        Text text = new Text("data\rdata");
+        String xml = text.toXML();
+        assertEquals("data&#x0D;data", xml);   
+    }
+
 
 }
