@@ -362,8 +362,10 @@ final class Verifier {
      * @throws IllegalDataException if this is not legal data
      */
     public static void checkProcessingInstructionData(String data) {
-        // Check basic XML name rules first
+        
+        // Check basic XML character rules first
         checkCharacterData(data);
+        if (data.length() == 0) return;
 
         if (data.indexOf("?>") >= 0) {
             throw new IllegalDataException(
@@ -373,6 +375,13 @@ final class Verifier {
         if (data.indexOf('\r') >= 0) {
             throw new IllegalDataException(
               "Processing instructions cannot contain carriage returns"
+            );
+        }
+        
+        char first = data.charAt(0);
+        if (first == ' ' || first == '\n' || first == '\t') {
+            throw new IllegalDataException(
+              "Processing instruction data cannot contain " +              "leading white space"
             );
         }
 
