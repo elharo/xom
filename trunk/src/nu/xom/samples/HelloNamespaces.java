@@ -22,11 +22,8 @@
 
 package nu.xom.samples;
 
-import java.io.IOException;
-
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Serializer;
 
 /**
  * 
@@ -46,18 +43,7 @@ public class HelloNamespaces {
         Element root = new Element("root", "http://www.xom.nu");    
         root.appendChild(new Element("NoNamespace"));
         Document doc = new Document(root);
-    
-        try {
-            Serializer serializer = new Serializer(System.out, "ISO-8859-1");
-            serializer.write(doc);
-            serializer.flush();
-        }
-        catch (IOException ex) { 
-            System.out.println(
-              "Due to an IOException, the parser could not check " 
-              + args[0]
-            ); 
-        }
+        System.out.println(doc.toXML());
     
     }
 
