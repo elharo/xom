@@ -75,7 +75,7 @@ to http://www.xom.nu/
     <property name="resolver.jar"   value="${lib2.dir}/resolver.jar"/>
     <property name="dom4j.jar"      value="${lib2.dir}/dom4j-1.5.1.jar"/>
 
-    <property name="excludes"      value="**/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb"/>
+    <property name="excludes"      value=".DS_Store, **/.DS_Store, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb"/>
 
     <property name="test.outputFormat" value="xml"/>    
     
@@ -320,7 +320,7 @@ XOM Build file
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." excludes="${excludes}"/>   
       <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
-        excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
+        excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, **/.DS_Store"/>   
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
       <zipfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>   
     </zip>
@@ -332,7 +332,7 @@ XOM Build file
       <tarfileset prefix="XOM" dir="." 
         excludes="${excludes}"/>   
       <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
-        excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
+        excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, **/.DS_Store"/>   
       <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
       <tarfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>   
     </tar>
