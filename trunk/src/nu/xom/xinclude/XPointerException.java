@@ -30,19 +30,11 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  */
 class XPointerException extends Exception {
 
     private Throwable cause = null;
-
-    /**
-     * <p>
-     * Constructs an <code>XPointerException</code> 
-     * with <code>null</code> as its error detail message.
-     * </p>
-     */
-    public XPointerException() {}
 
     /**
      * <p>
@@ -93,7 +85,7 @@ class XPointerException extends Exception {
         return this.cause;  
     }
 
-    // null is insufficient for detemrin unset cause.
+    // null is insufficient for detecting an unset cause.
     // The cause may be set to null whicn may not then be reset.
     private boolean causeSet = false;
 

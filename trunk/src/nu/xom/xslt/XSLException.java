@@ -30,21 +30,12 @@ package nu.xom.xslt;
  * </p>
 ` * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  *
  */
 public class XSLException extends Exception {
 
     private Throwable cause;
-
-    /**
-     * <p>
-     * Creates a new XSLException.
-     * </p>
-     */
-    public XSLException() {
-        super();
-    }
 
     /**
      * <p>
@@ -71,7 +62,7 @@ public class XSLException extends Exception {
         super(message);
     }
 
-    // null is insufficient for detemrin unset cause.
+    // null is insufficient for detecting an unset cause.
     // The cause may be set to null whicn may not then be reset.
     private boolean causeSet = false;
 
@@ -90,7 +81,7 @@ public class XSLException extends Exception {
      *
      * @param cause the root cause of this exception
      * 
-     * @return this <code>XMLException</code>
+     * @return this <code>XSLException</code>
      * 
      * @throws IllegalArgumentException if the cause is this exception
      *   (An exception cannot be its own cause.)

@@ -31,19 +31,11 @@ package nu.xom.xinclude;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  */
 public class XIncludeException extends Exception {
 
     private String uri;
-
-    /**
-     * <p>
-     * Constructs an <code>XIncludeException</code> 
-     * with <code>null</code> as its error detail message.
-     * </p>
-     */
-    public XIncludeException() {}
 
     /**
      * <p>
@@ -125,7 +117,7 @@ public class XIncludeException extends Exception {
         return this.cause;  
     }
 
-    // null is insufficient for detemrin unset cause.
+    // null is insufficient for detecting an unset cause.
     // The cause may be set to null whicn may not then be reset.
     private boolean causeSet = false;
 
@@ -141,7 +133,7 @@ public class XIncludeException extends Exception {
      *
      * @param cause the root cause of this exception
      * 
-     * @return this <code>XMLException</code>
+     * @return this <code>XIncludeException</code>
      * 
      * @throws IllegalArgumentException if the cause is this exception
      *   (An exception cannot be its own cause.)

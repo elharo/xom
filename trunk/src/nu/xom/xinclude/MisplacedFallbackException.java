@@ -31,18 +31,9 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  */
 public class MisplacedFallbackException extends XIncludeException {
-
-    /**
-     * <p>
-     * Constructs a <code>MisplacedFallbackException</code> 
-     * with <code>null</code>
-     * as its error detail message.
-     * </p>
-     */
-    public MisplacedFallbackException() {}
 
     /**
      * <p>
