@@ -59,7 +59,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  */
 public class NodeFactory {
@@ -151,7 +151,7 @@ public class NodeFactory {
      * root element, the list returned must contain exactly one 
      * <code>Element</code> object. The simplest way to check this 
      * is testing if <code>element.getParent() instanceof 
-     * Document<code>.
+     * Document</code>.
      * </p>
      * 
      * <p>
