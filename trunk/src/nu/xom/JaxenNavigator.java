@@ -38,6 +38,7 @@ import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -114,7 +115,7 @@ class JaxenNavigator extends DefaultNavigator {
     }
     
     
-    // recursion????
+    // ????remove recursion
     public static Element findByID(Element top, String id) {
         
         if (hasID(top, id)) return top;
@@ -170,23 +171,27 @@ class JaxenNavigator extends DefaultNavigator {
     
     public Iterator getNamespaceAxisIterator(Object contextNode) {
         
-        System.out.println("Iterating namespaces");
         try {
             Element element = (Element) contextNode;
             // ???? can probably avoid this list copy
             Map bindings = element.getNamespacePrefixesInScope();
             Iterator iterator = bindings.keySet().iterator();
-            List result = new ArrayList(bindings.size());
+            List result = new ArrayList(bindings.size()+1);
+            // ???? write unit test for this
+            result.add(new NamespaceNode("xml", "http://www.w3.org/XML/1998/namespace"));
+
             while (iterator.hasNext()) {
                 String prefix = (String) iterator.next();
-                NamespaceNode ns = new NamespaceNode(prefix, (String) bindings.get(prefix));
-                result.add(ns);
+                String uri = (String) bindings.get(prefix);
+                if (! "".equals(prefix) || ! "".equals(uri)) {
+                    NamespaceNode ns = new NamespaceNode(prefix, uri);
+                    result.add(ns);
+                }
             }
             return result.iterator();
         }
         catch (ClassCastException ex) {
-            // ???? can this actually happen
-            return new EmptyIterator();
+            return Collections.EMPTY_LIST.iterator();
         }
     }
     
@@ -194,7 +199,7 @@ class JaxenNavigator extends DefaultNavigator {
         
         Node n = (Node) contextNode;
         Node parent = n.getParent();
-        if (parent == null) return new EmptyIterator();
+        if (parent == null) return Collections.EMPTY_LIST.iterator();
         else {
             List l = new ArrayList(1);
             l.add(parent);
@@ -231,40 +236,25 @@ class JaxenNavigator extends DefaultNavigator {
         
         try {
             Element element = (Element) contextNode;
-            if (element.attributes == null) return new EmptyIterator();
+            if (element.attributes == null) {
+                return Collections.EMPTY_LIST.iterator();
+            }
             else return element.attributes.iterator();
         }
         catch (ClassCastException ex) {
-            return new EmptyIterator();
+            return Collections.EMPTY_LIST.iterator();
         }
         
     }
     
     
-    private static class EmptyIterator implements Iterator {
-
-        public boolean hasNext() {
-            return false;
-        }
-
-        public Object next() {
-            return null;
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }  
-        
-    }
-    
-
     public Iterator getChildAxisIterator(Object o) {
         
         if (o instanceof ParentNode) {
             return new ChildIterator((ParentNode) o);
         }
         else {
-            return new EmptyIterator();
+            return Collections.EMPTY_LIST.iterator();
         }
         
     }
