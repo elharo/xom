@@ -38,7 +38,7 @@ class NonVerifyingHandler extends XOMHandler {
       String qualifiedName, org.xml.sax.Attributes attributes) {
         
         flushText();
-        Element element = Element.build(qualifiedName, namespaceURI);
+        Element element = Element.build(qualifiedName, namespaceURI, localName);
         if (parent == document) { // root
             document.setRootElement(element);
             inProlog = false;
