@@ -34,7 +34,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a2
  *
  */
 public class NamespacesTest extends XOMTestCase {
@@ -318,6 +318,7 @@ public class NamespacesTest extends XOMTestCase {
 
     
     public void testAddSameNamespaceDeclaration() {
+        
         Element e = new Element("test", "http://www.example.com");
        
         try {
@@ -331,6 +332,7 @@ public class NamespacesTest extends XOMTestCase {
         e.addNamespaceDeclaration("", "http://www.example.com");
         assertEquals("http://www.example.com", e.getNamespaceURI(""));
         assertEquals(1, e.getNamespaceDeclarationCount());
+        
     } 
 
     
@@ -583,6 +585,7 @@ public class NamespacesTest extends XOMTestCase {
 
     
     public void testCountNamespaces() {
+        
         Element html = new Element("html");
         assertEquals(1, html.getNamespaceDeclarationCount());
         html.setNamespaceURI("http://www.w3.org/1999/xhtml");
@@ -597,7 +600,8 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals(4, html.getNamespaceDeclarationCount());
         html.addAttribute(new Attribute("xml:space", 
           "http://www.w3.org/XML/1998/namespace", "default"));
-        assertEquals(4, html.getNamespaceDeclarationCount());        
+        assertEquals(4, html.getNamespaceDeclarationCount());   
+        
     }
 
     
@@ -620,9 +624,11 @@ public class NamespacesTest extends XOMTestCase {
     
     
     public void testNumbersAllowedInSchemes() {
+        
         String namespace = "u0123456789:schemespecificdata";
         Element e = new Element("test", namespace);
         assertEquals(namespace, e.getNamespaceURI());
+        
     }
 
     
@@ -646,6 +652,7 @@ public class NamespacesTest extends XOMTestCase {
 
     
     public void testNumbersCantStartSchemes() {
+        
         String namespace = "8uri:schemespecificdata";
         try {
             new Element("test", namespace);
@@ -654,6 +661,25 @@ public class NamespacesTest extends XOMTestCase {
         catch (MalformedURIException success) {
             assertNotNull(success.getMessage());
         }
+        
+    }
+
+    
+    /** This is a very funny test case. RFC 1738 allows URIs like
+     *  <code>prospero://host.dom//pros/name</code> but RFC 2396 and
+     *  RFC2396bis forbid them.
+     */
+    public void testPathCantStartWithDoubleSlash() {
+        
+        String namespace = "prospero://host.dom//pros/name";
+        try {
+            new Element("test", namespace);
+            fail("Allowed URI with path containing double slash");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+        
     }
 
     
@@ -736,7 +762,6 @@ public class NamespacesTest extends XOMTestCase {
           "wais://wais.example.com:78/database", "WAIS://wais.example.com:78/database",
           "file://vms.host.edu/disk$user/my/notes/note12345.txt", 
           "FILE://vms.host.edu/disk$user/my/notes/note12345.txt",
-          "prospero://host.dom//pros/name", "PROSPERO://host.dom:1525//pros/name",
           "z39.50s://melvyl.ucop.edu/cat", "Z39.50S://melvyl.ucop.edu/cat", 
           "z39.50r://melvyl.ucop.edu/mags?elecworld.v30.n19", 
           "Z39.50R://melvyl.ucop.edu/mags?elecworld.v30.n19", 
@@ -764,7 +789,7 @@ public class NamespacesTest extends XOMTestCase {
         }
         
     }
-    
+
     
     public void testPercentEscapes() {
 

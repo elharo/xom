@@ -650,7 +650,7 @@ public class BaseURITest extends XOMTestCase {
             fail("Allowed relative base URI");
         }
         catch (MalformedURIException success) {
-            assertTrue(success.getMessage().startsWith("Base"));
+            assertTrue(success.getMessage().toLowerCase().indexOf("absolute") >= 0);
         }
         
     }
