@@ -100,6 +100,23 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testSelfAxisWithTextChildren() {
+        
+        Element parent = new Element("parent");
+        Node child1 = new Text("1");
+        Node child2 = new Text("2");
+        Node child3 = new Text("3");
+        Node child4 = new Text("4");
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        parent.appendChild(child3);
+        parent.appendChild(child4);
+        Nodes result = child1.query("self::text()");
+        assertEquals(4, result.size());
+        
+    }
+    
+
     public void testSelfAxisWithTextChildAndNoParent() {
         
         Node child = new Text("child");
