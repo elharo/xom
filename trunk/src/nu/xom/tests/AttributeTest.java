@@ -36,7 +36,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b5
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -614,6 +614,15 @@ public class AttributeTest extends XOMTestCase {
         assertEquals("valueGreen", 
           element.getAttributeValue("cd", "http://www.example.org"));
 
+    }
+    
+    
+    public void testXMLLangCanBeEmptyString() {
+        // per section 2.12 of the XML Rec
+        
+        Attribute a = new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "");
+        assertEquals("", a.getValue());
+        
     }
 
     
