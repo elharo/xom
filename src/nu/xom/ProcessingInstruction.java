@@ -41,7 +41,7 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d14
+ * @version 1.0d21
  *
  */
 public class ProcessingInstruction extends LeafNode {
@@ -139,6 +139,8 @@ public class ProcessingInstruction extends LeafNode {
      * 
      * @param data the data to set
      * 
+     * @throws IllegalDataException if <code>data</code> is null
+     *      or otherwise not legal XML processingInstrcution data
      * @throws XMLException if the proposed data does not satisfy 
      *   the local constraints
      */
@@ -210,7 +212,7 @@ public class ProcessingInstruction extends LeafNode {
      * 
      * @see nu.xom.Node#copy()
      */
-    public final Node copy() {
+    public Node copy() {
         return new ProcessingInstruction(target, data);
     }
 

@@ -51,7 +51,7 @@ import java.util.TreeSet;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d21
  *
  */
 public class Element extends ParentNode {
@@ -1427,7 +1427,7 @@ public class Element extends ParentNode {
      * 
      * @see nu.xom.Node#copy()
      */
-    public final Node copy() {
+    public Node copy() {
         return new Element(this);
     }
 
