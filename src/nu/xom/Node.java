@@ -498,25 +498,6 @@ public abstract class Node {
     }
 
 
-    private static void process(List in, Nodes out, Text text) {
-
-        Iterator iterator = in.iterator();
-        while (iterator.hasNext()) {
-            Object next = iterator.next();
-            if (next instanceof JaxenNavigator.XOMList) {
-                List l = (List) next;
-                if (l.contains(text)) {
-                    out.append(text);
-                    l.remove(text);
-                    if (l.isEmpty()) in.remove(l);
-                    return;
-                }
-            }
-        }
-        
-    }
-
-
     /**
      * <p>
      * Returns the nodes selected by the XPath expression in the 
