@@ -103,8 +103,7 @@ class XOMHandler
         }
         else {  // root
             element = factory.makeRootElement(qualifiedName, namespaceURI);
-            if (element == null) {
-            // null root; that's a No-No
+            if (element == null) { // null root; that's a no-no
                 throw new NullPointerException(
                     "Factory failed to create root element."
                 );   
