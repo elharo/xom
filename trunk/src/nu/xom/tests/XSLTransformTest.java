@@ -1091,8 +1091,7 @@ public class XSLTransformTest extends XOMTestCase {
                                     // not relevant within XOM
                                 } 
                                 else {
-                                    assertEquals(
-                                      id + "\r\n" + actualResult.toXML(),
+                                    assertEquals("Problem with " + id,
                                       expectedResult, actualResult);
                                 }
                             }
@@ -1130,38 +1129,9 @@ public class XSLTransformTest extends XOMTestCase {
                                 continue;
                             }
                             
-                            // XXX try removing the special cases; known, reported bugs in Xalan
                             if ("axes_axes62".equals(id)) {  
                                 // Bug 12690
                                 // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12690
-                                continue;
-                            }
-                            else if ("numberformat_numberformat45".equals(id)
-                              || "numberformat_numberformat46".equals(id)) {
-                                // Bug 27938
-                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27938
-                                // This one appears to have been fixed in the most recent Xalan
-                                // though not the on bundled with the JDK 1.4
-                                continue;
-                            } 
-                            else if ("select_select85".equals(id)) {
-                                // Bug 27939
-                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27939
-                                // This one appears to have been fixed in the most recent Xalan
-                                // though not the on bundled with the JDK 1.4
-                                continue;
-                            }
-                            
-                            // test suite bugs
-                            if ("impincl_impincl27".equals(id)) {  
-                                // Uses a file URI I'm not sure is legal
-                                // <xsl:import href="file:fragments/imp27b.xsl"/>
-                                // This was allowed in 1808 but disallowed in 2396
-                                continue;
-                            }
-                            
-                            // discretionary cases
-                            if ("output_output87".equals(id)) {  
                                 continue;
                             }
                             
