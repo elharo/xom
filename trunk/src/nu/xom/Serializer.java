@@ -49,7 +49,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d21
  *
  */
 public class Serializer {
@@ -270,8 +270,7 @@ public class Serializer {
             escaper.writeMarkup(attribute.getQualifiedName());
             escaper.writeMarkup("=\"");
             escaper.writeAttributeValue(attribute.getValue());
-            escaper.writeMarkup("\"");
-            
+            escaper.writeMarkup("\"");  
         }       
         
         // Namespaces
@@ -326,7 +325,7 @@ public class Serializer {
                 write(element.getChild(i)); 
             }
             escaper.decrementIndent();
-            if (escaper.getIndent() > 0) {
+            if (escaper.isIndenting() && !escaper.isPreserveSpace()) {
                 Node firstChild = element.getChild(0);
                 if (!(firstChild.isText()) 
                   || firstChild.getValue().trim().equals("")) {
@@ -685,21 +684,26 @@ public class Serializer {
      *   property, unless, of course, an 
      *   <code>xml:space="default"</code> attribute overrides the
      *   <code>xml:space="preserve"</code> attribute.
-     *   Caution: this may not be working yet????
      * </p>
      * 
      * <p>
      *   The default value for indent is 0; that is, the default is
      *   not to add or subtract any white space from the source
-     *   document.
+     *   document.  
      * </p>
-     * 
-     * What happens when this is set to a negative value????
      * 
      * @param indent the number of spaces to indent 
      *      each successive level of the hierarchy
+     * 
+     * @throws IllegalArgumentException if indent is less than zero
+     * 
      */
     public void setIndent(int indent) {
+        if (indent < 0) {
+            throw new IllegalArgumentException(
+              "Indent cannot be negative"
+            );
+        }
         escaper.setIndent(indent);
     }
 
@@ -759,7 +763,7 @@ public class Serializer {
     /**
      * <p>
      * Sets the suggested maximum line length for this serializer.
-     * Setting this to 0 indicates that no automatic wrapping is to be 
+     * Setting this to 0 indicates that no automatic wrapping is to be
      * performed. When a line approaches this length, the serializer 
      * begins looking for opportunities to break the line. Generally 
      * it will break on any ASCII white space character (tab, carriage 
@@ -774,6 +778,7 @@ public class Serializer {
      * <p>
      * The default value for max line length is 0, which is  
      * interpreted as no maximum line length. 
+     * Setting this to a negative value just sets it to 0. 
      * </p>
      * 
      * <p>
@@ -791,10 +796,7 @@ public class Serializer {
      *   regardless of the setting of the this property, unless,  
      *   of course, an <code>xml:space="default"</code> attribute 
      *   overrides the <code>xml:space="preserve"</code> attribute.
-     *   Caution: this may not be working yet????
      * </p>
-     * 
-     * What happens when this is set to a negative value????
      * 
      * @param maxLength the suggested maximum line length
      */
