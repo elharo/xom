@@ -385,6 +385,9 @@ public abstract class Node {
      */
     public final Nodes query(String xpath, XPathContext namespaces) {
         
+        if (this.isDocType()) {
+            throw new XPathException("Can't use XPath on a DocType");
+        }
         DocumentFragment frag = null;
         
         Node root = getRoot();
