@@ -86,7 +86,7 @@ public class SAXConverterTest extends XOMTestCase {
     }
 
     public void testSetAndGetLexicalHandler() {
-        LexicalHandler handler = new BasicLexicalHandler();
+        LexicalHandler handler = new XMLWriter();
         converter.setLexicalHandler(handler);
         assertEquals(handler, converter.getLexicalHandler()); 
         
@@ -187,19 +187,6 @@ public class SAXConverterTest extends XOMTestCase {
       throws IOException, SAXException, ParsingException {
         Document doc = builder.build("http://www.rddl.org/");
         convertAndCompare(doc);
-    }
-    
-    
-    static class BasicLexicalHandler implements LexicalHandler {
-
-        public void endCDATA() {}
-        public void endDTD() {}
-        public void startCDATA() {}
-        public void comment(char[] ch, int start, int length) {}
-        public void endEntity(String name) {}
-        public void startEntity(String name) {}
-        public void startDTD(String name, String publicId, String systemId) {}
-        
     }
 
 }
