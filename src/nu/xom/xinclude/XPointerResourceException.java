@@ -25,37 +25,39 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * <code>XPointerResourceException</code> is a checked exception thrown
- * when no XPointer part identifies a subresource. This corresponds to 
+ * Thrown when no XPointer part identifies a subresource. This  
+ * corresponds to 
  * <a href="http://www.w3.org/TR/xptr-framework/#scheme">section 3.3 
  * of the XPointer Framework</a> which states, 
  * "If no pointer part identifies subresources, it is an error."
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  */
 class XPointerResourceException extends XPointerException {
 
+    
     /**
      * <p>
      * Constructs an <code>XPointerResourceException</code> with the 
      * specified detail message. 
      * </p>
      * 
-     * @param message the detail message.
+     * @param message a string indicating the specific problem
      */
     XPointerResourceException(String message) {
         super(message);
     }
 
+    
     /**
      * <p>
      * Constructs an <code>XPointerResourceException</code> with the 
      * specified detail message and initial cause. 
      * </p>
      *
-     * @param message the detail message
+     * @param message a string indicating the specific problem
      * @param cause the initial exception which caused this 
      *     <code>XPointerException</code>
      */
@@ -63,4 +65,5 @@ class XPointerResourceException extends XPointerException {
         super(message, cause);
     }
 
+    
 }

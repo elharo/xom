@@ -25,27 +25,28 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * <code>XPointerException</code> is the generic superclass
- * for all checked exceptions that may be thrown as a result
+ * The generic superclass for all checked exceptions thrown as a result
  * of a violation of the XPointer grammar.
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a4
  */
 class XPointerSyntaxException extends XPointerException {
 
+    
     /**
      * <p>
      * Constructs an <code>XPointerSyntaxException</code> with the  
      * specified detail message.
      * </p>
      * 
-     * @param message the detail message.
+     * @param message a string indicating the specific problem
      */
     public XPointerSyntaxException(String message) {
         super(message);
     }
+    
     
     /**
      * <p>
@@ -53,7 +54,7 @@ class XPointerSyntaxException extends XPointerException {
      * specified detail message and initial cause. 
      * </p>
      *
-     * @param message the detail message
+     * @param message a string indicating the specific problem
      * @param cause the initial exception which caused this 
      *     <code>XPointerSyntaxException</code>
      */
@@ -61,4 +62,5 @@ class XPointerSyntaxException extends XPointerException {
         super(message, cause);
     }
 
+    
 }

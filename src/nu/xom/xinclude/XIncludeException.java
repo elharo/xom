@@ -43,7 +43,7 @@ public class XIncludeException extends Exception {
      * detail message.
      * </p>
      * 
-     * @param message the detail message
+     * @param message a string indicating the specific problem
      */
     public XIncludeException(String message) {
         super(message);
@@ -59,7 +59,7 @@ public class XIncludeException extends Exception {
      * method of class <code>java.lang.Throwable</code>.
      * </p>
      * 
-     * @param message the detail message
+     * @param message a string indicating the specific problem
      * @param cause   the initial cause of the exception
      */
     public XIncludeException(String message, Throwable cause) {

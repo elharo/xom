@@ -25,10 +25,10 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * A <code>BadHTTPHeaderException</code> is thrown when
- * an <code>accept</code> or <code>accept-language</code>
- * attribute contains C0 control characters (including linefeed,
- * tab, or carriage return) or non-ASCII characters.
+ * Indicates that an <code>accept</code> or 
+ * <code>accept-language</code> attribute contains C0 control 
+ * characters (including linefeed, tab, or carriage return) 
+ * or non-ASCII characters.
  * </p>
  *
  * @author Elliotte Rusty Harold

@@ -25,9 +25,8 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * A <code>BadParseAttributeException</code> is thrown when
- * the <code>parse</code> attribute has some value other than
- * <code>xml</code> or <code>text</code>.
+ * Indicates that the <code>parse</code> attribute has some value other 
+ * than <code>xml</code> or <code>text</code>.
  * </p>
  *
  * @author Elliotte Rusty Harold
