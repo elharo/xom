@@ -18,11 +18,30 @@ RELAX NG?
 add an XPath based NodeFactory that only instantiates nodes that
 satisfy a certain pattern
 
+A util package with the most useful samples and contribs
+
+Do Serializer and canonicalizer need setOutputStream methods?
+
+should Builder have an option to cache all external entities so it doesn't keep reloading them, perhaps via a SAX EntityResolver.
+
+A getAttributeValueInScope() method that searches up the tree for the nearest 
+ancestor element with the specified attribute. This would be useful for xml:lang, xml:space, and many other cases!!!!
+
+Should Builder/NodeFactory have a build(Document) method that allows one to pass an existing document through a node factory without reserializing? 
+
+Should/could the TrAX source and result, Jaxen adapter and so forth go public in the converters package?
+
 1.1:
 -------
 
+Optimize normalization
+
+test running in unsigned java web start
+
 add a NodeFactory section to the tutorial for processing big documents
 
+check if we've accidentally sealed in jaxen
+what should the manifest say about that?
 
 could/should I strip the junit.jar of clases XOM doesn't use?
 
@@ -39,11 +58,7 @@ Profile AllTests (or maybe FastTests).
 
 Add Class-Path entries to manifest
 
-Do Serializer and canonicalizer need setOutputStream methods?
-
 Add more XPath samples based on XOM
-
-A util package with the most useful samples and contribs
 
 Figure out a way to allow users to configure different text storage algorithms,
 all stored as byte arrays.
@@ -64,13 +79,6 @@ Should XSLTransform have a constructor that takes a TrAX
 Templates or Transformer object to allow
 additional properties to be configured
 
-should Builder have an option to cache all external entities so it doesn't keep reloading them, perhaps via a SAX EntityResolver.
-
-A getAttributeValueInScope() method that searches up the tree for the nearest 
-ancestor element with the specified attribute. This would be useful for xml:lang, xml:space, and many other cases!!!!
-
-Should Builder/NodeFactory have a build(Document) method that allows one to pass an existing document through a node factory without reserializing? 
-
 A FastSerializer that does no indenting, no line-breaking, no character sets
 except UTF-8 and UTF-16, no normalization, and does not use TextWriter
 
@@ -78,8 +86,6 @@ consider using a WeakHashMap to hold all mappings of nodes to base URIs
 
 Could Builder hold a cache of interned strings to use while building?
 Does NUX BinaryXMLCODEC do something like this?
-
-Should/could the TrAX source and result, Jaxen adapter and so forth go public in the converters package?
 
 
 1.0.1:
@@ -143,6 +149,9 @@ For 1.5 use ant.java.version property and an equals condition
 Wolfgang's ant build file for smaller vs. faster jars (Text class)
 
 Add tools page to web site (Ant, tagSoup, Clover, etc.)
+
+cvs -d :pserver:elharo@cvs.dev.java.net:/cvs rtag XOM_11a3 xom
+
 
 Backport Fixes to make in 1.0.1
 
