@@ -76,7 +76,9 @@ public class SerializerTest extends XOMTestCase {
         Element root = new Element("test");
         root.addAttribute(
           new Attribute(
-            "xml:space", "http://www.w3.org/XML/1998/namespace", "preserve"));
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "preserve"));
         String value =  
           "This is a long sentence with plenty of opportunities for " +          "breaking from beginning to end.";
         root.appendChild(value);    
@@ -92,7 +94,9 @@ public class SerializerTest extends XOMTestCase {
         Element root = new Element("test");
         root.addAttribute(
           new Attribute(
-            "xml:space", "http://www.w3.org/XML/1998/namespace", "preserve"));
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "preserve"));
         Element child1 = new Element("preserve");
         String value = 
           "This is a long sentence with plenty of opportunities for " +          "breaking from beginning to end.";
@@ -102,8 +106,11 @@ public class SerializerTest extends XOMTestCase {
         root.appendChild(child2);
         child2.addAttribute(
           new Attribute(
-            "xml:space", "http://www.w3.org/XML/1998/namespace", "default"));
-        String value2 = "This is another very long sentence with plenty" +            " of opportunities for breaking from beginning to end.";
+            "xml:space", 
+            "http://www.w3.org/XML/1998/namespace", 
+            "default"));
+        String value2 = 
+            "This is another very long sentence with plenty" +            " of opportunities for breaking from beginning to end.";
         child2.appendChild(value2);
 
         String value3 = 
@@ -506,7 +513,7 @@ public class SerializerTest extends XOMTestCase {
         Document doc = new Document(root);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out, "UTF-8");
-        serializer.preserveBaseURI(true);
+        serializer.setPreserveBaseURI(true);
         serializer.write(doc);
         String result = out.toString("UTF-8");
         assertTrue(result.indexOf("<root") > 1);
@@ -657,7 +664,7 @@ public class SerializerTest extends XOMTestCase {
         assertEquals(original, reparsed);
     }
     
-    public void testCarriageReturnInAttributeValueWithDefaultOptions() 
+    public void testCarriageReturnInAttributeValueWithDefaultOptions()
       throws IOException, ParsingException {        
         Element root = new Element("root");
         root.addAttribute(new Attribute("test", "\r"));
