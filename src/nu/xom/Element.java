@@ -1262,101 +1262,73 @@ public class Element extends ParentNode {
      * 
      * @see Node#getBaseURI()
      */
-    public final String getBaseURI() {
-        
-        // XXX remove recursion
-        // Check to see if this element has an xml:base
-        // attribute. If so, this takes precedence over
-        // everything else.
-        String actualBase = getActualBaseURI();
-        ParentNode parent = getParent();
-        Attribute baseAttribute = this.getAttribute("base", 
-          "http://www.w3.org/XML/1998/namespace");
+     public String getBaseURI() {
 
-        // This element has an xml:base attribute
-        if (baseAttribute != null) {
-            String baseIRI = baseAttribute.getValue();
-            // The base attribute contains an IRI, not a URI.
-            // Thus the first thing we have to do is escape it
-            // to convert illegal characters to hexadecimal escapes.
-            String base = URIUtil.toURI(baseIRI);
-            if (legalURI(base)) {
+        String baseURI = "";
+        String sourceEntity = this.getActualBaseURI();
+        
+        ParentNode current = this;
+        
+        while (true) {
+            String currentEntity = current.getActualBaseURI();
+            if (sourceEntity != null && sourceEntity.length() != 0 
+              && sourceEntity != currentEntity) {
+                if (sourceEntity != null) {
+                    baseURI = URIUtil.absolutize(sourceEntity, baseURI);
+                }
+                break;
+            }
             
+            if (current.isDocument()) {
+                if (currentEntity != null) {
+                    baseURI = URIUtil.absolutize(currentEntity, baseURI);
+                }
+                break;
+            }
+            Attribute baseAttribute = ((Element) current).getAttribute("base", 
+              "http://www.w3.org/XML/1998/namespace");
+            if (baseAttribute != null) {
+                String baseIRI = baseAttribute.getValue();
+                // The base attribute contains an IRI, not a URI.
+                // Thus the first thing we have to do is escape it
+                // to convert illegal characters to hexadecimal escapes.
+                String base = URIUtil.toURI(baseIRI);
                 if ("".equals(base)) {
-                    // Look for nearest actual base URI
-                    while (parent != null) {
-                        String parentActualBase = parent.getActualBaseURI();
-                        if (parentActualBase == null || "".equals(parentActualBase)) {
-                            parent = parent.getParent();
-                        }
-                        else {
-                            return parentActualBase;
-                        }
-                    }
-                    return "";
+                    baseURI = getEntityURI();
+                    break;
                 }
-                else if (!URIUtil.isAbsolute(base)) {
-                    // absolutize the URI if possible
-                    if (parent != null) {                   
-                        String parentActualBase = parent.getActualBaseURI();
-                        // can element be considered to come from same entity as its parent?
-                        if (actualBase == null || actualBase.equals("") || actualBase.equals(parentActualBase)) {
-                            try {
-                                String parentBase = parent.getBaseURI();
-                                if (!nu.xom.URIUtil.isOpaque(parentBase)) {
-                                    base = URIUtil.absolutize(parentBase, base);    
-                                }
-                            }
-                            catch (MalformedURIException ex) {
-                                return "";
-                            }
-                        }
-                        else {
-                            try {
-                                if (!URIUtil.isOpaque(actualBase)) {
-                                    base = URIUtil.absolutize(actualBase, base);    
-                                } 
-                            }
-                            catch (MalformedURIException ex) {
-                                return "";
-                            }
-                        }
-                    }
+                else if (legalURI(base)) {
+                    if ("".equals(baseURI)) baseURI = base;
+                    else if (URIUtil.isOpaque(base)) break; 
+                    else baseURI = URIUtil.absolutize(base, baseURI);
+                    if (URIUtil.isAbsolute(base)) break;
                 }
-                
-                try {
-                    Verifier.checkAbsoluteURIReference(base);
+            }
+            current = current.getParent();
+            if (current == null) {
+                if (currentEntity != null) {
+                    baseURI = URIUtil.absolutize(currentEntity, baseURI);
                 }
-                catch (MalformedURIException ex) {
-                    base = "";
-                }
-                
-                return base;
-                
+                break;
             }
         }
         
-        // This element does not have an xml:base attribute
-        // 2. If this node doesn't have a parent,
-        //    then return its own base URI.
-        if (parent == null) {
-            if (actualBase != null) return actualBase;
-            return "";
+        if (URIUtil.isAbsolute(baseURI)) return baseURI;
+        return "";
+            
+    }
+    
+    
+    private String getEntityURI() {
+     
+        ParentNode current = this;
+        while (current != null) {
+            if (current.actualBaseURI != null 
+              && current.actualBaseURI.length() != 0) {
+                return current.actualBaseURI;
+            }
+            current = current.getParent();
         }
-               
-        // 3. This element does not declare a base URI,
-        //    so it uses its parent's base URI.
-        if (actualBase == null || "".equals(actualBase)) return parent.getBaseURI();      
-               
-        // 4. If the parent is loaded from the same entity,
-        //    then the parent's xml:base attributes count.
-        if (actualBase.equals(parent.getActualBaseURI())) {
-            return parent.getBaseURI();      
-        }
-               
-        // The parent is loaded from a different entity.
-        // Therefore just return the actual base.
-        if (actualBase != null) return actualBase;
         return "";
         
     }
