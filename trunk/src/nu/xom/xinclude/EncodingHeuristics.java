@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -36,13 +36,14 @@ import java.io.InputStream;
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0b11
  */
 class EncodingHeuristics {
 
   // No instances allowed
   private EncodingHeuristics() {}
 
+  
   /**
     * <p>
     * This utility method uses a variety of heuristics to
@@ -63,9 +64,8 @@ class EncodingHeuristics {
         in.mark(1024);
         
         try {
-          // Lots of things can go wrong here. If any do, I just 
-          // return null so that we'll fall back on the encoding 
-          // declaration or the UTF-8 default.
+          // Lots of things can go wrong here. If any do,  
+          // return "UTF-8" as the default.
             int byte1 = in.read();
             int byte2 = in.read();
             if (byte1 == 0xFE && byte2 == 0xFF) {
@@ -185,6 +185,7 @@ class EncodingHeuristics {
         
     }
 
+    
     private static String findEncodingDeclaration(String declaration)
         throws IOException {
           int position = declaration.indexOf("encoding") + 8;
