@@ -496,11 +496,24 @@ public class Canonicalizer {
 
         private boolean visiblyUtilized(Element parent, String prefix, String uri) {
 
-            for (int i = 0; i < parent.getNamespaceDeclarationCount(); i++) {
-                String pfx = parent.getNamespacePrefix(i);
-                if (prefix.equals(pfx)) {
-                    return noOutputAncestorUsesPrefix(parent, prefix, uri);
+            boolean match = false;
+            String pfx = parent.getNamespacePrefix();
+            String local = parent.getNamespaceURI();
+            if (prefix.equals(pfx) && local.equals(uri)) {
+                match = true;
+            }
+            else {
+                for (int i = 0; i < parent.getAttributeCount(); i++) {
+                    pfx = parent.getAttribute(i).getNamespacePrefix();
+                    if (prefix.equals(pfx)) {
+                        match = true;
+                        break;
+                    }
                 }
+            }
+        
+            if (match) {
+                return noOutputAncestorUsesPrefix(parent, prefix, uri);
             }
             
             return false;

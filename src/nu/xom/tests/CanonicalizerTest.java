@@ -80,6 +80,46 @@ public class CanonicalizerTest extends XOMTestCase {
     }
 
     
+    public void testExclusiveDoesntRenderUnusedPrefix() throws IOException {
+     
+        Element pdu = new Element("n0:tuck", "http://a.example");
+        pdu.addNamespaceDeclaration("pre", "http://www.example.org/");
+   
+        String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
+    public void testExclusiveDoesntRenderUnusedPrefixFromUnincludedAttribute() throws IOException {
+     
+        Element pdu = new Element("n0:tuck", "http://a.example");
+        pdu.addAttribute(new Attribute("pre:foo", "http://www.example.org/", "test"));
+   
+        String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc, "//* | //namespace::node()", null);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
     public void testWithComments() throws ParsingException, IOException {
       
         File tests = input;
@@ -829,27 +869,6 @@ public class CanonicalizerTest extends XOMTestCase {
     }
         
 
-    public void testExclusiveDoesntRenderUnusedPrefix() throws IOException {
-     
-        Element pdu = new Element("n0:tuck", "http://a.example");
-        pdu.addNamespaceDeclaration("pre", "http://www.example.org/");
-   
-        String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
-        
-        XPathContext context = new XPathContext("n1", "http://b.example");
-        Document doc = new Document(pdu);
-        canonicalizer.write(doc, "//. | //@* | //namespace::*", context);  
-        
-        byte[] result = out.toByteArray();
-        out.close();
-        String s = new String(out.toByteArray(), "UTF8");
-        assertEquals(expected, s);
-        
-    }
-        
-
     public void testExclusive22a() throws ParsingException, IOException {
      
         Builder builder = new Builder();
@@ -877,16 +896,20 @@ public class CanonicalizerTest extends XOMTestCase {
     public void testExclusive22b() throws ParsingException, IOException {
      
         Builder builder = new Builder();
-        String input = "<n2:pdu xmlns:n1='http://example.com' xmlns:n2='http://foo.example' xml:lang='fr' xml:space='retain'><n1:elem2 xmlns:n1='http://example.net' xml:lang='en'><n3:stuff xmlns:n3='ftp://example.org'/></n1:elem2></n2:pdu>";
+        String input = "<n2:pdu xmlns:n1='http://example.com' "
+            + "xmlns:n2='http://foo.example' xml:lang='fr' xml:space='retain'>"
+            + "<n1:elem2 xmlns:n1='http://example.net' xml:lang='en'>"
+            + "<n3:stuff xmlns:n3='ftp://example.org'/></n1:elem2></n2:pdu>";
         Document doc = builder.build(input, null);
         
-        String expected = "<n1:elem2 xmlns:n1=\"http://example.net\" xml:lang=\"en\">" +
-                "<n3:stuff xmlns:n3=\"ftp://example.org\"></n3:stuff></n1:elem2>";
+        String expected = "<n1:elem2 xmlns:n1=\"http://example.net\" xml:lang=\"en\">"
+            + "<n3:stuff xmlns:n3=\"ftp://example.org\"></n3:stuff></n1:elem2>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
         
         XPathContext context = new XPathContext("n1", "http://example.net");
-        canonicalizer.write(doc, " (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context);  
+        canonicalizer.write(doc, 
+          " (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context);  
         
         byte[] result = out.toByteArray();
         out.close();
