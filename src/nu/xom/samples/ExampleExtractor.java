@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -45,7 +45,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0a1
  *
  */
 public class ExampleExtractor {
@@ -69,8 +69,9 @@ public class ExampleExtractor {
             }  
         } // end chapters loop
 
-  }
+    }
 
+    
     private static void extractExample(Element example, int chapter) 
       throws IOException {
 
@@ -93,16 +94,21 @@ public class ExampleExtractor {
         System.out.println(file);
         FileOutputStream fout = new FileOutputStream(file);
         Writer out = new OutputStreamWriter(fout, "UTF-8");
-        // Buffering almost always helps performance a lot
-        out = new BufferedWriter(out);
-        out.write(code);
-        // Be sure to flush and close your streams
-        out.flush();
-        out.close();
+        try {
+            // Buffering almost always helps performance a lot
+            out = new BufferedWriter(out);
+            out.write(code);
+            // Be sure to flush and close your streams
+            out.flush();
+        }
+        finally {
+            fout.close();
+        }
     
     }
   
-      public static void main(String[] args) {
+    
+    public static void main(String[] args) {
 
         if (args.length <= 0) {
           System.out.println(
@@ -136,5 +142,6 @@ public class ExampleExtractor {
      
     } // end main
   
+    
 }
   
