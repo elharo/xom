@@ -34,8 +34,12 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import nu.xom.Node;
+import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
+import nu.xom.Text;
 import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.CircularIncludeException;
 import nu.xom.xinclude.MissingHrefException;
@@ -62,7 +66,29 @@ public class XIncludeTest extends XOMTestCase {
     protected void setUp() {        
         builder = new Builder();       
     }
-
+ 
+    
+    public void testIncludeTextWithCustomNodeFactory() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/c2.xml");
+        Builder builder = new Builder(new TextNodeFactory());
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc, builder);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c2.xml")
+        );
+        assertEquals(expectedResult, result);
+        Element root = result.getRootElement();
+        for (int i = 0; i < root.getChildCount(); i++) {
+            Node node = root.getChild(i);
+            if (node instanceof Text) {
+                assertTrue(node instanceof TextSubclass);
+            }
+        }
+        
+    }
+    
     
     public void test1() 
       throws ParsingException, IOException, XIncludeException {
@@ -70,8 +96,6 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/test.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
-        // For debugging
-        /* dumpResult(input, result); */
         Document expectedResult = builder.build(
           new File("data/xinclude/output/test.xml")
         );
@@ -86,8 +110,6 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/includefromsamedocumentwithbase.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
-        // For debugging
-        // dumpResult(input, result); 
         Document expectedResult = builder.build(
           new File("data/xinclude/output/includefromsamedocumentwithbase.xml")
         );
@@ -105,8 +127,6 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File("data/xinclude/input/resolvethruxpointer.xml");
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
-        // For debugging
-        // dumpResult(input, result); 
         Document expectedResult = builder.build(
           new File("data/xinclude/output/resolvethruxpointer.xml")
         );
@@ -251,6 +271,27 @@ public class XIncludeTest extends XOMTestCase {
         XMLAssert.assertEquals(expectedResult, result);
         
     } */
+    
+    
+    private static class TextNodeFactory extends NodeFactory {
+        
+        public Nodes makeText(String data) {
+            return new Nodes(new TextSubclass(data));
+        }
+        
+    }
+    
+    private static class TextSubclass extends Text {
+        
+        TextSubclass(String data) {
+            super(data);
+        }
+        
+        public Node copy() {
+            return new TextSubclass(this.getValue());
+        }
+        
+    }
     
     
     public void testRecurseWithinSameDocument() 
@@ -415,6 +456,7 @@ public class XIncludeTest extends XOMTestCase {
         }
     }
     
+    
     public void testMissingHref() 
       throws ParsingException, IOException, XIncludeException {
         File input = new File("data/xinclude/input/missinghref.xml");
@@ -545,6 +587,7 @@ public class XIncludeTest extends XOMTestCase {
         */
         
     }
+    
     
     public void testXPointerPureTumbler() 
       throws ParsingException, IOException, XIncludeException {
