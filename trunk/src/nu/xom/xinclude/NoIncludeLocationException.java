@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -25,57 +25,62 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * A <code>MissingHrefException</code> is thrown when
- * an <code>xinclude:include</code> element is missing its 
- * required <code>href</code> attribute.
+ * A <code>NoIncludeLocationException</code> is thrown when
+ * an <code>xinclude:include</code> element has neither an 
+ * <code>href</code> nor an <code>xpointer</code> attribute.
  * </p>
  *
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  */
-public class MissingHrefException extends XIncludeException {
+public class NoIncludeLocationException extends XIncludeException {
 
+    
     /**
      * <p>
-     * Constructs a <code>MissingHrefException</code> with the 
-     * specified detailmessage. The error message string 
-     * <code>message</code> can later be retrieved by the 
+     * Constructs a <code>NoIncludeLocationException</code> with the 
+     * specified message. The message string <code>message</code> 
+     * can be retrieved later by the 
      * <code>{@link java.lang.Throwable#getMessage}</code>
      * method of class <code>java.lang.Throwable</code>.
      * </p>
      *
-     * @param message the detail message.
+     * @param message indicates the specific problem
      */
-    public MissingHrefException(String message) {
+    public NoIncludeLocationException(String message) {
        super(message);
     }
 
+    
     /**
      * <p>
-     * Constructs a <code>MissingHrefException</code> with the 
+     * Constructs a <code>NoIncludeLocationException</code> with the 
      * specified detail message and root cause. 
      * </p>
      * 
-     * @param message the detail message
+     * @param message indicates the specific problem
      * @param cause the initial exception which caused this 
-     *     <code>MissingHrefException</code>
+     *     <code>NoIncludeLocationException</code>
      */
-    public MissingHrefException(String message, Throwable cause) {
+    public NoIncludeLocationException(String message, Throwable cause) {
         super(message);
         initCause(cause);
     }
 
+    
     /**
      * <p>
-     * Creates a new <code>MissingHrefException</code> with a detail 
-     * message, line and column numbers, and a URI of the document
-     * that caused the exception.
+     * Creates a new <code>NoIncludeLocationException</code> with a  
+     * detail message, line and column numbers, and a URI of the 
+     * document that caused the exception.
      * </p>
      * 
      * @param message indicates the specific problem
      * @param uri the URI of the document that caused this exception
      */
-    public MissingHrefException(String message, String uri) {
+    public NoIncludeLocationException(String message, String uri) {
         super(message, uri);
     }
+    
+    
 }
