@@ -109,15 +109,20 @@ public abstract class ParentNode extends Node {
      *     greater than the number of children of this node
      */
     public void insertChild(Node child, int position) {
-        
+        _insertChild(child, position);
+    }
+    
+    
+    // because this method is called from Document constructor and
+    // constructors should not call overridable methods
+    final void _insertChild(Node child, int position) {
         insertionAllowed(child, position);
         if (children == null) children = new ArrayList(1);
         children.add(position, child);
         child.setParent(this);
-
     }
-    
-    
+
+
     abstract void insertionAllowed(Node child, int position);
 
     
