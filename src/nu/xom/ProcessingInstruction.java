@@ -166,7 +166,7 @@ public class ProcessingInstruction extends Node {
      * @param data the data to set
      * 
      * @throws IllegalDataException if <code>data</code> is null
-     *      or otherwise not legal XML processingInstrcution data
+     *      or otherwise not legal XML processing instruction data
      * @throws XMLException if the proposed data does not satisfy 
      *   the local constraints
      */
