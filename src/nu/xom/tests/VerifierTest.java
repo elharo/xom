@@ -47,11 +47,15 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a3
  *
  */
 public class VerifierTest extends XOMTestCase {
-
+ 
+    private final static char[] subdelims = {'!', '$', '&', '\'', '(', ')' , '*', '+', ',', ';', '='};
+    private final static char[] unreserved = {'-', '.', '_', '~'};
+    private final static char[] unwise = {'{', '}', '|', '\\', '^', '[', ']', '`'};
+    private final static char[] delims = {'<', '>', '#', '%', '^', '"'};
     
     public VerifierTest(String name) {
         super(name);
@@ -172,6 +176,545 @@ public class VerifierTest extends XOMTestCase {
     }
     
     
+    public void testAllASCIILettersAllowedInQueryStrings() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 'A'; c <= 'Z'; c++) {
+            String uri = "http://www.example.com/?name=" + c;
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }
+        
+        for (char c = 'a'; c <= 'z'; c++) {
+            String uri = "http://www.example.com/?name=" + c;
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }      
+        
+    }
+    
+    
+    public void testAllASCIIDigitsAllowedInQueryStrings() {
+        
+        Element e = new Element("e");
+        
+        for (char c = '0'; c <= '9'; c++) {
+            String uri = "http://www.example.com/?value=" + c;
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }   
+        
+    }
+    
+    
+    public void testSlashAllowedInQueryString() {
+        
+        Element e = new Element("e");
+        
+        String uri = "http://www.example.com/?path=/home/elharo/docs/";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());
+        
+    }
+    
+    
+    public void testQuestionMarkAllowedInQueryString() {
+        
+        Element e = new Element("e");
+        
+        String uri = "http://www.example.com/?path=?home?elharo?docs?";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());
+        
+    }
+    
+    
+    public void testColonAllowedInQueryString() {
+        
+        Element e = new Element("e");
+        
+        String uri = "http://www.example.com/?path=:home:elharo:docs:";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());
+        
+    }
+    
+    
+    public void testAtSignAllowedInQueryString() {
+        
+        Element e = new Element("e");
+        
+        String uri = "http://www.example.com/?path=@home@elharo@docs@";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());
+        
+    }
+    
+    
+    public void testNonASCIICharactersNotAllowedInQueryStrings() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 128; c <= 1024; c++) {
+            String uri = "http://www.example.com/?value=" + c;
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed unescaped non-ASCII character " + c + " in query string");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testDelimsNotAllowedInQueryStrings() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < delims.length; i++) {
+            String uri = "http://www.example.com/?value=" + delims[i] + "#Must_Use_Fragment_ID";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed delimiter character " + delims[i] + " in query string");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testUnwiseCharactersNotAllowedInQueryStrings() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < unwise.length; i++) {
+            String uri = "http://www.example.com/?value=" + unwise[i];
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed unwise character " + unwise[i] + " in query string");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testUnwiseCharactersNotAllowedInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < unwise.length; i++) {
+            String uri = "http://user" + unwise[i] + "name@www.example.com/?value=" + unwise[i];
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed unwise character " + unwise[i] + " in user info");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testUnwiseCharactersNotAllowedInHost() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < unwise.length; i++) {
+            String uri = "http://u" + unwise[i] + "www.example.com/";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed unwise character " + unwise[i] + " in host");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testDelimsNotAllowedInHost() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < delims.length; i++) {
+            String uri = "http://u" + delims[i] + "www.example.com/#value";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed unwise character " + delims[i] + " in host");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testUnwiseCharactersNotAllowedInPath() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < unwise.length; i++) {
+            String uri = "http://www.example.com/path" + unwise[i] + "/path";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed unwise character " + unwise[i] + " in path");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testAllASCIILettersAllowedInHostNames() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 'A'; c <= 'Z'; c++) {
+            String uri = "http://" + c + ".com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }
+        
+        for (char c = 'a'; c <= 'z'; c++) {
+            String uri = "http://" + c + ".com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }      
+        
+    }
+    
+    
+    public void testAllASCIIDigitsAllowedInHostNames() {
+        
+        Element e = new Element("e");
+        
+        for (char c = '0'; c <= '9'; c++) {
+            String uri = "http://c" + c + ".com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }   
+        
+    }
+    
+    
+    public void testNonASCIICharactersNotAllowedInHostNames() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 128; c <= 1024; c++) {
+            String uri = "http://c" + c + ".com/";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed unescaped non-ASCII character " + c + " in host name");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testAllASCIILettersAllowedInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 'A'; c <= 'Z'; c++) {
+            String uri = "http://" + c + "@c.com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }
+        
+        for (char c = 'a'; c <= 'z'; c++) {
+            String uri = "http://" + c + "@c.com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }      
+        
+    }
+    
+    
+    public void testAllSubDelimsAllowedInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < subdelims.length; i++) {
+            String uri = "http://c" + subdelims[i] + "x@c.com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }  
+        
+    }
+    
+    
+    public void testAllSubDelimsAllowedInPath() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < subdelims.length; i++) {
+            String uri = "http://cc.com/path" + subdelims[i] +".html";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }  
+        
+    }
+    
+    
+    public void testAllUnreservedPunctuationMarksAllowedInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < unreserved.length; i++) {
+            String uri = "http://c" + unreserved[i] + "x@c.com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }  
+        
+    }
+    
+    
+    public void testAllUnreservedPunctuationMarksAllowedInHost() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < unreserved.length; i++) {
+            String uri = "http://c" + unreserved[i] + "xc.com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }  
+        
+    }
+    
+    
+    public void testAllSubDelimsAllowedInQueryString() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < subdelims.length; i++) {
+            String uri = "http://cx@c.com/?name=" + subdelims[i];
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }  
+        
+    }
+    
+    
+    public void testAllSubDelimsAllowedInHost() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < subdelims.length; i++) {
+            String uri = "http://cx" + subdelims[i] + "c.com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }  
+        
+    }
+    
+    
+    public void testAllUnreservedPunctuationMarksAllowedInQueryString() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < unreserved.length; i++) {
+            String uri = "http://cx@c.com/?name=" + unreserved[i];
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }  
+        
+    }
+    
+    
+    public void testAllASCIIDigitsAllowedInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        for (char c = '0'; c <= '9'; c++) {
+            String uri = "http://" + c + "@c.com/";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }   
+        
+    }
+    
+    
+    public void testNonASCIICharactersNotAllowedInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 128; c <= 1024; c++) {
+            String uri = "http://" + c + "@c.com/";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed unescaped non-ASCII character " + c + " in user info");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testDelimCharactersNotAllowedInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        for (int i = 0; i < delims.length; i++) {
+            String uri = "http://c" + delims[i] + "c@c.com/?name=value#fragID";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed delim character " + delims[i] + " in user info");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+    
+    
+    public void testMalformedURI() {
+        
+        Element e = new Element("e");
+    
+        String uri = "http://c#c@c.com/?name=value#fragID";
+        try {
+            e.setNamespaceURI(uri);
+            fail("Allowed http://c#c@c.com/?name=value#fragID as URI");
+        }
+        catch (MalformedURIException success) {
+            assertEquals(uri, success.getData());
+        }
+            
+    }
+
+    
+    public void testFragmentIDContainsQuestionMark() {
+        
+        Element e = new Element("e");
+    
+        String uri = "http://cc@c.com/?name=value#fragID?home/?elharo?";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());
+            
+        uri = "http://cc@c.com/#fragID?name=value";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());
+            
+    }
+
+    
+    public void testFragmentIDContainsFirstColon() {
+        
+        Element e = new Element("e");
+    
+        String uri = "http://c.com/#fragID:home";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());
+            
+        uri = "http://c.com/#fragID:home@eharo.com/somewhere";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());
+            
+    }
+
+    
+    public void testEmptyHostAllowed() {
+        
+        Element e = new Element("e");
+    
+        String uri = "scheme://elharo@:80/data";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());
+            
+    }
+
+    
+    public void testC0ControlsNotAllowedInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 0; c <= ' '; c++) {
+            String uri = "http://" + c + "@c.com/";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed C0 control 0x" + Integer.toHexString(c) + " in user info");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testC0ControlsNotAllowedInPath() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 0; c <= ' '; c++) {
+            String uri = "http://www.example.com/test/" + c + "data/";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed C0 control 0x" + Integer.toHexString(c) + " in path");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testC0ControlsNotAllowedInQueryString() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 0; c <= ' '; c++) {
+            String uri = "http://www.c.com/?name=" + c + "&value=7";
+            try {
+                e.setNamespaceURI(uri);
+                fail("Allowed C0 control 0x" + Integer.toHexString(c) + " in query string");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }   
+        
+    }
+
+    
+    public void testHostNameTooLong() {
+     
+        StringBuffer uri = new StringBuffer("http://");
+        for (int i = 0; i < 255; i++) uri.append('c');
+        uri.append(".com/");
+        Element e = new Element("e");
+        try {
+            e.setNamespaceURI(uri.toString());
+            fail("Allowed excessively long host name");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
     public void testSymbolsNotAllowedInSchemeNames() {
         
         Element e = new Element("e");
@@ -210,6 +753,121 @@ public class VerifierTest extends XOMTestCase {
         
     }
 
+    
+    public void testBadHexEscapeInQueryString() {
+        
+        Element e = new Element("e");
+        
+        String uri = "scheme:schemeSpecificData?test%5test";
+        try {
+            e.setNamespaceURI(uri);
+            fail("allowed " + uri + " as namespace URI");
+        }
+        catch (MalformedURIException success) {
+            assertEquals(uri, success.getData());
+        }  
+        
+        uri = "scheme:schemeSpecificData?test%5";
+        try {
+            e.setNamespaceURI(uri);
+            fail("allowed " + uri + " as namespace URI");
+        }
+        catch (MalformedURIException success) {
+            assertEquals(uri, success.getData());
+        }  
+        
+    }
+    
+
+    public void testHexEscapeInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        String uri = "scheme://user%C3%80TED@www.example.com/";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());  
+        
+    }
+
+    
+    public void testHexEscapeInHost() {
+        
+        Element e = new Element("e");
+        
+        String uri = "scheme://user%C3%80www.example.com/";
+        e.setNamespaceURI(uri);
+        assertEquals(uri, e.getNamespaceURI());  
+        
+    }
+
+    
+    public void testBadHexEscapeInUserInfo() {
+        
+        Element e = new Element("e");
+        
+        String uri = "scheme://user%5TED@www.example.com/";
+        try {
+            e.setNamespaceURI(uri);
+            fail("allowed " + uri + " as namespace URI");
+        }
+        catch (MalformedURIException success) {
+            assertEquals(uri, success.getData());
+        }  
+        
+        uri = "scheme://user%5@www.example.com/";
+        try {
+            e.setNamespaceURI(uri);
+            fail("allowed " + uri + " as namespace URI");
+        }
+        catch (MalformedURIException success) {
+            assertEquals(uri, success.getData());
+        }  
+        
+    }
+
+
+    public void testBadHexEscapeInHost() {
+        
+        Element e = new Element("e");
+        
+        String uri = "scheme://user%5TEDwww.example.com/";
+        try {
+            e.setNamespaceURI(uri);
+            fail("allowed " + uri + " as namespace URI");
+        }
+        catch (MalformedURIException success) {
+            assertEquals(uri, success.getData());
+        }  
+        
+        uri = "scheme://www.example.co%5/";
+        try {
+            e.setNamespaceURI(uri);
+            fail("allowed " + uri + " as namespace URI");
+        }
+        catch (MalformedURIException success) {
+            assertEquals(uri, success.getData());
+        }  
+        
+    }
+
+
+    public void testQuestionmarkIsNotAHexDigit() {
+        
+        Element e = new Element("e");
+        
+        // Have to do this in a fragment ID to keep it from being
+        // interpreted as a query string separator
+        String uri = "scheme://user@www.example.com/#fragment%?Adata";
+        try {
+            e.setNamespaceURI(uri);
+            fail("allowed " + uri + " as namespace URI");
+        }
+        catch (MalformedURIException success) {
+            assertEquals(uri, success.getData());
+        }  
+        
+    }
+    
     
     public void testIllegalIRIs() {
         
