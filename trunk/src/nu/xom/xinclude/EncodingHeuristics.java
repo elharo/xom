@@ -38,7 +38,7 @@ import java.io.InputStream;
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d15
+ * @version 1.0d21
  */
 class EncodingHeuristics {
 
@@ -170,11 +170,9 @@ class EncodingHeuristics {
                   buffer[i] = (byte) c;
               }
               in.reset();
-              // Most EBCDIC encodings are comaptible with Cp037 over
+              // Most EBCDIC encodings are compatible with Cp037 over
               // the range we care about
-              return findEncodingDeclaration(
-                new String(buffer, "Cp037")
-              );
+              return findEncodingDeclaration(new String(buffer, "Cp037"));
             }
         
         }   
@@ -201,7 +199,7 @@ class EncodingHeuristics {
               }
           }
           if (c != '=') { // malformed
-              return "UTF-8"; 
+              throw new IOException("Couldn't determine encoding");
           }
           // get rid of white space after equals sign
           while (true) {
