@@ -28,11 +28,12 @@ import java.io.Writer;
 /**
  * <p>
  *   ISO-8859-14, for Gaelic, Welsh, and other Celtic languages.
+ *   Not yet supported by Sun's JDK as of 1.5 alpha. IBM's 1.4.1 
+ *   JDK does support it.
  * </p>
  * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
- * 
  *
  */
 class Latin8Writer extends TextWriter {
@@ -214,10 +215,10 @@ class Latin8Writer extends TextWriter {
             case 0x1E69: return true;  // place holder to enable table lookup
             case 0x1E6A: return false; // LATIN CAPITAL LETTER T WITH DOT ABOVE
             case 0x1E6B: return false; // LATIN SMALL LETTER T WITH DOT ABOVE
-            case 0x1E6C: return false; // LATIN SMALL LETTER T WITH DOT ABOVE
-            case 0x1E6D: return false; // LATIN SMALL LETTER T WITH DOT ABOVE
-            case 0x1E6E: return false; // LATIN SMALL LETTER T WITH DOT ABOVE
-            case 0x1E6F: return false; // LATIN SMALL LETTER T WITH DOT ABOVE
+            case 0x1E6C: return true;  // place holder to enable table lookup
+            case 0x1E6D: return true;  // place holder to enable table lookup
+            case 0x1E6E: return true;  // place holder to enable table lookup
+            case 0x1E6F: return true;  // place holder to enable table lookup
             case 0x1E70: return true;  // place holder to enable table lookup
             case 0x1E71: return true;  // place holder to enable table lookup
             case 0x1E72: return true;  // place holder to enable table lookup
