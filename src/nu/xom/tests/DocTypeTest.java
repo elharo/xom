@@ -40,7 +40,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0a3
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -88,11 +88,13 @@ public class DocTypeTest extends XOMTestCase {
         Document doc = (new Builder()).build(data, null);
         String result = doc.toXML();
         assertEquals(data, result);    
+        
     }  
     
     
     public void testToXMLWithCommentsInInternalDTDSubset() 
       throws ValidityException, ParsingException, IOException {
+        
         String data = "<?xml version=\"1.0\"?>\r\n" 
           + "<!DOCTYPE root [\r\n" +
                 "  <!--comment-->\r\n  <!ELEMENT test (#PCDATA)>" +
@@ -101,11 +103,13 @@ public class DocTypeTest extends XOMTestCase {
         Document doc = (new Builder()).build(data, null);
         String result = doc.toXML();
         assertEquals(data, result);    
+        
     }  
     
     
     public void testToXMLWithProcessingInstructionsInInternalDTDSubset() 
       throws ValidityException, ParsingException, IOException {
+        
         String data = "<?xml version=\"1.0\"?>\r\n" 
           + "<!DOCTYPE root [\r\n" +
                 "  <?target data?>\r\n  <!ELEMENT test (#PCDATA)>" +
@@ -114,11 +118,13 @@ public class DocTypeTest extends XOMTestCase {
         Document doc = (new Builder()).build(data, null);
         String result = doc.toXML();
         assertEquals(data, result);    
+        
     }  
     
     
     public void testInternalDTDSubset() 
       throws ParsingException, IOException {
+        
         String data = "<!DOCTYPE root [ <!ELEMENT root EMPTY> ]><test/>";   
         Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.com");
@@ -129,13 +135,16 @@ public class DocTypeTest extends XOMTestCase {
         assertTrue(doctype.toXML().indexOf("[") > 0);
         assertTrue(doctype.toXML().indexOf("]") > 0);
         assertTrue(doctype.toXML().indexOf("<!ELEMENT root EMPTY>") > 0);
+        
     }
 
     
     public void testToString() {
+        
         String expected 
           = "[nu.xom.DocType: " + name + "]";
-        assertEquals(expected, doctypePublicID.toString());      
+        assertEquals(expected, doctypePublicID.toString());   
+        
     }
 
     
@@ -199,6 +208,24 @@ public class DocTypeTest extends XOMTestCase {
         
         try {
             new DocType(":Data");
+            fail("Allowed colon to begin root element name");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testSetRootElementName() {
+        
+        DocType doctype = new DocType("root");
+        doctype.setRootElementName("newname");
+        assertEquals("newname", doctype.getRootElementName());
+        doctype.setRootElementName("new:name");
+        assertEquals("new:name", doctype.getRootElementName());
+        try {
+            doctype.setRootElementName(":Data");
             fail("Allowed colon to begin root element name");
         }
         catch (IllegalNameException success) {
