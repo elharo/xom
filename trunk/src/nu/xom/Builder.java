@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d5
  * 
  */
 public class Builder {
@@ -613,16 +613,14 @@ public class Builder {
     // Nasty hack to make sure we get the right form
     // of file URLs on Windows
     private static String fileURLPrefix = "file://";
-    private static boolean isWindows = false;
     
     static {
         String os = System.getProperty("os.name", "Unix");
         // I could do System.setProperty("os.name" "Windows") to test 
-        // this, but I'd need to us ea frsh ClassLoader to rerun the
+        // this, but I'd need to use a fresh ClassLoader to rerun the
         // static initializer block.
         if (os.indexOf("Windows") >= 0) {
             fileURLPrefix = "file:/";
-            isWindows = true;
         }
     }
 
