@@ -136,7 +136,6 @@ attributes on include elements
 
 MissingHrefException has been renamed  NoIncludeLocationException
 
-
 XOMTestCase is part of the published API.
 
 CircularInclusionException has been renamed InclusionLoopException
@@ -155,11 +154,12 @@ Added support for GB18030 encoding on output
 
 IllegalDataException and its subclasses have getData and setData methods
 to get and set the exact text that caused the exception.
+IllegalNameException, IllegalCharacterDataException, and IllegalTargetException are now 
+subclasses of IllegalDataException. IllegalCharacterDataException replaces most previous
+uses of IllegalDataException.
 
-IllegalNameException and its subclasses have getName and setName methods
-to get and set the exact text that caused the exception.
-
-NamespaceException is now a subclass of WellformednessException
+NamespaceException has been subdivided into 
+IllegalNameException, MalformedURIException, and NamespaceConflictException. 
 
 Verifier is now based on table lookup. 
 
