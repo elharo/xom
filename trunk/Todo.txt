@@ -27,13 +27,23 @@ Method in text class and Builder
 
 StAX Builder and converter sample to test API and implementation
 
-a getDescendants methods in ParentNode????
+a getDescendants methods in ParentNode???? or does XPath make this redundant????
 
 a method to insert a Nodes in a Nodes
 
+Add separate implementations optimized for speed and size.
+The current implementation is mostly optimized for size. The speedy version
+would carry extra pointers (especially next sibling) to make navigation very quick.
+Some final methods would have to be implemented by calling non-final package protected 
+methods that could be overridden instead. 
+
+catalog support????
+
+xml:id support
 
 1.0.1:
 --------
+
 DHollenbeck suggests that implementing Array lists directly in ParentNode
 rather than using Collections API would save memory and time.
 See http://lists.ibiblio.org/pipermail/xom-interest/2004-January/000898.html
@@ -81,6 +91,8 @@ see if they make sense
 
 register XOM as a trademark
 
+Add documentation describing Infoset mapping
+
 Before beta:
 -----------
 
@@ -117,14 +129,42 @@ saying XSLT 1.0 suite had been discontinued?
 
 See Apache for code contributor license contract
 
-Before alpha:
-------------
-
-remove recursion from DOMConverter
-
-Change XINCLUDE_NS????
-
 cowan suggests always escaping C1 controls????
+helpful with files misidentified Cp1252 perhaps?
+or just for 8859 sets? yes, just 8859-X; not an issue for UTF-8 or UTF-16
+because those character sets use double bytes for 
+control codes (still easier to handle in an editor when non-printing characters
+are escaped)
+
+check into class loading issues reported on the mailing list
+
+
+===============
+Done 1.0a1:
+===============
+
+The base URI handling has been modified as follows:
+
+1. getBaseURI() always returns an absolute URI or the empty string if the base URI is not known.
+   Other than the empty string it never returns a relative URI. 
+   It never returns null.
+2. Base URI of an element does not change when it is detached or copied
+3. setBaseURI requires an absolute URI, and throws a MalformedURIException if you attempt
+   to pass it a relative URI, or a URI with a fragment identifier. (Relative URIs are still allowed in 
+   xml:base attributes.)
+
+
+XOM will not double verify when being fed data through Norm Walsh's catalog filter;
+provided that the underlying parser is good.
+
+Supports 2nd candidate recommendation syntax for XInclude
+
+Constraints on parentage are not checked when building with Nonverifying factory
+(fastAddAttribute, fastInsertChild) 
+
+DOMConverter is now non-recursive
+
+An element's absolutized base URI is preserved when detaching
 
 ===============
 Done 1.0d25:
