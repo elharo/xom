@@ -63,7 +63,7 @@ to http://www.xom.nu/
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
-    <property name="junit.jar"       value="${lib.dir}/junit.jar"/>
+    <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"    value="${lib.dir}/servlet.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
@@ -101,6 +101,7 @@ XOM Build file
     
     help     --> print this message
     jar      --> build the xom.jar file
+    samples  --> build the xom-samples.jar file
     compile  --> compile the source code
     javadoc  --> generate the API documentation
     test     --> run JUnit test suite
@@ -144,15 +145,29 @@ XOM Build file
          index="yes"
 		 compress="no"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/xerces/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
-         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/samples nu/xom/benchmarks nu/xom/pantry/* nu/xom/pantry">
+         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/*">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
-       <!-- <attribute name="Class-Path" value="${saxon.jar}"/>  -->
         <attribute name="Main-Class" value="nu.xom.Info"/>
       </manifest>
     </jar>
   </target>
 
+  
+  <target name="samples" depends="compile" description="Create xom-samples.jar">
+    <jar jarfile="${build.dir}/${name}-samples.jar"
+         basedir="${build.dest}"
+         index="yes"
+		 compress="no"
+         includes="nu/xom/samples/* nu/xom/benchmarks/*"
+         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/xerces/* nu/xom/canonical/* nu/xom/pantry/* nu/xom/pantry">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+      </manifest>
+    </jar>
+  </target>
+
+  
   <target name="javadoc" depends="prepare"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
@@ -221,26 +236,29 @@ XOM Build file
   
   <target name="dist" depends="zip, tar.gz" />
  
-  <target name="zip" depends="jar, javadoc" description="Build zip file for distro">
+  <target name="zip" depends="jar, javadoc, samples" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." 
         excludes="**/*.zip, **/.thumbnails/**, clover_html/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
+      <zipfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>   
     </zip>
   </target>
   
   
-  <target name="tar" depends="jar, javadoc" description="Build tar file for distro">
+  <target name="tar" depends="jar, javadoc, samples" description="Build tar file for distro">
     <tar destfile="${dist.dir}/${name}-${version}.tar">
       <tarfileset prefix="XOM" dir="." 
         excludes="**/*.zip, **/.thumbnails/**, clover_html/**, xom.gif data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
+      <tarfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>   
     </tar>
   </target>
+  
   
   <target name="tar.gz" depends="tar" description="Build tar.gz file for distro">
      <gzip src="${dist.dir}/${name}-${version}.tar" zipfile="${dist.dir}/${name}-${version}.tar.gz"/>
