@@ -47,9 +47,11 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.LocatorImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -945,7 +947,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
-    public void testSkippedEntityThrwosXMLException()
+    public void testSkippedEntityThrowsXMLException()
       throws IOException, ParsingException, SAXException {
         
         XMLReader xerces = XMLReaderFactory.createXMLReader(
@@ -2525,6 +2527,26 @@ public class BuilderTest extends XOMTestCase {
     }
     
 
+    public void testParserThrowsUnexpectedRuntimeException() 
+      throws SAXException, IOException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        Exception cause = new RuntimeException();
+        XMLFilter filter = new ExceptionTester(cause);
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        
+        try {
+            builder.build("<data/>");
+        }
+        catch (ParsingException success) {
+            assertEquals(cause, success.getCause());
+        }
+        
+    }
+    
+
     public void testParserThrowsIOException() 
       throws SAXException, ParsingException {
         
@@ -2542,6 +2564,38 @@ public class BuilderTest extends XOMTestCase {
             assertEquals(cause, success);
         }
         
+    }
+    
+    
+    public void testCrimsonIgnoresWarning() 
+      throws SAXException, ParsingException, IOException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.crimson.parser.XMLReaderImpl"
+        );
+        XMLFilter filter = new WarningFilter();
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+        
+        Document doc = builder.build("<data/>", null);
+        assertEquals("<?xml version=\"1.0\"?>\n<data />\n", doc.toXML());
+        
+    }
+    
+    
+    private static class WarningFilter extends XMLFilterImpl {
+        
+        public void startElement(String namespaceURI, String localName,
+          String qualifiedName, Attributes atts) throws SAXException {    
+    
+            this.getErrorHandler().warning(
+              new SAXParseException("Warning", new LocatorImpl())
+            );
+            super.startElement(namespaceURI, localName, qualifiedName, 
+              atts);
+            
+        }        
+
     }
     
 
