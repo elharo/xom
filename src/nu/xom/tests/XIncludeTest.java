@@ -60,7 +60,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b4
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -263,8 +263,8 @@ public class XIncludeTest extends XOMTestCase {
         Document in = new Document(root);
         Document out = XIncluder.resolve(in);
         String result = out.toXML();
-        assertEquals("<?xml version=\"1.0\"?>\r\n" +
-           "<root><child2 id=\"p1\" /><child2 id=\"p1\" /></root>\r\n", result);
+        assertEquals("<?xml version=\"1.0\"?>\n" +
+           "<root><child2 id=\"p1\" /><child2 id=\"p1\" /></root>\n", result);
     }
     
 
@@ -578,9 +578,9 @@ public class XIncludeTest extends XOMTestCase {
         Reader reader = new StringReader(data);
         Document doc = builder.build(reader);
         Document result = XIncluder.resolve(doc);
-        assertEquals("<?xml version=\"1.0\"?>\r\n" 
-                + "<document xmlns:xi=\"http://www.w3.org/2001/XInclude\">Correct!</document>\r\n", 
-                result.toXML());
+        assertEquals("<?xml version=\"1.0\"?>\n" 
+          + "<document xmlns:xi=\"http://www.w3.org/2001/XInclude\">Correct!</document>\n", 
+          result.toXML());
         
     }
     
