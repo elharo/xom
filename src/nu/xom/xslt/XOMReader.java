@@ -24,7 +24,6 @@ package nu.xom.xslt;
 
 import java.io.IOException;
 
-import nu.xom.Nodes;
 import nu.xom.converters.SAXConverter;
 
 import org.xml.sax.ContentHandler;
