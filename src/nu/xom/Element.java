@@ -1002,15 +1002,6 @@ public class Element extends ParentNode {
               + " conflicts with existing namespace binding."
             );   
         }
-        else if (prefix.length() == 0 
-          && this.prefix.length() == 0 
-          && !uri.equals(this.URI)) {
-            throw new NamespaceException(
-              "Additional namespace " + uri 
-              + " conflicts with existing default namespace."
-            );   
-        }
-        
         
         // local constraints
         checkAddNamespaceDeclaration(prefix, uri);
