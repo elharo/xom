@@ -84,6 +84,20 @@ public class XIncludeTest extends XOMTestCase {
     }
     
  
+    public void testXMLBaseOnIncludeElementUsedToResolveHref() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/xmlbasetest2.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expected = builder.build(
+          new File("data/xinclude/output/xmlbasetest2.xml")
+        );
+        assertEquals(expected, result);
+                
+    }
+    
     public void testMarsh() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -92,6 +106,20 @@ public class XIncludeTest extends XOMTestCase {
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File("data/xinclude/output/marshtest.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testMarshWithXMLBase() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/marshtestwithxmlbase.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/marshtestwithxmlbase.xml")
         );
         assertEquals(expectedResult, result);
         
