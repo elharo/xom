@@ -58,7 +58,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0a3
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -433,5 +433,44 @@ public class DOMConverterTest extends XOMTestCase {
         
     }
     
+    
+    public void testConvertNullXOMDocument() {
+     
+        try {
+            DOMConverter.convert((Document) null, impl);
+            fail("Converted null document");
+        }
+        catch (NullPointerException success) {
+        }
+        
+        
+    }
+ 
+    
+    public void testConvertNullDOMElement() {
+     
+        try {
+            DOMConverter.convert((org.w3c.dom.Element) null);
+            fail("Converted null element");
+        }
+        catch (NullPointerException success) {
+        }
+        
+        
+    }
+ 
+    
+    public void testConvertNullDOMDocument() {
+     
+        try {
+            DOMConverter.convert((org.w3c.dom.Document) null);
+            fail("Converted null element");
+        }
+        catch (NullPointerException success) {
+        }
+        
+        
+    }
+ 
     
 }
