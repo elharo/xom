@@ -2416,7 +2416,7 @@ public class XIncludeTest extends XOMTestCase {
     // Test that an xpointer attribute that uses percent escapes 
     // is a not a fatal error when the 
     // fallback element containing it is not activated????
-    // See http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2004Oct/0006.html
+    // See http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2004Oct/0007.html
     public void testXpointerAttributeContainsPercentEscapeInUnactivatedFallback() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -2426,5 +2426,9 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 
+    
+    // XXX Need to test all hidden errors inside non-XInclude children 
+    // of xi:include elements
+    
     
 }
