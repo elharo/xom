@@ -48,6 +48,8 @@ DHollenbeck suggests that implementing Array lists directly in ParentNode
 rather than using Collections API would save memory and time.
 See http://lists.ibiblio.org/pipermail/xom-interest/2004-January/000898.html
 
+He also suggests using char[] arrays internally rather than Strings
+
 Optimize toXML for Elements and Documents by adding a package private
 toXML(StringBuffer method)
 
@@ -55,6 +57,16 @@ dvholten suggests zipping characters.dat to save space
 
 Can XInclude be rewritten to be non-recursive?
 
+with XIncluder would it make more sense to use a private class
+that stores all the variables rather than constantly passing them
+back and forth from static methods? That is, make private methods instance 
+methods rather than static????
+
+Could I use the JAR services API to allow the encodings supported to
+be extended via lookup tables????
+
+would it be possible to get a minimal interoperable subset of Big5, SJIS, etc
+and escape all non-interoperable characters?
 
 Before 1.0:
 -----------
@@ -65,6 +77,7 @@ on the javadoc through an ant task
 
 Spell check
 
+Look into a code beautifier for the line length
 Line length corrections; would jalopy help?
 
 Add a class hierarchy diagram to nu.xom package.html
@@ -77,14 +90,10 @@ Check Javadoc guidelines at Sun for where to capitalize and put periods.
 Bottom line: don't capitalize first word; use period only at end of complete sentences;
 or for multisentence comments; use lower case non code-tagged to distinguish objects from classes
 
-Add some see directives to JavaDoc
-
 redo copyright and license notice to use /* */ instead of //
 comments????
 
 Add JavaDoc comments to unit tests that describe what each test tests
-
-Look into a code beautifier for the line length
 
 Look at the order of the methods in the various classes;
 see if they make sense
@@ -96,38 +105,11 @@ Add documentation describing Infoset mapping
 Before beta:
 -----------
 
-Use better URI parsing and verification;
-replace Xerces verification
-
 Use more fixtures to clean up unit tests.
-
-Add an ant task on JCSC?
-
-write ant tasks to generate 
- partial jars as for ICU4j and Xerces
- 
-What can be cut from Xerces jar? WML and HTML perhaps? schemas?
-build with dtdjars
-
-what can be cut from xalan, build without xsltc or with only xsltc????
-
-Add more encoding classes, particularly for Japanese and Chinese;
-see what Xerces supports. It would be nice to support all these
-on output.
-
-with XIncluder would it make more sense to use a private class
-that stores all the variables rather than constantly passing them
-back and forth from static methods? That is, make private methods instance 
-methods rather than static????
-
-Use TestDox to create docs for unit tests???? make sure names make sense in
-that context?????
 
 Finish XSLT test suite????
 Post a "Punch bull in fac" note on cafe con Leche
 saying XSLT 1.0 suite had been discontinued?
-
-See Apache for code contributor license contract
 
 cowan suggests always escaping C1 controls????
 helpful with files misidentified Cp1252 perhaps?
@@ -136,16 +118,49 @@ because those character sets use double bytes for
 control codes (still easier to handle in an editor when non-printing characters
 are escaped)
 
-check into class loading issues reported on the mailing list
+Might be able to work around some of the bugs in Oracle 10
 
-Run Clover on latest code
+===============
+Done 1.0a4:
+===============
+
+Nodes.remove(int) now returns the node removed
+
+The IBM virtual machine 1.4.1 is no longer special cased.
+
+The API documentation has undergone extensive editing. 
+
+The unpublished nu.xom.xerces package has been removed.
+
+===============
+Done 1.0a3:
+===============
+
+The Element copy constructor and copy methods are no longer recursive, so they
+shouldn't cause stack overflows in deep documents. This necessitated adding a 
+protected shallowCopy() method that can be used to create an instance of a subclass
+of Element. Overriding this is preferred to overriding copy() when one wishes 
+to maintain the objects' types after a copy.
+
+The getBaseURI() method is also no longer recursive. 
+
+The W3C XML Schema Language and WML and HTML DOMs have been removed from 
+the bundled version of Xerces to save space. 
+
+There is now a contributor license agreement.
+
+XOM will now use character references only when necessary for
+*all* encodings supported by the local virtual machine.
+However, this may be quite a bit slower than the 
+explicitly supported encodings like UTF-8 and the ISO-8859
+character sets. Measurements remain to be performed.
 
 ===============
 Done 1.0a2:
 ===============
 
 URI verification and base URI resolution are now performed 
-according to the RFC2396bids algorithm, rather than by using the 
+according to the RFC2396bis algorithm, rather than by using the 
 Xerces and java.net URI classes.
 
 The Builder no longer sets any System properties for more compatibility
