@@ -815,6 +815,7 @@ public class XIncluder {
     private static void processFallback(Element includeElement, 
       Builder builder, Stack baseURLs, ParentNode parent, Exception ex)
         throws XIncludeException, IOException, ParsingException {
+        
            Element fallback 
               = includeElement.getFirstChildElement("fallback", XINCLUDE_NS);
            if (fallback == null) {
@@ -835,6 +836,7 @@ public class XIncluder {
                 parent.insertChild(child, parent.indexOf(includeElement)); 
            }
            includeElement.detach();
+           
     }
 
     
