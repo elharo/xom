@@ -27,8 +27,6 @@ Method in text class and Builder
 
 StAX Builder and converter sample to test API and implementation
 
-a getDescendants methods in ParentNode???? or does XPath make this redundant????
-
 a method to insert a Nodes in a Nodes
 
 Add separate implementations optimized for speed and size.
@@ -38,8 +36,6 @@ Some final methods would have to be implemented by calling non-final package pro
 methods that could be overridden instead. 
 
 catalog support????
-
-xml:id support
 
 document subset canonicalization (does this depend on XPath????)
 
@@ -124,6 +120,12 @@ For 1.5 use ant.java.version property and an equals condition
 Wolfgang's ant build file for smaller vs. faster jars (Text class)
 
 Add tools page to web site (Ant, tagSoup, Clover, etc.)
+
+===============
+Done 1.1d3:
+===============
+
+xml:id support
 
 ===============
 Done 1.1d2:
