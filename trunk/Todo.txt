@@ -75,9 +75,7 @@ and escape all non-interoperable characters?
 Before 1.0:
 -----------
 
-Make all JavaDoc valid XHTML and verify this with validator;
-to do this we need an XHTML doclet; no let's use Tidy or jtidy 
-on the javadoc through an ant task
+Update all versions to 1.0
 
 Spell check
 
@@ -121,6 +119,22 @@ Do an exhaustive test and report bugs to Sun. Note especially
     public void testIBMCp943() throws ParsingException, IOException {
         checkAll("Cp943");
     } 
+    
+    
+Add a tools package for the character table generator
+
+===============
+Done 1.0b2:
+===============
+
+Fixed various bugs that prevented the loading of JDK15_XML1_0Parser
+
+Worked around bugs in JDK 1.5 beta 2 that limited elements to a single attribute.
+
+The API documentation is now well-formed XHTML. (It might even be valid. I haven't checked.)
+
+There's a new tools package that cotnains clases used to help build XOM. Currently this 
+contains the class to convert JavaDoc to XHTML using TagSoup.
 
 ===============
 Done 1.0b1:
