@@ -26,9 +26,14 @@ package nu.xom;
 import java.io.Writer;
 
 /**
+ * <p>
+ *  ISO 8859-9 for Western Europe. Includes the Euro sign and
+ *  several uncommon French letters. otherwise the same as 
+ *  Latin-1. 
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
- * 
  *
  */
 class Latin9Writer extends TextWriter {
@@ -57,14 +62,14 @@ class Latin9Writer extends TextWriter {
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
     boolean needsEscaping(char c) {
-        if (c <= 0xA3) return false;      
+        if (c <= 0xA3 ) return false;      
+        if (c == 0x20AC) return false; // EURO SIGN
         
-        switch (c) {
-            case 0x20AC: return false; // EURO SIGN
+        switch (c) {  // Latin-1 overlap
             case 0x00A5: return false; // YEN SIGN
-            case 0x0160: return false; // LATIN CAPITAL LETTER S WITH CARON
+            case 0x00A6: return true;  // place holder to enable table lookup
             case 0x00A7: return false; // SECTION SIGN
-            case 0x0161: return false; // LATIN SMALL LETTER S WITH CARON
+            case 0x00A8: return true;  // place holder to enable table lookup
             case 0x00A9: return false; // COPYRIGHT SIGN
             case 0x00AA: return false; // FEMININE ORDINAL INDICATOR
             case 0x00AB: return false; // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
@@ -76,17 +81,17 @@ class Latin9Writer extends TextWriter {
             case 0x00B1: return false; // PLUS-MINUS SIGN
             case 0x00B2: return false; // SUPERSCRIPT TWO
             case 0x00B3: return false; // SUPERSCRIPT THREE
-            case 0x017D: return false; // LATIN CAPITAL LETTER Z WITH CARON
+            case 0x00B4: return true;  // place holder to enable table lookup
             case 0x00B5: return false; // MICRO SIGN
             case 0x00B6: return false; // PILCROW SIGN
             case 0x00B7: return false; // MIDDLE DOT
-            case 0x017E: return false; // LATIN SMALL LETTER Z WITH CARON
+            case 0x00B8: return true;  // place holder to enable table lookup
             case 0x00B9: return false; // SUPERSCRIPT ONE
             case 0x00BA: return false; // MASCULINE ORDINAL INDICATOR
             case 0x00BB: return false; // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-            case 0x0152: return false; // LATIN CAPITAL LIGATURE OE
-            case 0x0153: return false; // LATIN SMALL LIGATURE OE
-            case 0x0178: return false; // LATIN CAPITAL LETTER Y WITH DIAERESIS
+            case 0x00BC: return true;  // place holder to enable table lookup
+            case 0x00BD: return true;  // place holder to enable table lookup
+            case 0x00BE: return true;  // place holder to enable table lookup
             case 0x00BF: return false; // INVERTED QUESTION MARK
             case 0x00C0: return false; // LATIN CAPITAL LETTER A WITH GRAVE
             case 0x00C1: return false; // LATIN CAPITAL LETTER A WITH ACUTE
@@ -152,9 +157,53 @@ class Latin9Writer extends TextWriter {
             case 0x00FD: return false; // LATIN SMALL LETTER Y WITH ACUTE
             case 0x00FE: return false; // LATIN SMALL LETTER THORN
             case 0x00FF: return false; // LATIN SMALL LETTER Y WITH DIAERESIS
-
         }
+        switch (c) { // uncommon French letters
+            case 0x0152: return false; // LATIN CAPITAL LIGATURE OE
+            case 0x0153: return false; // LATIN SMALL LIGATURE OE
+            case 0x0154: return true;  // place holder to enable table lookup
+            case 0x0155: return true;  // place holder to enable table lookup
+            case 0x0156: return true;  // place holder to enable table lookup
+            case 0x0157: return true;  // place holder to enable table lookup
+            case 0x0158: return true;  // place holder to enable table lookup
+            case 0x0159: return true;  // place holder to enable table lookup
+            case 0x015A: return true;  // place holder to enable table lookup
+            case 0x015B: return true;  // place holder to enable table lookup
+            case 0x015C: return true;  // place holder to enable table lookup
+            case 0x015D: return true;  // place holder to enable table lookup
+            case 0x015E: return true;  // place holder to enable table lookup
+            case 0x015F: return true;  // place holder to enable table lookup
+            case 0x0160: return false; // LATIN CAPITAL LETTER S WITH CARON
+            case 0x0161: return false; // LATIN SMALL LETTER S WITH CARON
+            case 0x0162: return true;  // place holder to enable table lookup
+            case 0x0163: return true;  // place holder to enable table lookup
+            case 0x0164: return true;  // place holder to enable table lookup
+            case 0x0165: return true;  // place holder to enable table lookup
+            case 0x0166: return true;  // place holder to enable table lookup
+            case 0x0167: return true;  // place holder to enable table lookup
+            case 0x0168: return true;  // place holder to enable table lookup
+            case 0x0169: return true;  // place holder to enable table lookup
+            case 0x016A: return true;  // place holder to enable table lookup
+            case 0x016B: return true;  // place holder to enable table lookup
+            case 0x016C: return true;  // place holder to enable table lookup
+            case 0x016D: return true;  // place holder to enable table lookup
+            case 0x016E: return true;  // place holder to enable table lookup
+            case 0x016F: return true;  // place holder to enable table lookup
+            case 0x0170: return true;  // place holder to enable table lookup
+            case 0x0171: return true;  // place holder to enable table lookup
+            case 0x0172: return true;  // place holder to enable table lookup
+            case 0x0173: return true;  // place holder to enable table lookup
+            case 0x0174: return true;  // place holder to enable table lookup
+            case 0x0175: return true;  // place holder to enable table lookup
+            case 0x0176: return true;  // place holder to enable table lookup
+            case 0x0177: return true;  // place holder to enable table lookup
+            case 0x0178: return false; // LATIN CAPITAL LETTER Y WITH DIAERESIS
+            case 0x017D: return false; // LATIN CAPITAL LETTER Z WITH CARON
+            case 0x017E: return false; // LATIN SMALL LETTER Z WITH CARON
+        }
+        
         return true;
+        
     }
 
 }

@@ -26,9 +26,12 @@ package nu.xom;
 import java.io.Writer;
 
 /**
+ * <p>
+ *   ISO 8859-6, ASCII plus Arabic
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
- * 
  *
  */
 class ISOArabicWriter extends TextWriter {
@@ -119,7 +122,9 @@ class ISOArabicWriter extends TextWriter {
             case 0x00A4: return false; // CURRENCY SIGN
             case 0x00AD: return false; // SOFT HYPHEN
         }
+        
         return true;
+        
     }
 
 }

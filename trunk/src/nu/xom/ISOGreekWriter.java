@@ -26,9 +26,12 @@ package nu.xom;
 import java.io.Writer;
 
 /**
+ * <p>
+ *   ISO 8859-7, ASCII plus Greek
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
- * 
  *
  */
 class ISOGreekWriter extends TextWriter {
