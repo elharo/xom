@@ -253,8 +253,6 @@ public class IDTest extends XOMTestCase {
         assertEquals(child, result.get(0));
         
     }
-
     
-    // need a test that this works with XInclude????
     
 }

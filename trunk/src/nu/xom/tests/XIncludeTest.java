@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -64,7 +64,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d4
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -1354,6 +1354,20 @@ public class XIncludeTest extends XOMTestCase {
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "xptridtest.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testXPointerXMLID() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "xmlidtest.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File(outputDir, "xmlidtest.xml")
         );
         assertEquals(expectedResult, result);
         
