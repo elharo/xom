@@ -31,7 +31,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b6
  *
  */
 public class ParsingExceptionTest extends XOMTestCase {
@@ -57,6 +57,17 @@ public class ParsingExceptionTest extends XOMTestCase {
         ParsingException ex = new ParsingException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
+    }
+    
+    
+    public void testFourArgumentConstructor() {
+            
+        ParsingException ex = new ParsingException(message, 100000, 400000, cause);
+        assertEquals(message, ex.getMessage());
+        assertEquals(cause, ex.getCause()); 
+        assertEquals(100000, ex.getLineNumber()); 
+        assertEquals(400000, ex.getColumnNumber()); 
+
     }
     
     
