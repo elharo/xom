@@ -310,13 +310,13 @@ public class NamespacesTest extends XOMTestCase {
        
    } 
 
-   public void testAddNullNamespaceDeclaration() {
+   public void testAddNullPrefix() {
        Element e = new Element("test");
        
        try {
            e.addNamespaceDeclaration(null, 
              "http://www.example.com");
-           fail("added null prefix");   
+           fail("added conflicting empty prefix to element in no namespace");   
        }
        catch (NamespaceException ex) {
             // success   
@@ -331,12 +331,21 @@ public class NamespacesTest extends XOMTestCase {
        
    } 
 
+   public void testAddNullURI() {
+       Element parent = new Element("parent", "http://www.example.org/");
+       Element e = new Element("pre:test", "http://www.example.com/"); 
+       parent.appendChild(e);
+       e.addNamespaceDeclaration("", null);
+       assertEquals("", e.getNamespaceURI(""));   
+   } 
+
+
    public void testUndeclareDefaultNamespace() {
+       Element parent = new Element("parent", "http://www.example.org/");
        Element e2 = new Element("pre:test", "http://www.example.net");
-       
+       parent.appendChild(e2);
        e2.addNamespaceDeclaration("", "");
-       assertEquals("", e2.getNamespaceURI(""));
-       
+       assertEquals("", e2.getNamespaceURI(""));      
    } 
 
    public void testAdding() {
