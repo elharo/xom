@@ -71,6 +71,24 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testNamespaceQueryWithAdjacentTextNodes() {
+        
+        Element parent = new Element("Test", "http://www.example.org");
+        Element child = new Element("child", "http://www.example.org");
+        parent.appendChild(child);
+        child.appendChild("1");
+        child.appendChild("2");
+        
+        Map namespaces = new HashMap();
+        namespaces.put("pre", "http://www.example.org");
+        Nodes result = parent.query("descendant::text()", namespaces);
+        assertEquals(2, result.size());
+        assertEquals("1", result.get(0).getValue());   
+        assertEquals("2", result.get(1).getValue());   
+        
+    }
+    
+
     public void testNamespaceQueryWithoutprefixMapping() {
         
         Element parent = new Element("Test", "http://www.example.org");

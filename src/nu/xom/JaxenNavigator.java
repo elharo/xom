@@ -141,7 +141,14 @@ class JaxenNavigator extends DefaultNavigator {
     
 
     public Iterator getChildAxisIterator(Object o) {
-        return new ChildIterator((ParentNode) o);
+        
+        if (o instanceof ParentNode) {
+            return new ChildIterator((ParentNode) o);
+        }
+        else {
+            return new EmptyIterator();
+        }
+        
     }
     
     
@@ -338,8 +345,6 @@ class JaxenNavigator extends DefaultNavigator {
 
     
     public boolean isNamespace(Object object) {
-
-        // ???? Auto-generated method stub
         return false;
     }
 
