@@ -58,7 +58,7 @@ import org.w3c.dom.NodeList;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b5
  *
  */
 public class DOMConverter {
@@ -545,12 +545,6 @@ public class DOMConverter {
         
         return domResult;  
         
-    }
-
-
-    private static boolean isLast(Element currentElement) {
-        ParentNode parent = currentElement.getParent();
-        return parent.indexOf(currentElement) == parent.getChildCount()-1;
     }
 
 
