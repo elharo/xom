@@ -22,7 +22,7 @@ Figure out a way to allow users to configure different text storage algorithms,
 all stored as byte arrays.
 Possibilities:
 
-System property
+System property (though that's VM wide, which is really, realy bad)
 Method in text class and Builder
 
 StAX Builder and converter sample to test API and implementation
@@ -44,6 +44,12 @@ xml:id support
 document subset canonicalization (does this depend on XPath????)
 
 exclusive XML canonicalization 
+
+Should XSLTransform have a constructor that takes a TrAX 
+Templates or Transformer object to allow
+additional properties to be configured
+
+a setInternalDTDSubset mehod that simply uses a parser to check the subset????
 
 1.0.1:
 --------
@@ -77,16 +83,12 @@ Before 1.0:
 
 Update all versions to 1.0
 
-Spell check
-
 Look into a code beautifier for the line length
 Line length corrections; would jalopy help?
 
 Add a class hierarchy diagram to nu.xom package.html
 
 Add information about O(1), O(length) etc. to JavaDoc
-
-Finish tutorial
 
 Check Javadoc guidelines at Sun for where to capitalize and put periods.
 Bottom line: don't capitalize first word; use period only at end of complete sentences;
@@ -124,6 +126,45 @@ Do an exhaustive test and report bugs to Sun. Note especially
 Add a tools package for the character table generator
 
 ===============
+Done 1.0b4:
+===============
+
+XSLT transformation is now based on SAX conversion rather than toXML.
+This should save memory in transformations and probably speed things up.
+
+All constructors in XSLTransform that take anything other than a Document are deprecated
+and will be removed in the next release:
+
+public XSLTransform(InputStream stylesheet)
+public XSLTransform(Reader stylesheet)
+public XSLTransform(String URL)
+public XSLTransform(File stylesheet)
+
+SAXConverter can now convert Nodes lists as well as Documents.
+
+SAXConverter now provides location information for system IDs.
+
+Various bug fixes in SAXConverter, especially with respect to startPrefixMapping 
+and endPrefixMapping
+
+The toXML methods now use \n as the line separator, since this is more likely
+to match the contents of text nodes created by parsing an XML document.
+The goal is to minimize the number of documents with mixed line break strings.
+
+DOMConverter can now convert XOM documents with only a single element to DOM.
+
+Minor bug fixes to better handle line breaks in the internal DTD subset
+
+===============
+Done 1.0b3:
+===============
+
+Java encoding names are now recognized when using the repackaged Xerces
+bundled with Java 1.5
+
+Fixed several bugs in DOMConverter
+
+===============
 Done 1.0b2:
 ===============
 
@@ -133,7 +174,7 @@ Worked around bugs in JDK 1.5 beta 2 that limited elements to a single attribute
 
 The API documentation is now well-formed XHTML. (It might even be valid. I haven't checked.)
 
-There's a new tools package that cotnains clases used to help build XOM. Currently this 
+There's a new tools package that contains classes used to help build XOM. Currently this 
 contains the class to convert JavaDoc to XHTML using TagSoup.
 
 ===============
