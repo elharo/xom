@@ -715,6 +715,48 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
+    public void testDocumentSubsetCanonicalizationWithoutSelectingPrologAndEpilog() 
+      throws ParsingException, IOException {
+        
+        String input = "<!-- prolog -->\n"
+            + "<!DOCTYPE doc [\n"
+            + "<!ATTLIST e2 xml:space (default|preserve) 'preserve'>\n"
+            + "<!ATTLIST e3 id ID #IMPLIED>\n"
+            + "]>\n"
+            + "<doc xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\">\n"
+            + "   <e1>\n"
+            + "      <e2 xmlns=\"\">\n"
+            + "         <e3 id=\"E3\"/>\n"
+            + "      </e2>\n"
+            + "   </e1>\n"
+            + "</doc><!-- epilog -->";
+        
+        Document doc = builder.build(input, null);
+        XPathContext context = new XPathContext("ietf", "http://www.ietf.org");
+        String xpath = "(/*//. | //@* | //namespace::*)\n"
+            + "[\n"
+            + "self::ietf:e1 or (parent::ietf:e1 and not(self::text() or self::e2))"
+            + " or\n"
+            + " count(id(\"E3\")|ancestor-or-self::node()) = count(ancestor-or-self::node())\n"
+            + "]";
+        
+        String expected = "<e1 xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\"><e3 xmlns=\"\" id=\"E3\" xml:space=\"preserve\"></e3></e1>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, Canonicalizer.CANONICAL_XML_WITH_COMMENTS);
+            serializer.write(doc.query(xpath, context));
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
     public void testEmptyDefaultNamespace() 
       throws ParsingException, IOException {
         
@@ -1122,6 +1164,32 @@ public class CanonicalizerTest extends XOMTestCase {
         
     }
     
+    
+    public void testExclusiveWithNamespacedAttributes() throws IOException {
+     
+        Element pdu = new Element("n0:pdu", "http://a.example");
+        Element elem1 = new Element("n1:elem1", "http://b.example");
+        elem1.appendChild("content");
+        pdu.appendChild(elem1);
+        elem1.addAttribute(new Attribute("pre:foo", "http://www.example.org/", "value"));
+        
+        String expected = "<n1:elem1 xmlns:n1=\"http://b.example\" xmlns:pre=\"http://www.example.org/\" pre:foo=\"value\">content</n1:elem1>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
+        
+        XPathContext context = new XPathContext("n1", "http://b.example");
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc.query("(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context));  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+    
+
     /* <root xml:lang="en"><a><b>test</b></a></root>
 
 Choose the document subset selected by /root//node()
@@ -1154,7 +1222,8 @@ and expect to see
     }    
         
 
-    public void testExclusiveWithInclusiveNamespaces() throws IOException {
+    public void testExclusiveWithInclusiveNamespaces() 
+      throws IOException {
      
         Element pdu = new Element("n0:pdu", "http://a.example");
         Element elem1 = new Element("n1:elem1", "http://b.example");
