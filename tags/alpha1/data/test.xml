@@ -1,0 +1,14 @@
+<!DOCTYPE test>
+<?xml-stylesheet href="file.css" type="text/css"?> 
+<!-- test -->
+<test xmlns:xlink='http://www.w3.org/TR/1999/xlink'>
+Hello dear
+<em>very important</em>
+<span xlink:type='simple'>here&apos;s the link</span>
+<svg:svg xmlns:svg='http://www.w3.org/TR/2000/svg'>
+	<svg:text>text in a namespace</svg:text>
+</svg:svg>
+<svg xmlns='http://www.w3.org/TR/2000/svg'><text>text in a namespace</text></svg>
+</test>
+<!--epilog-->
+  
