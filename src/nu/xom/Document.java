@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -31,7 +31,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  */
 public class Document extends ParentNode {
@@ -48,7 +48,6 @@ public class Document extends ParentNode {
      * 
      */
     public Document(Element root) {
-        checkRoot(root);
         insertChild(root, 0);
     }
 
@@ -77,7 +76,14 @@ public class Document extends ParentNode {
 
     final void insertionAllowed(Node child, int position) {
         
-        if (child.isComment() || child.isProcessingInstruction()) {
+        if (child == null) {
+            throw new NullPointerException(
+             "Tried to insert a null child in the document");
+        }
+        else if (child.getParent() != null) {
+            throw new MultipleParentException("Child already has a parent.");
+        }
+        else if (child.isComment() || child.isProcessingInstruction()) {
             return;
         }
         else if (child.isDocType()) {
@@ -112,7 +118,9 @@ public class Document extends ParentNode {
 
     }
     
-
+    // could I optimize this into a while loop that doesn't call 
+    // getChildCount even once???? better yet just remove the test
+    // condition from the for loop
     private int getRootPosition() {
         
         for (int i = 0; i < getChildCount(); i++) {
@@ -166,7 +174,7 @@ public class Document extends ParentNode {
      * @throws NullPointerException if doctype is null
      * 
      */
-    public final void setDocType(DocType doctype) {
+    public void setDocType(DocType doctype) {
         
         DocType oldDocType = getDocType();
         if (doctype == null) {
@@ -180,8 +188,9 @@ public class Document extends ParentNode {
         if (oldDocType == null) insertChild(doctype, 0);
         else {
             int position = indexOf(oldDocType);
-            checkInsertChild(doctype, position);
-            checkRemoveChild(oldDocType, position);
+            // how to make this atommic now????
+           /*heckInsertChild(doctype, position);
+            checkRemoveChild(oldDocType, position); */
             children.remove(position);
             children.add(position, doctype);
             oldDocType.setParent(null);
@@ -225,7 +234,7 @@ public class Document extends ParentNode {
      *      subclass of <code>Document</code>
      * @throws NullPointerException if root is null
      */
-    public final void setRootElement(Element root) {
+    public void setRootElement(Element root) {
         
         Element oldRoot = this.getRootElement(); 
         if (root == oldRoot) return;
@@ -236,11 +245,11 @@ public class Document extends ParentNode {
             throw new MultipleParentException(root.getQualifiedName()
               + " already has a parent");
         }
-        checkRoot(root);
         
         int index = indexOf(oldRoot);
-        checkRemoveChild(oldRoot, index);
-        checkInsertChild(root, index);
+        // atomicity ????
+       /* checkRemoveChild(oldRoot, index);
+        checkInsertChild(root, index); */
         
         oldRoot.setParent(null);
         children.remove(index);
@@ -262,7 +271,7 @@ public class Document extends ParentNode {
      * @throws MalformedURIException if <code>URI</code> is 
      *     not a legal IRI
      */
-    public final void setBaseURI(String URI) { 
+    public void setBaseURI(String URI) { 
         setActualBaseURI(URI);       
     }
     
@@ -277,23 +286,6 @@ public class Document extends ParentNode {
     public final String getBaseURI() {       
         return getActualBaseURI();       
     }
-    
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the root element beyond what XML 1.0 requires.
-     * For example, an <code>XHTMLDocument</code> subclass might 
-     * throw an exception if the proposed root element were not 
-     * an <code>html</code> element.
-     * </p>
-     * 
-     * @param root the new root element
-     * 
-     * @throws XMLException if the proposed root element 
-     *     does not satisfy the local constraints
-     */
-    protected void checkRoot(Element root) {}
 
     
     /**
@@ -314,7 +306,7 @@ public class Document extends ParentNode {
      * @throws WellformednessException if the index points 
      *     to the root element
      */
-    public final Node removeChild(int position) {
+    public Node removeChild(int position) {
         
         if (position == getRootPosition()) {
             throw new WellformednessException(
@@ -342,7 +334,7 @@ public class Document extends ParentNode {
      *   child of this node
      * @throws WellformednessException if child is the root element
      */
-    public final Node removeChild(Node child) {
+    public Node removeChild(Node child) {
         
         if (child == getRootElement()) {
             throw new WellformednessException(
@@ -376,8 +368,10 @@ public class Document extends ParentNode {
      * @throws XMLException if the subclass rejects the removal of
      *     oldChild or the insertion of newChild
      */
-    public final void replaceChild(Node oldChild, Node newChild) {
+    public void replaceChild(Node oldChild, Node newChild) {
           
+        // do I need to call insertionAllowed(newChild)????
+        // otherwise MultipleParent problem
         if (oldChild == getRootElement() 
           && newChild != null && newChild.isElement()) {
             setRootElement((Element) newChild);

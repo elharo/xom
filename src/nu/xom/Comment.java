@@ -111,7 +111,7 @@ public class Comment extends Node {
      * 
      * @param data the text to install in the object
      */
-    public final void setValue(String data) {
+    public void setValue(String data) {
         if (data == null) data = "";
         else {
             Verifier.checkPCDATA(data);
@@ -144,29 +144,12 @@ public class Comment extends Node {
                 throw ex;
             } 
             
-        }
-        checkValue(data); 
+        } 
         this.data = data;
         
     }
 
 
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks. However, this can only be used to add checks, not 
-     * remove them. All text in comments must be potentially 
-     * well-formed when serialized. 
-     * </p>
-     * 
-     * @param data the text to check
-     * 
-     * @throws XMLException if the data does not satisfy
-     *     the local constraints
-     */
-    protected void checkValue(String data) {}
-
-    
     /**
      * <p>
      * Throws <code>IndexOutOfBoundsException</code> because 

@@ -41,8 +41,7 @@ import java.util.List;
  * </ul>
  * 
  * <p>
- * It provides methods  to
- * add and remove child nodes.
+ * It provides methods to add and remove child nodes.
  * </p>
  * 
  * 
@@ -110,7 +109,7 @@ public abstract class ParentNode extends Node {
      *     greater than the number of children of this node
      * @throws XMLException if the concrete subclass rejects this child
      */
-    public final void insertChild(Node child, int position) {
+    public void insertChild(Node child, int position) {
         
         insertionAllowed(child, position);
         if (children == null) children = new ArrayList(1);
@@ -121,22 +120,6 @@ public abstract class ParentNode extends Node {
     
     
     abstract void insertionAllowed(Node child, int position);
-
-
-    /**
-     * <p>
-     *   Subclasses can override this method to allow
-     *   only certain nodes to be added in particular positions.
-     *   By throwing an <code>XMLException</code>
-     *   they can prevent the child from being added.
-     * </p>
-     * 
-     * @param position where to insert the child
-     * @param child the node to insert
-     *
-     * @throws XMLException if the subclass rejects the proposed child
-     */
-    protected void checkInsertChild(Node child, int position) {}
 
     
     /**
@@ -153,7 +136,7 @@ public abstract class ParentNode extends Node {
      * @throws XMLException if the concrete subclass rejects this child
      * 
      */
-    public final void appendChild(Node child) {
+    public void appendChild(Node child) {
         insertChild(child, getChildCount());
     }
 
@@ -226,7 +209,6 @@ public abstract class ParentNode extends Node {
             );
         }
         Node removed = (Node) children.get(position);
-        checkRemoveChild(removed, position);
         children.remove(position);
         removed.setParent(null);
         return removed;    
@@ -260,29 +242,12 @@ public abstract class ParentNode extends Node {
               "Child does not belong to this node"
             );
         }
-        checkRemoveChild(child, position);
         children.remove(position);
         
         child.setParent(null);
         return child;
         
     }
-
-    
-    /**
-     * <p>
-     *   Subclasses can override this method to allow
-     *   only certain nodes to be removed from particular 
-     *   positions. By throwing an <code>XMLException</code>
-     *   they can prevent the child from being removed.
-     * </p>
-     * 
-     * @param child the node to be removed
-     * @param position location of the node to be removed
-     *
-     * @throws XMLException if the subclass rejects the removal
-     */
-    protected void checkRemoveChild(Node child, int position) {}
 
     
     /**
@@ -317,7 +282,7 @@ public abstract class ParentNode extends Node {
             throw new NullPointerException(
               "Tried to replace child with null"
             );
-        }
+        } 
         if (children == null) {
             throw new NoSuchChildException(
               "Reference node is not a child of this node."
@@ -333,6 +298,7 @@ public abstract class ParentNode extends Node {
         if (oldChild == newChild) return;
         
         // must make sure insertion is legal before we remove
+        // atomicity???? what if remove fails and insert doesn't or vice versa
         insertionAllowed(newChild, position);
         removeChild(position);
         insertChild(newChild, position);

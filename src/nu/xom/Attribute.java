@@ -211,6 +211,7 @@ public class Attribute extends Node {
         result.value = value;
         
         return result;
+        
     }
 
 
@@ -236,26 +237,9 @@ public class Attribute extends Node {
      * 
      * @param type the DTD type of this attribute
      */
-    public final void setType(Type type) {
-        checkType(type);
+    public void setType(Type type) {
         this.type = type;
     }
-
-    
-    /**
-     * <p>
-     * This method is called before the specified 
-     * type is assigned to this attribute. By default it does nothing.
-     * However, subclasses can override it and prevent certain
-     * types from being assigned to the attribute 
-     * by throwing an <code>XMLException</code>.
-     * </p>
-     * 
-     * @param type the DTD type of this attribute
-     * 
-     * @throws XMLException if the subclass rejects the requested type.
-     */
-    protected void checkType(Type type) {}
 
     
     /**
@@ -291,28 +275,12 @@ public class Attribute extends Node {
      *     <code>xml:base</code> attribute, and the value is not a
      *     legal IRI
      */
-    public final void setValue(String value) {
+    public void setValue(String value) {
         Verifier.checkPCDATA(value);
-        checkValue(value);
         this.value = value;
     }
 
     
-    /**
-     * <p>
-     * Subclasses can override this method to check the value for 
-     * an attribute before it's created or its value is changed.
-     * </p>
-     * 
-     * @param value the proposed attribute value
-     * 
-     * @throws XMLException if <code>value</code> does not satisfy the 
-     *     local constraints
-     * 
-     */
-    protected void checkValue(String value) {}
-
-
     /**
      * <p>
      * Returns the local name of this attribute,
@@ -337,34 +305,18 @@ public class Attribute extends Node {
      *      is not a namespace well-formed, non-colonized name
      * 
      */
-    public final void setLocalName(String localName) {
+    public void setLocalName(String localName) {
+        
         Verifier.checkNCName(localName);
         if (localName.equals("xmlns")) {
             throw new IllegalNameException("The Attribute class is not"
               + " used for namespace declaration attributes.");
         }
-        checkLocalName(localName);
         this.localName = localName;
+        
     }   
     
     
-    /**
-     * <p>
-     * This method is called before the specified 
-     * local name is assigned to this attribute.
-     * By default it does nothing. However,
-     * subclasses can override it and prevent certain
-     * local names from being assigned to the attribute 
-     * by throwing an <code>XMLException</code>.
-     * </p>
-     * 
-     * @param localName the proposed local name of the attribute
-     * 
-     * @throws XMLException if the subclass rejects the name.
-     */
-    protected void checkLocalName(String localName) {}
-
-
     /**
      * <p>
      * Returns the qualified name of this attribute,
@@ -433,7 +385,7 @@ public class Attribute extends Node {
      *          on the attribute's parent element.</li>
      * </ul>
      */
-    public final void setNamespace(String prefix, String URI) {
+    public void setNamespace(String prefix, String URI) {
         
         if (URI == null) URI = "";
         if (prefix == null) prefix = "";
@@ -485,30 +437,11 @@ public class Attribute extends Node {
         
         Verifier.checkAbsoluteURIReference(URI);
         Verifier.checkNCName(prefix);
-        checkNamespace(prefix, URI);
         
         this.URI = URI;
         this.prefix = prefix;
         
     }
-
-    
-    /**
-     * <p>
-     * This method is called before the specified 
-     * prefix and URI are assigned to this attribute.
-     * By default it does nothing. However,
-     * subclasses can override it and prevent certain
-     * namespace URIs from being assigned to the attribute 
-     * by throwing an <code>XMLException</code>.
-     * </p>
-     * 
-     * @param prefix the proposed namespace prefix for this attribute
-     * @param URI the proposed namespace URI for this attribute
-     * 
-     * @throws XMLException if the subclass rejects the name.
-     */
-    protected void checkNamespace(String prefix, String URI) {}
 
     
     /**
@@ -916,7 +849,7 @@ public class Attribute extends Node {
          * suitable for debugging and diagnosis. 
          * </p>
          * 
-         *  @return a non-XML string representation of this type
+         * @return a non-XML string representation of this type
          *
          * @see java.lang.Object#toString()
          */

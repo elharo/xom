@@ -202,31 +202,10 @@ public class DocType extends Node {
      * @throws IllegalNameException if the root element name is not 
      *     a legal XML 1.0 name
      */
-    public final void setRootElementName(String name) {
+    public void setRootElementName(String name) {
         Verifier.checkXMLName(name);
-        checkRootElementName(name);
         this.rootName = name;
     }
-
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional checks
-     * on the root element name beyond what XML 1.0 requires.
-     * For example, an <code>HTMLDocType</code> subclass might throw an
-     * exception if any name other than "html" were passed to this 
-     * method. However, this can only be used
-     * to add checks, not remove them. All document type declarations 
-     * must be potentially well-formed when serialized. 
-     * </p>
-     * 
-     * @param name the root element name specified 
-     *     by the document type declaration.
-     * 
-     * @throws XMLException if the proposed root element name 
-     *     does not satisfy the local constraints
-     */
-    protected void checkRootElementName(String name) {}
 
     
     /**
@@ -276,7 +255,7 @@ public class DocType extends Node {
      *      the rules for public IDs in XML 1.0
      * @throws WellformednessException if no system ID has been set
      */
-    public final void setPublicID(String id) {  
+    public void setPublicID(String id) {  
         
         if (systemID == null && id != null) {
             throw new WellformednessException(
@@ -310,30 +289,9 @@ public class DocType extends Node {
                 }  
             }
         }
-        checkPublicID(id);
         this.publicID = id;
         
     }   
-
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the public ID beyond what XML 1.0 requires.
-     * For example, an <code>HTMLDocType</code> subclass might 
-     * check that the public ID were one of the three IDs 
-     * defined by the XHTML 1.0 specification. However, this can only
-     * be used to add checks, not remove them. All document type 
-     * declarations must be potentially well-formed when serialized. 
-     * </p>
-     * 
-     * @param publicID the proposed public ID for the external 
-     *     DTD subset
-     * 
-     * @throws XMLException if the proposed public ID 
-     *     does not satisfy the local constraints
-     */
-    protected void checkPublicID(String publicID) {}
 
     
     /**
@@ -365,7 +323,7 @@ public class DocType extends Node {
      * @throws WellformednessException if the public ID is non-null 
      *     and you attempt to remove the system ID
      */
-    public final void setSystemID(String id) {
+    public void setSystemID(String id) {
         
         if (id == null && publicID != null) {
             throw new WellformednessException(
@@ -392,29 +350,9 @@ public class DocType extends Node {
             }
         }
         
-        checkSystemID(id);
         this.systemID = id;
         
     }
-    
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the system ID beyond what XML 1.0 requires.
-     * For example, it might wish to check that the URL scheme 
-     * is recognized. However, this can only be used
-     * to add checks, not remove them. All document 
-     * type declarations must be potentially well-formed
-     * when serialized. 
-     * </p>
-     * 
-     * @param systemID the URL of the external DTD subset.
-     * 
-     * @throws XMLException if the proposed system ID 
-     *     does not satisfy the local constraints
-     */
-    protected void checkSystemID(String systemID) {}
 
     
     /**
