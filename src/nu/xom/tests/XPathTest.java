@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nu.xom.Attribute;
+import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.Nodes;
@@ -68,6 +69,80 @@ public class XPathTest extends XOMTestCase {
         Nodes result = child.query("parent::*");
         assertEquals(1, result.size());
         assertEquals(parent, result.get(0));   
+        
+    }
+    
+
+    public void testAncestorAxis() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        grandparent.appendChild(parent);
+        
+        Nodes result = child.query("ancestor::*");
+        // ???? appears to be a bug where root node is considered to
+        // be of principle node type on ancestor axis
+        assertEquals(2, result.size());
+        assertEquals(parent, result.get(0));   
+        assertEquals(grandparent, result.get(1));
+        
+    }
+    
+
+    public void testDescendantAxis() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        grandparent.appendChild(parent);
+        
+        Nodes result = doc.query("descendant::*");
+        assertEquals(3, result.size());
+        assertEquals(grandparent, result.get(0));   
+        assertEquals(parent, result.get(1));
+        assertEquals(child, result.get(2));
+        
+    }
+    
+
+    public void testDescendantOrSelfAxis() {
+        
+        Element grandparent = new Element("Test");
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        grandparent.appendChild(parent);
+        
+        Nodes result = grandparent.query("descendant-or-self::*");
+        assertEquals(3, result.size());
+        assertEquals(grandparent, result.get(0));   
+        assertEquals(parent, result.get(1));
+        assertEquals(child, result.get(2));
+        
+    }
+    
+
+    public void testAncestorOrSelfAxis() {
+        
+        Element grandparent = new Element("Test");
+        Document doc = new Document(grandparent);
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        grandparent.appendChild(parent);
+        
+        Nodes result = child.query("ancestor::*");
+        // ???? appears to be a bug where root node is considered to
+        // be of principle node type on ancestor axis
+        assertEquals(3, result.size());
+        assertEquals(child, result.get(0));   
+        assertEquals(parent, result.get(1));   
+        assertEquals(grandparent, result.get(2));
         
     }
     
