@@ -789,21 +789,16 @@ public class XIncluder {
     private static void processFallback(Element includeElement, 
       Builder builder, Stack baseURLs, ParentNode parent, Exception ex)
         throws XIncludeException, IOException, ParsingException {
-           Elements fallbacks 
-              = includeElement.getChildElements("fallback", XINCLUDE_NS);
-           if (fallbacks.size() == 0) {
+           Element fallback 
+              = includeElement.getFirstChildElement("fallback", XINCLUDE_NS);
+           if (fallback == null) {
                 if (ex instanceof IOException) throw (IOException) ex;
                 XIncludeException ex2 = new XIncludeException(
                   ex.getMessage(), includeElement.getDocument().getBaseURI());
                 ex2.initCause(ex);
                 throw ex2;
            }
-           else if (fallbacks.size() > 1) {
-                throw new XIncludeException("Multiple fallbacks", 
-                   includeElement.getDocument().getBaseURI());
-           }
              
-           Element fallback = fallbacks.get(0); 
            while (fallback.getChildCount() > 0) {
                 Node child = fallback.getChild(0);
                 if (child instanceof Element) {
@@ -820,21 +815,16 @@ public class XIncluder {
     private static Nodes processFallback(
       Element includeElement, Builder builder, Stack baseURLs, Exception ex)
         throws XIncludeException, IOException, ParsingException {
-           Elements fallbacks 
-              = includeElement.getChildElements("fallback", XINCLUDE_NS);
-           if (fallbacks.size() == 0) {
+           Element fallback 
+              = includeElement.getFirstChildElement("fallback", XINCLUDE_NS);
+           if (fallback == null) {
                 if (ex instanceof IOException) throw (IOException) ex;
                 XIncludeException ex2 = new XIncludeException(
                   ex.getMessage(), includeElement.getDocument().getBaseURI());
                 ex2.initCause(ex);
                 throw ex2;
            }
-           else if (fallbacks.size() > 1) {
-                throw new XIncludeException("Multiple fallbacks", 
-                   includeElement.getDocument().getBaseURI());
-           }
-             
-           Element fallback = fallbacks.get(0); 
+
            Nodes result = new Nodes();
            for (int i = 0; i < fallback.getChildCount(); i++) {
                 Node child = fallback.getChild(0);
@@ -850,7 +840,7 @@ public class XIncluder {
            }
            return result;
 
-    }
+    } 
 
    
 
