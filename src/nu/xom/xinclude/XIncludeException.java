@@ -30,8 +30,6 @@ package nu.xom.xinclude;
  * of a violation of XInclude's rules.
  * </p>
  * 
- * replace getRootCause and setRootCause with initCause????
- *
  * @author Elliotte Rusty Harold
  * @version 1.0d21
  */
@@ -46,12 +44,14 @@ public class XIncludeException extends Exception {
     public XIncludeException() {}
 
     /**
-     * Constructs an <code>XIncludeException</code> with the specified 
+     * <p>
+     * Constructs an <code>XIncludeException</code> with the specified
      * detail message. The error message string <code>message</code> 
      * can later be retrieved by the 
      * <code>{@link java.lang.Throwable#getMessage}</code>
      * method of class <code>java.lang.Throwable</code>.
-     *
+     * </p>
+     * 
      * @param message the detail message
      */
     public XIncludeException(String message) {
@@ -59,12 +59,14 @@ public class XIncludeException extends Exception {
     }
 
     /**
+     * <p>
      * Constructs an <code>XIncludeException</code> with the specified 
      * detail message and initial cause. The error message string 
      * <code>message</code> can later be retrieved by the 
      * <code>{@link java.lang.Throwable#getMessage}</code>
      * method of class <code>java.lang.Throwable</code>.
-     *
+     * </p>
+     * 
      * @param message the detail message
      * @param cause   the initial cause of the exception
      */
