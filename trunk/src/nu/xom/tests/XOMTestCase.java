@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -40,7 +40,7 @@ import nu.xom.Text;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public class XOMTestCase extends TestCase {
@@ -619,6 +619,12 @@ public class XOMTestCase extends TestCase {
                 assertEquals(message,
                   (ProcessingInstruction) expected, 
                   (ProcessingInstruction) actual
+                );
+            }
+            else if (expected instanceof Attribute) {
+                assertEquals(message,
+                  (Attribute) expected, 
+                  (Attribute) actual
                 );
             }
             else {
