@@ -872,6 +872,22 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+
+    // In this test the inlcuded document has a prolog and an epilog
+    public void testReplaceRoot2() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/roottest2.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        dumpResult(input, result);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/roottest2.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+
     
     public void testIncludeElementsCannotHaveIncludeChildren() 
       throws ParsingException, IOException, XIncludeException {

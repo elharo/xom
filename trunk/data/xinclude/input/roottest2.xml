@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<xinclude:include xmlns:xinclude="http://www.w3.org/2003/XInclude"
+  href="simple2.xml"/>
+
