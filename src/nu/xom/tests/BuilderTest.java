@@ -1282,12 +1282,65 @@ public class BuilderTest extends XOMTestCase {
         catch (ValidityException ex) {
             fail("Crimson threw validity error instead of well-formedness error");
         }
-        catch (ParsingException ex) {
-            assertNotNull(ex.getMessage());
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
         }
         
     }        
 
+    
+    // This is testing a work-around for a Xerces bug
+    // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=27583
+    // that reports this as an IOException rather than a SAXException
+    public void testBuildMalformedDocumentWithUnpairedSurrogate() 
+      throws IOException {
+        
+        String doc = "<doc>A\uD800A</doc>";
+        try {
+            builder.build(doc, "http://www.example.com");   
+            fail("Allowed malformed doc");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
+    public void testBuildMalformedDocumentWithBadUnicodeData() 
+      throws IOException {
+        
+        File f = new File("data/xmlconf/xmltest/not-wf/sa/170.xml");
+        if (f.exists()) {
+            try {
+                builder.build(f);   
+                fail("Allowed malformed doc");
+            }
+            catch (ParsingException success) {
+                assertNotNull(success.getMessage());
+            }
+        }
+        
+    }
+    
+    
+    public void testBuildAnotherMalformedDocumentWithBadUnicodeData() 
+      throws IOException {
+        
+        File f = new File("data//oasis/p02fail30.xml");
+        if (f.exists()) {
+            try {
+                builder.build(f);   
+                fail("Allowed malformed doc");
+            }
+            catch (ParsingException success) {
+                assertNotNull(success.getMessage());
+            }
+        }
+        
+    }
+    
+    
     public void testBuildMalformedDocumentWithBadParser() 
       throws ParsingException, IOException {
         
@@ -1298,8 +1351,7 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (IllegalNameException success) {
             assertNotNull(success.getMessage());
-        }
-            
+        }      
         
     }
 
