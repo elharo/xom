@@ -731,11 +731,36 @@ public class Serializer {
             escaper.writeMarkup(value);
             escaper.writeMarkup("]]>");
         }
+        // is this boundary whitespace we can ignore?
+        else if (isBoundaryWhitespace(text)) {
+            return; // without writing node
+        }
         else {
             escaper.writePCDATA(value);
         }
         
-    }   
+    }  
+    
+    private boolean isBoundaryWhitespace(Text text) {
+        
+        if (getIndent() <= 0) return false;
+        if (!"".equals(text.getValue().trim())) return false;
+        ParentNode parent = text.getParent();
+        int position = parent.indexOf(text);
+        if (position == 0) return false;
+        Node previous = null;
+        Node next = null;
+        previous = parent.getChild(position-1);
+        if (position != parent.getChildCount()-1) next = parent.getChild(position+1);
+        if (previous == null || !previous.isText()) {
+            if (next == null || !next.isText()) {
+                return true;
+            }
+        }
+        
+        return false;
+        
+    }
 
     
     /**
