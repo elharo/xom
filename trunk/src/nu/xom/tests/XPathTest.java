@@ -47,7 +47,7 @@ import nu.xom.XPathException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d4
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -140,6 +140,20 @@ public class XPathTest extends XOMTestCase {
         assertEquals(1, result.size());
         result = doc.query("/*[5000000001 > 5000000001]");
         assertEquals(0, result.size());
+        
+    }
+    
+
+    public void testNamespaceNodeParent() {
+        
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        Element child = new Element("pre:child", "http://www.ietf.org");
+        root.appendChild(child);
+        
+        Nodes result = doc.query("/root/*/namespace::*/parent::*");
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));
         
     }
     
