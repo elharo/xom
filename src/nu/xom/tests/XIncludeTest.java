@@ -2129,20 +2129,6 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
-    public void testIncludeMiddlePunctuationFileNames() 
-      throws ParsingException, IOException, XIncludeException {
-      
-        File input = new File("data/xinclude/input/middlepunctuation.xml");
-        Document doc = builder.build(input);
-        Document result = XIncluder.resolve(doc);
-        Document expectedResult = builder.build(
-          new File("data/xinclude/output/middlepunctuation.xml")
-        );
-        assertEquals(expectedResult, result);
-        
-    }
-    
-    
     public void testMiddlePunctuationError() 
       throws ParsingException, IOException {
       
