@@ -348,7 +348,8 @@ public class XIncluder {
                 // Process fallbacks;  I'm not sure this is correct 
                 // behavior. Possibly this should include nothing. See
                 // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0000.html
-                // ????
+                // Daniel Veillard thinks this is correct. See
+                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0001.html
                 processFallback(element, baseURLs, parent, ex);
             }
             
