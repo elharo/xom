@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -34,7 +34,7 @@ import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 
 
-/*
+/**
  * <p>
  * This class provides utility methods to
  * compare nodes for deep equality in an infoset
@@ -47,19 +47,52 @@ import nu.xom.Text;
  */
 public class XOMTestCase extends TestCase {
 
+    // add JavaDocs????
+    
     public XOMTestCase(String name) {
         super(name);   
-    }
+    }  
     
+    
+    /**
+     * <p>
+     *   Asserts that two text nodes are equal. 
+     *   Text nodes are considered equal if and only if they are identical
+     *   char by char. null???? Unicode and whitespace normalization
+     *   is not performed before comparison.
+     * </p>
+     * 
+     * @param expected
+     * @param actual
+     */
     public static void assertEquals(Text expected, Text actual) {
         assertEquals(null, expected, actual);
     }
     
+    
+    /**
+     * <p>
+     * Asserts that two text nodes are equal. 
+     * Text nodes are considered equal if and 
+     * only if they are identical
+     * char by char, or if both are null. 
+     * Unicode and whitespace normalization
+     * is not performed before comparison.
+     * If they are not an <code>AssertionFailedError</code>
+     * is thrown with the given message.
+     * </p>
+     * 
+     * @param message
+     * @param expected
+     * @param actual
+     */
     public static void assertEquals(
       String message, Text expected, Text actual) {
+        if (actual == expected) return;
         assertEquals(message, expected.getValue(), actual.getValue());
     }
 
+    
     public static void assertEquals(
       Attribute expected, Attribute actual) {
         assertEquals(null, expected, actual);   
@@ -69,6 +102,7 @@ public class XOMTestCase extends TestCase {
     public static void assertEquals(
       String message, Attribute expected, Attribute actual) {
         
+        if (actual == expected) return;
         String value1 = expected.getValue();
         String value2 = actual.getValue();
         if ("xml:base".equals(expected.getQualifiedName())) {
@@ -90,13 +124,16 @@ public class XOMTestCase extends TestCase {
 
     }
 
+    
     public static void assertEquals(DocType expected, DocType actual) {
         assertEquals(null, expected, actual);
     }
 
+    
     public static void assertEquals(
       String message, DocType expected, DocType actual) {
         
+        if (actual == expected) return;
         /* assertEquals(
           type1.getInternalDTDSubset(), 
           type2.getInternalDTDSubset()
@@ -115,15 +152,18 @@ public class XOMTestCase extends TestCase {
         );
     }
 
+    
     public static void assertEquals(
       Element expected, Element actual) {
         assertEquals(null, expected, actual);
 
     }
 
+    
     public static void assertEquals(String message,
       Element expected, Element actual) {
         
+        if (actual == expected) return;
         assertEquals(message,
           expected.getLocalName(), 
           actual.getLocalName()
@@ -199,7 +239,9 @@ public class XOMTestCase extends TestCase {
 
     }
     
+    
     private static void combineTextNodes(Element element) {
+
         for (int i = 0; i < element.getChildCount()-1; i++) {
             Node child = element.getChild(i);
             if (child instanceof Text) {
@@ -213,10 +255,14 @@ public class XOMTestCase extends TestCase {
                   }
             }
         }        
+
     }
 
+    
     public static void assertEquals(
       String message, Document expected, Document actual) {       
+
+        if (actual == expected) return;
         assertEquals(message,
           expected.getChildCount(), 
           actual.getChildCount()
@@ -226,43 +272,54 @@ public class XOMTestCase extends TestCase {
             Node child2 = actual.getChild(i);
             assertEquals(message, child1, child2);
         }
+
     }
 
+    
     public static void assertEquals(
       Document expected, Document actual) {       
         assertEquals(null, expected, actual);
     }
     
+    
     public static void assertEquals(
       String message, Comment expected, Comment actual) {
+        if (actual == expected) return;
         assertEquals(message, expected.getValue(), actual.getValue());
     }
+    
     
     public static void assertEquals(Comment expected, Comment actual) {
         assertEquals(null, expected, actual);
     }
+    
     
     public static void assertEquals(ProcessingInstruction instruction1, 
       ProcessingInstruction instruction2) {
         assertEquals(null, instruction1, instruction2);
     }
     
+    
     public static void assertEquals(String message, 
-      ProcessingInstruction instruction1, 
-      ProcessingInstruction instruction2) {
-        assertEquals(message, instruction1.getValue(),
-                            instruction2.getValue());
-        assertEquals(message, instruction1.getTarget(), 
-                            instruction2.getTarget());
+      ProcessingInstruction expected, 
+      ProcessingInstruction actual) {
+
+        if (actual == expected) return;
+        assertEquals(message, expected.getValue(), actual.getValue());
+        assertEquals(message, expected.getTarget(), actual.getTarget());
+        
     }
 
+    
     public static void assertEquals(Node expected, Node actual) {
         assertEquals(null, expected, actual);
     }
     
+    
     public static void assertEquals(
       String message, Node expected, Node actual) {
         
+        if (actual == expected) return;
         try {
             if (expected instanceof Document) {
                 assertEquals(message, (Document) expected, (Document) actual);
@@ -305,5 +362,6 @@ public class XOMTestCase extends TestCase {
         }
         
     }
+   
     
 }
