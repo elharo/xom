@@ -22,10 +22,8 @@
 package nu.xom;
 
 import java.util.List;
-import java.util.Map;
 
 import org.jaxen.JaxenException;
-import org.jaxen.NamespaceContext;
 import org.jaxen.XPath;
 
 /**
