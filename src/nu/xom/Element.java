@@ -202,7 +202,8 @@ public class Element extends ParentNode {
         int top = 0;
         indexes[0] = 0;
         
-        // true if processing the element for the 2nd time; i.e. the element's end-tag
+        // true if processing the element for the 2nd time; 
+        // i.e. the element's end-tag
         boolean endTag = false; 
         
         while (true) {
@@ -237,7 +238,7 @@ public class Element extends ParentNode {
             if (sourceCurrent.isElement()) {
                 Element child = copyTag((Element) sourceCurrent);
                 resultParent.appendChild(child); 
-                if (sourceCurrent.getChildCount() > 0) { // not empty element
+                if (sourceCurrent.getChildCount() > 0) { 
                     resultParent = child;
                 }
             }
@@ -1589,7 +1590,7 @@ public class Element extends ParentNode {
      * Subclasses should override this method so that it
      * returns an instance of the subclass so that types
      * are preserved when copying. This method should not add any
-     * attribute, namespace declarations, or children to the 
+     * attributes, namespace declarations, or children to the 
      * shallow copy. Any such items will be overwritten.
      * </p>
      *

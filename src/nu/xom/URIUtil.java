@@ -207,7 +207,8 @@ class URIUtil {
             }
             else if (question != -1) {
                 if (question < colon) {
-                    MalformedURIException ex = new MalformedURIException("Unparseable URI");
+                    MalformedURIException ex 
+                      = new MalformedURIException("Unparseable URI");
                     ex.setData(spec);
                     throw ex;
                 }
@@ -220,7 +221,7 @@ class URIUtil {
                     ex.setData(spec);
                     throw ex;
                 }
-                schemeSpecificPart = spec.substring(colon+1, sharp);                
+                schemeSpecificPart = spec.substring(colon+1, sharp);
             }
             
             if (sharp != -1) {
