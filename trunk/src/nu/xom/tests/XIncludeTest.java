@@ -112,6 +112,20 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testIncludeDocumentThatUsesIntradocumentReferences() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/includedocumentwithintradocumentreferences.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/includedocumentwithintradocumentreferences.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
     // According to RFC 2396 empty string URI laways refers to the 
     // current document irrespective of base URI
     public void testXMLBaseNotUsedToResolveMissingHref() 
@@ -1359,6 +1373,22 @@ public class XIncludeTest extends XOMTestCase {
         Document result = XIncluder.resolve(doc);
         Document expected = builder.build(
           new File("data/xinclude/output/ignoresfragmentid.xml")
+        );
+        assertEquals(expected, result);
+                
+    }
+    
+ 
+    public void testLineEnds() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(
+          "data/xinclude/input/lineends.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        String data = result.getValue();
+        Document expected = builder.build(
+          new File("data/xinclude/output/lineends.xml")
         );
         assertEquals(expected, result);
                 
