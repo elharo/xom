@@ -62,11 +62,13 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  *
  */
 public class XIncluder {
     
+    private static String version = System.getProperty("java.version");   
+
     // could rewrite this to handle only elements in documents 
     // (no parentless elements) and then add code to handle Nodes 
     // and parentless elements by sticking each one in a Document
@@ -560,7 +562,6 @@ public class XIncluder {
     
     private static String getXMLLangValue(Element element) {
         
-        String value = "";
         while (true) {
            Attribute lang = element.getAttribute(
              "lang", "http://www.w3.org/XML/1998/namespace");
@@ -993,16 +994,20 @@ public class XIncluder {
                 }
             }
             // workaround for pre-1.3 VMs that don't recognize UTF-16
-            if (encoding.equalsIgnoreCase("UTF-16")) {
-                String version = System.getProperty("java.version");   
-                if (version.startsWith("1.2") 
-                  || version.startsWith("1.1")) {
+            if (version.startsWith("1.2")  || version.startsWith("1.1")) {
+                if (encoding.equalsIgnoreCase("UTF-16")) {
                     // is it  big-endian or little-endian?
                     in.mark(2);
                     int first = in.read();
                     if (first == 0xFF) encoding = "UnicodeLittle";
                     else encoding="UnicodeBig";
                     in.reset();  
+                }
+                else if (encoding.equalsIgnoreCase("UnicodeBigUnmarked")) {
+                    encoding = "UnicodeBig";
+                }
+                else if (encoding.equalsIgnoreCase("UnicodeLittleUnmarked")) {
+                    encoding = "UnicodeLittle";
                 }
             }
             Reader reader = new BufferedReader(
