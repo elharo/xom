@@ -272,8 +272,9 @@ public class Attribute extends Node {
      */
     public final void setValue(String value) {
         // Need to check values of xml:base
+        // does this get trimmed????
         if ("xml".equals(prefix) && "base".equals(localName)) {
-            Verifier.checkIRI(value);
+            Verifier.checkXMLBaseValue(value);
         }
         else {
             Verifier.checkCharacterData(value);   

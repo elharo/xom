@@ -310,15 +310,6 @@ public class BaseURITest extends XOMTestCase {
     public void testXMLBaseFailures() {
         Attribute base = new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", "base.html");
-        
-        try { // check IRI draft????
-            base.setValue("http://www.w3.org/ testing");
-            fail("Allowed URI containing space");
-        }
-        catch (MalformedURIException ex) { // should this be a malformedIRIException????
-            // success
-            assertNotNull(ex.getMessage());
-        }
 
         try {
             base.setValue("http://www.w3.org/tes%ting");
@@ -348,24 +339,6 @@ public class BaseURITest extends XOMTestCase {
         }
 
         try {
-            base.setValue("http://www.w3.org/^testing");
-            fail("Allowed URI containing unwise character");
-        }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
-        }
-
-        try {
-            base.setValue("http://www.w3.org/<testing");
-            fail("Allowed URI containing unwise < character");
-        }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
-        }
-
-        try {
             base.setValue("http://www.w3.org/\u0000testing");
             fail("Allowed URI containing unwise null C0 control character");
         }
@@ -385,7 +358,26 @@ public class BaseURITest extends XOMTestCase {
 
     }
     
+    // Note that the xml:base attribute can contain an IRI,
+    // not a URI. Here we test for legal IRIs but illegal URIs
+    public void testValuesLegalInXMLBaseButNotInAURI() {
+        Element element = new Element("test");
+        Attribute base = new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", "base.html");
+        element.addAttribute(base);
+        
+        base.setValue("http://www.w3.org/ testing");
+        assertEquals("http://www.w3.org/%20testing", element.getBaseURI());
 
+        base.setValue("http://www.w3.org/^testing");
+        assertEquals("http://www.w3.org/%5etesting", element.getBaseURI());
+
+        base.setValue("http://www.w3.org/<testing");
+        assertEquals("http://www.w3.org/%3ctesting", element.getBaseURI());
+
+    }
+    
+    
     public void testXMLBaseValuesCanContainPercentEscapes() {
         Attribute base = new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", "base.html");
@@ -395,6 +387,7 @@ public class BaseURITest extends XOMTestCase {
         String baseURI = e.getBaseURI();
         assertEquals("http://www.w3.org/%20testing", baseURI);
     }
+    
     
     public void testInheritBaseFromDoc() {
         assertEquals(base1, doc.getRootElement().getBaseURI());
