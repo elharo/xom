@@ -33,7 +33,6 @@ import java.io.StringReader;
 import java.io.UTFDataFormatException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -56,7 +55,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0b7
  * 
  */
 public class Builder {
@@ -642,17 +641,6 @@ public class Builder {
         for (int i = 0; i < length; i++) {
             char c = absolute.charAt(i);
             if (c == separatorChar) url.append('/');
-            // Should I specify UTF-8 rather than platform default?
-            // In fact, the platform default is likely to be UTF-8; 
-            // at least in Java 1.4. I've verified this on  
-            // Mac OS X 10.2, Windows 2000, and Linux. In other words,
-            // it looks like URLEncoder on these platforms uses UTF-8 
-            // to encode the URL, whatever the underlying encoding is.
-            // (I'm not sure whether it's UTF-8 or not.)
-            // In other words, this works on the three major platforms,
-            // at least in Java 1.4, and it will compile and run in 
-            // Java 1.3. So I should leave this as is and stop worrying
-            // about it, unless someone files a bug report.
             else {
                 switch(c) {
                     case ' ':  
@@ -674,7 +662,9 @@ public class Builder {
                         url.append("%25");
                         break;
                     case '&':  
-                        url.append("%26");
+                        // ampersand does not need to be encoded in 
+                        // path part of URL
+                        url.append('&');
                         break;
                     case '\'':  
                         url.append(c);
@@ -942,7 +932,7 @@ public class Builder {
                         break;
                     default: 
                         if (c < 0xD800 || c > 0xDFFF) {
-                            url.append(URLEncoder.encode(String.valueOf(c)));
+                            url.append(URIUtil.percentEscape(c));
                         }
                         else if (c <= 0xDBFF) {
                             // high surrogate; therefore we need to 
@@ -950,7 +940,14 @@ public class Builder {
                             i++;
                             try {
                                 char low = absolute.charAt(i);
-                                url.append(URLEncoder.encode(String.valueOf(c)+String.valueOf(low)));
+                                String character = String.valueOf(c)+String.valueOf(low);
+                                byte[] data = character.getBytes("UTF8");
+                                // Always exactly 4 bytes, unless the encoder is buggy
+                                for (int j=0; j < 4; j++) {
+                                    url.append('%');
+                                    String hex = Integer.toHexString(data[j]).toUpperCase();
+                                    url.append(hex.substring(hex.length()-2));
+                                }
                             }
                             catch (IndexOutOfBoundsException ex) {
                                 // file name contains a high half and not a low half
@@ -959,6 +956,8 @@ public class Builder {
                             }
                         }
                         else {
+                            // low half not preceded by high half
+                            // Can't create a base URI
                             url = new StringBuffer();
                             break;
                         }
