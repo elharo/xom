@@ -32,6 +32,7 @@ import java.net.URL;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
+import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -195,6 +196,105 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
+    public void testParseEqualsTextWithNodeFactoryThatRemovesAllTextNodes()  
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/c2.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc, new Builder(new TextFilter()));
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c2a.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    private static class TextFilter extends NodeFactory {
+        
+        public Nodes makeText(String data) {
+            return new Nodes();
+        }
+        
+    }
+
+    
+    public void testParseEqualsTextWithNodeFactoryThatReplacesTextNodesWithComments()  
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/c2.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc, new Builder(new TextToComment()));
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c2b.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    private static class TextToComment extends NodeFactory {
+        
+        public Nodes makeText(String data) {
+            return new Nodes(new Comment(data));
+        }
+        
+    }
+
+    
+    public void testParseEqualsTextWithNodeFactoryThatReplacesTextNodesWithAttributes()  
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/c2.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc, new Builder(new TextToAttribute()));
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c2c.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    public void testParseEqualsTextWithNodeFactoryThatReplacesTextNodesWithTwoElements()  
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/c2.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc, new Builder(new TextToElements()));
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/c2d.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    
+    private static class TextToElements extends NodeFactory {
+        
+        public Nodes makeText(String data) {
+            Nodes result = new Nodes();
+            result.append(new Element("empty1"));
+            result.append(new Element("empty2"));
+            return result;
+        }
+        
+    }
+
+    
+    private static class TextToAttribute extends NodeFactory {
+        
+        public Nodes makeText(String data) {
+            return new Nodes(new Attribute("name", data));
+        }
+        
+    }
+
     
     public void testIncludeTextWithCustomNodeFactoryThatChangesElementNames() 
       throws ParsingException, IOException, XIncludeException {
