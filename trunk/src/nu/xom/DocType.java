@@ -233,7 +233,7 @@ public class DocType extends Node {
      */
     public final void setInternalDTDSubset(String subset) {
         
-        if (subset != null) {
+        if (subset != null && subset.length() > 0) {
             Verifier.checkInternalDTDSubset(subset);
             fastSetInternalDTDSubset(subset);
         }
