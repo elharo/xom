@@ -227,7 +227,7 @@ public class Serializer {
      * @throws IOException if the underlying output stream
      *      encounters an I/O error
      * @throws NullPointerException if <code>doc</code> is null
-     * @throws XMLException if the document contains an unescapable
+     * @throws UnavailableCharacterException if the document contains an unescapable
      *     character (e.g. in an element name) that is not available 
      *     in the current encoding
      */
@@ -299,7 +299,7 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if the element name contains  
+     * @throws UnavailableCharacterException if the element name contains  
      *     a character that is not available in the current encoding
      */
     protected void write(Element element) throws IOException {
@@ -372,7 +372,7 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if the element name contains  
+     * @throws UnavailableCharacterException if the element name contains  
      *     a character that is not available in the current encoding
      */
     protected void writeEndTag(Element element) throws IOException {
@@ -400,7 +400,7 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if the name of the element or the name of
+     * @throws UnavailableCharacterException if the name of the element or the name of
      *     any of its attributes contains a character that is not 
      *     available in the current encoding
      */
@@ -435,7 +435,7 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if the name of the element or the name of
+     * @throws UnavailableCharacterException if the name of the element or the name of
      *     any of its attributes contains a character that is not 
      *     available in the current encoding
      */
@@ -473,7 +473,7 @@ public class Serializer {
      *     written
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if the name of any of the element's 
+     * @throws UnavailableCharacterException if the name of any of the element's 
      *     attributes contains a character that is not 
      *     available in the current encoding
      */
@@ -524,7 +524,7 @@ public class Serializer {
      *     written
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if any of the element's namespace prefixes
+     * @throws UnavailableCharacterException if any of the element's namespace prefixes
      *     contains a character that is not available in the current 
      *     encoding
      */
@@ -569,7 +569,7 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if the namespace prefix contains a 
+     * @throws UnavailableCharacterException if the namespace prefix contains a 
      *     character that is not available in the current encoding
      */
     protected void writeNamespaceDeclaration(String prefix, String uri)
@@ -598,7 +598,7 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if the attribute name contains a character 
+     * @throws UnavailableCharacterException if the attribute name contains a character 
      *     that is not available in the current encoding
      * 
      */
@@ -627,7 +627,7 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream 
      *     encounters an I/O error
-     * @throws XMLException if the comment contains a character that is
+     * @throws UnavailableCharacterException if the comment contains a character that is
      *     not available in the current encoding
      */
     protected void write(Comment comment) throws IOException {
@@ -657,7 +657,7 @@ public class Serializer {
      * 
      * @throws IOException  if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if the comment contains a character that is
+     * @throws UnavailableCharacterException if the comment contains a character that is
      *     not available in the current encoding
      */
     protected void write(ProcessingInstruction instruction) 
@@ -730,7 +730,7 @@ public class Serializer {
      * 
      * @throws IOException if the underlying 
      *     output stream encounters an I/O error
-     * @throws XMLException if the document type declaration contains  
+     * @throws UnavailableCharacterException if the document type declaration contains  
      *     a character that is not available in the current encoding
      */
     protected void write(DocType doctype) throws IOException {
