@@ -32,20 +32,18 @@ import java.io.Writer;
 
 /**
  * <p>
- *  A serializer outputs a <code>Document</code> object
- *  in a specific encoding
- *  using various options for controlling white space, indenting,  
- *  line breaking, and base URIs. However, in general these do affect
- *  the document's infoset. In particular, if you set either the 
- *  maximum line length or the indent size to a positive value, 
+ *  A serializer outputs a <code>Document</code> object in a specific 
+ *  encoding using various options for controlling white space,  
+ *  indenting, line breaking, and base URIs. However, in general these 
+ *  do affect the document's infoset. In particular, if you set either 
+ *  the maximum line length or the indent size to a positive value, 
  *  then the serializer will not respect input white space. It 
  *  may trim leading and trailing space, condense runs of white 
  *  space to a single space, convert carriage  returns and line 
  *  feeds to spaces, add extra space where none was present before, 
  *  and otherwise muck with the document's white space. 
- *  The defaults, however, preserve all significant white 
- *  space including ignorable white space, to the maximum
- *  extent possible.
+ *  The defaults, however, preserve all significant white space
+ *  including ignorable white space, to the maximum extent possible.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -247,7 +245,12 @@ public class Serializer {
       throws IOException {
         Serializer serializer = new Serializer(out);
         serializer.write(doc);
+        serializer.flush();
     }
+    
+    // Does it make sense to add encoding and indented variations 
+    // here? Or perhaps move this and those potential methods 
+    // into a separate util, contrib, or samples package???? 
 
     /**
      * <p>
@@ -312,7 +315,7 @@ public class Serializer {
      *   been configured to indent or use a maximum line length.
      * </p>
      * 
-     * @param element the <code>Element</code> to serialize.
+     * @param element the <code>Element</code> to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *     encounters an I/O error
@@ -605,7 +608,7 @@ public class Serializer {
      *   encoding.
      * </p>
      * 
-     * @param comment the <code>Comment</code> to serialize.
+     * @param comment the <code>Comment</code> to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code> 
      *     encounters an I/O error
@@ -632,7 +635,7 @@ public class Serializer {
      * </p>
      * 
      * @param instruction the <code>ProcessingInstruction</code> 
-     *     to serialize.
+     *     to serialize
      * 
      * @throws IOException  if the underlying <code>OutputStream</code>
      *     encounters an I/O error
@@ -700,7 +703,7 @@ public class Serializer {
      *   This will not require any changes to the public API.
      * </p> 
      * 
-     * @param text the <code>Text</code> to serialize.
+     * @param text the <code>Text</code> to serialize
      * 
      * @throws IOException  if the underlying <code>OutputStream</code>
      *     encounters an I/O error
@@ -770,7 +773,7 @@ public class Serializer {
      * onto the output stream using the current options.
      * </p>
      * 
-     * @param node the <code>Node</code> to serialize.
+     * @param node the <code>Node</code> to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *     encounters an I/O error
@@ -815,7 +818,7 @@ public class Serializer {
      *   Double and single quotes are not escaped.
      * </p> 
      * 
-     * @param text the <code>String</code> to serialize.
+     * @param text the <code>String</code> to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code> 
      *     encounters an I/O error
@@ -838,7 +841,7 @@ public class Serializer {
      *   The single quote is not escaped. 
      * </p> 
      * 
-     * @param value the <code>String</code> to serialize.
+     * @param value the <code>String</code> to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code> 
      *     encounters an I/O error
@@ -855,7 +858,7 @@ public class Serializer {
      *   current character set cause an <code>IOException</code>.
      * </p> 
      * 
-     * @param text the <code>String</code> to serialize.
+     * @param text the <code>String</code> to serialize
      * 
      * @throws IOException if the underlying <code>OutputStream</code>
      *     encounters an I/O error or <code>text</code> contains 
@@ -1141,7 +1144,7 @@ public class Serializer {
      * </p>
      * 
      * @return true if this serialization performs Unicode 
-     *     normalization; false if it isn't.
+     *     normalization; false if it doesn't
      */
     public boolean getUnicodeNormalizationFormC() {
         return escaper.getNFC();   
