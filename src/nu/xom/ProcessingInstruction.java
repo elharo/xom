@@ -41,7 +41,7 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b6
  *
  */
 public class ProcessingInstruction extends Node {
@@ -295,7 +295,8 @@ public class ProcessingInstruction extends Node {
      */
     public final String toString() {
         return "[" + getClass().getName() + ": target=\"" 
-         + target + "\"; data=\"" + data +"\"]";
+         + target + "\"; data=\"" 
+         + Text.escapeLineBreaksAndTruncate(data) +"\"]";
     }
 
     

@@ -33,7 +33,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b6
  *
  */
 public class Text extends Node {
@@ -263,14 +263,42 @@ public class Text extends Node {
      */
     public final String toString() {
         
-        String value = getValue();
-        if (value.length() <= 40) {
-            return "[" + getClass().getName() + ": " + value + "]";
+        return "[" + getClass().getName() + ": " 
+          + escapeLineBreaksAndTruncate(getValue()) + "]";
+          
+    }
+    
+    
+    static String escapeLineBreaksAndTruncate(String s) {
+        
+        int length = s.length();
+        boolean tooLong = length > 40;
+        if (length > 40) {
+            length = 35;
+            s = s.substring(0, 35);
         }
         
-        return "[" + getClass().getName() + ": " 
-          + value.substring(0, 35) + "...]";
-          
+        StringBuffer result = new StringBuffer(length);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '\n': 
+                    result.append("\\n");
+                    break;
+                case '\r': 
+                    result.append("\\r");
+                    break;
+                case '\t': 
+                    result.append("\\t");
+                    break;
+                default:
+                    result.append(c);
+            }
+        }
+        if (tooLong) result.append("...");
+        
+        return result.toString();
+        
     }
 
     

@@ -40,7 +40,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b4
+ * @version 1.0b6
  * 
  */
 public class Attribute extends Node {
@@ -536,7 +536,8 @@ public class Attribute extends Node {
      */
     public final String toString() {
         return "[" + getClass().getName() + ": " 
-         + getQualifiedName() + "=\"" + getValue() + "\"]";
+         + getQualifiedName() + "=\"" 
+         + Text.escapeLineBreaksAndTruncate(getValue()) + "\"]";
     }
 
     

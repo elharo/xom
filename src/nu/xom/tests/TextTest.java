@@ -34,7 +34,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b6
  *
  */
 public class TextTest extends XOMTestCase {
@@ -268,15 +268,39 @@ public class TextTest extends XOMTestCase {
     }
 
     
+    public void testToStringWithLineFeed() {
+        
+        Text t = new Text("content\ncontent");
+        assertEquals("[nu.xom.Text: content\\ncontent]", t.toString());          
+        
+    }
+
+
+    public void testToStringWithCarriageReturn() {
+        
+        Text t = new Text("content\rcontent");
+        assertEquals("[nu.xom.Text: content\\rcontent]", t.toString());          
+        
+    }
+
+
+    public void testToStringWithCarriageReturnLinefeed() {
+        
+        Text t = new Text("content\r\ncontent");
+        assertEquals("[nu.xom.Text: content\\r\\ncontent]", t.toString());          
+        
+    }
+
+
     public void testToString() {
         
-        Text c1 = new Text("content");
-        assertEquals("[nu.xom.Text: content]", c1.toString());          
+        Text t = new Text("content");
+        assertEquals("[nu.xom.Text: content]", t.toString());          
         
-        c1.setValue("012345678901234567890123456789012345678901234567890123456789");
+        t.setValue("012345678901234567890123456789012345678901234567890123456789");
         assertEquals(
           "[nu.xom.Text: 01234567890123456789012345678901234...]", 
-          c1.toString()
+          t.toString()
         );          
         
     }
