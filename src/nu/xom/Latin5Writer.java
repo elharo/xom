@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -95,12 +95,101 @@ class Latin5Writer extends TextWriter {
             case 0x00FD: return true;  // place holder to enable table lookup
             case 0x00FE: return true;  // place holder to enable table lookup
             case 0x00FF: return false; // LATIN SMALL LETTER Y WITH DIAERESIS
-        } // could fill in holes here????
-        switch (c) {  // Turkish letters
+            case 0x0100: return true;  // place holder to enable table lookup
+            case 0x0101: return true;  // place holder to enable table lookup
+            case 0x0102: return true;  // place holder to enable table lookup
+            case 0x0103: return true;  // place holder to enable table lookup
+            case 0x0104: return true;  // place holder to enable table lookup
+            case 0x0105: return true;  // place holder to enable table lookup
+            case 0x0106: return true;  // place holder to enable table lookup
+            case 0x0107: return true;  // place holder to enable table lookup
+            case 0x0108: return true;  // place holder to enable table lookup
+            case 0x0109: return true;  // place holder to enable table lookup
+            case 0x010A: return true;  // place holder to enable table lookup
+            case 0x010B: return true;  // place holder to enable table lookup
+            case 0x010C: return true;  // place holder to enable table lookup
+            case 0x010D: return true;  // place holder to enable table lookup
+            case 0x010E: return true;  // place holder to enable table lookup
+            case 0x010F: return true;  // place holder to enable table lookup
+            case 0x0110: return true;  // place holder to enable table lookup
+            case 0x0111: return true;  // place holder to enable table lookup
+            case 0x0112: return true;  // place holder to enable table lookup
+            case 0x0113: return true;  // place holder to enable table lookup
+            case 0x0114: return true;  // place holder to enable table lookup
+            case 0x0115: return true;  // place holder to enable table lookup
+            case 0x0116: return true;  // place holder to enable table lookup
+            case 0x0117: return true;  // place holder to enable table lookup
+            case 0x0118: return true;  // place holder to enable table lookup
+            case 0x0119: return true;  // place holder to enable table lookup
+            case 0x011A: return true;  // place holder to enable table lookup
+            case 0x011B: return true;  // place holder to enable table lookup
+            case 0x011C: return true;  // place holder to enable table lookup
+            case 0x011D: return true;  // place holder to enable table lookup
+            // Turkish letters
             case 0x011E: return false; // LATIN CAPITAL LETTER G WITH BREVE
             case 0x011F: return false; // LATIN SMALL LETTER G WITH BREVE
+            case 0x0120: return true;  // place holder to enable table lookup
+            case 0x0121: return true;  // place holder to enable table lookup
+            case 0x0122: return true;  // place holder to enable table lookup
+            case 0x0123: return true;  // place holder to enable table lookup
+            case 0x0124: return true;  // place holder to enable table lookup
+            case 0x0125: return true;  // place holder to enable table lookup
+            case 0x0126: return true;  // place holder to enable table lookup
+            case 0x0127: return true;  // place holder to enable table lookup
+            case 0x0128: return true;  // place holder to enable table lookup
+            case 0x0129: return true;  // place holder to enable table lookup
+            case 0x012A: return true;  // place holder to enable table lookup
+            case 0x012B: return true;  // place holder to enable table lookup
+            case 0x012C: return true;  // place holder to enable table lookup
+            case 0x012D: return true;  // place holder to enable table lookup
+            case 0x012E: return true;  // place holder to enable table lookup
+            case 0x012F: return true;  // place holder to enable table lookup
             case 0x0130: return false; // LATIN CAPITAL LETTER I WITH DOT ABOVE
             case 0x0131: return false; // LATIN SMALL LETTER DOTLESS I
+            case 0x0132: return true;  // place holder to enable table lookup
+            case 0x0133: return true;  // place holder to enable table lookup
+            case 0x0134: return true;  // place holder to enable table lookup
+            case 0x0135: return true;  // place holder to enable table lookup
+            case 0x0136: return true;  // place holder to enable table lookup
+            case 0x0137: return true;  // place holder to enable table lookup
+            case 0x0138: return true;  // place holder to enable table lookup
+            case 0x0139: return true;  // place holder to enable table lookup
+            case 0x013A: return true;  // place holder to enable table lookup
+            case 0x013B: return true;  // place holder to enable table lookup
+            case 0x013C: return true;  // place holder to enable table lookup
+            case 0x013D: return true;  // place holder to enable table lookup
+            case 0x013E: return true;  // place holder to enable table lookup
+            case 0x013F: return true;  // place holder to enable table lookup
+            case 0x0140: return true;  // place holder to enable table lookup
+            case 0x0141: return true;  // place holder to enable table lookup
+            case 0x0142: return true;  // place holder to enable table lookup
+            case 0x0143: return true;  // place holder to enable table lookup
+            case 0x0144: return true;  // place holder to enable table lookup
+            case 0x0145: return true;  // place holder to enable table lookup
+            case 0x0146: return true;  // place holder to enable table lookup
+            case 0x0147: return true;  // place holder to enable table lookup
+            case 0x0148: return true;  // place holder to enable table lookup
+            case 0x0149: return true;  // place holder to enable table lookup
+            case 0x014A: return true;  // place holder to enable table lookup
+            case 0x014B: return true;  // place holder to enable table lookup
+            case 0x014C: return true;  // place holder to enable table lookup
+            case 0x014D: return true;  // place holder to enable table lookup
+            case 0x014E: return true;  // place holder to enable table lookup
+            case 0x014F: return true;  // place holder to enable table lookup
+            case 0x0150: return true;  // place holder to enable table lookup
+            case 0x0151: return true;  // place holder to enable table lookup
+            case 0x0152: return true;  // place holder to enable table lookup
+            case 0x0153: return true;  // place holder to enable table lookup
+            case 0x0154: return true;  // place holder to enable table lookup
+            case 0x0155: return true;  // place holder to enable table lookup
+            case 0x0156: return true;  // place holder to enable table lookup
+            case 0x0157: return true;  // place holder to enable table lookup
+            case 0x0158: return true;  // place holder to enable table lookup
+            case 0x0159: return true;  // place holder to enable table lookup
+            case 0x015A: return true;  // place holder to enable table lookup
+            case 0x015B: return true;  // place holder to enable table lookup
+            case 0x015C: return true;  // place holder to enable table lookup
+            case 0x015D: return true;  // place holder to enable table lookup
             case 0x015E: return false; // LATIN CAPITAL LETTER S WITH CEDILLA
             case 0x015F: return false; // LATIN SMALL LETTER S WITH CEDILLA
         }
