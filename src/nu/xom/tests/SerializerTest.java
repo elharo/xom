@@ -1641,5 +1641,33 @@ public class SerializerTest extends XOMTestCase {
           result
         );       
     }
+
+    public void testConflictBetweenMaxLengthAndIndent() 
+      throws IOException {
+        Element root = new Element("a");
+        Element b = new Element("b");
+        Element c = new Element("c");
+        Element d = new Element("d");
+        b.appendChild(c);
+        root.appendChild(b); 
+        c.appendChild(d);
+        d.appendChild("data");
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setMaxLength(16);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\"\r\nencoding=\"UTF-8\"?>\r\n"
+          + "<a>\r\n    <b>\r\n        <c>\r\n        <d>data</d>\r\n        </c>\r\n    </b>\r\n</a>\r\n", 
+          result
+        );       
+    }
+    
+    
     
 }
