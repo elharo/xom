@@ -615,137 +615,18 @@ public class XIncluder {
       Element element, Builder builder, Stack baseURLs, Document originalDoc)
       throws IOException, ParsingException, XIncludeException {
         
-        if (isIncludeElement(element)) {
-            String parse = element.getAttributeValue("parse");
-            if (parse == null) parse = "xml";
-            String xpointer = element.getAttributeValue("xpointer");
-            String encoding = element.getAttributeValue("encoding");
-            String href = element.getAttributeValue("href");
-            String accept = element.getAttributeValue("accept");
-            String acceptLanguage = element.getAttributeValue("accept-language"); 
-            
-            if ("".equals(href)) href = null;
-            if (href == null && xpointer == null) {
-                throw new NoIncludeLocationException(
-                  "Missing href attribute", 
-                  element.getDocument().getBaseURI()
-                );   
-            }
-            if (href != null) href = convertToURI(href);
-            
-            testForForbiddenChildElements(element);
-
-            String base = element.getBaseURI();
-            URL baseURL = null;
-            try {
-                baseURL = new URL(base);     
-            }
-            catch (Exception ex) {
-               // don't use base   
-            }
-            URL url = null;
-            try {
-                // xml:base attributes added to maintain the 
-                // base URI should not have fragment IDs
-                if (baseURL != null && href != null) url = new URL(baseURL, href);
-                else if (href != null) url = new URL(href);                
-                if (parse.equals("xml")) {
-                    Nodes replacements;
-                    if (url != null) {
-                        ParentNode parent = element.getParent();
-                        String parentLanguage = "";
-                        if (parent != null && parent instanceof Element) {
-                            parentLanguage = getXMLLangValue((Element) parent);
-                        }
-                        replacements = downloadXMLDocument(url, 
-                          xpointer, builder, baseURLs, accept, acceptLanguage, parentLanguage);
-                        // Add base URIs. Base URIs added by XInclusion require
-                        // the element to maintain the same base URI as it had  
-                        // in the original document. Since its base URI in the 
-                        // original document does not contain a fragment ID,
-                        // therefore its base URI after inclusion shouldn't, 
-                        // and this special case is unnecessary. Base URI fixup
-                        // should not add the fragment ID. 
-                        for (int i = 0; i < replacements.size(); i++) {
-                            Node child = replacements.get(i);
-                            if (child instanceof Element) {
-                                String noFragment = url.toExternalForm();
-                                if (noFragment.indexOf('#') >= 0) {
-                                    noFragment = noFragment.substring(
-                                      0, noFragment.indexOf('#'));
-                                }
-                                Element baseless = (Element) child;
-                                Attribute baseAttribute = new Attribute(
-                                  "xml:base", 
-                                  "http://www.w3.org/XML/1998/namespace", 
-                                  noFragment 
-                                );
-                                baseless.addAttribute(baseAttribute);   
-                            }
-                        }  
-                    }
-                    else {
-                        Document parentDoc = element.getDocument();
-                        if (parentDoc == null) {
-                            parentDoc = originalDoc;
-                        }
-                        Nodes originals = XPointer.query(parentDoc, xpointer);
-                        replacements = new Nodes(); 
-                        for (int i = 0; i < originals.size(); i++) {
-                            Node original = originals.get(i);
-                            if (original instanceof Element) {
-                                if (contains((Element) original, element)) {
-                                    throw new InclusionLoopException(
-                                      "Element tried to include itself"); 
-                                }  
-                            }
-                            replacements.append(original.copy());        
-                        }  
-                        replacements = resolveXPointerSelection(
-                          replacements, builder, baseURLs, parentDoc);                           
-                    }
-                    return replacements; 
-                }  // end parse="xml"
-                else if (parse.equals("text")) {                   
-                    return downloadTextDocument(
-                      url, encoding, builder, accept, acceptLanguage);
-                }
-                else {
-                   throw new BadParseAttributeException(
-                     "Bad value for parse attribute: " + parse, 
-                     element.getDocument().getBaseURI());   
-                }
-            
-            }
-            catch (IOException ex) {
-                return processFallbackSilently(element, builder, baseURLs, ex);
-            }
-            catch (XPointerSyntaxException ex) {
-                return processFallbackSilently(element, builder, baseURLs, ex);
-            }
-            catch (XPointerResourceException ex) {
-                // Process fallbacks;  I'm not sure this is correct 
-                // behavior. Possibly this should include nothing. See
-                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0000.html
-                // Daniel Veillard thinks this is correct. See
-                // http://lists.w3.org/Archives/Public/www-xml-xinclude-comments/2003Aug/0001.html
-                return processFallbackSilently(element, builder, baseURLs, ex);
-            }
-            
+        // There is no possibility the element passed to this method 
+        // is an include or a fallback element 
+        if (isIncludeElement(element) || isFallbackElement(element) ) {
+            throw new RuntimeException(
+              "XOM BUG: include or fallback element passed to resolveSilently; please report with a test case");
         }
-        else if (isFallbackElement(element)) {
-            throw new MisplacedFallbackException(
-              "Fallback element outside include element", 
-              element.getDocument().getBaseURI()
-            );
-        }
-        else {
-            Elements children = element.getChildElements();
-            for (int i = 0; i < children.size(); i++) {
-                resolve(children.get(i), builder, baseURLs, originalDoc);   
-            } 
-            return new Nodes(element);
-        }
+        
+        Elements children = element.getChildElements();
+        for (int i = 0; i < children.size(); i++) {
+            resolve(children.get(i), builder, baseURLs, originalDoc);   
+        } 
+        return new Nodes(element);
         
     }
 
@@ -804,37 +685,6 @@ public class XIncluder {
     }
 
     
-    private static Nodes processFallbackSilently(
-      Element includeElement, Builder builder, Stack baseURLs, Exception ex)
-        throws XIncludeException, IOException, ParsingException {
-           Element fallback 
-              = includeElement.getFirstChildElement("fallback", XINCLUDE_NS);
-           if (fallback == null) {
-                if (ex instanceof IOException) throw (IOException) ex;
-                XIncludeException ex2 = new XIncludeException(
-                  ex.getMessage(), includeElement.getDocument().getBaseURI());
-                ex2.initCause(ex);
-                throw ex2;
-           }
-
-           Nodes result = new Nodes();
-           for (int i = 0; i < fallback.getChildCount(); i++) {
-                Node child = fallback.getChild(i);
-                if (child instanceof Element) {
-                    Nodes nodes = resolveSilently((Element) child, builder, baseURLs);
-                    for (int j = 0; j < nodes.size(); j++) {
-                        result.append(nodes.get(j));   
-                    }
-                } 
-                else {
-                    result.append(child);   
-                } 
-           }
-           return result;
-
-    } 
-
-   
     // I could probably move the xpointer out of this method
     private static Nodes downloadXMLDocument(
       URL source, String xpointer, Builder builder, Stack baseURLs,
@@ -1041,6 +891,7 @@ public class XIncluder {
         
     }
 
+    
     private static boolean isFallbackElement(Element element) {
      
         return element.getLocalName().equals("fallback")
@@ -1048,6 +899,7 @@ public class XIncluder {
         
     }
 
+    
 /* The algorithm used is that defined in Namespaces in XML 1.1:
   Some characters are disallowed in URI references, even if they 
   are allowed in XML; the disallowed characters, according to [RFC2396]
