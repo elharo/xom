@@ -310,56 +310,29 @@ public class BaseURITest extends XOMTestCase {
     public void testXMLBaseFailures() {
         Attribute base = new Attribute("xml:base", 
           "http://www.w3.org/XML/1998/namespace", "base.html");
+        Element test = new Element("test");
+        test.addAttribute(base);
+        
+        base.setValue("http://www.w3.org/tes%ting");
+        assertNull(test.getBaseURI());
 
-        try {
-            base.setValue("http://www.w3.org/tes%ting");
-            fail("Allowed URI containing unescaped %");
-        }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
-        }
+        base.setValue("http://www.w3.org/%Atesting");
+        assertNull(test.getBaseURI());
 
-        try {
-            base.setValue("http://www.w3.org/%Atesting");
-            fail("Allowed IRI containing half percent escape");
-        }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
-        }
-
-        try {
-            base.setValue("http://www.w3.org/%A");
-            fail("Allowed IRI containing half percent at end of path");
-        }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
-        }
-
-        try {
-            base.setValue("http://www.w3.org/\u0000testing");
-            fail("Allowed URI containing unwise null C0 control character");
-        }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
-        }
-
-        try {
-            base.setValue("http://www.w3.org/\u0007testing");
-            fail("Allowed URI containing unwise BEL C0 control character");
-        }
-        catch (MalformedURIException ex) {
-            // success
-            assertNotNull(ex.getMessage());
-        }
+        base.setValue("http://www.w3.org/%A");
+        assertNull(test.getBaseURI());
+        
+        base.setValue("http://www.w3.org/%0testing");
+        assertNull(test.getBaseURI());
+        
+        base.setValue("http://www.w3.org/%7testing");
+        assertNull(test.getBaseURI());
 
     }
     
     // Note that the xml:base attribute can contain an IRI,
-    // not a URI. Here we test for legal IRIs but illegal URIs
+    // not a URI. It may also contain unescaped characters that
+    // need to be escaped. This tests for unescaped values.
     public void testValuesLegalInXMLBaseButNotInAURI() {
         Element element = new Element("test");
         Attribute base = new Attribute("xml:base", 

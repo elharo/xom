@@ -1231,24 +1231,33 @@ public class Element extends ParentNode {
             
             if (base.indexOf(':') == -1) {
                 // absolutize the URI if possible
-                if (parent == null) return base;
-                
-                String parentBase = parent.getActualBaseURI();
+                if (parent != null) {                   
+                    String parentBase = parent.getActualBaseURI();
                     // Mostly a null check
-                if (parentBase == actualBase 
-                  || parentBase.equals(actualBase)) {
-                    try {
-                        URL u = new URL(
-                          new URL(parent.getBaseURI()), base
-                        );
-                        return u.toExternalForm();
-                    }
-                    catch (MalformedURLException ex) {
-                        return base;   
+                    if (parentBase == actualBase 
+                      || parentBase.equals(actualBase)) {
+                        try {
+                            URL u = new URL(
+                              new URL(parent.getBaseURI()), base
+                            );
+                            base = u.toExternalForm();
+                        }
+                        catch (MalformedURLException ex) {
+                            base = null;
+                        }
                     }
                 }
             }
+            
+            try {
+                Verifier.checkURI(base);
+            }
+            catch (MalformedURIException ex) {
+                base = null;
+            }
+            
             return base;
+            
         }
         
         // This element does not have an xml:base attribute
@@ -1258,7 +1267,6 @@ public class Element extends ParentNode {
                
         // 3. This element does not declare a base URI,
         //    so it uses its parent's base URI.
-        //    (This one's arguable.)
         if (actualBase == null) return parent.getBaseURI();      
                
         // 4. If the parent is loaded from the same entity,
@@ -1274,7 +1282,7 @@ public class Element extends ParentNode {
     
 
     // There's lots of room to optimize this method,
-    // but I doubt it's worth it.
+    // but I doubt it's worth it.????
     private static String toURI(String iri) {
     
         StringBuffer uri = new StringBuffer(iri.length());
