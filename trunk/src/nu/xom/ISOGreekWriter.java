@@ -42,38 +42,17 @@ class ISOGreekWriter extends TextWriter {
      */
     boolean needsEscaping(char c) {
         if (c <= 0xA0) return false;        
-        switch (c) {
-            // A bug in Java 1.4 and 1.3 prevents a LEFT and RIGHT 
-            // SINGLE QUOTATION MARKs
-            // from being correctly output
-            // as the actual character in this encoding
-            // even though it does exist in the 
-            // ISO-8859-7 character set.
-            // case 0x2018: return false; // LEFT SINGLE QUOTATION MARK
-            // case 0x2019: return false; // RIGHT SINGLE QUOTATION MARK
-            case 0x00A3: return false; // POUND SIGN
-            case 0x00A6: return false; // BROKEN BAR
-            case 0x00A7: return false; // SECTION SIGN
-            case 0x00A8: return false; // DIAERESIS
-            case 0x00A9: return false; // COPYRIGHT SIGN
-            case 0x00AB: return false; // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
-            case 0x00AC: return false; // NOT SIGN
-            case 0x00AD: return false; // SOFT HYPHEN
-            case 0x2015: return false; // HORIZONTAL BAR
-            case 0x00B0: return false; // DEGREE SIGN
-            case 0x00B1: return false; // PLUS-MINUS SIGN
-            case 0x00B2: return false; // SUPERSCRIPT TWO
-            case 0x00B3: return false; // SUPERSCRIPT THREE
+        switch (c) { // Greek
             case 0x0384: return false; // GREEK TONOS
             case 0x0385: return false; // GREEK DIALYTIKA TONOS
             case 0x0386: return false; // GREEK CAPITAL LETTER ALPHA WITH TONOS
-            case 0x00B7: return false; // MIDDLE DOT
+            case 0x0387: return true;  // place holder to enable table lookup
             case 0x0388: return false; // GREEK CAPITAL LETTER EPSILON WITH TONOS
             case 0x0389: return false; // GREEK CAPITAL LETTER ETA WITH TONOS
             case 0x038A: return false; // GREEK CAPITAL LETTER IOTA WITH TONOS
-            case 0x00BB: return false; // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+            case 0x038B: return true;  // place holder to enable table lookup
             case 0x038C: return false; // GREEK CAPITAL LETTER OMICRON WITH TONOS
-            case 0x00BD: return false; // VULGAR FRACTION ONE HALF
+            case 0x038D: return true;  // place holder to enable table lookup
             case 0x038E: return false; // GREEK CAPITAL LETTER UPSILON WITH TONOS
             case 0x038F: return false; // GREEK CAPITAL LETTER OMEGA WITH TONOS
             case 0x0390: return false; // GREEK SMALL LETTER IOTA WITH DIALYTIKA AND TONOS
@@ -94,6 +73,7 @@ class ISOGreekWriter extends TextWriter {
             case 0x039F: return false; // GREEK CAPITAL LETTER OMICRON
             case 0x03A0: return false; // GREEK CAPITAL LETTER PI
             case 0x03A1: return false; // GREEK CAPITAL LETTER RHO
+            case 0x03A2: return true;  // place holder to enable table lookup
             case 0x03A3: return false; // GREEK CAPITAL LETTER SIGMA
             case 0x03A4: return false; // GREEK CAPITAL LETTER TAU
             case 0x03A5: return false; // GREEK CAPITAL LETTER UPSILON
@@ -138,6 +118,46 @@ class ISOGreekWriter extends TextWriter {
             case 0x03CC: return false; // GREEK SMALL LETTER OMICRON WITH TONOS
             case 0x03CD: return false; // GREEK SMALL LETTER UPSILON WITH TONOS
             case 0x03CE: return false; // GREEK SMALL LETTER OMEGA WITH TONOS
+        }
+        switch (c) { // overlap with Latin-1
+            case 0x00A3: return false; // POUND SIGN
+            case 0x00A4: return true;  // place holder to enable table lookup
+            case 0x00A5: return true;  // place holder to enable table lookup
+            case 0x00A6: return false; // BROKEN BAR
+            case 0x00A7: return false; // SECTION SIGN
+            case 0x00A8: return false; // DIAERESIS
+            case 0x00A9: return false; // COPYRIGHT SIGN
+            case 0x00AA: return true;  // place holder to enable table lookup
+            case 0x00AB: return false; // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
+            case 0x00AC: return false; // NOT SIGN
+            case 0x00AD: return false; // SOFT HYPHEN
+            case 0x00AE: return true;  // place holder to enable table lookup
+            case 0x00AF: return true;  // place holder to enable table lookup
+            case 0x00B0: return false; // DEGREE SIGN
+            case 0x00B1: return false; // PLUS-MINUS SIGN
+            case 0x00B2: return false; // SUPERSCRIPT TWO
+            case 0x00B3: return false; // SUPERSCRIPT THREE
+            case 0x00B4: return true;  // place holder to enable table lookup
+            case 0x00B5: return true;  // place holder to enable table lookup
+            case 0x00B6: return true;  // place holder to enable table lookup
+            case 0x00B7: return false; // MIDDLE DOT
+            case 0x00B8: return true;  // place holder to enable table lookup
+            case 0x00B9: return true;  // place holder to enable table lookup
+            case 0x00BA: return true;  // place holder to enable table lookup
+            case 0x00BB: return false; // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+            case 0x00BC: return true;  // place holder to enable table lookup
+            case 0x00BD: return false; // VULGAR FRACTION ONE HALF
+        }
+        switch (c) { // assorted characters
+            case 0x2015: return false; // HORIZONTAL BAR
+            // A bug in Java 1.4 and 1.3 prevents a LEFT and RIGHT 
+            // SINGLE QUOTATION MARKs
+            // from being correctly output
+            // as the actual character in this encoding
+            // even though it does exist in the 
+            // ISO-8859-7 character set.
+            // case 0x2018: return false; // LEFT SINGLE QUOTATION MARK
+            // case 0x2019: return false; // RIGHT SINGLE QUOTATION MARK        
         }
         return true;
     }
