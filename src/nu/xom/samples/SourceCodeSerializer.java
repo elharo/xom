@@ -46,9 +46,6 @@ import nu.xom.Text;
  *   building self-contained unit tests.
  * </p>
  * 
- *  ????needs more testing for additional namespace
- *  declarations
- * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  *
@@ -181,6 +178,7 @@ public class SourceCodeSerializer extends Serializer {
             String parent = (String) parents.peek();
             writeRaw(parent + ".addNamespaceDeclaration(\"" +
               prefix + "\", \"" + element.getNamespaceURI(prefix) + "\");");
+            breakLine();
         }
 
     }
