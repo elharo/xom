@@ -364,7 +364,7 @@ public class XSLTransformTest extends XOMTestCase {
         
         File doc = new File("data/xslt/input/8-14.xml");
         File stylesheet = new File("data/xslt/input/textmethod.xsl");
-        Builder builder = new Builder();
+        Builder builder = new Builder(); 
         XSLTransform xform = new XSLTransform(stylesheet);
         Document input = builder.build(doc);
         Nodes output = xform.transform(input);
@@ -377,4 +377,37 @@ public class XSLTransformTest extends XOMTestCase {
         assertTrue(output.get(5) instanceof ProcessingInstruction);
     }
 
+    public void testCommentWithParent() 
+      throws ParsingException, IOException, XSLException {
+        
+        File stylesheet = new File("data/xslt/input/commentwithparent.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Document input = new Document(new Element("root"));
+        Nodes output = xform.transform(input);
+        assertEquals(1, output.size());
+        assertEquals("", output.get(0).getValue());
+        Element root = (Element) output.get(0);
+        assertEquals(1, root.getChildCount());
+        Comment child = (Comment) root.getChild(0);
+        assertEquals("test", child.getValue());
+    }
+
+    public void testProcessingInstructionWithParent() 
+      throws ParsingException, IOException, XSLException {
+        
+        File stylesheet = new File("data/xslt/input/piwithparent.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Document input = new Document(new Element("root"));
+        Nodes output = xform.transform(input);
+        assertEquals(1, output.size());
+        assertEquals("", output.get(0).getValue());
+        Element root = (Element) output.get(0);
+        assertEquals(1, root.getChildCount());
+        ProcessingInstruction child = (ProcessingInstruction) root.getChild(0);
+        assertEquals("target", child.getTarget());
+        assertEquals("test", child.getValue());
+    }
+
+    
+    
 }
