@@ -27,9 +27,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.Writer;
 import java.net.URL;
 
 import junit.framework.AssertionFailedError;
@@ -59,11 +61,11 @@ import nu.xom.xinclude.XIncluder;
 
 /**
  * <p>
- *   Unit tests for the XInclude and XPointer engines.
+ * Unit tests for the XInclude and XPointer engines.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b8
+ * @version 1.0b9
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -2150,13 +2152,24 @@ public class XIncludeTest extends XOMTestCase {
     public void testIncludeHighPunctuationFileNames() 
       throws ParsingException, IOException, XIncludeException {
       
+        // Windows has a problem with some of these file names so
+        // first we have to generate the file, just to avoid storing
+        // it in the zip archive
         try {
+            File f = new File(inputDir, "{|}.txt");
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("{|}");
+            out.flush();
+            out.close();
+            
             File input = new File(inputDir, "punctuation.xml");
             Document doc = builder.build(input);
             Document result = XIncluder.resolve(doc);
             Document expectedResult = builder.build(
               new File(outputDir, "punctuation.xml")
             );
+            f.delete();
             assertEquals(expectedResult, result);
         }
         catch (FileNotFoundException ex) {
