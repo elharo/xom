@@ -464,7 +464,7 @@ public class CanonicalXMLSerializer extends Serializer {
      * @param lineSeparator the character(s) used to break lines
      */
     public final void setLineSeparator(String lineSeparator) {
-       // throw an excepiton instead????
+       // throw an exception instead????
         super.setLineSeparator("\n");  
     }
 
@@ -491,7 +491,7 @@ public class CanonicalXMLSerializer extends Serializer {
      */
     public final void setMaxLength(int maxLength) {
        // do nothing because canonical XML does not adjust white space
-       // throw an excepiton instead????
+       // throw an exception instead????
     }
 
     /**
@@ -520,10 +520,10 @@ public class CanonicalXMLSerializer extends Serializer {
      * @param preserve argument is ignored. It is present only for
      *     compatibility with the superclass 
      */
-    public final void preserveBaseURI(boolean preserve) {
+    public final void setPreserveBaseURI(boolean preserve) {
        // do nothing because canonical XML 
        // does not insert extra attributes
-       // throw an excepiton instead????
+       // throw an exception instead????
     }
 
     /**
@@ -540,7 +540,8 @@ public class CanonicalXMLSerializer extends Serializer {
      *   This feature is not yet implemented. 
      * </p>
      * 
-     * @param normalize true if normalization is performed; false if it isn't.
+     * @param normalize true if normalization is performed; 
+     *     false if it isn't
      */
     public final void setUnicodeNormalizationFormC(boolean normalize) {
         if (normalize) {

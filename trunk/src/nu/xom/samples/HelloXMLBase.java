@@ -75,10 +75,10 @@ public class HelloXMLBase {
     try {
         Serializer serializer 
           = new Serializer(System.out, "ISO-8859-1");
-        serializer.preserveBaseURI(true);
+        serializer.setPreserveBaseURI(true);
         serializer.write(doc);
         serializer.flush();
-        serializer.preserveBaseURI(false);
+        serializer.setPreserveBaseURI(false);
         serializer.write(doc);
         serializer.flush();
     }

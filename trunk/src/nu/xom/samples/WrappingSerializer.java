@@ -348,7 +348,7 @@ public class WrappingSerializer extends Serializer {
           Serializer serializer = new WrappingSerializer(System.out, "ISO-8859-1");
           serializer.setIndent(4);
           serializer.setMaxLength(24);
-          serializer.preserveBaseURI(true);
+          serializer.setPreserveBaseURI(true);
           serializer.write(doc);
           serializer.flush();
         }
