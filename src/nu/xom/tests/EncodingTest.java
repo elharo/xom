@@ -131,82 +131,94 @@ public class EncodingTest extends XOMTestCase {
       System.gc();   
     } 
     
-    public void testUSASCII() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testUSASCII() throws ParsingException, IOException {
         checkAll("US-ASCII");
     }
     
-    public void testASCII() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testASCII() throws ParsingException, IOException {
         checkAll("ASCII");
     }
 
-    public void testLatin1() 
-      throws ParsingException, UnsupportedEncodingException {       
+    public void testLatin1() throws ParsingException, IOException {       
         checkAll("ISO-8859-1");        
     }
 
-    public void testLatin2() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testLatin2() throws ParsingException, IOException {
         checkAll("ISO-8859-2");
     }
     
-    public void testLatin3() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testLatin3() throws ParsingException, IOException {
         checkAll("ISO-8859-3");
     }
     
-    public void testLatin4() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testLatin4() throws ParsingException, IOException {
         checkAll("ISO-8859-4");
     }
     
-    public void testCyrillic() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testCyrillic() throws ParsingException, IOException {
         checkAll("ISO-8859-5");
     }
     
-    public void testArabic() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testArabic() throws ParsingException, IOException {
         checkAll("ISO-8859-6");
     }
     
-    public void testGreek() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testGreek() throws ParsingException, IOException {
         checkAll("ISO-8859-7");
     }
     
-    public void testHebrew() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testHebrew() throws ParsingException, IOException {
         checkAll("ISO-8859-8");
     }
     
-    public void testLatin5()  
-      throws ParsingException, UnsupportedEncodingException {
+    public void testLatin5() throws ParsingException, IOException {
         checkAll("ISO-8859-9");
     }
 
-    public void testUTF8() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testUTF8() throws ParsingException, IOException {
         checkAll("UTF-8");
     }
     
-    public void testUTF16()  
-      throws ParsingException, UnsupportedEncodingException {
+    public void testUTF16() throws ParsingException, IOException {
         checkAll("UTF-16");
     } 
 
-    public void testUCS2() 
-      throws ParsingException, UnsupportedEncodingException {
+    public void testUCS2() throws ParsingException, IOException {
         checkAll("ISO-10646-UCS-2");
     } 
 
-    // This test fails to some as yet unworked around input bugs
-    // in Java's handling of NEL with Cp037 encoding
-    /* public void testEBCDIC037() 
-      throws ParsingException, UnsupportedEncodingException {
-        checkAll("CP037");
-    } */
+    // Sun's Java 1.4.2 and earlier has some nasty bugs in input for 
+    // EBCDIC. Specifically it maps NEL to linefeed. Therefore checkAll
+    // fails here. We can test everything except NEL.
+    public void testEBCDIC037() 
+      throws ParsingException, IOException {
+        Builder builder = new Builder();
+        byte[] data = null;
+        ByteArrayOutputStream out = new ByteArrayOutputStream(100000);    
+        // Write data into a byte array using encoding
+        Serializer serializer = new Serializer(out, "Cp037");
+        serializer.write(doc);
+        serializer.flush();
+        out.flush();
+        out.close();
+        data = out.toByteArray();
+        InputStream in = new ByteArrayInputStream(data);
+        Document reparsed = builder.build(in);
+        serializer = null;
+        
+        Element reparsedRoot = reparsed.getRootElement();
+        int childCount = reparsedRoot.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            Element test = (Element) reparsedRoot.getChild(i); 
+            String value = test.getValue();
+            int expected 
+             = Integer.parseInt(test.getAttributeValue("c"));
+            if (expected == 133 /* NEL */) continue;
+            int actual = value.charAt(0);
+            assertEquals(expected, actual);
+        } 
+        
+        in = null;    } 
 
     // These encodings are only available after Java 1.3
     private static boolean java14OrLater = false;
@@ -218,13 +230,11 @@ public class EncodingTest extends XOMTestCase {
         if (versionNumber >= 1.4) java14OrLater = true; 
     }   
     
-    public void testLatin7()  
-      throws ParsingException, UnsupportedEncodingException {
+    public void testLatin7() throws ParsingException, IOException {
         if (java14OrLater) checkAll("ISO-8859-13");
     }
     
-    public void testLatin9()  
-      throws ParsingException, UnsupportedEncodingException {
+    public void testLatin9() throws ParsingException, IOException {
         if (java14OrLater) checkAll("ISO-8859-15");
     } 
         
@@ -243,13 +253,11 @@ public class EncodingTest extends XOMTestCase {
     }
        
     // These encodings are not installed in all distributions by default 
-    public void testLatin6()  
-      throws ParsingException, UnsupportedEncodingException {
+    public void testLatin6() throws ParsingException, IOException {
         if (extendedCharsetsAvailable) checkAll("ISO-8859-10");
     } 
 
-    public void testLatin8()  
-      throws ParsingException, UnsupportedEncodingException {
+    public void testLatin8() throws ParsingException, IOException {
         if (extendedCharsetsAvailable) checkAll("ISO-8859-14");
     }
 
@@ -268,43 +276,34 @@ public class EncodingTest extends XOMTestCase {
 
     
     private void checkAll(String encoding) 
-      throws ParsingException, UnsupportedEncodingException {
+      throws ParsingException, IOException {
         
         Builder builder = new Builder();
         byte[] data = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream(100000);    
-        try {
-            // Write data into a byte array using encoding
-            Serializer serializer = new Serializer(out, encoding);
-            serializer.write(doc);
-            serializer.flush();
-            out.flush();
-            out.close();
-            data = out.toByteArray();
-            InputStream in = new ByteArrayInputStream(data);
-            Document reparsed = builder.build(in);
-            serializer = null;
-            
-            Element reparsedRoot = reparsed.getRootElement();
-            int childCount = reparsedRoot.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                Element test = (Element) reparsedRoot.getChild(i); 
-                String value = test.getValue();
-                int expected 
-                 = Integer.parseInt(test.getAttributeValue("c"));
-                int actual = value.charAt(0);
-                assertEquals(expected, actual);
-            } 
-            
-            in = null;
-            
-        }
-        catch (UnsupportedEncodingException ex) {
-            throw ex;   
-        }  
-        catch (IOException ex) {
-            ex.printStackTrace();   
+        // Write data into a byte array using encoding
+        Serializer serializer = new Serializer(out, encoding);
+        serializer.write(doc);
+        serializer.flush();
+        out.flush();
+        out.close();
+        data = out.toByteArray();
+        InputStream in = new ByteArrayInputStream(data);
+        Document reparsed = builder.build(in);
+        serializer = null;
+        
+        Element reparsedRoot = reparsed.getRootElement();
+        int childCount = reparsedRoot.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            Element test = (Element) reparsedRoot.getChild(i); 
+            String value = test.getValue();
+            int expected 
+             = Integer.parseInt(test.getAttributeValue("c"));
+            int actual = value.charAt(0);
+            assertEquals(expected, actual);
         } 
+        
+        in = null;
             
     }
 
