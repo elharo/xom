@@ -408,6 +408,23 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals("test", child.getValue());
     } 
 
+    public void testTransformNodes() throws XSLException {
+        
+        File stylesheet = new File("data/xslt/input/piwithparent.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Nodes input = new Nodes(new Element("root"));
+        Nodes output = xform.transform(input);
+        assertEquals(1, output.size());
+        assertEquals("", output.get(0).getValue());
+        Element root = (Element) output.get(0);
+        assertEquals(1, root.getChildCount());
+        ProcessingInstruction child = (ProcessingInstruction) root.getChild(0);
+        assertEquals("target", child.getTarget());
+        assertEquals("test", child.getValue());
+    } 
+
+    
+    
     // primarily this makes sure the XSLTHandler can handle various
     // edge cases
     public void testIdentityTransform() throws XSLException {
