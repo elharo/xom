@@ -40,10 +40,6 @@ import nu.xom.NamespaceException;
  */
 public class AttributeTest extends XOMTestCase {
 
-    public AttributeTest() {
-        super("Attribute tests");
-    }
-
     public AttributeTest(String name) {
         super(name);
     }
