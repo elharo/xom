@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+
+<root>
+
+    <data character="160"> </data>
+
+    <data character="161">&#xa1;</data>
+
+    <data character="162">&#xa2;</data>
+
+    <data character="163">&#xa3;</data>
+
+    <data character="164">¤</data>
+
+    <data character="165">&#xa5;</data>
+
+    <data character="166">&#xa6;</data>
+
+    <data character="167">§</data>
+
+    <data character="168">¨</data>
+
+    <data character="169">&#xa9;</data>
+
+    <data character="170">&#xaa;</data>
+
+    <data character="171">&#xab;</data>
+
+    <data character="172">&#xac;</data>
+
+    <data character="173">­</data>
+
+    <data character="174">&#xae;</data>
+
+    <data character="175">&#xaf;</data>
+
+    <data character="176">°</data>
+
+    <data character="177">&#xb1;</data>
+
+    <data character="178">&#xb2;</data>
+
+    <data character="179">&#xb3;</data>
+
+    <data character="180">´</data>
+
+    <data character="181">&#xb5;</data>
+
+    <data character="182">&#xb6;</data>
+
+    <data character="183">&#xb7;</data>
+
+    <data character="184">¸</data>
+
+    <data character="185">&#xb9;</data>
+
+    <data character="186">&#xba;</data>
+
+    <data character="187">&#xbb;</data>
+
+    <data character="188">&#xbc;</data>
+
+    <data character="189">&#xbd;</data>
+
+    <data character="190">&#xbe;</data>
+
+    <data character="191">&#xbf;</data>
+
+    <data character="192">&#xc0;</data>
+
+    <data character="193">Á</data>
+
+    <data character="194">Â</data>
+
+    <data character="195">&#xc3;</data>
+
+    <data character="196">Ä</data>
+
+    <data character="197">&#xc5;</data>
+
+    <data character="198">&#xc6;</data>
+
+    <data character="199">Ç</data>
+
+    <data character="200">&#xc8;</data>
+
+    <data character="201">É</data>
+
+    <data character="202">&#xca;</data>
+
+    <data character="203">Ë</data>
+
+    <data character="204">&#xcc;</data>
+
+    <data character="205">Í</data>
+
+    <data character="206">Î</data>
+
+    <data character="207">&#xcf;</data>
+
+    <data character="208">&#xd0;</data>
+
+    <data character="209">&#xd1;</data>
+
+    <data character="210">&#xd2;</data>
+
+    <data character="211">Ó</data>
+
+    <data character="212">Ô</data>
+
+    <data character="213">&#xd5;</data>
+
+    <data character="214">Ö</data>
+
+    <data character="215">×</data>
+
+    <data character="216">&#xd8;</data>
+
+    <data character="217">&#xd9;</data>
+
+    <data character="218">Ú</data>
+
+    <data character="219">&#xdb;</data>
+
+    <data character="220">Ü</data>
+
+    <data character="221">Ý</data>
+
+    <data character="222">&#xde;</data>
+
+    <data character="223">ß</data>
+
+    <data character="224">&#xe0;</data>
+
+    <data character="225">á</data>
+
+    <data character="226">â</data>
+
+    <data character="227">&#xe3;</data>
+
+    <data character="228">ä</data>
+
+    <data character="229">&#xe5;</data>
+
+    <data character="230">&#xe6;</data>
+
+    <data character="231">ç</data>
+
+    <data character="232">&#xe8;</data>
+
+    <data character="233">é</data>
+
+    <data character="234">&#xea;</data>
+
+    <data character="235">ë</data>
+
+    <data character="236">&#xec;</data>
+
+    <data character="237">í</data>
+
+    <data character="238">î</data>
+
+    <data character="239">&#xef;</data>
+
+    <data character="240">&#xf0;</data>
+
+    <data character="241">&#xf1;</data>
+
+    <data character="242">&#xf2;</data>
+
+    <data character="243">ó</data>
+
+    <data character="244">ô</data>
+
+    <data character="245">&#xf5;</data>
+
+    <data character="246">ö</data>
+
+    <data character="247">÷</data>
+
+    <data character="248">&#xf8;</data>
+
+    <data character="249">&#xf9;</data>
+
+    <data character="250">ú</data>
+
+    <data character="251">&#xfb;</data>
+
+    <data character="252">ü</data>
+
+    <data character="253">ý</data>
+
+    <data character="254">&#xfe;</data>
+
+    <data character="255">&#xff;</data>
+
+    <data character="256">&#x100;</data>
+
+    <data character="257">&#x101;</data>
+
+    <data character="258">Ă</data>
+
+    <data character="259">ă</data>
+
+    <data character="260">Ą</data>
+
+    <data character="261">ą</data>
+
+    <data character="262">Ć</data>
+
+    <data character="263">ć</data>
+
+    <data character="264">&#x108;</data>
+
+    <data character="265">&#x109;</data>
+
+    <data character="266">&#x10a;</data>
+
+    <data character="267">&#x10b;</data>
+
+    <data character="268">Č</data>
+
+    <data character="269">č</data>
+
+    <data character="270">Ď</data>
+
+    <data character="271">ď</data>
+
+    <data character="272">Đ</data>
+
+    <data character="273">đ</data>
+
+    <data character="274">&#x112;</data>
+
+    <data character="275">&#x113;</data>
+
+    <data character="276">&#x114;</data>
+
+    <data character="277">&#x115;</data>
+
+    <data character="278">&#x116;</data>
+
+    <data character="279">&#x117;</data>
+
+    <data character="280">Ę</data>
+
+    <data character="281">ę</data>
+
+    <data character="282">Ě</data>
+
+    <data character="283">ě</data>
+
+    <data character="284">&#x11c;</data>
+
+    <data character="285">&#x11d;</data>
+
+    <data character="286">&#x11e;</data>
+
+    <data character="287">&#x11f;</data>
+
+    <data character="288">&#x120;</data>
+
+    <data character="289">&#x121;</data>
+
+    <data character="290">&#x122;</data>
+
+    <data character="291">&#x123;</data>
+
+    <data character="292">&#x124;</data>
+
+    <data character="293">&#x125;</data>
+
+    <data character="294">&#x126;</data>
+
+    <data character="295">&#x127;</data>
+
+    <data character="296">&#x128;</data>
+
+    <data character="297">&#x129;</data>
+
+    <data character="298">&#x12a;</data>
+
+    <data character="299">&#x12b;</data>
+
+    <data character="300">&#x12c;</data>
+
+    <data character="301">&#x12d;</data>
+
+    <data character="302">&#x12e;</data>
+
+    <data character="303">&#x12f;</data>
+
+    <data character="304">&#x130;</data>
+
+    <data character="305">&#x131;</data>
+
+    <data character="306">&#x132;</data>
+
+    <data character="307">&#x133;</data>
+
+    <data character="308">&#x134;</data>
+
+    <data character="309">&#x135;</data>
+
+    <data character="310">&#x136;</data>
+
+    <data character="311">&#x137;</data>
+
+    <data character="312">&#x138;</data>
+
+    <data character="313">Ĺ</data>
+
+    <data character="314">ĺ</data>
+
+    <data character="315">&#x13b;</data>
+
+    <data character="316">&#x13c;</data>
+
+    <data character="317">Ľ</data>
+
+    <data character="318">ľ</data>
+
+    <data character="319">&#x13f;</data>
+
+    <data character="320">&#x140;</data>
+
+    <data character="321">Ł</data>
+
+    <data character="322">ł</data>
+
+    <data character="323">Ń</data>
+
+    <data character="324">ń</data>
+
+    <data character="325">&#x145;</data>
+
+    <data character="326">&#x146;</data>
+
+    <data character="327">Ň</data>
+
+    <data character="328">ň</data>
+
+    <data character="329">&#x149;</data>
+
+    <data character="330">&#x14a;</data>
+
+    <data character="331">&#x14b;</data>
+
+    <data character="332">&#x14c;</data>
+
+    <data character="333">&#x14d;</data>
+
+    <data character="334">&#x14e;</data>
+
+    <data character="335">&#x14f;</data>
+
+    <data character="336">Ő</data>
+
+    <data character="337">ő</data>
+
+    <data character="338">&#x152;</data>
+
+    <data character="339">&#x153;</data>
+
+    <data character="340">Ŕ</data>
+
+    <data character="341">ŕ</data>
+
+    <data character="342">&#x156;</data>
+
+    <data character="343">&#x157;</data>
+
+    <data character="344">Ř</data>
+
+    <data character="345">ř</data>
+
+    <data character="346">Ś</data>
+
+    <data character="347">ś</data>
+
+    <data character="348">&#x15c;</data>
+
+    <data character="349">&#x15d;</data>
+
+    <data character="350">Ş</data>
+
+    <data character="351">ş</data>
+
+    <data character="352">Š</data>
+
+    <data character="353">š</data>
+
+    <data character="354">Ţ</data>
+
+    <data character="355">ţ</data>
+
+    <data character="356">Ť</data>
+
+    <data character="357">ť</data>
+
+    <data character="358">&#x166;</data>
+
+    <data character="359">&#x167;</data>
+
+    <data character="360">&#x168;</data>
+
+    <data character="361">&#x169;</data>
+
+    <data character="362">&#x16a;</data>
+
+    <data character="363">&#x16b;</data>
+
+    <data character="364">&#x16c;</data>
+
+    <data character="365">&#x16d;</data>
+
+    <data character="366">Ů</data>
+
+    <data character="367">ů</data>
+
+    <data character="368">Ű</data>
+
+    <data character="369">ű</data>
+
+    <data character="370">&#x172;</data>
+
+    <data character="371">&#x173;</data>
+
+    <data character="372">&#x174;</data>
+
+    <data character="373">&#x175;</data>
+
+    <data character="374">&#x176;</data>
+
+    <data character="375">&#x177;</data>
+
+    <data character="376">&#x178;</data>
+
+    <data character="377">Ź</data>
+
+    <data character="378">ź</data>
+
+    <data character="379">Ż</data>
+
+    <data character="380">ż</data>
+
+    <data character="381">Ž</data>
+
+    <data character="382">ž</data>
+
+    <data character="383">&#x17f;</data>
+
+    <data character="384">&#x180;</data>
+
+    <data character="385">&#x181;</data>
+
+    <data character="386">&#x182;</data>
+
+    <data character="387">&#x183;</data>
+
+    <data character="388">&#x184;</data>
+
+    <data character="389">&#x185;</data>
+
+    <data character="390">&#x186;</data>
+
+    <data character="391">&#x187;</data>
+
+    <data character="392">&#x188;</data>
+
+    <data character="393">&#x189;</data>
+
+    <data character="394">&#x18a;</data>
+
+    <data character="395">&#x18b;</data>
+
+    <data character="396">&#x18c;</data>
+
+    <data character="397">&#x18d;</data>
+
+    <data character="398">&#x18e;</data>
+
+    <data character="399">&#x18f;</data>
+
+    <data character="400">&#x190;</data>
+
+    <data character="401">&#x191;</data>
+
+    <data character="402">&#x192;</data>
+
+    <data character="403">&#x193;</data>
+
+    <data character="404">&#x194;</data>
+
+    <data character="405">&#x195;</data>
+
+    <data character="406">&#x196;</data>
+
+    <data character="407">&#x197;</data>
+
+    <data character="408">&#x198;</data>
+
+    <data character="409">&#x199;</data>
+
+    <data character="410">&#x19a;</data>
+
+    <data character="411">&#x19b;</data>
+
+    <data character="412">&#x19c;</data>
+
+    <data character="413">&#x19d;</data>
+
+    <data character="414">&#x19e;</data>
+
+    <data character="415">&#x19f;</data>
+
+    <data character="416">&#x1a0;</data>
+
+    <data character="417">&#x1a1;</data>
+
+    <data character="418">&#x1a2;</data>
+
+    <data character="419">&#x1a3;</data>
+
+    <data character="420">&#x1a4;</data>
+
+    <data character="421">&#x1a5;</data>
+
+    <data character="422">&#x1a6;</data>
+
+    <data character="423">&#x1a7;</data>
+
+    <data character="424">&#x1a8;</data>
+
+    <data character="425">&#x1a9;</data>
+
+    <data character="426">&#x1aa;</data>
+
+    <data character="427">&#x1ab;</data>
+
+    <data character="428">&#x1ac;</data>
+
+    <data character="429">&#x1ad;</data>
+
+    <data character="430">&#x1ae;</data>
+
+    <data character="431">&#x1af;</data>
+
+    <data character="432">&#x1b0;</data>
+
+    <data character="433">&#x1b1;</data>
+
+    <data character="434">&#x1b2;</data>
+
+    <data character="435">&#x1b3;</data>
+
+    <data character="436">&#x1b4;</data>
+
+    <data character="437">&#x1b5;</data>
+
+    <data character="438">&#x1b6;</data>
+
+    <data character="439">&#x1b7;</data>
+
+    <data character="440">&#x1b8;</data>
+
+    <data character="441">&#x1b9;</data>
+
+    <data character="442">&#x1ba;</data>
+
+    <data character="443">&#x1bb;</data>
+
+    <data character="444">&#x1bc;</data>
+
+    <data character="445">&#x1bd;</data>
+
+    <data character="446">&#x1be;</data>
+
+    <data character="447">&#x1bf;</data>
+
+    <data character="448">&#x1c0;</data>
+
+    <data character="449">&#x1c1;</data>
+
+    <data character="450">&#x1c2;</data>
+
+    <data character="451">&#x1c3;</data>
+
+    <data character="452">&#x1c4;</data>
+
+    <data character="453">&#x1c5;</data>
+
+    <data character="454">&#x1c6;</data>
+
+    <data character="455">&#x1c7;</data>
+
+    <data character="456">&#x1c8;</data>
+
+    <data character="457">&#x1c9;</data>
+
+    <data character="458">&#x1ca;</data>
+
+    <data character="459">&#x1cb;</data>
+
+    <data character="460">&#x1cc;</data>
+
+    <data character="461">&#x1cd;</data>
+
+    <data character="462">&#x1ce;</data>
+
+    <data character="463">&#x1cf;</data>
+
+    <data character="464">&#x1d0;</data>
+
+    <data character="465">&#x1d1;</data>
+
+    <data character="466">&#x1d2;</data>
+
+    <data character="467">&#x1d3;</data>
+
+    <data character="468">&#x1d4;</data>
+
+    <data character="469">&#x1d5;</data>
+
+    <data character="470">&#x1d6;</data>
+
+    <data character="471">&#x1d7;</data>
+
+    <data character="472">&#x1d8;</data>
+
+    <data character="473">&#x1d9;</data>
+
+    <data character="474">&#x1da;</data>
+
+    <data character="475">&#x1db;</data>
+
+    <data character="476">&#x1dc;</data>
+
+    <data character="477">&#x1dd;</data>
+
+    <data character="478">&#x1de;</data>
+
+    <data character="479">&#x1df;</data>
+
+    <data character="480">&#x1e0;</data>
+
+    <data character="481">&#x1e1;</data>
+
+    <data character="482">&#x1e2;</data>
+
+    <data character="483">&#x1e3;</data>
+
+    <data character="484">&#x1e4;</data>
+
+    <data character="485">&#x1e5;</data>
+
+    <data character="486">&#x1e6;</data>
+
+    <data character="487">&#x1e7;</data>
+
+    <data character="488">&#x1e8;</data>
+
+    <data character="489">&#x1e9;</data>
+
+    <data character="490">&#x1ea;</data>
+
+    <data character="491">&#x1eb;</data>
+
+    <data character="492">&#x1ec;</data>
+
+    <data character="493">&#x1ed;</data>
+
+    <data character="494">&#x1ee;</data>
+
+    <data character="495">&#x1ef;</data>
+
+    <data character="496">&#x1f0;</data>
+
+    <data character="497">&#x1f1;</data>
+
+    <data character="498">&#x1f2;</data>
+
+    <data character="499">&#x1f3;</data>
+
+    <data character="500">&#x1f4;</data>
+
+    <data character="501">&#x1f5;</data>
+
+    <data character="502">&#x1f6;</data>
+
+    <data character="503">&#x1f7;</data>
+
+    <data character="504">&#x1f8;</data>
+
+    <data character="505">&#x1f9;</data>
+
+    <data character="506">&#x1fa;</data>
+
+    <data character="507">&#x1fb;</data>
+
+    <data character="508">&#x1fc;</data>
+
+    <data character="509">&#x1fd;</data>
+
+    <data character="510">&#x1fe;</data>
+
+    <data character="511">&#x1ff;</data>
+
+</root>
+
