@@ -114,6 +114,7 @@ public class Comment extends Node {
 
 
     private void _setValue(String data) {
+        
         if (data == null) data = "";
         else {
             Verifier.checkPCDATA(data);
@@ -132,13 +133,6 @@ public class Comment extends Node {
                 throw ex;
             }
     
-            if (data.startsWith("-")) {
-                IllegalDataException ex = new IllegalDataException(
-                 "Comment data starts with a hyphen.");
-                ex.setData(data);
-                throw ex;
-            }
-    
             if (data.endsWith("-")) {
                 IllegalDataException ex = new IllegalDataException(
                  "Comment data ends with a hyphen.");
@@ -148,6 +142,7 @@ public class Comment extends Node {
             
         } 
         this.data = data;
+        
     }
 
 
