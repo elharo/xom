@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -46,7 +46,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b8
+ * @version 1.0b11
  *
  */
 public class Element extends ParentNode {
@@ -212,7 +212,6 @@ public class Element extends ParentNode {
       Element resultElement) {
         
         if (sourceElement.getChildCount() == 0) return;
-        ParentNode originalParent = sourceElement.getParent(); // may be null
         ParentNode resultParent = resultElement;
         Node sourceCurrent = sourceElement;
         int index = 0;
