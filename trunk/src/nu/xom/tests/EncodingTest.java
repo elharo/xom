@@ -294,9 +294,8 @@ public class EncodingTest extends XOMTestCase {
             }
             int actual = value.charAt(0);
             if (value.length() > 1) {
-                int high = value.charAt(0);
                 int low = value.charAt(1);
-                actual = (high << 10) + low + SURROGATE_OFFSET;
+                actual = (actual << 10) + low + SURROGATE_OFFSET;
             }
             // This doesn't work for all encodings, because there are
             // a few cases where you write a Unicode compatibility 
@@ -304,10 +303,12 @@ public class EncodingTest extends XOMTestCase {
             // but read back what is essentially a different version 
             // of the same character. That is the mapping from some
             // legacy character sets to Unicode is not always 1-1.
+            /*
             assertEquals("Expected 0x" 
               + Integer.toHexString(expected).toUpperCase()
               + " but was 0x" 
-              + Integer.toHexString(actual).toUpperCase(), expected, actual);
+              + Integer.toHexString(actual).toUpperCase(), expected, actual); */
+            assertEquals(expected, actual); 
         } 
         
         in = null;
