@@ -35,7 +35,7 @@ import nu.xom.NamespaceException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -126,28 +126,31 @@ public class AttributeTest extends XOMTestCase {
     public void testXmlns() {
         
         try {
-               new Attribute("xmlns", "http://www.w3.org/TR");
+            new Attribute("xmlns", "http://www.w3.org/TR");
             fail("Created attribute with name xmlns");
         }
         catch (NamespaceException ex) {
-            // success    
+            // success
+            assertNotNull(ex.getMessage());    
         }
  
         try {
-               new Attribute("xmlns:prefix", "http://www.w3.org/TR");
+            new Attribute("xmlns:prefix", "http://www.w3.org/TR");
             fail("Created attribute with name xmlns:prefix");
         }
         catch (NamespaceException ex) {
             // success    
+            assertNotNull(ex.getMessage());    
         }
  
         // Now try with namespace URI from errata
         try {
-             new Attribute("xmlns", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/");
+            new Attribute("xmlns", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/");
             fail("created xmlns attribute");
          }
-         catch (NamespaceException e) {
-             // success    
+         catch (NamespaceException ex) {
+            // success    
+            assertNotNull(ex.getMessage());    
          }
         
         // Now try with namespace URI from errata
@@ -155,8 +158,9 @@ public class AttributeTest extends XOMTestCase {
              new Attribute("xmlns:pre", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/");
             fail("created xmlns:pre attribute");
          }
-         catch (NamespaceException e) {
-             // success    
+         catch (NamespaceException ex) {
+            // success    
+            assertNotNull(ex.getMessage());    
          }
 
     }
@@ -175,8 +179,8 @@ public class AttributeTest extends XOMTestCase {
             fail("allowed non-IRI for xml:base value");
         }
         catch (IllegalDataException ex) {
-            
-            // success
+            // success    
+            assertNotNull(ex.getMessage());    
         }
     
         try {
@@ -184,8 +188,8 @@ public class AttributeTest extends XOMTestCase {
             fail("allowed non-IRI for xml:base value");
         }
         catch (IllegalDataException ex) {
-            
-            // success
+            // success    
+            assertNotNull(ex.getMessage());    
         }
         
         a1.setValue("http://www.example.com/\u00FE");
@@ -201,6 +205,7 @@ public class AttributeTest extends XOMTestCase {
         }
         catch (NamespaceException ex) {
             // success    
+            assertNotNull(ex.getMessage());    
         }
  
         try {
@@ -209,6 +214,7 @@ public class AttributeTest extends XOMTestCase {
         }
         catch (NamespaceException ex) {
             // success    
+            assertNotNull(ex.getMessage());    
         }
  
         try {
@@ -217,6 +223,7 @@ public class AttributeTest extends XOMTestCase {
         }
         catch (NamespaceException ex) {
             // success    
+            assertNotNull(ex.getMessage());    
         }
         
         String xmlNamespace = "http://www.w3.org/XML/1998/namespace";       
@@ -242,8 +249,9 @@ public class AttributeTest extends XOMTestCase {
               "http://www.w3.org/");
             fail("remapped xml prefix");
          }
-         catch (NamespaceException e) {
-             // success    
+         catch (NamespaceException ex) {
+            // success    
+            assertNotNull(ex.getMessage());    
          }
 
      }
@@ -372,7 +380,10 @@ public class AttributeTest extends XOMTestCase {
           new Attribute("surrogate", "test: \uD8F5\uDBF0  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            // success    
+            assertNotNull(ex.getMessage());    
+        }
 
 
         // Two high-halves
@@ -380,28 +391,40 @@ public class AttributeTest extends XOMTestCase {
           new Attribute("surrogate", "test: \uD8F5\uD8F5  ");
           fail("Should raise an IllegalDataException");
         }
-        catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            // success    
+            assertNotNull(ex.getMessage());    
+        }
 
         // One high-half
         try {
            new Attribute("surrogate", "test: \uD8F5  ");
            fail("Should raise an IllegalDataException");
          }
-         catch (IllegalDataException success) {}
+        catch (IllegalDataException ex) {
+            // success    
+            assertNotNull(ex.getMessage());    
+        }
 
         // One low half
-         try {
+        try {
             new Attribute("surrogate", "test: \uDF80  ");
             fail("Should raise an IllegalDataException");
-          }
-          catch (IllegalDataException success) {}
+        }
+        catch (IllegalDataException ex) {
+            // success    
+            assertNotNull(ex.getMessage());    
+        }
 
         // Low half before high half
-         try {
+        try {
             new Attribute("surrogate", "test: \uDCF5\uD8F5  ");
             fail("Should raise an IllegalDataException");
-          }
-          catch (IllegalDataException success) {}
+        }
+        catch (IllegalDataException ex) {
+            // success    
+            assertNotNull(ex.getMessage());    
+        }
 
 
     }
