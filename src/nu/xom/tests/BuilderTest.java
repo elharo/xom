@@ -485,6 +485,8 @@ public class BuilderTest extends XOMTestCase {
             assertTrue(ex.getErrorCount() > 0);
             for (int i = 0; i < ex.getErrorCount(); i++) {
                 assertNotNull(ex.getValidityError(i));   
+                assertTrue(ex.getLineNumber(i) >= -1);   
+                assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
                 Document doc = builder.build(reader1); 
@@ -506,6 +508,8 @@ public class BuilderTest extends XOMTestCase {
             assertTrue(ex.getErrorCount() > 0);
             for (int i = 0; i < ex.getErrorCount(); i++) {
                 assertNotNull(ex.getValidityError(i));   
+                assertTrue(ex.getLineNumber(i) >= -1);   
+                assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
                 Document doc = builder.build(reader1, base); 
@@ -527,7 +531,9 @@ public class BuilderTest extends XOMTestCase {
             assertNotNull(ex.getMessage());   
             assertTrue(ex.getErrorCount() > 0);
             for (int i = 0; i < ex.getErrorCount(); i++) {
-                assertNotNull(ex.getValidityError(i));   
+                assertNotNull(ex.getValidityError(i));
+                assertTrue(ex.getLineNumber(i) >= -1);   
+                assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
                 Document doc = builder.build(in, base); 
@@ -549,6 +555,8 @@ public class BuilderTest extends XOMTestCase {
             assertTrue(ex.getErrorCount() > 0);
             for (int i = 0; i < ex.getErrorCount(); i++) {
                 assertNotNull(ex.getValidityError(i));   
+                assertTrue(ex.getLineNumber(i) >= -1);   
+                assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
                 Document doc = builder.build(in); 
@@ -569,6 +577,8 @@ public class BuilderTest extends XOMTestCase {
             assertTrue(ex.getErrorCount() > 0);
             for (int i = 0; i < ex.getErrorCount(); i++) {
                 assertNotNull(ex.getValidityError(i));   
+                assertTrue(ex.getLineNumber(i) >= -1);   
+                assertTrue(ex.getColumnNumber(i) >= -1);   
             }   
             if (!xercesBroken) {
                 Document doc = builder.build(source, base); 
