@@ -172,6 +172,8 @@ XOM Build file
              splitindex="true"
              noindex="false"
              windowtitle="${Name} ${version}  API"
+             docencoding="UTF-8"
+             charset="UTF-8"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
 			 &lt;br/&gt; &lt;a href='mailto:elharo@metalab.unc.edu?Subject=XOM'&gt;elharo@metalab.unc.edu&lt;/a&gt;">
