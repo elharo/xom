@@ -35,7 +35,7 @@ import junit.framework.TestSuite;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d24
+ * @version 1.0a1
  *
  */
 public class XOMTests extends TestCase {
@@ -75,6 +75,7 @@ public class XOMTests extends TestCase {
         // result.addTest(new TestSuite(EBCDICTest.class));
         result.addTest(new TestSuite(RoundTripTest.class));
         result.addTest(new TestSuite(DOMConverterTest.class));
+        result.addTest(new TestSuite(InfoTest.class));
         result.addTest(new TestSuite(SerializerTest.class));
         result.addTest(new TestSuite(CanonicalizerTest.class));
         result.addTest(new TestSuite(BuilderTest.class));
