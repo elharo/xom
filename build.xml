@@ -221,6 +221,7 @@ XOM Build file
        <batchtest fork="yes" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
+           <exclude name="**/pantry/*" />
            <exclude name="**/MegaTest.java" />
            <exclude name="**/benchmarks/*.java" />
            <exclude name="**/EBCDICTest.java" />
