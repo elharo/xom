@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,7 +33,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d4
  *
  */
 abstract class TextWriter {
@@ -240,13 +240,13 @@ abstract class TextWriter {
             else {
                 if (lineSeparatorSet) {
                     escapeBreakLine();
+                    skipFollowingLinefeed = true;
                 }
                 else {
                     out.write("&#x0D;");
                     column += 6;
                     justBroke=false;
                 }
-                skipFollowingLinefeed = true; 
             }
         }
         // Handle characters that are illegal in attribute values
