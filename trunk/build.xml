@@ -33,12 +33,12 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0d24"/>
+    <property name="version" value="1.0a1"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
-    <property name="debug"       value="on"/>
+    <property name="debug"       value="off"/>
     <property name="optimize"    value="on"/>
     <property name="deprecation" value="on"/>
 
@@ -64,9 +64,10 @@ to http://www.xom.nu/
     <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
+    <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
+    <property name="xom-core"       value="${build.dest}"/>
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"    value="${lib.dir}/servlet.jar"/>
-    <property name="xom-core"       value="${build.dest}"/>
 
     <property name="test.outputFormat" value="xml"/>    
     
@@ -149,6 +150,24 @@ XOM Build file
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Main-Class" value="nu.xom.Info"/>
+        <section name="nu/xom/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="nu/xom/xslt/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="nu/xom/xinclude/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="nu/xom/xerces/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="nu/xom/converters/">
+          <attribute name="Sealed" value="true"/>
+        </section>
+        <section name="nu/xom/canonical/">
+          <attribute name="Sealed" value="true"/>
+        </section>
       </manifest>
     </jar>
   </target>
@@ -283,6 +302,26 @@ XOM Build file
   </target>
  
  
+  <target name="testjar" depends="jar" description="Run JUnit tests using jar file">
+    <junit printsummary="on" fork="no">
+       <classpath>
+          <pathelement location="${xom.jar}"/>
+       </classpath>
+       <classpath refid="run.class.path" />
+       <formatter type="${test.outputFormat}" />
+       <batchtest fork="yes" todir="${testoutput.dir}">
+         <fileset dir="${build.src}">
+           <include name="**/*Test.java" />
+           <exclude name="**/pantry/*" />
+           <exclude name="**/MegaTest.java" />
+           <exclude name="**/benchmarks/*.java" />
+           <exclude name="**/EBCDICTest.java" />
+         </fileset>
+      </batchtest>
+    </junit>
+  </target>
+ 
+ 
   <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
     <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
       <sysproperty key="org.xml.sax.driver" value="org.apache.parsers.SAXParser"/> 
@@ -295,6 +334,7 @@ XOM Build file
     
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
+    <delete dir="clover"/>
     <delete>
       <fileset dir="." includes="junit*properties"/>
     </delete>
