@@ -728,6 +728,19 @@ public class Element extends ParentNode {
             } 
         }      
 
+        if ("http://www.w3.org/XML/1998/namespace".equals(uri) 
+          && ! "xml".equals(prefix)) {
+            throw new NamespaceException(
+              "Wrong prefix " + prefix + 
+              " for the http://www.w3.org/XML/1998/namespace namespace URI"
+            );      
+        }
+        else if ("xml".equals(prefix) && 
+          !"http://www.w3.org/XML/1998/namespace".equals(uri)) {
+            throw new NamespaceException(
+              "Wrong namespace URI " + uri + " for the xml prefix"
+            );      
+        }
         
         checkNamespaceURI(uri);
         this.URI = uri;
@@ -973,6 +986,11 @@ public class Element extends ParentNode {
                  "Wrong namespace URI for xml prefix: " + uri);
             }   
         }
+        else if (uri.equals("http://www.w3.org/XML/1998/namespace")) {
+            throw new NamespaceException(
+               "Wrong prefix for http://www.w3.org/XML/1998/namespace namespace: " 
+               + prefix);  
+        }
         
         String currentBinding = getLocalNamespaceURI(prefix);
         if (currentBinding != null && !currentBinding.equals(uri)) {
@@ -998,7 +1016,6 @@ public class Element extends ParentNode {
         namespaces.put(prefix, uri);
         
     }
-
 
 
     /**

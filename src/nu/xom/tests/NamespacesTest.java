@@ -33,7 +33,7 @@ import nu.xom.NamespaceException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class NamespacesTest extends XOMTestCase {
@@ -71,8 +71,6 @@ public class NamespacesTest extends XOMTestCase {
          "http://www.example.com/");
         severalNamespaces.addNamespaceDeclaration("xlink", 
          "http://www.w3.org/2001/xlink");
-         
-        
         
     }
     
@@ -112,6 +110,30 @@ public class NamespacesTest extends XOMTestCase {
           "http://www.w3.org/XML/1998/namespace",
           severalNamespaces.getNamespaceURI("xml")
         );    
+    }
+    
+    public void testWrongPrefixNotAllowedWithXMLURI() {
+        
+        try {
+            noNamespaces.addNamespaceDeclaration("pre", "http://www.w3.org/XML/1998/namespace");
+            fail("Allowed XML namespace to be associated with non-xml prefix");    
+        }
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());   
+        }
+        
+    }
+    
+    public void testXMLPrefixNotAllowedWithWrongURI() {
+        
+        try {
+            noNamespaces.addNamespaceDeclaration("xml", "http://www.example.org/");
+            fail("Allowed xml prefix to be associated with wrong URI");    
+        }
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());   
+        }
+        
     }
     
     public void testXMLNSNamespace() {
@@ -354,9 +376,9 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals("http://www.example.com/",
           someNamespaces.getNamespaceURI("foo"));
 
-   }
+    }
 
-   public void testReplacingNamespaceDeclaration() {
+    public void testReplacingNamespaceDeclaration() {
     
         assertEquals("http://www.w3.org/2001/xlink", 
           someNamespaces.getNamespaceURI("xlink"));
@@ -377,9 +399,9 @@ public class NamespacesTest extends XOMTestCase {
           someNamespaces.getNamespaceURI("xlink"));
         
 
-   }
+    }
 
-   public void testSetPrefix() {
+    public void testSetPrefix() {
     
         try {
             Attribute a = severalNamespaces.getAttribute(0);
@@ -391,10 +413,10 @@ public class NamespacesTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
 
-   }
+    }
 
 
-   public void testElementConflict() {
+    public void testElementConflict() {
     
         Element element = new Element("pre:test", 
           "http://www.example.com/");
@@ -459,22 +481,22 @@ public class NamespacesTest extends XOMTestCase {
       <c:c xmlns:c="urn:x-xom:c" id="c" />
     </b>
    */
-   public void testLaurent() {
+    public void testLaurent() {
     
-     Element b = new Element("b", "urn:x-xom:b");
-     b.addAttribute(new Attribute("id", "b"));
-    
-     Element c = new Element("c:c", "urn:x-xom:c");
-     c.addAttribute(new Attribute("id", "c"));
-     b.appendChild(c);
+         Element b = new Element("b", "urn:x-xom:b");
+         b.addAttribute(new Attribute("id", "b"));
+        
+         Element c = new Element("c:c", "urn:x-xom:c");
+         c.addAttribute(new Attribute("id", "c"));
+         b.appendChild(c);
+         
+         assertEquals("urn:x-xom:b", b.getNamespaceURI());
+         assertEquals("urn:x-xom:c", c.getNamespaceURI());
+         assertEquals("urn:x-xom:b", b.getNamespaceURI(""));
+         assertEquals("urn:x-xom:b", c.getNamespaceURI(""));
+         assertEquals("urn:x-xom:c", c.getNamespaceURI("c"));
      
-     assertEquals("urn:x-xom:b", b.getNamespaceURI());
-     assertEquals("urn:x-xom:c", c.getNamespaceURI());
-     assertEquals("urn:x-xom:b", b.getNamespaceURI(""));
-     assertEquals("urn:x-xom:b", c.getNamespaceURI(""));
-     assertEquals("urn:x-xom:c", c.getNamespaceURI("c"));
-     
-   }
+    }
 
     public void testCountNamespaces() {
         Element html = new Element("html");

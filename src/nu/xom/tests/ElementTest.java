@@ -1263,4 +1263,35 @@ public class ElementTest extends XOMTestCase {
         assertEquals("", html.getNamespacePrefix());         
     }
 
+    public void testXMLPrefixAllowed() {
+        Element test = new Element("xml:base",
+              "http://www.w3.org/XML/1998/namespace");
+        assertEquals("xml", test.getNamespacePrefix());
+        assertEquals("http://www.w3.org/XML/1998/namespace", test.getNamespaceURI());
+        assertEquals("xml:base", test.getQualifiedName());
+    }
+
+    public void testXMLPrefixNotAllowedWithWrongURI() {
+        try {
+            new Element("xml:base", "http://www.example.org/");
+            fail("Allowed wrong namespace for xml prefix");    
+        }
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());   
+        }
+        
+    }
+
+    public void testWrongPrefixNotAllowedWithXMLURI() {
+        try {
+            new Element("test:base", "http://www.w3.org/XML/1998/namespace");
+            fail("Allowed XML namespace to be associated with non-xml prefix");    
+        }
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());   
+        }
+        
+    }
+
+
 }

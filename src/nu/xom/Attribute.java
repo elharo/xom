@@ -39,7 +39,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d10
+ * @version 1.0d23
  * 
  */
 public class Attribute extends Node {
@@ -142,6 +142,10 @@ public class Attribute extends Node {
 
         prefix = "";
         String localName = name;
+        // Warning: do not cache the value returned by indexOf here
+        // and in build
+        // without profiling. My current tests show doing this slows 
+        // down the parse by about 7%. I can't explain it.
         if (name.indexOf(':') >= 0) {
             prefix = name.substring(0, name.indexOf(':'));   
             localName = name.substring(name.indexOf(':') + 1);
@@ -412,6 +416,11 @@ public class Attribute extends Node {
           && !(URI.equals("http://www.w3.org/XML/1998/namespace"))) {
             throw new NamespaceException(
               "Wrong namespace URI for xml prefix: " + URI); 
+        }
+        else if (URI.equals("http://www.w3.org/XML/1998/namespace")
+          && !prefix.equals("xml")) {
+            throw new NamespaceException(
+              "Wrong prefix for the XML namespace: " + prefix); 
         }
         else if (prefix.length() == 0) {
             if (URI.length() == 0) {

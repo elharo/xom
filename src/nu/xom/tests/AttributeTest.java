@@ -244,17 +244,29 @@ public class AttributeTest extends XOMTestCase {
         assertEquals("xml:lang", a3.getQualifiedName());
         assertEquals(xmlNamespace, a3.getNamespaceURI());
 
-         try {
-            new Attribute("xml:base", "http://www.nothteXMLNamespace", 
+        try {
+            new Attribute("xml:base", "http://www.notTheXMLNamespace", 
               "http://www.w3.org/");
             fail("remapped xml prefix");
-         }
-         catch (NamespaceException ex) {
+        }
+        catch (NamespaceException ex) {
             // success    
             assertNotNull(ex.getMessage());    
-         }
+        }
 
-     }
+    }
+
+    public void testWrongPrefixNotAllowedWithXMLURI() {
+        
+        try {
+            new Attribute("test:base", "http://www.w3.org/XML/1998/namespace", "value");
+            fail("Allowed XML namespace to be associated with non-xml prefix");    
+        }
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());   
+        }
+        
+    }
 
     public void testToString() {   
         assertEquals(
