@@ -24,8 +24,6 @@ package nu.xom;
 import java.io.IOException;
 import java.io.Writer;
 
-import com.ibm.icu.text.Normalizer;
-
 /**
  * <p>
  *   This class is responsible for writing strings with the 
