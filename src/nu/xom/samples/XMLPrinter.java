@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002-2004 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -31,12 +31,12 @@ import nu.xom.ParsingException;
 
 /**
  * <p>
- *   Demonstrates parsing a document and outputting
- *    it again using the <code>getStringForm</code> method.
+ * Demonstrates parsing a document and outputting
+ * it again using the <code>toXML</code> method.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0b7
  *
  */
 public class XMLPrinter {
@@ -59,7 +59,7 @@ public class XMLPrinter {
         }
         catch (IOException ex) { 
           System.out.println(
-           "Due to an IOException, the parser could not check " 
+           "Due to an IOException, the parser could not print " 
            + args[0]
           ); 
         }
