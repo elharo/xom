@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -61,7 +61,7 @@ public class NormalizingFactory extends NodeFactory {
     // We don't need text nodes at all    
     public Nodes makeText(String data) {
         data = normalizeSpace(data);
-        if ("".equals(data)) return null; 
+        if ("".equals(data)) return empty; 
         return super.makeText(data); 
     }    
 
