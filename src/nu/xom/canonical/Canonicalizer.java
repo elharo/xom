@@ -50,16 +50,13 @@ import nu.xom.XPathContext;
  * <p>
  *   Writes XML in the format specified by <a target="_top"
  *   href="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical
- *   XML Version 1.0</a>.
- * </p>
- *
- * <p>
- *   Only complete documents can be canonicalized.
- *   Document subset canonicalization is not yet supported.
+ *   XML Version 1.0</a> or <a target="_top"
+ *   href="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/">Exclusive
+ *   XML Canonicalization Version 1.0</a>
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1d5
  *
  */
 public class Canonicalizer {
