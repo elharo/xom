@@ -862,4 +862,19 @@ public class BaseURITest extends XOMTestCase {
     }
     
     
+    public void testRelativeBaseURIResolution() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", "data/limit/test.xml");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          "http://www.w3.org/XML/1998/namespace", "child.xml"));
+        root.appendChild(child);
+        assertEquals("data/limit/child.xml", child.getBaseURI());
+        
+    }
+    
+    
 }
