@@ -27,7 +27,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a3
  *
  */
 class TextWriterFactory {
@@ -98,6 +98,9 @@ class TextWriterFactory {
         }           
         else if (encoding.equals("ISO-8859-16")) {
             return new Latin10Writer(out, encoding); 
+        }
+        else if (encoding.equals("BIG5")) {
+            return new Big5Writer(out, encoding); 
         }
         else if (encoding.equals("IBM037")
               || encoding.equals("CP037")
