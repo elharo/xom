@@ -30,7 +30,7 @@ import nu.xom.xslt.XSLTransform;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0b4
  *
  */
 public class Transformer {
@@ -41,11 +41,18 @@ public class Transformer {
       * </p>
       *
       * @param args <code>args[0]</code> contains the URL or  
-      *      file name of the document to be transformed. 
-      * <code>args[1]</code> contains the URL or  
-      *      file name of the stylesheet. 
+      *      filename of the document to be transformed. 
+      *      <code>args[1]</code> contains the URL or  
+      *      filename of the stylesheet. 
       */
     public static void main(String[] args) {
+        
+       if (args.length < 2) {
+           System.err.println(
+             "Usage: java nu.xom.samples.Transformer document stylesheet"
+           );
+           return;   
+       }
   
        System.setProperty(
           "javax.xml.transform.TransformerFactory", 
