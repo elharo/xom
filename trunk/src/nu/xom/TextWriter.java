@@ -30,11 +30,11 @@ import java.io.Writer;
 /**
  * <p>
  *   This class is responsible for writing strings with the 
- *   necessary esacping for their context.
+ *   necessary escaping for their context.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d21
  *
  */
 abstract class TextWriter {
@@ -446,7 +446,7 @@ abstract class TextWriter {
      * All other values are forbidden.
      * </p>
      * 
-     * @param lineSeparator The lineSeparator to set
+     * @param lineSeparator the lineSeparator to set
      * 
      * @throws IllegalArgumentException if you attempt to use 
      *      any line separator other than "\n", "\r", or "\r\n".
@@ -498,7 +498,7 @@ abstract class TextWriter {
      * In some circumstances this may not be respected.
      * </p>
      * 
-     * @param maxLength The maxLength to set
+     * @param maxLength the maxLength to set
      */
     public void setMaxLength(int maxLength) {
         if (maxLength < 0) maxLength = 0;
@@ -512,7 +512,7 @@ abstract class TextWriter {
      * Use 0 for no extra indenting.
      * </p>
      * 
-     * @param indent The indent to set
+     * @param indent the indent to set
      */
     public void setIndent(int indent) {
         this.indent = indent;
@@ -542,7 +542,8 @@ abstract class TextWriter {
      * </p>
      *
      * 
-     * @return true if an xml:space="true" attribute is in-scope
+     * @return true if an <ocde>xml:space="true"</code> attribute 
+     *      is in-scope
      */
     public boolean isPreserveSpace() {
         return preserveSpace;
