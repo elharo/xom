@@ -194,14 +194,14 @@ public class Document extends ParentNode {
      * @return the root element
      */
     public final Element getRootElement() {
-        for (int i = 0; i < getChildCount(); i++) {
+        // This looks like an infinite loop but it isn't because
+        // all documents have root elements.
+        for (int i = 0; ; i++) {
              Node child = getChild(i);
              if (child.isElement()) {
                 return (Element) child;
              }
          }
-         // It should not be possible to get here
-         throw new WellformednessException("Missing root element");
     }
 
     /**
