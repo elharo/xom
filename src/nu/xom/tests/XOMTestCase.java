@@ -67,7 +67,7 @@ public class XOMTestCase extends TestCase {
      * <code>ComparisonFailure</code> is thrown.
      * </p>
      * 
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
      * @throws ComparisonException if the <code>Text</code> nodes 
@@ -89,7 +89,7 @@ public class XOMTestCase extends TestCase {
      * </p>
      * 
      * @param message printed if the nodes are not equal
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
      * @throws ComparisonException if the <code>Text</code> nodes 
@@ -134,7 +134,7 @@ public class XOMTestCase extends TestCase {
      * considered equal if one might be a relative form of the other.
      * </p>
      * 
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
      * @throws ComparisonException if the <code>Attribute</code> nodes 
@@ -165,7 +165,7 @@ public class XOMTestCase extends TestCase {
      * </p>
      * 
      * @param message printed if the nodes are not equal 
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
      * @throws ComparisonException if the <code>Attribute</code> nodes 
@@ -211,7 +211,7 @@ public class XOMTestCase extends TestCase {
      * <code>ComparisonFailure</code> is thrown.
      * </p>
      * 
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the <code>DocType</code> nodes 
@@ -234,7 +234,7 @@ public class XOMTestCase extends TestCase {
      * </p>
      * 
      * @param message printed if the nodes are not equal
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the <code>DocType</code> nodes 
@@ -277,7 +277,7 @@ public class XOMTestCase extends TestCase {
      * a <code>ComparisonFailure</code> is thrown.
      * </p>
      * 
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the <code>Elements</code> nodes 
@@ -303,7 +303,7 @@ public class XOMTestCase extends TestCase {
      * </p>
      * 
      * @param message printed if the nodes are not equal
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the <code>Element</code> nodes 
@@ -420,7 +420,7 @@ public class XOMTestCase extends TestCase {
      * </p>
      * 
      * @param message printed if the nodes are not equal
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the <code>Document</code> nodes 
@@ -453,7 +453,7 @@ public class XOMTestCase extends TestCase {
      * a <code>ComparisonFailure</code> is thrown.
      * </p>
      * 
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the <code>Document</code> nodes 
@@ -476,7 +476,7 @@ public class XOMTestCase extends TestCase {
      * </p>
      * 
      * @param message printed if the nodes are not equal
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the <code>Comment</code> nodes 
@@ -501,7 +501,7 @@ public class XOMTestCase extends TestCase {
      * <code>ComparisonFailure</code> is thrown.
      * </p>
      * 
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the <code>Comment</code> nodes 
@@ -521,7 +521,7 @@ public class XOMTestCase extends TestCase {
      * <code>ComparisonFailure</code> is thrown.
      * </p>
      * 
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the 
@@ -544,7 +544,7 @@ public class XOMTestCase extends TestCase {
      * </p>
      * 
      * @param message printed if the nodes are not equal
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      *
      * @throws ComparisonException if the 
@@ -574,7 +574,7 @@ public class XOMTestCase extends TestCase {
      * a <code>Comment</code>.
      * </p>
      * 
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
      * @throws ComparisonException if the nodes are not equal
@@ -596,7 +596,7 @@ public class XOMTestCase extends TestCase {
      * </p>
      * 
      * @param message printed if the nodes are not equal
-     * @param expected the node the test should producee
+     * @param expected the node the test should produce
      * @param actual the node the test does produce
      * 
      * @throws ComparisonException if the nodes are not equal
