@@ -26,35 +26,24 @@ package nu.xom;
 /**
  * 
  * <p>
- * A <code>NamespaceException</code> indicates some violation of the 
- * rules of Namespaces in XML. All namespace exceptions are not
- * violations of pure XML 1.0 without namespaces. For example, 
- * trying to set the name of an element to "98degrees" throws an 
- * <code>IllegalNameException</code> because it violates XML 1.0 
- * with or without namespaces. However, setting the same element's 
- * name to <code>test:test:degrees</code> throws a 
- * <code>NamespaceException</code> because 
- * <code>test:test:degrees</code> is a legal name in XML 1.0 but not a 
- * legal name in XML 1.0 + namespaces.
+ * A <code>NamespaceConflictException</code> signals an attempt 
+ * to set a namespace in a way that conflicts with an exisitng 
+ * namespace; for instance, assigning adding an attribute to
+ * an element that has the same prefix as the element but maps it
+ * to a different URI. 
  * </p>
  * 
- * <p>
- * The <code>xml</code> prefix is not treated specially on attributes  
- * like <code>xml:base</code> and <code>xml:space</code>.
- * If used, these attributes must be specified 
- * like any other attribute in a namespace.
- * </p> 
- * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
-public class NamespaceConflictException extends WellformednessException {
+public class NamespaceConflictException 
+  extends WellformednessException {
 
     
     /**
      * <p>
-     * Creates a new <code>NamespaceException</code> 
+     * Creates a new <code>NamespaceConflictException</code> 
      * with a detail message.
      * </p>
      * 
@@ -67,14 +56,15 @@ public class NamespaceConflictException extends WellformednessException {
     
     /**
      * <p>
-     * Creates a new <code>NamespaceException</code> 
+     * Creates a new <code>NamespaceConflictException</code> 
      * with a detail message and an underlying root cause.
      * </p>
      * 
      * @param message indicates the specific problem
      * @param cause the original cause of this exception
      */
-    public NamespaceConflictException(String message, Throwable cause) {
+    public NamespaceConflictException(
+      String message, Throwable cause) {
         super(message, cause);
     }
 
