@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -39,7 +39,7 @@ import nu.xom.Text;
 
 /**
  * <p>
- *   Writes XML in the format specified by <a 
+ *   Writes XML in the format specified by <a target="_top"
  *   href="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical
  *   XML Version 1.0</a>.
  * </p>
