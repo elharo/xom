@@ -27,17 +27,18 @@ import java.io.UnsupportedEncodingException;
  * <p>
  *   This class represents a run of text. 
  *   CDATA sections are not treated differently than 
- *   normal text.
+ *   normal text. <code>Text</code> objects may be adjacent to other 
+ *   <code>Text</code> objects.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1a2
  *
  */
 public class Text extends Node {
 
     
-    private byte[] data;
+    byte[] data;
     
     
     /**
@@ -140,7 +141,7 @@ public class Text extends Node {
      * the text of the node.
      * </p>
      *  
-     * @return The content of the node.
+     * @return the content of the node
      */
     public final String getValue() {
         
