@@ -59,7 +59,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b3
  * 
  */
 public class NodeFactory {
@@ -240,7 +240,7 @@ public class NodeFactory {
      * object may not contain any <code>Document</code> objects.
      * All of the nodes returned must be parentless.
      * Subclasses may return an empty <code>Nodes</code> to indicate  
-     * the sttribute should not be created.
+     * the attribute should not be created.
      * </p>
      * 
      * @param name the prefixed name of the attribute
