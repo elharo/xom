@@ -29,7 +29,6 @@ import nu.xom.Element;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.Node;
-import nu.xom.Builder;
 import nu.xom.ParentNode;
 
 import org.jaxen.DefaultNavigator;
@@ -37,7 +36,6 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
