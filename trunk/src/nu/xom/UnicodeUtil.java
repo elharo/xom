@@ -8609,7 +8609,8 @@ final class UnicodeUtil {
             for (int i = 0; i < length; i++) {
                 int c = data[i];
                 // assuming starters are never combined with preceding characters; true????
-                if (isStarter(c) ) {
+                // Kannada vowel sign OO may be counter example
+                /* if (isStarter(c) ) {
                     lastStarter = c;
                     lastStarterIndex = i;
                     composed.append(c);
@@ -8630,8 +8631,33 @@ final class UnicodeUtil {
                         
                         composed.data[lastStarterIndex] = composedChar; 
                     }
+                } */
+                if (lastStarter == -1 || isBlocked(lastStarterIndex, i)) {
+                    composed.append(c);
+                    if (isStarter(c) ) {
+                        lastStarter = c;
+                        lastStarterIndex = i;
+                    }
                 }
-                
+                else  {
+                    int composedChar = composeCharacter(lastStarter, c);
+                    if (composedChar == -1) {
+                        composed.append(c);
+                        if (isStarter(c) ) {
+                            lastStarter = c;
+                            lastStarterIndex = i;
+                            composed.append(c);
+                        }
+                    }
+                    else {
+                        lastStarter = composedChar;
+                        // XXX dangerous side effects
+                        data[lastStarterIndex] = composedChar;
+                        data[i] = 0;
+                        
+                        composed.data[lastStarterIndex] = composedChar; 
+                    }
+                }
             }
             
             return composed;
