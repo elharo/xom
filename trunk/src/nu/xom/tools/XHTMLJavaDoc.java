@@ -11,6 +11,8 @@ import nu.xom.Builder;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
@@ -50,7 +52,7 @@ import nu.xom.Serializer;
 class XHTMLJavaDoc {
     
     private static Builder builder 
-      = new Builder(new org.ccil.cowan.tagsoup.Parser());
+      = new Builder(new org.ccil.cowan.tagsoup.Parser(), false, new HTMLFixFactory());
 
 
     private static class HTMLFilter implements FileFilter {
@@ -89,7 +91,6 @@ class XHTMLJavaDoc {
                 }
                 else {
                     try {
-                        // use a NodeFactory that turns i's and b's into CSS????
                         Document doc = builder.build(f);
                         DocType doctype = new DocType("html", 
                           "-//W3C//DTD XHTML 1.0 Frameset//EN",
@@ -123,6 +124,26 @@ class XHTMLJavaDoc {
         }
         else {
             System.err.println("Could not locate source directory: " + indir);
+        }
+        
+    }
+    
+    
+    private static class HTMLFixFactory extends NodeFactory {
+        
+        public Nodes finishMakingElement(Element element) {
+            
+            if (element.getLocalName().equals("i")) {
+                element.setLocalName("span");
+                element.addAttribute(new Attribute("style", "font-style: italic"));
+            }
+            else if (element.getLocalName().equals("b")) {
+                element.setLocalName("span");
+                element.addAttribute(new Attribute("style", "font-weight: bold"));
+            }
+                
+            return new Nodes(element);   
+            
         }
         
     }
