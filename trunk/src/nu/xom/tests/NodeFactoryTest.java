@@ -415,7 +415,7 @@ public class NodeFactoryTest extends XOMTestCase {
     
     int numNodesInExternalDTDSubset = 0; 
     
-    public void testDontReportCommentsAndProcessingInstrcutionsInExternalDTDSubset() 
+    public void testDontReportCommentsAndProcessingInstructionsInExternalDTDSubset() 
       throws IOException, ParsingException {
         
         File input = new File("data/contentindtd.xml");
