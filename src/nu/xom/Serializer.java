@@ -548,9 +548,9 @@ public class Serializer {
      *     written
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws UnavailableCharacterException if any of the element's namespace prefixes
-     *     contains a character that is not available in the current 
-     *     encoding
+     * @throws UnavailableCharacterException if any of the element's 
+     *     namespace prefixes contains a character that is not 
+     *     available in the current encoding
      */
     protected void writeNamespaceDeclarations(Element element)
       throws IOException {
