@@ -40,7 +40,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  * 
  */
 public class Attribute extends Node {
@@ -442,25 +442,12 @@ public class Attribute extends Node {
         this.prefix = prefix;
         
     }
-
-    
-    /**
-     * <p>
-     * Returns false because attributes do not have children.
-     * </p>
-     * 
-     * @return false
-     * @see nu.xom.Node#hasChildren()
-     */
-    public final boolean hasChildren() {
-        return false;   
-    }
     
     
     /**
      * <p>
      *  Throws <code>IndexOutOfBoundsException</code>
-     *  because attribute do not have children.
+     *  because attributes do not have children.
      * </p>
      *
      * @param position the child to return
