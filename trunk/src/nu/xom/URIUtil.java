@@ -105,14 +105,19 @@ class URIUtil {
     }
     
 
+    // XXX remove dependence on Xerces URI class
     static String absolutize(String base, String spec) {
         
+        if (!isAbsolute(base)) {
+           // Xerces can't handle two relative URIs so use Java instead
+           return absolutizeWithJava14(base, spec);
+        }
         try {
             URI u = new URI(base);
             URI resolved = new URI(u, spec);
             return resolved.toString();
         } 
-        catch (Exception e) {
+        catch (Exception ex) {
             throw new nu.xom.MalformedURIException("bad");
         } 
         catch (NoClassDefFoundError error) {
