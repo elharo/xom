@@ -59,7 +59,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  * 
  */
 public class NodeFactory {
@@ -393,5 +393,10 @@ public class NodeFactory {
         return new Nodes(new ProcessingInstruction(target, data)); 
     }
 
+    
+    void addAttribute(Element element, Attribute attribute) {
+        element.addAttribute(attribute);
+    }
+  
     
 }

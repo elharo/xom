@@ -87,6 +87,10 @@ class XOMHandler
         if (locator != null) {
             documentBaseURI = locator.getSystemId();
             document.setBaseURI(documentBaseURI);
+            // FIXME do we need to depend on the locator here
+            // isn't the base URI often passed into build?
+            // and if it is how do we use it?
+            // especially if we set base URI on all built elements?
         }
     }
   
@@ -135,7 +139,7 @@ class XOMHandler
                  if (baseURI != null && !baseURI.equals(documentBaseURI)) {
                      element.setActualBaseURI(baseURI);
                  }
-            } 
+            }         
             
             // Attach the attributes; this must be done before the
             // namespaces are attached.           
@@ -156,7 +160,7 @@ class XOMHandler
                     for (int j=0; j < nodes.size(); j++) {
                         Node node = nodes.get(j);
                         if (node.isAttribute()) {
-                            element.addAttribute((Attribute) node);
+                            factory.addAttribute(element, (Attribute) node);
                         }
                         else {
                             element.appendChild(node);   
@@ -593,4 +597,5 @@ class XOMHandler
         
     }
  
+    
 }

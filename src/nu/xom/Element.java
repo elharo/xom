@@ -422,13 +422,19 @@ public class Element extends ParentNode {
             // namespaces of other attributes
         }
         
+        fastAddAttribute(attribute);
+        
+    }
+    
+
+    
+    void fastAddAttribute(Attribute attribute) {
         if (attributes == null) attributes = new Attributes();
         attributes.add(attribute);
         attribute.setParent(this);
-        
     }
 
-    
+
     /**
      * <p>
      * Removes an attribute from this element.
@@ -1242,6 +1248,20 @@ public class Element extends ParentNode {
      * this method returns null. 
      * </p>
      * 
+     * <p>
+     * If the element's <code>xml:base</code> attribute contains a 
+     * value that is a syntactically illegal URI (e.g. %GF.html") 
+     * then what is returned????. Currently this method can return
+     * null in several circumstances including this one.
+     * However, I may change that to returning the empty string.
+     * According to 4.2 of RFC 2396, "A URI reference that does 
+     * not contain a URI is a reference to the current document.  
+     * In other words, an empty URI reference within a 
+     * document is interpreted as a reference to the start of that document,
+     * and a reference containing only a fragment identifier is a reference
+     * to the identified fragment of that document."
+     * </p>
+     * 
      * @return the base URI of this element 
      * 
      * @see Node#getBaseURI()
@@ -1278,15 +1298,12 @@ public class Element extends ParentNode {
                             }
                         }
                         catch (MalformedURIException ex) {
-                            // System.err.println("Oops " + base);
                             return null;
                         }
                     }
                     else {
                         try {
                             if (!URIUtil.isOpaque(actualBase)) {
-                                // should the absolutize method be able to
-                                // combine two relative bases????
                                 base = URIUtil.absolutize(actualBase, base);    
                             } 
                         }

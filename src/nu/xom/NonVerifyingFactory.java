@@ -30,11 +30,12 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 class NonVerifyingFactory extends NodeFactory {
 
+    
     /**
      * <p>
      * Creates a new <code>Element</code> in the specified namespace 
@@ -50,6 +51,7 @@ class NonVerifyingFactory extends NodeFactory {
         return Element.build(name, namespace);   
     }
 
+    
     /**
      * <p>
      * Creates a new <code>Attribute</code> in the specified namespace 
@@ -69,6 +71,7 @@ class NonVerifyingFactory extends NodeFactory {
         return new Nodes(Attribute.build(name, URI, value, type));
     }
 
+    
     /**
      * <p>
      * Creates a new <code>Comment</code>.
@@ -83,6 +86,7 @@ class NonVerifyingFactory extends NodeFactory {
         return new Nodes(Comment.build(data));   
     }
 
+    
     /**
      * <p>
      * Creates a new <code>DocType</code> with a root element name,
@@ -102,6 +106,7 @@ class NonVerifyingFactory extends NodeFactory {
         return new Nodes(DocType.build(rootElementName, publicID, systemID));    
     }
 
+    
      /**
      * <p>
      * Creates a new <code>Text</code> node.
@@ -116,6 +121,7 @@ class NonVerifyingFactory extends NodeFactory {
         return new Nodes(Text.build(data));  
     }
 
+    
     /**
      * <p>
      * Creates a new <code>CDATASection</code> node.
@@ -130,6 +136,7 @@ class NonVerifyingFactory extends NodeFactory {
         return new Nodes(CDATASection.build(data));  
     }
 
+    
     /**
      * <p>
      * Creates a new <code>ProcessingInstruction</code> with
@@ -146,5 +153,12 @@ class NonVerifyingFactory extends NodeFactory {
       String target, String data) {
         return new Nodes(ProcessingInstruction.build(target, data)); 
     }
+
+    
+    void addAttribute(Element element, Attribute attribute) {
+        element.fastAddAttribute(attribute);
+    }
+  
+    
 
 }
