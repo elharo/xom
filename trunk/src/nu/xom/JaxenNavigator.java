@@ -416,7 +416,7 @@ class JaxenNavigator extends DefaultNavigator {
                 Text t = (Text) next;
                 // Is this an empty text node?
                 boolean empty = t.isEmpty();
-                List texts = new ArrayList();
+                List texts = new ArrayList(1);
                 texts.add(t);
                 while (xomIndex < xomCount) {
                     Node nextText = parent.getChild(xomIndex);
