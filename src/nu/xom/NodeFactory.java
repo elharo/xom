@@ -231,8 +231,9 @@ public class NodeFactory {
 
     /**
      * <p>
-     * Creates a new <code>Document</code> with 
-     * the specified root element.
+     * Creates a new <code>Document</code> with an initial fake root
+     * which will be replaced by the real root shortly.
+     * This fake root should never be exposed.
      * </p>
      * 
      * <p>
@@ -245,7 +246,9 @@ public class NodeFactory {
      * @return the newly created <code>Document</code>
      */
     public Document makeDocument() {
-        return new Document(new Element("fauxRoot"));  
+        return new Document(
+          Element.build("root", "http://www.xom.nu/fakeRoot")
+        );  
     }
 
     /**
