@@ -457,10 +457,6 @@ public class XIncluder {
                         resolveInPlace(replacements, builder);  
                         // Write a unit test where an xpointer includes itself
                         // indirectly through intermediary documents????
-                        
-                        // deliberately not updating the base here since
-                        // we're in the same document; however, that may be flaky
-                        // in the presence of xml:base attributes????
                                                  
                     }
                       

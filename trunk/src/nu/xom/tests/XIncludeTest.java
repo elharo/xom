@@ -72,9 +72,24 @@ public class XIncludeTest extends XOMTestCase {
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
         // For debugging
-        /* dumpResult(original, result); */
+        /* dumpResult(input, result); */
         Document expectedResult = builder.build(
           new File("data/xinclude/output/test.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
+    public void testBaseURIsPreservedINSameDocumentInclusion() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/includefromsamedocumentwithbase.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        // For debugging
+        // dumpResult(input, result); 
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/includefromsamedocumentwithbase.xml")
         );
         assertEquals(expectedResult, result);
         
