@@ -312,7 +312,7 @@ public abstract class Node {
     }
 
     
-    // Simple methods to replace instanceof tests
+    // Methods to replace instanceof tests to improve performance
     boolean isElement() {
         return false;   
     }
