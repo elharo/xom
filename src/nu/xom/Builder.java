@@ -965,9 +965,13 @@ public class Builder {
         }
         
         String base = url.toString();
-        Document doc = build(fin, base);
-        fin.close();
-        return doc;
+        try {
+            Document doc = build(fin, base);
+            return doc;
+        }
+        finally {   
+            fin.close();
+        }
         
     }
 
