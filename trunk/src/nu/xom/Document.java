@@ -43,10 +43,13 @@ public class Document extends ParentNode {
      * </p>
      * 
      * @param root the root element of this document
+     * 
+     * @throws NullPointerException if root is null
+     * 
      */
     public Document(Element root) {
         checkRoot(root);
-        super.insertChild(root, 0);
+        insertChild(root, 0);
     }
 
     /**
@@ -55,10 +58,12 @@ public class Document extends ParentNode {
      * </p>
      * 
      * @param doc the Document to copy
+     * 
+     * @throws NullPointerException if doc is null
      */
     public Document(Document doc) {
 
-      super.insertChild(doc.getRootElement().copy(), 0);
+      insertChild(doc.getRootElement().copy(), 0);
       for (int i = 0; i < doc.getChildCount(); i++) {
           Node child = doc.getChild(i);
           if (!(child.isElement())) {
@@ -70,31 +75,9 @@ public class Document extends ParentNode {
     }
 
 
-    /**
-     * <p>
-     * Inserts a child node at the specified position.
-     * Inserting at position 0 makes the child the
-     *  first child of this node. Inserting at the position 
-     * <code>getChildCount</code> makes the child the 
-     * last child of the node.
-     * </p>
-     * 
-     * @param position where to insert the child
-     * @param child the node to insert
-     * 
-     * @throws IllegalAddException if <code>child</code> is not a 
-     *    <code>Comment</code>, <code>ProcessingInstruction</code>, 
-     *    or <code>DocType</code>, or if <code>child</code> is a 
-     *    <code>DocType</code> but this document already has a
-     *    <code>DocType</code>
-     * @throws MultipleParentException if child already has a parent
-     * @throws NullPointerException if child is null
-     * @throws IndexOutOfBoundsException if the position is negative 
-     *     or greater than the number of children of the node.`
-     */
-    public final void insertChild(Node child, int position) {
+    final void insertionAllowed(Node child, int position) {
         if (child.isComment() || child.isProcessingInstruction()) {
-            super.insertChild(child, position);
+            return;
         }
         else if (child.isDocType()) {
             if (position <= getRootPosition()) {
@@ -104,7 +87,7 @@ public class Document extends ParentNode {
                       "Tried to insert a second DOCTYPE"
                     );   
                 }
-                super.insertChild(child, position);
+                return;
             }
             else {
                 throw new IllegalAddException(
@@ -114,6 +97,7 @@ public class Document extends ParentNode {
             }
         }
         else if (child.isElement()) {
+            if (getChildCount() == 0) return;
             throw new IllegalAddException(
              "Cannot add a second root element to a Document."
             );
@@ -124,6 +108,7 @@ public class Document extends ParentNode {
         }
 
     }
+    
 
     private int getRootPosition() {
         for (int i = 0; i < getChildCount(); i++) {
@@ -173,15 +158,26 @@ public class Document extends ParentNode {
      * 
      */
     public final void setDocType(DocType doctype) {
+        
         DocType oldDocType = getDocType();
-        if (oldDocType == null) {
-            super.insertChild(doctype, 0);            
-        } 
-        else if (doctype == oldDocType) return; 
-        else {
-            super.insertChild(doctype, this.indexOf(oldDocType));
-            oldDocType.detach();
+        if (doctype == null) {
+            throw new NullPointerException("Null DocType");
         }
+        else if (doctype == oldDocType) return; 
+        else if (doctype.getParent() != null) {
+            throw new MultipleParentException("DocType belongs to another document");
+        }
+        
+        // checkInsertChild(????)
+        if (oldDocType == null) insertChild(doctype, 0);
+        else {
+            int position = indexOf(oldDocType);
+            children.remove(position);
+            children.add(position, doctype);
+            oldDocType.setParent(null);
+            doctype.setParent(this);
+        }
+        
     }
 
 
@@ -206,22 +202,38 @@ public class Document extends ParentNode {
 
     /**
      * <p>
-     * Replaces the current root element
-     * with a different root element.
+     * Replaces the current root element with a different root element.
      * </p>
      * 
      * @param root the new root element
      * 
      * @throws MultipleParentException if root has a parent
      * @throws XMLException if root is not legal for this  
-     *      subclass of Document
+     *      subclass of <code>Document</code>
      * @throws NullPointerException if root is null
      */
     public final void setRootElement(Element root) {
-        if (root == this.getRootElement()) return;
+        
+        Element oldRoot = this.getRootElement(); 
+        if (root == oldRoot) return;
+        else if (root == null) {
+            throw new NullPointerException("Root element cannot be null");
+        }
+        else if (root.getParent() != null) {
+            throw new MultipleParentException(root.getQualifiedName()
+              + " already has a parent");
+        }
         checkRoot(root);
-        super.insertChild(root, getRootPosition());
-        super.removeChild(getRootPosition()+1);
+        
+        int index = indexOf(oldRoot);
+        checkRemoveChild(oldRoot, index);
+        checkInsertChild(root, index);
+        
+        oldRoot.setParent(null);
+        children.remove(index);
+        children.add(index, root);
+        root.setParent(this);
+        
     }
 
     /**

@@ -102,7 +102,7 @@ public abstract class ParentNode extends Node {
      * @param child the node to insert
      * 
      * @throws IllegalAddException if this node cannot have child of
-     *   passed type
+     *     the argument's type
      * @throws MultipleParentException if <code>child</code> already 
      *     has a parent
      * @throws NullPointerException if <code>child</code> is null
@@ -110,25 +110,19 @@ public abstract class ParentNode extends Node {
      *       greater than the number of children of this node
      * @throws XMLException if the concrete subclass rejects this child
      */
-    public void insertChild(Node child, int position) {
+    public final void insertChild(Node child, int position) {
         
-        if (child == null) {
-            throw new NullPointerException(
-             "Tried to insert a null child in the tree");
-        }
-        if (child.getParent() != null) {
-            throw new MultipleParentException(child.toString() 
-              + "Child already has a parent.");
-        }
-        
-        checkInsertChild(child, position);
+        insertionAllowed(child, position);
         if (children == null) children = new ArrayList(1);
         children.add(position, child);
         child.setParent(this);
 
     }
-
     
+    
+    abstract void insertionAllowed(Node child, int position);
+
+
     /**
      * <p>
      *   Subclasses can override this method to allow
@@ -178,12 +172,14 @@ public abstract class ParentNode extends Node {
      *     or greater than the number of children of the node - 1
      */
     public Node getChild(int position) {
+        
         if (children == null) {
             throw new IndexOutOfBoundsException(
               "This node has no children"
             );
         }
         return (Node) children.get(position); 
+        
     }
 
     
@@ -268,6 +264,7 @@ public abstract class ParentNode extends Node {
         
         child.setParent(null);
         return child;
+        
     }
 
     
@@ -297,13 +294,28 @@ public abstract class ParentNode extends Node {
      * @param oldChild the node removed from the tree
      * @param newChild the node inserted into the tree
      * 
+     * @throws MultipleParentException if <code>newChild</code> already 
+     *     has a parent
      * @throws NoSuchChildException if <code>oldChild</code> 
      *      is not a child of this node
-     * @throws NullPointerException if <code>newChild</code> is null
+     * @throws NullPointerException if either argument is null
      * @throws IllegalAddException if this node cannot have children 
      *      of the type of <code>newChild</code>
+     * @throws XMLException if the subclass rejects the removal of
+     *     oldChild or the insertion of newChild
      */
     public final void replaceChild(Node oldChild, Node newChild) {
+        
+        if (oldChild == null) {
+            throw new NullPointerException(
+              "Tried to replace null child"
+            );
+        } 
+        if (newChild == null) {
+            throw new NullPointerException(
+              "Tried to replace child with null"
+            );
+        }
         if (children == null) {
             throw new NoSuchChildException(
               "Reference node is not a child of this node."
@@ -315,8 +327,14 @@ public abstract class ParentNode extends Node {
               "Reference node is not a child of this node."
             );   
         }
+        
+        if (oldChild == newChild) return;
+        
+        // must make sure insertion is legal before we remove
+        insertionAllowed(newChild, position);
         removeChild(position);
         insertChild(newChild, position);
+        
     }
 
     

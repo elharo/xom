@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -46,7 +46,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class DocumentTest extends XOMTestCase {
@@ -64,20 +64,22 @@ public class DocumentTest extends XOMTestCase {
 
     }
     
+    
     public void testToString() {
         assertEquals("[nu.xom.Document: root]", doc.toString());
     }
     
+    
     public void testDocTypeInsertion() {
+        
         DocType type1 = new DocType("root");
         
         try {
             doc.insertChild(type1, 1);
             fail("inserted doctype after root element");
         }
-        catch (IllegalAddException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());
         }
         
         doc.insertChild(type1, 0);
@@ -88,9 +90,8 @@ public class DocumentTest extends XOMTestCase {
             doc.insertChild(type2, 1);
             fail("Inserted 2nd DocType");
         }
-        catch (IllegalAddException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());
         }
         assertEquals(type1, doc.getDocType());
         assertNull(type2.getParent());
@@ -104,7 +105,9 @@ public class DocumentTest extends XOMTestCase {
         
     }
 
+    
     public void testSetDocType() {
+        
         DocType type1 = new DocType("root");       
         doc.setDocType(type1);
         assertEquals(type1, doc.getDocType());
@@ -144,6 +147,7 @@ public class DocumentTest extends XOMTestCase {
         
     }
 
+    
     public void testBaseURI() {
         
         assertNull(doc.getBaseURI());
@@ -165,20 +169,22 @@ public class DocumentTest extends XOMTestCase {
 
     }
     
+    
     public void testSecondRoot() {
     
         try {
             doc.insertChild(new Element("test"), 0);
             fail("Added second root element");
         }
-        catch (IllegalAddException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
 
+    
     public void testSetRoot() {
+        
         Element newRoot = new Element("newroot");
         doc.setRootElement(newRoot);
         
@@ -188,19 +194,20 @@ public class DocumentTest extends XOMTestCase {
         try {
             doc.setRootElement(null);              
         }
-        catch (NullPointerException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
 
+    
     public void testReplaceRootWithItself() {
         Element root = doc.getRootElement();
         doc.setRootElement(root);
         assertEquals(root, doc.getRootElement());
     }
 
+    
     public void testDetach() {
         Comment comment 
           = new Comment("This will be attached then detached");
@@ -210,10 +217,12 @@ public class DocumentTest extends XOMTestCase {
         assertNull(comment.getParent());
     }
 
+    
     public void testGetDocument() {
         assertEquals(doc, doc.getDocument());
     }
 
+    
     public void testConstructor() {
     
         assertEquals(root, doc.getRootElement());
@@ -252,9 +261,7 @@ public class DocumentTest extends XOMTestCase {
             new Document(nullRoot);
             fail("allowed null root!");
         }
-        catch (NullPointerException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NullPointerException success) {
         }
         
         try {
@@ -267,6 +274,7 @@ public class DocumentTest extends XOMTestCase {
         }
         
     }
+    
     
     public void testCopyConstructor() {
         
@@ -281,6 +289,7 @@ public class DocumentTest extends XOMTestCase {
         assertEquals(doc, doc2);
         
     }
+    
     
     public void testCopyConstructorBaseURI() {
         
@@ -300,6 +309,7 @@ public class DocumentTest extends XOMTestCase {
         
     }
     
+    
     public void testCopy() {
         
         doc.insertChild(new Comment("text"), 0);
@@ -314,6 +324,7 @@ public class DocumentTest extends XOMTestCase {
         
     }
     
+    
     public void testAppend() {
     
         Element root = new Element("root");
@@ -323,27 +334,24 @@ public class DocumentTest extends XOMTestCase {
             doc.appendChild(new Text("test"));
             fail("appended string");
         }   
-        catch (IllegalAddException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             doc.appendChild(new Text("    "));
             fail("appended white space");
         }   
-        catch (IllegalAddException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             doc.appendChild(new Text("test"));
             fail("appended Text");
         }   
-        catch (IllegalAddException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
@@ -351,22 +359,21 @@ public class DocumentTest extends XOMTestCase {
             doc.appendChild(new Element("test"));
             fail("appended element");
         }   
-        catch (IllegalAddException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             doc.insertChild(new Element("test"), 0);
             fail("inserted element");
         }   
-        catch (IllegalAddException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
 
+    
     public void testRemoval() {
     
         Element root = new Element("root");
@@ -376,27 +383,24 @@ public class DocumentTest extends XOMTestCase {
             root.detach();
             fail("detached root element");
         }   
-        catch (WellformednessException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             doc.removeChild(root);
             fail("removed root element");
         }   
-        catch (WellformednessException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
         }
         
         try {
             doc.removeChild(0);
             fail("removed root element");
         }   
-        catch (WellformednessException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (WellformednessException success) {
+            assertNotNull(success.getMessage());
         }
         
         doc.appendChild(new Comment("test"));
@@ -413,22 +417,21 @@ public class DocumentTest extends XOMTestCase {
             doc.removeChild(something);
             fail("Removed nonchild");
         }
-        catch (NoSuchChildException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NoSuchChildException success) {
+            assertNotNull(success.getMessage());
         }
 
         try {
             doc.removeChild(20);
             fail("removed overly sized element");
         }   
-        catch (IndexOutOfBoundsException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (IndexOutOfBoundsException success) {
+            assertNotNull(success.getMessage());
         }
         
     }
 
+    
     public void testToXML() throws ParsingException, IOException {
         Builder builder = new Builder();
         File f = new File("data/test.xml");   
@@ -438,4 +441,5 @@ public class DocumentTest extends XOMTestCase {
         assertEquals(input, output);
     }
 
+    
 }
