@@ -52,7 +52,7 @@ import nu.xom.XPathContext;
  *   href="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical
  *   XML Version 1.0</a> or <a target="_top"
  *   href="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/">Exclusive
- *   XML Canonicalization Version 1.0</a>
+ *   XML Canonicalization Version 1.0</a>. 
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -62,9 +62,21 @@ import nu.xom.XPathContext;
 public class Canonicalizer {
 
     private boolean withComments;
+    private boolean exclusive = false;
     private CanonicalXMLSerializer serializer;
     
     private static Comparator comparator = new AttributeComparator();
+    
+    
+    public final static String CANONICAL_XML =  
+     "http://www.w3.org/TR/2001/REC-xml-c14n-20010315";
+    public final static String CANONICAL_XML_WITH_COMMENTS =  
+     "http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments";
+    public final static String EXCLUSIVE_XML_CANONICALIZATION = 
+      "http://www.w3.org/2001/10/xml-exc-c14n#";
+    public final static String EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS = 
+      "http://www.w3.org/2001/10/xml-exc-c14n#WithComments";
+    
     
     private static class AttributeComparator implements Comparator {
         
@@ -102,7 +114,7 @@ public class Canonicalizer {
      *     is written onto
      */
     public Canonicalizer(OutputStream out) {
-        this(out, true);
+        this(out, true, false);
     }
 
     
@@ -119,9 +131,93 @@ public class Canonicalizer {
      */
     public Canonicalizer(
       OutputStream out, boolean withComments) {
+        this(out, withComments, false);
+    }
+
+
+    /**
+     * <p>
+     * Creates a <code>Canonicalizer</code> that outputs a 
+     * canonical XML document with or without comments,
+     * using either the original or the exclusive canonicalization
+     * algorithm. 
+     * </p>
+     * 
+     * @param out the output stream the document
+     *     is written onto
+     * @param withComments true if comments should be included 
+     *     in the output, false otherwise
+     * @param exclusive true if exclusive XML canonicalization 
+     *     should be performed, false if regular XML canonicalization
+     *     should be performed
+     */
+    public Canonicalizer(
+      OutputStream out, boolean withComments, boolean exclusive) {
+        
         this.serializer = new CanonicalXMLSerializer(out);
         serializer.setLineSeparator("\n");
         this.withComments = withComments;
+        this.exclusive = exclusive;
+        
+    }
+
+
+    /**
+     * <p>
+     * Creates a <code>Canonicalizer</code> that outputs a 
+     * canonical XML document using the specified algorithm.Currently, four 
+     * algorithms are defined and supported:
+     * </p>
+     * 
+     * <ul>
+     * <li>Canonical XML without comments: 
+     * <code>http://www.w3.org/TR/2001/REC-xml-c14n-20010315</code></li>
+     * <li>Canonical XML with comments: 
+     * <code>http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments</code></li>
+     * <li>Exclusive XML canonicalization without comments: 
+     * <code>http://www.w3.org/2001/10/xml-exc-c14n#</code></li>
+     * <li>Exclusive XML canonicalization with comments: 
+     * <code>http://www.w3.org/2001/10/xml-exc-c14n#WithComments</code></li>
+     * </ul>
+     * 
+     * @param out the output stream the document
+     *     is written onto
+     * @param algorithm the URI for the canonicalization algorithm
+     * 
+     * @throws IllegalArgumentException if the algorithm is 
+     *     not recognized
+     * 
+     */
+    public Canonicalizer(
+      OutputStream out, String algorithm) {
+        
+        if (algorithm == null) {
+            throw new NullPointerException("Null algorithm");
+        }
+        this.serializer = new CanonicalXMLSerializer(out);
+        serializer.setLineSeparator("\n");
+        if (algorithm.equals(CANONICAL_XML)) {
+            this.withComments = false;
+            this.exclusive = false;
+        }
+        else if (algorithm.equals(CANONICAL_XML_WITH_COMMENTS)) {
+            this.withComments = true;
+            this.exclusive = false;
+        }
+        else if (algorithm.equals(EXCLUSIVE_XML_CANONICALIZATION)) {
+            this.withComments = false;
+            this.exclusive = true;            
+        }
+        else if (algorithm.equals(EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS)) {
+            this.withComments = true;
+            this.exclusive = true;            
+        }
+        else {
+            // custom exception????
+            throw new IllegalArgumentException(
+              "Unsupported canonicalization algorithm: " + algorithm);
+        }
+        
     }
 
 
@@ -635,7 +731,7 @@ public class Canonicalizer {
     /**
      * <p>
      * Serializes a document onto the output 
-     * stream using the canonical XML algorithm.
+     * stream using the specified canonicalization algorithm.
      * </p>
      * 
      * @param doc the document to serialize
