@@ -104,11 +104,35 @@ see if they make sense
 
 register XOM as a trademark
 
+There are some weird issues in some of the more obscure code pages w.r.t round tripping
+Do an exhaustive test and report bugs to Sun. Note especially
 
-Before Beta:
------------
 
-Test on Windows
+    public void testIBMCP33722() throws ParsingException, IOException {
+        checkAll("CP33722");
+    } 
+
+
+    public void testIBMCp942() throws ParsingException, IOException {
+        checkAll("Cp942");
+    } 
+
+
+    public void testIBMCp943() throws ParsingException, IOException {
+        checkAll("Cp943");
+    } 
+
+===============
+Done 1.0b1:
+===============
+
+The XInclude test suite is loaded and run from the W3C CVS 
+server if necessary
+
+Worked around various JDK bugs that prevent round-tripping of 
+some characters in Japanese encodings
+
+Improved compatibility with Java 1.5
 
 ===============
 Done 1.0a5:
