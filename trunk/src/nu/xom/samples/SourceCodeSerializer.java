@@ -46,7 +46,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0b7
  *
  */
 public class SourceCodeSerializer extends Serializer {
@@ -193,8 +193,11 @@ public class SourceCodeSerializer extends Serializer {
                 + "\", \"" + escapeText(instruction.getValue()) + "\"), " + root + ");");            
         }
         else {
-            writeRaw(parent + ".appendChild(new ProcessingInstruction(\"" + instruction.getTarget() 
-                + "\", \"" + escapeText(instruction.getValue()) + "\"));");
+            writeRaw(parent 
+                + ".appendChild(new ProcessingInstruction(\"" 
+                + instruction.getTarget() 
+                + "\", \"" + escapeText(instruction.getValue()) 
+                + "\"));");
         }
         breakLine();
     }
@@ -214,24 +217,30 @@ public class SourceCodeSerializer extends Serializer {
 
     } 
     
+    
     protected void write(Comment comment) throws IOException {
         String parent = (String) parents.peek();
         if (parent.equals("doc")) {
             Document doc = comment.getDocument();
             int root = doc.indexOf(comment);
-            writeRaw(parent + ".insertChild(new Comment(\"" + escapeText(comment.getValue()) + "\"), " + root + ");");            
+            writeRaw(parent + ".insertChild(new Comment(\"" 
+              + escapeText(comment.getValue()) + "\"), " 
+              + root + ");");            
         }
         else {
-            writeRaw(parent + ".appendChild(new Comment(\"" + escapeText(comment.getValue()) + "\");");
+            writeRaw(parent + ".appendChild(new Comment(\"" 
+              + escapeText(comment.getValue()) + "\");");
         }
         breakLine();
     }
+    
     
     protected void write(Text text) throws IOException {
         String parent = (String) parents.peek(); 
         writeRaw(parent + ".appendChild(new Text(\"" + escapeText(text.getValue()) + "\"));");
         breakLine();
     }
+    
     
     public static void main(String[] args) {
   
