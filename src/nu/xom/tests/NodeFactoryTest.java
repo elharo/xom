@@ -60,6 +60,10 @@ public class NodeFactoryTest extends XOMTestCase {
         super(name);
     }
     
+    protected void setUp() {
+        numNodesInExternalDTDSubset = 0;
+    }
+    
     
     public void testSkippingComment() 
       throws IOException, ParsingException {
@@ -399,6 +403,33 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
 
+    
+    int numNodesInExternalDTDSubset = 0; 
+    
+    public void testDontReportCommentsAndProcessingInstrcutionsInExternalDTDSubset() 
+      throws IOException, ParsingException {
+        
+        File input = new File("data/contentindtd.xml");
+        Builder builder = new Builder(new Counter());
+        builder.build(input); 
+        assertEquals(0, numNodesInExternalDTDSubset);
+        
+    }
+    
+    
+    private class Counter extends NodeFactory {
+        
+        public Nodes makeComment(String data) {
+            numNodesInExternalDTDSubset++;
+            return super.makeComment(data);
+        }
+        
+        public Nodes makeProcessingInstruction(String target, String data) {
+            numNodesInExternalDTDSubset++;
+            return super.makeProcessingInstruction(target, data);
+        }
+        
+    }
     
     public void testDontCoalesceTextNodes() 
       throws IOException, ParsingException {

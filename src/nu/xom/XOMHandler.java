@@ -315,10 +315,8 @@ class XOMHandler
     public void processingInstruction(String target, String data) {
         
         if (!inDTD) flushText();
-        Nodes result = factory.makeProcessingInstruction(target, data);
-        // should I report processing instructions and comments
-        // from the external DTD subset at all????
         if (inExternalSubset) return;
+        Nodes result = factory.makeProcessingInstruction(target, data);
         
         for (int i = 0; i < result.size(); i++) {
             Node node = result.get(i);
@@ -415,8 +413,9 @@ class XOMHandler
     public void comment(char[] text, int start, int length) {
         
         if (!inDTD) flushText();
-        Nodes result = factory.makeComment(new String(text, start, length));
         if (inExternalSubset) return;
+
+        Nodes result = factory.makeComment(new String(text, start, length));
         
         for (int i = 0; i < result.size(); i++) {
             Node node = result.get(i);
