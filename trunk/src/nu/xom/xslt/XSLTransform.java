@@ -39,8 +39,6 @@ import javax.xml.transform.stream.StreamSource;
 import nu.xom.Document;
 import nu.xom.NodeList;
 
-// Need to decide how to handle transforms where method="text"????
-
 /**
  * <p>
  * This class serves as an interface to a 
