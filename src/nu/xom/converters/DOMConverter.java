@@ -51,7 +51,7 @@ import org.w3c.dom.NamedNodeMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d17
+ * @version 1.0d22
  * 
  *
  */
@@ -67,7 +67,8 @@ public class DOMConverter {
      * <code>http://www.w3.org/2000/xmlns/</code>.
      * </p>
      */
-    public final static String XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/";
+    public final static String XMLNS_NAMESPACE 
+      = "http://www.w3.org/2000/xmlns/";
 
     /**
      * <p>
@@ -143,7 +144,8 @@ public class DOMConverter {
 
     private static ProcessingInstruction convert(
         org.w3c.dom.ProcessingInstruction pi) {
-        return new ProcessingInstruction(pi.getTarget(), pi.getNodeValue());
+        return new ProcessingInstruction(
+          pi.getTarget(), pi.getNodeValue());
     }
 
     private static DocType convert(org.w3c.dom.DocumentType doctype) {
@@ -163,18 +165,18 @@ public class DOMConverter {
     }
 
     private static Element convert(org.w3c.dom.Element element) {
-        Element result 
-          = new Element(element.getTagName(), element.getNamespaceURI());
-
+        String namespaceURI = element.getNamespaceURI();
+        String tagName = element.getTagName();
+        Element result = new Element(tagName, namespaceURI);
         
-        // fill elements attributes and additional namespace declarations
+        // fill element's attributes and additional namespace declarations
         NamedNodeMap attributes = element.getAttributes();
         for (int i = 0; i < attributes.getLength(); i++) {
             org.w3c.dom.Attr attribute = (org.w3c.dom.Attr) attributes.item(i);
+            String name = attribute.getName();
             String uri = attribute.getNamespaceURI();
             if (uri == null) uri = "";
-            if (uri.equals(XMLNS_NAMESPACE)) {
-                String name = attribute.getName();
+            if (uri.equals(XMLNS_NAMESPACE)) { 
                 if (name.equals("xmlns")) continue;
                 String prefix = name.substring(name.indexOf(':') + 1);
                 String currentPrefix = result.getNamespaceURI(prefix);
@@ -182,10 +184,10 @@ public class DOMConverter {
                     result.addNamespaceDeclaration(prefix, attribute.getValue()); 
                 }
             }    
-            else {
+            else { 
                 result.addAttribute(
                   new Attribute(
-                    attribute.getName(), uri, attribute.getValue()
+                    name, uri, attribute.getValue()
                   )
                 );
             }
