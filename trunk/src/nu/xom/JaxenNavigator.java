@@ -106,8 +106,14 @@ class JaxenNavigator extends DefaultNavigator {
         if (high.isDocument()) {
             root = ((Document) high).getRootElement();
         }
-        else {
-            root = (Element) high;
+        else { // document fragment
+            Node first = high.getChild(0);
+            if (first.isElement()) {
+                root = (Element) high.getChild(0);
+            }
+            else {
+                return null;
+            }
         }
         
         return findByID(root, id);
@@ -156,7 +162,8 @@ class JaxenNavigator extends DefaultNavigator {
     }
 
     
-    private static class NamespaceNode {
+    // ???? rename XPathNamespaceNode
+    static class NamespaceNode {
         
         NamespaceNode(String prefix, String uri) {
             this.prefix = prefix;
@@ -195,6 +202,7 @@ class JaxenNavigator extends DefaultNavigator {
         }
     }
     
+    
     public Iterator getParentAxisIterator(Object contextNode)  {
         
         Node n = (Node) contextNode;
@@ -212,7 +220,8 @@ class JaxenNavigator extends DefaultNavigator {
     public Object getDocumentNode(Object o) {
     
         Node node = (Node) o;
-        return node.getDocument();
+        //return node.getDocument();
+        return node.getRoot();
         
     }
     
@@ -269,7 +278,9 @@ class JaxenNavigator extends DefaultNavigator {
     private static int getXPathChildCount(ParentNode parent) {
     
         if (parent instanceof Document) {
-            return parent.getChildCount();
+            DocType doctype = ((Document) parent).getDocType();
+            if (doctype == null) return parent.getChildCount();
+            else return parent.getChildCount() - 1;
         }
         int children = 0;
         
@@ -309,11 +320,28 @@ class JaxenNavigator extends DefaultNavigator {
     // issues inside Jaxen; double check if we still need this????
     private static class XOMList extends ArrayList {}
 
+    
+    // Need to make sure we don't count DocType in children when 
+    // working with XPath
+    private static Object getXPathChild(int request, Document parent) {
+     
+        DocType doctype = parent.getDocType();
+        if (doctype == null) return parent.getChild(request);
+        else {
+            int doctypePosition = parent.indexOf(doctype);
+            if (request < doctypePosition) {
+                return parent.getChild(request);
+            }
+            else return parent.getChild(request+1);
+        }
+        
+    }
+    
 
     private static Object getXPathChild(int request, ParentNode parent) {
     
         if (parent instanceof Document) {
-            return parent.getChild(request);
+            return getXPathChild(request, (Document) parent);
         }
         
         int childCount = 0;
@@ -437,8 +465,11 @@ class JaxenNavigator extends DefaultNavigator {
     }
 
     
+    // This is really a question of whether this is the root node.
+    // Should this test be parent != null?
+    // and/or instanceof Nodes?
     public boolean isDocument(Object object) {
-        return object instanceof Document;
+        return object instanceof Document || object instanceof DocumentFragment;
     }
 
     
