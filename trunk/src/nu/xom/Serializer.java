@@ -238,7 +238,7 @@ public class Serializer {
             writeChild(doc.getChild(i)); 
             
             // Might want to remove this line break in a 
-            // non-XML serializer where it's not guranteed to be 
+            // non-XML serializer where it's not guaranteed to be 
             // OK to add extra line breaks in the prolog
             escaper.breakLine();
         }       
@@ -303,7 +303,18 @@ public class Serializer {
             escaper.breakLine();
         }
         
-        if (element.getChildCount() > 0) {
+        // workaround for case where only children are empty text nodes
+        boolean hasRealChildren = false;
+        for (int i = 0; i < element.getChildCount(); i++) {
+            Node child = element.getChild(i);
+            if (child.isText() && "".equals(child.getValue())) continue;
+            else {
+                hasRealChildren = true;
+                break;
+            }
+        }
+        
+        if (hasRealChildren) {
             writeStartTag(element);
             // adjust for xml:space
             boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
@@ -350,7 +361,7 @@ public class Serializer {
     /**
      * <p>
      *   This method writes the end-tag for an element in the form
-     *   <code>&lt;/<i>name</i></code>.
+     *   <code>&lt;/<i>name</i>&gt;</code>.
      * </p>
      * 
      * @param element the element whose end-tag is written
