@@ -82,7 +82,7 @@ public class XIncludeTest extends XOMTestCase {
         serializer.write(result);        
         
     }
-
+    
     
     public void testXMLBaseUsedToResolveHref() 
       throws ParsingException, IOException, XIncludeException {
@@ -126,6 +126,25 @@ public class XIncludeTest extends XOMTestCase {
         
     }
     
+    
+    /* public void testNISTInclude33() 
+      throws ParsingException, IOException {
+        
+        File input = new File("data/XInclude-Test-Suite/Nist/test/docs/nist-include-33.xml");
+        
+        if (input.exists()) {
+            try {
+                Document doc = builder.build(input);
+                XIncluder.resolveInPlace(doc);
+                fail("Failed test Nist 33");
+            }
+            catch (XIncludeException success) {
+                assertNotNull(success.getMessage());
+            }    
+        }
+    } */
+   
+
     
     public void testIncludeDocumentThatUsesIntradocumentReferences() 
       throws ParsingException, IOException, XIncludeException {
@@ -1626,7 +1645,7 @@ public class XIncludeTest extends XOMTestCase {
                     File input = new File("data/XInclude-Test-Suite/" 
                       + basedir + '/' + testcase.getAttributeValue("href"));
                     Element output = testcase.getFirstChildElement("output");
-                    // System.out.println("Test case: " + input);
+                    // System.err.println("Test case: " + input);
                     if (output == null) { // test failure   
                         try {
                             Document doc = builder.build(input);
@@ -1657,6 +1676,21 @@ public class XIncludeTest extends XOMTestCase {
         } 
         
     } 
+    
+    
+    private void compare(File expected, File input) 
+      throws IOException, ParsingException, XIncludeException {
+        
+        Document expectedDoc = builder.build(expected);
+        Document doc = builder.build(input);
+        XIncluder.resolveInPlace(doc);
+        assertEquals("Error when processing  " 
+          + input.getName(), expectedDoc, doc);
+        
+    }
+    
+    
+ 
 
   // Turn off these tests because Java doesn't support UCS4 yet
  /*   public void testAutoDetectUCS4BE() 
