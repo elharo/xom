@@ -25,8 +25,6 @@
 
 package nu.xom.xinclude;
 
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,6 +119,11 @@ class XPointer {
                     }
                     catch (XMLException inex) {
                         // doesn't adhere to the element scheme spec;
+                        // Therefore this pointer part does not identify
+                        // a subresource (See 2nd paragraph of section  
+                        // 3 of http://www.w3.org/TR/xptr-element/ )
+                        // This is not a resource error unless no 
+                        // XPointer part identifies a subresource.
                         continue;
                     }
                     current = findByID(doc.getRootElement(), id);                         
