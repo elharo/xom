@@ -44,13 +44,13 @@ import java.util.List;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0b8
  *
  */
 public abstract class ParentNode extends Node {
 
-    List   children; 
-    String actualBaseURI;
+    ArrayList children; 
+    String    actualBaseURI;
 
     /**
      * <p>
@@ -88,6 +88,14 @@ public abstract class ParentNode extends Node {
      * child of this node. Inserting at the position 
      * <code>getChildCount()</code> makes the child the 
      * last child of the node.
+     * </p>
+     * 
+     * <p>
+     * An as yet unproven hypothesis: it is significantly faster to 
+     * construct documents from the top down than the bottom up.
+     * That is, one should add an element to its parent before
+     * adding its children. This short-circuits some possibly
+     * expensive checks. 
      * </p>
      * 
      * <p>
@@ -239,6 +247,7 @@ public abstract class ParentNode extends Node {
         Node removed = (Node) children.get(position);
         // fill in actual base URI
         // This way does add base URIs to elements created in memory
+        // XXX but this is a HotSpot when building; we need a fastRemoveChild
         if (removed.isElement()) fillInBaseURI((Element) removed);
         children.remove(position);
         removed.setParent(null);
