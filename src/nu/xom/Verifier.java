@@ -1090,32 +1090,6 @@ final class Verifier {
 
     /**
      * <p>
-     * Checks a string to see if it is an RFC 2396 absolute URI.
-     * Absolute URIs may not contain fragment identifiers.
-     * </p>
-     * 
-     * @param uri <code>String</code> to check
-     * 
-     * @throws MalformedURIException if this is not an absolute URI
-     */
-    public static void checkAbsoluteURI(String uri) {
-        
-        // All legal URIs are legal URI references
-        checkAbsoluteURIReference(uri);
-        
-        // Only difference is a URI can't contain a fragment ID
-        if (uri.indexOf('#') >= 0) {
-            throw new MalformedURIException(
-              "URIs (as opposed to URI references) "
-              + "cannot contain fragement identifiers."
-            ); 
-        }
-
-    }
-
-
-    /**
-     * <p>
      * Checks a string to see if it is an RFC 2396 absolute URI
      * reference. URI references can contain fragment identifiers.
      * </p>
