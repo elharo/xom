@@ -46,7 +46,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class StreamingExampleExtractor extends NodeFactory {
@@ -55,17 +55,20 @@ public class StreamingExampleExtractor extends NodeFactory {
     private boolean inExample = false;
     private Nodes empty = new Nodes();
 
+    
     // We don't need the comments.     
     public Nodes makeComment(String data) {
         return empty;  
     }    
 
+    
     // We need text nodes only inside examples    
     public Nodes makeText(String data) {
         if (inExample) return super.makeText(data);
         return empty;  
     }    
 
+    
     public Element makeRootElement(String name, String namespace) {
         if ("example".equals(name)) {
             inExample = true;
@@ -76,6 +79,7 @@ public class StreamingExampleExtractor extends NodeFactory {
         return super.startMakingElement(name, namespace);   
     }
 
+    
     public Element startMakingElement(String name, String namespace) {
         if ("example".equals(name)) {
             inExample = true;
@@ -86,6 +90,7 @@ public class StreamingExampleExtractor extends NodeFactory {
         if (inExample) return super.startMakingElement(name, namespace);
         else return null;   
     }
+    
     
     public Nodes finishMakingElement(Element element) {
         if (element.getQualifiedName().equals("example")) {
@@ -103,6 +108,7 @@ public class StreamingExampleExtractor extends NodeFactory {
         return new Nodes(element);   
     }
 
+    
     public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
         if (inExample && name.equals("id")) {
@@ -111,16 +117,19 @@ public class StreamingExampleExtractor extends NodeFactory {
         return empty;
     }
 
+    
     public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
         return empty;    
     }
 
+    
     public Nodes makeProcessingInstruction(
       String target, String data) {
         return empty; 
     }  
 
+    
     private static void extractExample(Element example, int chapter) 
       throws IOException {
 
@@ -143,16 +152,21 @@ public class StreamingExampleExtractor extends NodeFactory {
         File file = new File(dir, fileName);
         System.out.println(file);
         FileOutputStream fout = new FileOutputStream(file);
-        Writer out = new OutputStreamWriter(fout, "UTF-8");
-        // Buffering almost always helps performance a lot
-        out = new BufferedWriter(out);
-        out.write(code);
-        // Be sure to flush and close your streams
-        out.flush();
-        out.close();
+        try {
+            Writer out = new OutputStreamWriter(fout, "UTF-8");
+            // Buffering almost always helps performance a lot
+            out = new BufferedWriter(out);
+            out.write(code);
+            // Be sure to flush and close your streams
+            out.flush();
+        }
+        finally {
+            fout.close();
+        }
     
     }
   
+    
     public static void main(String[] args) {
 
         if (args.length <= 0) {
@@ -179,4 +193,5 @@ public class StreamingExampleExtractor extends NodeFactory {
      
     } // end main
   
+    
 }
