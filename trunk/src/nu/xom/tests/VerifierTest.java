@@ -132,6 +132,83 @@ public class VerifierTest extends XOMTestCase {
         }    
         
     }
+    
+    
+    public void testAllASCIILettersAllowedToBeginSchemeNames() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 'A'; c <= 'Z'; c++) {
+            String uri = c + "scheme:schemeSpecificData";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }
+        
+        for (char c = 'a'; c <= 'z'; c++) {
+            String uri = c + "scheme:schemeSpecificData";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }      
+        
+    }
+
+    
+    public void testAllASCIILettersAllowedInSchemeNames() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 'A'; c <= 'Z'; c++) {
+            String uri = "scheme" + c + ":schemeSpecificData";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }
+        
+        for (char c = 'a'; c <= 'z'; c++) {
+            String uri = "scheme" + c + ":schemeSpecificData";
+            e.setNamespaceURI(uri);
+            assertEquals(uri, e.getNamespaceURI());
+        }      
+        
+    }
+    
+    
+    public void testSymbolsNotAllowedInSchemeNames() {
+        
+        Element e = new Element("e");
+        
+        char[] disallowed = { ';', '@', '&', '=', '$', ',', '"', '?', '#', '/', '\\', '|',
+                 '_', '!', '~', '*', '\'', '(', ')', '<', '>', '[', ']', '{', '}', '^', '`'};
+        
+        for (int i = 0; i < disallowed.length; i++) {
+            String uri = "scheme" + disallowed[i] + ":schemeSpecificData";
+            try {
+                e.setNamespaceURI(uri);
+                fail("allowed " + uri + " as namespace URI");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }     
+        
+    }
+    
+    
+    public void testNonASCIILettersNotAllowedToBeginSchemeNames() {
+        
+        Element e = new Element("e");
+        
+        for (char c = 'Z' +1; c < 'a'; c++) {
+            String uri = c + "scheme:schemeSpecificData";
+            try {
+                e.setNamespaceURI(uri);
+                fail("allowed " + uri + " as namespace URI");
+            }
+            catch (MalformedURIException success) {
+                assertEquals(uri, success.getData());
+            }
+        }      
+        
+    }
 
     
     public void testIllegalIRIs() {
