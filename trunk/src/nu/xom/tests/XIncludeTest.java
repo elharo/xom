@@ -425,6 +425,34 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
+    public void testIncludeElementsCannotHaveIncludeChildren() 
+      throws ParsingException, IOException, XIncludeException {
+        File input = new File("data/xinclude/input/nestedxinclude.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("allowed include element to contain another include element");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());          
+        }
+    }
+
+    
+    public void testIncludeElementsCannotHaveChildrenFromXIncludeNamespace() 
+      throws ParsingException, IOException, XIncludeException {
+        File input = new File("data/xinclude/input/nestedxincludenamespace.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("allowed include element to contain another include element");
+        }
+        catch (XIncludeException success) {
+            assertNotNull(success.getMessage());          
+        }
+    }
+
+    
     // In this test the fallback is activated.
     public void testMultipleFallbacks() 
       throws ParsingException, IOException, XIncludeException {
