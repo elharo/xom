@@ -362,8 +362,6 @@ public class XOMTestCase extends TestCase {
             );                      
         }
         
-        if (hasAdjacentTextNodes(expected)) expected = combineTextNodes(expected);
-        if (hasAdjacentTextNodes(actual)) actual = combineTextNodes(actual);
         compareChildren(message, expected, actual);
 
     }
@@ -383,15 +381,49 @@ public class XOMTestCase extends TestCase {
         
     }
 
+    
     private static void compareChildren(String message, Element expected, Element actual) {
 
+        Element expectedCopy = expected;
+        Element actualCopy = actual;
+        if (hasAdjacentTextNodes(expected)) expectedCopy = combineTextNodes(expected);
+        if (hasAdjacentTextNodes(actual)) actualCopy = combineTextNodes(actual);
+
         assertEquals(message,
-          expected.getChildCount(), actual.getChildCount());
-        for (int i = 0; i < expected.getChildCount(); i++) {
-            Node child1 = expected.getChild(i);
-            Node child2 = actual.getChild(i);
-            assertEquals(message, child1, child2);
+          expectedCopy.getChildCount(), actualCopy.getChildCount());
+        int nonTextNodes = expectedCopy.getChildCount();
+        for (int i = 0; i < expectedCopy.getChildCount(); i++) {
+            Node child1 = expectedCopy.getChild(i);
+            Node child2 = actualCopy.getChild(i);
+            if (child1 instanceof Text) {
+                nonTextNodes--;
+                assertEquals(message, child1, child2);
+            }
         }
+        
+        // now compare everything that isn't text using the original
+        // element objects
+        for (int i = 0; i < nonTextNodes; i++) {
+            Node expectedChild = getNonTextNode(expected, i);
+            Node actualChild = getNonTextNode(actual, i);
+            assertEquals(expectedChild, actualChild);
+        }
+        
+    }
+
+    
+    private static Node getNonTextNode(Element element, int index) {
+
+        int nonTextCount = 0;
+        for (int i = 0; i < element.getChildCount(); i++) {
+            Node child = element.getChild(i);
+            if (! (child instanceof Text) ) {
+                if (nonTextCount == index) return child;
+                nonTextCount++;
+            }
+        }
+        throw new RuntimeException(
+          "Bug in XOMTestCase: this statement should not be reachable");
         
     }
 
