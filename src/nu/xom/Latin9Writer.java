@@ -27,7 +27,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d7
+ * @version 1.0d23
  * 
  *
  */
@@ -42,7 +42,7 @@ class Latin9Writer extends TextWriter {
      * @param out the <code>Writer</code> on which the text will be written
      * @param encoding the character set used by the <code>Writer</code>
      */
-    public Latin9Writer(Writer out, String encoding) {
+    Latin9Writer(Writer out, String encoding) {
         super(out, encoding);
     }
 
@@ -56,7 +56,7 @@ class Latin9Writer extends TextWriter {
      * 
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
-    public boolean needsEscaping(char c) {
+    boolean needsEscaping(char c) {
         if (c <= 0xA3) return false;      
         
         switch (c) {
@@ -154,6 +154,7 @@ class Latin9Writer extends TextWriter {
             case 0x00FF: return false; // LATIN SMALL LETTER Y WITH DIAERESIS
 
         }
-        return true;    }
+        return true;
+    }
 
 }

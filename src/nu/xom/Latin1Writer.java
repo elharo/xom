@@ -27,7 +27,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d4
+ * @version 1.0d23
  * 
  *
  */
@@ -38,14 +38,14 @@ class Latin1Writer extends TextWriter {
      * @param out
      * @param encoding
      */
-    public Latin1Writer(Writer out, String encoding) {
+    Latin1Writer(Writer out, String encoding) {
         super(out, encoding);
     }
 
     /**
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
-    public boolean needsEscaping(char c) {
+    boolean needsEscaping(char c) {
         return c > 255;
     }
 

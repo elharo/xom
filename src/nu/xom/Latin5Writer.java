@@ -27,20 +27,20 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d5
+ * @version 1.0d23
  * 
  *
  */
 class Latin5Writer extends TextWriter {
 
-    public Latin5Writer(Writer out, String encoding) {
+    Latin5Writer(Writer out, String encoding) {
         super(out, encoding);
     }
 
     /**
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
-    public boolean needsEscaping(char c) {
+    boolean needsEscaping(char c) {
         if (c <= 0xCF) return false;        
         switch (c) {
             case 0x00D1: return false; // LATIN CAPITAL LETTER N WITH TILDE

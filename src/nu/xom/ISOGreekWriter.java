@@ -27,20 +27,20 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d5
+ * @version 1.0d23
  * 
  *
  */
 class ISOGreekWriter extends TextWriter {
 
-    public ISOGreekWriter(Writer out, String encoding) {
+    ISOGreekWriter(Writer out, String encoding) {
         super(out, encoding);
     }
 
     /**
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
-    public boolean needsEscaping(char c) {
+    boolean needsEscaping(char c) {
         if (c <= 0xA0) return false;        
         switch (c) {
             // A bug in Java 1.4 and 1.3 prevents a LEFT and RIGHT 

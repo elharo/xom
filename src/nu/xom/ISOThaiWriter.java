@@ -27,20 +27,20 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d5
+ * @version 1.0d23
  * 
  *
  */
 class ISOThaiWriter extends TextWriter {
 
-    public ISOThaiWriter(Writer out, String encoding) {
+    ISOThaiWriter(Writer out, String encoding) {
         super(out, encoding);
     }
 
     /**
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
-    public boolean needsEscaping(char c) {
+    boolean needsEscaping(char c) {
         if (c <= 0xA0) return false;        
         switch (c) {
             case 0x0E01: return false; // THAI CHARACTER KO KAI
