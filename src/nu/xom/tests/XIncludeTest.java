@@ -149,6 +149,19 @@ public class XIncludeTest extends XOMTestCase {
         
     } */
     
+    public void testRecurseWithinSameDocument() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/recursewithinsamedocument.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/recursewithinsamedocument.xml")
+        );
+        assertEquals(expectedResult, result);
+        
+    }
+    
     public void testSiblingIncludes() 
       throws ParsingException, IOException, XIncludeException {
       
