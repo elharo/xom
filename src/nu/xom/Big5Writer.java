@@ -7625,10 +7625,6 @@ class Big5Writer extends TextWriter {
         if (c <= 40866) return false;
         if (c <= 40867) return true;
         if (c <= 40868) return false;
-        if (c <= 57346) return true;  // XXX
-        if (c <= 63560) return false;
-        if (c <= 63735) return true;
-        if (c <= 63736) return false;
         if (c <= 64011) return true;
         if (c <= 64013) return false;
         if (c <= 65071) return true;
@@ -7636,12 +7632,14 @@ class Big5Writer extends TextWriter {
         if (c <= 65074) return true;
         if (c <= 65092) return false;
         if (c <= 65096) return true;
+        if (c <= 65104) return false;
+        if (c <= 65105) return true;
         if (c <= 65106) return false;
         if (c <= 65107) return true;
         if (c <= 65111) return false;
         if (c <= 65112) return true;
         if (c <= 65126) return false;
-        if (c <= 65127) return true;
+        if (c <= 65128) return true;
         if (c <= 65131) return false;
         if (c <= 65280) return true;
         if (c <= 65281) return false;
@@ -7654,13 +7652,8 @@ class Big5Writer extends TextWriter {
         if (c <= 65342) return true;
         if (c <= 65343) return false;
         if (c <= 65344) return true;
-        if (c <= 65374) return false;
-        if (c <= 65503) return true;
-        if (c <= 65505) return false;
-        if (c <= 65506) return true;
-        if (c <= 65507) return false;
-        if (c <= 65508) return true;
-        if (c <= 65509) return false;
+        if (c <= 65373) return false;
+        if (c <= 65509) return true;
         return true;
     }
 
