@@ -657,7 +657,6 @@ public class Builder {
                 ex.getLineNumber(),
                 ex.getColumnNumber(),
                 ex);
-            vex.setPartialDocument(getCurrentDocument());
             throw vex;
         }
         catch (SAXParseException ex) {
@@ -669,7 +668,6 @@ public class Builder {
                     ((SAXInvalidException) nested).getLineNumber(),
                     ((SAXInvalidException) nested).getColumnNumber(),
                     nested); 
-                vex.setPartialDocument(getCurrentDocument());
                 throw vex;               
             }
             // end workaround
@@ -678,29 +676,17 @@ public class Builder {
                 ex.getLineNumber(),
                 ex.getColumnNumber(),
                 ex);
-            pex.setPartialDocument(getCurrentDocument());
             throw pex;
         }
         catch (SAXException ex) {
             ParsingException pex 
               = new ParsingException(ex.getMessage(), ex);
-            pex.setPartialDocument(getCurrentDocument());
             throw pex;
         }
 
-        return getCurrentDocument();
-        
-    }
-    
-    private Document getCurrentDocument() {
         XOMHandler handler = (XOMHandler) (parser.getContentHandler());
-        Document result = handler.getDocument();
-        if (result.getRootElement()
-                  .getNamespaceURI()
-                  .equals("http://www.xom.nu/fakeRoot")) {
-            return null;
-        }
-        return result;        
+        return handler.getDocument();
+        
     }
     
     private static class ValidityRequired implements ErrorHandler {
