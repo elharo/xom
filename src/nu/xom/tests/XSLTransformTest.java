@@ -843,7 +843,6 @@ public class XSLTransformTest extends XOMTestCase {
         
         String indent = output.getAttributeValue("indent");
         if ("yes".equals(indent)) {
-            // System.out.println("Indent Yes: " + styleDoc.getBaseURI());
             return true;
         }
         else return false;
@@ -1264,9 +1263,6 @@ public class XSLTransformTest extends XOMTestCase {
                         continue;
                     } 
                     Document inputDoc = builder.build(input);
-                    if (id.equals("Whitespaces__91444")) {
-                        System.err.println(inputDoc.toXML());
-                    }
                     XSLTransform xform;
                     if (strip) xform = new XSLTransform(styleDoc, stripper);
                     else xform = new XSLTransform(styleDoc);
