@@ -510,6 +510,10 @@ public abstract class Node {
             Node child = parent.getChild(i);
             if (child.isElement()) {
                 Element element = (Element) child;
+                if (in.contains(element)) {
+                    out.append(element);
+                    in.remove(element);
+                }
                 // attach namespaces
                 if (!namespaces.isEmpty()) {
                     Iterator iterator = in.iterator();
@@ -522,16 +526,6 @@ public abstract class Node {
                                 iterator.remove();
                             }
                         }
-                    }
-                }
-                
-                
-                for (int a = 0; a < element.getAttributeCount(); a++) {
-                    Attribute att = element.getAttribute(a);
-                    if (in.contains(att)) {
-                        out.append(att);
-                        in.remove(att);
-                        if (in.isEmpty()) return;
                     }
                 }
                 
