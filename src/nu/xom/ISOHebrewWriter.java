@@ -59,6 +59,9 @@ class ISOHebrewWriter extends TextWriter {
             // as the actual character in this encoding
             // even though it does exist in the 
             // ISO-8859-8 character set.
+            // See JDC bug 4760496
+            // http://developer.java.sun.com/developer/bugParade/bugs/4760496.html
+            // They have marked this as fixed in Tiger (i.e. Java 1.5)
             // case 0x00AF: return false; // MACRON
             case 0x00B0: return false; // DEGREE SIGN
             case 0x00B1: return false; // PLUS-MINUS SIGN
@@ -105,9 +108,11 @@ class ISOHebrewWriter extends TextWriter {
             case 0x05EA: return false; // HEBREW LETTER TAV
             // A bug in Java prevents a LEFT-TO-RIGHT MARK 
             // and RIGHT-TO-LEFT MARK from being correctly output
-            // as the actual character in this encoding
-            // even though it does exist in the 
-            // ISO-8859-8 character set.
+            // as the actual character in this encoding even
+            // though it does exist in the ISO-8859-8 character set.
+            // See JDC bug 4758951
+            // http://developer.java.sun.com/developer/bugParade/bugs/4758951.html
+            // They have marked this as fixed in Tiger (i.e. Java 1.5)
             // case 0x200E: return false; // LEFT-TO-RIGHT MARK
             // case 0x200F: return false; // RIGHT-TO-LEFT MARK
         }
