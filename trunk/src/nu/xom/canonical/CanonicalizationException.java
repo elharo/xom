@@ -26,7 +26,7 @@ package nu.xom.canonical;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1d7
  * 
  */
 public class CanonicalizationException extends RuntimeException {
@@ -55,7 +55,7 @@ public class CanonicalizationException extends RuntimeException {
      *
      * @return the root cause of this exception
      */
-    public Throwable getCause() {
+    public final Throwable getCause() {
         return this.cause;  
     }
 
@@ -86,7 +86,7 @@ public class CanonicalizationException extends RuntimeException {
      *   (An exception cannot be its own cause.)
      * @throws IllegalStateException if this method is called twice
      */
-    public Throwable initCause(Throwable cause) {
+    public final Throwable initCause(Throwable cause) {
         
         if (causeSet) {
             throw new IllegalStateException("Can't overwrite cause");
