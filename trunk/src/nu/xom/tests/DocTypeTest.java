@@ -62,6 +62,7 @@ public class DocTypeTest extends XOMTestCase {
         doctypeRootOnly = new DocType(name);
     }
 
+    
     public void testToXML() {
         String expected 
           = "<!DOCTYPE " + name + " PUBLIC \"" 
@@ -91,12 +92,14 @@ public class DocTypeTest extends XOMTestCase {
         assertTrue(doctype.toXML().indexOf("<!ELEMENT root EMPTY>") > 0);
     }
 
+    
     public void testToString() {
         String expected 
           = "[nu.xom.DocType: " + name + "]";
         assertEquals(expected, doctypePublicID.toString());      
     }
 
+    
     public void testConstructor1Arg() {
 
         String name = "MyName";
@@ -119,13 +122,40 @@ public class DocTypeTest extends XOMTestCase {
             name = "try MyName";
             doctype = new DocType(name);
             fail("allowed root element name to contain spaces");
-        } catch (IllegalNameException ex) {
-            // success
-            assertNotNull(ex.getMessage());
+        } 
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
         }
 
     }
 
+    
+    public void testNullRootElementName() {
+        
+        try {
+            new DocType((String) null);
+            fail("Allowed null root element name");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testEmptyRootElementName() {
+        
+        try {
+            new DocType("");
+            fail("Allowed empty string to be root element name");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
     public void testConstructor2Arg() {
 
         String name = "MyName";
@@ -147,6 +177,7 @@ public class DocTypeTest extends XOMTestCase {
 
     }
 
+    
     public void testConstructor3Arg() {
 
         String name = "MyName";
@@ -160,6 +191,7 @@ public class DocTypeTest extends XOMTestCase {
 
     }
 
+    
     public void testEmptyStringForPublicID() {
 
         String name = "MyName";
@@ -173,6 +205,7 @@ public class DocTypeTest extends XOMTestCase {
 
     }
 
+    
     public void testEmptyStringForSystemID() {
 
         String name = "MyName";
@@ -186,6 +219,7 @@ public class DocTypeTest extends XOMTestCase {
 
     }
 
+    
     public void testIllegalPublicIDs() {
 
         // PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
@@ -456,9 +490,8 @@ public class DocTypeTest extends XOMTestCase {
             doctype.setSystemID(null);
             fail("removed system ID before removing public ID");
         } 
-        catch (WellformednessException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (WellformednessException success) {  
+            assertNotNull(success.getMessage());
         }
 
         doctype.setPublicID(null);
