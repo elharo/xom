@@ -55,11 +55,5 @@ class EBCDICWriter extends OutputStreamWriter {
     
     }
 
-    
-    public void write(char[] text, int offset, int length)
-      throws IOException {      
-       for (int i = offset; i < offset+length; i++) write(text[i]);          
-    }
-
 
 }
