@@ -22,6 +22,7 @@
 package nu.xom;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -73,6 +74,13 @@ public final class Nodes {
     }
     
     
+    // XXX may not be an ArrayList
+    // FIXME may contain non-nodes objects
+    Nodes(List results) {
+        this.nodes = results;
+    }
+
+
     /**
      * <p>
      * Returns the number of nodes in the list.

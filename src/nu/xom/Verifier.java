@@ -1315,12 +1315,11 @@ final class Verifier {
     
     // For use in checking internal DTD subsets 
     private static XMLReader parser;
-    private static InputSource empty;
 
     static synchronized void checkInternalDTDSubset(String subset) {
 
         if (parser == null) {
-            empty = new InputSource(new EmptyReader());
+            final InputSource empty = new InputSource(new EmptyReader());
             parser = Builder.findParser(false);
             // Now let's stop this parser from loading any external
             // entities the subset references
