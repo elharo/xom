@@ -273,6 +273,7 @@ public class NamespacesTest extends XOMTestCase {
 
     }
    
+
     public void testGetNamespaceDeclarationCount() {
         Element test = new Element("test");
         assertEquals(1, test.getNamespaceDeclarationCount());
@@ -292,6 +293,7 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals(3, test.getNamespaceDeclarationCount());
            
     }
+
 
     public void testRemoving() {
     
@@ -699,6 +701,33 @@ public class NamespacesTest extends XOMTestCase {
     }
 
     
+    public void testPercentSignFollowedByNonHexDigits() {
+        
+        for (char c = 'G'; c <= '`'; c++) {
+            String namespace = "http://www.example.org/%1" + c + "test/";
+            try {
+                new Element("test", namespace);
+                fail("Allowed malformed namespace URI " + namespace);
+            }
+            catch (MalformedURIException success) {
+                assertNotNull(success.getMessage());
+            }
+        }
+        
+        for (char c = ':'; c <= '@'; c++) {
+            String namespace = "http://www.example.org/%1" + c + "test/";
+            try {
+                new Element("test", namespace);
+                fail("Allowed malformed namespace URI " + namespace);
+            }
+            catch (MalformedURIException success) {
+                assertNotNull(success.getMessage());
+            }
+        }
+        
+    }
+
+    
     public void testVariousSchemes() {    
         
         // what happens if xml:base uses some of these weirder
@@ -745,6 +774,7 @@ public class NamespacesTest extends XOMTestCase {
     
     
     public void testPercentEscapes() {
+
         // Namespace URIs are compared for direct string equality;
         // no de-escaping is performed
         for (char c = ' '; c <= '~'; c++) {
@@ -753,7 +783,14 @@ public class NamespacesTest extends XOMTestCase {
             assertEquals(url, e.getNamespaceURI());
             assertEquals(url, e.getNamespaceURI("pre"));
         }
-        
+        // repeat in upper case
+        for (char c = ' '; c <= '~'; c++) {
+            String url = "http://www.example.com/%" + Integer.toHexString(c).toUpperCase() + "test/";
+            Element e = new Element("pre:test", url);
+            assertEquals(url, e.getNamespaceURI());
+            assertEquals(url, e.getNamespaceURI("pre"));
+        }
+
     }
     
 
