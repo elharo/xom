@@ -31,7 +31,7 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d15
+ * @version 1.0d21
  */
 public class MissingHrefException extends XIncludeException {
 
@@ -56,6 +56,21 @@ public class MissingHrefException extends XIncludeException {
      */
     public MissingHrefException(String message) {
        super(message);
+    }
+
+    /**
+     * <p>
+     * Constructs a <code>MissingHrefException</code> with the 
+     * specified detail message and root cause. 
+     * </p>
+     * 
+     * @param message the detail message
+     * @param cause the initial exception which caused this 
+     *     <code>MissingHrefException</code>
+     */
+    public MissingHrefException(String message, Throwable cause) {
+        super(message);
+        initCause(cause);
     }
 
 }

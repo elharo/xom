@@ -31,7 +31,7 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d15
+ * @version 1.0d21
  */
 public class CircularIncludeException extends XIncludeException {
 
@@ -53,11 +53,10 @@ public class CircularIncludeException extends XIncludeException {
      * method of class <code>java.lang.Throwable</code>.
      * </p>
      * 
-     * @param message the detail message.
+     * @param message the detail message
      */
     public CircularIncludeException(String message) {
         super(message);
     }
-
 
 }
