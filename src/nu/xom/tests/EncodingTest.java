@@ -45,7 +45,7 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  *
  */
 public class EncodingTest extends XOMTestCase {
@@ -121,6 +121,14 @@ public class EncodingTest extends XOMTestCase {
 
     public void testEUCJP() throws ParsingException, IOException {
         checkAll("EUC-JP");
+    } 
+
+    public void testShift_JIS() throws ParsingException, IOException {
+        checkAll("Shift_JIS");
+    } 
+
+    public void testISO2022JP() throws ParsingException, IOException {
+        checkAll("ISO-2022-JP");
     } 
 
     public void testUSASCII() throws ParsingException, IOException {
