@@ -106,6 +106,8 @@ class URIUtil {
     
 
     // XXX remove dependence on Xerces URI class
+    // XXX should name be resolve rather than absolutize, because
+    // this method can also resolve pure relative URIs
     static String absolutize(String base, String spec) {
         
         if (!isAbsolute(base)) {
