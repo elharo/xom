@@ -633,7 +633,7 @@ public class NodeFactoryTest extends XOMTestCase {
             
         });
         try {
-            Document doc = builder.build(data, "http://www.example.org/");
+            builder.build(data, "http://www.example.org/");
             fail("Built document without root element");
         }
         catch (XMLException success) {
@@ -653,7 +653,7 @@ public class NodeFactoryTest extends XOMTestCase {
             
         });
         try {
-            Document doc = builder.build(data, "http://www.example.org/");
+            builder.build(data, "http://www.example.org/");
             fail("Built document without root element");
         }
         catch (XMLException success) {
