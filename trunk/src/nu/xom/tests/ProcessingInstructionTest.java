@@ -34,7 +34,7 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a3
  *
  */
 public class ProcessingInstructionTest extends XOMTestCase {
@@ -123,9 +123,33 @@ public class ProcessingInstructionTest extends XOMTestCase {
         assertEquals(instruction1.toXML(), instruction2.toXML());
            
     }
+    
+    
+    public void setTarget() {
+        
+        pi.setTarget("newname");
+        assertEquals("newname", pi.getTarget());
+        
+        try {
+            pi.setTarget("pre:name");
+            fail("Allowed colon in processing instruction target");
+        }
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+        try {
+            pi.setTarget("pre name");
+            fail("Allowed white space in processing instruction target");
+        }
+        catch (IllegalTargetException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
 
     
-    public void testSetter() {
+    public void testSetValue() {
 
         try {
           pi.setValue("kjsahdj ?>");
@@ -186,6 +210,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
 
 
     public void testEquals() {
+        
         ProcessingInstruction pi1 
           = new ProcessingInstruction("test", "afaf");
         ProcessingInstruction pi2
@@ -202,10 +227,12 @@ public class ProcessingInstructionTest extends XOMTestCase {
         assertTrue(!pi3.equals(pi4));
         assertTrue(!pi2.equals(pi4));
         assertTrue(!pi2.equals(pi3));
+        
     }
 
     
     public void testCopy() {
+        
         Element test = new Element("test");
         test.appendChild(pi);
         ProcessingInstruction c2 = (ProcessingInstruction) pi.copy();
@@ -214,14 +241,17 @@ public class ProcessingInstructionTest extends XOMTestCase {
         assertEquals(pi.getValue(), c2.getValue());
         assertTrue(!pi.equals(c2));
         assertNull(c2.getParent());
+        
     }
 
     
     // Check passing in a string with correct surrogate pairs
     public void testCorrectSurrogates() {
+        
         String goodString = "test: \uD8F5\uDF80  ";
         pi.setValue(goodString);
-        assertEquals(goodString, pi.getValue());       
+        assertEquals(goodString, pi.getValue());
+        
     }
 
     
@@ -417,7 +447,6 @@ public class ProcessingInstructionTest extends XOMTestCase {
             assertEquals(":target", success.getData());
             assertNotNull(success.getMessage());   
         }
-
         
     }
 
