@@ -102,7 +102,16 @@ public class ProcessingInstructionTest extends XOMTestCase {
         pi = new ProcessingInstruction("test", "");
         assertEquals("", pi.getValue());
 
-
+    }
+    
+    public void testCopyConstructor() {
+        ProcessingInstruction instruction1 = new ProcessingInstruction("target", "data");   
+        ProcessingInstruction instruction2 = new ProcessingInstruction(instruction1);
+        
+        assertEquals(instruction1.getTarget(), instruction2.getTarget());
+        assertEquals(instruction1.getValue(), instruction2.getValue());
+        assertEquals(instruction1.toXML(), instruction2.toXML());
+           
     }
 
     public void testSetter() {
