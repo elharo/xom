@@ -45,12 +45,6 @@ package nu.xom;
  */
 public class NodeFactory {
 
-    // suppose you want to change comments to Text or PI to
-    // Element? Should some of these methods just return a Node,
-    // or even a Nodes instead????
-    
-    // does nodefactory need an option to make an additional namespace????
-
     /**
      * <p>
      * Creates a new <code>Element</code> in the specified namespace 

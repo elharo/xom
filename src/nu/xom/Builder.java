@@ -251,14 +251,6 @@ public class Builder {
         
     }        
     
-    // This is one of the few places where the 
-    // SAXness is exposed. What if the object is changed after
-    // being passed to this method? Wrong features set, etc.????
-    // Could/should I eliminate this? Perhaps after adding
-    // get/setFeature/property? Would it then be necessary to
-    // add a variation in SAXConverter to handle special, non-XML 
-    // reader like my SQLReader?
-    
     /**
      * <p>
      * Creates a new <code>Builder</code> based 
