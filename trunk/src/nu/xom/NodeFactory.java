@@ -59,16 +59,23 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  * 
  */
 public class NodeFactory {
 
+    /**
+     * <p>
+     * Constructs a new node factory.
+     * </p>
+     * 
+     */
+    public NodeFactory() {}
     
     /**
      * <p>
      * Creates a new <code>Element</code> in the specified namespace 
-     * with the specified name. The <code>Builder</code> calls this
+     * with the specified name. The builder calls this
      * method to make the root element of the document.
      * </p>
      * 
@@ -87,7 +94,7 @@ public class NodeFactory {
      * @param name the qualified name of the element
      * @param namespace the namespace URI of the element
      * 
-     * @return the new root <code>Element</code>
+     * @return the new root element
      */
     public Element makeRootElement(String name, String namespace) {
         return startMakingElement(name, namespace);    
@@ -116,7 +123,7 @@ public class NodeFactory {
      * @param name the qualified name of the element
      * @param namespace the namespace URI of the element
      * 
-     * @return the new <code>Element</code>
+     * @return the new element
      */
     public Element startMakingElement(String name, String namespace) {
         return new Element(name, namespace);    
@@ -125,9 +132,8 @@ public class NodeFactory {
     
     /**
      * <p>
-     * The <code>Builder</code> calls this method to signal the 
-     * end of an element. This method should return the
-     * <code>Nodes</code> to be added to the tree.
+     * Signals the end of an element. This method should return 
+     * the <code>Nodes</code> to be added to the tree.
      * They need not contain the <code>Element</code> that 
      * was passed to this method, though most often they will.
      * By default the <code>Nodes</code> returned contain
@@ -208,11 +214,10 @@ public class NodeFactory {
     
     /**
      * <p>
-     * The <code>Builder</code> calls this method to signal the end 
-     * of a document. The default implementation of this method  
-     * does nothing. The <code>Builder</code> does not call this 
-     * method if an exception is thrown while building a 
-     * <code>Document</code>.
+     * Signals the end of a document. The default implementation of   
+     * this method does nothing. The builder does not 
+     * call this  method if an exception is thrown while building 
+     * a <code>Document</code>.
      * </p>
      * 
      * @param document the completed <code>Document</code>
