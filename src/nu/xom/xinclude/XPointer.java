@@ -47,40 +47,36 @@ import nu.xom.ParentNode;
  *   probably become public and move to a package of its own.
  * </p>
  * 
- * 
  * @author Elliotte Rusty Harold
+ * @version 1.0d21
  *
  */
 class XPointer {
     
     public static NodeList resolve(Document doc, String xptr) 
-        throws XPointerSyntaxException {    
+      throws XPointerSyntaxException, XPointerResourceException {    
             
-        try {   
-            xptr = decode(xptr);
-            NodeList result = new NodeList();
-            // Is this a bare name?
-            try {
-                new Element(xptr);
-                Element identified = findByID(doc.getRootElement(), xptr); 
-                if (identified != null) {
-                    result.append(identified);   
-                }
+        NodeList result = new NodeList();
+        xptr = decode(xptr);
+        try { // Is this a shorthand XPointer
+            new Element(xptr);
+            Element identified = findByID(doc.getRootElement(), xptr); 
+            if (identified != null) {
+                result.append(identified);   
                 return result;
             }
-            catch (IllegalNameException ex) {
-               // not a bare name   
-            }          
-            
+        }
+        catch (IllegalNameException ex) {
+            // not a bare name; try element() scheme
             List elementSchemeData = findElementSchemeData(xptr);
             if (elementSchemeData.size() == 0) {
-               // This may be a legal XPointer, but it doesn't 
-               // have an element() scheme so we can't handle it. 
-               throw new XPointerSyntaxException(
-                 "No supported XPointer schemes found"
-               );    
+                // This may be a legal XPointer, but it doesn't 
+                // have an element() scheme so we can't handle it. 
+                throw new XPointerSyntaxException(
+                  "No supported XPointer schemes found"
+                );    
             }
-            
+        
             for (int i = 0; i < elementSchemeData.size(); i++) {
                 String currentData = (String) (elementSchemeData.get(i));
                 int[] keys = new int[0];
@@ -90,22 +86,37 @@ class XPointer {
                     try {
                         new Element(currentData);
                     }
-                    catch (IllegalNameException ex) {
+                    catch (IllegalNameException inex) {
                         // not a bare name 
                         throw new XPointerSyntaxException(
-                          "bad element scheme data " + elementSchemeData
+                          "bad element scheme data " + elementSchemeData, 
+                          inex
                         );  
                     }  
-                    Element identified = findByID(doc.getRootElement(), currentData); 
+                    Element identified = findByID(
+                      doc.getRootElement(), currentData); 
                     if (identified != null) {
                         result.append(identified);   
                         return result;                
                     }
                 }
                 else if (!currentData.startsWith("/")) {
-                    String id = currentData.substring(0, currentData.indexOf('/'));
-                    current = findByID(doc.getRootElement(), id);       
-                    keys = split(currentData.substring(currentData.indexOf('/')));   
+                    String id = currentData.substring(
+                      0, currentData.indexOf('/'));
+                    // Check to make sure this is a legal 
+                    // XML name/ID value
+                    try {
+                        new Element(id);   
+                    }
+                    catch (IllegalNameException inex) {
+                        throw new XPointerSyntaxException(
+                          id + " is not a non-colonized name");   
+                    }
+                    current = findByID(doc.getRootElement(), id);                         
+                    keys = split(currentData.substring(
+                      currentData.indexOf('/')));
+                    
+                    if (current == null) continue;                   
                 }
                 else {
                     keys = split(currentData);   
@@ -120,26 +131,14 @@ class XPointer {
                     result.append(current);
                     return result;
                 }
-            }
               
-        }
-        catch (StringIndexOutOfBoundsException ex) {
-            XPointerSyntaxException ex2 = new XPointerSyntaxException(xptr 
-              + " is not a syntactically correct XPointer"); 
-            ex2.initCause(ex);
-            throw ex2; 
-        }
-        catch (NumberFormatException ex) {
-            XPointerSyntaxException ex2 = new XPointerSyntaxException(xptr 
-              + " is not a syntactically correct XPointer"); 
-            ex2.initCause(ex);
-            throw ex2; 
+            }
+            
         }
         
         // If we get here and still haven't been able to match an
-        // element, the XPointer has failed. Change this to a resourceexception????
-        // see XPointer spec
-        throw new XPointerSyntaxException(
+        // element, the XPointer has failed. 
+        throw new XPointerResourceException(
           "XPointer " + xptr 
           + " did not locate any nodes in the document "
           + doc.getBaseURI()
@@ -147,8 +146,8 @@ class XPointer {
     }
     
     
-    private static Element findNthChildElement(ParentNode parent, int position) {
-        
+    private static Element findNthChildElement(
+      ParentNode parent, int position) {  
         // watch out for 1-based indexing of tumblers
         int elementCount = 1;
         for (int i = 0; i < parent.getChildCount(); i++) {
@@ -161,8 +160,9 @@ class XPointer {
         return null;
     }
     
-    private static int[] split(String tumbler) {
-          
+    private static int[] split(String tumbler)
+      throws XPointerSyntaxException {
+  
         int numberOfParts = 0;
         for (int i = 0; i < tumbler.length(); i++) {
           if (tumbler.charAt(i) == '/') numberOfParts++;   
@@ -171,17 +171,25 @@ class XPointer {
         int[] result = new int[numberOfParts];
         int index = 0;
         StringBuffer part = new StringBuffer(3);
-        for (int i = 1; i < tumbler.length(); i++) {
-            if (tumbler.charAt(i) == '/') {
-              result[index] = Integer.parseInt(part.toString()); 
-              index++;
-              part = new StringBuffer(3);
-            }   
-            else {
-                part.append(tumbler.charAt(i));   
-            }   
+        try {
+            for (int i = 1; i < tumbler.length(); i++) {
+                if (tumbler.charAt(i) == '/') {
+                    result[index] = Integer.parseInt(part.toString()); 
+                    index++;
+                    part = new StringBuffer(3);
+                }   
+                else {
+                    part.append(tumbler.charAt(i));   
+                }   
+            }
+            result[result.length-1] = Integer.parseInt(part.toString());
         }
-        result[result.length-1] = Integer.parseInt(part.toString());
+        catch (NumberFormatException ex) {
+            XPointerSyntaxException ex2 
+              = new XPointerSyntaxException(tumbler
+                + " is not syntactically correct", ex); 
+            throw ex2; 
+        }
         
         return result;
     }
@@ -271,32 +279,46 @@ class XPointer {
         return null;
     }
     
-    private static String decode(String xptr) {
+    private static String decode(String xptr) throws XPointerSyntaxException {
         StringBuffer result = new StringBuffer(xptr);
-        for (int i = 0; i < result.length(); i++) {
-            char c = result.charAt(i);
-            if (c == '%') {
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                while (c == '%') {
-                    result.deleteCharAt(i);
-                    String hex = result.substring(i, i+2);
-                    byte character = (byte) Integer.parseInt(hex, 16);
-                    out.write(character);
-                    result.deleteCharAt(i);
-                    result.deleteCharAt(i);                    
-                    c = result.charAt(i);
+        try {
+            for (int i = 0; i < result.length(); i++) {
+                char c = result.charAt(i);
+                if (c == '%') {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    while (c == '%') {
+                        result.deleteCharAt(i);
+                        String hex = result.substring(i, i+2);
+                        byte character = (byte) Integer.parseInt(hex, 16);
+                        out.write(character);
+                        result.deleteCharAt(i);
+                        result.deleteCharAt(i);                    
+                        c = result.charAt(i);
+                    }
+                    byte[] raw = out.toByteArray();
+                    try {
+                        String data = new String(raw, "UTF-8");
+                        result.insert(i, data);
+                    } catch (UnsupportedEncodingException ex) {
+                        throw new RuntimeException(
+                          "Broken VM does not support UTF-8"
+                        );
+                    }
+                    
                 }
-                byte[] raw = out.toByteArray();
-                try {
-                    String data = new String(raw, "UTF-8");
-                    result.insert(i, data);
-                } catch (UnsupportedEncodingException ex) {
-                    throw new RuntimeException(
-                      "Broken VM does not support UTF-8"
-                    );
-                }
-                
             }
+        }
+        catch (StringIndexOutOfBoundsException ex) {
+            XPointerSyntaxException ex2 = new XPointerSyntaxException( 
+              xptr + " is not a syntactically correct XPointer"); 
+            ex2.initCause(ex);
+            throw ex2; 
+        }
+        catch (NumberFormatException ex) {
+            XPointerSyntaxException ex2 = new XPointerSyntaxException(xptr 
+              + " is not a syntactically correct XPointer"); 
+            ex2.initCause(ex);
+            throw ex2; 
         }
         return result.toString();
     }  
