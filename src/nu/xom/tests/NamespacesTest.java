@@ -269,76 +269,80 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals("http://www.example.com/", 
           severalNamespaces.getNamespaceURI(""));
 
-   }
+    }
 
-   public void testAddSameNamespaceDeclaration() {
-       Element e = new Element("test", "http://www.example.com");
+    public void testAddSameNamespaceDeclaration() {
+        Element e = new Element("test", "http://www.example.com");
        
-       try {
-           e.addNamespaceDeclaration("", "http://www.red.com");
-           fail("added conflicting default namespace");   
-       }
-       catch (NamespaceException ex) {
+        try {
+            e.addNamespaceDeclaration("", "http://www.red.com");
+            fail("added conflicting default namespace");   
+        }
+        catch (NamespaceException ex) {
             // success   
             assertNotNull(ex.getMessage());
-       }
+        }
        
-       e.addNamespaceDeclaration("", "http://www.example.com");
-       assertEquals("http://www.example.com", e.getNamespaceURI(""));
-       assertEquals(1, e.getNamespaceDeclarationCount());
-   } 
+        e.addNamespaceDeclaration("", "http://www.example.com");
+        assertEquals("http://www.example.com", e.getNamespaceURI(""));
+        assertEquals(1, e.getNamespaceDeclarationCount());
+    } 
 
-
-
-   public void testAddEmptyNamespaceDeclaration() {
+    public void testAddEmptyNamespaceDeclaration() {
        Element e = new Element("test");
        
-       try {
-           e.addNamespaceDeclaration("", "http://www.example.com");
-           fail("added conflicting default namespace");   
-       }
-       catch (NamespaceException ex) {
+        try {
+            e.addNamespaceDeclaration("", "http://www.example.com");
+            fail("added conflicting default namespace");   
+        }
+        catch (NamespaceException ex) {
             // success   
             assertNotNull(ex.getMessage());
-       }
+        }
        
-       e.setNamespaceURI("http://www.example.com");
-       e.setNamespacePrefix("pre");
-       e.addNamespaceDeclaration("", "http://www.example.net");
+        e.setNamespaceURI("http://www.example.com");
+        e.setNamespacePrefix("pre");
+        e.addNamespaceDeclaration("", "http://www.example.net");
+    
+        assertEquals("http://www.example.net", e.getNamespaceURI(""));
+       
+    } 
 
-       assertEquals("http://www.example.net", e.getNamespaceURI(""));
+    public void testAddNullPrefix() {
+        Element e = new Element("test");
        
-   } 
-
-   public void testAddNullPrefix() {
-       Element e = new Element("test");
-       
-       try {
-           e.addNamespaceDeclaration(null, 
-             "http://www.example.com");
-           fail("added conflicting empty prefix to element in no namespace");   
-       }
-       catch (NamespaceException ex) {
+        try {
+            e.addNamespaceDeclaration(null, 
+              "http://www.example.com");
+            fail("added conflicting empty prefix to element in no namespace");   
+        }
+        catch (NamespaceException ex) {
             // success   
             assertNotNull(ex.getMessage());
-       }
+        }
        
-       e.setNamespaceURI("http://www.example.com");
-       e.setNamespacePrefix("pre");
-       e.addNamespaceDeclaration(null, "http://www.example.net");
+        e.setNamespaceURI("http://www.example.com");
+        e.setNamespacePrefix("pre");
+        e.addNamespaceDeclaration(null, "http://www.example.net");
 
-       assertEquals("http://www.example.net", e.getNamespaceURI(""));
+        assertEquals("http://www.example.net", e.getNamespaceURI(""));
        
-   } 
+    } 
 
-   public void testAddNullURI() {
-       Element parent = new Element("parent", "http://www.example.org/");
-       Element e = new Element("pre:test", "http://www.example.com/"); 
-       parent.appendChild(e);
-       e.addNamespaceDeclaration("", null);
-       assertEquals("", e.getNamespaceURI(""));   
-   } 
+    public void testAddNullURI() {
+        Element parent = new Element("parent", "http://www.example.org/");
+        Element e = new Element("pre:test", "http://www.example.com/"); 
+        parent.appendChild(e);
+        e.addNamespaceDeclaration("", null);
+        assertEquals("", e.getNamespaceURI(""));   
+    } 
 
+    public void testRemoveNullPrefix() {
+        Element e = new Element("pre:test", "http://www.example.com/"); 
+        e.addNamespaceDeclaration("", "http://www.example.net");
+        e.removeNamespaceDeclaration(null);
+        assertEquals("", e.getNamespaceURI(""));   
+    } 
 
     public void testUndeclareDefaultNamespace() {
         Element parent = new Element("parent", "http://www.example.org/");
@@ -462,9 +466,9 @@ public class NamespacesTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
 
-   }
+    }
 
-   public void testAttributeConflict() {
+    public void testAttributeConflict() {
     
         Element element = new Element("test");
         element.addNamespaceDeclaration("pre", 
@@ -481,10 +485,10 @@ public class NamespacesTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
 
-   }
+    }
 
 
-   public void testSetAttributePrefix() {
+    public void testSetAttributePrefix() {
     
         try {
            severalNamespaces.setNamespacePrefix("xlink");
@@ -504,7 +508,7 @@ public class NamespacesTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
 
-   }
+    }
    
    /*
     * Test document submitted by Laurent Bihanic
