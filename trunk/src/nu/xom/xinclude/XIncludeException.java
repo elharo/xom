@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -69,7 +69,7 @@ public class XIncludeException extends Exception {
     /**
      * <p>
      * Creates a new <code>XIncludeException</code> with a detail 
-     * message, line and column numbers, and a URI of the document
+     * message, line and column numbers, and the URI of the document
      * that caused the exception.
      * </p>
      * 
