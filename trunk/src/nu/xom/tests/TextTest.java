@@ -28,8 +28,13 @@ import nu.xom.IllegalDataException;
 import nu.xom.Text;
 
 /**
+ * 
+ * <p>
+ *  Basic tests for the Text class.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d22
  *
  */
 public class TextTest extends XOMTestCase {
