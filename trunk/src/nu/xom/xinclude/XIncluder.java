@@ -577,13 +577,12 @@ public class XIncluder {
     }
     
     
-    // This assumes current implementation of XPointer
-    // that always selects exactly zero or one element
+    // This assumes current implementation of XPointer that
+    // always selects exactly one element or throws an exception.
     private static Nodes resolveXPointerSelection(Nodes in, 
       Builder builder, Stack baseURLs, Document original) 
       throws IOException, ParsingException, XIncludeException {
 
-        if (in.size() == 0) return new Nodes();
         Element preinclude = (Element) in.get(0);
         return resolveSilently(preinclude, builder, baseURLs, original);
         
