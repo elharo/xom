@@ -204,42 +204,46 @@ abstract class TextWriter {
             lastCharacterWasSpace = true;
             skipFollowingLinefeed = false;
         }
-        else if (c == '\r' && !adjustingWhiteSpace()) {
-            if (lineSeparatorSet) {
-                escapeBreakLine();
-            }
-            else {
-                out.write("&#x0D;");
-                column += 6;
-            }
-            skipFollowingLinefeed = true; 
-        }
-        else if (c == '\r' /* && adjustingWhiteSpace() */) {
-            out.write(" ");
-            lastCharacterWasSpace = true;
-            skipFollowingLinefeed = true; 
-        }
-        else if (c == '\n'  && !adjustingWhiteSpace()) {
+        else if (c == '\n') {
             if (skipFollowingLinefeed) {
                 skipFollowingLinefeed = false;
                 return;
             }
-            if (lineSeparatorSet) {
-                escapeBreakLine();
+            if (adjustingWhiteSpace()) {
+                if (skipFollowingLinefeed) {
+                    skipFollowingLinefeed = false;
+                    return;
+                }
+                out.write(" ");
+                lastCharacterWasSpace = true;                
             }
             else {
-                out.write("&#x0A;");
-                column += 6;
+                if (lineSeparatorSet) {
+                    escapeBreakLine();
+                }
+                else {
+                    out.write("&#x0A;");
+                    column += 6;
+                }
+                lastCharacterWasSpace = true;
             }
-            lastCharacterWasSpace = true;
         }
-        else if (c == '\n'  /* && adjustingWhiteSpace() */) {
-            if (skipFollowingLinefeed) {
-                skipFollowingLinefeed = false;
-                return;
+        else if (c == '\r') {
+            if (adjustingWhiteSpace()) {
+                out.write(" ");
+                lastCharacterWasSpace = true;
+                skipFollowingLinefeed = true;              
             }
-            out.write(" ");
-            lastCharacterWasSpace = true;
+            else {
+                if (lineSeparatorSet) {
+                    escapeBreakLine();
+                }
+                else {
+                    out.write("&#x0D;");
+                    column += 6;
+                }
+                skipFollowingLinefeed = true; 
+            }
         }
         else if (c == '"') {
             out.write("&quot;");
