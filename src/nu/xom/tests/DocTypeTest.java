@@ -33,7 +33,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d22
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -100,7 +100,8 @@ public class DocTypeTest extends XOMTestCase {
             doctype = new DocType(name);
             fail("allowed root element name to contain spaces");
         } catch (IllegalNameException ex) {
-            // success    
+            // success
+            assertNotNull(ex.getMessage());
         }
 
     }
@@ -176,6 +177,7 @@ public class DocTypeTest extends XOMTestCase {
             }
             catch (WellformednessException ex) {
                 // successfully detected bad public ID    
+                assertNotNull(ex.getMessage());
             }
         } 
         for (char c = 0xB; c < 0xD; c++) {
@@ -186,6 +188,7 @@ public class DocTypeTest extends XOMTestCase {
             }
             catch (WellformednessException ex) {
                 // successfully detected bad public ID    
+                assertNotNull(ex.getMessage());
             }
         } 
         for (char c = 0xE; c < 0x20; c++) {
@@ -206,6 +209,7 @@ public class DocTypeTest extends XOMTestCase {
             }
             catch (WellformednessException ex) {
                 // successfully detected bad public ID    
+                assertNotNull(ex.getMessage());
             }
         } 
 
@@ -235,6 +239,7 @@ public class DocTypeTest extends XOMTestCase {
         }
         catch (WellformednessException ex) {
             // successfully detected bad system ID    
+            assertNotNull(ex.getMessage());
         }
         try {
             new DocType("test", "http://www.example.com/index.html#");
@@ -242,6 +247,7 @@ public class DocTypeTest extends XOMTestCase {
         }
         catch (WellformednessException ex) {
             // successfully detected bad system ID    
+            assertNotNull(ex.getMessage());
         }
 
 
@@ -295,8 +301,10 @@ public class DocTypeTest extends XOMTestCase {
         try {
             doctype.setPublicID("-//Me//some public ID");
             fail("created a doctype with a public ID and no system ID");
-        } catch (WellformednessException ex) {
+        } 
+        catch (WellformednessException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
 
     }
@@ -306,7 +314,7 @@ public class DocTypeTest extends XOMTestCase {
         String name = "MyName";
         String publicID = "-//Me//some public ID";
         DocType doctype =
-            new DocType(name, publicID, "http://www.example.com");
+          new DocType(name, publicID, "http://www.example.com");
 
         doctype.setPublicID(null);
         assertNull(doctype.getPublicID());
@@ -316,8 +324,10 @@ public class DocTypeTest extends XOMTestCase {
         try {
             doctype.setSystemID(null);
             fail("removed system ID before removing public ID");
-        } catch (WellformednessException ex) {
+        } 
+        catch (WellformednessException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
 
         doctype.setPublicID(null);

@@ -153,7 +153,8 @@ public class CanonicalizerTest extends XOMTestCase {
             fail("Canonicalized document with relative namespace URI");
         }
         catch (XMLException ex) {
-            // success   
+            // success
+            assertNotNull(ex.getMessage());
         }    
         
     }

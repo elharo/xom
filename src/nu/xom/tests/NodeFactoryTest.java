@@ -47,7 +47,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 public class NodeFactoryTest extends XOMTestCase {
@@ -86,6 +86,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }
         catch (CycleException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
                 
     }
@@ -102,6 +103,7 @@ public class NodeFactoryTest extends XOMTestCase {
         }
         catch (IllegalAddException ex) {
             // success   
+            assertNotNull(ex.getMessage());
         }
                 
     }
