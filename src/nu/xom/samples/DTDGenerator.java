@@ -34,6 +34,17 @@ import nu.xom.ParseException;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ *
+ * <p>
+ * Demonstrates walking the tree while collecting
+ * element and attribute names and types.
+ * </p>
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.0d21
+ *
+ */
 public class DTDGenerator {
  
     public static void main(String[] args) {
@@ -74,7 +85,6 @@ public class DTDGenerator {
             return super.startMakingElement(name, namespace);
         }
         
-        // will this handle enumerated types????
         public Attribute makeAttribute(String name, String URI, 
           String value, Attribute.Type type) {
               
