@@ -933,10 +933,13 @@ public class XIncluder {
             Node node = included.get(i);
             // Take account of xml:base attribute, which we normally 
             // don't do when detaching
-            String oldBase = node.getBaseURI();
+            String noFragment = node.getBaseURI();
+            if (noFragment.indexOf('#') >= 0) {
+                noFragment = noFragment.substring(0, noFragment.indexOf('#'));
+            }
             node.detach();
             if (node instanceof Element) {
-                ((Element) node).setBaseURI(oldBase);
+                ((Element) node).setBaseURI(noFragment);
             }
         }  
           
