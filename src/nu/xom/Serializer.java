@@ -1085,7 +1085,7 @@ public class Serializer {
      *     attributes should be added as necessary
      *     to preserve base URI information 
      */
-    public void preserveBaseURI(boolean preserve) {
+    public void setPreserveBaseURI(boolean preserve) {
         this.preserveBaseURI = preserve;
     }
     
