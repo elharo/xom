@@ -439,6 +439,11 @@ public class Canonicalizer {
                     if (uri.equals(inScope.getURI(prefix))) {
                         continue;
                     }
+                    else if (exclusive) {
+                        if (visiblyUtilized(namespace)) {
+                            map.put(prefix, uri);
+                        }
+                    }
                     else {
                         map.put(prefix, uri);
                     }
@@ -473,6 +478,44 @@ public class Canonicalizer {
         } 
     
         
+        private boolean visiblyUtilized(Namespace namespace) {
+
+            String uri = namespace.getValue();
+            String prefix = namespace.getPrefix();
+            Element parent = (Element) namespace.getParent();
+            for (int i = 0; i < parent.getNamespaceDeclarationCount(); i++) {
+                String pfx = parent.getNamespacePrefix(i);
+                if (prefix.equals(pfx)) {
+                    return noOutputAncestorUsesPrefix(parent, prefix, uri);
+                }
+            }
+            
+            return false;
+            
+        }
+
+
+        private boolean noOutputAncestorUsesPrefix(Element original, String prefix, String uri) {
+
+            ParentNode parent = original.getParent();
+            while (parent != null && !(parent instanceof Document)) {
+                if (nodes.contains(parent)) {
+                    Element element = (Element) parent;
+                    for (int i = 0; i < element.getNamespaceDeclarationCount(); i++) {
+                        String current = element.getNamespacePrefix(i);
+                        if (current.equals(prefix)) {
+                            String newURI = element.getNamespaceURI(prefix);
+                            return ! newURI.equals(uri);
+                        }
+                    }
+                }
+                parent = parent.getParent();
+            }
+            return true;
+            
+        }
+
+
         // ???? move into Nodes?
         private int indexOf(Element element) {
             for (int i = 0; i < nodes.size(); i++) {
