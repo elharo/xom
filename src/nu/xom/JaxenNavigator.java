@@ -44,7 +44,6 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -52,6 +51,8 @@ import java.util.Map;
 
 
 class JaxenNavigator extends DefaultNavigator {
+    
+    private static Iterator emptyIterator = new EmptyIterator(); 
 
     
     public Iterator getSelfAxisIterator(Object contextNode) {
@@ -190,7 +191,7 @@ class JaxenNavigator extends DefaultNavigator {
             return result.iterator();
         }
         catch (ClassCastException ex) {
-            return Collections.EMPTY_LIST.iterator();
+            return emptyIterator;
         }
         
     }
@@ -199,7 +200,7 @@ class JaxenNavigator extends DefaultNavigator {
     public Iterator getParentAxisIterator(Object contextNode)  {
         
         Node parent = (Node) getParentNode(contextNode);
-        if (parent == null) return Collections.EMPTY_LIST.iterator();
+        if (parent == null) return emptyIterator;
         else {
             List l = new ArrayList(1);
             l.add(parent);
@@ -226,12 +227,12 @@ class JaxenNavigator extends DefaultNavigator {
         try {
             Element element = (Element) contextNode;
             if (element.attributes == null) {
-                return Collections.EMPTY_LIST.iterator();
+                return emptyIterator;
             }
             else return element.attributes.iterator();
         }
         catch (ClassCastException ex) {
-            return Collections.EMPTY_LIST.iterator();
+            return emptyIterator;
         }
         
     }
@@ -243,7 +244,7 @@ class JaxenNavigator extends DefaultNavigator {
             return new ChildIterator((ParentNode) o);
         }
         else {
-            return Collections.EMPTY_LIST.iterator();
+            return emptyIterator;
         }
         
     }
