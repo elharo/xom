@@ -1,0 +1,5 @@
+<?xml version='1.0'?>
+<root>
+   You should see a p element:
+  <p xml:base="http://www.example.org/test">Passed</p>
+</root>
