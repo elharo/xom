@@ -236,7 +236,7 @@ public class DOMConverterTest extends XOMTestCase {
 
     public void testConvertElement() 
       throws SAXException, IOException, ParserConfigurationException {
-        byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();;
+        byte[] data = ("<element name='value' " +            "xmlns='http://example.com/' " +            "xmlns:pre='http://example.net'/>").getBytes();
         org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
         org.w3c.dom.Element root = doc.getDocumentElement();
@@ -284,7 +284,7 @@ public class DOMConverterTest extends XOMTestCase {
     public void testConvertCDATASection() 
       throws SAXException, IOException, ParserConfigurationException {
 
-        byte[] data = "<element><![CDATA[ here's the text ]]></element>".getBytes();;
+        byte[] data = "<element><![CDATA[ here's the text ]]></element>".getBytes();
         org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
         org.w3c.dom.Element root = doc.getDocumentElement();
