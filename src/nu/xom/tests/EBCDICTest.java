@@ -37,13 +37,13 @@ import nu.xom.Serializer;
 /**
  * <p>
  *  Tests support for the typical U.S. EBCDIC encoding.
- *  Unfortunately this test exposes a bug in the handling
- *  of NEL, character 0x85, in Sun's JDK. Specifically
+ *  Unfortunately this test exposes a <a href=
+ *  "http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4867251">bug<a/>
+ *  in the handling of NEL, character 0x85, in Sun's JDK. Specifically
  *  InputStreamReader maps 0x85 to a line feed rather than 
  *  NEL. I've reported the bug to the Java Developer Connection,
  *  but until it's fixed this test fails. I don't have an easy
  *  workaround. 
- *  XXX link to JDC bug
  * </p>
  * 
  * @author Elliotte Rusty Harold
