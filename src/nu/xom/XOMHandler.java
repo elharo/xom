@@ -59,9 +59,6 @@ class XOMHandler
     private NodeFactory  factory;
     
     XOMHandler(NodeFactory factory) {
-        if (factory == null) {
-            throw new NullPointerException("Factory cannot be null");
-        }
         this.factory = factory; 
     }   
     
@@ -297,19 +294,19 @@ class XOMHandler
             }
             for (int i=0; i < result.size(); i++) {
                 Node node = result.get(i);
-                 if (node.isAttribute()) {
-                     try {
-                         ((Element) parent).addAttribute((Attribute) node);
-                     }
-                     catch (ClassCastException ex) {
+                if (node.isAttribute()) {
+                    try {
+                        ((Element) parent).addAttribute((Attribute) node);
+                    }
+                    catch (ClassCastException ex) {
                         throw new XMLException(
                           "Factory tried to add an attribute to a document", 
                           ex);   
-                     }
-                 }
-                 else {
-                     parent.appendChild(node);   
-                 }
+                    }
+                }
+                else {
+                    parent.appendChild(node);   
+                }
             }
             buffer = new StringBuffer();
         }
