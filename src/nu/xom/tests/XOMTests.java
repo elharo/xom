@@ -46,6 +46,7 @@ public class XOMTests extends TestCase {
 
     public static Test suite() {
         TestSuite result = new TestSuite();
+        result.addTest(new TestSuite(VerifierTest.class));
         result.addTest(new TestSuite(SubclassTest.class));
         result.addTest(new TestSuite(NodeFactoryTest.class));
         result.addTest(new TestSuite(ParentNodeTest.class));
