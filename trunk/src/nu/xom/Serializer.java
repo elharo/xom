@@ -471,16 +471,18 @@ public class Serializer {
         String value = text.getValue();
         if (text.isCDATASection() 
           && text.getValue().indexOf("]]>") == -1) {
-           for (int i = 0; i < value.length(); i++) {
-               if (escaper.needsEscaping(value.charAt(i))) {
-                    // can't use CDATA section
-                    escaper.writePCDATA(value);
-                    return;   
-               }   
-           }
-           escaper.writeMarkup("<![CDATA[");
-           escaper.writeMarkup(value);
-           escaper.writeMarkup("]]>");
+            if (!(escaper instanceof UnicodeWriter)) {
+                for (int i = 0; i < value.length(); i++) {
+                   if (escaper.needsEscaping(value.charAt(i))) {
+                        // can't use CDATA section
+                        escaper.writePCDATA(value);
+                        return;   
+                   }   
+                }
+            }
+            escaper.writeMarkup("<![CDATA[");
+            escaper.writeMarkup(value);
+            escaper.writeMarkup("]]>");
         }
         else {
             escaper.writePCDATA(value);
