@@ -40,15 +40,13 @@ import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.LocatorImpl;
 
 /**
- * 
  * <p>
  * Feeds a XOM <code>Document</code> into a
  * SAX2 <code>ContentHandler</code>.
  * </p>
-  * 
- * @author Elliotte Rusty Harold
- * @version 1.0b7
  * 
+ * @author Elliotte Rusty Harold
+ * @version 1.0b7 
  */
 public class SAXConverter {
 
@@ -208,7 +206,6 @@ public class SAXConverter {
         if (parentNode instanceof Element) {
             parent = (Element) parentNode;   
         }
-        String parentURI = null;
         
         if (parent != null && uri.equals(parent.getNamespaceURI(prefix))) {
             return;   

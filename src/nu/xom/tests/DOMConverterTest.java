@@ -488,7 +488,6 @@ public class DOMConverterTest extends XOMTestCase {
         Builder builder = new Builder();
         Document xomDocIn = builder.build(f);
         org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocIn, impl);
-        org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
         Document xomDocOut = DOMConverter.convert(domDoc);
         assertEquals(xomDocIn, xomDocOut);
         
