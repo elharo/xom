@@ -413,6 +413,24 @@ public class XIncludeTest extends XOMTestCase {
         
     }
 
+    // Test we can inlcude form same document using only an xpointer attribute
+    public void testOnlyXPointer() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/onlyxpointer.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/onlyxpointer.xml")
+        );
+        // dumpResult(input, result); 
+        
+        assertEquals(expectedResult, result);
+        
+    }
+
+
+
     // Test with 3 element schemes in the XPointer.
     // The first and second one point to nothing. The third one
     // selects something.

@@ -376,13 +376,13 @@ public class XIncluder {
             if (parse == null) parse = "xml";
             String encoding = element.getAttributeValue("encoding");
             String href = element.getAttributeValue("href");
-            if (href == null) {
+            if (href == null && xpointer == null) {
                 throw new MissingHrefException(
                   "Missing href attribute", 
                   element.getDocument().getBaseURI()
                 );   
             }
-            href = convertToURI(href);
+            if (href != null) href = convertToURI(href);
             
             testForMultipleFallbacks(element);
 
@@ -397,41 +397,53 @@ public class XIncluder {
                    // don't use base   
                 }
             }
-            URL url;
+            URL url = null;
             try {
                 // xml:base attributes added to maintain the 
                 // base URI should not have fragment IDs
 
-                if (baseURL != null) url = new URL(baseURL, href);
-                else url = new URL(href);                
+                if (baseURL != null && href != null) url = new URL(baseURL, href);
+                else if (href != null) url = new URL(href);                
                 if (parse.equals("xml")) {
-                    Nodes replacements 
-                      = downloadXMLDocument(url, xpointer, builder, baseURLs);
-                      
-                // Add base URIs. Base URIs added by XInclusion require
-                // the element to maintain the same base URI as it had  
-                // in the original document. Since its base URI in the 
-                // original document does not contain a fragment ID,
-                // therefore its base URI after inclusion shouldn't, 
-                // and this special case is unnecessary. Base URI fixup
-                // should not add the fragment ID. 
-                    for (int i = 0; i < replacements.size(); i++) {
-                        Node child = replacements.get(i);
-                        if (child instanceof Element) {
-                            String noFragment = url.toExternalForm();
-                            if (noFragment.indexOf('#') >= 0) {
-                                noFragment = noFragment.substring(
-                                  0, noFragment.indexOf('#'));
+                    Nodes replacements;
+                    if (url != null) { 
+                        replacements  = downloadXMLDocument(url, xpointer, builder, baseURLs);
+                        // Add base URIs. Base URIs added by XInclusion require
+                        // the element to maintain the same base URI as it had  
+                        // in the original document. Since its base URI in the 
+                        // original document does not contain a fragment ID,
+                        // therefore its base URI after inclusion shouldn't, 
+                        // and this special case is unnecessary. Base URI fixup
+                        // should not add the fragment ID. 
+                        for (int i = 0; i < replacements.size(); i++) {
+                            Node child = replacements.get(i);
+                            if (child instanceof Element) {
+                                String noFragment = url.toExternalForm();
+                                if (noFragment.indexOf('#') >= 0) {
+                                    noFragment = noFragment.substring(
+                                      0, noFragment.indexOf('#'));
+                                }
+                                Element baseless = (Element) child;
+                                Attribute baseAttribute = new Attribute(
+                                  "xml:base", 
+                                  "http://www.w3.org/XML/1998/namespace", 
+                                  noFragment 
+                                );
+                                baseless.addAttribute(baseAttribute);   
                             }
-                            Element baseless = (Element) child;
-                            Attribute baseAttribute = new Attribute(
-                              "xml:base", 
-                              "http://www.w3.org/XML/1998/namespace", 
-                              noFragment 
-                            );
-                            baseless.addAttribute(baseAttribute);   
-                        }
-                    }  
+                        }  
+                    }
+                    else {
+                        Nodes originals = XPointer.resolve(element.getDocument(), xpointer);
+                        replacements = new Nodes(); 
+                        for (int i = 0; i < originals.size(); i++) {
+                            replacements.append(originals.get(i).copy());         
+                        }    
+                        // deliberately not updating the base here since
+                        // we're in the same document; however, that may be flaky
+                        // in the presence of xml:base attributes????
+                                                 
+                    }
                       
                     // Will fail if we're replacing the root element with 
                     // a node list containing zero or multiple elements,
