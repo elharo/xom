@@ -89,7 +89,7 @@ public class XSLTransformTest extends XOMTestCase {
      + "<text>text in a namespace</text></svg>"
      + "</test>\r\n"
      + "<!--epilog-->";
-
+    
     
     /* public void testAttrDup() throws ParsingException, IOException, XSLException {
         
@@ -149,13 +149,40 @@ public class XSLTransformTest extends XOMTestCase {
             Document doc = builder.build(notAStyleSheet, 
               "http://www.example.com");
             new XSLTransform(doc);
-            // ???? should this really be an error?
-            // Isn't any well-formed document a stylesheet?
             fail("Compiled non-stylesheet");
         }
         catch (XSLException success) { 
             assertNotNull(success.getMessage());
         }
+        
+    }
+
+
+    public void testLiteralResultElementUsedAsStylesheet() 
+      throws ParsingException, IOException, XSLException {
+
+        String literalResultElementAsStylesheet = 
+        "<html xsl:version='1.0'\n"
+        + "      xmlns:xsl='http://www.w3.org/1999/XSL/Transform'\n"
+        + "      xmlns='http://www.w3.org/TR/xhtml1/strict'>\n"
+        + "  <head>\n"
+        + "    <title>Expense Report Summary</title>\n"
+        + "  </head>\n"
+        + "  <body>\n"
+        + "    <p>Total Amount: <xsl:value-of select='expense-report/total'/></p>\n"
+        + "  </body>\n"
+        + "</html>\n";
+    
+        Builder builder = new Builder();
+        Document stylesheet = builder.build(literalResultElementAsStylesheet, 
+          "http://www.example.com");
+        XSLTransform transform = new XSLTransform(stylesheet);
+        Document doc = builder.build(notAStyleSheet, 
+              "http://www.example.com");
+        Nodes result = transform.transform(doc);
+        Element root = (Element) (result.get(0));
+        assertEquals("html", root.getQualifiedName());
+        assertEquals(2, root.getChildCount());
         
     }
 
