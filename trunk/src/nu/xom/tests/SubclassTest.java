@@ -1,4 +1,4 @@
-// Copyright 2003 Elliotte Rusty Harold
+// Copyright 2003, 2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -40,7 +40,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a3
  *
  */
 public class SubclassTest extends XOMTestCase {
@@ -48,14 +48,17 @@ public class SubclassTest extends XOMTestCase {
     private Element root;
     private Document doc;
     
+    
     public SubclassTest(String name) {
         super(name);
     }
 
+    
     protected void setUp() {
         root = new Element("root");
         doc = new Document(new ElementSubclass("root"));   
     }
+    
     
     public void testAttributeClassInCopy() {
         root.addAttribute(new AttributeSubclass("name", "value"));
@@ -63,6 +66,7 @@ public class SubclassTest extends XOMTestCase {
         Element copy = (Element) root.copy();
         assertTrue(copy.getAttribute(0) instanceof AttributeSubclass);
     }
+    
     
     private class AttributeSubclass extends Attribute {
         
@@ -76,12 +80,14 @@ public class SubclassTest extends XOMTestCase {
         
     } 
 
+    
     public void testTextClassInCopy() {
         root.appendChild(new TextSubclass("value"));
         assertTrue(root.getChild(0) instanceof TextSubclass);
         Element copy = (Element) root.copy();
         assertTrue(copy.getChild(0) instanceof TextSubclass);
     }
+    
     
     private class TextSubclass extends Text {
         
@@ -94,6 +100,7 @@ public class SubclassTest extends XOMTestCase {
         }        
     } 
 
+    
     public void testElementClassInCopy() {
         root.appendChild(new ElementSubclass("child"));
         assertTrue(root.getChild(0) instanceof ElementSubclass);
@@ -101,13 +108,14 @@ public class SubclassTest extends XOMTestCase {
         assertTrue(copy.getChild(0) instanceof ElementSubclass);
     }
     
+    
     private class ElementSubclass extends Element {
         
         ElementSubclass(String name) {
             super(name);   
         }
 
-        public Node copy() {
+        protected Element shallowCopy() {
             return new ElementSubclass(this.getQualifiedName());   
         }
         
@@ -121,6 +129,7 @@ public class SubclassTest extends XOMTestCase {
         assertTrue(copy.getChild(0) instanceof CommentSubclass);
     }
     
+    
     private class CommentSubclass extends Comment {
         
         CommentSubclass(String value) {
@@ -133,6 +142,7 @@ public class SubclassTest extends XOMTestCase {
         
     } 
 
+    
     private class DocTypeSubclass extends DocType {
         
         DocTypeSubclass(String name) {
@@ -144,12 +154,14 @@ public class SubclassTest extends XOMTestCase {
         }        
     } 
 
+    
     public void testProcessingInstructionClassInCopy() {
         root.appendChild(new ProcessingInstructionSubclass("target", "value"));
         assertTrue(root.getChild(0) instanceof ProcessingInstructionSubclass);
         Element copy = (Element) root.copy();
         assertTrue(copy.getChild(0) instanceof ProcessingInstructionSubclass);
     }
+    
     
     private class ProcessingInstructionSubclass extends ProcessingInstruction {
         
@@ -163,12 +175,14 @@ public class SubclassTest extends XOMTestCase {
         
     } 
     
+    
     public void testProcessingInstructionClassInDocCopy() {
         doc.insertChild(new ProcessingInstructionSubclass("target", "value"), 0);
         assertTrue(doc.getChild(0) instanceof ProcessingInstructionSubclass);
         Document copy = (Document) doc.copy();
         assertTrue(copy.getChild(0) instanceof ProcessingInstructionSubclass);
     }
+    
     
     public void testCommentClassInDocCopy() {
         doc.insertChild(new CommentSubclass("target"), 0);
@@ -177,11 +191,13 @@ public class SubclassTest extends XOMTestCase {
         assertTrue(copy.getChild(0) instanceof CommentSubclass);
     }
     
+    
     public void testElementClassInDocCopy() {
         assertTrue(doc.getChild(0) instanceof ElementSubclass);
         Document copy = (Document) doc.copy();
         assertTrue(copy.getChild(0) instanceof ElementSubclass);
     }
+    
     
     public void testDocTypeClassInDocCopy() {
         doc.insertChild(new DocTypeSubclass("root"), 0);
@@ -190,4 +206,5 @@ public class SubclassTest extends XOMTestCase {
         assertTrue(copy.getChild(0) instanceof DocTypeSubclass);
     }
 
+    
 }
