@@ -28,7 +28,7 @@ package nu.xom.xslt;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0
  */
 public class XSLException extends Exception {
 

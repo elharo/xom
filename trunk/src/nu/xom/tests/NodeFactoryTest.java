@@ -46,7 +46,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b9
+ * @version 1.0
  *
  */
 public class NodeFactoryTest extends XOMTestCase {

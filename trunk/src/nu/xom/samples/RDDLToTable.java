@@ -86,7 +86,7 @@ import nu.xom.Serializer;
  *&lt;/table></code></pre>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0
  */
 
 public class RDDLToTable extends NodeFactory {

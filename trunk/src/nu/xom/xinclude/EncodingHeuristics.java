@@ -36,7 +36,7 @@ import java.io.InputStream;
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0b11
+ * @version 1.0
  */
 class EncodingHeuristics {
 

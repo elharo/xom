@@ -40,7 +40,7 @@ import nu.xom.Text;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0
  *
  */
 public class XOMTestCase extends TestCase {

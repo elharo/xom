@@ -64,7 +64,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b9
+ * @version 1.0
  *
  */
 public class XIncludeTest extends XOMTestCase {

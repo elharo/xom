@@ -48,8 +48,8 @@ import nu.xom.Serializer;
  *   Unicode normalization.
  * </p>
  * 
- *  @author Elliotte Rusty Harold
- *  @version 1.0d23
+ * @author Elliotte Rusty Harold
+ * @version 1.0
  *
  */
 public class NormalizingFactory extends NodeFactory {

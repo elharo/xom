@@ -42,7 +42,7 @@ import java.util.ArrayList;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b8
+ * @version 1.0
  *
  */
 public abstract class ParentNode extends Node {

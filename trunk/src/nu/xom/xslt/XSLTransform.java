@@ -111,7 +111,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0
  */
 public final class XSLTransform {
 

@@ -28,7 +28,7 @@ import nu.xom.ParsingException;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0
  *
  */
 public class ROT13File {

@@ -2,8 +2,8 @@ XOM is a library. By itself, it doesn't do much of anything. It exists
 only to be used by other programs. It requires Java 1.2 or later. 
 
 To install it you'll need to place the XOM JAR archive somewhere in your
-CLASSPATH. This archive is the file named something like xom-1.0.jar or
-xom-1.0b11.jar. (The version number may have changed if I've forgotten
+CLASSPATH. This archive is the file named something like xom-1.0.jar. 
+(The version number may have changed if I've forgotten
 to update this document.) You can either put it in your jre/lib/ext
 directory, add xom-1.0.jar to your CLASSPATH environment variable, or
 use the -classpath option when invoking javac and java.
@@ -28,11 +28,12 @@ space-limited environments. junit.jar is only used for testing, and is
 not needed for normal operation of XOM.
 
 If you want to build XOM from source, you'll need to have Apache Ant
-installed. See http://ant.apache.org/. Most of the targets build in Ant
-1.5 or later. However the betterdocs target requires Ant 1.6. Once
-that's installed, building should be as simple as typing "ant compile"
-or "ant jar" in the xom directory. Type "ant help" to see other possible
-options.
+installed. See http://ant.apache.org/. Once Ant is installed, building
+should be as simple as typing "ant compile" or "ant jar" in the xom
+directory. Type "ant help" to see other possible options. Most of the
+targets build in Ant 1.5 or later. However the betterdocs target
+requires Ant 1.6, and the test target only works in Ant 1.5. It does not
+work in Ant 1.6, though the testui target does.
 
 =======================================================================
 XOM is Copyright 2004 Elliotte Rusty Harold

@@ -29,7 +29,7 @@ import nu.xom.xslt.XSLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0
  *
  */
 public class XSLExceptionTest extends XOMTestCase {

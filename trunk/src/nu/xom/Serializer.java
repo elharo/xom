@@ -46,7 +46,7 @@ import java.util.Locale;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b8
+ * @version 1.0
  * 
  */
 public class Serializer {

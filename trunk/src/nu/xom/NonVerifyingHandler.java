@@ -24,7 +24,7 @@ package nu.xom;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0b8
+ * @version 1.0
  *
  */
 class NonVerifyingHandler extends XOMHandler {

@@ -34,7 +34,7 @@ import junit.framework.TestSuite;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0
  *
  */
 public class FastTests extends TestCase {

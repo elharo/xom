@@ -46,7 +46,7 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0
  *
  */
 public class PoliteSpider {

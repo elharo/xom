@@ -43,7 +43,7 @@ import com.ibm.icu.text.UTF16;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0
  *
  */
 public class EncodingTest extends XOMTestCase {

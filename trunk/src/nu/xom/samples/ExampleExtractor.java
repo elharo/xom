@@ -43,7 +43,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0
  *
  */
 public class ExampleExtractor {

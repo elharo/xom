@@ -41,7 +41,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0
  *
  */
 public class SourceCodeGenerator {

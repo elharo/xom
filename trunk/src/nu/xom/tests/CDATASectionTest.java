@@ -33,7 +33,7 @@ import nu.xom.*;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0
  *
  */
 public class CDATASectionTest extends XOMTestCase {

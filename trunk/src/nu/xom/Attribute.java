@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b6
+ * @version 1.0
  * 
  */
 public class Attribute extends Node {
@@ -745,7 +745,7 @@ public class Attribute extends Node {
      * </p>
      * 
      * @author Elliotte Rusty Harold
-     * @version 1.0a4
+     * @version 1.0
      *
      */
     public static final class Type {

@@ -43,7 +43,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0
  *
  */
 public class BudgetData {

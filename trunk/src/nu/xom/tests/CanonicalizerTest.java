@@ -47,7 +47,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b7
+ * @version 1.0
  *
  */
 public class CanonicalizerTest extends XOMTestCase {

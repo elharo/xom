@@ -32,7 +32,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0
  *
  */
 public class IllegalNameException extends IllegalDataException {
