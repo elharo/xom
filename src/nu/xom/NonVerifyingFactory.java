@@ -30,7 +30,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  *
  */
 class NonVerifyingFactory extends NodeFactory {
@@ -157,11 +157,6 @@ class NonVerifyingFactory extends NodeFactory {
     
     void addAttribute(Element element, Attribute attribute) {
         element.fastAddAttribute(attribute);
-    }
-  
-    
-    void insertChild(Element element, Node child, int position) {
-        element.fastInsertChild(child, position);
     }
 
     
