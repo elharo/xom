@@ -35,6 +35,8 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
+import nu.xom.ValidityException;
+
 import com.ibm.icu.text.UTF16;
 
 /**
@@ -96,9 +98,44 @@ public class EncodingTest extends XOMTestCase {
         
     }
     
+    
     protected void tearDown() {
       doc = null;
       System.gc();   
+    } 
+
+    
+/*    public void testCharacter80() throws ParsingException, IOException {
+        
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        root.appendChild("\u0080");
+        ByteArrayOutputStream out = new ByteArrayOutputStream(128);
+        Serializer serializer = new Serializer(out, "Big5");
+        serializer.write(doc);
+        serializer.flush();
+        out.flush();
+        out.close();
+        byte[] data = out.toByteArray();
+        InputStream in = new ByteArrayInputStream(data);
+        Document reparsed = (new Builder()).build(in);
+        in.close();
+        assertEquals("\u0080", reparsed.getValue());
+        
+    }*/
+
+    
+    public void testGeneric() throws ParsingException, IOException {
+        checkAll("Cp1252");
+    }
+    
+
+    public void testBig5() throws ParsingException, IOException {
+        checkAll("Big5");
+    } 
+
+    public void testEUCJP() throws ParsingException, IOException {
+        checkAll("EUC-JP");
     } 
 
     public void testUSASCII() throws ParsingException, IOException {
@@ -187,10 +224,6 @@ public class EncodingTest extends XOMTestCase {
         if (java14OrLater) checkAll("GB18030");
     } 
 
-    public void Big5() throws ParsingException, IOException {
-        checkAll("Big5");
-    } 
-
     // These encodings are not installed in all distributions by 
     // default. They are only found currently in IBM's Java 1.4.1 VM. 
     // They don't seem to be supported in the 1.5 alpha
@@ -248,6 +281,7 @@ public class EncodingTest extends XOMTestCase {
         data = out.toByteArray();
         InputStream in = new ByteArrayInputStream(data);
         Document reparsed = builder.build(in);
+        in.close();
         serializer = null;
         
         Element reparsedRoot = reparsed.getRootElement();
@@ -256,7 +290,7 @@ public class EncodingTest extends XOMTestCase {
             Element test = (Element) reparsedRoot.getChild(i); 
             String value = test.getValue();
             int expected 
-             = Integer.parseInt(test.getAttributeValue("c"));
+              = Integer.parseInt(test.getAttributeValue("c"));
             // workaround for EBCDIC bugs
             if (expected == 133 && encoding.equalsIgnoreCase("Cp037")) {
                 continue;
@@ -268,12 +302,12 @@ public class EncodingTest extends XOMTestCase {
             assertEquals("Expected 0x" 
               + Integer.toHexString(expected).toUpperCase()
               + " but was 0x" 
-              + Integer.toHexString(actual).toUpperCase(),
-              expected, actual);
+              + Integer.toHexString(actual).toUpperCase(), expected, actual);
         } 
         
         in = null;
             
     }
-
+    
+    
 }
