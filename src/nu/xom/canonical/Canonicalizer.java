@@ -23,11 +23,14 @@ package nu.xom.canonical;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import org.xml.sax.helpers.NamespaceSupport;
@@ -64,6 +67,7 @@ public class Canonicalizer {
     private boolean withComments;
     private boolean exclusive = false;
     private CanonicalXMLSerializer serializer;
+    private List inclusiveNamespacePrefixes = new ArrayList();
     
     private static Comparator comparator = new AttributeComparator();
     
@@ -494,11 +498,12 @@ public class Canonicalizer {
         }
 
 
-        private boolean needToDeclareNamespace(Element parent, String prefix, String uri) {
+        private boolean needToDeclareNamespace(
+          Element parent, String prefix, String uri) {
 
             boolean match = visiblyUtilized(parent, prefix, uri);
         
-            if (match) {
+            if (match || inclusiveNamespacePrefixes.contains(prefix)) {
                 return noOutputAncestorUsesPrefix(parent, prefix, uri);
             }
             
@@ -861,6 +866,48 @@ public class Canonicalizer {
      */
     public final void write(Document doc, String xpath, XPathContext context) 
       throws IOException {  
+        this.write(doc, xpath, context, null);
+    }  
+ 
+    
+    /**
+     * <p>
+     * Serializes a document subset selected by an XPath expression
+     * onto the output stream using the canonical XML algorithm.
+     * Only nodes selected by the XPath expression are output.
+     * Children are not output unless they are specifically selected.
+     * Selecting an element does not automatically select all the  
+     * element's children and attributes. Not selecting an element
+     * does not imply that its children and attributes will not be
+     * output. 
+     * </p>
+     * 
+     * @param doc the document to serialize
+     * @param xpath the XPath expression that identifies the nodes to
+     *     canonicalize
+     * @param context the namespace bindings used when resolving the 
+     *     XPath expression
+     * @param inclusiveNamespacePrefixes a whitespace separated list 
+     *     of namespace prefixes that will always be included in the 
+     *     output, even in exclusive canonicalization
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     * @throws XPathException if the XPath expression is syntactically
+     *     incorrect
+     */
+    public final void write(Document doc, String xpath, 
+      XPathContext context, String inclusiveNamespacePrefixes) 
+      throws IOException {  
+        
+        this.inclusiveNamespacePrefixes.clear();
+        if (this.exclusive && inclusiveNamespacePrefixes != null) {
+            StringTokenizer tokenizer = new StringTokenizer(
+              inclusiveNamespacePrefixes, " \t\r\n", false);
+            while (tokenizer.hasMoreTokens()) {
+                this.inclusiveNamespacePrefixes.add(tokenizer.nextToken());
+            }
+        }
         
         Nodes selected = doc.query(xpath, context);
         serializer.nodes = selected;

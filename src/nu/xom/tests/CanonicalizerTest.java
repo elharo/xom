@@ -1064,6 +1064,32 @@ public class CanonicalizerTest extends XOMTestCase {
     }
         
 
+    public void testExclusiveWithInclusiveNamespaces() throws IOException {
+     
+        Element pdu = new Element("n0:pdu", "http://a.example");
+        Element elem1 = new Element("n1:elem1", "http://b.example");
+        elem1.appendChild("content");
+        pdu.appendChild(elem1);
+        
+        String expected = "<n1:elem1 xmlns:n0=\"http://a.example\""
+          + " xmlns:n1=\"http://b.example\">content</n1:elem1>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        
+        XPathContext context = new XPathContext("n1", "http://b.example");
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc, "(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context, "n0");  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
+
+
     public void testExclusive22a() throws ParsingException, IOException {
      
         Builder builder = new Builder();
