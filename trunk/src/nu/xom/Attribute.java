@@ -40,7 +40,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b1
+ * @version 1.0b4
  * 
  */
 public class Attribute extends Node {
@@ -501,7 +501,7 @@ public class Attribute extends Node {
      * is not attached to an element.
      * </p>
      * 
-     * @return a copy of this <code>Attribute</code>
+     * @return a copy of this attribute
      * 
      */ 
     public Node copy() {
