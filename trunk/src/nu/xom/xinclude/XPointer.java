@@ -126,13 +126,13 @@ class XPointer {
         catch (StringIndexOutOfBoundsException ex) {
             XPointerSyntaxException ex2 = new XPointerSyntaxException(xptr 
               + " is not a syntactically correct XPointer"); 
-            ex2.setRootCause(ex);
+            ex2.initCause(ex);
             throw ex2; 
         }
         catch (NumberFormatException ex) {
             XPointerSyntaxException ex2 = new XPointerSyntaxException(xptr 
               + " is not a syntactically correct XPointer"); 
-            ex2.setRootCause(ex);
+            ex2.initCause(ex);
             throw ex2; 
         }
         

@@ -29,13 +29,13 @@ package nu.xom.xinclude;
  * for all checked exceptions that may be thrown as a result
  * of a violation of XInclude's rules.
  * </p>
+ * 
+ * replace getRootCause and setRootCause with initCause????
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d15
+ * @version 1.0d21
  */
 public class XIncludeException extends Exception {
-
-    private Throwable rootCause = null;
 
     /**
      * <p>
@@ -52,26 +52,28 @@ public class XIncludeException extends Exception {
      * <code>{@link java.lang.Throwable#getMessage}</code>
      * method of class <code>java.lang.Throwable</code>.
      *
-     * @param message the detail message.
+     * @param message the detail message
      */
     public XIncludeException(String message) {
         super(message);
     }
 
     /**
-     * When an <code>IOException</code>,  
-     * <code>MalformedURLException</code>, or other generic exception 
-     * is thrown while processing an XML document
-     * for XIncludes, it is customarily replaced
-     * by some form of <code>XIncludeException</code>.  
-     * This method allows you to store the original exception.
+     * Constructs an <code>XIncludeException</code> with the specified 
+     * detail message and initial cause. The error message string 
+     * <code>message</code> can later be retrieved by the 
+     * <code>{@link java.lang.Throwable#getMessage}</code>
+     * method of class <code>java.lang.Throwable</code>.
      *
-     * @param nestedException the underlying exception which 
-     *     caused the <code>XIncludeException</code> to be thrown
+     * @param message the detail message
+     * @param cause   the initial cause of the exception
      */
-    public void setRootCause(Throwable nestedException) {
-        this.rootCause = nestedException;     
+    public XIncludeException(String message, Throwable cause) {
+        super(message);
+        initCause(cause);
     }
+
+    private Throwable cause;
 
     /**
      * <p>
@@ -88,8 +90,42 @@ public class XIncludeException extends Exception {
      * @return the underlying exception which 
            caused the XIncludeException to be thrown
      */
-    public Throwable getRootCause() {
-        return this.rootCause;     
+    public Throwable getCause() {
+        return this.cause;  
+    }
+
+    // null is insufficient for detemrin unset cause.
+    // The cause may be set to null whicn may not then be reset.
+    private boolean causeSet = false;
+
+    /**
+     * <p>
+     * When an <code>IOException</code>,  
+     * <code>MalformedURLException</code>, or other generic exception 
+     * is thrown while processing an XML document
+     * for XIncludes, it is customarily replaced
+     * by some form of <code>XIncludeException</code>.  
+     * This method allows you to store the original exception.
+     * </p>
+     *
+     * @param cause the root cause of this exception
+     * 
+     * @return this <code>XMLException</code>
+     * 
+     * @throws IllegalArgumentException if the cause is this exception
+     *   (An exception cannot be its own cause.)
+     * @throws IllegalStateException if this method is called twice
+     */
+    public Throwable initCause(Throwable cause) {
+        if (causeSet) {
+            throw new IllegalStateException("Can't overwrite cause");
+        } 
+        else if (cause == this) {
+            throw new IllegalArgumentException("Self-causation not permitted"); 
+        }
+        else this.cause = cause;
+        causeSet = true;
+        return this;
     }
 
 }
