@@ -1,0 +1,8 @@
+<simple>
+<test xmlns:xinclude="http://www.w3.org/2001/XInclude">
+  This test makes sure that an unescaped right square bracket 
+  is recognized as an illegal IRI character, which has proved 
+  to be a problem in the past.
+  <xinclude:include href="\]^_`.txt" parse="text"/>
+</test>
+</simple>
