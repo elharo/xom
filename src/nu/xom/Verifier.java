@@ -182,9 +182,9 @@ final class Verifier {
 
     }
 
-    // This seems to be allowing URIs with framgent IDs.
+    // This seems to be allowing URIs with fragment IDs.
     // Make sure this is OK everywhere it's used. It's
-    // definitiely needed in somple palce; might need separate
+    // definitely needed in some places; might need separate
     // check URI and checkURIReference methods????
     /**
      * <p>
@@ -199,7 +199,7 @@ final class Verifier {
      */
     static void checkURI(String uri) {
         
-        // Are there any verifiable are loosened rules for framgent
+        // Are there any loosened rules for fragment
         // IDs? i.e. can they contain characters that the rest of the URI
         // can't such as [ and ]? e.g. in XPointer?
         // Same question for query strings?
