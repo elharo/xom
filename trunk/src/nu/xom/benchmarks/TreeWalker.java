@@ -46,7 +46,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b8
  *
  */
 class TreeWalker {
@@ -55,7 +55,7 @@ class TreeWalker {
      
         if (args.length <= 0) {
           System.out.println(
-            "Usage: java nu.xom.samples.TreeWalker URL"
+            "Usage: java nu.xom.benchmarks.TreeWalker URL"
           );
           return; 
         }
@@ -64,8 +64,8 @@ class TreeWalker {
         Builder parser = new Builder();
         try {
             // Separate out the basic I/O by parsing document,
-            // and then serializing into a byte array.
-            // This caches the and removes any dependence on the DTD.
+            // and then serializing into a byte array. This caches
+            // the document and removes any dependence on the DTD.
             Document doc = parser.build(args[0]);
             DocType type = doc.getDocType();
             if (type != null) {
