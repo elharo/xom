@@ -10,8 +10,32 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.DocType;
 import nu.xom.Document;
+import nu.xom.Element;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
+
+// Copyright 2004 Elliotte Rusty Harold
+// 
+// This library is free software; you can redistribute 
+// it and/or modify it under the terms of version 2.1 of 
+// the GNU Lesser General Public License as published by  
+// the Free Software Foundation.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+// GNU Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General 
+// Public License along with this library; if not, write to the 
+// Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+// Boston, MA  02111-1307  USA
+// 
+// You can contact Elliotte Rusty Harold by sending e-mail to
+// elharo@metalab.unc.edu. Please include the word "XOM" in the
+// subject line. The XOM home page is temporarily located at
+// http://www.cafeconleche.org/XOM/  but will eventually move
+// to http://www.xom.nu/
 
 /**
  * <p>
@@ -64,15 +88,20 @@ class XHTMLJavaDoc {
                 }
                 else {
                     try {
+                        // use a NodeFactory that turns i's and b's into CSS????
                         Document doc = builder.build(f);
                         DocType doctype = new DocType("html", 
                           "-//W3C//DTD XHTML 1.0 Frameset//EN",
                           "http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-frameset.dtd");
                         doc.setDocType(doctype);
                         Attribute en = new Attribute("lang", "en-US");
-                        Attribute xmlen = new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "en-US");
-                        doc.getRootElement().addAttribute(en);
-                        doc.getRootElement().addAttribute(xmlen);
+                        Attribute xmlen = new Attribute("xml:lang", 
+                          "http://www.w3.org/XML/1998/namespace", "en-US");
+                        Element root = doc.getRootElement();
+                        root.addAttribute(en);
+                        root.addAttribute(xmlen);
+                        Attribute version = root.getAttribute("version");
+                        if (version != null) root.removeAttribute(version);
                         Serializer serializer = new HTMLSerializer(new FileOutputStream(f));
                         serializer.write(doc);
                         serializer.flush();
@@ -85,7 +114,6 @@ class XHTMLJavaDoc {
                     }
                 }
             }
-            
         }
         else {
             System.err.println("Could not locate source directory: " + indir);
