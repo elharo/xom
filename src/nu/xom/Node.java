@@ -21,6 +21,7 @@
 
 package nu.xom;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import org.jaxen.XPath;
  *
  * <p>
  *  The generic superclass for all the contents 
- *  of an XML document. There are exactly seven kinds of 
+ *  of an XML document. There are exactly eight kinds of 
  *  nodes in XOM:
  * </p>
  * 
@@ -43,17 +44,18 @@ import org.jaxen.XPath;
  *   <li><code>Attribute</code></li>
  *   <li><code>ProcessingInstruction</code></li>
  *   <li><code>DocType</code></li>
+ *   <li><code>Namespace</code></li>
  * </ul>
  * 
  * <p>
  *   Every instance of <code>Node</code> is an  
- *   instance of one of these seven classes
+ *   instance of one of these eight classes
  *   (including, possibly, one of their subclasses).
  * </p>
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1d4
  *
  */
 public abstract class Node {
@@ -430,15 +432,11 @@ public abstract class Node {
                 xp.setNamespaceContext(namespaces.getJaxenContext());
             }
             List results = xp.selectNodes(this);
+            List namespaceList = new ArrayList();
             Iterator iterator = results.iterator();
             while (iterator.hasNext()) {
                 Object o = iterator.next();
-                if (o instanceof JaxenNavigator.XPathNamespaceNode) {
-                    throw new XPathException("XPath expression " 
-                      + xpath + "returned namespace nodes, which XOM "
-                      + "does not support.");
-                }
-                else if (o instanceof DocumentFragment) {
+                if (o instanceof DocumentFragment) {
                     iterator.remove();
                     // Want to allow // and //* and so forth
                     // but not / for rootless documents
@@ -447,13 +445,19 @@ public abstract class Node {
                           + "node of disconnected subtree");
                     }
                 }
-                else if (!(o instanceof Node)) {
+                else if (o instanceof Node) {
+                    Node n = (Node) o;
+                    if (n.isNamespace()) {
+                        namespaceList.add(n);
+                    }
+                }
+                else {
                     throw new XPathException("XPath expression " 
                       + xpath + " did not return a node-set.");
                 }
             }
             
-            return sortResults(results);
+            return sortResults(results, namespaceList);
         }
         catch (XPathException ex) {
             ex.setXPath(xpath);
@@ -478,12 +482,12 @@ public abstract class Node {
 
     // recursively descend through document; in document
     // order, and add results as they are found
-    private Nodes sortResults(List in) {
+    private Nodes sortResults(List in, List namespaces) {
 
         Node root = this.getRoot();
         if (in.size() > 1 && root instanceof ParentNode) {
             Nodes out = new Nodes();
-            process(in, out, (ParentNode) root);
+            process(in, namespaces, out, (ParentNode) root);
             return out;
         }
         else {
@@ -492,7 +496,7 @@ public abstract class Node {
     }
 
 
-    private static void process(List in, Nodes out, ParentNode parent) {
+    private static void process(List in, List namespaces, Nodes out, ParentNode parent) {
 
         if (in.isEmpty()) return;
         if (in.contains(parent)) {
@@ -506,6 +510,22 @@ public abstract class Node {
             Node child = parent.getChild(i);
             if (child.isElement()) {
                 Element element = (Element) child;
+                // attach namespaces
+                if (!namespaces.isEmpty()) {
+                    Iterator iterator = in.iterator();
+                    while (iterator.hasNext()) {
+                        Object o = iterator.next();
+                        if (o instanceof Namespace) {
+                            Namespace n = (Namespace) o;
+                            if (element == n.getParent()) {
+                                out.append(n);
+                                iterator.remove();
+                            }
+                        }
+                    }
+                }
+                
+                
                 for (int a = 0; a < element.getAttributeCount(); a++) {
                     Attribute att = element.getAttribute(a);
                     if (in.contains(att)) {
@@ -514,7 +534,17 @@ public abstract class Node {
                         if (in.isEmpty()) return;
                     }
                 }
-                process(in, out, element);
+                
+                // attach attributes
+                for (int a = 0; a < element.getAttributeCount(); a++) {
+                    Attribute att = element.getAttribute(a);
+                    if (in.contains(att)) {
+                        out.append(att);
+                        in.remove(att);
+                        if (in.isEmpty()) return;
+                    }
+                }
+                process(in, namespaces, out, element);
             }
             else {
                 if (in.contains(child)) {
@@ -579,6 +609,10 @@ public abstract class Node {
     }
             
     boolean isDocType() {
+        return false;   
+    }
+  
+    boolean isNamespace() {
         return false;   
     }
   
