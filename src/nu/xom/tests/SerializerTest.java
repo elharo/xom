@@ -51,7 +51,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -1949,7 +1949,6 @@ public class SerializerTest extends XOMTestCase {
         serializer.flush();
         byte[] data = out.toByteArray();
         String result = new String(data, "UTF-8");
-        System.err.println(result);
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
                 "<a>\r\n    <b> </b>\r\n</a>\r\n", result);
 
