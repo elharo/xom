@@ -188,8 +188,25 @@ public abstract class ParentNode extends Node {
      *     the children of this node
      */
     public int indexOf(Node child) {
+        
         if (children == null) return -1;
-        return children.indexOf(child);  
+        
+        // There might be an optimization here. We tend to iterate
+        // through in order. We could store the last index returned and
+        // check that index and the one immediately after it first; 
+        // before searching the list from the beginning. However, in
+        // tests the effect ranged from unobservable to slightly slower
+        // so I'm ruling this out for now. 
+        /* if (lastPosition >= 0 && lastPosition < children.size()-1) {
+            lastPosition++;
+            if (child == children.get(lastPosition)) {
+              return lastPosition;
+            }
+        }
+        lastPosition = children.indexOf(child);
+        return lastPosition; */
+        return children.indexOf(child);
+        
     }
 
     
