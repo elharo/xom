@@ -235,6 +235,7 @@ public class CommentTest extends XOMTestCase {
 
     }
 
+    
     public void testGetDocument() {
 
         Comment c1 = new Comment("data");
@@ -247,10 +248,38 @@ public class CommentTest extends XOMTestCase {
 
     }
 
+    
     public void testAllowReservedCharactersInData() {
         Comment comment = new Comment("<test>&amp;&greater;");
         String xml = comment.toXML();
         assertEquals("<!--<test>&amp;&greater;-->", xml);  
     }
+
+
+    public void testForbidIllegalCharactersInComments() {
+        
+        try {
+            new Comment(" \u0001 ");
+            fail("Allowed C0 control in comment");
+        }
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
+          
+    }
+
+
+    public void testForbidUnmatchedSurrogatesInComments() {
+        
+        try {
+            new Comment(" \uD800 ");
+            fail("Allowed unmatched high surrogate in comment");
+        }
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
+          
+    }
+
 
 }
