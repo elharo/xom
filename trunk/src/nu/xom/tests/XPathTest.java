@@ -49,7 +49,7 @@ import nu.xom.XPathException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1d7
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -71,6 +71,14 @@ public class XPathTest extends XOMTestCase {
     
     protected void tearDown() {
         System.setErr(systemErr);
+    }
+    
+    public void testAllNodesQuery() {
+        
+        Document doc = new Document(new Element("doc"));
+        Nodes subset = doc.query("//. | /");
+        assertEquals(2, subset.size());
+        
     }
     
     
