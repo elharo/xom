@@ -862,6 +862,30 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testAttributeHasNoSiblings() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child1");
+        Element child2 = new Element("child2");
+        Element child3 = new Element("child3");
+        parent.appendChild(child1);
+        parent.appendChild(child2);
+        parent.appendChild(child3);
+        Attribute a1 = new Attribute("a1", "value");
+        Attribute a2 = new Attribute("a2", "value");
+        Attribute a3 = new Attribute("a3", "value");
+        child2.addAttribute(a1);
+        child2.addAttribute(a2);
+        child2.addAttribute(a3);
+        
+        Nodes result = a2.query("preceding-sibling::*");
+        assertEquals(0, result.size());   
+        result = a2.query("following-sibling::*");
+        assertEquals(0, result.size());    
+        
+    }
+    
+
     public void testIDFunction() {
         
         Element parent = new Element("Test");
