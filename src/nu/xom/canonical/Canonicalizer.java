@@ -534,8 +534,12 @@ public class Canonicalizer {
         private boolean noOutputAncestorUsesPrefix(Element original, String prefix, String uri) {
 
             ParentNode parent = original.getParent();
+            if (parent instanceof Document && "".equals(uri)) {
+                return false;
+            }
+            
             while (parent != null && !(parent instanceof Document)) {
-                if (nodes.contains(parent)) {
+                if (nodes == null || nodes.contains(parent)) {
                     Element element = (Element) parent;
                     String pfx = element.getNamespacePrefix();
                     if (pfx.equals(prefix)) {
