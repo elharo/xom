@@ -29,7 +29,9 @@ import nu.xom.ParsingException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
+import nu.xom.Comment;
 import nu.xom.CycleException;
+import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.IllegalAddException;
@@ -405,4 +407,123 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals("data data", text.getValue());      
     }
 
+    private static class TripleElementFilter extends NodeFactory {
+     
+        public Nodes finishMakingElement(Element element) {
+            Nodes result = new Nodes(element);   
+            result.append(element.copy());
+            result.append(element.copy());
+            return result;
+        }   
+        
+    }
+    
+    public void testTriple() 
+      throws IOException, ParsingException {  
+        String data = "<a><b><c/></b></a>";
+        Builder builder = new Builder(new TripleElementFilter());
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        assertEquals(3, root.getChildCount());
+        assertEquals("", root.getValue());
+        Element b = (Element) root.getChild(0);
+        assertEquals("b", b.getLocalName());
+        assertEquals("<a><b><c /><c /><c /></b><b><c /><c /><c /></b><b><c /><c /><c /></b></a>", root.toXML());      
+    }
+
+    private static class UncommentFilter extends NodeFactory {
+     
+        public Nodes makeComment(String data) {
+            Nodes result = new Nodes(new Text(data));   
+            return result;
+        }   
+        
+    }
+    
+    public void testUncomment() 
+      throws ParsingException, IOException {
+        String data = "<!-- test --><a></a>";
+        Builder builder = new Builder(new UncommentFilter());
+        try {
+            builder.build(data, "http://www.example.org/");
+            fail("built Text into prolog");
+        }
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());   
+        }            
+    }
+    
+    private static class DocumentFilter extends NodeFactory {
+     
+        public Nodes makeComment(String data) {
+            Element root = new Element("root");
+            Nodes result = new Nodes(new Document(root));   
+            return result;
+        }   
+        
+    }
+
+    public void testCantAddDocument() 
+      throws ParsingException, IOException {
+        String data = "<a><!-- test --></a>";
+        Builder builder = new Builder(new DocumentFilter());
+        try {
+            builder.build(data, "http://www.example.org/");
+            fail("built document into document");
+        }
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());   
+        }            
+    }
+
+    public void testCantAddTwoDoctypes() 
+      throws ParsingException, IOException {
+        String data = "<!DOCTYPE a><a></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes makeDocType(String name, String publicID, String systemID) {
+                Nodes result = new Nodes();
+                result.append(new DocType(name, publicID, systemID));
+                result.append(new Comment("sajdha"));
+                result.append(new DocType(name, publicID, systemID));
+                return result;
+            }
+            
+        });
+        try {
+            builder.build(data, "http://www.example.org/");
+            fail("built two doctypes");
+        }
+        catch (IllegalAddException success) {
+            assertNotNull(success.getMessage());   
+        }            
+    }
+    
+    public void testChangeAttributesToElements() 
+      throws ParsingException, IOException {
+        String data = "<a name=\"test\" value=\"data\"/>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes makeAttribute(String name, String URI, 
+              String value, Attribute.Type type) {
+                Nodes result = new Nodes();
+                Element element = new Element(name, URI);
+                element.appendChild(value);
+                result.append(element);
+                return result;
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        assertEquals(2, root.getChildCount());
+        Element name = (Element) root.getChild(0);
+        Element value = (Element) root.getChild(1);
+        assertEquals("test", name.getValue());         
+        assertEquals("data", value.getValue());         
+        assertEquals("name", name.getLocalName());         
+        assertEquals("value", value.getQualifiedName());         
+    }
+    
+ 
 }
