@@ -46,7 +46,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0b7
  *
  */
 public class DocumentTest extends XOMTestCase {
@@ -61,7 +61,6 @@ public class DocumentTest extends XOMTestCase {
     protected void setUp() {
         root = new Element("root");
         doc = new Document(root);
-
     }
     
     
@@ -101,7 +100,6 @@ public class DocumentTest extends XOMTestCase {
         assertEquals(doc.getDocType(), type2);
         assertNull(type1.getParent());
         assertEquals(type2, doc.getChild(0));
-        
         
     }
 
@@ -574,12 +572,15 @@ public class DocumentTest extends XOMTestCase {
 
     
     public void testToXML() throws ParsingException, IOException {
+        
         Builder builder = new Builder();
-        File f = new File("data/test.xml");   
+        File f = new File("data");
+        f = new File(f, "test.xml");   
         Document input = builder.build(f);
         String s = input.toXML();
         Document output = builder.build(s, f.toURL().toExternalForm());
         assertEquals(input, output);
+        
     }
 
     

@@ -52,7 +52,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0b7
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -204,6 +204,7 @@ public class ElementTest extends XOMTestCase {
 
     
     public void testToString() {
+        
         String name = "sakjdhjhd";
         String uri = "http://www.something.com/";
         Element e = new Element(name, uri);
@@ -211,11 +212,13 @@ public class ElementTest extends XOMTestCase {
         String s = e.toString();
         assertTrue(s.startsWith("[nu.xom.Element: "));
         assertTrue(s.endsWith("]"));
-        assertTrue(s.indexOf(name) != -1);       
+        assertTrue(s.indexOf(name) != -1); 
+        
     }
 
     
     public void testToXML() {
+        
         String name = "sakjdhjhd";
         String uri = "http://www.something.com/";
         Element e = new Element(name, uri);
@@ -224,14 +227,16 @@ public class ElementTest extends XOMTestCase {
         assertTrue(s.endsWith("/>"));
         assertTrue(s.startsWith("<" + name));
         assertTrue(s.indexOf(uri) != -1);
-        assertTrue(s.indexOf("xmlns=") != -1);       
+        assertTrue(s.indexOf("xmlns=") != -1);    
+        
     }
 
     
     public void testToXML2() throws ParsingException, IOException {
         
         Builder builder = new Builder();
-        File f = new File("data/soapresponse.xml");   
+        File f = new File("data");
+        f = new File(f, "soapresponse.xml");   
         Document doc = builder.build(f); 
         Element root = doc.getRootElement();
         String  form = root.toXML();
