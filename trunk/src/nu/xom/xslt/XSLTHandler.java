@@ -44,12 +44,21 @@ import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 
 /**
+ * <p> 
+ * As currently designed this class is non-public and never
+ * reused. A new XSLTHanlder is used for each call to transform().
+ * Therefore we do not actually need to reset. This is important
+ * because some XSLT processors call startDocument() and 
+ * endDocument() and some don't, especially when the output
+ * of a transform is a document frgament.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d21
  *
  */
 class XSLTHandler 
- implements ContentHandler, LexicalHandler {
+  implements ContentHandler, LexicalHandler {
 
     private NodeList    result;
     private Stack       parents;
@@ -61,7 +70,10 @@ class XSLTHandler
             throw new NullPointerException("Factory cannot be null");
         }
         this.factory = factory; 
-        reset();
+        result = new NodeList();
+        parents = new Stack();
+        buffer = new StringBuffer();
+        prefixes = new HashMap();
     }   
     
     NodeList getResult() {
@@ -70,27 +82,8 @@ class XSLTHandler
     }
     
     public void setDocumentLocator(Locator locator) {}
-
-    // As currently designed this class is non-public and never
-    // reused. A new XSLTHanlder is used for each call to transform().
-    // Therefore we do not actually need to reset. This is important
-    // because some XSLT processors call startDocument() and 
-    // endDocument() and some don't, especially when the output
-    // of a transform is a document frgament.
-    public void startDocument() {
-        // reset();
-    }
-  
-    public void reset() {
-        result = new NodeList();
-        parents = new Stack();
-        buffer = new StringBuffer();
-        prefixes = new HashMap();
-    }
-  
-    public void endDocument() {
-        // parents.pop();
-    }
+    public void startDocument() {}
+    public void endDocument() {}
   
     public void startElement(String namespaceURI, String localName, 
      String qualifiedName, Attributes attributes) {
@@ -199,14 +192,14 @@ class XSLTHandler
     public void processingInstruction(String target, String data) 
       throws SAXException {
 
-        flushText();
-        
         // See http://saxon.sourceforge.net/saxon6.5.2/extensibility.html#Writing-output-filters
         // to understand why we need to work around Saxon here
         if ("saxon:warning".equals(target)) {
             throw new SAXException("continue");   
         }
-        
+
+        flushText();
+                
         ProcessingInstruction instruction 
          = factory.makeProcessingInstruction(target, data);
         if (parents.isEmpty()) {
