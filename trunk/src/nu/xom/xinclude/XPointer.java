@@ -48,13 +48,15 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0b5
  *
  */
 class XPointer {
     
+    
     // prevent instantiation
     private XPointer() {}
+    
     
     public static Nodes query(Document doc, String xptr) 
       throws XPointerSyntaxException, XPointerResourceException {    
@@ -93,11 +95,15 @@ class XPointer {
                         new Element(currentData);
                     }
                     catch (IllegalNameException inex) {
-                        // not a bare name 
-                        throw new XPointerSyntaxException(
-                          "bad element scheme data " + elementSchemeData, 
-                          inex
-                        );  
+                        // not a bare name; and doesn't contain a /
+                        // This doesn't adhere to the element scheme. 
+                        // Therefore, according to the XPointer element
+                        // scheme spec, " if scheme data in a pointer 
+                        // part with the element() scheme does not 
+                        // conform to the syntax defined in this 
+                        // section the pointer part does not identify 
+                        // a subresource."
+                        continue; 
                     }  
                     Element identified = findByID(
                       doc.getRootElement(), currentData); 
@@ -115,8 +121,8 @@ class XPointer {
                         new Element(id);   
                     }
                     catch (XMLException inex) {
-                        throw new XPointerSyntaxException(
-                          id + " is not a non-colonized name", inex);   
+                        // doesn't adhere to the element scheme spec;
+                        continue;
                     }
                     current = findByID(doc.getRootElement(), id);                         
                     keys = split(currentData.substring(
@@ -152,6 +158,7 @@ class XPointer {
               + doc.getBaseURI()
             );
         }
+        
     }
     
     

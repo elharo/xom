@@ -135,6 +135,7 @@ public class XIncludeTest extends XOMTestCase {
         
     }    
  
+    
     public void testXMLBaseOnIncludeElementUsedToResolveHref() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -1406,6 +1407,25 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
+    // What if xpointer attribute is required because there's no href
+    // but the xpointer doesn't identify a subresource????
+    
+    public void testBadElementSchemeDataIsNotAnError() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/badelementschemedata.xml");
+        Document doc = builder.build(input);
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File("data/xinclude/output/badelementschemedata.xml")
+        );
+        // dumpResult(input, result); 
+        
+        assertEquals(expectedResult, result);
+        
+    }
+
+    
     public void testXPointerSyntaxErrorMissingFinalParenthesis() 
       throws ParsingException, IOException {
       
@@ -1434,7 +1454,6 @@ public class XIncludeTest extends XOMTestCase {
         Document expectedResult = builder.build(
           new File("data/xinclude/output/onlyxpointer.xml")
         );
-        // dumpResult(input, result); 
         
         assertEquals(expectedResult, result);
         
@@ -1742,6 +1761,8 @@ public class XIncludeTest extends XOMTestCase {
                 
     }
 */
+    
+    
     public void testEBCDIC() 
       throws ParsingException, IOException, XIncludeException {
       
