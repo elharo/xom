@@ -593,5 +593,39 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals("urn:foo", c.getNamespaceURI("foo"));
         assertEquals("urn:foo", d.getNamespaceURI("foo"));
     }
+    
+    public void testNumbersAllowedInSchemes() {
+        String namespace = "u0123456789:schemespecificdata";
+        Element e = new Element("test", namespace);
+        assertEquals(namespace, e.getNamespaceURI());
+    }
+
+    public void testPunctuationMarksAllowedInSchemes() {
+        String namespace = "u+-.:schemespecificdata";
+        Element e = new Element("test", namespace);
+        assertEquals(namespace, e.getNamespaceURI());
+    }
+
+    public void testPunctuationMarksCantStartSchemes() {
+        String namespace = "+:schemespecificdata";
+        try {
+            new Element("test", namespace);
+            fail("Allowed scheme name to start with +");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
+
+    public void testNumbersCantStartSchemes() {
+        String namespace = "8uri:schemespecificdata";
+        try {
+            new Element("test", namespace);
+            fail("Allowed scheme name to start with digit");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+    }
 
 }
