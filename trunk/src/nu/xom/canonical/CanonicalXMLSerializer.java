@@ -435,10 +435,16 @@ public class CanonicalXMLSerializer extends Serializer {
      * 
      * @param indent the number of spaces to indent each 
      *     successive level in the hierarchy
+     * @throws IllegalArgumentException if <code>indent</code> is anything 
+     *     other than 0
+     * 
      */
     public final void setIndent(int indent) {
-       // throw an exception instead????
-       // do nothing because canonical XML does not adjust white space
+        if (indent != 0) {
+            throw new IllegalArgumentException(
+              "Canonical XML does not allow indenting."
+            );
+        }
     }
 
     /**
@@ -462,9 +468,15 @@ public class CanonicalXMLSerializer extends Serializer {
      * </p>
      * 
      * @param lineSeparator the character(s) used to break lines
+     * @throws IllegalArgumentException if <code>lineSeparator</code>
+     *     is not \n
      */
     public final void setLineSeparator(String lineSeparator) {
-       // throw an exception instead????
+        if (!("\n".equals(lineSeparator))) {
+            throw new IllegalArgumentException(
+              "Canonical XML requires that the line separator be \n."
+            );
+        }
         super.setLineSeparator("\n");  
     }
 
@@ -488,10 +500,15 @@ public class CanonicalXMLSerializer extends Serializer {
      * </p>
      * 
      * @param maxLength the suggested maximum line length
+     * @throws IllegalArgumentException if <code>maxLength</code>
+     *     greater than 0
      */
     public final void setMaxLength(int maxLength) {
-       // do nothing because canonical XML does not adjust white space
-       // throw an exception instead????
+        if (maxLength > 0) {
+            throw new IllegalArgumentException(
+              "Canonical XML does not allow line wrapping."
+            );
+        }
     }
 
     /**
@@ -519,11 +536,15 @@ public class CanonicalXMLSerializer extends Serializer {
      * 
      * @param preserve argument is ignored. It is present only for
      *     compatibility with the superclass 
+     * @throws IllegalArgumentException if <code>preserve</code>
+     *     is true
      */
     public final void setPreserveBaseURI(boolean preserve) {
-       // do nothing because canonical XML 
-       // does not insert extra attributes
-       // throw an exception instead????
+        if (preserve) {
+            throw new IllegalArgumentException(
+              "Canonical XML does not preserve the base URI."
+            );
+        }
     }
 
     /**
@@ -542,6 +563,8 @@ public class CanonicalXMLSerializer extends Serializer {
      * 
      * @param normalize true if normalization is performed; 
      *     false if it isn't
+     * @throws IllegalArgumentException if <code>normalize</code>
+     *     is true
      */
     public final void setUnicodeNormalizationFormC(boolean normalize) {
         if (normalize) {
