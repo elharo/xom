@@ -49,12 +49,7 @@ import java.util.List;
  */
 public final class Nodes {
     
-    // does this need equals, toString and hashCode????
-    
     private List nodes;
-    
-    // would it be quicker to lazy allocate nodes only
-    // when the first element is appended????
     
     /**
      * <p>
