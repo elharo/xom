@@ -319,7 +319,7 @@ class XOMHandler
     public void processingInstruction(String target, String data) {
         
         Nodes result = factory.makeProcessingInstruction(target, data);
-        if (inDTD && inExternalSubset) return;
+        if (inExternalSubset) return;
 
         if (result.size() > 0 && !inDTD) flushText();
         
@@ -334,7 +334,7 @@ class XOMHandler
                     parent.appendChild(node);
                 }
             }
-            else if (!inExternalSubset) {
+            else {
                 if (node.isProcessingInstruction() || node.isComment()) {
                     internalDTDSubset.append(node.toXML());            
                     internalDTDSubset.append('\n');            
@@ -414,7 +414,7 @@ class XOMHandler
     public void comment(char[] text, int start, int length) {
         
         Nodes result = factory.makeComment(new String(text, start, length));
-        if (inDTD && inExternalSubset) return;
+        if (inExternalSubset) return;
 
         if (result.size() > 0 && !inDTD) flushText();
         
@@ -429,7 +429,7 @@ class XOMHandler
                     parent.appendChild(node);
                 }
             }
-            else if (!inExternalSubset) {
+            else {
                 if (node.isComment() || node.isProcessingInstruction()) {
                     internalDTDSubset.append(node.toXML());            
                     internalDTDSubset.append('\n');            
