@@ -649,7 +649,7 @@ public class BuilderTest extends XOMTestCase {
     // and it should be fixed in Xerces 2.6.
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
-        builder.build("http://www.cafeconleche.org/redirecttest.xml");
+        builder.build("http://www.ibiblio.org/xml/redirecttest.xml");
     } 
 
     public void testDontGetNodeFactory() {
