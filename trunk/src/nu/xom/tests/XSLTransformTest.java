@@ -236,4 +236,24 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
 
+    // Make sure that method="text" doesn't affect what we get
+    // since this is not a serialized transform
+    public void testTextMethod() 
+      throws ParseException, IOException, XSLException {
+        
+        File doc = new File("data/xslt/input/8-14.xml");
+        File stylesheet = new File("data/xslt/input/textmethod.xsl");
+        Builder builder = new Builder();
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Document input = builder.build(doc);
+        NodeList output = xform.transform(input);
+        assertEquals(6, output.size());
+        assertEquals("12345", output.get(0).getValue());
+        assertEquals("67890", output.get(1).getValue());
+        assertEquals("", output.get(2).getValue());
+        assertEquals("0987654321", output.get(3).getValue());
+        assertTrue(output.get(4) instanceof Comment);
+        assertTrue(output.get(5) instanceof ProcessingInstruction);
+    }
+
 }
