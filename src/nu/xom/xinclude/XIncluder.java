@@ -420,11 +420,12 @@ public class XIncluder {
                         replacements = new Nodes(); 
                         for (int i = 0; i < originals.size(); i++) {
                             Node original = originals.get(i);
-                            if (original instanceof Element) {
-                                if (contains((Element) original, element)) {
-                                    throw new InclusionLoopException("Element tried to include itself"); 
-                                }  
-                            }
+                            // current implementation of XPointer never returns non-elements
+                            if (contains((Element) original, element)) {
+                                throw new InclusionLoopException(
+                                  "Element tried to include itself"
+                                ); 
+                            }  
                             Node copy = original.copy();
                             replacements.append(copy);        
                         }  
