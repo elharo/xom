@@ -537,6 +537,38 @@ public class BuilderTest extends XOMTestCase {
         }      
         
     }
+
+    public void testValidateNamespaceMalformedInvalidDocumentWithCrimson() 
+      throws IOException {
+        StringReader reader = new StringReader("<!DOCTYPE root [" +
+                "<!ELEMENT root (a)>\n" +
+                "<!ELEMENT a (#PCDATA)> \n" +
+                "]>\n" +
+                "<root><b:b /></root>");
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        }
+        catch (SAXException ex) {
+           // No Crimson in classpath; therefore can't test it
+           return;
+        }
+        Builder builder = new Builder(crimson);
+        try {
+            builder.build(reader);   
+            fail("Crimson allowed namespace malformed doc");
+        }
+        catch (ValidityException ex) {
+            fail("Crimson should have thrown ParsingException instead");
+        }      
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }      
+        
+    }
+    
+    
     
     public void testInvalidDocFromReaderWithBase()
       throws IOException, ParsingException {
@@ -901,5 +933,35 @@ public class BuilderTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
     }        
+
+    public void testBuildMalformedDocumentWithCrimson() 
+      throws IOException {
+        Reader reader = new StringReader("<!DOCTYPE root [" +
+                "<!ELEMENT root (a, b)>" +
+                "<!ELEMENT a (EMPTY)>" +
+                "<!ELEMENT b (PCDATA)>" +
+                "]><root><a/><b></b>");
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        Builder builder = new Builder(crimson);
+        try {
+            builder.build(reader);   
+            fail("Allowed malformed doc");
+        }
+        catch (ValidityException ex) {
+            fail("Crimson threw validity error instead of well-formedness error");
+        }
+        catch (ParsingException ex) {
+            assertNotNull(ex.getMessage());
+        }
+    }        
+    
+    
     
 }
