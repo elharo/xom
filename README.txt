@@ -1,41 +1,38 @@
 XOM is a library. By itself, it doesn't do much of anything. It exists
-only to be used by other programs.
+only to be used by other programs. It requires Java 1.2 or later. 
 
 To install it you'll need to place the XOM JAR archive somewhere in your
-CLASSPATH. This is the file named something lile xom-1.0.jar or
+CLASSPATH. This archive is the file named something like xom-1.0.jar or
 xom-1.0b11.jar. (The version number may have changed if I've forgotten
-to update this document.)
+to update this document.) You can either put it in your jre/lib/ext
+directory, add xom-1.0.jar to your CLASSPATH environment variable, or
+use the -classpath option when invoking javac and java.
 
-You can either put it in your jre/lib/ext directory, add xom-1.0.jar to
-your CLASSPATH environment variable, or use the -classpath option when
-invoking javac and java. For example,
+To check your download you can run one of the sample programs found in
+the xom-samples.jar file. For instance, nu.xom.samples.PrettyPrinter
+class formats an XML document by inserting and removing white space
+around element boundaries. In Java 1.4 and later you can run it from the
+command line like this:
 
-java -classpath .:xom-1.0.jar YourClassName
+$ java -classpath xom-samples.jar:xom-1.0.jar nu.xom.samples.PrettyPrinter filename.xml
 
-I also recommend installing XOM's supporting libraries, which you'll
-find in the lib directory. These include xalan.jar, xercesImpl.jar,
-normalizer.jar, and xmlParserAPIs.jar. In Java 1.4 and later, you can
-skip xercesImpl.jar and xmlParserAPIs.jar. However, without them XOM
-will rely on Java 1.4's built-in Crimson parser, which is quite a bit
-buggier and slower than Xerces. Java 1.5 bundles Xerces. However, the
-version included with XOM has fixed a few bugs. xalan.jar is optional in
-Java 1.4 and later, though again the version bundled with XOM is quite a
-bit less buggy than the one bundled with the JDK. In Java 1.3 and
-earlier, all these jar files are required. (You could leave out
-xalan.jar if you don't use any of the classes in nu.xom.xslt.)
+Java 1.3 and earlier do not have a built-in XML parser so in these environments you'll also need to install XOM's supporting libraries. These include xalan.jar, xercesImpl.jar, normalizer.jar, and xmlParserAPIs.jar, and are found in the lib directory. The versions shipped with XOM are quite a bit faster and less buggy than the ones bundled with the JDK, so you may well want to use them even in Java 1.4 and later. For example,
 
-normalizer.jar is needed in all versions of Java. However, it's only
-actually used by the setUnicodeNormalizationFormC() method in Serializer. 
-If you don't call this method, you can omit this archive in 
-space-limited environments.
+$ java -classpath xom-samples.jar:xom-1.0.jar:lib/xmlParserAPIs.jar:lib/xercesImpl.jar:lib/normalizer.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml
 
-junit.jar is only used for testing, and is not needed for normal
-operation of XOM.
+You could leave out xalan.jar if you don't use any of the classes in
+nu.xom.xslt. normalizer.jar is needed in all versions of Java. However,
+it's only actually used by the setUnicodeNormalizationFormC() method in
+Serializer. If you don't call this method, you can omit this archive in
+space-limited environments. junit.jar is only used for testing, and is
+not needed for normal operation of XOM.
 
 If you want to build XOM from source, you'll need to have Apache Ant
-installed. See http://ant.apache.org/. Once that's installed, building
-should be as simple as typing "ant compile" or "ant jar" in the xom
-directory. Type "ant help" to see other possible options. 
+installed. See http://ant.apache.org/. Most of the targets build in Ant
+1.5 or later. However the betterdocs target requires Ant 1.6. Once
+that's installed, building should be as simple as typing "ant compile"
+or "ant jar" in the xom directory. Type "ant help" to see other possible
+options.
 
 =======================================================================
 XOM is Copyright 2004 Elliotte Rusty Harold
