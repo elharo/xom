@@ -46,7 +46,7 @@ import java.io.StringReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -561,6 +561,7 @@ public class SerializerTest extends XOMTestCase {
         }
         catch (IllegalArgumentException ex) {
             // success
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -569,6 +570,7 @@ public class SerializerTest extends XOMTestCase {
         }
         catch (IllegalArgumentException ex) {
             // success
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -577,6 +579,7 @@ public class SerializerTest extends XOMTestCase {
         }
         catch (IllegalArgumentException ex) {
             // success
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -585,6 +588,7 @@ public class SerializerTest extends XOMTestCase {
         }
         catch (IllegalArgumentException ex) {
             // success
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -593,6 +597,7 @@ public class SerializerTest extends XOMTestCase {
         }
         catch (IllegalArgumentException ex) {
             // success
+            assertNotNull(ex.getMessage());
         }
         
         try {
@@ -601,6 +606,7 @@ public class SerializerTest extends XOMTestCase {
         }
         catch (IllegalArgumentException ex) {
             // success
+            assertNotNull(ex.getMessage());
         }
         
     }
@@ -1014,6 +1020,7 @@ public class SerializerTest extends XOMTestCase {
         }
         catch (IllegalArgumentException ex) {
            // success    
+            assertNotNull(ex.getMessage());
         }
         
     }
