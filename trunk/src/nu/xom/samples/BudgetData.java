@@ -45,7 +45,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d21
  *
  */
 public class BudgetData {
@@ -65,7 +65,7 @@ public class BudgetData {
   } 
 
   // the field names in order
-  public final static String[] keys = {
+  final static String[] keys = {
     "AgencyCode",
     "AgencyName",
     "BureauCode",
