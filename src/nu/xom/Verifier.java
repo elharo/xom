@@ -856,6 +856,7 @@ final class Verifier {
         private int position = 0;
         
         synchronized boolean contains(String s) {
+            
             for (int i = 0; i < LOAD; i++) {
                 // Here I'm assuming the namespace URIs are interned.
                 // This is commonly but not always true. This won't
@@ -864,7 +865,12 @@ final class Verifier {
                 // interned but slower if they have.
                 if (s == cache[i]) return true;
             }
+            // We missed the cache so let's look more carefully
+            for (int i = 0; i < LOAD; i++) {
+                if (s.equals(cache[i])) return true;
+            }
             return false;
+            
         }
 
         synchronized void put(String s) {
@@ -890,7 +896,9 @@ final class Verifier {
      */
     static void checkAbsoluteURIReference(String uri) {
         
-        if (cache.contains(uri)) return;
+        if (cache.contains(uri)) {
+            return;
+        }
         URIUtil.ParsedURI parsed = new URIUtil.ParsedURI(uri);
         try {
             if (parsed.scheme == null) {
