@@ -1695,7 +1695,7 @@ public class SerializerTest extends XOMTestCase {
        
     }
     
-    // just so we can test a protected writeChild() method
+    // just so we can test protected methods
     private static class ExposingSerializer extends Serializer {
         
         ExposingSerializer(OutputStream out, String encoding) 
@@ -1707,7 +1707,65 @@ public class SerializerTest extends XOMTestCase {
             super.writeChild(node);
         }
         
+        public void exposedWriteRaw(String text) throws IOException {
+            writeRaw(text);
+        }
+        
+        public void exposedWriteEscaped(String text) throws IOException {
+            writeEscaped(text);
+        }
+        
+        public void exposedWriteAttributeValue(String text) throws IOException {
+            writeAttributeValue(text);
+        }
+        
+        public int exposeGetColumnNumber() {
+            return super.getColumnNumber();
+        }
+        
     }
 
+    
+    public void testWriteRaw() throws IOException {
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ExposingSerializer serializer = new ExposingSerializer(out, "UTF-8");
+        serializer.exposedWriteRaw("<>&\"'");
+        assertEquals(5, serializer.exposeGetColumnNumber()); 
+        serializer.flush();
+        byte[] data = out.toByteArray();
+        String result = new String(data, "UTF-8");
+        assertEquals("<>&\"'", result);
+        
+    }    
+
+    
+    public void testWriteEscaped() throws IOException {
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ExposingSerializer serializer = new ExposingSerializer(out, "UTF-8");
+        serializer.exposedWriteEscaped("<>&\"'");
+        assertEquals(15, serializer.exposeGetColumnNumber());   
+        serializer.flush();
+        byte[] data = out.toByteArray();
+        String result = new String(data, "UTF-8");
+        assertEquals("&lt;&gt;&amp;\"'", result);
+        
+    }    
+
+    
+    public void testWriteAttributeValue() throws IOException {
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ExposingSerializer serializer = new ExposingSerializer(out, "UTF-8");
+        serializer.exposedWriteAttributeValue("<>&\"'");
+        assertEquals(20, serializer.exposeGetColumnNumber());   
+        serializer.flush();
+        byte[] data = out.toByteArray();
+        String result = new String(data, "UTF-8");
+        assertEquals("&lt;&gt;&amp;&quot;'", result);
+        
+    }    
+    
     
 }
