@@ -149,6 +149,27 @@ public class XOMTestCaseTest extends XOMTestCase {
     }
     
     
+    public void testUnequalElements() {
+     
+        Element e1 = new Element("test");
+        e1.appendChild("1");
+        e1.appendChild(new Element("b"));
+        e1.appendChild("3");
+        Element e2 = new Element("test");
+        e2.appendChild("1");
+        e2.appendChild(new Element("c"));
+        e2.appendChild("3");
+        try {
+            assertEquals(e1, e2);
+            fail("Unequal elements compared equal");
+        }
+        catch (ComparisonFailure success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+    
     public void testCompareXMLBaseAttributes() {
      
         Node a1 = new Attribute("xml:base", Namespace.XML_NAMESPACE, "value.xml");
