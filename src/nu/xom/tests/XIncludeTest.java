@@ -60,7 +60,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b6
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -1407,9 +1407,8 @@ public class XIncludeTest extends XOMTestCase {
     }
 
     
-    // What if xpointer attribute is required because there's no href
-    // but the xpointer doesn't identify a subresource????
-    
+    // ???? What if xpointer attribute is required because there's no href
+    // but the xpointer doesn't identify a subresource?
     public void testBadElementSchemeDataIsNotAnError() 
       throws ParsingException, IOException, XIncludeException {
       
@@ -1838,6 +1837,13 @@ public class XIncludeTest extends XOMTestCase {
         for (int i = 0; i < testcases.size(); i++) {
             Element group = testcases.get(i);   
             String basedir = group.getAttributeValue("basedir");
+            if (basedir.startsWith("Harold")) {
+                // These tests are listed in the catalog but haven't 
+                // yet been checked into CVS. besides, these are all
+                // based on individual tests in this class anyway, so
+                // running these is duplicated effort.
+                continue;   
+            }
             Elements cases = group.getChildElements("testcase");
             for (int j = 0; j < cases.size(); j++) {
                 Element testcase = cases.get(j);
