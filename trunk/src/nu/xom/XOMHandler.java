@@ -531,13 +531,17 @@ class XOMHandler
        String value) {   
         
         if (!inExternalSubset && doctype != null) {
-            if (!name.startsWith("%")) { // ignore parameter entities
-                internalDTDSubset.append("  <!ENTITY ");
-                internalDTDSubset.append(name); 
-                internalDTDSubset.append(" \""); 
-                internalDTDSubset.append(escapeReservedCharactersInEntityDeclaration(value)); 
-                internalDTDSubset.append("\">\n"); 
+            internalDTDSubset.append("  <!ENTITY ");
+            if (name.startsWith("%")) {
+                internalDTDSubset.append("% "); 
+                internalDTDSubset.append(name.substring(1));
             }
+            else {
+                internalDTDSubset.append(name); 
+            }
+            internalDTDSubset.append(" \""); 
+            internalDTDSubset.append(escapeReservedCharactersInEntityDeclaration(value)); 
+            internalDTDSubset.append("\">\n"); 
         }
         
     }
