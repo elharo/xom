@@ -47,7 +47,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b7
  *
  */
 public class Element extends ParentNode {
@@ -1124,20 +1124,33 @@ public class Element extends ParentNode {
      */
     public final int getNamespaceDeclarationCount() {
         
-        Set allPrefixes;
+        // This seems to be a HotSpot for DOM conversion.
+        // I'm trying to avoid the overhead of creating and adding
+        // to a HasSet for the simplest case of an element, none 
+        // of whose attributes are in namespaces, and which has no
+        // additional namespace declarations. In this case, the 
+        // namespace count is exactly one, which is here indicated
+        // by a null prefix set.
+        Set allPrefixes = null;
         if (namespaces != null) {
             allPrefixes = new HashSet(namespaces.getPrefixes());
+            allPrefixes.add(prefix);
         } 
-        else allPrefixes = new HashSet(3);
-        if (!"xml".equals(prefix)) allPrefixes.add(prefix);
+        if ("xml".equals(prefix)) allPrefixes = new HashSet();
         // add attribute prefixes
         for (int i = 0; i < getAttributeCount(); i++) {
             Attribute att = getAttribute(i);
             String attPrefix = att.getNamespacePrefix();
             if (attPrefix.length() != 0 && !"xml".equals(attPrefix)) {
+                if (allPrefixes == null) {
+                    allPrefixes = new HashSet();
+                    allPrefixes.add(prefix);
+                }
                 allPrefixes.add(attPrefix);    
             }
         }
+        
+        if (allPrefixes == null) return 1; 
         return allPrefixes.size();
         
     }
