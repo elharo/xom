@@ -78,7 +78,11 @@ public class BuilderTest extends XOMTestCase {
     private String attributeDeclaration2 
       = "<!ATTLIST root anotherattribute CDATA \"value\">";
     private String unparsedEntityDeclaration 
-      = "<!ENTITY hatch-pic SYSTEM " +        "\"http://www.example.com/images/cup.gif\" NDATA gif>";
+      = "<!ENTITY hatch-pic SYSTEM " +
+        "\"http://www.example.com/images/cup.gif\" NDATA gif>";
+    private String unparsedEntityDeclarationPublic
+      = "<!ENTITY public-pic PUBLIC \"public ID\"" +
+        "\"http://www.example.com/images/cup.gif\" NDATA gif>";
     private String internalEntityDeclaration 
       = "<!ENTITY Pub-Status \"" +        "This is a pre-release of the specification.\">";
     private String externalEntityDeclarationPublic = 
@@ -102,6 +106,7 @@ public class BuilderTest extends XOMTestCase {
      + externalEntityDeclarationPublic + "\n"
      + externalEntityDeclarationSystem + "\n"
      + unparsedEntityDeclaration + "\n"
+     + unparsedEntityDeclarationPublic + "\n"
      + notationDeclarationPublic + "\n"
      + notationDeclarationSystem + "\n"
      + "]>\r\n"
@@ -375,6 +380,10 @@ public class BuilderTest extends XOMTestCase {
         assertTrue(
           internalDTDSubset,
           internalDTDSubset.indexOf(unparsedEntityDeclaration) > 0
+        );
+        assertTrue(
+          internalDTDSubset,
+          internalDTDSubset.indexOf(unparsedEntityDeclarationPublic) > 0
         );
         assertTrue(
           internalDTDSubset, 
