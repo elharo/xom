@@ -25,6 +25,7 @@ package nu.xom.tests;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -32,6 +33,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.UnknownHostException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -41,6 +43,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.IllegalAddException;
+import nu.xom.IllegalDataException;
 import nu.xom.MalformedURIException;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -826,168 +829,149 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals(2, a.getNamespaceDeclarationCount());
         
     }
-
-
-// These tests seem too broken to be useful
-/*    public void testOASISMicrosoftConformanceSuite()  
-      throws IOException, ParsingException, XSLException {
-
-        File base = new File("data/oasis_xslt_testsuite/TESTS/MSFT_Conformance_Tests/");
-        File catalog = new File(base, "xslt.xml");
-        if (catalog.exists()) {
-            Builder builder = new Builder();
-            Document doc = builder.build(catalog);
-            Element root = doc.getRootElement();
-            Elements testcases = root.getChildElements("testcase");
-            for (int i = 0; i < testcases.size(); i++) {
-                Element testcase = testcases.get(i);
-                String uri = testcase.getAttributeValue("uri");
-                File file = new File(base.toURL().getPath() + uri); 
-                Document testcaseDoc = builder.build(file);
-                Elements cases = testcaseDoc.getRootElement().getChildElements("variation");
-                for (int j = 0; j < cases.size(); j++) {
-                    Element variation = cases.get(j);
-                    String name = variation.getAttributeValue("name");
-                    String description = variation.getFirstChildElement("description").getValue();
-                    File dir = file.getParentFile();
-                    Element result = variation.getFirstChildElement("result");
-                    File resultFile = null;
-                    if (!("invalid".equals(result.getAttributeValue("expected")))) {
-                        resultFile = new File(dir, result.getValue());
-                    }
-                    Element data = variation.getFirstChildElement("data");
-                    File xml = new File(dir, data.getFirstChildElement("xml").getValue());
-                    File xsl = new File(dir, data.getFirstChildElement("xsl").getValue());
-                    
-                    if (resultFile != null) {
-                        try {
-                            Document input = builder.build(xml);
-                            XSLTransform style = new XSLTransform(builder.build(xsl));
-                            style.transform(input);
-                        }
-                        catch (MalformedURIException ex) {
-                            // Some of the test cases use relative 
-                            // namespace URIs XOM doesn't support. 
-                            // System.err.println("Malformed uri in " + xsl);
-                        }
-                        catch (XSLException ex) {
-                            // look at these again; are they really errors?
-                            // reported bugs
-                            if ("GenereateIdAppliedToNamespaceNodesOnDifferentElements".equals(name)) continue;
-                            // fixed in Xalan 2.6
-                            if ("_81543".equals(name)) continue;
-                            if ("_81544".equals(name)) continue;
-                            if ("_81545".equals(name)) continue;
-                            if ("_81546".equals(name)) continue;
-                            if ("_81547".equals(name)) continue;
-                            if ("_81548".equals(name)) continue;
-                            if ("_81550".equals(name)) continue;
-                            if ("_81551".equals(name)) continue;
-                            if ("_89434".equals(name)) continue;
-                            if ("_89435".equals(name)) continue;
-                            if ("_89436".equals(name)) continue;
-                            if ("_89437".equals(name)) continue;
-                            
-                            System.out.println("Static XSL error in " + xsl);
-                            System.out.println(name);
-                            throw ex;
-                        }
-                        catch (ParsingException ex) {
-                            // There are several cases where the xml prefix
-                            // is bound to the wrong namespace URI
-                            // System.out.println("XML error in " + xml);
-                            // System.out.println("XML error in " + xsl);
-                            // System.out.println(ex.getMessage()); 
-                            // throw ex;
-                        } 
-                        catch (FileNotFoundException ex) {
-                            // System.err.println("Missing file " + ex.getMessage());
-                        }
-                        catch (UnknownHostException ex) {
-                            // a few of the test cases refer to a DTD 
-                            // at a remote site that doesn't exist
-                        }
-                    }
-                    // According to XSLT spec
-                    // "A conforming XSLT processor must signal any errors 
-                    // except for those that this document specifically allows 
-                    // an XSLT processor not to signal. A conforming XSLT processor 
-                    // may but need not recover from any errors that it signals."
-                    // This basically means processors aren't required to stop 
-                    // processing when an error is encountered
-                   /* else {
-                        try {
-                            Document stylesheet = builder.build(xsl);
-                            XSLTransform transform = new XSLTransform(stylesheet);
-                            // some errors are only detected at runtime
-                            try {
-                                Document input = builder.build(xml);
-                                Nodes output = transform.transform(input);
-                            }
-                            catch (MalformedURIException ex) {
-                                // System.err.println("Malformed uri in " + xsl);
-                                continue;
-                            } 
-                            
-                            // test suite bugs
-                            if ("_78374".equals(name)) continue;
-                            if ("Attribute_UseXmlnsNsAsNamespaceForAttribute".equals(name)) continue;
-                            
-                            // discretionary whether errors are reported or fixed
-                            if ("_78378".equals(name)) continue;
-                            if ("_89463".equals(name)) continue;
-                            if ("_89464".equals(name)) continue;
-                            if ("_89465".equals(name)) continue;
-                            if ("_77562".equals(name)) continue;
-                            if ("bvt074".equals(name)) continue;
-                            if ("_78363".equals(name)) continue;
-                            
-                            // places where spec is unclear whether something is an error or not
-                            if ("RefToUndefinedAttributeSet".equals(name)) continue;
-                            if ("_77596".equals(name)) continue;
-                            if ("Element_UseXslElementWithNameSpaceAttrEqualToXmlnsUri".equals(name)) continue;
-                            if ("Element_UseXslElementWIthNamespaceEqualToXmlnsUri".equals(name)) continue;
-                            // these next few seem to all be about attribute sets that are
-                            // problematic but aren't actually used
-                            if ("err003".equals(name)) continue;
-                            if ("err004".equals(name)) continue;
-                            if ("err005".equals(name)) continue;
-                            if ("err006".equals(name)) continue;
-                            if ("err010".equals(name)) continue;
-                            if ("err011".equals(name)) continue;
-                            // bad attribute value templates
-                            if ("err012".equals(name)) continue;
-                            if ("err013".equals(name)) continue;
-                            // many of these are errors that aren't actually reached
-                            // during processing
-                            if ("err026".equals(name)) continue;
-                            if ("err029".equals(name)) continue;
-                            if ("err031".equals(name)) continue;
-                            if ("err038".equals(name)) continue;
-                            if ("err044".equals(name)) continue;
-                            if ("err048".equals(name)) continue;
-                            if ("err049".equals(name)) continue;
-                            if ("err050".equals(name)) continue; 
-                            if ("err059".equals(name)) continue;
-                            if ("err062".equals(name)) continue;
-
-
-                            // fixed in latest version of Xalan
-                            System.out.println("Fail: " + name);
-                            fail("Built incorrect stylesheet " + xsl);
-                        }
-                        catch (Exception success) {
-                            
-                        }
-                    } * /
-                }
-            } 
-            
-        } 
-        
-    } */
     
   
+    public void testOASISMicrosoftConformanceSuite()  
+      throws IOException, ParsingException, XSLException {
+        
+        Builder builder = new Builder();
+        File base = new File("data/oasis-xslt-testsuite/TESTS/");
+        File catalog = new File(base, "catalog.xml");
+        
+        // The test suite need to be installed separately. If we can't
+        // find the catalog, we just don't run these tests.
+        if (catalog.exists()) {
+            Document doc = builder.build(catalog);
+            Element testsuite = doc.getRootElement();
+            Elements submitters = testsuite.getChildElements("test-catalog");
+            Element submitter = submitters.get(1);
+            Elements testcases = submitter.getChildElements("test-case");
+            for (int j = 0; j < testcases.size(); j++) {
+                Element testcase = testcases.get(j);
+                String id = testcase.getAttributeValue("id");
+                File root = new File(base, "MSFT_Conformance_Tests");
+                root = new File(root, testcase.getFirstChildElement("file-path").getValue());
+                File input = null;
+                File style = null;
+                File output = null;
+                Element scenario = testcase.getFirstChildElement("scenario");
+                Elements inputs = scenario.getChildElements("input-file");
+                for (int k = 0; k < inputs.size(); k++) {
+                    Element file = inputs.get(k);
+                    String role = file.getAttributeValue("role");
+                    if ("principal-data".equals(role)) {
+                        input = new File(root, file.getValue());
+                    }
+                    else if ("principal-stylesheet".equals(role)) {
+                        style = new File(root, file.getValue());
+                    }
+                }  // end for 
+                Elements outputs = scenario.getChildElements("output-file");
+                for (int k = 0; k < outputs.size(); k++) {
+                    Element file = outputs.get(k);
+                    String role = file.getAttributeValue("role");
+                    if ("principal".equals(role)) {
+                        // Fix up OASIS catalog bugs
+                        File parent = new File(root.getParent());
+                        parent = new File(parent, "REF_OUT");
+                        parent = new File(parent, root.getName());
+                        String outputFileName = file.getValue();
+                        output = new File(parent, outputFileName);
+                    }
+                }  // end for 
+                
+                try {
+                    Document styleDoc = builder.build(style);
+                    Document inputDoc = builder.build(input);
+                    XSLTransform xform = new XSLTransform(styleDoc);
+                    Nodes result = xform.transform(inputDoc);
+                    if (output == null) {
+                        if ("Attributes__89463".equals(id)
+                          || "Attributes__89465".equals(id)) {
+                            // Processors are allowed to recover from
+                            // this problem.
+                            assertEquals(0, result.size());
+                        }
+                        else if ("Attributes__89464".equals(id)) {
+                            // Processors are allowed to recover from
+                            // this problem.
+                            assertEquals(0, ((Element) result.get(0)).getAttributeCount());
+                        }
+                        else { // transform should have failed
+                            fail("Transformed " 
+                              + testcase.getAttributeValue("id"));
+                        }
+                    }
+                    else { 
+                        try {
+                            Document expectedResult = builder.build(output);
+                            Document actualResult = XSLTransform.toDocument(result);
+                            assertEquals("Problem with " + id,
+                              expectedResult, actualResult);
+                        }
+                        catch (ParsingException ex) {  
+                            // a few of the test cases generate 
+                            // text or HTML output rather than 
+                            // well-formed XML. For the moment, I 
+                            // just skip these; but could I compare
+                            // the raw text to the value of the 
+                            // document object instead????
+                            continue;
+                        }
+                        catch (IllegalAddException ex) {
+                            // A few of the test cases generate 
+                            // incomplete documents so we can't
+                            // compare output. Perhaps I could
+                            // wrap in an element,t hen get children
+                            // to build a Node object rather than a
+                            // Document???? i.e. a fragment parser?
+                            // Could use a SequenceInputStream to hack this
+                        }
+                    } // end else
+                    
+                } // end try
+                catch (MalformedURIException ex) {
+                    // several stylesheets use relative namespace URIs XOM
+                    // does not support; skip the test
+                }
+                catch (FileNotFoundException ex) {
+                    // The catalog doesn't always match what's on disk
+                }
+                catch (ParsingException ex) {
+                    String operation = scenario.getAttributeValue("operation");
+                    if (!"execution-error".equals(operation)) {
+                        System.err.println(id + ": " + ex.getMessage());
+                        throw ex;
+                    }
+                }
+                catch (XSLException ex) {
+                    // If the output was null the transformation 
+                    // was expected to fail
+                    if (output != null) {
+                        if ("Attributes__81487".equals(id)
+                          || "Attributes__81551".equals(id)) {
+                            // spec inconsistency; see 
+                            // http://lists.w3.org/Archives/Public/xsl-editors/2004JulSep/0003.html
+                            continue;
+                        }
+                        else {
+                            System.err.println(id + ": " + ex.getMessage());
+                            Throwable cause = ex.getCause();
+                            if (cause != null) {
+                                System.err.println("cause: " + cause.getMessage());                                
+                            }
+                            throw ex;
+                        }
+                    }
+                } // end catch 
+                
+            } // end for 
+            
+        } // end if 
+     
+    }
+
+    
     public void testOASISXalanConformanceSuite()  
       throws IOException, ParsingException, XSLException {
         
@@ -1107,7 +1091,11 @@ public class XSLTransformTest extends XOMTestCase {
                             catch (IllegalAddException ex) {
                                 // A few of the test cases generate 
                                 // incomplete documents so we can't
-                                // compare output. 
+                                // compare output. Perhaps I could
+                                // wrap in an element,t hen get children
+                                // to build a Node object rather than a
+                                // Document???? i.e. a fragment parser?
+                                // Could use a SequenceInputStream to hack this
                             }
                             // XXX report issues in test suite with indent="yes" in stylesheets
                             // where indenting is not specifically being tested
