@@ -254,18 +254,21 @@ public class XPathTest extends XOMTestCase {
         
         Element parent = new Element("Test");
         Element child1 = new Element("child");
-        child1.addAttribute(new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "en"));
+        child1.addAttribute(new Attribute("xml:lang", 
+          "http://www.w3.org/XML/1998/namespace", "en"));
         parent.appendChild(child1);
         Element child2 = new Element("child");
         child2.appendChild("2");
-        child2.addAttribute(new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "fr"));
+        child2.addAttribute(new Attribute("xml:lang", 
+          "http://www.w3.org/XML/1998/namespace", "fr"));
         parent.appendChild(child2);
         Element child3 = new Element("child");
         child3.appendChild("3");
         parent.appendChild(child3);
         Element child4 = new Element("child");
         child4.appendChild("4");
-        child4.addAttribute(new Attribute("xml:lang", "http://www.w3.org/XML/1998/namespace", "en-US"));
+        child4.addAttribute(new Attribute("xml:lang", 
+          "http://www.w3.org/XML/1998/namespace", "en-US"));
         parent.appendChild(child4);
         
         Nodes result = parent.query("child::*[lang('en')]");
@@ -477,8 +480,13 @@ public class XPathTest extends XOMTestCase {
         Element element = new Element("test");
         File f = new File(inputDir, "prettyxml.xml");
         String url = f.toURL().toExternalForm();
-        Nodes result = element.query("document('" + url + "')/*");
-        assertEquals(1, result.size());
+        try {
+            element.query("document('" + url + "')/*");
+            fail("allowed document() function");
+        }
+        catch(XPathException success) {
+            assertTrue(success.getMessage().indexOf("document() ") >= 0);
+        }
         
     }
     
@@ -489,8 +497,13 @@ public class XPathTest extends XOMTestCase {
         Element element = new Element("test");
         File f = new File(inputDir, "prettyxml.xml");
         String url = f.toURL().toExternalForm();
-        Nodes result = element.query("document('" + url + "')//*");
-        assertEquals(2, result.size());
+        try {
+            element.query("document('" + url + "')//*");
+            fail("allowed document() function");
+        }
+        catch(XPathException success) {
+            assertTrue(success.getMessage().indexOf("document() ") >= 0);
+        }
         
     }
     
@@ -502,8 +515,14 @@ public class XPathTest extends XOMTestCase {
         String url1 = f1.toURL().toExternalForm();
         File f2 = new File(inputDir, "test.xml");
         String url2 = f2.toURL().toExternalForm();
-        Nodes result = element.query("document('" + url1 + "')/* | " + "document('" + url2 + "')/*");
-        assertEquals(2, result.size());
+        try {
+            element.query("document('" + url1 + "')/* | " 
+              + "document('" + url2 + "')/*");
+            fail("allowed document() function");
+        }
+        catch(XPathException success) {
+            assertTrue(success.getMessage().indexOf("document() ") >= 0);
+        }
         
     }
     
