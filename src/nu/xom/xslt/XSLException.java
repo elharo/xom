@@ -23,8 +23,6 @@
 
 package nu.xom.xslt;
 
-import nu.xom.XMLException;
-
 /**
  * <p><code>XSLException</code>
  *   is thrown when an XSL stylesheet fails to compile
@@ -32,10 +30,10 @@ import nu.xom.XMLException;
  * </p>
 ` * 
  * @author Elliotte Rusty Harold
- * @version 1.0d16
+ * @version 1.0d21
  *
  */
-public class XSLException extends XMLException {
+public class XSLException extends Exception {
 
     private Throwable cause;
 
@@ -50,8 +48,8 @@ public class XSLException extends XMLException {
 
     /**
      * <p>
-     * Creates a new XSLException with the specified detail message
-     * and an underlying root cause.
+     * Creates a new <code>XSLException</code> with the specified 
+     * detail message and an underlying root cause.
      * </p>
      * 
      * @param message information about the cause of the exception
@@ -72,38 +70,54 @@ public class XSLException extends XMLException {
     public XSLException(String message) {
         super(message);
     }
-    
-    
-    /**
-     * <p>
-     * Return the original cause that led to this exception,
-     * or null if there was no original exception.
-     * </p>
-     * 
-     * @return the root cause of this exception
-     */
-    public Throwable getCause() {
-        return this.cause;  
-    }
 
+    // null is insufficient for detemrin unset cause.
+    // The cause may be set to null whicn may not then be reset.
+    private boolean causeSet = false;
 
     /**
      * <p>
-     * Sets the root cause of this exception. 
-     * This may only be called once. Subsequent
-     * calls throw an <code>IllegalStateException</code>.
+     * Sets the root cause of this exception. This may 
+     * only be called once. Subsequent calls throw an 
+     * <code>IllegalStateException</code>.
      * </p>
      * 
+     * <p>
+     * This method is unnecessary in Java 1.4 where it could easily be
+     * inherited from the superclass. However, including it here
+     * allows this  method to be used in Java 1.3 and earlier.
+     * </p>
+     *
      * @param cause the root cause of this exception
      * 
-     * @return the root cause of this exception
+     * @return this <code>XMLException</code>
      * 
+     * @throws IllegalArgumentException if the cause is this exception
+     *   (An exception cannot be its own cause.)
      * @throws IllegalStateException if this method is called twice
      */
     public Throwable initCause(Throwable cause) {
-        if (this.cause == null) this.cause = cause; 
-        else throw new IllegalStateException("Cannot reset the cause");
+        if (causeSet) {
+            throw new IllegalStateException("Can't overwrite cause");
+        } 
+        else if (cause == this) {
+            throw new IllegalArgumentException("Self-causation not permitted"); 
+        }
+        else this.cause = cause;
+        causeSet = true;
         return this;
+    }
+
+    /**
+     * <p>
+     * Returns the underlying exception that caused this exception.
+     * </p>
+     * 
+     * @return the initial exception that caused this exception 
+     *     to be thrown
+     */
+    public Throwable getCause() {
+        return this.cause;  
     }
 
 }
