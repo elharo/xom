@@ -36,21 +36,6 @@ package nu.xom;
 // ???? update javadoc
 class NonVerifyingFactory extends NodeFactory {
 
-
-    /**
-     * <p>
-     * Creates a new <code>Element</code> in no namespace with
-     * the specified name.
-     * </p>
-     * 
-     * @param name the local name of the element
-     * 
-     * @return the new <code>Element</code>
-     */
-    public Element makeElement(String name) {
-        return Element.build(name, "");   
-    }
-
     /**
      * <p>
      * Creates a new <code>Element</code> in the specified namespace 
