@@ -56,7 +56,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -203,6 +203,42 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(Attribute.Type.NMTOKENS, att.getType());      
         assertEquals("1 2 3", att.getValue());      
         assertNull(document.getBaseURI());
+    }
+    
+    // verify that XML 1.1 is not supported
+    public void testXML11() throws IOException {
+        String data = "<?xml version='1.1'?><root/>";
+        try {
+            builder.build(data, "http://www.example.com");
+            fail("XML 1.1 allowed");
+        }
+        catch (ParsingException ex) {
+            assertNotNull(ex.getMessage());   
+        }
+    }
+    
+    // verify that XML 1.2 is not supported
+    public void testXML12() throws IOException {
+        String data = "<?xml version='1.2'?><root/>";
+        try {
+            builder.build(data, "http://www.example.com");
+            fail("XML 1.1 allowed");
+        }
+        catch (ParsingException ex) {
+            assertNotNull(ex.getMessage());   
+        }
+    }
+    
+    // verify that XML 2.0 is not supported
+    public void testXML20() throws IOException {
+        String data = "<?xml version='2.0'?><root/>";
+        try {
+            builder.build(data, "http://www.example.com");
+            fail("XML 1.1 allowed");
+        }
+        catch (ParsingException ex) {
+            assertNotNull(ex.getMessage());   
+        }
     }
     
     public void testIDAttributeType() 
