@@ -27,11 +27,9 @@ import nu.xom.*;
 
 import java.io.*;
 
-// Need to test some transforms that don't produce full documents????
-
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d21
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -121,6 +119,44 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
 
+
+/*   <xsl:template match="/">
+    <element1>some data and <content/> for a test</element1>
+    <element2>Remember, the XSLT processor is going to strip out the literal white space</element2>
+    <element3>some data and <content/> for a <!--test--></element3>
+    <element4/>
+    <xsl:comment>test</xsl:comment>
+    <?test are PIs treated as literals in XSLT? ?>
+  </xsl:template> */
+  
+    public void testCreateDocumentFragment() 
+      throws ParseException, IOException, XSLException {
+        
+        Element element1 = new Element("element1");
+        element1.appendChild("some data and ");
+        element1.appendChild(new Element("content"));
+        element1.appendChild(" for a test");
+        
+        Element element2 = new Element("element2");
+        element2.appendChild(
+          "Remember, the XSLT processor is going to strip out the literal white space"
+        );
+        File doc = new File("data/xslt/input/8-14.xml");
+        File stylesheet = new File("data/xslt/input/fragment.xsl");
+        Builder builder = new Builder();
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Document input = builder.build(doc);
+        NodeList output = xform.transform(input);
+        assertEquals(6, output.size());
+        assertEquals(element1, output.get(0));
+        assertEquals(element2, output.get(1));
+        assertEquals(new Element("element4"), output.get(3));
+        assertEquals(new Comment("test"), output.get(4));
+        assertEquals(new ProcessingInstruction("test", 
+          "PIs are not treated as literals in XSLT?"), output.get(5));
+        
+    }
+
     public void testTransform() 
       throws ParseException, IOException, XSLException {
         
@@ -182,6 +218,21 @@ public class XSLTransformTest extends XOMTestCase {
 
         Document expected = builder.build("data/xslt/output/8-15.xml");
         assertEquals(expected, result);
+        
+    }
+
+    public void testSingleTextNode() 
+      throws ParseException, IOException, XSLException {
+        
+        File doc = new File("data/xslt/input/8-14.xml");
+        File stylesheet = new File("data/xslt/input/singlestring.xsl");
+        Builder builder = new Builder();
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Document input = builder.build(doc);
+        NodeList output = xform.transform(input);
+        assertEquals(1, output.size());
+        Text data = (Text) (output.get(0));
+        assertEquals("Data", data.getValue());
         
     }
 
