@@ -57,30 +57,30 @@ public class AttributesTest extends XOMTestCase {
     public void testSize() {
         assertEquals(0, noAttributes.getAttributeCount());
         assertEquals(3, threeAttributes.getAttributeCount());
-     }
+    }
 
-   public void testGetOutOfBounds() {
+    public void testGetOutOfBounds() {
     
         try {
             noAttributes.getAttribute(0);
             fail("Should have thrown IndexOutOfBoundsException");
         }
-        catch (IndexOutOfBoundsException ex) {
-            // success   
+        catch (IndexOutOfBoundsException success) {
+            assertNotNull(success.getMessage());  
         }
         try {
             threeAttributes.getAttribute(4);
         }
-        catch (IndexOutOfBoundsException ex) {
-            // success   
+        catch (IndexOutOfBoundsException success) {
+            assertNotNull(success.getMessage());   
         }
         try {
             threeAttributes.getAttribute(-1);
         }
-        catch (IndexOutOfBoundsException ex) {
-            // success   
+        catch (IndexOutOfBoundsException success) {
+            assertNotNull(success.getMessage());   
         }
 
-     }
+    }
 
 }
