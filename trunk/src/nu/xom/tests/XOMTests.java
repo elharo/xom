@@ -33,7 +33,7 @@ import junit.framework.TestSuite;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d3
+ * @version 1.1d4
  *
  */
 public class XOMTests extends TestCase {
@@ -63,6 +63,7 @@ public class XOMTests extends TestCase {
         result.addTest(new TestSuite(DocumentTest.class));
         result.addTest(new TestSuite(DocTypeTest.class));
         result.addTest(new TestSuite(AttributesTest.class));
+        result.addTest(new TestSuite(NamespaceNodeTest.class));
         result.addTest(new TestSuite(NamespacesTest.class));
         // Too slow to run routinely
         // result.addTest(new TestSuite(MegaTest.class));

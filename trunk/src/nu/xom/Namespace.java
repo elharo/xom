@@ -35,13 +35,14 @@ import nu.xom.Element;
  * @version 1.1d4
  *
  */
-public class Namespace extends Node {
+public final class Namespace extends Node {
     
     private String prefix;
     private String uri;
     private Element parent;
     
-    public final static String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
+    public final static String XML_NAMESPACE 
+      = "http://www.w3.org/XML/1998/namespace";
 
     public Namespace(String prefix, String uri, Element parent) {
         this.prefix = prefix;
@@ -75,13 +76,20 @@ public class Namespace extends Node {
 
 
     public Node copy() {
-        return null; // ????
+        return new Namespace(prefix, uri, null);
     }
 
 
     public String toXML() {
-        return null; // ????
+        String colon = prefix.equals("") ? "" : ":";
+        return "xmlns" + colon + prefix + "=\"" + uri + "\"";
     }
+    
+    
+    public String toString() {
+        return "[Namespace: " + this.toXML() + "]";
+    }
+    
     
     boolean isNamespace() {
         return true;
