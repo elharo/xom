@@ -26,12 +26,13 @@ package nu.xom.xinclude;
 /**
  * <p>
  * A <code>BadHrefAttributeException</code> is thrown when
- * the <code>href</code> attribute contains an illegalm value,
- * such as a URI with a fragment identifier.
+ * the <code>href</code> attribute contains an illegal value,
+ * such as a URI with a fragment identifier, or a syntactically 
+ * incorrect IRI.
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a3
  */
 public class BadHrefAttributeException extends XIncludeException {
 
