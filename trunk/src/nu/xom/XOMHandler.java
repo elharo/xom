@@ -200,53 +200,54 @@ class XOMHandler
         
         if (current != null) {
             flushText();
-            ParentNode temp = current.getParent();
+            parent = current.getParent();
             Nodes result = factory.finishMakingElement((Element) current);
-            // might speed things up for common case by checking here
-            // if result only contains current, in which case just return????
-            if (!temp.isDocument()) {
-                temp.removeChild(temp.getChildCount() - 1);
-                for (int i=0; i < result.size(); i++) {
-                    Node node = result.get(i);
-                     if (node.isAttribute()) {
-                         ((Element) temp).addAttribute((Attribute) node);
-                     }
-                     else {
-                         temp.appendChild(node);   
-                     }
+            
+            // Optimization for default case where result only contains current
+            if (result.size() != 1 || result.get(0) != current) {            
+                if (!parent.isDocument()) {
+                    parent.removeChild(parent.getChildCount() - 1);
+                    for (int i=0; i < result.size(); i++) {
+                        Node node = result.get(i);
+                         if (node.isAttribute()) {
+                             ((Element) parent).addAttribute((Attribute) node);
+                         }
+                         else {
+                             parent.appendChild(node);   
+                         }
+                    }
                 }
-            }
-            else { // root element
-                Document doc = (Document) temp;
-                Element currentRoot = doc.getRootElement();
-                boolean beforeRoot = true;
-                for (int i=0; i < result.size(); i++) {
-                    Node node = result.get(i);
-                    if (node.isElement()) {
-                        if (node != currentRoot) {   
-                            if (!beforeRoot) {
-                                // already set root, oops
-                                throw new IllegalAddException("Factory returned multiple roots");   
+                else { // root element
+                    Document doc = (Document) parent;
+                    Element currentRoot = doc.getRootElement();
+                    boolean beforeRoot = true;
+                    for (int i=0; i < result.size(); i++) {
+                        Node node = result.get(i);
+                        if (node.isElement()) {
+                            if (node != currentRoot) {   
+                                if (!beforeRoot) {
+                                    // already set root, oops
+                                    throw new IllegalAddException("Factory returned multiple roots");   
+                                }
+                                doc.setRootElement((Element) node);
                             }
-                            doc.setRootElement((Element) node);
+                            beforeRoot = false;
                         }
-                        beforeRoot = false;
+                        else if (beforeRoot) {
+                            doc.insertChild(node, doc.indexOf(doc.getRootElement()));   
+                        }
+                        else {
+                            doc.appendChild(node);   
+                        }
                     }
-                    else if (beforeRoot) {
-                        doc.insertChild(node, doc.indexOf(doc.getRootElement()));   
+                    if (beforeRoot) {
+                        // somebody tried to replace the root element with
+                        // no element at all. That's a no-no
+                        throw new WellformednessException(
+                          "Factory attempted to remove the root element");
                     }
-                    else {
-                        doc.appendChild(node);   
-                    }
-                }
-                if (beforeRoot) {
-                    // somebody tried to replace the root element with
-                    // no element at all. That's a no-no
-                    throw new WellformednessException(
-                      "Factory attempted to remove the root element");
                 }
             }
-            parent = temp;
         }
     }
     
