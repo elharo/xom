@@ -44,7 +44,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b2
+ * @version 1.0b6
  * 
  */
 class XHTMLJavaDoc {
@@ -127,6 +127,7 @@ class XHTMLJavaDoc {
         
     }
     
+    
     private static class HTMLSerializer extends Serializer {
         
         HTMLSerializer(OutputStream out) {
@@ -136,8 +137,13 @@ class XHTMLJavaDoc {
         protected void writeXMLDeclaration() {
         }
         
+        protected void writeEmptyElementTag(Element element) 
+          throws IOException {
+             super.writeStartTag(element);
+             super.writeEndTag(element);
+        }
+        
     }
-    
     
     
 }
