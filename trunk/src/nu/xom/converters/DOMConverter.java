@@ -321,6 +321,48 @@ public class DOMConverter {
      */
     public static Element convert(org.w3c.dom.Element element) {
         
+        org.w3c.dom.Node current = element;
+        Element result = makeElement(element);
+        ParentNode parent = result;
+        boolean backtracking = false;
+        while (current != null) {
+            if (current.hasChildNodes() && !backtracking) {
+                current = current.getFirstChild();
+                backtracking = false;
+            }
+            else if (current == element) {
+                break;   
+            }
+            else if (current.getNextSibling() != null) {
+                current = current.getNextSibling();
+                backtracking = false;
+            }
+            else {
+                current = current.getParentNode();
+                backtracking = true;
+                parent = parent.getParent();
+                continue;
+            }
+            
+            int type = current.getNodeType();
+            if (type == org.w3c.dom.Node.ELEMENT_NODE) {
+                Element child = makeElement((org.w3c.dom.Element) current);
+                parent.appendChild(child);
+                parent = child;
+            }
+            else {
+                Node child = convert(current);
+                parent.appendChild(child);
+            }
+            
+        }
+        
+        return result;  
+        
+    }
+ 
+    
+    private static Element makeElement(org.w3c.dom.Element element) {
         String namespaceURI = element.getNamespaceURI();
         String tagName = element.getTagName();
         Element result = new Element(tagName, namespaceURI);
@@ -345,18 +387,10 @@ public class DOMConverter {
                 result.addAttribute(new Attribute(name, uri, value));
             }
         }
-        
-        // recurse children can I remove the recursion????
-        for (org.w3c.dom.Node current = element.getFirstChild(); 
-             current!= null; current = current.getNextSibling()) {
-            result.appendChild(convert(current));
-        }
-        
-        return result;  
-        
+        return result;
     }
- 
-    
+
+
     /**
      * <p>
      * Translates a XOM <code>nu.xom.Document</code> object
