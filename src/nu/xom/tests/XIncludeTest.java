@@ -101,7 +101,7 @@ public class XIncludeTest extends XOMTestCase {
         Document doc = builder.build(input);
         Document result = XIncluder.resolve(doc);
         // For debugging
-        dumpResult(input, result); 
+        // dumpResult(input, result); 
         Document expectedResult = builder.build(
           new File("data/xinclude/output/resolvethruxpointer.xml")
         );
@@ -688,6 +688,7 @@ public class XIncludeTest extends XOMTestCase {
         Document doc = builder.build(input);
         try {
             XIncluder.resolve(doc);
+            fail("Allowed malformed XPointer");
         }
         catch (XIncludeException ex) {
             // success   
@@ -707,6 +708,7 @@ public class XIncludeTest extends XOMTestCase {
         Document doc = builder.build(input);
         try {
             XIncluder.resolve(doc);
+            fail("Allowed another malformed XPointer");
         }
         catch (XIncludeException ex) {
             // success   
