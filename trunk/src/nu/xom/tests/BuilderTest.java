@@ -1990,6 +1990,56 @@ public class BuilderTest extends XOMTestCase {
     }
   
     
+    public void testBuildFromFileThatContainsC0ControlCharacterInName()
+      throws ParsingException, IOException {
+        
+        File f = new File(inputDir, "\u0019file.xml");
+        try {
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("<data />");
+            out.flush();
+            out.close();
+            Document doc = builder.build(f);
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/%19file.xml"));
+        }
+        finally {
+            if (f.exists()) f.delete();
+        }
+        
+    }
+  
+    
+    public void testBuildFromFileThatContainsTabCharacterInName()
+      throws ParsingException, IOException {
+        
+        File f = new File(inputDir, "\tfile.xml");
+        try {
+            Writer out = new OutputStreamWriter(
+              new FileOutputStream(f), "UTF8");
+            out.write("<data />");
+            out.flush();
+            out.close();
+            Document doc = builder.build(f);
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/%09file.xml"));
+        }
+        finally {
+            if (f.exists()) f.delete();
+        }
+        
+    }
+  
+    
     public void testBuildFromFileThatContainsTildeInName()
       throws ParsingException, IOException {
         
