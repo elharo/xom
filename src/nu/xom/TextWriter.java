@@ -35,7 +35,7 @@ import com.ibm.icu.text.Normalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a4
  *
  */
 abstract class TextWriter {
@@ -367,20 +367,21 @@ abstract class TextWriter {
     private boolean needsBreak() {
         
         if (maxLength <= 0 || preserveSpace) return false;
-        // Better algorithm needed:
-        // Should look ahead in the stream,
-        // see if there's a white space character 
+        // XXX Better algorithm needed: Should look ahead in the 
+        // stream, see if there's a white space character 
         // between here and the maxLength XXX
         
         return column >= maxLength - 10; 
         
     }
     
+    
     private boolean justBroke = false;
     
     boolean justBroke() {
         return justBroke;
     }
+    
     
     final void breakLine() throws IOException {
         
@@ -573,9 +574,8 @@ abstract class TextWriter {
     
    /**
      * <p>
-     * Sets the number of spaces to indent each 
-     * successive level in the hierarchy.
-     * Use 0 for no extra indenting.
+     * Sets the number of spaces to indent each successive level in the
+     *  hierarchy. Use 0 for no extra indenting.
      * </p>
      * 
      * @param indent the indent to set
