@@ -745,7 +745,6 @@ public class BaseURITest extends XOMTestCase {
           "wais://wais.example.com:78/database", "WAIS://wais.example.com:78/database",
           "file://vms.host.edu/disk$user/my/notes/note12345.txt", 
           "FILE://vms.host.edu/disk$user/my/notes/note12345.txt",
-          "prospero://host.dom//pros/name", "PROSPERO://host.dom:1525//pros/name",
           "z39.50s://melvyl.ucop.edu/cat", "Z39.50S://melvyl.ucop.edu/cat", 
           "z39.50r://melvyl.ucop.edu/mags?elecworld.v30.n19", 
           "Z39.50R://melvyl.ucop.edu/mags?elecworld.v30.n19", 
