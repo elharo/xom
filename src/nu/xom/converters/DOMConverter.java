@@ -55,7 +55,7 @@ import org.w3c.dom.NamedNodeMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class DOMConverter {
@@ -495,41 +495,5 @@ public class DOMConverter {
         
         return result;       
     }
-
-    private static void addNamespaceAttributeIfNecessary(
-        Element element,
-        org.w3c.dom.Document document,
-        org.w3c.dom.Element result,
-        String namespace,
-        String prefix) {
-        boolean addNamespace = false;
-        if (!"".equals(namespace)) {
-            ParentNode parent = element.getParent();
-            if (parent instanceof Document) addNamespace = true;
-            else {
-                Element parentElement = (Element) parent;
-                if ( !(element.getNamespaceURI()
-                  .equals(parentElement.getNamespaceURI(prefix))) ) {
-                    addNamespace = true;   
-                }   
-            }   
-            
-        }
-        if (addNamespace) {
-            Attr xmlns;
-            if ("".equals(prefix)) {
-                xmlns = document.createAttributeNS(
-                  XMLNS_NAMESPACE, "xmlns"
-                );
-            }
-            else {
-                xmlns = document.createAttributeNS(
-                  XMLNS_NAMESPACE, "xmlns:" + prefix);
-            } 
-            xmlns.setValue(namespace);
-            result.setAttributeNodeNS(xmlns);   
-        }
-    }
-
 
 }
