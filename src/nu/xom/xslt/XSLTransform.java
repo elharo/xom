@@ -113,7 +113,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b4
  */
 public final class XSLTransform {
 
@@ -172,6 +172,11 @@ public final class XSLTransform {
      * stylesheet from the specified input stream.
      * </p>
      *
+     * @deprecated  This method does not provide a base URL for the
+     * stylesheet so relative URLs used by xsl:import, xsl:include,
+     * and the document() function cannot be resolved. Use 
+     * {@link #XSLTransform(InputStream,String)} instead.
+     * 
      * @param stylesheet input stream from 
      *      which the stylesheet is read
      * 
@@ -186,9 +191,36 @@ public final class XSLTransform {
     /**
      * <p>
      * Creates a new <code>XSLTransform</code> by reading the 
+     * stylesheet from the specified input stream.
+     * </p>
+     * 
+     * @param stylesheet input stream from 
+     *      which the stylesheet is read
+     * @param url the base URL used to resolve relative URLs within
+     *     the stylesheet. This may be null if this is not known. 
+     *     In this case, however, the stylesheet must use any relative
+     *     URLs. test????
+     * 
+     * @throws XSLException when an IOException, format error, or
+     *     something else prevents the stylesheet from being compiled 
+     */ 
+    public XSLTransform(InputStream stylesheet, String url) 
+      throws XSLException {
+        this(new StreamSource(stylesheet, url));
+    }
+
+    
+    /**
+     * <p>
+     * Creates a new <code>XSLTransform</code> by reading the 
      * stylesheet from the specified reader.
      * </p>
-     *
+     * 
+     * @deprecated  This method does not provide a base URL for the
+     * stylesheet so relative URLs used by xsl:import, xsl:include,
+     * and the document() function cannot be resolved. Use 
+     * {@link #XSLTransform(Reader,String)} instead.
+     * 
      * @param stylesheet character stream from which the stylesheet
      *     is read
      * 
@@ -197,6 +229,28 @@ public final class XSLTransform {
      */ 
     public XSLTransform(Reader stylesheet) throws XSLException {
         this(new StreamSource(stylesheet));
+    }
+  
+    
+    /**
+     * <p>
+     * Creates a new <code>XSLTransform</code> by reading the 
+     * stylesheet from the specified reader.
+     * </p>
+     * 
+     * @param stylesheet character stream from which the stylesheet
+     *     is read
+     * @param url the base URL used to resolve relative URLs within
+     *     the stylesheet. This may be null if this is not known. 
+     *     In this case, however, the stylesheet must use any relative
+     *     URLs. test????
+     * 
+     * @throws XSLException when an IOException, format error, or
+     *     something else prevents the stylesheet from being compiled 
+     */ 
+    public XSLTransform(Reader stylesheet, String url) 
+      throws XSLException {
+        this(new StreamSource(stylesheet, url));
     }
   
     
@@ -220,6 +274,14 @@ public final class XSLTransform {
      * <p>
      * Creates a new <code>XSLTransform</code> by
      * reading the stylesheet from the specified document.
+     * </p>
+     * 
+     * <p>
+     * This method is currently implemented very inefficiently.
+     * If a stylesheet exists in serialized form as a file, stream, 
+     * web resource or some such format, it's likely to be faster
+     * to use one of the other constructors to load it directly
+     * from its original source.
      * </p>
      *
      * @param stylesheet document containing the stylesheet
