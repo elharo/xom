@@ -178,7 +178,12 @@ final class Verifier {
             int result = data[i];
             if (result >= 0xD800 && result <= 0xDBFF) { 
                 try {
-                    result = decodeSurrogatePair(result, data[i+1]);
+                    int low = data[i+1];
+                    if (low < 0xDC00 || low > 0xDFFF) {
+                        IllegalCharacterDataException ex 
+                          = new IllegalCharacterDataException("Bad surrogate pair");
+                        ex.setData(text);
+                    }
                     i++; // increment past low surrogate
                 }
                 catch (ArrayIndexOutOfBoundsException ex) {
@@ -186,10 +191,6 @@ final class Verifier {
                       = new IllegalCharacterDataException("Bad Surrogate Pair", ex);
                     ide.setData(text);
                     throw ide;
-                }
-                catch (IllegalCharacterDataException ex) {
-                    ex.setData(text);
-                    throw ex;
                 }
                 // all properly matched surrogate pairs are legal in PCDATA
             }  // end if 
@@ -723,19 +724,6 @@ final class Verifier {
         }
         
     }    
-
-    
-    private static int decodeSurrogatePair(int high, int low) {
-        // This method is only called after a high-surrogate 
-        // has been spotted in the stream so we know that's good.
-        // Thus we only need to test the low surrogate.
-        if (low < 0xDC00 || low > 0xDFFF) {
-            throw new IllegalCharacterDataException("Bad surrogate pair");
-        }
-        // Algorithm defined in Unicode spec
-        return (high-0xD800)*0x400 + (low-0xDC00) + 0x10000;
-        
-    }
 
     
     static void checkXMLName(String name) {
