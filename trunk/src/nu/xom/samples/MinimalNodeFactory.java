@@ -24,27 +24,29 @@
 package nu.xom.samples;
 
 import nu.xom.Attribute;
-import nu.xom.Comment;
-import nu.xom.DocType;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
-import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
-
+import nu.xom.Nodes;
 /**
  * <p>
  * Demonstrates a <code>NodeFactory</code> that builds the minimum 
  * structures possible, just the document and the root element.
  * </p>
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.0d23
+ * 
  */
 public class MinimalNodeFactory extends NodeFactory {
 
-    public Comment makeComment(String data) {
-        return null;  
+    private Nodes empty = new Nodes();
+
+    public Nodes makeComment(String data) {
+        return empty;  
     }    
 
-    public Text makeText(String data) {
-        return null;  
+    public Nodes makeText(String data) {
+        return empty;  
     }    
 
     public Element makeRootElement(String name, String namespace) {
@@ -52,23 +54,22 @@ public class MinimalNodeFactory extends NodeFactory {
     }
     
     public Element startMakingElement(String name, String namespace) {
-        Element result = new Element(name, namespace);  
         return null;    
     }
 
-    public Attribute makeAttribute(String name, String namespace, 
+    public Nodes makeAttribute(String name, String namespace, 
       String value, Attribute.Type type) {
-        return null;
+        return empty;
     }
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return null;    
+        return empty;    
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
-        return null; 
+        return empty; 
     }    
 
 }

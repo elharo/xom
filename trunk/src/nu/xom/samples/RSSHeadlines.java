@@ -27,8 +27,8 @@ import java.io.IOException;
 
 import nu.xom.Builder;
 import nu.xom.Element;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
-import nu.xom.Text;
 
 /**
  * <p>
@@ -36,11 +36,12 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  */
 public class RSSHeadlines extends MinimalNodeFactory {
 
     private boolean inTitle = false;
+    private Nodes empty = new Nodes();
 
     public Element startMakingElement(String name, String namespace) {              
         if ("title".equals(name) ) {
@@ -49,17 +50,17 @@ public class RSSHeadlines extends MinimalNodeFactory {
         return new Element(name, namespace);             
     }
 
-    public Text makeText(String data) {        
+    public Nodes makeText(String data) {        
         if (inTitle) System.out.print(data);
-        return null;      
+        return empty;      
     }
 
-    protected Element finishMakingElement(Element element) {
+    protected Nodes finishMakingElement(Element element) {
         if ("title".equals(element.getQualifiedName()) ) {
             System.out.println();
             inTitle = false;
         }
-        return element;
+        return new Nodes(element);
     }
 
     public static void main(String[] args) {

@@ -26,14 +26,11 @@ package nu.xom.samples;
 import java.io.IOException;
 
 import nu.xom.Builder;
-import nu.xom.Comment;
-import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
-import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
 
 
 /**
@@ -42,10 +39,12 @@ import nu.xom.Text;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class StreamingNodeLister extends NodeFactory {
+
+    private Nodes empty = new Nodes();
 
   public static void main(String[] args) {
   
@@ -74,16 +73,16 @@ public class StreamingNodeLister extends NodeFactory {
   
   private int depth = 0;
 
-    public Comment makeComment(String data) {
+    public Nodes makeComment(String data) {
         printSpaces();
         System.out.println("Comment");
-        return null; 
+        return empty; 
     }    
 
-    public Text makeText(String data) {
+    public Nodes makeText(String data) {
         printSpaces();
         System.out.println("Text");
-        return null; 
+        return empty; 
     }    
 
     public Element startMakingElement(String name, String namespace) {
@@ -93,28 +92,28 @@ public class StreamingNodeLister extends NodeFactory {
         return super.startMakingElement(name, namespace);    
     }
 
-    public Element finishMakingElement(Element element) {
+    public Nodes finishMakingElement(Element element) {
         depth--;
-        return element;
+        return new Nodes(element);
     }
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
         System.out.println("DOCTYPE");
-        return null; 
+        return empty; 
     }
 
-    public Text makeWhiteSpaceInElementContent(String data) {
+    public Nodes makeWhiteSpaceInElementContent(String data) {
         printSpaces();
         System.out.println("Ignorable white space");
-        return null; 
+        return empty; 
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
         printSpaces();
         System.out.println("Processing instruction: " + target);
-        return null; 
+        return empty; 
     }
   
   private void printSpaces() {

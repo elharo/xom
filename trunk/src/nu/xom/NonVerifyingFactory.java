@@ -30,9 +30,10 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
+// ???? update javadoc
 class NonVerifyingFactory extends NodeFactory {
 
 
@@ -78,9 +79,9 @@ class NonVerifyingFactory extends NodeFactory {
      * 
      * @return the new <code>Attribute</code>
      */
-    public Attribute makeAttribute(String name, String URI, 
+    public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
-        return Attribute.build(name, URI, value, type);
+        return new Nodes(Attribute.build(name, URI, value, type));
     }
 
     /**
@@ -92,8 +93,8 @@ class NonVerifyingFactory extends NodeFactory {
      * 
      * @return the new <code>Comment</code>
      */
-    public Comment makeComment(String data) {
-        return Comment.build(data);   
+    public Nodes makeComment(String data) {
+        return new Nodes(Comment.build(data));   
     }
 
     /**
@@ -109,44 +110,12 @@ class NonVerifyingFactory extends NodeFactory {
      * 
      * @return the new <code>DocType</code>
      */
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return DocType.build(rootElementName, publicID, systemID);    
+        return new Nodes(DocType.build(rootElementName, publicID, systemID));    
     }
 
-    /**
-     * <p>
-     * Creates a new <code>DocType</code> with a root element name,
-     * a system ID, and a null public ID.
-     * </p>
-     * 
-     * @param rootElementName the declared, qualified name 
-     *   for the root element
-     * @param systemID the URL of the external DTD subset
-     * 
-     * @return the new <code>DocType</code>
-     */
-    public DocType makeDocType(String rootElementName,
-      String systemID) {
-        return DocType.build(rootElementName, null, systemID);    
-    }
-
-    /**
-     * <p>
-     * Creates a new <code>DocType</code> with a root element name
-     * but no public or system ID.
-     * </p>
-     * 
-     * @param rootElementName the declared, qualified name 
-     *   for the root element
-     * 
-     * @return the new <code>DocType</code>
-     */
-    public DocType makeDocType(String rootElementName) {
-        return DocType.build(rootElementName, null, null);    
-    }
-
-    /**
+     /**
      * <p>
      * Creates a new <code>Text</code> node.
      * </p>
@@ -155,8 +124,8 @@ class NonVerifyingFactory extends NodeFactory {
      * 
      * @return the new <code>Text</code>
      */
-    public Text makeText(String data) {
-        return Text.build(data);  
+    public Nodes makeText(String data) {
+        return new Nodes(Text.build(data));  
     }
 
     /**
@@ -168,8 +137,8 @@ class NonVerifyingFactory extends NodeFactory {
      * 
      * @return the new <code>Text</code>
      */
-    Text makeCDATASection(String data) {
-        return CDATASection.build(data);  
+    Nodes makeCDATASection(String data) {
+        return new Nodes(CDATASection.build(data));  
     }
 
     /**
@@ -183,9 +152,9 @@ class NonVerifyingFactory extends NodeFactory {
      * 
      * @return the new <code>ProcessingInstruction</code>
      */
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
-        return ProcessingInstruction.build(target, data); 
+        return new Nodes(ProcessingInstruction.build(target, data)); 
     }
 
 }

@@ -28,13 +28,10 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import nu.xom.Builder;
-import nu.xom.Comment;
-import nu.xom.DocType;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
-import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
 
 
 /**
@@ -45,12 +42,13 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class StreamingTreeReporter extends NodeFactory {
 
     private Writer out;
+    private Nodes empty = new Nodes();
     
     public StreamingTreeReporter(Writer out) {
       if (out == null) {
@@ -64,28 +62,28 @@ public class StreamingTreeReporter extends NodeFactory {
     }
 
     // We don't really need the comments.     
-    public Comment makeComment(String data) {
-        return null; 
+    public Nodes makeComment(String data) {
+        return empty; 
     }    
 
-    public Text makeText(String data) {
-        return null;  
+    public Nodes makeText(String data) {
+        return empty;  
     }    
 
-    public Element finishMakingElement(Element element) {
+    public Nodes finishMakingElement(Element element) {
         TreePrinter.inspect(element);
-        return element;
+        return new Nodes(element);
     }
 
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return null;    
+        return empty;    
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
-        return null; 
+        return empty; 
     }
 
     public static void main(String[] args) {

@@ -46,7 +46,7 @@ import org.xml.sax.ext.LexicalHandler;
 /**
  * <p> 
  * As currently designed this class is non-public and never
- * reused. A new XSLTHanlder is used for each call to transform().
+ * reused. A new XSLTHandler is used for each call to transform().
  * Therefore we do not actually need to reset. This is important
  * because some XSLT processors call startDocument() and 
  * endDocument() and some don't, especially when the output
@@ -54,13 +54,13 @@ import org.xml.sax.ext.LexicalHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 class XSLTHandler 
   implements ContentHandler, LexicalHandler {
 
-    private Nodes    result;
+    private Nodes       result;
     private Stack       parents;
     private NodeFactory factory;
     private Map         prefixes; // In scope right now
@@ -112,12 +112,17 @@ class XSLTHandler
             }
             String namespace = attributes.getURI(i);
             String value = attributes.getValue(i);
-            Attribute attribute = factory.makeAttribute(
+            // Here I rely on the behavior of the default factory.
+            // This will need to be changed if I ever allow transforms
+            // to use different factory subclasses.
+            
+            Nodes nodes = factory.makeAttribute(
               attributeName, 
               namespace, 
               value, 
               getType(attributes.getType(i))
-            );
+            ); 
+            Attribute attribute = (Attribute) nodes.get(0); // assumes default factory
             element.addAttribute(attribute);    
         }
 
@@ -173,7 +178,8 @@ class XSLTHandler
     // accumulate all text that's in the buffer into a text node
     private void flushText() {
         if (buffer.length() > 0) {
-            Text data = factory.makeText(buffer.toString());
+            Nodes nodes = factory.makeText(buffer.toString());
+            Text data = (Text) nodes.get(0); // assumes default factory 
             if (parents.isEmpty()) {
                 result.append(data); 
             }
@@ -200,8 +206,8 @@ class XSLTHandler
 
         flushText();
                 
-        ProcessingInstruction instruction 
-         = factory.makeProcessingInstruction(target, data);
+        Nodes nodes = factory.makeProcessingInstruction(target, data);
+        ProcessingInstruction instruction = (ProcessingInstruction) nodes.get(0);
         if (parents.isEmpty()) {
             result.append(instruction); 
         }
@@ -251,7 +257,9 @@ class XSLTHandler
 
     public void comment(char[] text, int start, int length) {
         flushText();
-        Comment comment = factory.makeComment(new String(text, start, length));
+        Nodes nodes = factory.makeComment(new String(text, start, length));
+        
+        Comment comment = (Comment) nodes.get(0); // assumes default node factory
         if (parents.isEmpty()) {
             result.append(comment); 
         }

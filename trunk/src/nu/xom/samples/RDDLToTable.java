@@ -32,6 +32,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
@@ -87,7 +88,7 @@ import nu.xom.Serializer;
  *&lt;/table></code></pre>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  */
 
 public class RDDLToTable extends NodeFactory {
@@ -126,7 +127,7 @@ public class RDDLToTable extends NodeFactory {
         
     }
     
-    protected Element finishMakingElement(Element element) {
+    protected Nodes finishMakingElement(Element element) {
         
         element.removeNamespaceDeclaration("rddl");
         element.removeNamespaceDeclaration("xlink");
@@ -194,14 +195,14 @@ public class RDDLToTable extends NodeFactory {
             }    
             result = table;
         }      
-        return result; 
+        return new Nodes(result); 
     }
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return new DocType("html", 
+        return new Nodes(new DocType("html", 
           "PUBLIC \"-//W3C//DTD XHTML Basic 1.0//EN\"",
-          "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd");    
+          "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd"));    
     }
 
 }

@@ -34,7 +34,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 class XOMHandler 
@@ -144,18 +144,21 @@ class XOMHandler
                 else {
                     String namespace = attributes.getURI(i);
                     String value = attributes.getValue(i);
-                    Attribute attribute = factory.makeAttribute(
+                    Nodes nodes = factory.makeAttribute(
                       qName, 
                       namespace, 
                       value, 
                       convertStringToType(attributes.getType(i))
                     );
-                    // It is possible for a factory to return
-                    // an attribute with the same name twice.
-                    // The second one returned overwrites the first.
-                    // It might be OK for the regular NonVerifyingNodeFactory
-                    // to do the fastAdding itself, and then return null????
-                    if (attribute != null) element.addAttribute(attribute);
+                    for (int j=0; j < nodes.size(); j++) {
+                        Node node = nodes.get(j);
+                        if (node.isAttribute()) {
+                            element.addAttribute((Attribute) node);
+                        }
+                        else {
+                            element.appendChild(node);   
+                        }
+                    }
                 }
             }
 
@@ -201,12 +204,46 @@ class XOMHandler
         if (current != null) {
             flushText();
             ParentNode temp = current.getParent();
-            Element result = factory.finishMakingElement((Element) current);
-            if (result != current) {
-               temp.removeChild(temp.getChildCount() - 1);
-               if (result != null) {
-                   temp.appendChild(result);
-               }   
+            Nodes result = factory.finishMakingElement((Element) current);
+            if (!temp.isDocument()) {
+                temp.removeChild(temp.getChildCount() - 1);
+                for (int i=0; i < result.size(); i++) {
+                    Node node = result.get(i);
+                     if (node.isAttribute()) {
+                         try {
+                             ((Element) temp).addAttribute((Attribute) node);
+                         }
+                         catch (ClassCastException ex) {
+                            throw new XMLException(
+                              "Factory tried to add an attribute to a document", 
+                              ex);   
+                         }
+                     }
+                     else {
+                         temp.appendChild(node);   
+                     }
+                }
+            }
+            else { // root element
+                Document doc = (Document) temp;
+                Element currentRoot = doc.getRootElement();
+                boolean beforeRoot = true;
+                for (int i=0; i < result.size(); i++) {
+                    Node node = result.get(i);
+                    // ???? check for multiple roots
+                    if (node.isElement()) {
+                        if (node == currentRoot) {   
+                            beforeRoot = false;
+                            continue;
+                        }
+                    }
+                    else if (beforeRoot) {
+                        doc.insertChild(node, doc.indexOf(doc.getRootElement()));   
+                    }
+                    else {
+                        doc.appendChild(node);   
+                    }
+                }
             }
             parent = temp;
         }
@@ -244,17 +281,33 @@ class XOMHandler
     // acumulate all text that's in the buffer into a text node
     private void flushText() {
         if (buffer.length() > 0) {
-            Text data;
+            Nodes result;
             if (!isIgnorable &&!inCDATA) {
-                data = factory.makeText(buffer.toString());
+                result = factory.makeText(buffer.toString());
             }
             else if (inCDATA) {
-                data = factory.makeCDATASection(buffer.toString());
+                result = factory.makeCDATASection(buffer.toString());
             }
-            else data = factory.makeWhiteSpaceInElementContent(
-              buffer.toString()
-            );
-            if (data != null) parent.appendChild(data);
+            else {
+                result = factory.makeWhiteSpaceInElementContent(
+                  buffer.toString());
+            }
+            for (int i=0; i < result.size(); i++) {
+                Node node = result.get(i);
+                 if (node.isAttribute()) {
+                     try {
+                         ((Element) parent).addAttribute((Attribute) node);
+                     }
+                     catch (ClassCastException ex) {
+                        throw new XMLException(
+                          "Factory tried to add an attribute to a document", 
+                          ex);   
+                     }
+                 }
+                 else {
+                     parent.appendChild(node);   
+                 }
+            }
             buffer = new StringBuffer();
         }
         isIgnorable = false;
@@ -271,24 +324,36 @@ class XOMHandler
     }
   
     public void processingInstruction(String target, String data) {
-        ProcessingInstruction instruction 
-         = factory.makeProcessingInstruction(target, data);
-        if (instruction != null) {
+        
+        Nodes result = factory.makeProcessingInstruction(target, data);
+        if (inDTD && inExternalSubset) return;
+
+        if (result.size() > 0 && !inDTD) flushText();
+        
+        for (int i = 0; i < result.size(); i++) {
+            Node node = result.get(i);
             if (!inDTD) {
-                flushText();
                 if (inProlog) {
-                    parent.insertChild(instruction, position);
+                    parent.insertChild(node, position);
                     position++;
                 }
                 else {
-                    parent.appendChild(instruction);
+                    parent.appendChild(node);
                 }
             }
             else if (!inExternalSubset) {
-                internalDTDSubset.append(instruction.toXML());            
-                internalDTDSubset.append('\n');            
-            }
+                if (node.isProcessingInstruction() || node.isComment()) {
+                    internalDTDSubset.append(node.toXML());            
+                    internalDTDSubset.append('\n');            
+                }
+                else {
+                    throw new XMLException("Factory tried to put a " 
+                      + node.getClass().getName() 
+                      + " in the internal DTD subset");   
+                }
+            }            
         }
+
     }
 
 
@@ -307,12 +372,16 @@ class XOMHandler
     public void startDTD(String rootName, String publicID, 
       String systemID) {
         inDTD = true;
-        DocType doctype = factory.makeDocType(rootName, publicID, systemID);
-        if (doctype != null) {
-            internalDTDSubset = new StringBuffer(); 
-            document.insertChild(doctype, position);
+        Nodes result = factory.makeDocType(rootName, publicID, systemID);
+        for (int i = 0; i < result.size(); i++) {
+            Node node = result.get(i);
+            document.insertChild(node, position);
             position++;
-            this.doctype = doctype;
+            if (node.isDocType()) {
+                DocType doctype =(DocType) node;
+                internalDTDSubset = new StringBuffer(); 
+                this.doctype = doctype;
+            }
         }
      }
      
@@ -351,27 +420,36 @@ class XOMHandler
 
     public void comment(char[] text, int start, int length) {
         
+        Nodes result = factory.makeComment(new String(text, start, length));
         if (inDTD && inExternalSubset) return;
-        Comment comment 
-          = factory.makeComment(new String(text, start, length));
-        if (comment != null) {
+
+        if (result.size() > 0 && !inDTD) flushText();
+        
+        for (int i = 0; i < result.size(); i++) {
+            Node node = result.get(i);
             if (!inDTD) {
-                flushText();
                 if (inProlog) {
-                    parent.insertChild(comment, position);
+                    parent.insertChild(node, position);
                     position++;
                 }
                 else {
-                    parent.appendChild(comment);
+                    parent.appendChild(node);
                 }
             }
-            else if (inDTD) {
-                internalDTDSubset.append(comment.toXML());            
-                internalDTDSubset.append('\n');            
-            }
+            else if (!inExternalSubset) {
+                if (node.isComment() || node.isProcessingInstruction()) {
+                    internalDTDSubset.append(node.toXML());            
+                    internalDTDSubset.append('\n');            
+                }
+                else {
+                    throw new XMLException("Factory tried to put a " 
+                      + node.getClass().getName() 
+                      + " in the internal DTD subset");   
+                }
+            }            
         }
-    } 
-    
+
+    }    
     
     public void elementDecl(String name, String model) {
         if (!inExternalSubset && doctype != null) {

@@ -26,13 +26,10 @@ package nu.xom.samples;
 import java.io.IOException;
 
 import nu.xom.Builder;
-import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Attribute;
-import nu.xom.Comment;
-import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
+import nu.xom.Nodes;
 import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
 
@@ -45,7 +42,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class StreamingTypeCounter extends NodeFactory{
@@ -59,6 +56,8 @@ public class StreamingTypeCounter extends NodeFactory{
     private int ENTITY = 0;
     private int ENTITIES = 0;
     private int NOTATION = 0;
+    
+    private Nodes empty = new Nodes();
 
     public void printCount() {
         System.out.println("CDATA type attributes: " + CDATA);
@@ -100,22 +99,21 @@ public class StreamingTypeCounter extends NodeFactory{
     }
 
     // We don't need the comments.     
-    public Comment makeComment(String data) {
-        return null;  
+    public Nodes makeComment(String data) {
+        return empty;  
     }    
 
     // We don't need text nodes at all    
-    public Text makeText(String data) {
-        return null;  
+    public Nodes makeText(String data) {
+        return empty;  
     }    
 
     public Element startMakingElement(String name, String namespace) {
-        // We only need to create the root element
-        Element result = new Element(name, namespace);           
-        return result;
+        // We only need to create the root element           
+        return null;
     }
     
-    public Attribute makeAttribute(String name, String URI, 
+    public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
         if (type.equals(Attribute.Type.CDATA))         CDATA++;
         else if (type.equals(Attribute.Type.UNDECLARED)) CDATA++;
@@ -127,21 +125,21 @@ public class StreamingTypeCounter extends NodeFactory{
         else if (type.equals(Attribute.Type.ENTITY))   ENTITY++;
         else if (type.equals(Attribute.Type.ENTITIES)) ENTITIES++;
         else if (type.equals(Attribute.Type.NOTATION)) NOTATION++;
-        return null;
+        return empty;
     }
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return null;    
+        return empty;    
     }
 
-    public Text makeWhiteSpaceInElementContent(String data) {
-        return null;  
+    public Nodes makeWhiteSpaceInElementContent(String data) {
+        return empty;  
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
-        return null; 
+        return empty; 
     }  
 
 }

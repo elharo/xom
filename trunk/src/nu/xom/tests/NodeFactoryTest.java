@@ -29,16 +29,15 @@ import nu.xom.ParsingException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
-import nu.xom.Comment;
 import nu.xom.CycleException;
-import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.IllegalAddException;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
-import nu.xom.ProcessingInstruction;
+import nu.xom.Nodes;
 import nu.xom.Text;
+import nu.xom.ValidityException;
 
 /**
  * <p>
@@ -47,7 +46,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class NodeFactoryTest extends XOMTestCase {
@@ -68,8 +67,8 @@ public class NodeFactoryTest extends XOMTestCase {
 
     private static class CommentFilter extends NodeFactory {
         
-        public Comment makeComment(String data) {
-            return null;
+        public Nodes makeComment(String data) {
+            return new Nodes();
         }
         
     }
@@ -122,9 +121,9 @@ public class NodeFactoryTest extends XOMTestCase {
 
         private Attribute test = new Attribute("limit", "none");
 
-        public Attribute makeAttribute(String name, String URI, 
+        public Nodes makeAttribute(String name, String URI, 
           String value, Attribute.Type type) {
-            return test;
+            return new Nodes(test);
         }
 
     }
@@ -192,9 +191,9 @@ public class NodeFactoryTest extends XOMTestCase {
     private static class ProcessingInstructionFilter 
       extends NodeFactory {
 
-        public ProcessingInstruction makeProcessingInstruction(
+        public Nodes makeProcessingInstruction(
           String target, String data) {
-            return null;
+            return new Nodes();
         }
 
     }
@@ -219,8 +218,8 @@ public class NodeFactoryTest extends XOMTestCase {
     private static class IgnorableWhiteSpaceFilter 
       extends NodeFactory {
 
-        public Text makeWhiteSpaceInElementContent(String data) {
-            return null;
+        public Nodes makeWhiteSpaceInElementContent(String data) {
+            return new Nodes();
         }
 
     }
@@ -267,7 +266,7 @@ public class NodeFactoryTest extends XOMTestCase {
       throws IOException, ParsingException {
         
         File input = new File("data/entitytest.xml");
-        Builder builder = new Builder(new MinimalizingFactory());
+        Builder builder = new Builder(new MinimizingFactory());
         Document doc = builder.build(input);
         assertEquals(1, doc.getChildCount());
         Element root = doc.getRootElement();
@@ -280,42 +279,52 @@ public class NodeFactoryTest extends XOMTestCase {
     
     // Throws away everything except the document and the
     // root element
-    static class MinimalizingFactory extends NodeFactory {
+    static class MinimizingFactory extends NodeFactory {
 
-        public Comment makeComment(String data) {
-            return null;  
+        private Nodes empty = new Nodes();
+
+        public Nodes makeComment(String data) {
+            return empty;  
         }    
     
-        public Text makeText(String data) {
-            return null;  
+        public Nodes makeText(String data) {
+            return empty;  
         }    
     
-        protected Element finishMakingElement(Element element) {
+        protected Nodes finishMakingElement(Element element) {
             if (element.getParent() instanceof Document) {
-                return element;
+                return new Nodes(element);
             }        
-            return null;
+            return empty;
         }
     
-        public Attribute makeAttribute(String name, String URI, 
+        public Nodes makeAttribute(String name, String URI, 
           String value, Attribute.Type type) {
-            return null;
+            return empty;
         }
     
-        public DocType makeDocType(String rootElementName, 
+        public Nodes makeDocType(String rootElementName, 
           String publicID, String systemID) {
-            return null;    
+            return empty;    
         }
     
-        public Text makeWhiteSpaceInElementContent(String data) {
-            return null;  
+        public Nodes makeWhiteSpaceInElementContent(String data) {
+            return empty;  
         }
     
-        public ProcessingInstruction makeProcessingInstruction(
+        public Nodes makeProcessingInstruction(
           String target, String data) {
-            return null; 
+            return empty; 
         }          
         
+    }
+    
+    public void testCDATASectionsCanBeOverridden() 
+      throws ValidityException, ParsingException, IOException {
+        String data ="<root><![CDATA[text]]></root>";
+        Builder builder = new Builder(new MinimizingFactory());
+        Document doc = builder.build(data, "http://www.example.com");
+        assertEquals("", doc.getValue());
     }
 
     public void testNullRootNotAllowed() 

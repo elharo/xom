@@ -27,14 +27,12 @@ import java.io.IOException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
-import nu.xom.Comment;
-import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
 
 /**
  * <p>
@@ -45,18 +43,20 @@ import nu.xom.Text;
  * </p>
  * 
  *  @author Elliotte Rusty Harold
- *  @version 1.0d22
+ *  @version 1.0d23
  *
  */
 public class StreamingProcessingInstructionLister extends NodeFactory {
 
-    public Comment makeComment(String data) {
-        return null;  
+    private Nodes empty = new Nodes();
+
+    public Nodes makeComment(String data) {
+        return empty;  
     }    
 
     // We don't need text nodes at all    
-    public Text makeText(String data) {
-        return null;  
+    public Nodes makeText(String data) {
+        return empty;  
     }    
 
     public Element makeRootElement(String name, String namespace) {
@@ -67,26 +67,26 @@ public class StreamingProcessingInstructionLister extends NodeFactory {
         return null;    
     }
 
-    public Attribute makeAttribute(String name, String URI, 
+    public Nodes makeAttribute(String name, String URI, 
       String value, Attribute.Type type) {
-        return null;
+        return empty;
     }
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return null;    
+        return empty;    
     }
 
-    public Text makeWhiteSpaceInElementContent(String data) {
-        return null;  
+    public Nodes makeWhiteSpaceInElementContent(String data) {
+        return empty;  
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
         ProcessingInstruction pi 
           = new ProcessingInstruction(target, data);
         System.out.println(pi.toXML());
-        return null; 
+        return empty; 
     }
 
     public static void main(String[] args) {

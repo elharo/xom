@@ -29,14 +29,11 @@ import java.io.Writer;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
-import nu.xom.Comment;
-import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
+import nu.xom.Nodes;
 import nu.xom.ParsingException;
-import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
 
 
 /**
@@ -46,12 +43,14 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class StreamingTextExtractor extends NodeFactory {
 
     private Writer out;
+    private Nodes empty = new Nodes();
+    // could I have a guaranteed empty Nodes subclass with a singleton????
     
     public StreamingTextExtractor(Writer out) {
       if (out == null) {
@@ -64,19 +63,18 @@ public class StreamingTextExtractor extends NodeFactory {
       this(new OutputStreamWriter(System.out));
     }
     
-    // We don't really need the comments. We just want to print them.    
-    public Comment makeComment(String data) {
-        return null;  
+    public Nodes makeComment(String data) {
+        return empty;  
     }    
 
-    public Text makeText(String data) {
+    public Nodes makeText(String data) {
         try {
             out.write(data);
         }
         catch (IOException ex) {
             System.err.println(ex);   
         }
-        return null;  
+        return empty;  
     }    
 
     public Element makeRootElement(String name, String namespace) {
@@ -89,20 +87,20 @@ public class StreamingTextExtractor extends NodeFactory {
         return null;    
     }
 
-    public Attribute makeAttribute(String name, String namespace, 
+    public Nodes makeAttribute(String name, String namespace, 
       String value, Attribute.Type type) {
         Attribute att = new Attribute(name, namespace, value, type);  
-        return null;
+        return empty;
     }
 
-    public DocType makeDocType(String rootElementName, 
+    public Nodes makeDocType(String rootElementName, 
       String publicID, String systemID) {
-        return null;    
+        return empty;    
     }
 
-    public ProcessingInstruction makeProcessingInstruction(
+    public Nodes makeProcessingInstruction(
       String target, String data) {
-        return null; 
+        return empty; 
     }    
     
     public void endDocument(Document doc) {
