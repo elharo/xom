@@ -22,9 +22,12 @@
 // to http://www.xom.nu/
 package nu.xom;
 
+import org.xml.sax.SAXException;
+
 import com.sun.org.apache.xerces.internal.parsers.SAXParser;
 import com.sun.org.apache.xerces.internal.parsers.DTDConfiguration;
-
+import com.sun.org.apache.xerces.internal.impl.Constants
+;
 /**
  * <p>
  * This class is used by the <code>Builder</code> to prevent the
@@ -35,13 +38,19 @@ import com.sun.org.apache.xerces.internal.parsers.DTDConfiguration;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b1
+ * @version 1.0b2
  * 
  */
 class JDK15XML1_0Parser extends SAXParser {
 
-    JDK15XML1_0Parser() {
+    JDK15XML1_0Parser() throws SAXException {
+      
         super(new DTDConfiguration());
+        // workaround for Java 1.5 beta 2 bugs
+        com.sun.org.apache.xerces.internal.util.SecurityManager manager 
+          = new com.sun.org.apache.xerces.internal.util.SecurityManager();
+        setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, manager);
+        
     }
 
 }
