@@ -344,13 +344,8 @@ public class Canonicalizer {
                 }
             }
     
-            return result.toString();
+            return result.toString();    
             
-            
-        }
-        
-        private boolean isSpace(char c) {
-           return c == ' ' || c == '\t' || c == '\r' || c == '\n';   
         }
         
         
