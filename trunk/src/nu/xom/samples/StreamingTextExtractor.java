@@ -50,7 +50,6 @@ public class StreamingTextExtractor extends NodeFactory {
 
     private Writer out;
     private Nodes empty = new Nodes();
-    // could I have a guaranteed empty Nodes subclass with a singleton????
     
     public StreamingTextExtractor(Writer out) {
       if (out == null) {

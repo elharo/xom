@@ -176,7 +176,6 @@ class TreeWalker {
             InputStream raw = new BufferedInputStream(
               new ByteArrayInputStream(data)
             );    
-            // why copy these variables here????
             Document doc = parser.build(raw, base);
             walkTree(iterator, doc);
             serialize(doc, new ByteArrayOutputStream(3000000));
