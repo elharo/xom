@@ -286,91 +286,6 @@ public class XIncluder {
 
     /**
      * <p>
-     * Returns a <code>Nodes</code> object in which all 
-     * <code>xinclude:include</code> elements have been replaced
-     * by their referenced content. Resolution is deep; that is, 
-     * include elements that are descendants of nodes in this list
-     * are replaced as well.
-     * </p>
-     * 
-     * @param in the <code>Nodes</code> object in which include 
-     *     elements should be resolved
-     * 
-     * @return a new Nodes object which does not contain any 
-     *   <code>xinclude:include</code> elements
-     * 
-     * @throws BadParseAttributeException if an <code>include</code>  
-     *     element has a <code>parse</code> attribute
-     *     with any value other than <code>text</code> 
-     *     or <code>parse</code>
-     * @throws CircularIncludeException if this <code>Element</code> 
-     *     contains an XInclude element that attempts to include a  
-     *     document in which this element is directly or indirectly 
-     *     included
-     * @throws IOException if an included document could not be loaded,
-     *     and no fallback was available
-     * @throws MissingHrefException if an <code>xinclude:include</code>
-     *     element does not have an <code>href</code> attribute
-     * @throws ParsingException if an included XML document 
-     *     was malformed
-     * @throws UnsupportedEncodingException if an included document 
-     *     used an encoding this parser does not support, and no 
-     *     fallback was available
-     * @throws XIncludeException if the document violates the
-     *     syntax rules of XInclude
-     * @throws XMLException if resolving an include element would 
-     *     result in a malformed document
-     * 
-     */
-    private static Nodes resolve(Nodes in) 
-      throws IOException, ParsingException, XIncludeException { 
-        return resolve(in, new Builder());
-    }
-
-    /**
-     * <p>
-     * Modifies a <code>Nodes</code> object by replacing all 
-     * <code>xinclude:include</code> elements with their referenced 
-     * content. Resolution is recursive; that is, include elements
-     * in the included documents are themselves resolved.
-     * Furthermore, include elements that are children or 
-     * descendants of elements in this list are also resolved.
-     * The <code>Nodes</code> object returned contains no
-     * include elements.
-     * </p>
-     * 
-     * @param in the <code>Nodes</code> object in which include 
-     *     elements should be resolved.
-     * 
-     * @throws BadParseAttributeException if an <code>include</code>  
-     *     element has a <code>parse</code> attribute
-     *     with any value other than <code>text</code> 
-     *     or <code>parse</code>
-     * @throws CircularIncludeException if this <code>Element</code> 
-     *     contains an XInclude element that attempts to include a  
-     *     document in which this element is directly or indirectly 
-     *     included
-     * @throws IOException if an included document could not be loaded,
-     *     and no fallback was available
-     * @throws MissingHrefException if an <code>xinclude:include</code>
-     *     element does not have an <code>href</code> attribute.
-     * @throws ParsingException if an included XML document 
-     *     was malformed
-     * @throws UnsupportedEncodingException if an included document 
-     *     used an encoding this parser does not support, and no 
-     *     fallback was available
-     * @throws XIncludeException if the document violates the
-     *     syntax rules of XInclude
-     * @throws XMLException if resolving an include element would 
-     *     result in a malformed document
-     */
-    private static void resolveInPlace(Nodes in) 
-      throws IOException, ParsingException, XIncludeException { 
-        resolveInPlace(in, new Builder());
-    }
-
-    /**
-     * <p>
      * Modifies a <code>Nodes</code> object by replacing all 
      * XInclude elements with their referenced content.
      * Resolution is recursive; that is, include elements
@@ -428,8 +343,6 @@ public class XIncluder {
             }
         }
     }
-
-    // could any of the resolve(nodes) methods be removed????
 
     /**
      * <p>
