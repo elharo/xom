@@ -217,8 +217,7 @@ public class Canonicalizer {
             this.exclusive = true;            
         }
         else {
-            // custom exception????
-            throw new IllegalArgumentException(
+            throw new CanonicalizationException(
               "Unsupported canonicalization algorithm: " + algorithm);
         }
         
@@ -960,7 +959,8 @@ public class Canonicalizer {
         if (nodes.size() > 0) {
             Document doc = nodes.get(0).getDocument();
             if (doc == null) {
-                throw new RuntimeException("change me to different type"); // ????
+                throw new CanonicalizationException(
+                  "Canonicalization is not defined for detached nodes");
             }
             Nodes result = sort(nodes);
             serializer.nodes = result;
