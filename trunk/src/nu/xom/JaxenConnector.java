@@ -21,14 +21,20 @@
 
 package nu.xom;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.jaxen.BaseXPath;
 import org.jaxen.JaxenException;
 
 
+/**
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.1a2
+ *
+ */
 class JaxenConnector extends BaseXPath {
 
     
@@ -39,20 +45,25 @@ class JaxenConnector extends BaseXPath {
     
     public List selectNodes(Object expression) throws JaxenException {
         
-        List initial = super.selectNodes(expression);
-        List result = new ArrayList(initial.size());
-        Iterator iterator = initial.iterator();
+        List result = super.selectNodes(expression);
+        // Text objects are returned wrapped in a List.
+        // We need to unwrap them here.
+        ListIterator iterator = result.listIterator();
         while (iterator.hasNext()) {
             Object next = iterator.next();
             if (next instanceof List) {
                 List l = (List) next;
-                result.addAll(l);
-            }
-            else {
-                result.add(next);
+                // replace the list with the first item in the list
+                iterator.set(l.get(0));
+                if (l.size() > 1) {
+                    Iterator texts = l.listIterator(1);
+                    while (texts.hasNext()) {
+                        iterator.add(texts.next());
+                    }
+                }
             }
         } 
-        return result; 
+        return result;
         
     }
 
