@@ -210,7 +210,6 @@ public class Element extends ParentNode {
             if (!endTag && sourceCurrent.getChildCount() > 0) {
                sourceCurrent = sourceCurrent.getChild(0);
                index = 0;
-               index = 0;
                top++;
                indexes = grow(indexes, top);
                indexes[top] = 0;
@@ -1510,24 +1509,32 @@ public class Element extends ParentNode {
         StringBuffer result = new StringBuffer();
         Node current = this.getChild(0);
         int index = 0;
-        boolean end = false;
+        int[] indexes = new int[10];
+        int top = 0;
+        indexes[0] = 0;
+        
+        boolean endTag = false;
         while (true) {
-            if (!end && current.getChildCount() > 0) {
+            if (!endTag && current.getChildCount() > 0) {
                current = current.getChild(0);
                index = 0;
-            }
+               top++;
+               indexes = grow(indexes, top);
+               indexes[top] = 0;            }
             else {
-                end = false;
+                endTag = false;
                 if (current.isText()) result.append(current.getValue());
                 ParentNode parent = current.getParent();
                 if (parent.getChildCount() - 1 == index) {
                     current = parent;
+                    top--;
                     if (current == this) break;
-                    index = current.getParent().indexOf(current);
-                    end = true;
+                    index = indexes[top];
+                    endTag = true;
                 }
                 else {
                     index++;
+                    indexes[top] = index;
                     current = parent.getChild(index);
                 }
             }
