@@ -33,7 +33,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0d25
  *
  */
 public class UnavailableCharacterException extends XMLException {
@@ -44,11 +44,11 @@ public class UnavailableCharacterException extends XMLException {
     
     /**
      * <p>
-     * Creates a new <code>UnavailableCharacterException</code> 
-     * with a detail message.
+     * Creates a new <code>UnavailableCharacterException</code>.
      * </p>
      * 
-     * @param message explains the reason for the exception
+     * @param character the character which caused the exception
+     * @param encoding the encoding which does not contain the character
      */
     public UnavailableCharacterException(char character, String encoding) {
     
