@@ -158,7 +158,7 @@ XOM Build file
     </jar>
   </target>
 
-  
+  <!-- could add   noqualifier="java.lang:java.io" but this requires Ant 1.6 -->
   <target name="javadoc" depends="prepare"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
@@ -177,7 +177,7 @@ XOM Build file
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
 			 &lt;br/&gt; &lt;a href='mailto:elharo@metalab.unc.edu?Subject=XOM'&gt;elharo@metalab.unc.edu&lt;/a&gt;">
-      <classpath refid="run.class.path"/>
+      <classpath refid="test.class.path"/>
       
     <fileset dir="${build.src}" defaultexcludes="yes">
       <include name="nu/xom/tests/XOMTestCase.java" />
