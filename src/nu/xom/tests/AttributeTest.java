@@ -29,6 +29,7 @@ import nu.xom.IllegalDataException;
 import nu.xom.IllegalNameException;
 import nu.xom.MalformedURIException;
 import nu.xom.NamespaceConflictException;
+import nu.xom.Text;
 
 /**
  * <p>
@@ -665,5 +666,15 @@ public class AttributeTest extends XOMTestCase {
         
     }
 
+    
+    public void testPunctuationCharactersInToXML() {
+        
+        String data = "=,.!@#$%^*()_-'[]{}+/?;:`|\\";
+        Attribute a = new Attribute("a", data);
+        assertEquals("a=\"" + data + "\"", a.toXML());
+        
+    }
+
+    
     
 }
