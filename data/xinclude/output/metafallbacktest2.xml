@@ -1,4 +1,5 @@
 <root>
+  <test xml:base="fallbacktotext.xml">
   <![CDATA[<simple>
 <test xmlns:xinclude="http://www.w3.org/2001/XInclude">
   <latin1>
@@ -18,4 +19,5 @@
 </test>
 </simple>
 ]]>
+</test>
 </root>

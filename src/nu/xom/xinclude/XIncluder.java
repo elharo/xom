@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a5
+ * @version 1.0b5
  *
  */
 public class XIncluder {
@@ -179,9 +179,11 @@ public class XIncluder {
        throws BadParseAttributeException, InclusionLoopException, 
              IOException, NoIncludeLocationException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {        
+         
         Document copy = new Document(in);
         resolveInPlace(copy, builder);
         return copy;   
+        
     }
 
     /**
@@ -867,7 +869,7 @@ public class XIncluder {
     } 
 
    
-
+    // I could probably move the xpointer out of this method
     private static Nodes downloadXMLDocument(
       URL source, String xpointer, Builder builder, Stack baseURLs,
       String accept, String acceptLanguage, String parentLanguage) 
@@ -892,6 +894,7 @@ public class XIncluder {
             in.close();
         }
           
+        resolveInPlace(doc, builder, baseURLs); 
         Nodes included;
         if (xpointer != null && xpointer.length() != 0) {
             included = XPointer.query(doc, xpointer); 
@@ -912,10 +915,8 @@ public class XIncluder {
                     }
                 }
             }
-            resolveInPlace(included, builder, baseURLs); 
         }
         else {
-            resolveInPlace(doc, builder, baseURLs); // remove include elements
             included = new Nodes();
             for (int i = 0; i < doc.getChildCount(); i++) {
                 Node child = doc.getChild(i);
