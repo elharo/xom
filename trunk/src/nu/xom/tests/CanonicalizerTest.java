@@ -107,6 +107,32 @@ public class CanonicalizerTest extends XOMTestCase {
     }
 
     
+    public void testRemoveDuplicateAttributes() throws IOException {
+        
+        Element pdu = new Element("doc");
+        Attribute a1 = new Attribute("a1", "v1");
+        pdu.addAttribute(a1);
+        Attribute a2 = new Attribute("a2", "v2");
+        pdu.addAttribute(a2);
+        
+        String expected = " a1=\"v1\" a2=\"v2\"";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        
+        Document doc = new Document(pdu);
+        Nodes subset = doc.query("//@*");
+        subset.append(a1);
+        subset.append(a2);
+        canonicalizer.write(subset);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+
+    
     public void testCanonicalizeOnlyNamespaces() throws IOException {
         
         Element pdu = new Element("doc", "http://www.example.com");
