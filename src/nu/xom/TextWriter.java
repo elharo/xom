@@ -369,7 +369,7 @@ abstract class TextWriter {
         if (maxLength <= 0 || preserveSpace) return false;
         // XXX Better algorithm needed: Should look ahead in the 
         // stream, see if there's a white space character 
-        // between here and the maxLength XXX
+        // between here and the maxLength
         
         return column >= maxLength - 10; 
         
