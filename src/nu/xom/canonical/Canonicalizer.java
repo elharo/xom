@@ -52,7 +52,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b7
  *
  */
 public class Canonicalizer {
@@ -204,11 +204,17 @@ public class Canonicalizer {
                 Node current = element;
                 boolean end = false;
                 int index = -1;
+                int[] indexes = new int[10];
+                int top = 0;
+                indexes[0] = -1;
                 while (true) {                   
                     if (!end && current.getChildCount() > 0) {
                        writeStartTag((Element) current, false);
                        current = current.getChild(0);
                        index = 0;
+                       top++;
+                       indexes = grow(indexes, top);
+                       indexes[top] = 0;
                     }
                     else {
                         if (end) {
@@ -222,14 +228,16 @@ public class Canonicalizer {
                         ParentNode parent = current.getParent();
                         if (parent.getChildCount() - 1 == index) {
                             current = parent;
+                            top--;
                             if (current != element) {
                                 parent = current.getParent();
-                                index = parent.indexOf(current);
+                                index = indexes[top];
                             }
                             end = true;
                         }
                         else {
                             index++;
+                            indexes[top] = index;
                             current = parent.getChild(index);
                         }
                     }
@@ -239,6 +247,16 @@ public class Canonicalizer {
         } 
     
         
+        private int[] grow(int[] indexes, int top) {
+            
+            if (top < indexes.length) return indexes;
+            int[] result = new int[indexes.length*2];
+            System.arraycopy(indexes, 0, result, 0, indexes.length);
+            return result;
+            
+        }
+
+
         protected void writeStartTag(Element element, boolean isEmpty) 
           throws IOException {
             writeRaw("<");
