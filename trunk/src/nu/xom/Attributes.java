@@ -23,7 +23,6 @@
 package nu.xom;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 
 /**
@@ -37,7 +36,7 @@ import java.util.Iterator;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0b8
  * 
  */
 final class Attributes {
@@ -99,6 +98,7 @@ final class Attributes {
         if (oldAttribute != null) remove(oldAttribute);
         
         attributes.add(attribute);
+        
     }
     
     
@@ -108,9 +108,9 @@ final class Attributes {
         String namespaceURI = attribute.getNamespaceURI();
         
         // Look for conflicts
-        Iterator iterator = attributes.iterator();
-        while (iterator.hasNext()) {
-            Attribute a = (Attribute) iterator.next();
+        int size = this.size();
+        for (int i = 0; i < size; i++) {
+            Attribute a = (Attribute) attributes.get(i);
             if (a.getNamespacePrefix().equals(prefix) 
               && !(a.getNamespaceURI().equals(namespaceURI))) {
                 throw new NamespaceConflictException(
@@ -118,6 +118,7 @@ final class Attributes {
                  + " conflicts with " + a.getQualifiedName());
             }   
         }
+        
     }
 
     
@@ -159,9 +160,9 @@ final class Attributes {
      */
     Attribute get(String localName, String namespaceURI) {
         
-        Iterator iterator = attributes.iterator();
-        while (iterator.hasNext()) {
-            Attribute a = (Attribute) iterator.next();
+        int size = attributes.size();
+        for (int i = 0; i < size; i++) {
+            Attribute a = (Attribute) attributes.get(i);
             if (a.getLocalName().equals(localName) 
              && a.getNamespaceURI().equals(namespaceURI)) {
                 return a;
@@ -173,13 +174,14 @@ final class Attributes {
     }
     
     
-    // Make copying a set of attribute easy while bypassing most checks.
-    // This is only intended for the use of Element.copy()
+    // Make copying a set of attributes easy while bypassing most 
+    // checks. This is only intended for the use of Element.copy().
     Attributes copy() {
         
         Attributes result = new Attributes();
-        result.attributes.ensureCapacity(this.size());
-        for (int i = 0; i < this.attributes.size(); i++) {
+        int size = attributes.size();
+        result.attributes.ensureCapacity(size);
+        for (int i = 0; i < size(); i++) {
             result.attributes.add(this.get(i).copy());
         }
         return result;
