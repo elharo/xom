@@ -578,8 +578,7 @@ public class NodeFactoryTest extends XOMTestCase {
         catch (XMLException success) {
             assertNotNull(success.getMessage());
         }
-    }
-    
+    }   
     
     
     public void testChangeElementsToAttributes() 
@@ -606,6 +605,32 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals("data1", root.getAttribute("b").getValue());         
         assertEquals("text", root.getAttribute("c").getValue());                  
     }
+
+
+    public void testChangeTextToAttributes() 
+      throws ParsingException, IOException {
+        String data = "<a><b>data1</b><c>text</c></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes makeText(String text) {
+                Nodes result = new Nodes();
+                result.append(new Attribute("name", text));
+                return result;
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        assertEquals(2, root.getChildCount());
+        assertEquals(0, root.getAttributeCount());
+        assertEquals("", root.getValue());
+        Element b = root.getFirstChildElement("b");
+        Element c = root.getFirstChildElement("c");
+        assertEquals("data1", b.getAttribute("name").getValue());
+        assertEquals("text", c.getAttribute("name").getValue());
+        
+    }
+
     
     public void testChangeRootElementsToAttribute() 
       throws ParsingException, IOException {
