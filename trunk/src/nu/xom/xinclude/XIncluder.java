@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0d24
  *
  */
 public class XIncluder {
@@ -285,16 +285,24 @@ public class XIncluder {
       throws IOException, ParsingException, XIncludeException {
         
         String base = in.getBaseURI();
-        if (baseURLs.indexOf(base) != -1) {
+        // workaround a bug in Sun VMs
+        if (base != null && base.startsWith("file:///")) {
+            base = "file:/" + base.substring(8);
+        }
+        
+        // this is the wrong place to test this. It's too late
+        /*if (baseURLs.indexOf(base) != -1) {
             throw new InclusionLoopException(
-              "Tried to include the already included document" + base +
-              " from " + in.getBaseURI(), in.getBaseURI());
-        } 
+              "Tried to include the already included document " + base +
+              " from " + baseURLs.peek(), (String) baseURLs.peek());
+        } */
         baseURLs.push(base);       
         resolve(in.getRootElement(), builder, baseURLs);
         baseURLs.pop();
+        
     }
 
+    
     private static void resolve(
       Element element, Builder builder, Stack baseURLs)
       throws IOException, ParsingException, XIncludeException {
@@ -302,6 +310,7 @@ public class XIncluder {
         resolve(element, builder, baseURLs, null);
         
     }
+    
     
     private static void resolve(
       Element element, Builder builder, Stack baseURLs, Document originalDoc)
@@ -351,7 +360,7 @@ public class XIncluder {
                 if (parse.equals("xml")) {
                     Nodes replacements;
                     if (url != null) { 
-                        replacements  = downloadXMLDocument(url, 
+                        replacements = downloadXMLDocument(url, 
                           xpointer, builder, baseURLs, accept, 
                           acceptCharset, acceptLanguage);
                         // Add base URIs. Base URIs added by XInclusion require
@@ -797,7 +806,14 @@ public class XIncluder {
       String accept, String charset, String language) 
       throws IOException, ParsingException, XIncludeException, 
              XPointerSyntaxException, XPointerResourceException {
-    
+
+        String base = source.toExternalForm();
+        if (xpointer == null && baseURLs.indexOf(base) != -1) {
+            throw new InclusionLoopException(
+              "Tried to include the already included document " + base +
+              " from " + baseURLs.peek(), (String) baseURLs.peek());
+        }      
+        
         URLConnection uc = source.openConnection();
         setHeaders(uc, accept, charset, language);
         Document doc = builder.build(
