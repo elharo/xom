@@ -45,7 +45,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.IllegalAddException;
 import nu.xom.MalformedURIException;
-import nu.xom.NamespaceConflictException;
+import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
@@ -53,14 +53,13 @@ import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
 import nu.xom.Text;
-import nu.xom.ValidityException;
 import nu.xom.XMLException;
 import nu.xom.xslt.XSLException;
 import nu.xom.xslt.XSLTransform;
 
 /**
  * <p>
- *  Unit tests for the XSLT engine.
+ * Unit tests for the XSLT engine.
  * </p>
  * 
  * <p>
@@ -70,7 +69,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b1
+ * @version 1.0b4
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -107,6 +106,7 @@ public class XSLTransformTest extends XOMTestCase {
         Nodes result = xform.transform(inputDoc);
         
     } */   
+    
     
     // primarily this makes sure the XSLTHandler can handle various
     // edge cases
@@ -178,6 +178,8 @@ public class XSLTransformTest extends XOMTestCase {
             Document doc = builder.build(notAStyleSheet, 
               "http://www.example.com");
             new XSLTransform(doc);
+            // ???? should this really be an error?
+            // Isn't any well-formed document a stylesheet?
             fail("Compiled non-stylesheet");
         }
         catch (XSLException success) { 
@@ -402,7 +404,7 @@ public class XSLTransformTest extends XOMTestCase {
         File doc = new File("data/xslt/input/8-1.xml");
         InputStream stylesheet = new FileInputStream("data/xslt/input/8-12.xsl");
         Builder builder = new Builder();
-        XSLTransform xform = new XSLTransform(stylesheet);
+        XSLTransform xform = new XSLTransform(stylesheet, doc.toURL().toExternalForm());
         Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Document result = new Document((Element) (output.get(0)));
@@ -621,7 +623,8 @@ public class XSLTransformTest extends XOMTestCase {
    
     
     public void testPassingNullSetsDefaultFactory() 
-      throws IOException, ParsingException, XSLException {  
+      throws IOException, ParsingException, XSLException { 
+        
         File stylesheet = new File("data/xslt/input/identity.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
         xform.setNodeFactory(new NodeFactoryTest.TripleElementFilter());
@@ -647,6 +650,7 @@ public class XSLTransformTest extends XOMTestCase {
     
     public void testTransformEmptyNodesList() 
       throws IOException, ParsingException, XSLException {  
+        
         File stylesheet = new File("data/xslt/input/identity.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
        
@@ -788,6 +792,30 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
 
+    public void testCommentsAreTransformed() 
+      throws IOException, ParsingException, XSLException {
+        
+        File stylesheet = new File("data/xslt/input/identity.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+
+        String data = "<a><!--test--></a>";
+        Builder builder = new Builder();
+        Document doc = builder.build(data, "http://www.example.org/");
+        
+        Nodes result = xform.transform(doc);
+        
+        assertEquals(1, result.size());
+        Element a = (Element) result.get(0);
+        assertEquals("a", a.getLocalName());
+        assertEquals(1, a.getChildCount());
+        assertEquals(0, a.getAttributeCount());
+        Node child = a.getChild(0);
+        assertTrue(child instanceof Comment);
+        assertTrue(child.getValue().equals("test"));
+        
+    }
+    
+    
     public void testCommentToAttribute() 
       throws IOException, ParsingException, XSLException {
         
@@ -840,9 +868,6 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals(2, a.getNamespaceDeclarationCount());
         
     }
-    
-  
-
 
 
     private static boolean indentYes(Document styleDoc) {
@@ -879,6 +904,7 @@ public class XSLTransformTest extends XOMTestCase {
                 for (int j = 0; j < testcases.size(); j++) {
                     Element testcase = testcases.get(j);
                     String id = testcase.getAttributeValue("id");
+                    // System.out.println(id);
                     if (id.startsWith("output_")) {
                         // These test cases are mostly about producing 
                         // HTML and plain text output that isn't 
@@ -946,6 +972,9 @@ public class XSLTransformTest extends XOMTestCase {
                                   || id.equals("copy_copy59")) {
                                     // Xalan bug;
                                     // XXX diagnose and report
+                                } 
+                                else if (id.equals("expression_expression02")) {
+                                    // requires unparsed entities XOM doesn't support
                                 } 
                                 else if (id.equals("idkey_idkey31")
                                   || id.equals("idkey_idkey59")
@@ -1031,9 +1060,9 @@ public class XSLTransformTest extends XOMTestCase {
                                 continue;
                             }
                             else if ("select_select85".equals(id)) {  
-                                // This has been fixed in Xalan 2.6.0
+                                // This has been fixed in Xalan 2.6.0.
                                 // However, it's a bug in earlier versions of Xalan
-                                // bundled with the JDK 1.4.2_05
+                                // including the one bundled with the JDK 1.4.2_05
                                 continue;
                             }
                             else if ("numberformat_numberformat45".equals(id)
@@ -1057,7 +1086,7 @@ public class XSLTransformTest extends XOMTestCase {
      
     }
     
-    
+   
     public void testOASISMicrosoftConformanceSuite()  
       throws IOException, ParsingException, XSLException {
         
@@ -1463,7 +1492,7 @@ public class XSLTransformTest extends XOMTestCase {
             
         } // end if 
      
-    }
+    } 
     
     
     public void testToDocumentWithEmptyNodes() {
