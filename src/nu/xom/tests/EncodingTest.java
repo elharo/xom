@@ -272,30 +272,40 @@ public class EncodingTest extends XOMTestCase {
     } */
 
     // These encodings are only available after Java 1.3
-   /* public void testLatin6()  
+    private static boolean java14OrLater = false;
+    
+    static {
+        String version = System.getProperty("java.version");
+        String majorVersion = version.substring(0, 3);
+        double versionNumber = Double.parseDouble(majorVersion);
+        if (versionNumber >= 1.4) java14OrLater = true; 
+    }
+    
+    
+    /* public void testLatin6()  
       throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-10");
-    }
+    } */
 
     public void testLatin7()  
       throws ParsingException, UnsupportedEncodingException {
-        checkAll("ISO-8859-13");
+        if (java14OrLater) checkAll("ISO-8859-13");
     }
         
-    public void testLatin8()  
+    /* public void testLatin8()  
       throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-14");
-    }
+    } */
     
-    public void testLatin10()  
+    /* public void testLatin10()  
       throws ParsingException, UnsupportedEncodingException {
         checkAll("ISO-8859-16");
-    }
+    } */
     
     public void testLatin9()  
       throws ParsingException, UnsupportedEncodingException {
-        checkAll("ISO-8859-15");
-    } */
+        if (java14OrLater) checkAll("ISO-8859-15");
+    } 
 
 
 // Java 1.4 does not yet support these encodings
