@@ -1011,8 +1011,11 @@ public class BuilderTest extends XOMTestCase {
     } 
 
     public void testDontGetNodeFactory() {
-        Builder builder = new Builder();   
-        assertNull(builder.getNodeFactory());
+        Builder builder = new Builder();
+        NodeFactory factory = builder.getNodeFactory();
+        if (factory != null) {
+            assertFalse(factory.getClass().getName().equals("NonVerifyingFactory"));
+        }
     }
     
     public void testGetNodeFactory() {

@@ -60,12 +60,23 @@ public class Builder {
 
     private XMLReader   parser;
     private NodeFactory factory;
+    
+    private static boolean IBMVM14 = false;
 
     static {    
+        String vendor = System.getProperty("java.vendor");
+        String version = System.getProperty("java.version");
+        String majorVersion = version.substring(0, 3);
+        
         // turn off XML 1.1
-        System.setProperty(
-          "org.apache.xerces.xni.parser.XMLParserConfiguration", 
-          "nu.xom.xerces.XML1_0ParserConfiguration");
+        if ( vendor.startsWith("IBM") && majorVersion.equals("1.4")) {
+            IBMVM14 = true;
+        }
+        else {
+            System.setProperty(
+              "org.apache.xerces.xni.parser.XMLParserConfiguration", 
+              "nu.xom.xerces.XML1_0ParserConfiguration");
+        }
     }
     
     /**
@@ -369,7 +380,7 @@ public class Builder {
         if (factory != null) {
             setHandlers(factory);             
         }
-        else if (parser instanceof XMLFilter) {
+        else if (parser instanceof XMLFilter || IBMVM14) {
             setHandlers(new NodeFactory()); 
         }
         else  {
@@ -406,7 +417,7 @@ public class Builder {
         catch (SAXException ex) {
             // This parser does not support declaration events.
             // We can live without them, though it does mean
-            // there won't be any internal DTD subset.
+            // they won't be any internal DTD subset.
         }
         
     }
