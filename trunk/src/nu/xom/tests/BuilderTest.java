@@ -1651,6 +1651,8 @@ public class BuilderTest extends XOMTestCase {
                 + "<resumé />\n";
             String actual = doc.toXML();
             assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/resum%C3%A9.xml"));
         }
         finally {
             if (f.exists()) f.delete();
@@ -1697,6 +1699,8 @@ public class BuilderTest extends XOMTestCase {
             + "<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/%23%20file.xml"));
         
     }
   
@@ -1709,6 +1713,8 @@ public class BuilderTest extends XOMTestCase {
             + "<data />\n";
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/!file.xml"));
         
     }
   
@@ -1982,7 +1988,7 @@ public class BuilderTest extends XOMTestCase {
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%" + Integer.toHexString('&') + "file.xml"));
+        assertTrue(doc.getBaseURI().endsWith("data/&file.xml"));
         
     }
   
