@@ -239,7 +239,7 @@ XOM Build file
   <target name="zip" depends="jar, javadoc, samples" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, clover_html/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, clover_html/**,  clover/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
@@ -251,7 +251,7 @@ XOM Build file
   <target name="tar" depends="jar, javadoc, samples" description="Build tar file for distro">
     <tar destfile="${dist.dir}/${name}-${version}.tar">
       <tarfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, clover_html/**, xom.gif data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif data/XInclude-Test-Suite/**, data/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
@@ -296,16 +296,16 @@ XOM Build file
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
     <delete>
-      <fileset dir="." includes="xom_coverage.db*"/>
       <fileset dir="." includes="junit*properties"/>
     </delete>
   </target>
 
   
+  <!-- These tasks require Clover -->
   <taskdef resource="clovertasks"/>
   
   <target name="with.clover" depends="init">
-    <clover-setup initString="xom_coverage.db">
+    <clover-setup initString="clover/xom_coverage.db">
        <files>
 	       <exclude name="nu/xom/samples/**"/>
 	       <exclude name="nu/xom/pantry/**"/>
@@ -315,19 +315,18 @@ XOM Build file
   </target>
 
   
-  <!-- These tasks require Clover -->
   <property name="ant-home" value="/opt/java/ant"/>
 
   <target name="clover.html" depends="with.clover">
     <clover-report>
-       <current outfile="clover_html" title="${Name} ${version}">
+       <current outfile="clover_html" title="Clover results for ${Name} ${version}">
 	       <format type="html"/>
        </current>	 
     </clover-report>
   </target>
   
  
-  <!-- This task requires the ANT optional.jar and junit.jar to be installed in ANT_HOME/lib-->
+  <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib-->
   <target name="clovertest" depends="compile" description="Run JUnit tests with clover.jar in classpath">
     <junit printsummary="on" fork="no">
        <classpath refid="run.class.path" />
