@@ -36,10 +36,9 @@ import org.jaxen.NamespaceContext;
  * @version 1.1d2
  *
  */
-public class XPathContext {
+public final class XPathContext {
 
     
-    // ???? add JavaDoc
     Map namespaces = new HashMap();
     
     
@@ -48,6 +47,15 @@ public class XPathContext {
     }   
     
     
+    /**
+     * <p>
+     * Creates a new XPath context that bonds the prefix to the
+     * URI.
+     * </p>
+     * 
+     * @param prefix the prefix to bind
+     * @param uri the namespace URI the prefix is bound to
+     */
     public XPathContext(String prefix, String uri) {
         namespaces.put(prefix, uri);
     }
@@ -56,6 +64,15 @@ public class XPathContext {
     private XPathContext() {}
 
     
+    /**
+     * <p>
+     * Binds the specified prefix to the specified namespace URI. 
+     * If the prefix is already bound in this context, ????.
+     * </p>
+     * 
+     * @param prefix the prefix to bind
+     * @param uri the namespace URI the prefix is bound to
+     */
     public void addNamespace(String prefix, String uri) {
         namespaces.put(prefix, uri);        
     }
@@ -64,12 +81,10 @@ public class XPathContext {
     // should this be a Node rather than an Element????
     /**
      * <p>
-     * ????
-     * </p>
-     * 
-     * <p>
-     * Changing the prefixes on the element after the context is
-     * returned does not change the context.
+     * Creates a new XPath context that contains all the namespace
+     * bindings <em>in scope</em> on the element. Changing 
+     * the prefixes in scope on the element after the context
+     * is returned does not change the context.
      * </p>
      * 
      * @param element the element whose namespace bindings are copied
