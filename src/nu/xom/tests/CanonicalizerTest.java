@@ -715,6 +715,47 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
+    public void testDocumentSubsetCanonicalizationSkippingProcessingInstructions() 
+      throws ParsingException, IOException {
+        
+        String input = "<!DOCTYPE doc [\n"
+            + "<!ATTLIST e3 id ID #IMPLIED>\n"
+            + "]>\n<?test?>"
+            + "<doc xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\">\n"
+            + "   <e1><?test?>\n"
+            + "      <e2 xmlns=\"\">\n"
+            + "         <e3 id=\"E3\"/>\n"
+            + "      </e2>\n"
+            + "   </e1>\n"
+            + "</doc><?test?>";
+        
+        String expected = "<doc xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\">\n"
+            + "   <e1>\n"
+            + "      <e2 xmlns=\"\">\n"
+            + "         <e3 id=\"E3\"></e3>\n"
+            + "      </e2>\n"
+            + "   </e1>\n"
+            + "</doc>";
+        
+        Document doc = builder.build(input, null);
+        XPathContext context = new XPathContext("ietf", "http://www.ietf.org");
+        String xpath = "//* | //text() | //@* | //namespace::*";
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            serializer.write(doc.query(xpath, context));
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+    
     public void testDocumentSubsetCanonicalizationWithoutSelectingPrologAndEpilog() 
       throws ParsingException, IOException {
         
