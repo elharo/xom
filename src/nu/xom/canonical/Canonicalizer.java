@@ -213,7 +213,6 @@ public class Canonicalizer {
                  i < element.getNamespaceDeclarationCount(); 
                  i++) {
                 String additionalPrefix = element.getNamespacePrefix(i);
-                if ("xml".equals(additionalPrefix)) continue;
                 String uri = element.getNamespaceURI(additionalPrefix);
                 if (parentElement != null) {
                    if (uri.equals(
