@@ -432,7 +432,8 @@ public abstract class Node {
                 connector.setNamespaceContext(namespaces.getJaxenContext());
             }
 
-            HashSet results = new HashSet(connector.selectNodes(this));
+            List queryResults = connector.selectNodes(this);
+            HashSet results = new HashSet(queryResults);
             List namespaceList = new ArrayList();
             Iterator iterator = results.iterator();
             while (iterator.hasNext()) {
@@ -453,8 +454,10 @@ public abstract class Node {
                     }
                 }
                 catch (ClassCastException ex) {
-                    throw new XPathException("XPath expression " 
-                      + xpath + " did not return a node-set.", ex);
+                    XPathTypeException qex = new XPathTypeException(
+                      "XPath expression " + xpath + " did not return a node-set.", 
+                      queryResults.get(0));
+                    throw qex;
                 }
             }
             

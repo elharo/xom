@@ -28,6 +28,7 @@ import nu.xom.Document;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.XPathException;
+import nu.xom.XPathTypeException;
 
 /**
  * @author Elliotte Rusty Harold
@@ -65,19 +66,19 @@ public class XPathDriver {
                 System.out.println(result.get(i).toXML());
             }
         }
+        catch (XPathTypeException ex) {
+            System.err.println(ex.getReturnValue());
+        }
         catch (XPathException ex) {
             System.err.println("XPath error: " + ex.getMessage());
-            return;
         }
         catch (IOException ex) {
             System.err.println("Could not read from " + args[0]);
             System.err.println(ex.getMessage());
-            return;
         }
         catch (ParsingException ex) {
             System.err.println(args[0] + " is malformed.");
             System.err.println(ex.getMessage());
-            return;
         }
   
     }
