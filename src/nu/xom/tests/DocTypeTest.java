@@ -35,7 +35,7 @@ import nu.xom.WellformednessException;
 
 /**
  * <p>
- *  various basic tests for the <code>DocType</code> class.
+ *  Various basic tests for the <code>DocType</code> class.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -249,6 +249,20 @@ public class DocTypeTest extends XOMTestCase {
         for (char c = '0'; c < '9'; c++) checkPublicIDCharacter(c + "");
 
     }
+    
+    public void testLegalSystemIDs() {
+
+        // one that contains a dollar sign and a comma
+        String systemID = "http://www.example.com/test$red/limit,data.xml";
+        DocType doctype = new DocType("root", systemID);
+        assertEquals(systemID, doctype.getSystemID());
+        // one that contains a semicolon
+        systemID = "smb://domain;user:pass@server/share/path/to/file";
+        doctype = new DocType("root", systemID);
+        assertEquals(systemID, doctype.getSystemID());
+        
+    }
+    
     
     public void testIllegalSystemIDs() {
 
