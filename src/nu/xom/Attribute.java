@@ -607,34 +607,42 @@ public class Attribute extends Node {
         
         StringBuffer result = new StringBuffer(s.length());
         for (int i = 0; i < s.length(); i++) {
-            result.append(escapeChar(s.charAt(i)));
+            escapeChar(result, s.charAt(i));
         }
         return result.toString();
         
     }
     
     
-    private static String escapeChar(char c) {
+    private static void escapeChar(StringBuffer result, char c) {
         
         switch (c) {
             case '<':
-                return "&lt;";
+                result.append("&lt;");
+                break;
             case '>':
-                return "&gt;";
+                result.append("&gt;");
+                break;
             case '&':
-                return "&amp;";
+                result.append("&amp;");
+                break;
             case '"':
-                return "&quot;";
+                result.append("&quot;");
+                break;
             case '\'':
-                return "&apos;";
+                result.append("&apos;");
+                break;
             case '\n':
-                return "&#x0A;";
+                result.append("&#x0A;");
+                break;
             case '\r':
-                return "&#x0D;";
+                result.append("&#x0D;");
+                break;
             case '\t':
-                return "&#x09;";
+                result.append("&#x09;");
+                break;
             default: 
-                return String.valueOf(c);   
+                result.append(c);   
         }
         
     }
