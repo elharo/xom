@@ -829,8 +829,18 @@ public class Element extends ParentNode {
      */
     public final void insertChild(Node child, int position) {
         
-        if (child.isText()
-          || child.isElement()
+        if (child.isElement()) {
+            if (child == this) {
+                throw new CycleException(
+                  "Cannot add a node to itself");  
+            }
+            else if (child.hasChildren() && isAncestor(this, child)) {
+                throw new CycleException(
+                  "Cannot add an ancestor as a child");                   
+            }
+            super.insertChild(child, position);            
+        }
+        else if (child.isText()
           || child.isProcessingInstruction()
           || child.isComment()) {
             super.insertChild(child, position);
@@ -842,6 +852,12 @@ public class Element extends ParentNode {
 
     }
     
+    private static boolean isAncestor(Node parent, Node child) {       
+        if (child == parent) return true;
+        if (parent == null) return false;
+        else return isAncestor(parent.getParent(), child);
+    }
+
     /**
      * <p>
      * Converts a string to a text node and inserts that

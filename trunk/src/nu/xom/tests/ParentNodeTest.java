@@ -24,6 +24,7 @@
 package nu.xom.tests;
 
 import nu.xom.Comment;
+import nu.xom.CycleException;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.IllegalAddException;
@@ -40,7 +41,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d18
+ * @version 1.0d21
  *
  */
 public class ParentNodeTest extends XOMTestCase {
@@ -69,15 +70,12 @@ public class ParentNodeTest extends XOMTestCase {
     }
 
     
-    public void testHasChildren() {
-        
+    public void testHasChildren() {       
         assertTrue(notEmpty.hasChildren());
-        assertTrue(!empty.hasChildren());
-        
+        assertTrue(!empty.hasChildren());       
     } 
 
-    public void testAppendChild() {
-        
+    public void testAppendChild() {      
         Element child = new Element("test");
         empty.appendChild(child);
         assertTrue(empty.hasChildren());
@@ -87,6 +85,30 @@ public class ParentNodeTest extends XOMTestCase {
         notEmpty.appendChild(child);
         assertTrue(!notEmpty.getChild(0).equals(child));
         assertTrue(notEmpty.getChild(1).equals(child));
+    } 
+
+    public void testAppendChildToItself() {      
+        Element child = new Element("test");
+        try {
+            child.appendChild(child);
+            fail("Appended node to itself");
+        }
+        catch (CycleException ex) {
+            // success   
+        }
+    } 
+
+    public void testCycle() {      
+        Element a = new Element("test");
+        Element b = new Element("test");
+        try {
+            a.appendChild(b);
+            b.appendChild(a);
+            fail("Allowed cycle");
+        }
+        catch (CycleException ex) {
+            // success   
+        }
     } 
 
     public void testInsertChild() {

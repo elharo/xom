@@ -30,6 +30,7 @@ import nu.xom.ParseException;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Comment;
+import nu.xom.CycleException;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -80,7 +81,7 @@ public class NodeFactoryTest extends XOMTestCase {
             Document doc = builder.build(data, "http://www.example.org/");
             fail("Allowed one element in several places");
         }
-        catch (MultipleParentException ex) {
+        catch (CycleException ex) {
             // success   
         }
                 
