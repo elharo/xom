@@ -33,7 +33,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0b6
  *
  */
 public class UnavailableCharacterException extends XMLException {
@@ -52,8 +52,8 @@ public class UnavailableCharacterException extends XMLException {
      */
     public UnavailableCharacterException(char character, String encoding) {
     
-        super("Cannot use the character &0x" 
-          + Integer.toHexString(character) + "; in the " 
+        super("Cannot use the character " + character + " (&#x" 
+          + Integer.toHexString(character).toUpperCase() + ";) in the " 
           + encoding + " encoding.");
         this.unavailableCharacter = character;
         this.encoding = encoding;
