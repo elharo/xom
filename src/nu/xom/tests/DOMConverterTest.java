@@ -33,11 +33,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import nu.xom.Attribute;
+import nu.xom.Builder;
 import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Nodes;
+import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
 import nu.xom.XMLException;
@@ -56,7 +58,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a1
+ * @version 1.0a2
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -406,6 +408,30 @@ public class DOMConverterTest extends XOMTestCase {
         assertEquals("text", third.getValue());
         
     }
-   
+    
+    
+    // regression found by Wolfgang Hoscheck
+    public void testWolfgang() throws ParsingException, IOException {
+        
+        String data = "<m>" 
+         + "<a code='3.1415292'>" 
+         + "<u>http://www.example.com</u>" 
+         + "<h>Some data</h>"
+         + "<s>StockAccess</s>"
+         + "</a>"
+         + "</m>";
+
+        Document doc = new Builder().build(data, null);       
+        Element article = doc.getRootElement().getChildElements().get(0);
+        Document temp = new Document(new Element(article));
+        
+        org.w3c.dom.Element domArticle 
+          = DOMConverter.convert(temp, impl).getDocumentElement();
+        assertEquals(3, domArticle.getChildNodes().getLength());
+        Element out = DOMConverter.convert(domArticle);
+        assertEquals(article, out);
+        
+    }
+    
     
 }
