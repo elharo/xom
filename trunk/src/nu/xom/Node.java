@@ -49,7 +49,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d13
+ * @version 1.0d21
  *
  */
 public abstract class Node {
@@ -181,9 +181,13 @@ public abstract class Node {
      * Removes this node from its parent so that it can be added 
      * to a different parent node or document.
      * </p>
+     * 
+     * @throws XMLException if subclass constraints prohibit this
+     *     node from being detached
      */
     public final void detach() {
 
+        checkDetach();
         if (parent == null) return;
         else if (this instanceof Attribute) {
             Element element = (Element) parent;
@@ -195,6 +199,22 @@ public abstract class Node {
 
     }
  
+    /**
+     * <p>
+     * Subclasses can override this method to perform additional 
+     * checks beyond what XML 1.0 requires. For example, an 
+     * <code>HTMLDocument</code> subclass might not allow the 
+     * body element to be detached.
+     * </p>
+     * 
+     * @param target the potential target to check.
+     * 
+     * @throws XMLException if the proposed target 
+     *   does not satisfy the local constraints
+     */
+    protected void checkDetach() {
+    }
+
     /**
      * <p>
      * Returns true if this node currently has children.
