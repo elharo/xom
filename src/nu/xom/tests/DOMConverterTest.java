@@ -318,12 +318,7 @@ public class DOMConverterTest extends XOMTestCase {
       throws SAXException, IOException, ParserConfigurationException {
 
         byte[] data = "<!DOCTYPE root ><element />".getBytes();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        factory.setValidating(false);
-        factory.setExpandEntityReferences(false);
-        org.w3c.dom.Document doc = factory.newDocumentBuilder()
-          .parse(new ByteArrayInputStream(data));
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
           
         org.w3c.dom.DocumentType type = doc.getDoctype();
         DocType xomType = DOMConverter.convert(type);
