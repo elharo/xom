@@ -65,29 +65,35 @@ import nu.xom.XMLException;
  *  class. Values of this property for popular XSLT processors include:
  *  </p>
  *  <ul>
- *   <li>
- *     Saxon 6.x: <code>com.icl.saxon.TransformerFactoryImpl</code>
+ *   <li>Saxon 6.x: 
+ *    <code>com.icl.saxon.TransformerFactoryImpl</code>
  *   </li>
- *  <li>
- *    Saxon 7.x: <code>net.sf.saxon.TransformerFactoryImpl</code>
- *  </li>
- *  <li>Xalan: 
+ *   <li>Saxon 7.x and 8.x: 
+ *    <code>net.sf.saxon.TransformerFactoryImpl</code>
+ *   </li>
+ *   <li>Xalan interpretive: 
  *    <code>org.apache.xalan.processor.TransformerFactoryImpl</code>
- *  </li>
- *  <li>jd.xslt: 
+ *   </li>
+ *   <li>Xalan XSLTC: 
+ *    <code>org.apache.xalan.xsltc.trax.TransformerFactoryImpl</code>
+ *   </li>
+ *   <li>jd.xslt: 
  *    <code>jd.xml.xslt.trax.TransformerFactoryImpl</code>
- *  </li>
- *  <li>Oracle: 
- *     <code>oracle.xml.jaxp.JXSAXTransformerFactory</code>
+ *   </li>
+ *   <li>Oracle: 
+ *    <code>oracle.xml.jaxp.JXSAXTransformerFactory</code>
+ *   </li>
+ *   <li>Java 1.5 bundled Xalan: 
+ *    <code>com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl</code>
  *   </li>
  *  </ul>
  *  <p>
  *   This property can be set in all the usual ways a Java system 
  *   property can be set. TrAX picks from them in this order:</p>
  *   <ol>
- *   <li> Invoking <code>System.setProperty( 
- *     "javax.xml.transform.TransformerFactory", 
- *     "<i><code>classname</code></i>")</code></li>
+ *   <li>The most recent value specified by invoking 
+ *   <code>System.setProperty("javax.xml.transform.TransformerFactory", 
+ *   "<i><code>classname</code></i>")</code></li>
  *   <li>The value specified at the command line using the 
  * <samp>-Djavax.xml.transform.TransformerFactory=<i>classname</i></samp>
  *      option to the <b>java</b> interpreter</li>
@@ -100,10 +106,10 @@ import nu.xom.XMLException;
  *   file in the JAR archives available to the runtime</li>
  *   <li>Finally, if all of the above options fail,
  *    a default implementation is chosen. In Sun's JDK 1.4.0 and 1.4.1,
- *    this is Xalan 2.2d10. In Java 1.4.2, this is Xalan 2.4. In 
- *    JDK 1.5 beta 2 this is Xalan 2.6.0???? </li>
+ *    this is Xalan 2.2d10. In JDK 1.4.2, this is Xalan 2.4. 
+ *    In JDK 1.4.2_02, this is Xalan 2.4.1.
+ *    In JDK 1.4.2_03 and 1.5 beta 2 this is Xalan 2.5.2. </li>
  *    </ol>
- *
  *
  * @author Elliotte Rusty Harold
  * @version 1.0a4
@@ -140,6 +146,7 @@ public final class XSLTransform {
      *     something else prevents the stylesheet from being compiled 
      */ 
      private XSLTransform(Source source) throws XSLException {
+         
         try {
             TransformerFactory factory 
               = TransformerFactory.newInstance();
@@ -154,6 +161,7 @@ public final class XSLTransform {
              "Syntax error in stylesheet", ex
            );    
         }
+        
     }
     
     
@@ -169,10 +177,11 @@ public final class XSLTransform {
      * @throws XSLException when an IOException, format error, or
      *     something else prevents the stylesheet from being compiled 
      */ 
-     public XSLTransform(InputStream stylesheet) throws XSLException {
+    public XSLTransform(InputStream stylesheet) throws XSLException {
         this(new StreamSource(stylesheet));
     }
 
+    
     /**
      * <p>
      * Creates a new <code>XSLTransform</code> by reading the 
@@ -196,11 +205,10 @@ public final class XSLTransform {
      * by reading the stylesheet from the specified file.
      * </p>
      *
-     * @param stylesheet file from which the 
-     *      stylesheet is read
+     * @param stylesheet file from which the stylesheet is read
      * 
      * @throws XSLException when an IOException, format error, or
-     * something else prevents the stylesheet from being compiled 
+     *     something else prevents the stylesheet from being compiled 
      */ 
     public XSLTransform(File stylesheet) throws XSLException {
         this(new StreamSource(stylesheet));
@@ -213,10 +221,9 @@ public final class XSLTransform {
      * reading the stylesheet from the specified document.
      * </p>
      *
-     * @param stylesheet document containing 
-     *      the stylesheet
+     * @param stylesheet document containing the stylesheet
      * 
-     * @throws XSLException when the supplied <code>Document</code>
+     * @throws XSLException when the supplied document
      *      is not syntactically correct XSLT
      */ 
     public XSLTransform(Document stylesheet) throws XSLException {
@@ -227,7 +234,7 @@ public final class XSLTransform {
     /**
      * <p>
      * Creates a new <code>XSLTransform</code> by
-     *  reading the stylesheet from the specified URL.
+     * reading the stylesheet from the specified URL.
      * </p>
      *
      * @param systemID URL from which the stylesheet is read
@@ -393,8 +400,8 @@ public final class XSLTransform {
     
     /**
      * <p>
-     *  Returns a string form of this
-     *  <code>XSLTransform</code>, suitable for debugging.
+     *  Returns a string form of this <code>XSLTransform</code>, 
+     *  suitable for debugging.
      * </p>
      *
      * @return debugging string
