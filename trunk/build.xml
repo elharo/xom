@@ -27,14 +27,14 @@ to http://www.xom.nu/
         Build XOM
     </description>
     
+    
   <!-- set global properties for this build -->
-
   <target name="init">
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
     <property name="version" value="1.0d23"/>
-    <property name="year"    value="2003"/>
+    <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
@@ -59,15 +59,15 @@ to http://www.xom.nu/
     <filter token="log"     value="true"/>
     <filter token="verbose" value="true"/>
 
-    <property name="xml-apis.jar" value="${lib.dir}/xmlParserAPIs.jar"/>
-    <property name="parser.jar"   value="${lib.dir}/xercesImpl.jar"/>
-    <property name="junit.jar"    value="${lib.dir}/junit.jar"/>
-    <property name="normalizer.jar"    value="${lib.dir}/normalizer.jar"/>
-    <property name="xslt.jar"     value="${lib.dir}/saxon-6.5.2.jar"/>
+    <property name="xml-apis.jar"   value="${lib.dir}/xmlParserAPIs.jar"/>
+    <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
+    <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
+    <property name="normalizer.jar" value="${lib.dir}/normalizer.jar"/>
+    <property name="xslt.jar"       value="${lib.dir}/saxon-6.5.2.jar"/>
     <!-- only needed for servlet samples -->
-    <property name="servlet.jar"  value="${lib.dir}/servlet.jar"/>
-    <property name="xom-core"     value="${build.dest}"/>
-    <property name="ant-home"     value="/opt/java/ant"/>
+    <property name="servlet.jar"    value="${lib.dir}/servlet.jar"/>
+    <property name="xom-core"       value="${build.dest}"/>
+    <property name="ant-home"       value="/opt/java/ant"/>
 
     <property name="test.outputFormat" value="xml"/>    
     
@@ -87,8 +87,10 @@ to http://www.xom.nu/
     
   </target>
 
+  
   <taskdef resource="clovertasks"/>
 
+  
   <target name="help">
     <echo>
 XOM Build file
@@ -109,6 +111,7 @@ XOM Build file
     </echo>
   </target>
 
+  
   <target name="prepare" depends="init">
     <mkdir dir="${dist.dir}"/>
     <mkdir dir="${testoutput.dir}"/>
@@ -122,6 +125,7 @@ XOM Build file
     
   </target>
 
+  
   <target name="compile" depends="prepare" description="Compile the source code">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
@@ -132,12 +136,14 @@ XOM Build file
     <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
   </target>
 
+  
   <target name="jar" depends="compile" description="Create xom.jar">
     <jar jarfile="${build.dir}/${name}-${version}.jar"
          basedir="${build.dest}"
          index="yes"
 		 compress="no"
-         excludes="nu/xom/samples/* nu/xom/tests/* nu/xom/benchmarks/* nu/xom/samples nu/xom/tests nu/xom/benchmarks nu/xom/pantry/* nu/xom/pantry">
+         includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/xerces/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
+         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/samples nu/xom/benchmarks nu/xom/pantry/* nu/xom/pantry">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
        <!-- <attribute name="Class-Path" value="${saxon.jar}"/>  -->
@@ -146,6 +152,7 @@ XOM Build file
     </jar>
   </target>
 
+  
   <target name="javadoc" depends="prepare"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
@@ -166,13 +173,15 @@ XOM Build file
     </javadoc>
   </target>
 
+  
   <target name="dist" depends="zip, tar.gz" />
 
   <!-- I can never remember the exact target name -->
   <target name="javadocs" depends="javadoc" />
-  <target name="apidocs" depends="javadoc"/>
-  <target name="apidoc" depends="javadoc"/>
+  <target name="apidocs"  depends="javadoc"/>
+  <target name="apidoc"   depends="javadoc"/>
 
+  
   <target name="zip" depends="jar, javadoc" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." 
@@ -182,6 +191,7 @@ XOM Build file
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
     </zip>
   </target>
+  
   
   <target name="tar" depends="jar, javadoc" description="Build tar file for distro">
     <tar destfile="${dist.dir}/${name}-${version}.tar">
@@ -214,6 +224,7 @@ XOM Build file
     </junit>
   </target>
  
+ 
   <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
     <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
       <sysproperty key="org.xml.sax.driver" value="org.apache.parsers.SAXParser"/> 
@@ -223,6 +234,7 @@ XOM Build file
     </java>
   </target>
     
+    
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
     <delete>
@@ -231,6 +243,7 @@ XOM Build file
     </delete>
   </target>
 
+  
   <taskdef resource="clovertasks"/>
   
   <target name="with.clover" depends="init">
@@ -243,6 +256,7 @@ XOM Build file
     </clover-setup>
   </target>
 
+  
   <target name="clover.html" depends="with.clover">
     <clover-report>
        <current outfile="clover_html" title="${Name} ${version}">
@@ -250,7 +264,7 @@ XOM Build file
        </current>	 
     </clover-report>
   </target>
-
+  
  
   <!-- This task requires the ANT optional.jar -->
   <target name="clovertest" depends="compile" description="Run JUnit tests with clover.jar in classpath">
