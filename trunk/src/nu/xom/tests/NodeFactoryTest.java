@@ -32,8 +32,6 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.IllegalAddException;
-import nu.xom.MultipleParentException;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -104,7 +102,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("Allowed one element in several places");
         }
-        catch (MultipleParentException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());
         }
                 
@@ -120,7 +118,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("Allowed one attribute twice");
         }
-        catch (IllegalAddException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());
         }
                 
@@ -513,7 +511,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("built Text into prolog");
         }
-        catch (IllegalAddException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());   
         }            
         
@@ -540,7 +538,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("built document into document");
         }
-        catch (IllegalAddException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());   
         }            
         
@@ -566,7 +564,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("built two doctypes");
         }
-        catch (IllegalAddException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());   
         }       
         
@@ -621,7 +619,7 @@ public class NodeFactoryTest extends XOMTestCase {
            builder.build(data, "http://www.example.org/");
            fail("Allowed element in internal DTD subset via processing instruction");
         }
-        catch (XMLException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());
         }
         
@@ -647,7 +645,7 @@ public class NodeFactoryTest extends XOMTestCase {
            builder.build(data, "http://www.example.org/");
            fail("Allowed element in internal DTD subset via comment");
         }
-        catch (XMLException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());
         }
         
@@ -725,7 +723,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("replaced root element with attribute");
         }
-        catch (XMLException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());
         }
         
@@ -750,7 +748,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(doc, "http://www.example.org/");
             fail("built with multiple parents");
         }
-        catch (MultipleParentException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());   
         }            
 
@@ -775,7 +773,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(doc, "http://www.example.org/");
             fail("built with multiple parents");
         }
-        catch (MultipleParentException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage());   
         }            
 
@@ -797,7 +795,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(doc, "http://www.example.org/");
             fail("Did not call finishMakingElement for root");
         }
-        catch (XMLException success) {
+        catch (ParsingException success) {
             assertEquals("Method was called", success.getMessage());   
         }            
 
@@ -866,7 +864,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("Built document without root element");
         }
-        catch (XMLException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage()); 
         }            
 
@@ -888,7 +886,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("Built document without root element");
         }
-        catch (XMLException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage()); 
         }            
 
@@ -952,7 +950,7 @@ public class NodeFactoryTest extends XOMTestCase {
             builder.build(data, "http://www.example.org/");
             fail("Built document without root element");
         }
-        catch (IllegalAddException success) {
+        catch (ParsingException success) {
             assertNotNull(success.getMessage()); 
         }            
 
