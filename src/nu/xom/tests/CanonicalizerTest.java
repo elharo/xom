@@ -42,6 +42,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Namespace;
 import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
 
@@ -819,6 +820,52 @@ public class CanonicalizerTest extends XOMTestCase {
         
         XPathContext context = new XPathContext("n1", "http://b.example");
         canonicalizer.write(new Document(pdu), "(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
+    public void testExclusive22a() throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String input = "<n0:local xmlns:n0='foo:bar' xmlns:n3='ftp://example.org'>" +
+                "<n1:elem2 xmlns:n1=\"http://example.net\" xml:lang=\"en\">"
+            + "<n3:stuff xmlns:n3=\"ftp://example.org\"/></n1:elem2></n0:local>";
+        Document doc = builder.build(input, null);
+        
+        String expected = "<n1:elem2 xmlns:n1=\"http://example.net\" xml:lang=\"en\">" +
+                "<n3:stuff xmlns:n3=\"ftp://example.org\"></n3:stuff></n1:elem2>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        
+        XPathContext context = new XPathContext("n1", "http://example.net");
+        canonicalizer.write(doc, " (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
+    public void testExclusive22b() throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        String input = "<n2:pdu xmlns:n1='http://example.com' xmlns:n2='http://foo.example' xml:lang='fr' xml:space='retain'><n1:elem2 xmlns:n1='http://example.net' xml:lang='en'><n3:stuff xmlns:n3='ftp://example.org'/></n1:elem2></n2:pdu>";
+        Document doc = builder.build(input, null);
+        
+        String expected = "<n1:elem2 xmlns:n1=\"http://example.net\" xml:lang=\"en\">" +
+                "<n3:stuff xmlns:n3=\"ftp://example.org\"></n3:stuff></n1:elem2>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out, true, true);
+        
+        XPathContext context = new XPathContext("n1", "http://example.net");
+        canonicalizer.write(doc, " (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context);  
         
         byte[] result = out.toByteArray();
         out.close();
