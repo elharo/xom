@@ -187,10 +187,11 @@ final class Verifier {
     }
 
     
-    // This seems to be allowing URIs with fragment IDs.
+    // FIXME This seems to be allowing URIs with fragment IDs.
+    // rename to checkURIReference and provide separate checkURI method
     // Make sure this is OK everywhere it's used. It's
     // definitely needed in some places; might need separate
-    // check URI and checkURIReference methods????
+    // check URI and checkURIReference methods
     /**
      * <p>
      * Checks a string to see if it is a syntactically correct 
@@ -208,8 +209,8 @@ final class Verifier {
         // IDs? i.e. can they contain characters that the rest of the URI
         // can't such as [ and ]? e.g. in XPointer?
         // Same question for query strings?
-        // Do I need to divide URI into base, query, and fragment and check each
-        // separately????
+        // FIXME I need to divide URI into base, query, and fragment and check each
+        // separately
         if ((uri == null) || uri.length() == 0) return;
 
         int leftBrackets = 0;
@@ -819,12 +820,16 @@ final class Verifier {
             );
         }
         try {
-            // XXX reduce to one method
+            // XXX reduce to one checkAbsoluteURI method
             checkAbsoluteURIReference(uri);
             checkURI(uri);
         }
         catch (MalformedURIException ex) {
-            MalformedURIException ex2 = new MalformedURIException("Base URIs must be absolute");
+            // XXX perhaps this is the wrong place to change the 
+            // message? should use a more generic message here and 
+            // fix in place that calls it.
+            MalformedURIException ex2 
+              = new MalformedURIException("Base URIs must be absolute");
             ex2.setData(uri);
             throw ex2;
         }
