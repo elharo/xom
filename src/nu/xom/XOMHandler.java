@@ -133,6 +133,7 @@ class XOMHandler
             
             // Attach the attributes; this must be done before the
             // namespaces are attached.
+            
             for (int i = 0; i < attributes.getLength(); i++) {
                 String qName = attributes.getQName(i);
                 if (qName.startsWith("xmlns:") || qName.equals("xmlns")) {               
@@ -301,14 +302,7 @@ class XOMHandler
             for (int i=0; i < result.size(); i++) {
                 Node node = result.get(i);
                 if (node.isAttribute()) {
-                    try {
-                        ((Element) parent).addAttribute((Attribute) node);
-                    }
-                    catch (ClassCastException ex) {
-                        throw new XMLException(
-                          "Factory tried to add an attribute to a document", 
-                          ex);   
-                    }
+                    ((Element) parent).addAttribute((Attribute) node);
                 }
                 else {
                     parent.appendChild(node);   
