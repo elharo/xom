@@ -120,18 +120,16 @@ public class Element extends ParentNode {
     private Element() {}
 
     
-    static Element build(String name, String uri) {
+    static Element build(String name, String uri, String localName) {
         
         Element result = new Element();
         String prefix = "";
-        String localName = name;
         int colon = name.indexOf(':');
         if (colon >= 0) {
-            prefix = name.substring(0, colon);   
-            localName = name.substring(colon + 1);   
+            prefix = name.substring(0, colon).intern();  
         }
-        result.prefix = prefix.intern();
-        result.localName = localName.intern();
+        result.prefix = prefix;
+        result.localName = localName;
         // We do need to verify the URI here because parsers are 
         // allowing relative URIs which XOM forbids, for reasons
         // of canonical XML if nothing else. But we only have to verify
