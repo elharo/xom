@@ -55,7 +55,7 @@ import nu.xom.XMLException;
 class XPointer {
     
     // prevent instantiation
-    private XPointer();
+    private XPointer() {}
     
     public static Nodes resolve(Document doc, String xptr) 
       throws XPointerSyntaxException, XPointerResourceException {    
