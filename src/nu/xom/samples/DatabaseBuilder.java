@@ -33,12 +33,13 @@ import java.io.*;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0b7
  */
 public class DatabaseBuilder  {
 
     private Connection connection;
       
+    
     // The string passed to the constructor must be a JDBC URL that
     // contains all necessary information for connecting to the
     // database such as host, port, username, password, and
@@ -50,6 +51,7 @@ public class DatabaseBuilder  {
         connection = DriverManager.getConnection(jdbcURL);
     }
   
+    
     public Document build(String selectQuery) 
       throws SQLException, ParsingException {
     
@@ -95,6 +97,7 @@ public class DatabaseBuilder  {
     
     }
 
+    
     // I want the XML document to store values in the standard W3C
     // XML Schema Language forms. This requires certain conversions 
     // depending on the type of the data
@@ -137,6 +140,7 @@ public class DatabaseBuilder  {
 
     }
   
+    
     private Text hexEncode(InputStream in) {
     
         StringBuffer result = new StringBuffer();
@@ -156,6 +160,7 @@ public class DatabaseBuilder  {
     
     }
  
+    
   // String types may contain C0 control characters that are
   // not legal in XML. I convert these to the Unicode replacement
   // character 0xFFFD
@@ -194,6 +199,7 @@ public class DatabaseBuilder  {
         return arrayElement;
     }
   
+    
     public static String getSchemaType(int type) {
    
         switch (type) {
@@ -227,6 +233,7 @@ public class DatabaseBuilder  {
     
     }
 
+    
     public static void main(String[] args) {
     
         if (args.length < 2) {

@@ -36,7 +36,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0b7
  *
  */
 public class DocumentMerger {
@@ -56,4 +56,5 @@ public class DocumentMerger {
         }        
         
     }
+    
 }
