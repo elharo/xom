@@ -1,4 +1,4 @@
-/* Copyright 2003, 2004 Elliotte Rusty Harold
+/* Copyright 2003-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,7 +33,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d6
  *
  */
 public class NodesTest extends XOMTestCase {
@@ -56,6 +56,47 @@ public class NodesTest extends XOMTestCase {
         assertEquals(1, nodes.size()); 
         Element stored = (Element) nodes.get(0);
         assertEquals(test, stored);  
+    }
+    
+    
+    public void testConstructWithNull() {
+        
+        try {
+            Nodes nodes = new Nodes(null);
+            fail("constructed with null");
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
+        } 
+        
+    }
+    
+    
+    public void testAppendNull() {
+        
+        try {
+            Nodes nodes = new Nodes();
+            nodes.append(null);
+            fail("appended null");
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
+        } 
+        
+    }
+    
+    
+    public void testInsertNull() {
+        
+        try {
+            Nodes nodes = new Nodes();
+            nodes.insert(null, 0);
+            fail("inserted null");
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
+        } 
+        
     }
     
     
