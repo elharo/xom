@@ -47,7 +47,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0a3
  *
  */
 public class Element extends ParentNode {
@@ -166,47 +166,81 @@ public class Element extends ParentNode {
         
         this.actualBaseURI = element.findActualBaseURI();
         
-        // XXX non-recursive algorithm for filling in children
-        // DOMCOnverter would probably be a better place to look for this
-        // Just change the DOM creation to XOM creation
-        /*Node current = element;
-        boolean end = false;
-        int index = -1;
-        while (true) {                   
-            if (!end && current.getChildCount() > 0) {
-               // writeStartTag((Element) current);
-               current = current.getChild(0);
+        nonrecursiveCopy(element, this);
+        
+    }
+    
+
+    private static Element copyTag(final Element source) {
+        
+        Element result = source.shallowCopy();
+        
+        // Attach additional namespaces
+        if (source.namespaces != null) {
+            result.namespaces = source.namespaces.copy();
+        }
+        
+        // Attach clones of attributes
+        if (source.attributes != null) {
+            result.attributes = source.attributes.copy();
+        } 
+        
+        result.actualBaseURI = source.findActualBaseURI();
+        
+        return result;
+        
+    }
+
+
+    private static Element nonrecursiveCopy(
+      final Element sourceElement, Element resultElement) {
+        
+        ParentNode originalParent = sourceElement.getParent(); // may be null
+        ParentNode resultParent = resultElement;
+        Node sourceCurrent = sourceElement;
+        int index = 0;
+        boolean end = false; // true if processing the element for the 2nd time; i.e. the element's end-tag
+        while (true) {
+            if (!end && sourceCurrent.getChildCount() > 0) {
+               sourceCurrent = sourceCurrent.getChild(0);
                index = 0;
             }
             else {
-                if (end) {
-                    // writeEndTag((Element) current);
-                    if (current == element) break;
-                }
-                else {
-                    // writeChild(current);
-                }
                 end = false;
-                ParentNode parent = current.getParent();
-                if (parent.getChildCount() - 1 == index) {
-                    current = parent;
-                    if (current != element) {
-                        parent = current.getParent();
-                        index = parent.indexOf(current);
+                ParentNode sourceParent = sourceCurrent.getParent(); 
+                if (sourceParent == originalParent) break; // copying a single empty element
+                else if (sourceParent.getChildCount() - 1 == index) {
+                    sourceCurrent = sourceParent; 
+                    if (sourceCurrent == sourceElement) break;
+                    if (sourceCurrent.isElement()) {
+                        // switch parent up
+                        resultParent = (Element) resultParent.getParent();
                     }
+                    index = sourceCurrent.getParent().indexOf(sourceCurrent);
                     end = true;
+                    continue;
                 }
                 else {
                     index++;
-                    current = parent.getChild(index);
+                    sourceCurrent = sourceParent.getChild(index); 
                 }
             }
-        }   */    
-        
-        for (int i = 0; i < element.getChildCount(); i++) {
-           Node child = element.getChild(i);
-           this.appendChild(child.copy());
+            
+            if (sourceCurrent.isElement()) {
+                Element child = copyTag((Element) sourceCurrent);
+                resultParent.appendChild(child); 
+                if (sourceCurrent.getChildCount() > 0) { // not empty element
+                    resultParent = child;
+                }
+            }
+            else {
+                Node child = sourceCurrent.copy();
+                resultParent.appendChild(child);
+            }
+            
         }
+        
+        return resultElement;  
         
     }
 
@@ -1453,7 +1487,8 @@ public class Element extends ParentNode {
     }
 
     
-    private static void writeEndTag(Element element, StringBuffer result) {
+    private static void writeEndTag(
+      Element element, StringBuffer result) {
         result.append("</");
         result.append(element.getQualifiedName());
         result.append(">");
@@ -1475,14 +1510,7 @@ public class Element extends ParentNode {
      */
     public final String getValue() {
 
-        // recursive algorithm limited to Java stack size
-        /* for (int i = 0; i < getChildCount(); i++) {
-           Node child = getChild(i);
-           if (child.isText() || child.isElement()) {
-               result.append(child.getValue());
-           }
-        } */
-        // non-recursive algorithm
+        // non-recursive algorithm avoids stack size limitations
         if (this.getChildCount() == 0) return "";
         StringBuffer result = new StringBuffer();
         Node current = this.getChild(0);
@@ -1520,12 +1548,48 @@ public class Element extends ParentNode {
      * that can be added to this document or a different one.
      * </p>
      * 
+     * <p>
+     * Subclassers should be wary. Implementing this method is trickier
+     * than it might seem, especially if you wish to avoid potential  
+     * stack overflows in deep documents. In particular, you should not
+     * rely on the obvious recursive algorithm. Most subclasses should
+     * override the {@link nu.xom.Element#shallowCopy() shallowCopy} 
+     * method instead.
+     * </p>
+     * 
      * @return a deep copy of this element with no parent
      * 
      * @see nu.xom.Node#copy()
      */
     public Node copy() {
-        return new Element(this);
+        Element shallow = copyTag(this);
+        return nonrecursiveCopy(this, shallow);
+    }
+    
+    
+    /**
+     * <p>
+     * Creates a very shallow copy of the element with the same name
+     * and namespace URI, but no children, attributes, base URI, or
+     * namespace declaration. This method is invoked as necessary
+     * by the {@link nu.xom.Element#copy() copy} method 
+     * and the {@link nu.xom.Element#Element(nu.xom.Element) 
+     * copy constructor}. 
+     * </p>
+     * 
+     * <p>
+     * Subclasses should override this method so that it
+     * returns an instance of the subclass so that types
+     * are preserved when copying. This method should not add any
+     * attribute, namespace declarations, or children to the 
+     * shallow copy. Any such items will be overwritten.
+     * </p>
+     *
+     * @return an empty element with the same name and 
+     *     namespace as this element
+     */
+    protected Element shallowCopy() {      
+        return new Element(getQualifiedName(), getNamespaceURI());
     }
 
     
