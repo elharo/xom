@@ -52,7 +52,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0a3
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -107,6 +107,7 @@ public class ElementTest extends XOMTestCase {
     
     
     public void testGetChildElementsNull() {
+        
         Elements elements = element.getChildElements(
           "", "http://www.example.com");
         assertEquals(2, elements.size());
@@ -116,11 +117,13 @@ public class ElementTest extends XOMTestCase {
           "http://www.example.com");
         assertEquals(2, elements.size());
         elements = element.getChildElements("", null);
-        assertEquals(1, elements.size());     
+        assertEquals(1, elements.size());  
+        
     }
     
     
     public void testGetFirstChildElement() {
+        
         Element first = element.getFirstChildElement("test");
         assertEquals(child1, first);
         
@@ -139,6 +142,7 @@ public class ElementTest extends XOMTestCase {
 
     
     public void testConstructor1() {
+        
         String name = "sakjdhjhd";
         Element e = new Element(name);
         
@@ -158,10 +162,12 @@ public class ElementTest extends XOMTestCase {
         assertEquals(name, e.getQualifiedName());
         assertEquals("",   e.getNamespacePrefix());
         assertEquals(uri,  e.getNamespaceURI());
+        
     }
 
     
     public void testConstructor3() {
+        
         String name = "red:sakjdhjhd";
         String uri = "http://www.something.com/";
         Element e = new Element(name, uri);
@@ -170,10 +176,22 @@ public class ElementTest extends XOMTestCase {
         assertEquals(name, e.getQualifiedName());
         assertEquals("red", e.getNamespacePrefix());
         assertEquals(uri, e.getNamespaceURI());
+        
     }
 
    
+    public void testCopyConstructorWithAdditionalNamespaces() {
+        
+        Element original = new Element("red");
+        original.addNamespaceDeclaration("pre", "http://www.example.org");
+        Element copy = new Element(original);
+        assertEquals("http://www.example.org", copy.getNamespaceURI("pre"));
+        
+    }
+    
+    
     public void testAllowEmptyNamespace() {
+        
         String name = "sakjdhjhd";
         String uri = "http://www.something.com/";
         Element e = new Element(name, uri);
@@ -1326,7 +1344,44 @@ public class ElementTest extends XOMTestCase {
     }
 
     
+    public void testRemoveNonElementChildren() {
+        
+        String name = "red:sakjdhjhd";
+        String uri = "http://www.red.com/";
+        Element parent = new Element(name, uri);
+
+        Attribute a1 = new Attribute("test", "test");       
+        parent.addAttribute(a1);
+        
+        Node child1 = new Text("http://www.mauve.com");
+        parent.appendChild(child1);
+        Node child2 = new ProcessingInstruction("child", "http://www.mauve.com");
+        parent.appendChild(child2);
+        Node child3 = new Comment("http://www.mauve.com");
+        parent.appendChild(child3);
+  
+        assertEquals(parent, child3.getParent());
+        assertEquals(parent, child1.getParent());
+        assertEquals(parent, child2.getParent());
+       
+        Nodes result = parent.removeChildren();
+ 
+        assertEquals(0, parent.getChildCount());
+        assertNull(child1.getParent());
+        assertNull(child2.getParent());
+        assertNull(child3.getParent());
+        assertEquals(parent, a1.getParent());
+        
+        assertEquals(3, result.size());
+        assertEquals(child1, result.get(0));
+        assertEquals(child2, result.get(1));
+        assertEquals(child3, result.get(2));
+        
+    }
+    
+    
     public void testGetAttributeValue() {
+        
         String name = "sakjdhjhd";
         Element e = new Element(name);
 
@@ -1348,10 +1403,12 @@ public class ElementTest extends XOMTestCase {
         assertNull(e.getAttributeValue("base"));
         assertNull(e.getAttributeValue("test", 
           "http://www.w3.org/XML/1998/namespace"));
+        
     }
 
 
     public void testGetAttribute() {
+        
         String name = "sakjdhjhd";
         Element e = new Element(name);
 
@@ -1425,6 +1482,7 @@ public class ElementTest extends XOMTestCase {
 
     
     public void testWrongPrefixNotAllowedWithXMLURI() {
+        
         try {
             new Element("test:base", "http://www.w3.org/XML/1998/namespace");
             fail("Allowed XML namespace to be associated with non-xml prefix");    
@@ -1432,6 +1490,7 @@ public class ElementTest extends XOMTestCase {
         catch (NamespaceConflictException success) {
             assertNotNull(success.getMessage());   
         }
+        
         
     }
     
