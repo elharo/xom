@@ -716,6 +716,8 @@ public class BuilderTest extends XOMTestCase {
         assertTrue(internalSubset.indexOf("image/jpeg\">") > 0);
     }
     
+    // Do I need tests with PUBLIC IDs for these????
+    
     
     // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
     // and possibly other parsers. I've reported the bug in Xerces,
@@ -786,4 +788,23 @@ public class BuilderTest extends XOMTestCase {
         }        
     }
 
+    public void testValidateMalformedDocument() 
+      throws IOException {
+        Reader reader = new StringReader("<!DOCTYPE root [" +
+                "<!ELEMENT root (a, b)>" +
+                "<!ELEMENT a (EMPTY)>" +
+                "<!ELEMENT b (PCDATA)>" +
+                "]><root><a/><b></b>");
+        try {
+            validator.build(reader);   
+            fail("Allowed malformed doc");
+        }
+        catch (ValidityException ex) {
+            fail("Threw validity error instead of well-formedness error");
+        }
+        catch (ParsingException ex) {
+            assertNotNull(ex.getMessage());
+        }
+    }    
+    
 }
