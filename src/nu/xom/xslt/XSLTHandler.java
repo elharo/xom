@@ -32,7 +32,7 @@ import nu.xom.Attribute;
 import nu.xom.Comment;
 import nu.xom.Element;
 import nu.xom.NodeFactory;
-import nu.xom.NodeList;
+import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
@@ -54,13 +54,13 @@ import org.xml.sax.ext.LexicalHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d22
  *
  */
 class XSLTHandler 
   implements ContentHandler, LexicalHandler {
 
-    private NodeList    result;
+    private Nodes    result;
     private Stack       parents;
     private NodeFactory factory;
     private Map         prefixes; // In scope right now
@@ -70,13 +70,13 @@ class XSLTHandler
             throw new NullPointerException("Factory cannot be null");
         }
         this.factory = factory; 
-        result = new NodeList();
+        result = new Nodes();
         parents = new Stack();
         buffer = new StringBuffer();
         prefixes = new HashMap();
     }   
     
-    NodeList getResult() {
+    Nodes getResult() {
         flushText(); // to handle case where there's no endDocument
         return result;
     }

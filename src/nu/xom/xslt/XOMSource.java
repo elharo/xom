@@ -30,13 +30,13 @@ import javax.xml.transform.sax.SAXSource;
 
 import nu.xom.Document;
 import nu.xom.Node;
-import nu.xom.NodeList;
+import nu.xom.Nodes;
 
 import org.xml.sax.InputSource;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d16
+ * @version 1.0d22
  *
  */
 class XOMSource extends SAXSource {
@@ -54,7 +54,7 @@ class XOMSource extends SAXSource {
        = "http://nu.xom/XOMResultFeature";
 
     // private Document document;
-    private NodeList source;
+    private Nodes source;
 
     /**
      * <p>
@@ -64,17 +64,17 @@ class XOMSource extends SAXSource {
      * </p>
      */
     public XOMSource(Document source) {
-        this.source = new NodeList();
+        this.source = new Nodes();
         this.source.append(source);
     }
     
     /**
      * <p>
      * Creates a new <code>XOMSource</code> object 
-     * from a <code>NodeList</code>.
+     * from a <code>Nodes</code>.
      * </p>
      */
-    public XOMSource(NodeList source) {
+    public XOMSource(Nodes source) {
         this.source = source;
     }
     

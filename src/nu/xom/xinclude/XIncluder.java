@@ -40,7 +40,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
-import nu.xom.NodeList;
+import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.ParsingException;
 import nu.xom.Text;
@@ -164,17 +164,17 @@ public class XIncluder {
 
     /**
      * <p>
-     * Modifies a <code>NodeList</code> by replacing all 
+     * Modifies a <code>Nodes</code> by replacing all 
      * XInclude elements with their referenced content.
      * Resolution is recursive; that is, include elements
      * in the included documents are themselves resolved.
      * Furthermore, include elements that are children or 
      * descendants of elements in this list are also resolved.
-     * The <code>NodeList</code> returned contains no
+     * The <code>Nodes</code> returned contains no
      * include elements.
      * </p>
      * 
-     * @param in the <code>NodeList</code> in which include elements
+     * @param in the <code>Nodes</code> in which include elements
      *     should be resolved.
      * 
      * @throws BadParseAttributeException if an <code>include</code>  
@@ -199,7 +199,7 @@ public class XIncluder {
      * @throws XOMException if resolving an include element would 
      *     result in a malformed document
      */
-    public static void resolveInPlace(NodeList in) 
+    public static void resolveInPlace(Nodes in) 
       throws IOException, ParsingException, XIncludeException { 
         for (int i = 0; i < in.size(); i++) {
             Node child = in.get(i);
@@ -265,7 +265,7 @@ public class XIncluder {
                 if (baseURL != null) url = new URL(baseURL, href);
                 else url = new URL(href);                
                 if (parse.equals("xml")) {
-                    NodeList replacements 
+                    Nodes replacements 
                       = downloadXMLDocument(url, baseURLs);
                       
                 // Add base URIs. Base URIs added by XInclusion require
@@ -444,7 +444,7 @@ public class XIncluder {
 
    
 
-    private static NodeList downloadXMLDocument(
+    private static Nodes downloadXMLDocument(
       URL source, Stack baseURLs) 
       throws IOException, ParsingException, XIncludeException, 
              XPointerSyntaxException, XPointerResourceException {
@@ -454,14 +454,14 @@ public class XIncluder {
           source.openStream(), source.toExternalForm()); 
           
         String fragmentID = source.getRef();
-        NodeList included;
+        Nodes included;
         if (fragmentID != null && fragmentID.length() != 0) {
             included = XPointer.resolve(doc, fragmentID);
             resolveInPlace(included);
         }
         else {
             resolveInPlace(doc, baseURLs); // remove include elements
-            included = new NodeList();
+            included = new Nodes();
             for (int i = 0; i < doc.getChildCount(); i++) {
                 Node child = doc.getChild(i);
                 if (!(child instanceof DocType)) {

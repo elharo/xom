@@ -36,11 +36,11 @@ import java.util.List;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d7
+ * @version 1.0d22
  * 
  *
  */
-public final class NodeList {
+public final class Nodes {
 
     
     private List nodes = new ArrayList();
@@ -50,7 +50,7 @@ public final class NodeList {
      * Creates an empty node list. 
      * </p>
      */
-    public NodeList() {}
+    public Nodes() {}
     
     /**
      * <p>
@@ -75,8 +75,8 @@ public final class NodeList {
      * 
      * @return the node at the specified position
      * 
-     * @throws <code>IndexOutOfBoundsException</code> if index is negative 
-     *     or greater than or equal to the size of the list
+     * @throws <code>IndexOutOfBoundsException</code> if index is  
+     *     negative or greater than or equal to the size of the list
      */
     public Node get(int index) {
         return (Node) nodes.get(index);   

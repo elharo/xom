@@ -46,7 +46,7 @@ import nu.xom.canonical.CanonicalXMLSerializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d122
+ * @version 1.0d22
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -159,7 +159,7 @@ public class CanonicalizerTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         Element element = new Element("test");
-        NodeList nodes = new NodeList();
+        Nodes nodes = new Nodes();
         nodes.append(element);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         CanonicalXMLSerializer serializer 
@@ -180,7 +180,7 @@ public class CanonicalizerTest extends XOMTestCase {
           "pre", "http://www.example.com/");
         Element element = new Element("test");
         parent.appendChild(element);
-        NodeList nodes = new NodeList();
+        Nodes nodes = new Nodes();
         nodes.append(element);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         CanonicalXMLSerializer serializer 
@@ -212,7 +212,7 @@ public class CanonicalizerTest extends XOMTestCase {
           "http://www.w3.org/XML/1998/namespace", "preserve"));
         Element element = new Element("test");
         parent.appendChild(element);
-        NodeList nodes = new NodeList();
+        Nodes nodes = new Nodes();
         nodes.append(element);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         CanonicalXMLSerializer serializer 

@@ -26,7 +26,7 @@ package nu.xom.xslt;
 import javax.xml.transform.sax.SAXResult;
 
 import nu.xom.NodeFactory;
-import nu.xom.NodeList;
+import nu.xom.Nodes;
 import org.xml.sax.ext.LexicalHandler;
 
 /**
@@ -36,7 +36,7 @@ import org.xml.sax.ext.LexicalHandler;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d16
+ * @version 1.0d22
  *
  */
 class XOMResult extends SAXResult {
@@ -60,7 +60,7 @@ class XOMResult extends SAXResult {
         this.setLexicalHandler((LexicalHandler) this.getHandler());
     }
 
-    public NodeList getResult() {
+    public Nodes getResult() {
         XSLTHandler handler = (XSLTHandler) this.getHandler();
         return handler.getResult();   
     }
