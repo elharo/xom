@@ -119,6 +119,7 @@ public class DOMConverter {
         }       
                        
         return xomDocument;
+        
     }
 
     
@@ -350,7 +351,7 @@ public class DOMConverter {
             if (type == org.w3c.dom.Node.ELEMENT_NODE) {
                 Element child = makeElement((org.w3c.dom.Element) current);
                 parent.appendChild(child);
-                parent = child;
+                if (current.hasChildNodes()) parent = child;
             }
             else {
                 Node child = convert(current);
@@ -519,7 +520,12 @@ public class DOMConverter {
                     xomCurrent = xomParent;
                     if (xomCurrent == xomElement) break;
                     // switch parent up
-                    domParent = (org.w3c.dom.Element) domParent.getParentNode();
+                    org.w3c.dom.Node temp = domParent.getParentNode();
+                    if (temp.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+                        domParent = (org.w3c.dom.Element) temp;
+                    }
+                    
+                    
                     index = xomCurrent.getParent().indexOf(xomCurrent);
                     end = true;
                     continue;
@@ -539,9 +545,6 @@ public class DOMConverter {
                 org.w3c.dom.Element child = makeElement(currentElement, document);
                 domParent.appendChild(child); 
                 domParent = child;
-                /* if (currentElement.getChildCount() == 0 && isLast(currentElement)) {
-                    domParent = (org.w3c.dom.Element) domParent.getParentNode();
-                } */
             }
             else {
                 org.w3c.dom.Node child = convert(xomCurrent, document);
