@@ -39,6 +39,18 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 
+/**
+ * 
+ * <p>
+ * This is just for XSLTransform, and implements only the functionality
+ * that class requires. Other classes should not use this.
+ * It is far from a conformant implementation of XMLReader. 
+ * </p>
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.0b5
+ *
+ */
 class XOMReader implements XMLReader {
 
     private Nodes nodes;
@@ -95,6 +107,7 @@ class XOMReader implements XMLReader {
 
     }
 
+    
     public void setEntityResolver(EntityResolver resolver) {
         throw new UnsupportedOperationException();
     }
@@ -137,13 +150,8 @@ class XOMReader implements XMLReader {
     public void parse(InputSource source) 
       throws IOException, SAXException {
         
-        if (source instanceof XOMInputSource) {
-            XOMInputSource xis = (XOMInputSource) source;
-            converter.convert(xis.getNodes());
-        }
-        else {
-            throw new UnsupportedOperationException("Non XOM source");            
-        }
+        XOMInputSource xis = (XOMInputSource) source;
+        converter.convert(xis.getNodes());
         
     }
 
