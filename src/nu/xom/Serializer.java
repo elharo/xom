@@ -50,7 +50,7 @@ import java.io.Writer;
  * 
  * @author Elliotte Rusty Harold
  * @version 1.0d22
- *
+ * 
  */
 public class Serializer {
 
@@ -125,7 +125,7 @@ public class Serializer {
      * 
      * @param out the output stream to write the document on
      * @param encoding the character encoding for the serialization
-     * 
+
      * @throws NullPointerException if <code>out</code> 
      *     or <code>encoding</code> is null
      * @throws UnsupportedEncodingException if the VM does not 
@@ -180,15 +180,32 @@ public class Serializer {
         escaper.reset();
         // The OutputStreamWriter automatically inserts
         // the byte order mark if necessary.
+        writeXMLDeclaration();
+        for (int i = 0; i < doc.getChildCount(); i++) {
+            write(doc.getChild(i)); 
+            
+            // Might want to remove this line break in a 
+            // non-XML serializer where it's not guranteed to be 
+            // OK to add extra line breaks in the prolog
+            escaper.breakLine();
+        }       
+        escaper.flush();
+    }
+
+    /**
+     * <p>
+     * This method writes the XML declaration onto the output stream,
+     * followed by a line break.
+     * </p>
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *      encounters an I/O error
+     */
+    protected void writeXMLDeclaration() throws IOException {
         escaper.writeMarkup("<?xml version=\"1.0\" encoding=\"");
         escaper.writeMarkup(escaper.getEncoding());
         escaper.writeMarkup("\"?>");
         escaper.breakLine();
-        for (int i = 0; i < doc.getChildCount(); i++) {
-            write(doc.getChild(i)); 
-            escaper.breakLine();
-        }       
-        escaper.flush();
     }
     
     // 1 == preserve all
@@ -210,7 +227,6 @@ public class Serializer {
         }
  
     }
-   
     
     
     /**
@@ -219,6 +235,24 @@ public class Serializer {
      * options. The result is guaranteed to be well-formed. If 
      * <code>element</code> does not have a parent element, it  
      * will also be namespace well-formed.
+     * </p>
+     * 
+     * <p>
+     *   If the element is empty, this method invokes 
+     *   <code>writeEmptyElementTag</code>. If the element is not 
+     *   empty, then: 
+     * </p>
+     * 
+     * <ol>
+     *   <li>It calls <code>writeStartTag</code></li>
+     *   <li>It passes each of the element's children to 
+     *       <code>write</code> in order.</li>
+     *   <li>It calls <code>writeEndTag</code></li>
+     * </ol>
+     * 
+     * <p>
+     *   It may break lines or add white space if the serializer has
+     *   been configured to indent or use a maximum line length.
      * </p>
      * 
      * @param element the <code>Element</code> to serialize.
@@ -231,81 +265,9 @@ public class Serializer {
         if (escaper.isIndenting() && !escaper.isPreserveSpace()) {
             escaper.breakLine();
         }
-        escaper.writeMarkup("<");
-        escaper.writeMarkup(element.getQualifiedName());
-        
-        // Namespace
-        String prefix = element.getNamespacePrefix();
-
-        ParentNode parent = element.getParent();
-        String parentURI = "";
-        if (parent.isElement()) {
-            parentURI = ((Element) parent).getNamespaceURI(prefix);
-        } 
-        
-        // check to see if we need an xml:base attribute
-        if (preserveBaseURI) {
-            if (element.getAttribute("base", 
-             "http://www.w3.org/XML/1998/namespace") == null) {
-                ParentNode elemParent = element.getParent();
-                String baseValue = element.getBaseURI();
-                if (baseValue != null) {
-                    if (elemParent == null 
-                      || elemParent.isDocument()
-                      || !element.getBaseURI()
-                           .equals(elemParent.getBaseURI())) {
-                           
-                        escaper.writeMarkup(' ');
-                        escaper.writeMarkup("xml:base=\"");
-                        escaper.writeAttributeValue(baseValue);
-                        escaper.writeMarkup("\"");
-                    }
-                }
-            }
-        }
-        
-        for (int i = 0; i < element.getAttributeCount(); i++) {
-            Attribute attribute = element.getAttribute(i);
-            escaper.writeMarkup(' ');
-            escaper.writeMarkup(attribute.getQualifiedName());
-            escaper.writeMarkup("=\"");
-            escaper.writeAttributeValue(attribute.getValue());
-            escaper.writeMarkup("\"");  
-        }       
-        
-        // Namespaces
-        ParentNode parentNode = element.getParent();
-        for (int i = 0; 
-             i < element.getNamespaceDeclarationCount(); 
-             i++) {
-            String additionalPrefix = element.getNamespacePrefix(i);
-            if ("xml".equals(additionalPrefix)) continue;
-            String uri = element.getNamespaceURI(additionalPrefix);
-            if (parentNode.isElement()) {
-               Element parentElement = (Element) parentNode;   
-               if (uri.equals(
-                 parentElement.getNamespaceURI(additionalPrefix))) {
-                      continue;
-               } 
-            }
-            else if (uri.equals("")) {
-                continue; // no need to say xmlns=""   
-            }
-            
-            if ("".equals(additionalPrefix)) {
-                escaper.writeMarkup(" xmlns"); 
-            }
-            else {
-                escaper.writeMarkup(" xmlns:"); 
-                escaper.writeMarkup(additionalPrefix); 
-            } 
-            escaper.writeMarkup("=\""); 
-            escaper.writePCDATA(uri);   
-            escaper.writeMarkup('\"');
-        } 
         
         if (element.hasChildren()) {
-            escaper.writeMarkup('>');
+            writeStartTag(element);
             // adjust for xml:space
             boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
             String newXMLSpaceValue = element.getAttributeValue(
@@ -332,15 +294,8 @@ public class Serializer {
                      escaper.breakLine();
                 }
             }
-            escaper.writeMarkup("</");
-            escaper.writeMarkup(element.getQualifiedName());
-            escaper.writeMarkup(">");
+            writeEndTag(element);
             
-            // readjust for xml:space
-            /*  if (changingWhiteSpace) {
-                escaper.setIndent(oldIndent);
-                escaper.setMaxLength(oldMaxLength);
-            }*/
             // restore parent value
             if  (newXMLSpaceValue != null) {
                 escaper.setPreserveSpace(wasPreservingWhiteSpace);
@@ -348,10 +303,236 @@ public class Serializer {
                         
         }
         else {
-            escaper.writeMarkup("/>");   
+            writeEmptyElementTag(element);   
         }
         escaper.flush();
         
+    }
+
+    /**
+     * <p>
+     *   This method writes the end-tag for an element in the form
+     *   <code>&lt;/<i>name</i></code>.
+     * </p>
+     * 
+     * @param element the element whose end-tag is written
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     */
+    protected void writeEndTag(Element element) throws IOException {
+        escaper.writeMarkup("</");
+        escaper.writeMarkup(element.getQualifiedName());
+        escaper.writeMarkup(">");
+    }
+
+    /**
+     * 
+     * <p>
+     *  This method writes the start-tag for the element including
+     *  all its namespace declarations and attributes.
+     * </p>
+     * 
+     * <p>
+     *   The <code>writeAttributes</code> method is called to write
+     *   all the non-namespace-declaration attributes. 
+     *   The <code>writeNamespaceDeclarations</code> method
+     *   is called to write all the namespace declaration attributes.
+     * </p>
+     * 
+     * @param element the element whose start-tag is written
+     * @param empty true if the element is empty, false if it isn't
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     */
+    protected void writeStartTag(Element element) throws IOException {
+        writeTagBeginning(element);
+        escaper.writeMarkup('>');
+    }
+
+    /**
+     * 
+     * <p>
+     *  This method writes an empty-element tag for the element 
+     *  including all its namespace declarations and attributes.
+     * </p>
+     * 
+     * <p>
+     *   The <code>writeAttributes</code> method is called to write
+     *   all the non-namespace-declaration attributes. 
+     *   The <code>writeNamespaceDeclarations</code> method
+     *   is called to write all the namespace declaration attributes.
+     * </p>
+     * 
+     * <p>
+     *   If subclasses don't wish empty-element tags to be used,
+     *   they can override this method to simply invoke 
+     *   <code>writeStartTag</code> followed by 
+     *   <code>writeEndTag</code>.
+     * </p>
+     * 
+     * @param element the element whose empty-element tag is written
+     * @param empty true if the element is empty, false if it isn't
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     */
+    protected void writeEmptyElementTag(Element element) throws IOException {
+        writeTagBeginning(element);
+        escaper.writeMarkup("/>");
+    }
+
+    // This just extracts the commonality between writeStartTag  
+    // and writeEmptyElementTag
+    private void writeTagBeginning(Element element) 
+      throws IOException {
+        escaper.writeMarkup('<');
+        escaper.writeMarkup(element.getQualifiedName());
+        writeAttributes(element);           
+        writeNamespaceDeclarations(element);
+    }
+
+
+    /**
+     * <p>
+     *   This method writes all the attributes of the specified
+     *   element onto the output stream, one at a time, separated
+     *   by white space. If preserveBaseURI is true, and it is
+     *   necessary to add an <code>xml:base</code> attribute
+     *   to the element in order to preserve the base URI, then 
+     *   that attribute is also written here.
+     *   Each individual attribute is written by invoking
+     *   <code>write(Attribute)</code>.
+     * </p>
+     * 
+     * @param element the <code>Element</code> whose attributes are 
+     *     written
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     */
+    protected void writeAttributes(Element element)
+      throws IOException {
+          
+        ParentNode parent = element.getParent();
+        // check to see if we need an xml:base attribute
+        if (preserveBaseURI) {
+            if (element.getAttribute("base", 
+             "http://www.w3.org/XML/1998/namespace") == null) {
+                //ParentNode elemParent = element.getParent();
+                String baseValue = element.getBaseURI();
+                if (baseValue != null) {
+                    if (parent == null 
+                      || parent.isDocument()
+                      || !element.getBaseURI()
+                           .equals(parent.getBaseURI())) {
+                           
+                        escaper.writeMarkup(' ');
+                        Attribute baseAttribute = new Attribute(
+                          "xml:base", 
+                          "http://www.w3.org/XML/1998/namespace", 
+                          baseValue);
+                        write(baseAttribute);
+                    }
+                }
+            }
+        }
+        
+        for (int i = 0; i < element.getAttributeCount(); i++) {
+            Attribute attribute = element.getAttribute(i);
+            escaper.writeMarkup(' ');
+            write(attribute);
+        }  
+    }
+
+    /**
+     * <p>
+     *   This method writes all the namespace declaration
+     *   attributes of the specified element onto the output stream,
+     *   one at a time, separated by white space. Each individual 
+     *   declaration is written by invoking 
+     *   <code>writeNamespaceDeclaration</code>.
+     * </p>
+     * 
+     * @param element the <code>Element</code> whose attributes are 
+     *     written
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     */
+    protected void writeNamespaceDeclarations(Element element)
+      throws IOException {
+        // Namespaces
+        ParentNode parent = element.getParent();
+        for (int i = 0; 
+             i < element.getNamespaceDeclarationCount(); 
+             i++) {
+            String additionalPrefix = element.getNamespacePrefix(i);
+            if ("xml".equals(additionalPrefix)) continue;
+            String uri = element.getNamespaceURI(additionalPrefix);
+            if (parent.isElement()) {
+               Element parentElement = (Element) parent;   
+               if (uri.equals(
+                 parentElement.getNamespaceURI(additionalPrefix))) {
+                      continue;
+               } 
+            }
+            else if (uri.equals("")) {
+                continue; // no need to say xmlns=""   
+            }
+            
+            escaper.writeMarkup(' ');
+            writeNamespaceDeclaration(additionalPrefix, uri);
+        } 
+    }
+
+
+    /**
+     * <p>
+     *   This writes a namespace declaration in the form
+     *   <code>xmlns:<i>prefix</i>="<i>uri</i>"</code> or 
+     *   <code>xmlns="<i>uri</i>"</code>. It does not write
+     *   the spaces on either side of the namespace declaration.
+     *   These are written by <code>writeStartTag</code>
+     * </p>
+     * 
+     * @param prefix the namespace prefix; the empty string for the
+     *     default namespace
+     * @param uri the namespace URI
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     */
+    protected void writeNamespaceDeclaration(String prefix, String uri)
+      throws IOException {
+        if ("".equals(prefix)) {
+            escaper.writeMarkup("xmlns"); 
+        }
+        else {
+            escaper.writeMarkup("xmlns:"); 
+            escaper.writeMarkup(prefix); 
+        } 
+        escaper.writeMarkup("=\""); 
+        escaper.writePCDATA(uri);   
+        escaper.writeMarkup('\"');
+    }
+
+    /**
+     * <p>
+     *   This method writes an attribute in the form 
+     *   <code><i>name</i>="<i>value</i>"</code>.
+     *   Characters in the attribute value are escaped as necessary.
+     * </p>
+     * 
+     * @param attribute the <code>Attribute</code> to write
+     * 
+     * @throws IOException if the underlying <code>OutputStream</code>
+     *     encounters an I/O error
+     */
+    protected void write(Attribute attribute) throws IOException {
+        escaper.writeMarkup(attribute.getQualifiedName());
+        escaper.writeMarkup("=\"");
+        escaper.writeAttributeValue(attribute.getValue());
+        escaper.writeMarkup("\"");  
     }
     
     /**
@@ -582,7 +763,7 @@ public class Serializer {
      * @throws IOException if the underlying <code>OutputStream</code> 
      *     encounters an I/O error
      */
-    protected final void writePCDATA(String text) throws IOException {
+    protected final void writeEscaped(String text) throws IOException {
         escaper.writePCDATA(text);
     }   
  
@@ -623,7 +804,7 @@ public class Serializer {
      *     encounters an I/O error or <code>text</code> contains 
      *     characters not available in the current character set
      */
-    protected final void writeMarkup(String text) throws IOException {
+    protected final void writeRaw(String text) throws IOException {
         escaper.writeMarkup(text);
     }   
  
@@ -847,5 +1028,81 @@ public class Serializer {
     public void preserveBaseURI(boolean preserve) {
         this.preserveBaseURI = preserve;
     }
+    
+    /**
+     * <p>
+     *   Returns the name of the character encoding used by 
+     *   this <code>Serializer</code>.
+     * </p>
+     * 
+     * @return the encoding used for the output document
+     */
+    public String getEncoding() {
+        return escaper.getEncoding();   
+    }
+    
+    /**
+     * <p>
+     *   If true, this property indicates serialization will
+     *   perform Unicode normalization on all data using normalization
+     *   form C (NFC). Performing Unicode normalization may change the
+     *   document's infoset. The default is false; do not normalize.
+     * </p>
+     * 
+     * <p>
+     *   The implementation used is IBM's <a href=
+     *   "http://oss.software.ibm.com/icu4j/index.html">International
+     *   Components for Unicode <i>for Java</i> (ICU4J) 2.6</a>. 
+     *   This version is based on Unicode 4.0. 
+     * </p>
+     * 
+     * <p>
+     *   This feature has not yet been benchmarked or optimized.
+     *   It may result in substantially slower code. 
+     * </p>
+     * 
+     * <p>
+     *   If all your data is in the first 256 code points of Unicode
+     *   (i.e. the ISO-8859-1, Latin-1 character set) then it's already
+     *   in normalization form C and renormalizing won't change 
+     *   anything.
+     * </p>
+     * 
+     * @param normalize true if normalization is performed; 
+     *     false if it isn't
+     */
+    public void setUnicodeNormalizationFormC(boolean normalize) {
+        escaper.setNFC(normalize);   
+    }
 
+    
+    /**
+     * <p>
+     *   If true, this property indicates serialization will
+     *   perform Unicode normalization on all data using normalization
+     *   form C (NFC). The default is false; do not normalize.
+     * </p>
+     * 
+     * @return true if this serialization performs Unicode 
+     *     normalization; false if it isn't.
+     */
+    public boolean getUnicodeNormalizationFormC() {
+        return escaper.getNFC();   
+    }
+    
+    /**
+     * <p>
+     *   This method returns the current column number 
+     *   of the output stream, It's useful for subclasses that
+     *   wish to implement their own pretty printing strategies
+     *   by inserting white space and line breaks at appropriate 
+     *   points.
+     * </p>
+     * 
+     * @return the current column number
+     */
+    protected final int getColumnNumber() {
+        return escaper.getColumnNumber();
+    }
+    
 }
