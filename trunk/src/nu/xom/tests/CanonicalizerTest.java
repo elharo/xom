@@ -344,6 +344,104 @@ public class CanonicalizerTest extends XOMTestCase {
         assertEquals(expected, s);
         
     }
+    
+    
+    public void testWriteDefaultNamespace() throws IOException {
+
+        Element pdu = new Element("tuck", "http://www.example.org/");
+        
+        String expected = " xmlns=\"http://www.example.org/\"";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
+        
+        Document doc = new Document(pdu);
+        Nodes subset = doc.query("//namespace::node()");
+        canonicalizer.write(subset);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
+    public void testOutputAncestorAttributeAndChildHaveDifferentLanguages() 
+      throws IOException {
+     
+        Element pdu = new Element("tuck");
+        pdu.addAttribute(new Attribute("xml:lang", Namespace.XML_NAMESPACE, "fr"));
+        
+        Element middle = new Element("middle");
+        pdu.appendChild(middle);
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("xml:lang", Namespace.XML_NAMESPACE, "en"));
+        middle.appendChild(child);
+        
+        String expected = "<tuck xml:lang=\"fr\"><child xml:lang=\"en\"></child></tuck>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
+        
+        Document doc = new Document(pdu);
+        Nodes subset = doc.query("/* | //child | //@*");
+        canonicalizer.write(subset);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
+    public void testOutputAncestorAttributeUsesPrefix() 
+      throws IOException {
+     
+        Element pdu = new Element("tuck");
+        pdu.addAttribute(new Attribute("pre:foo", "http://www.example.org/", "value"));
+        Element child = new Element("pre:test", "http://www.example.org/");
+        pdu.appendChild(child);
+        
+        String expected = "<tuck xmlns:pre=\"http://www.example.org/\" pre:foo=\"value\"><pre:test></pre:test></tuck>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+        
+
+    public void testOutputAncestorAttributeRedefinesPrefix() 
+      throws IOException {
+     
+        Element pdu = new Element("tuck");
+        pdu.addAttribute(new Attribute("pre:foo", "http://www.example.com/", "value"));
+        Element child = new Element("pre:test", "http://www.example.org/");
+        pdu.appendChild(child);
+        
+        String expected = "<tuck xmlns:pre=\"http://www.example.com/\" pre:foo=\"value\"><pre:test xmlns:pre=\"http://www.example.org/\"></pre:test></tuck>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
+        
+        Document doc = new Document(pdu);
+        canonicalizer.write(doc);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
         
 
     public void testExclusiveDoesntRenderUnusedPrefixFromUnincludedAttribute() 
@@ -884,6 +982,31 @@ public class CanonicalizerTest extends XOMTestCase {
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query(xpath, context));
+        }
+        finally {
+            out.close();
+        }
+            
+        String actual = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+    
+
+    public void testCanonicalizeDocumentSubsetIncludingRoot() 
+      throws ParsingException, IOException {
+        
+        String input = "<doc />";
+        
+        Document doc = builder.build(input, null);
+        
+        String expected = "<doc></doc>";
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, false);
+            Nodes subset = doc.query("//.");
+            serializer.write(subset);
         }
         finally {
             out.close();
@@ -1532,9 +1655,43 @@ and expect to see
     }
 
     
-    public void testCanonicalizeXMLNamespace() {
+    public void testCanonicalizeDefaultNamespace() throws IOException {
      
-        // ????
+        Element element = new Element("foo", "http://www.example.org");
+        Nodes namespaces = element.query("namespace::*");
+        Namespace ns = (Namespace) namespaces.get(0);
+        if (ns.getPrefix().equals("xml")) ns = (Namespace) namespaces.get(1);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(ns);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = " xmlns=\"http://www.example.org\"".getBytes("UTF-8");
+        assertEquals(expected, actual);  
+        
+    }
+
+    
+    public void testCanonicalizeXMLNamespace() throws IOException {
+     
+        Element element = new Element("foo");
+        Nodes namespaces = element.query("namespace::*");
+        Namespace ns = (Namespace) namespaces.get(0);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(ns);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = " xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"".getBytes("UTF-8");
+        assertEquals(expected, actual);  
         
     }
 
