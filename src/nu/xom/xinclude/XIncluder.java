@@ -454,26 +454,17 @@ public class XIncluder {
                 }
                 else if (parse.equals("text")) {                   
                     Nodes replacements 
-                      = downloadTextDocument(url, encoding, builder, accept, acceptCharset, acceptLanguage); 
-                    if (replacements.size() == 0) {  // need to test branch????
-                        parent.removeChild(element);
-                    }
-                    else {
-                        Node replacement = replacements.get(0);
+                      = downloadTextDocument(url, encoding, builder, accept, acceptCharset, acceptLanguage);
+                    for (int j = 0; j < replacements.size(); j++) {
+                        Node replacement = replacements.get(j);
                         if (replacement instanceof Attribute) {
                             ((Element) parent).addAttribute((Attribute) replacement);
-                            parent.removeChild(element);
                         }
                         else {
-                            parent.replaceChild(element, replacement);
-                        }
-                    }
-                    if (replacements.size() > 1) { // need to test branch????
-                        int position = parent.indexOf(replacements.get(0));
-                        for (int j = 1; j < replacements.size(); j++) {
-                            parent.insertChild(replacements.get(j), position+j);
-                        }
-                    }
+                            parent.insertChild(replacement, parent.indexOf(element));
+                        }   
+                    }                    
+                    parent.removeChild(element);
                 }
                 else {
                    throw new BadParseAttributeException(
