@@ -46,7 +46,7 @@ import nu.xom.Text;
  *   building self-contained unit tests.
  * </p>
  * 
- *  ????needs more testing for prolog and epilog content and additional namespace
+ *  ????needs more testing for additional namespace
  *  declarations
  * 
  * @author Elliotte Rusty Harold
@@ -71,13 +71,15 @@ public class SourceCodeSerializer extends Serializer {
     public void write(Document doc) throws IOException {
         parents.push("doc");
         Element root = doc.getRootElement();
+                
         write(root);
-        breakLine();
         
+        // prolog
         for (int i = 0; i < doc.indexOf(root); i++) {
             writeChild(doc.getChild(i)); 
         }  
         
+        //epilog
         for (int i = doc.indexOf(root) + 1; i < doc.getChildCount(); i++) {
             writeChild(doc.getChild(i)); 
         }       
@@ -187,8 +189,16 @@ public class SourceCodeSerializer extends Serializer {
     protected void write(ProcessingInstruction instruction) 
       throws IOException {
         String parent = (String) parents.peek(); 
-        writeRaw(parent + ".appendChild(new ProcessingInstruction(\"" + instruction.getTarget() 
+        if (parent.equals("doc")) {
+            Document doc = instruction.getDocument();
+            int root = doc.indexOf(instruction);
+            writeRaw(parent + ".insertChild(new ProcessingInstruction(\"" + instruction.getTarget() 
+                + "\", \"" + escapeText(instruction.getValue()) + "\"), " + root + ");");            
+        }
+        else {
+            writeRaw(parent + ".appendChild(new ProcessingInstruction(\"" + instruction.getTarget() 
                 + "\", \"" + escapeText(instruction.getValue()) + "\"));");
+        }
         breakLine();
     }
 
@@ -200,14 +210,23 @@ public class SourceCodeSerializer extends Serializer {
                 + doctype.getSystemID() + 
                         "\");");
         breakLine();
-        writeRaw("doc.insertChild(doctype, 0);");
+        Document doc = doctype.getDocument();
+        int root = doc.indexOf(doc.getRootElement());
+        writeRaw("doc.insertChild(doctype, " + root + ");");
         breakLine();
 
     } 
     
     protected void write(Comment comment) throws IOException {
-        String parent = (String) parents.peek(); 
-        writeRaw(parent + ".appendChild(new Comment(\"" + escapeText(comment.getValue()) + "\"));");
+        String parent = (String) parents.peek();
+        if (parent.equals("doc")) {
+            Document doc = comment.getDocument();
+            int root = doc.indexOf(comment);
+            writeRaw(parent + ".insertChild(new Comment(\"" + escapeText(comment.getValue()) + "\"), " + root + ");");            
+        }
+        else {
+            writeRaw(parent + ".appendChild(new Comment(\"" + escapeText(comment.getValue()) + "\");");
+        }
         breakLine();
     }
     
