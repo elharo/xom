@@ -44,11 +44,17 @@ class URIUtil {
         int colon = uri.indexOf(':');
         if (colon < 1) return false;
         if (uri.substring(colon+1).startsWith("//")) return false;
+        // Java seems to occasionally use URLs for file scheme
+        // that look like file:/home/elharo/...
+        // According to RFC 2396 these are opaque, but we can't treat 
+        // them that way. 
+        if (uri.startsWith("file:/")) return false;
         if (!Verifier.isAlpha(uri.charAt(0))) return false;
         for (int i = 1; i < colon; i++) {
              if (!Verifier.isSchemeCharacter(uri.charAt(i))) return false;
         }
         return true;
+        
     }
 
     
@@ -61,11 +67,13 @@ class URIUtil {
              if (!Verifier.isSchemeCharacter(uri.charAt(i))) return false;
         }
         return true;
+        
     }
 
     
-    // Prefer Xerces resolution if avaialble. It's less buggy.
+    // Prefer Xerces resolution if available. It's less buggy.
     static String absolutizeWithJava14(String base, String spec) {
+        
         // Trying to avoid dependence on Java 1.4
         try {
             Class javanetURI = Class.forName("java.net.URI");
@@ -92,10 +100,12 @@ class URIUtil {
                 throw new MalformedURIException(ex.getMessage()); 
             }
         }        
+        
     }
     
 
     static String absolutize(String base, String spec) {
+        
         try {
             URI u = new URI(base);
             URI resolved = new URI(u, spec);
