@@ -38,10 +38,10 @@ import nu.xom.Serializer;
 /**
  * <p>
  *   Demonstrates a custom <code>NodeFactory</code> that converts 
- *   rddl:resource elements to XHTML tables. 
+ *   <code>rddl:resource</code> elements to XHTML tables. 
  *   This is inspired by Example 8-11 in
  *   <cite>Processing XML with Java</cite>.
- *   In brief, it demonstartes that major modifications 
+ *   In brief, it demonstrates that major modifications 
  *   may have to take place in <code>endElement</code> but can still
  *   be effectively streamed.
  * </p>
@@ -51,6 +51,7 @@ import nu.xom.Serializer;
  *  The various attributes of the resource are mapped to different 
  *  parts of the table. In particular, a <code>rddl:resource</code>
  *  like this:
+ * </p>
  *
  * <pre><code>&lt;rddl:resource
  *        id="note-xlink2rdf"
@@ -123,13 +124,14 @@ public class RDDLToTable extends NodeFactory {
         
     }
     
-    // Could this one be changed to return a different element????
     protected Element finishMakingElement(Element element) {
+        
+        element.removeNamespaceDeclaration("rddl");
+        element.removeNamespaceDeclaration("xlink");
+        Element result = element;
         if (RDDL_NAMESPACE.equals(element.getNamespaceURI())
           && "resource".equals(element.getLocalName())) {
-            element.setLocalName("table");
-            element.setNamespaceURI(XHTML_NAMESPACE);
-            element.setNamespacePrefix("");
+            Element table = new Element("table", XHTML_NAMESPACE);
             // move the content
             Element tr = new Element("tr", XHTML_NAMESPACE);
             Element td = new Element("td", XHTML_NAMESPACE);
@@ -139,7 +141,7 @@ public class RDDLToTable extends NodeFactory {
                 Node child = element.removeChild(0);
                 td.appendChild(child);   
             }
-            element.appendChild(tr);
+            table.appendChild(tr);
             
             Attribute href = element.getAttribute("role", XLINK_NAMESPACE);
             if (href != null) {
@@ -151,7 +153,7 @@ public class RDDLToTable extends NodeFactory {
                 tdhref2.appendChild(href.getValue());
                 trhref.appendChild(tdhref1);
                 trhref.appendChild(tdhref2);
-                element.insertChild(trhref, 0); 
+                table.insertChild(trhref, 0); 
             }
             
             Attribute arcrole = element.getAttribute("role", XLINK_NAMESPACE);
@@ -164,7 +166,7 @@ public class RDDLToTable extends NodeFactory {
                 tdarcrole2.appendChild(arcrole.getValue());
                 trarcrole.appendChild(tdarcrole1);
                 trarcrole.appendChild(tdarcrole2);
-                element.insertChild(trarcrole, 0); 
+                table.insertChild(trarcrole, 0); 
             }
 
 
@@ -178,7 +180,7 @@ public class RDDLToTable extends NodeFactory {
                 tdrole2.appendChild(role.getValue());
                 trrole.appendChild(tdrole1);
                 trrole.appendChild(tdrole2);
-                element.insertChild(trrole, 0); 
+                table.insertChild(trrole, 0); 
             }
                        
             Attribute id = element.getAttribute("id");
@@ -186,10 +188,11 @@ public class RDDLToTable extends NodeFactory {
                 element.removeAttribute(id);
                 Element caption = new Element("caption", XHTML_NAMESPACE);
                 caption.appendChild(id.getValue());
-                element.insertChild(caption, 0); 
+                table.insertChild(caption, 0); 
             }    
+            result = table;
         }      
-        return element; 
+        return result; 
     }
 
     public DocType makeDocType(String rootElementName, 
