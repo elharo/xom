@@ -169,11 +169,8 @@ public class Element extends ParentNode {
         
         // Attach clones of attributes
         if (element.attributes != null) {
-            for (int i = 0; i < element.attributes.size(); i++) {
-                Attribute a = element.attributes.get(i);
-                this.addAttribute((Attribute) a.copy()); 
-            }
-        }
+            this.attributes = element.attributes.copy();
+        } 
         
         this.setActualBaseURI(element.getActualBaseURI());
         

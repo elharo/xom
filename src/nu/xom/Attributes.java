@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -38,7 +38,7 @@ import java.util.Iterator;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  * 
  */
 final class Attributes {
@@ -47,6 +47,7 @@ final class Attributes {
     
     // non-public constructor to prevent instantiation
     Attributes() {}
+    
     
     /**
      * 
@@ -57,9 +58,10 @@ final class Attributes {
      * 
      * @return the number of attributes in the container
      */
-    public int size() {
+    int size() {
         return attributes.size();   
     }
+    
     
     /**
      * 
@@ -82,7 +84,7 @@ final class Attributes {
      *     in the list
      * 
      */
-    public Attribute get(int index) {
+    Attribute get(int index) {
         return (Attribute) attributes.get(index);   
     }
     
@@ -99,6 +101,7 @@ final class Attributes {
         
         attributes.add(attribute);
     }
+    
     
     void checkPrefixConflict(Attribute attribute) {
         
@@ -118,8 +121,10 @@ final class Attributes {
         }
     }
 
+    
     // Remove the specified Attribute object from the list.
     void remove(Attribute attribute) {
+        
         if (attribute == null) {
             throw new NullPointerException(
               "Tried to remove null attribute"
@@ -132,8 +137,10 @@ final class Attributes {
               + attribute.getQualifiedName() 
               + " from non-parent element");
         }
+        
     }
 
+    
     /**
      * <p>
      * Retrieves the attribute with the specified local name 
@@ -151,7 +158,7 @@ final class Attributes {
      *     if this <code>Attributes</code> object does not contain 
      *     such an attribute
      */
-    public Attribute get(String localName, String namespaceURI) {
+    Attribute get(String localName, String namespaceURI) {
         
         Iterator iterator = attributes.iterator();
         while (iterator.hasNext()) {
@@ -163,6 +170,22 @@ final class Attributes {
         }
         
         return null;
+        
+    }
+    
+    
+    // Make copying a set of attribute easy while bypassing most checks.
+    // This is only intended for the use of Element.copy()
+    Attributes copy() {
+        
+        Attributes result = new Attributes();
+        result.attributes.ensureCapacity(this.size());
+        Iterator iterator = this.attributes.iterator();
+        for (int i = 0; i < this.attributes.size(); i++) {
+            result.attributes.add(this.get(i).copy());
+        }
+        return result;
+        
     }
     
 }
