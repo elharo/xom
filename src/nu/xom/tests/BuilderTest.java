@@ -36,6 +36,7 @@ import org.xml.sax.DTDHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
@@ -54,6 +55,7 @@ import nu.xom.NodeFactory;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.ValidityException;
+import nu.xom.XMLException;
 
 
 /**
@@ -63,7 +65,7 @@ import nu.xom.ValidityException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b6
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -418,10 +420,37 @@ public class BuilderTest extends XOMTestCase {
     
     public void testBuildFromReaderWithBase()
       throws IOException, ParsingException {
+        
         Reader reader = new StringReader(source);
         Document document = builder.build(reader, base);
         verify(document);        
         assertEquals(base, document.getBaseURI());
+        
+    }
+
+ 
+    private static class NoLocator extends XMLFilterImpl {
+
+        public NoLocator(XMLReader reader) {
+            super(reader);
+        }
+        
+        public void setDocumentLocator(Locator locator) {}
+        
+    }    
+    
+    
+    public void testBuildWithoutLocator()
+      throws IOException, ParsingException, SAXException {
+        
+        
+        XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        XMLReader filter = new NoLocator(xerces);
+        
+        Builder builder = new Builder(filter);
+        Document document = builder.build(source, "http://www.example.org/");
+        verify(document);
+        assertEquals("http://www.example.org/", document.getBaseURI());
         
     }
     
@@ -454,6 +483,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testBuildFromInvalidDoc()
       throws IOException, ParsingException {
+        
         try {
             validator.build(source, base);
             fail("Built invalid doc");
@@ -531,6 +561,7 @@ public class BuilderTest extends XOMTestCase {
             );
             
         }  
+        
     }
     
     
@@ -759,12 +790,13 @@ public class BuilderTest extends XOMTestCase {
     
     public void testWarningDoesNotStopBuild()
       throws IOException, ParsingException, SAXException {
+        
         XMLReader xerces;
         try {
             xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
         } 
         catch (SAXException ex) {
-            // can't test Crimson if you can't load it
+            // can't test Xerces if you can't load it
             return;
         }
         // This document generates a warning due to the duplicate
@@ -781,6 +813,39 @@ public class BuilderTest extends XOMTestCase {
         // The main test is that the document is built successfully.
         assertEquals(2, document.getChildCount());
         assertEquals("root", document.getRootElement().getQualifiedName());
+        
+    }   
+    
+    
+    private static class EntitySkipper extends XMLFilterImpl {
+
+        public EntitySkipper(XMLReader reader) {
+            super(reader);
+        }
+        
+        public void characters(char[] data, int start, int length) 
+          throws SAXException {
+            super.skippedEntity("name");
+        }
+        
+    }
+    
+    
+    public void testSkippedEntityThrwosXMLException()
+      throws IOException, ParsingException, SAXException {
+        
+        XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        XMLReader filter = new EntitySkipper(xerces);
+        
+        Builder builder = new Builder(filter, true);
+        try {
+            builder.build("<root>replace</root>", base); 
+            fail("Allowed skipped entity");
+        }
+        catch (XMLException success) {
+            assertNotNull(success.getMessage());
+        }   
+        
     }   
     
     
