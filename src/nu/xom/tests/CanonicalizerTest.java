@@ -1450,7 +1450,12 @@ public class CanonicalizerTest extends XOMTestCase {
     private void processTests(Elements tests) 
       throws ParsingException, IOException  {
         
-        for (int i = 0; i < tests.size(); i++) {
+        Element parent = new Element("e");
+        Element child = new Element("a");
+        parent.appendChild(child);
+        
+        int size = tests.size();
+        for (int i = 0; i < size; i++) {
             Element test = tests.get(i);
             String namespace = test.getAttributeValue("NAMESPACE");
             if ("no".equals(namespace)) continue;
@@ -1460,12 +1465,10 @@ public class CanonicalizerTest extends XOMTestCase {
             String base = test.getBaseURI();
             // Hack because URIUtil isn't public; and I don't want to
             // depend on 1.4 only java.net.URI
-            Element parent = new Element("e");
             parent.setBaseURI(base);
-            Element child = new Element("a");
+
             child.addAttribute(new Attribute("xml:base", 
               "http://www.w3.org/XML/1998/namespace", uri));
-            parent.appendChild(child);
             String resolvedURI = child.getBaseURI();
             
             Document doc = builder.build(resolvedURI);
@@ -1490,10 +1493,7 @@ public class CanonicalizerTest extends XOMTestCase {
             finally {
                 in.close();
             }
-            for (int j = 0; j < expected.length; j++) {
-                assertEquals(resolvedURI + " at byte " + j,
-                  expected[j], actual[j]);
-            }
+            assertEquals(expected, actual);
             
         }
         
