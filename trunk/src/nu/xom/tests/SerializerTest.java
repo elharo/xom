@@ -984,8 +984,30 @@ public class SerializerTest extends XOMTestCase {
         for (String line = reader.readLine(); 
              line != null;
              line = reader.readLine()) {
-            assertTrue(line.length() + ": " + line, line.length() <= length);    
+            assertTrue(line.length() + ": " + line, 
+              line.length() <= length);    
         }
+    }
+    
+    public void testPrettyXML() throws IOException {
+        Element items = new Element("itemSet");
+        items.appendChild(new Element("item1"));
+        items.appendChild(new Element("item2"));
+        Document doc = new Document(items);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<itemSet>\r\n    <item1/>\r\n    <item2/>\r\n"
+          + "</itemSet>\r\n", 
+          result
+        );
+        
     }
 
 }
