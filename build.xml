@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0b8"/>
+    <property name="version" value="1.0b9"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -402,6 +402,7 @@ XOM Build file
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
     <delete dir="clover"/>
+    <delete dir="clover_html"/>
     <delete>
       <fileset dir="." includes="junit*properties"/>
     </delete>
