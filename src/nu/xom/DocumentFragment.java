@@ -35,11 +35,8 @@ package nu.xom;
  */
 class DocumentFragment extends ParentNode {
 
-    // rename subtree????
-    
     void insertionAllowed(Node child, int position) {
-        // do we really want to allow documents, attributes
-        // and namespaces to be inserted here????
+        // Everything can be inserted
     }
 
 
