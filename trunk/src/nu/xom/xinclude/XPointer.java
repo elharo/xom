@@ -39,13 +39,13 @@ import nu.xom.XMLException;
 /**
  * 
  * <p>
- *   Right now this is just for XInclude, and hence is non-public.
- *   Once it's more baked it will probably become public and move 
- *   to a package of its own.
+ * Right now this is just for XInclude, and hence is non-public.
+ * Once it's more baked it will probably become public and move 
+ * to a package of its own.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b5
+ * @version 1.0b7
  *
  */
 class XPointer {
@@ -308,9 +308,6 @@ class XPointer {
             else {
                 if (end) {
                     if (current == element) break;
-                }
-                else {
-                    ;
                 }
                 end = false;
                 ParentNode parent = current.getParent();
