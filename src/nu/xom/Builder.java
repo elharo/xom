@@ -67,12 +67,17 @@ public class Builder {
      * following order:
      * </p>
      * 
+     * need to check Xerces 1.x????
+     * 
      * <ol>
      * <li>Xerces 2.x</li>
      * <li>Piccolo</li>
-     * <li>&AElig;lfred</li>
+     * <li>GNU &AElig;lfred</li>
      * <li>Oracle</li>
      * <li>Crimson</li>
+     * <li>XP</li>
+     * <li>Saxon's &AElig;lfred</li>
+     * <li>dom4j's &AElig;lfred</li>
      * <li>The platform default specified by the 
      *     <code>org.xml.sax.driver</code> system property</li>
      * </ol>
@@ -140,7 +145,10 @@ public class Builder {
         "com.bluecast.xml.Piccolo",
         "gnu.xml.aelfred2.XmlReader",
         "oracle.xml.parser.v2.SAXParser",
-        "org.apache.crimson.parser.XMLReaderImpl"
+        "org.apache.crimson.parser.XMLReaderImpl",
+        "com.jclark.xml.sax.SAX2Driver",
+        "com.icl.saxon.aelfred.SAXDriver",
+        "org.dom4j.io.aelfred.SAXDriver"
     };
 
     private static XMLReader findParser(boolean validate) {
