@@ -23,6 +23,7 @@
 
 package nu.xom;
 
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 /**
@@ -102,6 +103,12 @@ class TextWriterFactory {
         else if (encoding.equals("BIG5")) {
             return new Big5Writer(out, encoding); 
         }
+        else if (encoding.equals("EUC-JP")) {
+            return new EUCJPWriter(out, encoding); 
+        }
+        else if (encoding.endsWith("ASCII")) {
+            return new ASCIIWriter(out, encoding); 
+        }
         else if (encoding.equals("IBM037")
               || encoding.equals("CP037")
               || encoding.equals("EBCDIC-CP-US")
@@ -114,12 +121,12 @@ class TextWriterFactory {
             return new Latin1Writer(out, encoding); 
         }     
         else {
-            // I'm assuming here that all character sets can
-            // handle the ASCII character set; even if not at the
-            // same code points. This is not completely true.
-            // There are some very old character sets that can't,
-            // but no one is likely to be using them for XML.
-            return new ASCIIWriter(out, encoding);  
+            try {
+                return new GenericWriter(out, encoding); 
+            }
+            catch (UnsupportedEncodingException ex) {
+                return new ASCIIWriter(out, encoding);
+            }
         }
         
     }
