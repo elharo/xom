@@ -64,7 +64,7 @@ public class Builder {
     private XMLReader   parser;
     private NodeFactory factory;
     
-    private static double  xercesVersion = 2.6;
+    private static double xercesVersion = 2.6;
     
     static {  
         
@@ -615,7 +615,17 @@ public class Builder {
             char c = absolute.charAt(i);
             if (c == File.separatorChar) url.append('/');
             else if (c == ':' && isWindows) url.append(':');
-            // XXX should I specify UTF-8 rather than platform default?
+            // Should I specify UTF-8 rather than platform default?
+            // In fact, the platform default is likely to be UTF-8; 
+            // at least in Java 1.4. I've verified this on  
+            // Mac OS X 10.2, Windows 2000, and Linux. In other words,
+            // it loks like URLEncoder on these platforms uses UTF-8 
+            // to encode the URL, whatever the underlying encoding is.
+            // (I'm not sure whether it's UTF-8 or not.)
+            // In other words, this works on the three major platforms,
+            // at least in Java 1.4, and it will compile and run in 
+            // Java 1.3. So I should leave this as is and stop worrying
+            // about it, unless someone files a bug report.
             else url.append(URLEncoder.encode(String.valueOf(c)));
         }
         
