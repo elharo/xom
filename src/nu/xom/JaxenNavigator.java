@@ -255,9 +255,6 @@ class JaxenNavigator extends DefaultNavigator {
         if (o instanceof ArrayList) {
             n = (Node) ((List) o).get(0);
         }
-        else if (o instanceof Namespace) {
-            return ((Namespace) o).getParent();
-        }
         else {
             n = (Node) o;
         }
