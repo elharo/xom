@@ -24,6 +24,7 @@
 package nu.xom.tests;
 
 import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 
 /**
  * <p>
@@ -38,6 +39,7 @@ public class ParsingExceptionTest extends XOMTestCase {
     
     private ParsingException ex;
     private Exception cause;
+    private String message = "testing 1-2-3";
     
     public ParsingExceptionTest(String name) {
         super(name);
@@ -49,10 +51,30 @@ public class ParsingExceptionTest extends XOMTestCase {
     }
 
     public void testConstructor() {
-        String message = "testing 1-2-3";
         Exception ex = new ParsingException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
+    }
+    
+    public void testLineAndColumnNumbers() {
+        ParsingException ex = new ParsingException(message, 10, 20);
+        assertEquals(message, ex.getMessage());
+        assertNull(ex.getCause());
+        assertEquals(10, ex.getLineNumber()); 
+        assertEquals(20, ex.getColumnNumber()); 
+    }
+    
+    public void testValidityExceptionLineAndColumnNumbers() {
+        ParsingException ex = new ValidityException(message, 10, 20);
+        assertEquals(message, ex.getMessage());
+        assertNull(ex.getCause());
+        assertEquals(10, ex.getLineNumber()); 
+        assertEquals(20, ex.getColumnNumber()); 
+    }
+    
+    public void testToString() {
+        ParsingException ex = new ParsingException(message, 10, 20);
+        assertTrue(ex.toString().endsWith(" at line 10, column 20.")); 
     }
     
     public void testInitCause() {
