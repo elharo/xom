@@ -1204,7 +1204,6 @@ public class Element extends ParentNode {
      * actual base URI.
      * </p>
      * 
-     * 
      * @return the base URI of this element 
      * 
      * @see Node#getBaseURI()
@@ -1310,19 +1309,7 @@ public class Element extends ParentNode {
                 try {
                     byte[] data = s.getBytes("UTF8");
                     for (int j = 0; j < data.length; j++) {
-                        uri.append('%');
-                        if (data[i] <= 0xF) {
-                            uri.append('0');
-                            uri.append(Integer.toHexString(data[i]));
-                        }
-                        else if (data[i] > 0) {
-                            uri.append(Integer.toHexString(data[i]));
-                        }
-                        else {
-                            uri.append(
-                              Integer.toHexString(256 + data[i])
-                            );
-                        }
+                        uri.append(percentEscape(data[j]));
                     }
                 }
                 catch (UnsupportedEncodingException ex) {
@@ -1334,6 +1321,14 @@ public class Element extends ParentNode {
         }    
         return uri.toString();
         
+    }
+    
+    private static String percentEscape(byte b) {
+        StringBuffer result = new StringBuffer(3);
+        result.append("%");
+        String hex = Integer.toHexString(b);
+        result.append(hex.substring(hex.length()-2));
+        return result.toString();
     }
 
 
@@ -1361,7 +1356,7 @@ public class Element extends ParentNode {
         ParentNode parentNode = getParent();
         for (int i = 0; i < getNamespaceDeclarationCount(); i++) {
             String additionalPrefix = getNamespacePrefix(i);
-            if ("xml".equals(additionalPrefix)) continue;
+            // if ("xml".equals(additionalPrefix)) continue;
             String uri = getNamespaceURI(additionalPrefix);
             if (parentNode != null && parentNode.isElement()) {
                Element parentElement = (Element) parentNode;   
@@ -1472,6 +1467,5 @@ public class Element extends ParentNode {
     boolean isElement() {
         return true;   
     } 
-
 
 }
