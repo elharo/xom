@@ -169,129 +169,7 @@ public class SAXConverter {
     private void process(Node node) throws SAXException {
         
         if (node instanceof Element) {
-            Element element = (Element) node;
-            // start prefix mapping
-            for (int i = 0; 
-                 i < element.getNamespaceDeclarationCount(); 
-                 i++) {
-                String prefix = element.getNamespacePrefix(i);
-                contentHandler.startPrefixMapping(prefix, 
-                  element.getNamespaceURI(prefix));  
-            }
-            ParentNode parentNode = element.getParent();
-            if (parentNode instanceof Element) {
-                Element parent = (Element) parentNode;
-             // now handle element's prefix if not declared on ancestor
-                String prefix = element.getNamespacePrefix();
-                if (!element.getNamespaceURI(prefix)
-                  .equals(parent.getNamespaceURI(prefix))) {
-                    contentHandler.startPrefixMapping(prefix, 
-                      element.getNamespaceURI(prefix));  
-                }
-                
-             // Handle attributes' prefixes if not declared on ancestor
-                for (int i = 0; i < element.getAttributeCount(); i++) {
-                    Attribute att = element.getAttribute(i);
-                    String attPrefix = att.getNamespacePrefix();
-                    if (!element.getNamespaceURI(attPrefix)
-                      .equals(parent.getNamespaceURI(attPrefix))
-                      && !element.getNamespacePrefix()
-                      .equals(attPrefix)) {
-                        contentHandler.startPrefixMapping(attPrefix, 
-                          element.getNamespaceURI(attPrefix));  
-                    }
-                }                
-            }
-            else { // declare all prefixes
-                String prefix = element.getNamespacePrefix();
-                if (!prefix.equals("")) {
-                    contentHandler.startPrefixMapping(prefix, 
-                      element.getNamespaceURI());  
-                }
-                
-             // Handle attributes' prefixes if not declared on ancestor
-                for (int i = 0; i < element.getAttributeCount(); i++) {
-                    Attribute att = element.getAttribute(i);
-                    String attPrefix = att.getNamespacePrefix();
-                    if (!attPrefix.equals("") &&
-                      !attPrefix.equals(element.getNamespacePrefix())){
-                        contentHandler.startPrefixMapping(attPrefix, 
-                          att.getNamespaceURI());  
-                    }
-                }
-                
-            }
-            
-            
-            // add attributes
-            AttributesImpl saxAttributes = new AttributesImpl();
-            for (int i = 0; i < element.getAttributeCount(); i++) {
-                Attribute attribute = element.getAttribute(i);
-                saxAttributes.addAttribute(attribute.getNamespaceURI(),
-                  attribute.getLocalName(),
-                  attribute.getQualifiedName(),
-                  getSAXType(attribute),
-                  attribute.getValue());
-            }
-
-            
-            contentHandler.startElement(
-              element.getNamespaceURI(),
-              element.getLocalName(), 
-              element.getQualifiedName(), 
-              saxAttributes);
-            for (int i = 0; i < element.getChildCount(); i++) {
-                process(element.getChild(i));   
-            }
-            contentHandler.endElement(element.getNamespaceURI(),
-              element.getLocalName(), element.getQualifiedName());
-            
-            // end prefix mappings
-            for (int i = 0; 
-                 i < element.getNamespaceDeclarationCount(); 
-                 i++) {
-                String prefix = element.getNamespacePrefix(i);
-                contentHandler.endPrefixMapping(prefix);  
-            }
-            if (parentNode instanceof Element) {
-                Element parent = (Element) parentNode;
-             // Now handle element's prefix if not declared on ancestor
-                String prefix = element.getNamespacePrefix();
-                if (!element.getNamespaceURI(prefix)
-                  .equals(parent.getNamespaceURI(prefix))) {
-                    contentHandler.endPrefixMapping(prefix);  
-                }
-                
-             // Handle attributes' prefixes if not declared on ancestor
-                for (int i = 0; i < element.getAttributeCount(); i++) {
-                    Attribute att = element.getAttribute(i);
-                    String attPrefix = att.getNamespacePrefix();
-                    if (!element.getNamespaceURI(attPrefix)
-                      .equals(parent.getNamespaceURI(attPrefix))
-                      && !element.getNamespacePrefix().equals(
-                      attPrefix)) {
-                        contentHandler.endPrefixMapping(attPrefix);  
-                    }
-                }                
-            }
-            else { // undeclare all prefixes
-                String prefix = element.getNamespacePrefix();
-                if (!prefix.equals("")) {
-                    contentHandler.endPrefixMapping(prefix);  
-                }
-                
-             // Handle attributes' prefixes if not declared on ancestor
-                for (int i = 0; i < element.getAttributeCount(); i++) {
-                    Attribute att = element.getAttribute(i);
-                    String attPrefix = att.getNamespacePrefix();
-                    if (!attPrefix.equals("") && !attPrefix
-                      .equals(element.getNamespacePrefix())) {
-                        contentHandler.endPrefixMapping(attPrefix);  
-                    }
-                }
-                
-            }
-            
+            convertElement((Element) node);
         }
         else if (node instanceof Text) {
             String data = node.getValue();
@@ -316,6 +194,130 @@ public class SAXConverter {
             lexicalHandler.endDTD();          
         }
         
+    }
+
+    private void convertElement(Element element) throws SAXException {
+        // start prefix mapping
+        for (int i = 0; 
+             i < element.getNamespaceDeclarationCount(); 
+             i++) {
+            String prefix = element.getNamespacePrefix(i);
+            contentHandler.startPrefixMapping(prefix, 
+              element.getNamespaceURI(prefix));  
+        }
+        ParentNode parentNode = element.getParent();
+        if (parentNode instanceof Element) {
+            Element parent = (Element) parentNode;
+         // now handle element's prefix if not declared on ancestor
+            String prefix = element.getNamespacePrefix();
+            if (!element.getNamespaceURI(prefix)
+              .equals(parent.getNamespaceURI(prefix))) {
+                contentHandler.startPrefixMapping(prefix, 
+                  element.getNamespaceURI(prefix));  
+            }
+            
+         // Handle attributes' prefixes if not declared on ancestor
+            for (int i = 0; i < element.getAttributeCount(); i++) {
+                Attribute att = element.getAttribute(i);
+                String attPrefix = att.getNamespacePrefix();
+                if (!element.getNamespaceURI(attPrefix)
+                  .equals(parent.getNamespaceURI(attPrefix))
+                  && !element.getNamespacePrefix()
+                  .equals(attPrefix)) {
+                    contentHandler.startPrefixMapping(attPrefix, 
+                      element.getNamespaceURI(attPrefix));  
+                }
+            }                
+        }
+        else { // declare all prefixes
+            String prefix = element.getNamespacePrefix();
+            if (!prefix.equals("")) {
+                contentHandler.startPrefixMapping(prefix, 
+                  element.getNamespaceURI());  
+            }
+            
+         // Handle attributes' prefixes if not declared on ancestor
+            for (int i = 0; i < element.getAttributeCount(); i++) {
+                Attribute att = element.getAttribute(i);
+                String attPrefix = att.getNamespacePrefix();
+                if (!attPrefix.equals("") &&
+                  !attPrefix.equals(element.getNamespacePrefix())){
+                    contentHandler.startPrefixMapping(attPrefix, 
+                      att.getNamespaceURI());  
+                }
+            }
+            
+        }
+        
+        
+        // add attributes
+        AttributesImpl saxAttributes = new AttributesImpl();
+        for (int i = 0; i < element.getAttributeCount(); i++) {
+            Attribute attribute = element.getAttribute(i);
+            saxAttributes.addAttribute(attribute.getNamespaceURI(),
+              attribute.getLocalName(),
+              attribute.getQualifiedName(),
+              getSAXType(attribute),
+              attribute.getValue());
+        }
+        
+        
+        contentHandler.startElement(
+          element.getNamespaceURI(),
+          element.getLocalName(), 
+          element.getQualifiedName(), 
+          saxAttributes);
+        for (int i = 0; i < element.getChildCount(); i++) {
+            process(element.getChild(i));   
+        }
+        contentHandler.endElement(element.getNamespaceURI(),
+          element.getLocalName(), element.getQualifiedName());
+        
+        // end prefix mappings
+        for (int i = 0; 
+             i < element.getNamespaceDeclarationCount(); 
+             i++) {
+            String prefix = element.getNamespacePrefix(i);
+            contentHandler.endPrefixMapping(prefix);  
+        }
+        if (parentNode instanceof Element) {
+            Element parent = (Element) parentNode;
+         // Now handle element's prefix if not declared on ancestor
+            String prefix = element.getNamespacePrefix();
+            if (!element.getNamespaceURI(prefix)
+              .equals(parent.getNamespaceURI(prefix))) {
+                contentHandler.endPrefixMapping(prefix);  
+            }
+            
+         // Handle attributes' prefixes if not declared on ancestor
+            for (int i = 0; i < element.getAttributeCount(); i++) {
+                Attribute att = element.getAttribute(i);
+                String attPrefix = att.getNamespacePrefix();
+                if (!element.getNamespaceURI(attPrefix)
+                  .equals(parent.getNamespaceURI(attPrefix))
+                  && !element.getNamespacePrefix().equals(
+                  attPrefix)) {
+                    contentHandler.endPrefixMapping(attPrefix);  
+                }
+            }                
+        }
+        else { // undeclare all prefixes
+            String prefix = element.getNamespacePrefix();
+            if (!prefix.equals("")) {
+                contentHandler.endPrefixMapping(prefix);  
+            }
+            
+         // Handle attributes' prefixes if not declared on ancestor
+            for (int i = 0; i < element.getAttributeCount(); i++) {
+                Attribute att = element.getAttribute(i);
+                String attPrefix = att.getNamespacePrefix();
+                if (!attPrefix.equals("") && !attPrefix
+                  .equals(element.getNamespacePrefix())) {
+                    contentHandler.endPrefixMapping(attPrefix);  
+                }
+            }
+            
+        }
     }
     
     private static String getSAXType(Attribute attribute) {
