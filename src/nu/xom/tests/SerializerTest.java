@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 
 /**
  * <p>
@@ -1325,6 +1326,28 @@ public class SerializerTest extends XOMTestCase {
         try {
             Serializer serializer = new Serializer(null);
             fail("Allowed null output stream");   
+        }   
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());   
+        }
+    }
+
+    public void testNullOutputStreamWithEncoding() 
+      throws UnsupportedEncodingException {
+        try {
+            Serializer serializer = new Serializer(null, "UTF-8");
+            fail("Allowed null output stream");   
+        }   
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());   
+        }
+    }
+
+    public void testNullEncoding() 
+      throws UnsupportedEncodingException {
+        try {
+            Serializer serializer = new Serializer(System.out, null);
+            fail("Allowed null encoding");   
         }   
         catch (NullPointerException success) {
             assertNotNull(success.getMessage());   
