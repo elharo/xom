@@ -26,7 +26,7 @@ package nu.xom;
 /**
  *
  * <p>
- *  This is the generic superclass for all the contents 
+ *  The generic superclass for all the contents 
  *  of an XML document. There are exactly seven kinds of 
  *  nodes in XOM:
  * </p>
@@ -49,10 +49,11 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a3
+ * @version 1.0a4
  *
  */
 public abstract class Node {
+    
     
     private ParentNode parent = null;
     
@@ -270,10 +271,13 @@ public abstract class Node {
     /**
      * <p>
      * Returns the actual XML form of this node, such as might be
-     * copied and pasted from the original document.
+     * copied and pasted from the original document. However, this 
+     * does not preserve semantically insignificant details such as
+     * white space inside tags or the use of empty-element tags vs.
+     * start-tag end-tag pairs.
      * </p>
      * 
-     * @return a String containing an XML representation of this node
+     * @return an XML representation of this node
      */
     public abstract String toXML(); 
     
