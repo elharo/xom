@@ -154,7 +154,7 @@ public class Canonicalizer {
             int position = 0;        
             while (true) {
                 Node child = doc.getChild(position);
-                write(child); 
+                writeChild(child); 
                 position++;
                 if (child instanceof ProcessingInstruction) breakLine();
                 else if (child instanceof Comment && withComments) {
@@ -169,7 +169,7 @@ public class Canonicalizer {
                 else if (child instanceof Comment && withComments) {
                     breakLine();
                 }
-                write(child);
+                writeChild(child);
             }
             
             flush();
@@ -193,7 +193,7 @@ public class Canonicalizer {
             writeStartTag(element, false);
             // children
             for (int i = 0; i < element.getChildCount(); i++) {
-                write(element.getChild(i)); 
+                writeChild(element.getChild(i)); 
             }
             writeEndTag(element);
         } 
