@@ -50,7 +50,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d4
+ * @version 1.1a2
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -1955,6 +1955,20 @@ public class SerializerTest extends XOMTestCase {
     }
 
     
+    private static class ElementSerializer extends Serializer {
+        
+        ElementSerializer(OutputStream out, String encoding) 
+          throws UnsupportedEncodingException {
+            super(out, encoding);   
+        }
+        
+        protected void write(Element element) throws IOException {
+            super.write(element);
+        }
+        
+    }
+
+    
     public void testWriteRaw() throws IOException {
 
         ExposingSerializer serializer = new ExposingSerializer(out, "UTF-8");
@@ -1963,6 +1977,18 @@ public class SerializerTest extends XOMTestCase {
         serializer.flush();
         String result = out.toString("UTF-8");
         assertEquals("<>&\"'", result);
+        
+    }    
+
+    
+    public void testWriteParentlessElementInANamespace() throws IOException {
+
+        ElementSerializer serializer = new ElementSerializer(out, "UTF-8");
+        Element element = new Element("a", "http://www.example.org");
+        serializer.write(element); 
+        serializer.flush();
+        String result = out.toString("UTF-8");
+        assertEquals("<a xmlns=\"http://www.example.org\" />", result);
         
     }    
 
