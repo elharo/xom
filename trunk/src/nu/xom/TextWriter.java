@@ -584,14 +584,7 @@ abstract class TextWriter {
         this.indent = indent;
     }
 
-    
-    /**
-     * <p>
-     * Method flush.
-     * <p>
-     * 
-     * @throws IOException
-     */
+
     void flush() throws IOException {
         out.flush();    
     }
