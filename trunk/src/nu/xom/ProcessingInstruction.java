@@ -41,7 +41,7 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  *
  */
 public class ProcessingInstruction extends LeafNode {
@@ -77,7 +77,8 @@ public class ProcessingInstruction extends LeafNode {
      * 
      */
     public ProcessingInstruction(ProcessingInstruction instruction) {
-        this(instruction.target, instruction.data);  
+        this.target = instruction.target;
+        this.data = instruction.data;  
     }
     
     private ProcessingInstruction() {}
@@ -104,7 +105,7 @@ public class ProcessingInstruction extends LeafNode {
      * Sets the target.
      * </p>
      * 
-     * @param target The new target
+     * @param target the new target
      * 
      * @throws IllegalTargetException if the proposed target 
      *   is not an XML 1.0 non-colonized name
