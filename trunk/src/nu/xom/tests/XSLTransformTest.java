@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 
+import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Comment;
 import nu.xom.Document;
@@ -406,8 +407,26 @@ public class XSLTransformTest extends XOMTestCase {
         ProcessingInstruction child = (ProcessingInstruction) root.getChild(0);
         assertEquals("target", child.getTarget());
         assertEquals("test", child.getValue());
-    }
+    } 
 
+    // primarily this makes sure the XSLTHandler can handle various
+    // edge cases
+    public void testIdentityTransform() 
+      throws ParsingException, IOException, XSLException {
+        
+        File stylesheet = new File("data/xslt/input/identity.xsl");
+        XSLTransform xform = new XSLTransform(stylesheet);
+        Element root = new Element("root", "http://www.example.org");
+        root.appendChild(new Text("some data"));
+        root.appendChild(new Element("something"));
+        root.addAttribute(new Attribute("test", "test"));
+        root.addAttribute(new Attribute("pre:red", "http://www.red.com/", "value"));
+        Document input = new Document(root);
+        Nodes output = xform.transform(input);
+        assertEquals(root, output.get(0));
+        
+    } 
+    
     
     
 }
