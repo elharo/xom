@@ -151,27 +151,15 @@ final class Verifier {
         char[] data = text.toCharArray();
         for (int i = 0, len = data.length; i < len; i++) {
             int result = data[i];
-            // high surrogate
             if (result >= 0xD800 && result <= 0xDBFF) { 
-                // Decode surrogate pair
-               int high = result;
-               try {
-                 int low = data[i+1];
-                 if (low < 0xDC00 || low > 0xDFFF) {
-                   throw new IllegalDataException(
-                     "Bad surrogate pair"
-                   );
-                 }
-                 // Algorithm defined in Unicode spec
-                 result = (high-0xD800)*0x400 + (low-0xDC00) + 0x10000;
-                 i++;
-               }
-               catch (IndexOutOfBoundsException ex) {
-                   throw new IllegalDataException(
-                     "Bad surrogate pair"
-                   );
-               }
-            }
+                try {
+                    result = decodeSurrogatePair(result, data[i+1]);
+                    i++; // increment past low surrogate
+                }
+                catch (ArrayIndexOutOfBoundsException ex) {
+                    throw new IllegalDataException("Bad Surrogate Pair", ex);
+                }
+            }  // end if 
 
             if (!isXMLCharacter(result)) {
                 // Likely this character can't be easily displayed
@@ -226,27 +214,14 @@ final class Verifier {
         int rightBrackets = 0;
         for (int i = 0; i < iri.length(); i++) {
             int test = iri.charAt(i);
-            // decode surrogate pair if necessary
-            // Could refactor this to keep in common
-            // checkCharacterData. Also could use ICU????
             if (test >= 0xD800 && test <= 0xDBFF) { 
-               int high = test;
-               try {
-                 int low = iri.charAt(i+1);
-                 if (low < 0xDC00 || low > 0xDFFF) {
-                   throw new MalformedURIException(
-                     "Bad surrogate pair"
-                   );
-                 }
-                 // Algorithm defined in Unicode spec
-                 test = (high-0xD800)*0x400 + (low-0xDC00) + 0x10000;
-                 i++;
-               }
-               catch (IndexOutOfBoundsException ex) {
-                   throw new IllegalDataException(
-                     "Bad surrogate pair"
-                   );
-               }
+                try {
+                    test = decodeSurrogatePair(test, iri.charAt(i+1));
+                    i++; // increment past low surrogate
+                }
+                catch (Exception ex) {
+                    throw new MalformedURIException("Bad surrogate pair", ex);
+                }
             }  // end if 
             
             if (checkForURI && !isURICharacter(test)) {
@@ -311,6 +286,16 @@ final class Verifier {
         return;
     }
 
+    
+    private static int decodeSurrogatePair(int high, int low) {
+        if (low < 0xDC00 || low > 0xDFFF) {
+            throw new IllegalDataException("Bad surrogate pair");
+        }
+        // Algorithm defined in Unicode spec
+        return (high-0xD800)*0x400 + (low-0xDC00) + 0x10000;
+    }
+
+    
     /**
      * <p>
      * This will check the supplied data to see if it is legal for 
@@ -592,13 +577,14 @@ final class Verifier {
      * @return true if <code>c</code> is a name character, 
      *     false otherwise
      */
-    static boolean isXMLNameCharacter(char c) {
+    private static boolean isXMLNameCharacter(char c) {
     
       return (isXMLLetter(c) || isXMLDigit(c) || c == '.' || c == '-' 
-                             || c == '_' || c == ':' || isXMLCombiningChar(c) 
-                             || isXMLExtender(c));
+           || c == '_' || c == ':' || isXMLCombiningChar(c) 
+           || isXMLExtender(c));
     }
 
+    
     /**
      * <p>
      * This is a utility function for determining whether a specified 
@@ -612,12 +598,13 @@ final class Verifier {
      * @return true if <code>c</code> is a name start character, 
      *     false otherwise
      */
-    static boolean isXMLNameStartCharacter(char c) {
+    private static boolean isXMLNameStartCharacter(char c) {
     
-      return (isXMLLetter(c) || c == '_' || c ==':');
+        return (isXMLLetter(c) || c == '_' || c ==':');
     
     }
 
+    
     /**
      * <p>
      * This is a utility function for determining whether a specified 
@@ -628,7 +615,7 @@ final class Verifier {
      * @param c <code>char</code> to check for XML name compliance
      * @return <code>String</code> - true if it's a letter, false otherwise
      */
-    static boolean isXMLLetter(char c) {
+    private static boolean isXMLLetter(char c) {
         // Note that order is very important here.  The search proceeds 
         // from lowest to highest values, so that no searching occurs 
         // above the character's value.  BTW, the first line is equivalent to:
@@ -844,6 +831,7 @@ final class Verifier {
         
     }
 
+    
     /**
      * <p>
      * This is a utility function for determining whether a specified 
@@ -854,7 +842,7 @@ final class Verifier {
      * @param c <code>char</code> to check
      * @return true if <code>c</code> is a combining character, false otherwise
      */
-    static boolean isXMLCombiningChar(char c) {
+    private static boolean isXMLCombiningChar(char c) {
         // CombiningChar
         if (c < 0x0300) return false;  if (c <= 0x0345) return true;
         if (c < 0x0360) return false;  if (c <= 0x0361) return true;
@@ -990,31 +978,33 @@ final class Verifier {
      * @param c <code>char</code> to check
      * @return true if it's an extender, false otherwise
      */
-    static boolean isXMLExtender(char c) {
-
-        if (c < 0x00B6) return false;  // quick short circuit
-
-        // Extenders                               
-        if (c == 0x00B7) return true;
-        if (c == 0x02D0) return true;
-        if (c == 0x02D1) return true;
-        if (c == 0x0387) return true;
-        if (c == 0x0640) return true;
-        if (c == 0x0E46) return true;
-        if (c == 0x0EC6) return true;
-        if (c == 0x3005) return true;
-                                       
-        if (c < 0x3031)  return false;  
-        if (c <= 0x3035) return true;
-        if (c < 0x309D)  return false;  
-        if (c <= 0x309E) return true;
-        if (c < 0x30FC)  return false;  
-        if (c <= 0x30FE) return true;
-        
-        return false;
+    private static boolean isXMLExtender(char c) {
+ 
+        switch (c) {
+            case 0x00B7: return true;
+            case 0x02D0: return true;
+            case 0x02D1: return true;
+            case 0x0387: return true;
+            case 0x0640: return true;
+            case 0x0E46: return true;
+            case 0x0EC6: return true;
+            case 0x3005: return true;
+            case 0x3031: return true;  
+            case 0x3032: return true;  
+            case 0x3033: return true;  
+            case 0x3034: return true;  
+            case 0x3035: return true;
+            case 0x309D: return true;
+            case 0x309E: return true;
+            case 0x30FC: return true;  
+            case 0x30FD: return true;  
+            case 0x30FE: return true;
+            default: return false;
+        }
         
     }
-      
+
+    
     /**
      * <p>
      * This is a utility function for determining whether a specified 
@@ -1025,7 +1015,7 @@ final class Verifier {
      * @param c <code>char</code> to check for XML digit compliance.
      * @return true if it's a digit, false otherwise
      */
-    static boolean isXMLDigit(char c) {
+    private static boolean isXMLDigit(char c) {
       
         if (c < 0x0030) return false;  if (c <= 0x0039) return true;
         if (c < 0x0660) return false;  if (c <= 0x0669) return true;
@@ -1061,7 +1051,7 @@ final class Verifier {
      * @param c  to check for hex digit.
      * @return  true if it's allowed, false otherwise.
      */
-    static boolean isHexDigit(char c) {
+    private static boolean isHexDigit(char c) {
 
     // I suspect most characters passed to this method will be
     // correct hexadecimal digits, so I test for the true cases
