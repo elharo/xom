@@ -30,7 +30,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d17
+ * @version 1.0d22
  *
  */
 class NonVerifyingFactory extends NodeFactory {
@@ -63,38 +63,6 @@ class NonVerifyingFactory extends NodeFactory {
      */
     public Element startMakingElement(String name, String namespace) {
         return Element.build(name, namespace);   
-    }
-
-    /**
-     * <p>
-     * Creates a new <code>Attribute</code> in no namespace with
-     * the specified name.
-     * </p>
-     * 
-     * @param name the local name of the attribute
-     * @param value the attribute value
-     * 
-     * @return the new <code>Attribute</code>
-     */
-    public Attribute makeAttribute(String name, String value) {
-        return Attribute.build(name, "", value, Attribute.Type.UNDECLARED);
-    }
-
-    /**
-     * <p>
-     * Creates a new <code>Attribute</code> in no namespace with
-     * the specified name and type.
-     * </p>
-     * 
-     * @param name the prefixed name of the attribute
-     * @param value the attribute value
-     * @param type the attribute type
-     * 
-     * @return the new <code>Attribute</code>
-     */
-    public Attribute makeAttribute(String name, String value, 
-      Attribute.Type type) {
-        return Attribute.build(name, "", value, type);
     }
 
     /**
