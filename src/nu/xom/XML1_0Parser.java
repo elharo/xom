@@ -39,8 +39,8 @@ import org.apache.xerces.parsers.DTDConfiguration;
  * <p>
  * This class does not support schema validation. If you want to use
  * the W3C XML Schema Language, you'll need to download and install 
- * the full version of Xerces from 
- * <a href="http://xml.apache.org/xerces2-j">http://xml.apache.org</a>.
+ * the full version of Xerces from <a target="_top"
+ * href="http://xml.apache.org/xerces2-j">http://xml.apache.org</a>.
  * </p>
  * 
  * @author Elliotte Rusty Harold

@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -1176,7 +1176,7 @@ public class Serializer {
      * </p>
      * 
      * <p>
-     *   The implementation used is IBM's <a href=
+     *   The implementation used is IBM's <a target="_top" href=
      *   "http://oss.software.ibm.com/icu4j/index.html">International
      *   Components for Unicode <i>for Java</i> (ICU4J) 2.6</a>. 
      *   This version is based on Unicode 4.0. 

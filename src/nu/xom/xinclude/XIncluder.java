@@ -51,9 +51,10 @@ import nu.xom.Text;
 /**
  * <p>
  * Implements XInclude resolution as specified in 
- * <a href="http://www.w3.org/TR/2004/REC-xinclude-20041220/"><cite>XML
- * Inclusions (XInclude) Version 1.0</cite></a>. Fallbacks
- * are supported. The XPointer <code>element()</code> scheme and 
+ * <a href="http://www.w3.org/TR/2004/REC-xinclude-20041220/"
+ * target="_top"><cite>XML Inclusions (XInclude) Version 
+ * 1.0</cite></a>. Fallbacks are supported. 
+ * The XPointer <code>element()</code> scheme and 
  * shorthand XPointers are also supported. The XPointer 
  * <code>xpointer()</code> scheme is not supported. 
  * The <code>accept</code> and <code>accept-language</code> 

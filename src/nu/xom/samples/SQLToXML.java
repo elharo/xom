@@ -39,7 +39,8 @@ import nu.xom.Serializer;
  * Demonstrates building a structured XML document,
  * from relational data using JDBC. A different version of this 
  * example was originally developed for Example 4.14 of Chapter 4 of 
- * <cite><a href="http://www.cafeconleche.org/books/xmljava/">Processing 
+ * <cite><a target="_top"
+ * href="http://www.cafeconleche.org/books/xmljava/">Processing 
  * XML with Java</a></cite>.
  * </p>
  * 

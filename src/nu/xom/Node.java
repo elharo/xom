@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -99,11 +99,11 @@ public abstract class Node {
     /**
      * 
      * <p>
-     * Returns the base URI of  this node as specified by 
-     * <a href="http://www.w3.org/TR/xmlbase/">XML Base</a>, 
-     * or the empty string if this is not known. In most cases, this 
-     * is the URL against which relative URLs in this node should be 
-     * resolved.
+     * Returns the base URI of this node as specified by 
+     * <a href="http://www.w3.org/TR/xmlbase/" target="_top">XML 
+     * Base</a>, or the empty string if this is not known. In most  
+     * cases, this is the URL against which relative URLs in this node 
+     * should be resolved.
      * </p>
      * 
      * <p>
@@ -156,11 +156,11 @@ public abstract class Node {
      * </ul>
      * 
      * <p>
-     *   Absolutization takes place as specified by the 
-     *   <a href="http://www.w3.org/TR/xmlbase/">XML 
-     *   Base specification</a>. However, it is not always possible to
-     *   absolutize a relative URI, in which case the empty string will 
-     *   be returned. 
+     *  Absolutization takes place as specified by the 
+     *  <a target="_top" href="http://www.w3.org/TR/xmlbase/">XML 
+     *  Base specification</a>. However, it is not always possible to
+     *  absolutize a relative URI, in which case the empty string will 
+     *  be returned. 
      * </p> 
      * 
      * @return the base URI of this node 

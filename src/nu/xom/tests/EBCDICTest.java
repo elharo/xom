@@ -36,7 +36,7 @@ import nu.xom.Serializer;
 /**
  * <p>
  *  Tests support for the typical U.S. EBCDIC encoding.
- *  Unfortunately this test exposes a <a href=
+ *  Unfortunately this test exposes a <a target="_top" href=
  *  "http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4867251">bug<a/>
  *  in the handling of NEL, character 0x85, in Sun's JDK. Specifically
  *  InputStreamReader maps 0x85 to a line feed rather than 
