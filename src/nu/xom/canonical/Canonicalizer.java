@@ -59,7 +59,7 @@ import nu.xom.XPathContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1d7
  *
  */
 public class Canonicalizer {
@@ -912,49 +912,7 @@ public class Canonicalizer {
      *     than one document; or if a detached node is in the list
      */
     public final void write(Nodes documentSubset) throws IOException { 
-        this.write(documentSubset, null);
-    }   
-
     
-    /**
-     * <p>
-     * Serializes a document subset onto the output stream using the 
-     * canonical XML algorithm. All nodes in the subset must come from
-     * same document. Furthermore, they must come from a document.
-     * They cannot be detached. 
-     * </p>
-     * 
-     * <p>
-     * Children are not output unless they are also included in the 
-     * subset. Including an element in the subset does not 
-     * automatically select all the element's children, attributes,  
-     * and namespaces. Furthermore, not selecting an element does  
-     * not imply that its children, namespaces, attributes will not 
-     * be output. 
-     * </p>
-     * 
-     * @param documentSubset the nodes to serialize
-     * @param inclusiveNamespacePrefixes a whitespace separated list 
-     *     of namespace prefixes that will always be included in the 
-     *     output, even in exclusive canonicalization
-     * 
-     * @throws IOException if the underlying <code>OutputStream</code>
-     *     encounters an I/O error
-     * @throws CanonicalizationException if the nodes come from more
-     *     than one document; or if a detached node is in the list
-     */
-    public final void write(Nodes documentSubset, String inclusiveNamespacePrefixes) 
-      throws IOException {  
-        
-        this.inclusiveNamespacePrefixes.clear();
-        if (this.exclusive && inclusiveNamespacePrefixes != null) {
-            StringTokenizer tokenizer = new StringTokenizer(
-              inclusiveNamespacePrefixes, " \t\r\n", false);
-            while (tokenizer.hasMoreTokens()) {
-                this.inclusiveNamespacePrefixes.add(tokenizer.nextToken());
-            }
-        }
-        
         if (documentSubset.size() > 0) {
             Document doc = documentSubset.get(0).getDocument();
             if (doc == null) {
@@ -966,6 +924,32 @@ public class Canonicalizer {
             serializer.write(doc);        
             serializer.flush();
         } 
+        
+    }   
+
+    
+    /**
+     * <p>
+     * Specifies the prefixes that will be output as specified in 
+     * regular canonical XML, even when doing exclusive 
+     * XML canonicalization.
+     * </p>
+     * 
+     * @param inclusiveNamespacePrefixes a whitespace separated list 
+     *     of namespace prefixes that will always be included in the 
+     *     output, even in exclusive canonicalization
+     */
+    public final void setInclusiveNamespacePrefixList(String inclusiveNamespacePrefixes) 
+      throws IOException {  
+        
+        this.inclusiveNamespacePrefixes.clear();
+        if (this.exclusive && inclusiveNamespacePrefixes != null) {
+            StringTokenizer tokenizer = new StringTokenizer(
+              inclusiveNamespacePrefixes, " \t\r\n", false);
+            while (tokenizer.hasMoreTokens()) {
+                this.inclusiveNamespacePrefixes.add(tokenizer.nextToken());
+            }
+        }
        
     }   
 

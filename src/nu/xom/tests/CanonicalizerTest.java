@@ -57,7 +57,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1d7
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -1149,7 +1149,11 @@ and expect to see
         
         XPathContext context = new XPathContext("n1", "http://b.example");
         Document doc = new Document(pdu);
-        canonicalizer.write(doc.query("(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context), "n0");  
+        canonicalizer.setInclusiveNamespacePrefixList("n0");
+        Nodes subset = doc.query(
+          "(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]",
+          context);
+        canonicalizer.write(subset);  
         
         byte[] result = out.toByteArray();
         out.close();
@@ -1157,8 +1161,6 @@ and expect to see
         assertEquals(expected, s);
         
     }
-        
-
 
 
     public void testExclusive22a() throws ParsingException, IOException {
