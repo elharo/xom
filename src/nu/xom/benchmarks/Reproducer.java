@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -39,11 +39,11 @@ import nu.xom.Text;
  * <p>
  * Benchmarks building a tree in memory by copying an existing document
  * without using copy. Thus everything is reverified so that 
- * constructors and Verifier are hit heavily. 
+ * constructors and <code>Verifier</code> are hit heavily. 
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d5
  *
  */
 class Reproducer {
@@ -176,25 +176,5 @@ class Reproducer {
         
     }
 
-    
-    private void warmup(Document doc, int numPasses) 
-      throws IOException, ParsingException {
-        
-        for (int i = 0; i < numPasses; i++) {
-            copy(doc);
-        }
-        
-    }
-    
-    
-
-    // note use of recursion
-    private void followNode(Node node) throws IOException {
-    
-        for (int i = 0; i < node.getChildCount(); i++) {
-            followNode(node.getChild(i));
-        }
-    
-    }
 
 }
