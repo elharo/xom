@@ -53,6 +53,7 @@ public class Document extends ParentNode {
         _insertChild(root, 0);
     }
 
+    
     /**
      * <p>
      * Creates a copy of the <code>Document</code>.
@@ -272,6 +273,9 @@ public class Document extends ParentNode {
     /**
      * <p>
      *   Returns the URI from which this document was loaded.
+     *   This method returns null if the base URI is not known;
+     *   for instance if the document was created in memory with
+     *   a constructor rather than by parsing an existing document.
      * </p>
      * 
      * @return the base URI of this document 

@@ -49,7 +49,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0a1
  *
  */
 public abstract class Node {
@@ -107,28 +107,54 @@ public abstract class Node {
      * </p>
      * 
      * <p>
-     * Currently, the value of the base URI is determined as follows:
+     *  The base URI of a non-parent node is the base URI of the 
+     *  element containing the node. The base URI of a document
+     *  node is the URI from whcih the document was parsed,
+     *  or which was set by calling <code>setBaseURI</code> on
+     *  on the document. 
+     * </p>
+     *
+     * <p>
+     * The base URI of an element is determined as follows:
      * </p>
      * 
      * <ul>
-     *   <li>If node has an <code>xml:base</code> attribute,
+     *   <li>If the element has an <code>xml:base</code> attribute,
      *        then the value of that attribute is 
-     *        converted from an IRI to a URI, absolutized if possible,  
+     *        converted from an IRI to a URI, absolutized if possible,
      *        and returned.
      *    </li>
-     *   <li>Otherwise, if any ancestor element of this node loaded from
-     *        the same entity has an <code>xml:base</code> attribute,
-     *        then the value of that attribute from the nearest such 
-     *        ancestor is converted from an IRI to a URI, 
-     *        absolutized if possible, and returned. 
-     *        <code>xml:base</code> attributes from other entities are
-     *        not considered.
+     *   <li>Otherwise, if any ancestor element of the element loaded
+     *       from the same entity has an <code>xml:base</code> 
+     *       attribute, then the value of that attribute from the
+     *        nearest such ancestor is converted from an IRI to a URI, 
+     *       absolutized if possible, and returned. 
+     *       <em><code>xml:base</code> attributes from other entities are
+     *       not considered.</em>
      *    </li>
      *    <li>
-     *      Otherwise, if this node was part of an externally
-     *      parsed entity or the document entity, or of a node
-     *      on which <code>setBaseURI()</code> was called,
-     *       then the URI of that entity is returned.
+     *      Otherwise, if <code>setBaseURI()</code> has been invoked on 
+     *      this element, then the URI most recently passed to that method 
+     *      is absolutized if possible and returned.
+     *    </li>
+     *    <li>
+     *      Otherwise, if <code>setBaseURI()</code> was invoked on this
+     *      element with a non-null value, then the URI of that entity 
+     *      is returned.
+     *    </li>
+     *    <li>
+     *      Otherwise, if the element comes from an externally
+     *      parsed entity or the document entity, and the 
+     *      original base URI has not been changed by invoking 
+     *      <code>setBaseURI()</code>, then the URI of that entity is
+     *      returned.
+     *    </li>
+     *    <li>
+     *      Otherwise, (the element was created by a constructor
+     *      rather then being parsed from an existing document), the
+     *      base URI of the nearest ancestor that does have a base URI
+     *      is returned. If no ancestors have a base URI, then null is
+     *      returned.
      *    </li>
      * </ul>
      * 
@@ -139,15 +165,6 @@ public abstract class Node {
      *   URI will be returned. 
      * </p> 
      * 
-     * <!--
-     * <p>
-     *   The URIs returned are actually IRIs that can contain
-     *   URI-illegal characters such as &Omega; and &eacute;.
-     *   This is in keeping with the XML Base specification.
-     *   However, the value returned by this method may need to be 
-     *   further escaped before being used in other systems that 
-     *   expect URIs, not IRIs.
-     * </p> -->
      * 
      * @return the base URI of this node 
      */

@@ -1227,9 +1227,10 @@ public class Element extends ParentNode {
      * 
      * <p>
      * Returns the base URI against which relative URIs in this
-     * element should be resolved.
-     * <code>xml:base</code> attributes take precedence over the
-     * actual base URI.
+     * element should be resolved. <code>xml:base</code> attributes
+     * <em>in the same entity</em> take precedence over the
+     * actual base URI of the document where the element was found
+     * or whuch was set by <code>setBaseURI</code>.
      * </p>
      * 
      * <p>
