@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2002-2004 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -30,8 +30,10 @@ import java.io.UnsupportedEncodingException;
 
 class EBCDICWriter extends OutputStreamWriter {
     
+    
     private final static int NEL = 0x85;
     private OutputStream raw;
+    
     
     public EBCDICWriter(OutputStream out) 
       throws UnsupportedEncodingException {
@@ -39,8 +41,10 @@ class EBCDICWriter extends OutputStreamWriter {
         this.raw = out;    
     }
     
+    
     // work around broken implementation of EBCDIC-37
     public void write(int c) throws IOException {
+        
         if (c == NEL) {
             flush();
             raw.write(0x15);
@@ -51,24 +55,11 @@ class EBCDICWriter extends OutputStreamWriter {
     
     }
 
+    
     public void write(char[] text, int offset, int length)
       throws IOException {      
        for (int i = offset; i < offset+length; i++) write(text[i]);          
     }
 
-    public void write(char[] text)
-      throws IOException {      
-       write(text, 0, text.length);          
-    }
-
-    public void write(String text, int offset, int length)
-      throws IOException {      
-        write(text.substring(offset, length).toCharArray());      
-    }
-
-    public void write(String text)
-      throws IOException {      
-        write(text.toCharArray());      
-    }
 
 }
