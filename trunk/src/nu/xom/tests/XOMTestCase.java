@@ -42,7 +42,7 @@ import nu.xom.Text;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0a4
+ * @version 1.0a5
  *
  */
 public class XOMTestCase extends TestCase {
@@ -55,7 +55,6 @@ public class XOMTestCase extends TestCase {
     public XOMTestCase(String name) {
         super(name);   
     }  
-    
     
     /**
      * <p>
@@ -178,7 +177,7 @@ public class XOMTestCase extends TestCase {
             // handle possibility that one is relative and other is not
             if (value1.equals(value2)) return;
             if (value1.startsWith("../")) {
-                assertTrue(value2.endsWith(value1.substring(2)));
+                assertTrue(message, value2.endsWith(value1.substring(2)));
             }
             else {
                 assertTrue(message, 
@@ -358,8 +357,8 @@ public class XOMTestCase extends TestCase {
              i++ ) {
             String prefix1 = actual.getNamespacePrefix(i);
             String uri1 = actual.getNamespaceURI(prefix1);
-            assertNotNull(expected.getNamespaceURI(prefix1));
-            assertEquals(
+            assertNotNull(message, expected.getNamespaceURI(prefix1));
+            assertEquals(message,
               uri1, expected.getNamespaceURI(prefix1)
             );                      
         }
@@ -370,9 +369,8 @@ public class XOMTestCase extends TestCase {
            // this is only used for unit testing  
            combineTextNodes(expected);
            combineTextNodes(actual);
-           
         }
-        assertEquals(actual.toXML(),
+        assertEquals(message,
           expected.getChildCount(), actual.getChildCount());
         for (int i = 0; i < expected.getChildCount(); i++) {
             Node child1 = expected.getChild(i);
