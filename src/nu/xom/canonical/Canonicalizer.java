@@ -414,7 +414,7 @@ public class Canonicalizer {
          * 
          * @see nu.xom.Serializer#writeXMLDeclaration()
          */
-        protected void writeXMLDeclaration() {};
+        protected void writeXMLDeclaration() {}
         
         /**
          * <p>

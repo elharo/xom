@@ -236,7 +236,7 @@ public class Attribute extends Node {
      * 
      * @throws XMLException if the subclass rejects the requested type.
      */
-    protected void checkType(Type type) {};
+    protected void checkType(Type type) {}
 
     /**
      * <p>
