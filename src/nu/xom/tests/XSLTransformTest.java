@@ -803,7 +803,8 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File("data/xslt/input/identity.xsl");
         XSLTransform xform = new XSLTransform(stylesheet);
 
-        String data = "<pre:a xmlns:pre='http://www.example.org' xmlns='http://www.example.net'>data</pre:a>";
+        String data = "<pre:a xmlns:pre='http://www.example.org' " +
+                "xmlns='http://www.example.net'>data</pre:a>";
         Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
         
