@@ -767,11 +767,6 @@ public class DocTypeTest extends XOMTestCase {
         assertTrue(internalDTDSubset.indexOf("<!ENTITY q2 \"&quot;\">") > 1);
         
     }
-
-    // greater than????
-
-    
-    
     
     
 }
