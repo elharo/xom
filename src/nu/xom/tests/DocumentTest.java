@@ -208,7 +208,7 @@ public class DocumentTest extends XOMTestCase {
     }
 
     
-    public void testReplaceRootWithDifferentElementUsingReplaceChild() {
+    public void testReplaceRootElementWithDifferentElementUsingReplaceChild() {
         
         Element newRoot = new Element("newRoot");
         Element oldRoot = doc.getRootElement();
@@ -216,6 +216,19 @@ public class DocumentTest extends XOMTestCase {
         assertEquals(newRoot, doc.getRootElement());
         assertNull(oldRoot.getParent());
         assertEquals(doc, newRoot.getParent());
+        
+    }
+
+    
+    public void testReplaceDocTypeWithDifferentDocTypeUsingReplaceChild() {
+        
+        DocType newDocType = new DocType("new");
+        DocType oldDocType = new DocType("old");
+        doc.setDocType(oldDocType);
+        doc.replaceChild(oldDocType, newDocType);
+        assertEquals(newDocType, doc.getDocType());
+        assertNull(oldDocType.getParent());
+        assertEquals(doc, newDocType.getParent());
         
     }
 
