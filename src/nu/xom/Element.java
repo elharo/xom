@@ -49,9 +49,8 @@ import java.util.TreeSet;
  *   <li>A list of child nodes</li>
  * </ul>
  * 
- * 
  * @author Elliotte Rusty Harold
- * @version 1.0d21
+ * @version 1.0d23
  *
  */
 public class Element extends ParentNode {
@@ -96,9 +95,10 @@ public class Element extends ParentNode {
         // I don't want to set the prefix field just yet.
         String prefix = "";
         String localName = name;
-        if (name.indexOf(':') >= 0) {
-            prefix = name.substring(0, name.indexOf(':'));   
-            localName = name.substring(name.indexOf(':') + 1);   
+        int colon = name.indexOf(':');
+        if (colon >= 0) {
+            prefix = name.substring(0, colon);   
+            localName = name.substring(colon + 1);   
         }
         
         // The order of these next two calls
@@ -114,9 +114,10 @@ public class Element extends ParentNode {
         Element result = new Element();
         String prefix = "";
         String localName = name;
-        if (name.indexOf(':') >= 0) {
-            prefix = name.substring(0, name.indexOf(':'));   
-            localName = name.substring(name.indexOf(':') + 1);   
+        int colon = name.indexOf(':');
+        if (colon >= 0) {
+            prefix = name.substring(0, colon);   
+            localName = name.substring(colon + 1);   
         }
         result.prefix = prefix;
         result.localName = localName;
@@ -767,6 +768,7 @@ public class Element extends ParentNode {
     public final void setNamespacePrefix(String prefix) {
         if (prefix == null) prefix = "";
         if (prefix.length() != 0) Verifier.checkNCName(prefix);
+        
         checkNamespacePrefix(prefix);
 
         // Check how this affects or conflicts with
@@ -774,7 +776,7 @@ public class Element extends ParentNode {
         // namespace declarations.
         String uri = getLocalNamespaceURI(prefix);
         if (uri != null) {
-            if (!uri.equals(this.URI)) {
+            if (!uri.equals(this.URI) && !"xml".equals(prefix)) {
                 throw new NamespaceException(prefix 
                  + " conflicts with existing prefix");
             }   
