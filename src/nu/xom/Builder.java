@@ -408,7 +408,7 @@ public class Builder {
               "http://xml.org/sax/properties/declaration-handler", 
               handler);
         }
-        catch (SAXException e) {
+        catch (SAXException ex) {
             // This parser does not support declaration events.
             // We can live without them, though it does mean
             // there won't be any internal DTD subset.
