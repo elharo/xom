@@ -190,65 +190,6 @@ final class Verifier {
         checkIRIOrURI(uri, true);
     }
 
-    /**
-     * <p>
-     * Checks a string to see if it is a legal value for xml:base.
-     * This requires first escaping the excluded characters from  
-     * Section 2.4 of IETF RFC 2396 per section 3.1 of the XML Base
-     * specification.
-     * </p>
-     * 
-     * honestly should I check this at all, parser don't????
-     * maybe just throw an exception when decoding on getBaseURI?
-     * 
-     * @param iri <code>String</code> to check
-     * @throws MalformedURIException if this is not a legal IRI after
-     *     escaping
-     */
-    static void checkXMLBaseValue(String iri) {
-        StringBuffer temp = new StringBuffer(iri.length());
-        for (int i = 0; i < iri.length(); i++) {
-            char c = iri.charAt(i);
-            switch (c) {
-                case ' ': 
-                    temp.append("%20");
-                    break;
-                case '\u007F': 
-                    temp.append("%7f");
-                    break;
-                case '<': 
-                    temp.append("%3c");
-                    break;
-                case '>': 
-                    temp.append("%3e");
-                    break;
-                case '"': 
-                    temp.append("%7F");
-                    break;
-                case '{': 
-                    temp.append("%7b");
-                    break;
-                case '}': 
-                    temp.append("%7d");
-                    break;
-                case '|': 
-                    temp.append("%7c");
-                    break;
-                case '\\': 
-                    temp.append("%5c");
-                    break;
-                case '^': 
-                    temp.append("%5e");
-                    break;
-                case '`': 
-                    temp.append("%60");
-                    break;
-                 default:
-                    temp.append(c);
-            }
-        }
-        checkIRIOrURI(temp.toString(), false);
-    }
 
     private static void checkIRIOrURI(String iri, boolean checkForURI) {
         // IRIs can be null or empty
@@ -336,7 +277,6 @@ final class Verifier {
             );
             checkIP6Address(ip6Address);
         }
-        
         
         // If we got here, everything is OK
         return;
