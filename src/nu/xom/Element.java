@@ -97,7 +97,7 @@ public class Element extends ParentNode {
         String prefix = "";
         String localName = name;
         int colon = name.indexOf(':');
-        if (colon >= 0) {
+        if (colon > 0) {
             prefix = name.substring(0, colon);   
             localName = name.substring(colon + 1);   
         }
@@ -556,10 +556,12 @@ public class Element extends ParentNode {
      */
     public final String getAttributeValue(String localName, 
                                           String namespaceURI) {
+        
         if (attributes == null) return null;                                      
         Attribute attribute = attributes.get(localName, namespaceURI);
         if (attribute == null) return null;
         else return attribute.getValue();
+        
     }
     
     
@@ -629,6 +631,7 @@ public class Element extends ParentNode {
      * @return the namespace URI mapped to <code>prefix</code>
      */
     public final String getNamespaceURI(String prefix) {
+        
         String result = getLocalNamespaceURI(prefix);
         if (result == null 
           && getParent() != null 
@@ -638,6 +641,7 @@ public class Element extends ParentNode {
         }
         if (result == null && "".equals(prefix)) result = "";
         return result;
+
     }
 
     
@@ -683,9 +687,11 @@ public class Element extends ParentNode {
      *     a legal, non-colonized name
      */
     public final void setLocalName(String localName) {
+        
         Verifier.checkNCName(localName);
         checkLocalName(localName);
         this.localName = localName;
+        
     }
 
     
@@ -720,6 +726,7 @@ public class Element extends ParentNode {
      *     or additional namespace
      */
     public final void setNamespaceURI(String uri) {
+        
         if (uri == null) uri = "";
         // Next line is needed to avoid unintentional
         // exceptions below when checking for conflicts
@@ -944,10 +951,12 @@ public class Element extends ParentNode {
      *     or greater than the number of children of the node
      */
     public final void insertChild(String text, int position) {
+        
        if (text == null) {
               throw new NullPointerException("Inserted null string");
        }
        super.insertChild(new Text(text), position);
+       
     } 
 
 
@@ -1119,6 +1128,7 @@ public class Element extends ParentNode {
      *     due to subclass constraints
      */
     public final void removeNamespaceDeclaration(String prefix) {
+        
         // local constraints
         checkRemoveNamespaceDeclaration(prefix);
         if (namespaces != null) {
@@ -1186,6 +1196,7 @@ public class Element extends ParentNode {
             }
         }
         return allPrefixes.size();
+        
     }
 
     
@@ -1251,6 +1262,7 @@ public class Element extends ParentNode {
             throw new IndexOutOfBoundsException(
               "No " + index + "th namespace");   
         }
+        
     }    
 
     
@@ -1682,6 +1694,7 @@ public class Element extends ParentNode {
     
     
     private static String percentEscape(char c) {
+        
         StringBuffer result = new StringBuffer(3);
         String s = String.valueOf(c);
         try {
@@ -1697,6 +1710,7 @@ public class Element extends ParentNode {
             throw new RuntimeException( 
               "Broken VM: does not recognize UTF-8 encoding");   
         }
+        
     }
 
 
@@ -1711,7 +1725,6 @@ public class Element extends ParentNode {
      * @return the String form of this element
      * 
      * @see nu.xom.Node#toXML()
-     * 
      * 
      */
     public final String toXML() {
@@ -1745,7 +1758,6 @@ public class Element extends ParentNode {
             result.append(uri);   
             result.append('"');
         }
-
         
         // attributes
         if (attributes != null) {
