@@ -567,7 +567,8 @@ public class XIncluder {
 
     // Should this method simply return a Nodes and not do any
     // of the detaching and adding and so forth???? leaving that
-    // till higher in the call chain????
+    // till higher in the call chain? In other words, replace this
+    // with resolveSilently?
     private static void resolve(
       Element element, Builder builder, Stack baseURLs)
       throws IOException, ParsingException, XIncludeException {
@@ -771,21 +772,21 @@ public class XIncluder {
         
     }
 
-    private static void processFallback(
-      Element element, Builder builder, Stack baseURLs, ParentNode parent, Exception ex)
+    private static void processFallback(Element includeElement, 
+      Builder builder, Stack baseURLs, ParentNode parent, Exception ex)
         throws XIncludeException, IOException, ParsingException {
            Elements fallbacks 
-              = element.getChildElements("fallback", XINCLUDE_NS);
+              = includeElement.getChildElements("fallback", XINCLUDE_NS);
            if (fallbacks.size() == 0) {
                 if (ex instanceof IOException) throw (IOException) ex;
                 XIncludeException ex2 = new XIncludeException(
-                  ex.getMessage(), element.getDocument().getBaseURI());
+                  ex.getMessage(), includeElement.getDocument().getBaseURI());
                 ex2.initCause(ex);
                 throw ex2;
            }
            else if (fallbacks.size() > 1) {
                 throw new XIncludeException("Multiple fallbacks", 
-                   element.getDocument().getBaseURI());
+                   includeElement.getDocument().getBaseURI());
            }
              
            Element fallback = fallbacks.get(0); 
@@ -796,26 +797,26 @@ public class XIncluder {
                 }
                 child = fallback.getChild(0);
                 child.detach();
-                parent.insertChild(child, parent.indexOf(element)); 
+                parent.insertChild(child, parent.indexOf(includeElement)); 
            }
-           element.detach();
+           includeElement.detach();
     }
 
     private static Nodes processFallback(
-      Element element, Builder builder, Stack baseURLs, Exception ex)
+      Element includeElement, Builder builder, Stack baseURLs, Exception ex)
         throws XIncludeException, IOException, ParsingException {
            Elements fallbacks 
-              = element.getChildElements("fallback", XINCLUDE_NS);
+              = includeElement.getChildElements("fallback", XINCLUDE_NS);
            if (fallbacks.size() == 0) {
                 if (ex instanceof IOException) throw (IOException) ex;
                 XIncludeException ex2 = new XIncludeException(
-                  ex.getMessage(), element.getDocument().getBaseURI());
+                  ex.getMessage(), includeElement.getDocument().getBaseURI());
                 ex2.initCause(ex);
                 throw ex2;
            }
            else if (fallbacks.size() > 1) {
                 throw new XIncludeException("Multiple fallbacks", 
-                   element.getDocument().getBaseURI());
+                   includeElement.getDocument().getBaseURI());
            }
              
            Element fallback = fallbacks.get(0); 
