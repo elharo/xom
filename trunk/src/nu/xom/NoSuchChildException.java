@@ -64,7 +64,7 @@ public class NoSuchChildException extends XMLException {
      * </p>
      * 
      * @param message explains the reason for the exception
-     * @param ex the nested exception that caused this exception
+     * @param cause the nested exception that caused this exception
      */
     public NoSuchChildException(String message, Throwable cause) {
         super(message);

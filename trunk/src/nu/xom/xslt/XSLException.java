@@ -53,7 +53,7 @@ public class XSLException extends Exception {
      * </p>
      * 
      * @param message information about the cause of the exception
-     * @param ex the nested exception that caused this exception
+     * @param cause the nested exception that caused this exception
      */
     public XSLException(String message, Throwable cause) {
         super(message);
