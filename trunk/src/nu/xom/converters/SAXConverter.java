@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -45,14 +45,14 @@ import org.xml.sax.helpers.LocatorImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0 
+ * @version 1.1d4 
  */
 public class SAXConverter {
 
     
     private ContentHandler contentHandler;
     private LexicalHandler lexicalHandler;
-    private LocatorImpl locator;
+    private LocatorImpl    locator;
 
     
     /**
@@ -192,6 +192,7 @@ public class SAXConverter {
               type.getPublicID(), type.getSystemID());              
             lexicalHandler.endDTD();          
         }
+        // all other types are ignored
         
     }
     
@@ -390,7 +391,7 @@ public class SAXConverter {
      * <p>
      * Converts a <code>Nodes</code> list into SAX by firing events
      * into the registered handlers. This method calls 
-     * invokes <code>startDocument</code> before processing the list
+     * <code>startDocument</code> before processing the list
      * of nodes, and calls <code>endDocument</code> after processing 
      * all of them. 
      * </p>
