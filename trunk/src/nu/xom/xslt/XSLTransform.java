@@ -129,8 +129,8 @@ public final class XSLTransform {
      *  reading the stylesheet from the specified <code>Source</code>.
      * </p>
      *
-     * @param stylesheet TrAX <code>Source</code> from 
-     *      which the stylesheet is read
+     * @param source TrAX <code>Source</code> from 
+     *      which the input document is read
      * 
      * @throws XSLException when an IOException, format error, or
      *     something else prevents the stylesheet from being compiled 
