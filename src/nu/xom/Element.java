@@ -48,7 +48,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d23
+ * @version 1.0a1
  *
  */
 public class Element extends ParentNode {
@@ -823,8 +823,12 @@ public class Element extends ParentNode {
             if (!uri.equals(this.URI) && !"xml".equals(prefix)) {
                 throw new NamespaceConflictException(prefix 
                  + " conflicts with existing prefix");
-            }   
+            }
         }
+        else if ("".equals(this.URI) && !"".equals(prefix)) {
+            throw new NamespaceConflictException(
+              "Cannot assign prefix to element in no namespace");            
+        } 
 
         this.prefix = prefix;
 
