@@ -410,9 +410,11 @@ public class NodeFactoryTest extends XOMTestCase {
     private static class TripleElementFilter extends NodeFactory {
      
         public Nodes finishMakingElement(Element element) {
-            Nodes result = new Nodes(element);   
-            result.append(element.copy());
-            result.append(element.copy());
+            Nodes result = new Nodes(element);  
+            if (!(element.getParent() instanceof Document)) { 
+                result.append(element.copy());
+                result.append(element.copy());
+            }
             return result;
         }   
         

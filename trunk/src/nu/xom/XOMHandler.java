@@ -230,12 +230,15 @@ class XOMHandler
                 boolean beforeRoot = true;
                 for (int i=0; i < result.size(); i++) {
                     Node node = result.get(i);
-                    // ???? check for multiple roots
                     if (node.isElement()) {
-                        if (node == currentRoot) {   
-                            beforeRoot = false;
-                            continue;
+                        if (node != currentRoot) {   
+                            if (!beforeRoot) {
+                                // already set root, oops
+                                throw new IllegalAddException("Factory returned multiple roots");   
+                            }
+                            doc.setRootElement((Element) node);
                         }
+                        beforeRoot = false;
                     }
                     else if (beforeRoot) {
                         doc.insertChild(node, doc.indexOf(doc.getRootElement()));   
