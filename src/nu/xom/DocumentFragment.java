@@ -30,7 +30,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1a2
  *
  */
 class DocumentFragment extends ParentNode {
@@ -57,5 +57,9 @@ class DocumentFragment extends ParentNode {
         throw new UnsupportedOperationException();
     }
 
+    
+    boolean isDocumentFragment() {
+        return true;
+    }
     
 }
