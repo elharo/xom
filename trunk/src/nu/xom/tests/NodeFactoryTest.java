@@ -34,7 +34,6 @@ import nu.xom.CycleException;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.MultipleParentException;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.ProcessingInstruction;
@@ -47,18 +46,20 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d19
+ * @version 1.0d21
  *
  */
 public class NodeFactoryTest extends XOMTestCase {
 
-    public void testSkippingComment() throws IOException, ParseException {
+    public void testSkippingComment() 
+      throws IOException, ParseException {
         
         String data = "<a>1<!--tetetwkfjkl-->8</a>";
         Builder builder = new Builder(new CommentFilter());
         Document doc = builder.build(data, "http://www.example.org/");
         Element root = doc.getRootElement();
-        assertEquals("Skipped comment interrupted text node", 1, root.getChildCount());
+        assertEquals("Skipped comment interrupted text node", 
+          1, root.getChildCount());
         assertEquals("18", doc.getValue());
         Node first = root.getChild(0);
         assertEquals(first.getValue(), "18");        
@@ -78,7 +79,8 @@ public class NodeFactoryTest extends XOMTestCase {
         String data = "<a><b>18</b></a>";
         Builder builder = new Builder(new SingleElementFactory());
         try {
-            Document doc = builder.build(data, "http://www.example.org/");
+            Document doc = builder.build(data,
+              "http://www.example.org/");
             fail("Allowed one element in several places");
         }
         catch (CycleException ex) {
@@ -97,9 +99,11 @@ public class NodeFactoryTest extends XOMTestCase {
 
     }
     
-    public void testChangingElementName() throws IOException, ParseException {
+    public void testChangingElementName() 
+      throws IOException, ParseException {
         
-        String data = "<a>1<b>2<a>3<b>4<a>innermost</a>5</b>6</a>7</b>8</a>";
+        String data 
+          = "<a>1<b>2<a>3<b>4<a>innermost</a>5</b>6</a>7</b>8</a>";
         Builder builder = new Builder(new CFactory());
         Document doc = builder.build(data, "http://www.example.org/");
         Element root = doc.getRootElement();
@@ -112,7 +116,8 @@ public class NodeFactoryTest extends XOMTestCase {
 
     private static class CFactory extends NodeFactory {
 
-        public Element startMakingElement(String name, String namespace) {
+        public Element startMakingElement(
+          String name, String namespace) {
             return new Element("c");
         }
 
@@ -131,13 +136,15 @@ public class NodeFactoryTest extends XOMTestCase {
 
     private static class CallsMakeRoot extends NodeFactory {
 
-        public Element makeRootElement(String name, String namepaceURI) {
+        public Element makeRootElement(
+          String name, String namepaceURI) {
             return new Element("rootSubstitute");
         }
 
     }
 
-    public void testSkippingProcessingInstruction() throws IOException, ParseException {
+    public void testSkippingProcessingInstruction()
+      throws IOException, ParseException {
         
         String data = "<a>1<?test some data?>8</a>";
         Builder builder = new Builder(new ProcessingInstructionFilter());
@@ -152,7 +159,8 @@ public class NodeFactoryTest extends XOMTestCase {
         assertEquals(first.getValue(), "18");        
     }
 
-    private static class ProcessingInstructionFilter extends NodeFactory {
+    private static class ProcessingInstructionFilter 
+      extends NodeFactory {
 
         public ProcessingInstruction makeProcessingInstruction(
           String target, String data) {
@@ -171,13 +179,15 @@ public class NodeFactoryTest extends XOMTestCase {
         Builder builder = new Builder(new IgnorableWhiteSpaceFilter());
         Document doc = builder.build(data, "http://www.example.org/");
         Element root = doc.getRootElement();
-        assertEquals("Failed to ignore white space", 1, root.getChildCount());
+        assertEquals("Failed to ignore white space", 
+          1, root.getChildCount());
         assertEquals("   ", doc.getValue());
         Node first = root.getChild(0);
         assertEquals(first.getValue(), "   ");        
     }
 
-    private static class IgnorableWhiteSpaceFilter extends NodeFactory {
+    private static class IgnorableWhiteSpaceFilter 
+      extends NodeFactory {
 
         public Text makeWhiteSpaceInElementContent(String data) {
             return null;
@@ -188,7 +198,8 @@ public class NodeFactoryTest extends XOMTestCase {
 
     public void testSkipping2() throws IOException, ParseException {
         
-        String data = "<a>1<b>2<a>3<b>4<a>innermost</a>5</b>6</a>7</b>8</a>";
+        String data 
+          = "<a>1<b>2<a>3<b>4<a>innermost</a>5</b>6</a>7</b>8</a>";
         Builder builder = new Builder(new BFilter());
         Document doc = builder.build(data, "http://www.example.org/");
         Element root = doc.getRootElement();
@@ -212,7 +223,8 @@ public class NodeFactoryTest extends XOMTestCase {
 
     static class BFilter extends NodeFactory {
 
-        public Element startMakingElement(String name, String namespaceURI) {
+        public Element startMakingElement(
+          String name, String namespaceURI) {
             if (name.equals("b")) return null;   
             return super.startMakingElement(name, namespaceURI);
         }
@@ -276,7 +288,8 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
 
-    public void testNullRootNotAllowed() throws IOException, ParseException {
+    public void testNullRootNotAllowed() 
+      throws IOException, ParseException {
         
         File input = new File("data/entitytest.xml");
         Builder builder = new Builder(new NullElementFactory());
@@ -293,7 +306,8 @@ public class NodeFactoryTest extends XOMTestCase {
     // This should cause an exception.
     static class NullElementFactory extends NodeFactory {
 
-        public Element startMakingElement(String name, String namespaceURI) {
+        public Element startMakingElement(
+          String name, String namespaceURI) {
             return null;   
         }
 
@@ -340,7 +354,8 @@ public class NodeFactoryTest extends XOMTestCase {
         
     }
 
-    public void testCoalesceTextNodes() throws IOException, ParseException {  
+    public void testCoalesceTextNodes() 
+      throws IOException, ParseException {  
         String data = "<a>data<!-- comment--> data</a>";
         Builder builder = new Builder(new CommentFilter());
         Document doc = builder.build(data, "http://www.example.org/");
