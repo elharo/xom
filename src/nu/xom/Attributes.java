@@ -29,7 +29,7 @@ import java.util.Iterator;
 
 /**
  * <p>
- * <code>Attributes</code>  is a read-only container used 
+ * Attributes is a read-only container used 
  * to hold the  attributes of an element (not including those used
  * for namespace declarations). It provides indexed access for 
  * convenience, but the attribute order is neither predictable 
@@ -75,11 +75,11 @@ final class Attributes {
      * 
      * @param index the attribute to return
      * 
-     * @return the index<sup>th</sup> Attribute in the container.
+     * @return the index<sup>th</sup> Attribute in the container
      * 
      * @throws IndexOutofBoundsException if the index is negative 
      *     or greater than or equal to the number of attributes 
-     *     in the list. 
+     *     in the list
      * 
      */
     public Attribute get(int index) {
