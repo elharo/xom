@@ -35,13 +35,13 @@ import nu.xom.ParentNode;
 import org.jaxen.DefaultNavigator;
 import org.jaxen.FunctionCallException;
 import org.jaxen.JaxenException;
-import org.jaxen.UnsupportedAxisException;
 import org.jaxen.XPath;
 
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 class JaxenNavigator extends DefaultNavigator {
@@ -144,23 +144,55 @@ class JaxenNavigator extends DefaultNavigator {
 
 
     public String getNamespacePrefix(Object o) {
-        throw new UnsupportedOperationException("Namespace axis not supported yet");
+        NamespaceNode ns = (NamespaceNode) o;
+        return ns.prefix;
     }
     
     
     public String getNamespaceStringValue(Object o) {
-        throw new UnsupportedOperationException("Namespace axis not supported yet");
+        NamespaceNode ns = (NamespaceNode) o;
+        return ns.uri;
     }
 
     
-    
-    public Iterator getNamespaceAxisIterator(Object o) throws UnsupportedAxisException {
-        throw new UnsupportedAxisException("Namespace axis not supported yet");
+    private static class NamespaceNode {
+        
+        NamespaceNode(String prefix, String uri) {
+            this.prefix = prefix;
+            this.uri = uri;
+        }
+        
+        String prefix;
+        String uri;
+        
     }
     
-    public Iterator getParentAxisIterator(Object o)  {
+    
+    public Iterator getNamespaceAxisIterator(Object contextNode) {
         
-        Node n = (Node) o;
+        System.out.println("Iterating namespaces");
+        try {
+            Element element = (Element) contextNode;
+            // ???? can probably avoid this list copy
+            Map bindings = element.getNamespacePrefixesInScope();
+            Iterator iterator = bindings.keySet().iterator();
+            List result = new ArrayList(bindings.size());
+            while (iterator.hasNext()) {
+                String prefix = (String) iterator.next();
+                NamespaceNode ns = new NamespaceNode(prefix, (String) bindings.get(prefix));
+                result.add(ns);
+            }
+            return result.iterator();
+        }
+        catch (ClassCastException ex) {
+            // ???? can this actually happen
+            return new EmptyIterator();
+        }
+    }
+    
+    public Iterator getParentAxisIterator(Object contextNode)  {
+        
+        Node n = (Node) contextNode;
         Node parent = n.getParent();
         if (parent == null) return new EmptyIterator();
         else {
@@ -195,11 +227,16 @@ class JaxenNavigator extends DefaultNavigator {
         
     }
     
-    public Iterator getAttributeAxisIterator(Object o) {
+    public Iterator getAttributeAxisIterator(Object contextNode) {
         
-        Element element = (Element) o;
-        if (element.attributes == null) return new EmptyIterator();
-        else return element.attributes.iterator();
+        try {
+            Element element = (Element) contextNode;
+            if (element.attributes == null) return new EmptyIterator();
+            else return element.attributes.iterator();
+        }
+        catch (ClassCastException ex) {
+            return new EmptyIterator();
+        }
         
     }
     

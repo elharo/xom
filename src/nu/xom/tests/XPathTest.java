@@ -46,8 +46,7 @@ import nu.xom.XPathException;
  */
 public class XPathTest extends XOMTestCase {
     
-    // ???? add tests that use namespace axis in predicate but do not return namespace nodes
-    
+    // ???? add test for query that uses root such as /* and / but does not have a Document
     
     public XPathTest(String name) {
         super(name);
@@ -78,6 +77,23 @@ public class XPathTest extends XOMTestCase {
         Nodes result = parent.query("*");
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));   
+        
+    }
+    
+
+    public void testUnionOfNodesWithInts() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        
+        try {
+            parent.query("* | count(/*)");
+            fail("Allowed query returning non-node-set");
+        }
+        catch (XPathException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
     
@@ -581,6 +597,15 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testAttributeAxisOnNonElement() {
+        
+        Text text = new Text("Test");
+        Nodes result = text.query("attribute::*");
+        assertEquals(0, result.size());
+        
+    }
+    
+
     public void testEmptyParentAxis() {
         
         Element parent = new Element("Test");
@@ -748,7 +773,7 @@ public class XPathTest extends XOMTestCase {
         Element parent = new Element("Test", "http://www.example.org");
         
         try {
-            parent.query("namespace::*");
+            Nodes nodes = parent.query("namespace::*");
             fail("Allowed return of namespace nodes");
         }
         catch (XPathException success) {
