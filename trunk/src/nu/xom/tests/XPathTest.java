@@ -33,7 +33,6 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 import nu.xom.Namespace;
 import nu.xom.NamespaceConflictException;
 import nu.xom.Node;
@@ -41,7 +40,6 @@ import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Text;
-import nu.xom.ValidityException;
 import nu.xom.XPathContext;
 import nu.xom.XPathException;
 
