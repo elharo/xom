@@ -1,4 +1,4 @@
-// Copyright 2002, 2003 Elliotte Rusty Harold
+// Copyright 2003 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -25,29 +25,31 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * <code>XPointerException</code> is the generic superclass
- * for all checked exceptions that may be thrown as a result
- * of a violation of the XPointer grammar.
+ * <code>XPointerResourceException</code> is a checked exception thrown
+ * when no XPointer part identifies a subresource. This corresponds to 
+ * <a href="http://www.w3.org/TR/xptr-framework/#scheme">section 3.3 
+ * of the XPointer Framework</a> which states, 
+ * "If no pointer part identifies subresources, it is an error."
  * </p>
  *
  * @author Elliotte Rusty Harold
  * @version 1.0d21
  */
-class XPointerSyntaxException extends XPointerException {
+class XPointerResourceException extends XPointerException {
 
     private Throwable cause = null;
 
     /**
      * <p>
-     * Constructs an <code>XPointerSyntaxException</code> 
+     * Constructs an <code>XPointerResourceException</code> 
      * with <code>null</code> as its error detail message.
      * </p>
      */
-    public XPointerSyntaxException() {}
+    public XPointerResourceException() {}
 
     /**
      * <p>
-     * Constructs an <code>XPointerSyntaxException</code> with the  
+     * Constructs an <code>XPointerResourceException</code> with the 
      * specified detail message. The error message string  
      * <code>message</code> can later be retrieved by the 
      * <code>{@link java.lang.Throwable#getMessage}</code>
@@ -56,21 +58,21 @@ class XPointerSyntaxException extends XPointerException {
      * 
      * @param message the detail message.
      */
-    public XPointerSyntaxException(String message) {
+    public XPointerResourceException(String message) {
         super(message);
     }
-    
+
     /**
      * <p>
-     * Constructs an <code>XPointerSyntaxException</code> with the 
+     * Constructs an <code>XPointerResourceException</code> with the 
      * specified detail message and initial cause. 
      * </p>
      *
      * @param message the detail message
      * @param cause the initial exception which caused this 
-     *     <code>XPointerSyntaxException</code>
+     *     <code>XPointerException</code>
      */
-    public XPointerSyntaxException(String message, Throwable cause) {
+    public XPointerResourceException(String message, Throwable cause) {
         super(message, cause);
     }
 
