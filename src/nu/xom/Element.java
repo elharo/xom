@@ -1285,7 +1285,21 @@ public class Element extends ParentNode {
             // to convert illegal characters to hexadecimal escapes.
             base = URIUtil.toURI(base);
             
-            if (!URIUtil.isAbsolute(base)) {
+            if ("".equals(base)) {
+                // Look for nearest actual base URI
+                while (parent != null) {
+                    String parentActualBase = parent.getActualBaseURI();
+                    if (parentActualBase == null) {
+                        parent = parent.getParent();
+                    }
+                    else {
+                        // FIXME absolutize
+                        return parentActualBase;
+                    }
+                }
+                return "";
+            }
+            else if (!URIUtil.isAbsolute(base)) {
                 // absolutize the URI if possible
                 if (parent != null) {                   
                     String parentActualBase = parent.getActualBaseURI();
