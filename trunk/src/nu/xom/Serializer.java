@@ -299,12 +299,13 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws UnavailableCharacterException if the element name contains  
-     *     a character that is not available in the current encoding
+     * @throws UnavailableCharacterException if the element name   
+     *     contains a character that is not available in the 
+     *     current encoding
      */
     protected void write(Element element) throws IOException {
 
-        if (escaper.isIndenting() && !escaper.isPreserveSpace()) {
+        if (escaper.isIndenting() && !escaper.isPreserveSpace() && !escaper.justBroke()) {
             escaper.breakLine();
         }
         
@@ -413,9 +414,9 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws UnavailableCharacterException if the name of the element or the name of
-     *     any of its attributes contains a character that is not 
-     *     available in the current encoding
+     * @throws UnavailableCharacterException if the name of the element
+     *     or the name of any of its attributes contains a character  
+     *     that is not available in the current encoding
      */
     protected void writeStartTag(Element element) throws IOException {
         writeTagBeginning(element);
@@ -675,6 +676,7 @@ public class Serializer {
      */
     protected void write(ProcessingInstruction instruction) 
       throws IOException {
+        
         if (escaper.isIndenting()) escaper.breakLine();
         escaper.writeMarkup("<?");
         escaper.writeMarkup(instruction.getTarget());
@@ -685,7 +687,8 @@ public class Serializer {
             escaper.writeMarkup(' ');
             escaper.writeMarkup(value);
         }
-        escaper.writeMarkup("?>");      
+        escaper.writeMarkup("?>"); 
+        
     }
     
     /**
@@ -711,6 +714,7 @@ public class Serializer {
      *     encounters an I/O error
      */
     protected void write(Text text) throws IOException {
+        
         String value = text.getValue();
         if (text.isCDATASection() 
           && text.getValue().indexOf("]]>") == -1) {
@@ -730,6 +734,7 @@ public class Serializer {
         else {
             escaper.writePCDATA(value);
         }
+        
     }   
 
     
