@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -58,7 +58,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1d2
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -354,15 +354,50 @@ public class DOMConverterTest extends XOMTestCase {
     }
 
    
+    public void testConvertInternalDTDSubset() 
+      throws SAXException, IOException, ParserConfigurationException {
+
+        byte[] data = "<!DOCTYPE root [<!ELEMENT element EMPTY>]><element />".getBytes();
+        org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(data));
+          
+        org.w3c.dom.DocumentType type = doc.getDoctype();
+        DocType xomType = DOMConverter.convert(type);
+        assertEquals(type.getName(), xomType.getRootElementName());
+        assertEquals(type.getInternalSubset(), xomType.getInternalDTDSubset());
+                 
+    }
+
+   
+    public void testConvertDocTypePublicAndSystemIdentifier() 
+      throws SAXException, IOException, ParserConfigurationException {
+
+        File inputDir = new File("data");
+        File f = new File(inputDir, "dtdtest.xhtml");
+        org.w3c.dom.Document doc = builder.parse(f);
+          
+        org.w3c.dom.DocumentType type = doc.getDoctype();
+        DocType xomType = DOMConverter.convert(type);
+        assertEquals(type.getName(), xomType.getRootElementName());
+        assertEquals(type.getSystemId(), xomType.getSystemID());
+        assertEquals(type.getPublicId(), xomType.getPublicID());
+                 
+    }
+
+   
     public void testChildElementAddsNamespace() {
         
         Element root = new Element("root");
-        Element child = new Element("pre:child", "http://www.example.org/");
-        child.addAttribute(new Attribute("xlink:type", "http://www.w3.org/1999/xlink", "simple"));
+        Element child = new Element("pre:child", 
+          "http://www.example.org/");
+        child.addAttribute(new Attribute("xlink:type", 
+          "http://www.w3.org/1999/xlink", "simple"));
         root.appendChild(child);
         Document doc = new Document(root);  
         
-        assertEquals(doc, DOMConverter.convert(DOMConverter.convert(doc, impl)));
+        assertEquals(
+          doc, 
+          DOMConverter.convert(DOMConverter.convert(doc, impl))
+        );
         
     }
     
