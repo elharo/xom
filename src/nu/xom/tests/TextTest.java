@@ -192,6 +192,36 @@ public class TextTest extends XOMTestCase {
 
     }
 
+    public void testNonBMPText() {
+        
+        for (char high = '\uD800'; high <= '\uDB7F'; high++) {
+            for (char low = '\uDC00'; low <= '\uDFFF'; low++) {
+                String s = high + "" + low;
+                Text t = new Text(s);
+                assertEquals(s, t.getValue());
+            }
+        }
+        
+    }
+    
+    public void testEndOfBMP() {
+        
+        try {
+            new Text("\uFFFE");
+            fail("allowed FFFE");
+        }
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
+        try {
+            new Text("\uFFFF");
+            fail("allowed FFFF");
+        }
+        catch (IllegalDataException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
 
     public void testLeafNode() {
 
