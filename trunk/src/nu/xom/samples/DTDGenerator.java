@@ -25,6 +25,7 @@ package nu.xom.samples;
 
 import java.io.IOException;
 
+import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -33,14 +34,14 @@ import nu.xom.ParseException;
 import java.util.List;
 import java.util.ArrayList;
 
-// need to add support for attlists????
-
 public class DTDGenerator {
  
     public static void main(String[] args) {
         
         if (args.length == 0) {
-            System.err.println("Usage: java nu.xom.samples.DTDGenerator URL");
+            System.err.println(
+              "Usage: java nu.xom.samples.DTDGenerator URL"
+            );
             return;   
         }
         
@@ -50,7 +51,7 @@ public class DTDGenerator {
         }
         catch (IOException ex) {
             System.err.println("Could not read " + args[0] 
-              + "due to" + "ex.getName()");
+              + " due to " + ex.getMessage());
         }       
         catch (ParseException ex) {
             System.err.println(args[0] + " is not well-formed");
@@ -61,16 +62,26 @@ public class DTDGenerator {
     private static class NamingNodeFactory extends NodeFactory {
 
         private List names = new ArrayList();
+        private String currentElement;
         
         public Element startMakingElement(String name, String namespace) {
             if (!names.contains(name)) {
                 System.out.println("<!ELEMENT " + name + " ANY>");   
                 names.add(name);
             }
+            currentElement = name;
             return super.startMakingElement(name, namespace);
         }
         
-        
+        // It's permissible to redeclare attributes, though ideally
+        // you'd prefer not to. ????
+        // will this handle enumerated types????
+        public Attribute makeAttribute(String name, String URI, 
+          String value, Attribute.Type type) {
+            System.out.println("<!ATTLIST " + currentElement + " "
+              + name + " " + type.toXML() + " #IMPLIED>");
+            return super.makeAttribute(name, URI, value, type);
+        } 
     } 
     
 }
