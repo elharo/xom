@@ -560,7 +560,7 @@ public class Serializer {
         for (int i = 0; i < count; i++) {
             String additionalPrefix = element.getNamespacePrefix(i);
             String uri = element.getNamespaceURI(additionalPrefix);
-            if (parent.isElement()) {
+            if (parent != null && parent.isElement()) {
                Element parentElement = (Element) parent;   
                if (uri.equals(
                  parentElement.getNamespaceURI(additionalPrefix))) {
