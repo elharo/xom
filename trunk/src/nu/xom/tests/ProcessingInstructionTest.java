@@ -97,6 +97,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         // test empty data allowed
         pi = new ProcessingInstruction("test", "");
         assertEquals("", pi.getValue());
+        assertEquals("<?test?>", pi.toXML());
 
     }
     
