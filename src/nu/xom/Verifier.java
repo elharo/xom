@@ -183,6 +183,7 @@ final class Verifier {
                         IllegalCharacterDataException ex 
                           = new IllegalCharacterDataException("Bad surrogate pair");
                         ex.setData(text);
+                        throw ex;
                     }
                     i++; // increment past low surrogate
                 }
