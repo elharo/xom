@@ -73,20 +73,21 @@ public class NamespacesTest extends XOMTestCase {
     
     
     public void testSetNamespacePrefixInConflictWithAdditionalNamespaceDeclaration() {
+        
         someNamespaces.setNamespaceURI("http://www.example.net");
         try {
             someNamespaces.setNamespacePrefix("xsl");
             fail("changed prefix to conflict with additional namespace declaration");
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) { 
+            assertNotNull(success.getMessage());
         }
         
     }
     
     
     public void testSetNamespaceURIInConflictWithAdditionalNamespaceDeclaration() {
+        
         someNamespaces.setNamespaceURI("http://www.w3.org/2001/xlink");
         someNamespaces.setNamespacePrefix("xlink");
         try {
@@ -102,6 +103,7 @@ public class NamespacesTest extends XOMTestCase {
     
     
     public void testXMLNamespace() {
+        
         assertEquals(
           "http://www.w3.org/XML/1998/namespace",
           noNamespaces.getNamespaceURI("xml")
@@ -109,7 +111,8 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals(
           "http://www.w3.org/XML/1998/namespace",
           severalNamespaces.getNamespaceURI("xml")
-        );    
+        );  
+        
     }
     
     
@@ -332,15 +335,15 @@ public class NamespacesTest extends XOMTestCase {
 
     
     public void testAddEmptyNamespaceDeclaration() {
-       Element e = new Element("test");
+        
+        Element e = new Element("test");
        
         try {
             e.addNamespaceDeclaration("", "http://www.example.com");
             fail("added conflicting default namespace");   
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) { 
+            assertNotNull(success.getMessage());
         }
        
         e.setNamespaceURI("http://www.example.com");
@@ -353,6 +356,7 @@ public class NamespacesTest extends XOMTestCase {
 
     
     public void testAddNullPrefix() {
+        
         Element e = new Element("test");
        
         try {
@@ -473,9 +477,8 @@ public class NamespacesTest extends XOMTestCase {
               "http://www.example.com/");
             fail("Redeclared without removal");   
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());
         }
         someNamespaces.removeNamespaceDeclaration("xlink");
         assertNull(someNamespaces.getNamespaceURI("xlink"));
@@ -495,9 +498,8 @@ public class NamespacesTest extends XOMTestCase {
             a.setNamespace("xsl", "http://www.example.com/");
             fail("added conflicting attribute prefix");
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) { 
+            assertNotNull(success.getMessage());
         }
 
     }
@@ -513,9 +515,8 @@ public class NamespacesTest extends XOMTestCase {
            element.setNamespaceURI("http://www.yahoo.com");
            fail("changed to conflicting element namespace");
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) {
+            assertNotNull(success.getMessage());
         }
 
     }
@@ -533,9 +534,8 @@ public class NamespacesTest extends XOMTestCase {
            a.setNamespace("pre", "http://www.yahoo.com/");
            fail("changed to conflicting attribute namespace");
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) { 
+            assertNotNull(success.getMessage());
         }
 
     }
@@ -547,18 +547,16 @@ public class NamespacesTest extends XOMTestCase {
            severalNamespaces.setNamespacePrefix("xlink");
            fail("added conflicting element prefix");
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) { 
+            assertNotNull(success.getMessage());
         }
 
         try {
            severalNamespaces.setNamespacePrefix("xsl");
            fail("added conflicting element prefix");
         }
-        catch (NamespaceException ex) {
-            // success   
-            assertNotNull(ex.getMessage());
+        catch (NamespaceException success) {  
+            assertNotNull(success.getMessage());
         }
 
     }
@@ -745,5 +743,52 @@ public class NamespacesTest extends XOMTestCase {
         
     }
     
+    
+    public void testPercentEscapes() {
+        // Namespace URIs are compared for direct string equality;
+        // no de-escaping is performed
+        for (char c = ' '; c <= '~'; c++) {
+            String url = "http://www.example.com/%" + Integer.toHexString(c) + "test/";
+            Element e = new Element("pre:test", url);
+            assertEquals(url, e.getNamespaceURI());
+            assertEquals(url, e.getNamespaceURI("pre"));
+        }
+        
+    }
+    
+
+    public void testDelims() {
+
+        String[] delims = {"<", ">", "\""};
+        for (int i = 0; i < delims.length; i++) {
+            String url = "http://www.example.com/" + delims[i] + "/";
+            try {
+                new Element("test", url);
+                fail("Allowed " + url + " as namespace URI");
+            }
+            catch (MalformedURIException success) {
+                assertNotNull(success.getMessage());
+            }
+        }
+        
+    }
+    
+    
+    public void testUnwise() {
+
+        char[] unwise = {'{', '}', '|', '\\', '^', '`'};
+        for (int i = 0; i < unwise.length; i++) {
+            String url = "http://www.example.com/" + unwise[i] + "/";
+            try {
+                new Element("test", url);
+                fail("Allowed " + url + " as namespace URI");
+            }
+            catch (MalformedURIException success) {
+                assertNotNull(success.getMessage());
+            }
+        }
+        
+    }
+     
     
 }
