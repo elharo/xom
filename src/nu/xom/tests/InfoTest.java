@@ -23,6 +23,8 @@
 
 package nu.xom.tests;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -32,7 +34,7 @@ import java.lang.reflect.Method;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d25
+ * @version 1.0b6
  *
  */
 public class InfoTest extends XOMTestCase {
@@ -47,6 +49,10 @@ public class InfoTest extends XOMTestCase {
     public void testInfo() throws ClassNotFoundException, NoSuchMethodException,
       IllegalAccessException, InvocationTargetException {
         
+        PrintStream systemOut = System.out;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
         Class info = Class.forName("nu.xom.Info");
         Class[] args = {String[].class};
         Method main = info.getMethod("main", args);
@@ -54,6 +60,16 @@ public class InfoTest extends XOMTestCase {
         Object[] wrappedArgs = new Object[1];
         wrappedArgs[0] = new String[0];
         main.invoke(null, wrappedArgs);
+        System.out.flush();
+        System.setOut(systemOut);
+        String output = new String(out.toByteArray());
+        assertTrue(output.indexOf("Copyright 2002") > 0);
+        assertEquals(19, output.indexOf(" Elliotte Rusty Harold") - output.indexOf("Copyright 2002"));
+        assertTrue(output.indexOf("http://www.xom.nu") > 0);
+        assertTrue(output.indexOf("General Public License") > 0);
+        assertTrue(output.indexOf("GNU") > 0);
+        assertTrue(output.indexOf("WITHOUT ANY WARRANTY") > 0);
+        assertTrue(output.indexOf("without even the implied warranty") > 0);
         
     }
  
