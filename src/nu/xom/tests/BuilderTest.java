@@ -25,6 +25,7 @@ package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -1803,13 +1804,18 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         File f = makeFile("\"file\".xml");
-        Document doc = builder.build(f);
-        f.delete();
-        String expectedResult = "<?xml version=\"1.0\"?>\n<data />\n";
-        String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
-        assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%22file%22.xml"));
+        try {
+            Document doc = builder.build(f);
+            f.delete();
+            String expectedResult = "<?xml version=\"1.0\"?>\n<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/%22file%22.xml"));
+        }
+        catch (FileNotFoundException ex) {
+            // This platform doesn't allow double quotes in file names 
+        }
         
     }
   
@@ -1880,16 +1886,21 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         File f = makeFile("|file.xml");
-        Document doc = builder.build(f);
-        f.delete();
-        String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<data />\n";
-        String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
-        assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%" 
-          + Integer.toHexString('|').toUpperCase()
-          + "file.xml"));
+        try {
+            Document doc = builder.build(f);
+            f.delete();
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/%" 
+              + Integer.toHexString('|').toUpperCase()
+              + "file.xml"));
+        }
+        catch (FileNotFoundException ex) {
+            // This platform doesn't allow vertical bars in file names 
+        }
         
     }
 
@@ -1898,6 +1909,27 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         File f = makeFile(":file.xml");
+        try {
+            Document doc = builder.build(f);
+            f.delete();
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/:file.xml"));
+        }
+        catch (FileNotFoundException ex) {
+            // This platform doesn't allow colons in file names 
+        }
+        
+    }
+
+    
+    public void testBuildFromFileThatContainsUnderscoreInName()
+      throws ParsingException, IOException {
+        
+        File f = makeFile("_file.xml");
         Document doc = builder.build(f);
         f.delete();
         String expectedResult = "<?xml version=\"1.0\"?>\n"
@@ -1905,7 +1937,23 @@ public class BuilderTest extends XOMTestCase {
         String actual = doc.toXML();
         assertEquals(expectedResult, actual);
         assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/:file.xml"));
+        assertTrue(doc.getBaseURI().endsWith("data/_file.xml"));
+        
+    }
+
+    
+    public void testBuildFromFileThatContainsUppercaseASCIIInName()
+      throws ParsingException, IOException {
+        
+        File f = makeFile("ABCDEFGHIJKLMONPQRSTUVWXYZ.xml");
+        Document doc = builder.build(f);
+        f.delete();
+        String expectedResult = "<?xml version=\"1.0\"?>\n"
+            + "<data />\n";
+        String actual = doc.toXML();
+        assertEquals(expectedResult, actual);
+        assertTrue(doc.getBaseURI().startsWith("file:/"));
+        assertTrue(doc.getBaseURI().endsWith("data/ABCDEFGHIJKLMONPQRSTUVWXYZ.xml"));
         
     }
 
@@ -1914,14 +1962,19 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         File f = makeFile("*file.xml");
-        Document doc = builder.build(f);
-        f.delete();
-        String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<data />\n";
-        String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
-        assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/*file.xml"));
+        try {
+            Document doc = builder.build(f);
+            f.delete();
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/*file.xml"));
+        }
+        catch (FileNotFoundException ex) {
+            // This platform doesn't allow asterisks in file names 
+        }
         
     }
   
@@ -1983,6 +2036,9 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromFileThatContainsBackslashInName()
       throws ParsingException, IOException {
         
+        String os = System.getProperty("os.name", "Unix");
+        if (os.indexOf("Windows") >= 0) return;
+  
         File f = new File(inputDir, "\\file.xml");
         try {
             Writer out = new OutputStreamWriter(
@@ -2023,6 +2079,9 @@ public class BuilderTest extends XOMTestCase {
             assertTrue(doc.getBaseURI().startsWith("file:/"));
             assertTrue(doc.getBaseURI().endsWith("data/%19file.xml"));
         }
+        catch (FileNotFoundException ex) {
+            // This platform doesn't allow C0 controls in file names 
+        }
         finally {
             if (f.exists()) f.delete();
         }
@@ -2047,6 +2106,9 @@ public class BuilderTest extends XOMTestCase {
             assertEquals(expectedResult, actual);
             assertTrue(doc.getBaseURI().startsWith("file:/"));
             assertTrue(doc.getBaseURI().endsWith("data/%09file.xml"));
+        }
+        catch (FileNotFoundException ex) {
+            // This platform doesn't allow tabs in file names 
         }
         finally {
             if (f.exists()) f.delete();
@@ -2084,16 +2146,21 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         File f = makeFile("<file>.xml");
-        Document doc = builder.build(f);
-        f.delete();
-        String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<data />\n";
-        String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
-        assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%" 
-          + Integer.toHexString('<').toUpperCase() + "file%"
-          + Integer.toHexString('>').toUpperCase() + ".xml"));
+        try {
+            Document doc = builder.build(f);
+            f.delete();
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/%" 
+              + Integer.toHexString('<').toUpperCase() + "file%"
+              + Integer.toHexString('>').toUpperCase() + ".xml"));
+        }
+        catch (FileNotFoundException ex) {
+            // This platform doesn't allow < and > in file names 
+        }
         
     }
   
@@ -2131,15 +2198,20 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         File f = makeFile("?file.xml");
-        Document doc = builder.build(f);
-        f.delete();
-        String expectedResult = "<?xml version=\"1.0\"?>\n"
-            + "<data />\n";
-        String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
-        assertTrue(doc.getBaseURI().startsWith("file:/"));
-        assertTrue(doc.getBaseURI().endsWith("data/%" 
-          + Integer.toHexString('?').toUpperCase() + "file.xml"));
+        try {
+            Document doc = builder.build(f);
+            f.delete();
+            String expectedResult = "<?xml version=\"1.0\"?>\n"
+                + "<data />\n";
+            String actual = doc.toXML();
+            assertEquals(expectedResult, actual);
+            assertTrue(doc.getBaseURI().startsWith("file:/"));
+            assertTrue(doc.getBaseURI().endsWith("data/%" 
+              + Integer.toHexString('?').toUpperCase() + "file.xml"));
+        }
+        catch (FileNotFoundException ex) {
+            // This platform doesn't allow question marks in file names 
+        }
         
     }
   
