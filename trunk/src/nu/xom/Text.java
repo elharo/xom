@@ -109,10 +109,10 @@ public class Text extends Node {
      *     characters which are illegal in well-formed XML 1.0 such as 
      *     null, vertical tab, or unmatched halves of surrogate pairs
      */
-    public final void setValue(String data) {
+    public void setValue(String data) {
+        
         if (data == null) data = "";
         else Verifier.checkPCDATA(data);
-        checkValue(data);
         try {
             this.data = data.getBytes("UTF8");   
         }
@@ -121,22 +121,8 @@ public class Text extends Node {
               "Bad VM! Does not support UTF-8"
             );
         }
+        
     }
-
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks. For example, an <code>Integer</code> subclass could
-     * verify that the text was a legal base-10 integer. However, 
-     * this can only be used to add checks, not remove them. All 
-     * text in text nodes must be potentially well-formed when 
-     * serialized. 
-     * </p>
-     * 
-     * @param data the text to check
-     */
-    protected void checkValue(String data) {}
 
     
     /**

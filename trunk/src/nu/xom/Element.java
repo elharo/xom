@@ -392,7 +392,7 @@ public class Element extends ParentNode {
      *      of that element
      * @throws XMLException if a subclass has rejected this attribute
      */
-    public final void addAttribute(Attribute attribute) {
+    public void addAttribute(Attribute attribute) {
 
         if (attribute.getParent() != null) {
             throw new MultipleParentException(
@@ -424,30 +424,11 @@ public class Element extends ParentNode {
             // namespaces of other attributes
         }
         
-        checkAddAttribute(attribute);
         if (attributes == null) attributes = new Attributes();
         attributes.add(attribute);
         attribute.setParent(this);
         
     }
-    
-
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional checks
-     * on the specific attributes added to this element beyond what XML 1.0 
-     * requires. For example, an <code>HTMLSpan</code>
-     * subclass might throw an exception
-     * if any attribute were passed to this method which was not allowed
-     * on an HTML <code>span</code> element.
-     * </p>
-     * 
-     * @param attribute The attribute to check.
-     * 
-     * @throws XMLException if the proposed attribute 
-     *     does not satisfy the local constraints
-     */
-    protected void checkAddAttribute(Attribute attribute) {}
 
     
     /**
@@ -466,9 +447,8 @@ public class Element extends ParentNode {
      *     does not satisfy the local constraints
      * 
      */
-    public final Attribute removeAttribute(Attribute attribute) {
+    public Attribute removeAttribute(Attribute attribute) {
         
-        checkRemoveAttribute(attribute);
         if (attributes == null) {
             throw new NoSuchAttributeException( "Tried to remove attribute "
               + attribute.getQualifiedName() 
@@ -479,23 +459,6 @@ public class Element extends ParentNode {
         return attribute;
         
     }
-
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the specific attributes removed from this element. 
-     * For example, an <code>XIncludeElement</code> subclass might 
-     * throw an exception if you tried to remove the <code>href</code> 
-     * attribute.
-     * </p>
-     * 
-     * @param attribute The attribute to check.
-     * 
-     * @throws XMLException if the proposed attribute 
-     *     does not satisfy the local constraints
-     */
-    protected void checkRemoveAttribute(Attribute attribute) {}
 
 
     /**
@@ -754,29 +717,12 @@ public class Element extends ParentNode {
      * @throws IllegalNameException if <code>localName</code> is not
      *     a legal, non-colonized name
      */
-    public final void setLocalName(String localName) {
+    public void setLocalName(String localName) {
         
         Verifier.checkNCName(localName);
-        checkLocalName(localName);
         this.localName = localName;
         
     }
-
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform 
-     * additional checks on the local name of the element.
-     * For example, an <code>SVGTextElement</code> subclass
-     * might throw an exception if the local name were anything 
-     * other than <code>text</code>.
-     * </p>
-     * 
-     * @param localName the new local name for the element
-     * 
-     * @throws XMLException if the local name is disallowed
-     */
-    protected void checkLocalName(String localName) {}
 
 
     /**
@@ -793,7 +739,7 @@ public class Element extends ParentNode {
      *     or if the element's prefix is shared by an attribute
      *     or additional namespace
      */
-    public final void setNamespaceURI(String uri) {
+    public void setNamespaceURI(String uri) {
         
         if (uri == null) uri = "";
         // Next line is needed to avoid unintentional
@@ -851,27 +797,9 @@ public class Element extends ParentNode {
             );      
         }
         
-        checkNamespaceURI(uri);
         this.URI = uri;
         
     }
-    
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the namespace URI of the element.
-     * For example, an <code>SVGElement</code> subclass
-     * might throw an exception  
-     * if the namespace URI were anything other than 
-     * http://www.w3.org/TR/2000/svg/.
-     * </p>
-     * 
-     * @param uri the new namespace URI of the element.
-     * 
-     * @throws XMLException if the namespace URI is disallowed
-     */
-    protected void checkNamespaceURI(String uri) {}
 
     
     /**
@@ -889,12 +817,10 @@ public class Element extends ParentNode {
      *     namespace with a different URI than the element
      *     itself
      */
-    public final void setNamespacePrefix(String prefix) {
+    public void setNamespacePrefix(String prefix) {
         
         if (prefix == null) prefix = "";
         if (prefix.length() != 0) Verifier.checkNCName(prefix);
-        
-        checkNamespacePrefix(prefix);
 
         // Check how this affects or conflicts with
         // attribute namespaces and additional
@@ -914,23 +840,6 @@ public class Element extends ParentNode {
         this.prefix = prefix;
 
     }
-
-
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the namespace prefix of the element.
-     * For example, an <code>XHTMLElement</code> subclass
-     * might throw an exception  
-     * if the namespace prefix were anything other than 
-     * an empty string.
-     * </p>
-     * 
-     * @param prefix the new prefix of the element
-     * 
-     * @throws XMLException if the namespace prefix is disallowed
-     */
-    protected void checkNamespacePrefix(String prefix) {}
 
 
     /**
@@ -1012,13 +921,11 @@ public class Element extends ParentNode {
      * @param position where to insert the child
      * @param text the string to convert to a text node and insert
      * 
-     * @throws IllegalAddException if this node cannot have this
-     *      text child
      * @throws NullPointerException if text is null
      * @throws IndexOutOfBoundsException if the position is negative
      *     or greater than the number of children of the node
      */
-    public final void insertChild(String text, int position) {
+    public void insertChild(String text, int position) {
         
        if (text == null) {
               throw new NullPointerException("Inserted null string");
@@ -1040,7 +947,7 @@ public class Element extends ParentNode {
      *     have children of this type
      * @throws NullPointerException if <code>text</code> is null
      */
-    public final void appendChild(String text) {
+    public void appendChild(String text) {
         insertChild(new Text(text), getChildCount());
     } 
 
@@ -1052,20 +959,23 @@ public class Element extends ParentNode {
      * exception). It will never remove only some of the nodes.
      * </p>
      * 
+     * <p>
+     * Subclassers should note that the default implementation of this
+     * method does <strong>not</strong> call <code>removeChild</code>
+     * or <code>detach</code>. If you override 
+     * <code>removeChild</code>, you'll probably need to override this
+     * method as well.
+     * </p>
+     * 
      * @return a list of all the children removed in the order they
      *     appeared in the element
      * 
      * @throws XMLException if a subclass refuses to remove any of the
      *     child nodes
      */
-    public final Nodes removeChildren() {
+    public Nodes removeChildren() {
         
         int length = this.getChildCount();
-        // First make sure we can remove all the children
-        for (int i = 0; i < length; i++) {
-            checkRemoveChild(getChild(i), i);
-        }   
-
         Nodes result = new Nodes();
         for (int i = 0; i < length; i++) {
             Node child = getChild(i);
@@ -1108,8 +1018,7 @@ public class Element extends ParentNode {
      * @throws XMLException if the namespace prefix and/or URI 
      *     is disallowed by a subclass
      */
-    public final void addNamespaceDeclaration(
-      String prefix, String uri) {
+    public void addNamespaceDeclaration(String prefix, String uri) {
 
         if (prefix == null) prefix = "";
         if (uri == null) uri = "";
@@ -1153,31 +1062,10 @@ public class Element extends ParentNode {
             );   
         }
         
-        // local constraints
-        checkAddNamespaceDeclaration(prefix, uri);
-        
         if (namespaces == null) namespaces = new Namespaces();
         namespaces.put(prefix, uri);
         
     }
-
-
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the specific namespace declarations 
-     * added to this element beyond what <cite>Namespaces in XML</cite>
-     * requires.
-     * </p>
-     * 
-     * @param prefix the prefix to add
-     * @param uri the URI to add
-     * 
-     * @throws XMLException if the namespace prefix 
-     *   and/or URI is disallowed
-     */
-    protected void checkAddNamespaceDeclaration(
-      String prefix, String uri) {}
 
 
     /**
@@ -1195,30 +1083,13 @@ public class Element extends ParentNode {
      * @throws XMLException if the namespace prefix cannot be removed
      *     due to subclass constraints
      */
-    public final void removeNamespaceDeclaration(String prefix) {
-        
-        // local constraints
-        checkRemoveNamespaceDeclaration(prefix);
+    public void removeNamespaceDeclaration(String prefix) {
+
         if (namespaces != null) {
             namespaces.remove(prefix);
         }
         
     }
-
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the specific namespace declarations removed 
-     * from elements beyond what <cite>Namespaces in XML</cite>
-     * requires.
-     * </p>
-     * 
-     * @param prefix the prefix that will be removed.
-     * 
-     * @throws XMLException if the prefix cannot be removed
-     */
-    protected void checkRemoveNamespaceDeclaration(String prefix) {}
 
     
     /**
@@ -1342,13 +1213,12 @@ public class Element extends ParentNode {
      * unless an <code>xml:base</code> attribute overrides this.
      * </p>
      * 
-     * 
      * @param URI the new base URI for this node
      * 
      * @throws MalformedURIException if <code>URI</code> is 
      *     not a legal RFC 2396 URI
      */
-    public final void setBaseURI(String URI) { 
+    public void setBaseURI(String URI) { 
         setActualBaseURI(URI);       
     }
     

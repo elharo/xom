@@ -117,7 +117,7 @@ public class ProcessingInstruction extends Node {
      * @throws XMLException if the proposed target does not 
      *     satisfy the local constraints
      */
-    public final void setTarget(String target) {
+    public void setTarget(String target) {
         
         try {
             Verifier.checkNCName(target);
@@ -135,27 +135,9 @@ public class ProcessingInstruction extends Node {
             throw tex;
         }
         
-        checkTarget(target);
-        
         this.target = target;
         
     }  
-    
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform additional 
-     * checks on the data beyond what XML 1.0 requires.
-     * For example, an <code>XMLStylesheet</code> subclass might throw 
-     * an exception if the target were not xml-stylesheet.
-     * </p>
-     * 
-     * @param target the potential target to check.
-     * 
-     * @throws XMLException if the proposed target 
-     *   does not satisfy the local constraints
-     */
-    protected void checkTarget(String target) {}
 
     
     /**
@@ -170,7 +152,7 @@ public class ProcessingInstruction extends Node {
      * @throws XMLException if the proposed data does not satisfy 
      *   the local constraints
      */
-    public final void setValue(String data) {
+    public void setValue(String data) {
         
         Verifier.checkPCDATA(data);
         if (data.length() != 0) {
@@ -199,7 +181,6 @@ public class ProcessingInstruction extends Node {
                 throw ex;
             }
         }
-        checkValue(data);
         this.data = data;
         
     }
@@ -252,23 +233,6 @@ public class ProcessingInstruction extends Node {
     public final int getChildCount() {
         return 0;   
     }
-    
-    
-    /**
-     * <p>
-     * Subclasses can override this method to perform 
-     * additional checks on the data beyond what XML 1.0 requires.
-     * For example, an <code>XMLStylesheet</code> subclass might 
-     * throw an exception if the data did not have a pseudo-attribute
-     * format.
-     * </p>
-     * 
-     * @param data the potential data to check.
-     * 
-     * @throws XMLException if the proposed data does not 
-     *   satisfy the local constraints
-     */
-    protected void checkValue(String data) {}
 
     
     /**
@@ -283,6 +247,7 @@ public class ProcessingInstruction extends Node {
      * @see nu.xom.Node#toXML()
      */
     public final String toXML() {
+        
         StringBuffer result = new StringBuffer("<?");
         result.append(target);
         if (data.length() > 0) {

@@ -187,7 +187,7 @@ public abstract class Node {
      * 
      * @throws XMLException if the parent refuses to detach this node
      */
-    public final void detach() {
+    public void detach() {
 
         if (parent == null) return;
         else if (this.isAttribute()) {
