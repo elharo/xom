@@ -153,23 +153,11 @@ public class AttributeTest extends XOMTestCase {
         assertEquals("xml:base", a1.getQualifiedName());
         assertEquals(xmlNamespace, a1.getNamespaceURI());
         
-        try {
-            a1.setValue("http://www.example.com/>");
-            fail("allowed non-IRI for xml:base value");
-        }
-        catch (IllegalDataException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
-        }
+        a1.setValue("http://www.example.com/>");
+        assertEquals("http://www.example.com/>", a1.getValue());
     
-        try {
-            a1.setValue("http://www.example.com/<");
-            fail("allowed non-IRI for xml:base value");
-        }
-        catch (IllegalDataException ex) {
-            // success    
-            assertNotNull(ex.getMessage());    
-        }
+        a1.setValue("http://www.example.com/<");
+        assertEquals("http://www.example.com/<", a1.getValue());
         
         a1.setValue("http://www.example.com/\u00FE");
         assertEquals(a1.getValue(), "http://www.example.com/\u00FE");

@@ -184,7 +184,7 @@ final class Verifier {
      * @param uri <code>String</code> to check
      * @throws MalformedURIException if this is not a legal URI
      */
-    private static void checkURI(String uri) {
+    static void checkURI(String uri) {
         checkIRIOrURI(uri, true);
     }
 
@@ -202,6 +202,66 @@ final class Verifier {
      */
     static void checkIRI(String iri) {
         checkIRIOrURI(iri, false);
+    }
+
+    /**
+     * <p>
+     * Checks a string to see if it is a legal value for xml:base.
+     * This requires first escaping the excluded characters from  
+     * Section 2.4 of IETF RFC 2396 per section 3.1 of the XML Base
+     * specification.
+     * </p>
+     * 
+     * honestly should I check this at all, parser don't????
+     * maybe just throw an exception when decosing on getBaseURI?
+     * 
+     * @param iri <code>String</code> to check
+     * @throws MalformedURIException if this is not a legal IRI after
+     *     escaping
+     */
+    static void checkXMLBaseValue(String iri) {
+        StringBuffer temp = new StringBuffer(iri.length());
+        for (int i = 0; i < iri.length(); i++) {
+            char c = iri.charAt(i);
+            switch (c) {
+                case ' ': 
+                    temp.append("%20");
+                    break;
+                case '\u007F': 
+                    temp.append("%7f");
+                    break;
+                case '<': 
+                    temp.append("%3c");
+                    break;
+                case '>': 
+                    temp.append("%3e");
+                    break;
+                case '"': 
+                    temp.append("%7F");
+                    break;
+                case '{': 
+                    temp.append("%7b");
+                    break;
+                case '}': 
+                    temp.append("%7d");
+                    break;
+                case '|': 
+                    temp.append("%7c");
+                    break;
+                case '\\': 
+                    temp.append("%5c");
+                    break;
+                case '^': 
+                    temp.append("%5e");
+                    break;
+                case '`': 
+                    temp.append("%60");
+                    break;
+                 default:
+                    temp.append(c);
+            }
+        }
+        checkIRIOrURI(temp.toString(), false);
     }
 
     private static void checkIRIOrURI(String iri, boolean checkForURI) {
@@ -1165,10 +1225,10 @@ final class Verifier {
      * <p>
      * This is a utility function for determining whether 
      * a specified Unicode character is legal in URI  
-     * references as determined by RFC 2396.
+     * references as determined by RFC 2396 and 2732.
      * </p>
      * 
-     * @param c <code>char</code> to check for URI reference compliance
+     * @param c Unicode code point to check for URI reference compliance
      * @return true if it's allowed, false otherwise.
      * 
      */
@@ -1221,7 +1281,7 @@ final class Verifier {
      */
     private static boolean isIRICharacter(int c) {
         
-        if (c < ' ') return false; // control characters not allowed
+        if (c < ' ')     return false; // control characters not allowed
         if (c <  0x80)   return isURICharacter(c);
         if (c <= 0xD7FF) return true;
         if (c <  0xF900) return false;
