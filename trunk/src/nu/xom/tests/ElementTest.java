@@ -1014,7 +1014,7 @@ public class ElementTest extends XOMTestCase {
             funky.addAttribute(a2); 
             fail("added conflicting namespace"); 
         }
-        catch (Exception ex) { // be more specific on exception type????
+        catch (NamespaceException ex) { 
             // success   
             assertNotNull(ex.getMessage());
         }
@@ -1035,7 +1035,7 @@ public class ElementTest extends XOMTestCase {
             test.addAttribute(a4); 
             fail("added conflicting attributes"); 
         }
-        catch (Exception ex) { // be more speciifc on exception type????
+        catch (NamespaceException ex) { 
             // success   
             assertNotNull(ex.getMessage());
         }
@@ -1050,7 +1050,7 @@ public class ElementTest extends XOMTestCase {
            test2.addAttribute(a6); 
            fail("added conflicting attributes"); 
         }
-        catch (Exception ex) { // be more specific one xception type????
+        catch (NamespaceException ex) { 
             // success   
             assertNotNull(ex.getMessage());
         }
