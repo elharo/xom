@@ -22,8 +22,18 @@ package nu.xom.tests;
 
 import nu.xom.Element;
 import nu.xom.Namespace;
+import nu.xom.NoSuchChildException;
 import nu.xom.Nodes;
 
+/**
+ * <p>
+ * Tests for namespace nodes used in XPath
+ * </p>
+ * 
+ * @author Elliotte Rusty Harold
+ * @version 1.1d6
+ *
+ */
 public class NamespaceNodeTest extends XOMTestCase {
 
     
@@ -67,6 +77,43 @@ public class NamespaceNodeTest extends XOMTestCase {
         Nodes result = root.query("namespace::pre");
         Namespace namespace = (Namespace) result.get(0);
         assertEquals("xmlns:pre=\"http://www.example.org/\"", namespace.toXML());
+        
+    }
+
+    
+    public void testDetachNamespaceNode() {
+     
+        Element root = new Element("pre:root", "http://www.example.org/");
+        Nodes result = root.query("namespace::pre");
+        Namespace namespace = (Namespace) result.get(0);
+        namespace.detach();
+        assertNull(namespace.getParent());
+        
+    }
+
+    
+    public void testRemoveNamespaceNode() {
+     
+        Element root = new Element("pre:root", "http://www.example.org/");
+        Nodes result = root.query("namespace::pre");
+        Namespace namespace = (Namespace) result.get(0);
+        try {
+            root.removeChild(namespace);
+            fail("Namespaces are not children");
+        }
+        catch (NoSuchChildException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+
+    
+    public void testGetParent() {
+     
+        Element root = new Element("pre:root", "http://www.example.org/");
+        Nodes result = root.query("namespace::pre");
+        Namespace namespace = (Namespace) result.get(0);
+        assertEquals(root, namespace.getParent());
         
     }
 
