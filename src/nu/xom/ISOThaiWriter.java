@@ -26,6 +26,11 @@ package nu.xom;
 import java.io.Writer;
 
 /**
+ * <p>
+ *   TIS-620, not quite the same as ISO 8859-11.
+ *   TIS-620 does not have the non-breaking space or the C1 controls.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  *
@@ -149,6 +154,7 @@ class ISOThaiWriter extends TextWriter {
             case 0x0E5A: return false; // THAI CHARACTER ANGKHANKHU
             case 0x0E5B: return false; // THAI CHARACTER KHOMUT
         }
+        
         return true;
         
     }

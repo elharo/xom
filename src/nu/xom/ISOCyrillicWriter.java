@@ -26,9 +26,12 @@ package nu.xom;
 import java.io.Writer;
 
 /**
+ * <p>
+ *  ISO 8859-5, ASCII plus Cyrillic (Russian, Byelorussian, etc.)
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
- * 
  *
  */
 class ISOCyrillicWriter extends TextWriter {

@@ -26,6 +26,11 @@ package nu.xom;
 import java.io.Writer;
 
 /**
+ * <p>
+ *   ISO-8859-1; a.k.a. Latin-1; most Western European letters
+ *   except for Greek.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  * 

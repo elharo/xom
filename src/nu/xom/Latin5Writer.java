@@ -26,6 +26,10 @@ package nu.xom;
 import java.io.Writer;
 
 /**
+ * <p>
+ *   ISO 8859-9 for Turkish. 
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
  * @version 1.0d23
  * 
@@ -43,6 +47,7 @@ class Latin5Writer extends TextWriter {
     boolean needsEscaping(char c) {
         if (c <= 0xCF) return false;        
         switch (c) {
+            case 0x00D0: return true;  // place holder to enable table lookup
             case 0x00D1: return false; // LATIN CAPITAL LETTER N WITH TILDE
             case 0x00D2: return false; // LATIN CAPITAL LETTER O WITH GRAVE
             case 0x00D3: return false; // LATIN CAPITAL LETTER O WITH ACUTE
@@ -55,8 +60,8 @@ class Latin5Writer extends TextWriter {
             case 0x00DA: return false; // LATIN CAPITAL LETTER U WITH ACUTE
             case 0x00DB: return false; // LATIN CAPITAL LETTER U WITH CIRCUMFLEX
             case 0x00DC: return false; // LATIN CAPITAL LETTER U WITH DIAERESIS
-            case 0x0130: return false; // LATIN CAPITAL LETTER I WITH DOT ABOVE
-            case 0x015E: return false; // LATIN CAPITAL LETTER S WITH CEDILLA
+            case 0x00DD: return true;  // place holder to enable table lookup
+            case 0x00DE: return true;  // place holder to enable table lookup
             case 0x00DF: return false; // LATIN SMALL LETTER SHARP S
             case 0x00E0: return false; // LATIN SMALL LETTER A WITH GRAVE
             case 0x00E1: return false; // LATIN SMALL LETTER A WITH ACUTE
@@ -74,7 +79,7 @@ class Latin5Writer extends TextWriter {
             case 0x00ED: return false; // LATIN SMALL LETTER I WITH ACUTE
             case 0x00EE: return false; // LATIN SMALL LETTER I WITH CIRCUMFLEX
             case 0x00EF: return false; // LATIN SMALL LETTER I WITH DIAERESIS
-            case 0x011F: return false; // LATIN SMALL LETTER G WITH BREVE
+            case 0x00F0: return true;  // place holder to enable table lookup
             case 0x00F1: return false; // LATIN SMALL LETTER N WITH TILDE
             case 0x00F2: return false; // LATIN SMALL LETTER O WITH GRAVE
             case 0x00F3: return false; // LATIN SMALL LETTER O WITH ACUTE
@@ -87,12 +92,21 @@ class Latin5Writer extends TextWriter {
             case 0x00FA: return false; // LATIN SMALL LETTER U WITH ACUTE
             case 0x00FB: return false; // LATIN SMALL LETTER U WITH CIRCUMFLEX
             case 0x00FC: return false; // LATIN SMALL LETTER U WITH DIAERESIS
-            case 0x0131: return false; // LATIN SMALL LETTER DOTLESS I
-            case 0x015F: return false; // LATIN SMALL LETTER S WITH CEDILLA
+            case 0x00FD: return true;  // place holder to enable table lookup
+            case 0x00FE: return true;  // place holder to enable table lookup
             case 0x00FF: return false; // LATIN SMALL LETTER Y WITH DIAERESIS
+        } // could fill in holes here????
+        switch (c) {  // Turkish letters
             case 0x011E: return false; // LATIN CAPITAL LETTER G WITH BREVE
+            case 0x011F: return false; // LATIN SMALL LETTER G WITH BREVE
+            case 0x0130: return false; // LATIN CAPITAL LETTER I WITH DOT ABOVE
+            case 0x0131: return false; // LATIN SMALL LETTER DOTLESS I
+            case 0x015E: return false; // LATIN CAPITAL LETTER S WITH CEDILLA
+            case 0x015F: return false; // LATIN SMALL LETTER S WITH CEDILLA
         }
+        
         return true;
+        
     }
 
 }
