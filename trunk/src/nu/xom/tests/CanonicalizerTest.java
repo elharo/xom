@@ -50,11 +50,16 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0a2
+ * @version 1.0a5
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
 
+    private final static double version = Double.parseDouble(
+      System.getProperty("java.version").substring(0,3)
+    );
+    
+    
     public CanonicalizerTest(String name) {
         super(name);
     }
@@ -83,15 +88,7 @@ public class CanonicalizerTest extends XOMTestCase {
             finally {
                 out.close();
             }            
-            byte[] actual = out.toByteArray();
-            
-            // for debugging
-            /*File debug = new File(
-              "data/canonical/debug/" + input.getName() + ".dbg");
-            java.io.OutputStream fout = new java.io.FileOutputStream(debug);
-            fout.write(actual);
-            fout.flush();
-            fout.close(); */    
+            byte[] actual = out.toByteArray();  
             
             File expected = new File(
               "data/canonical/output/" + input.getName() + ".out");
@@ -298,7 +295,12 @@ public class CanonicalizerTest extends XOMTestCase {
     
     public void testNFCFromISO88596() 
       throws ParsingException, IOException {
+        
+        // This test fails in 1.2.2 due to an apparent bug in the 
+        // conversion of the characters '1' and '0' to bytes in 
+        // ISO-8859-6
         isoNormalizationTest("ISO-8859-6");
+        
     }
     
     
@@ -322,7 +324,12 @@ public class CanonicalizerTest extends XOMTestCase {
     
     public void testNFCFromISO885913() 
       throws ParsingException, IOException {
-        isoNormalizationTest("ISO-8859-13");
+        
+        if (version >= 1.3) {
+            // iSO-8859-6 not supported in Java 1.2
+            isoNormalizationTest("ISO-8859-13");
+        }
+        
     }
 
     
@@ -335,9 +342,12 @@ public class CanonicalizerTest extends XOMTestCase {
     // 14 and 16 aren't tested because Java doesn't support them yet
     private void isoNormalizationTest(String encoding)
       throws ParsingException, IOException {
+        
         String prolog = "<?xml version='1.0' encoding='" 
           + encoding + "'?>\r\n<root>";
+        
         byte[] prologData = prolog.getBytes(encoding);
+        
         String epilog = "</root>";
         byte[] epilogData = epilog.getBytes(encoding);      
         byte[] data = new byte[prologData.length + epilogData.length + 255 - 160 + 1];
@@ -353,6 +363,7 @@ public class CanonicalizerTest extends XOMTestCase {
         String normalizedResult = Normalizer.normalize(rawResult, Normalizer.NFC);
         assertEquals("Parser doesn't use NFC when converting from " + encoding, 
           normalizedResult, rawResult);
+        
     }
 
     
