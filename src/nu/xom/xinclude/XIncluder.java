@@ -577,42 +577,6 @@ public class XIncluder {
     }
     
     
-    /**
-     * <p>
-     * Modifies a <code>Nodes</code> object by replacing all 
-     * XInclude elements with their referenced content.
-     * Resolution is recursive; that is, include elements
-     * in the included documents are themselves resolved.
-     * Furthermore, include elements that are children or 
-     * descendants of elements in this list are also resolved.
-     * The <code>Nodes</code> object returned contains no
-     * include elements.
-     * </p>
-     */
-    private static void resolveInPlace(Nodes in, Builder builder, Stack baseURLs) 
-      throws IOException, ParsingException, XIncludeException { 
-        for (int i = 0; i < in.size(); i++) {
-            Node child = in.get(i);
-            if (child instanceof Element) {
-                Element element = (Element) child;
-                if (isIncludeElement(element)) {
-                    Nodes nodes = resolveSilently(element, builder, baseURLs);
-                    in.remove(i);
-                    for (int j = 0; j < nodes.size(); j++) {
-                        in.insert(nodes.get(j), i++);
-                    }
-                }
-                else {       
-                    resolve((Element) child, builder, baseURLs);
-                }
-            }
-            else if (child instanceof Document) {
-                resolveInPlace((Document) child, builder,  baseURLs);   
-            }
-        }
-    }
-    
-    
     // This assumes current implementation of XPointer
     // that always selects exactly zero or one element
     private static Nodes resolveXPointerSelection(Nodes in, 
