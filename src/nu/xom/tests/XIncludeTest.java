@@ -967,4 +967,37 @@ public class XIncludeTest extends XOMTestCase {
         }
                 
     } 
+
+    public void testColonizedNameForIdValueInElementScheme() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/badxptr3.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Bad ID in element not detected");
+        }
+        catch (XIncludeException success) {
+            // success   
+            assertNotNull(success.getMessage());   
+        }
+                
+    } 
+
+    public void testBadIdValueInElementScheme() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File("data/xinclude/input/badxptr4.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Bad ID in element not detected");
+        }
+        catch (XIncludeException success) {
+            // success   
+            assertNotNull(success.getMessage());   
+        }
+                
+    } 
+
 }
