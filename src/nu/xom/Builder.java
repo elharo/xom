@@ -60,7 +60,6 @@ public class Builder {
 
     private XMLReader   parser;
     private NodeFactory factory;
-    private boolean     validate = false;
 
     static {    
         // turn off XML 1.1
@@ -349,8 +348,7 @@ public class Builder {
      */ 
     public Builder(
       XMLReader parser, boolean validate, NodeFactory factory) {
-               
-        this.validate = validate;     
+                  
         try { 
             setupParser(parser, validate);
         }
