@@ -136,7 +136,7 @@ public class Builder {
      *     is installed in the local class path
      */
     public Builder(boolean validate) {     
-         this(findParser(validate), validate, null); 
+        this(findParser(validate), validate, null); 
     }
 
     
@@ -198,7 +198,8 @@ public class Builder {
         } 
 
         try {
-            parser = (XMLReader) Class.forName("nu.xom.JDK15XML1_0Parser").newInstance();
+            parser = (XMLReader) Class.forName(
+              "nu.xom.JDK15XML1_0Parser").newInstance();
             setupParser(parser, validate);
             return parser;
         } 
@@ -251,10 +252,15 @@ public class Builder {
     private static void setupParser(XMLReader parser, boolean validate)
       throws SAXNotRecognizedException, SAXNotSupportedException {
         
+        XMLReader baseParser = parser;
+        while (baseParser instanceof XMLFilter) {
+            baseParser = ((XMLFilter) baseParser).getParent();
+        }
+        String parserName = baseParser.getClass().getName();
         if (!validate) {
             parser.setFeature(
               "http://xml.org/sax/features/namespace-prefixes", true);
-            if (parser.getClass().getName().equals(  // Crimson workaround
+            if (parserName.equals(  // Crimson workaround
               "org.apache.crimson.parser.XMLReaderImpl")) {
                 parser.setErrorHandler(
                   new NamespaceWellformednessRequired()
@@ -289,7 +295,6 @@ public class Builder {
         }
         
         // A couple of Xerces specific properties
-        String parserName = parser.getClass().getName();
         if (parserName.equals("nu.xom.XML1_0Parser") 
          || parserName.equals("nu.xom.JDK15XML1_0Parser")
          || parserName.equals("org.apache.xerces.parsers.SAXParser")
