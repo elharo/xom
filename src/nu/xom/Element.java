@@ -1303,6 +1303,8 @@ public class Element extends ParentNode {
             else if (c == '\'')uri.append(c);
             else if (c == '(') uri.append(c);
             else if (c == ')') uri.append(c);
+            else if (c == '[') uri.append(c);
+            else if (c == ']') uri.append(c);
             else uri.append(percentEscape(c));
         }    
         return uri.toString();
