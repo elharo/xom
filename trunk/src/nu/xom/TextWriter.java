@@ -90,6 +90,7 @@ abstract class TextWriter {
     }
     
     
+    // XXX lookup table?
     final void writePCDATA(char c) throws IOException {
         
         if (needsEscaping(c)) {
@@ -180,7 +181,7 @@ abstract class TextWriter {
 
     
     // This is the same as writePCDATA except that it
-    // also needs to escape " as &quot;
+    // also needs to escape " as &quot; and tab as "&#x09;".
     // I'm not escaping the single quote because Serializer
     // always uses double quotes to contain 
     // values.
