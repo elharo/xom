@@ -1401,5 +1401,16 @@ public class XPathTest extends XOMTestCase {
         
     }
     
+    
+    public void testNaNEvaluatesToFalse() {
+        
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        
+        Nodes result = doc.query("/*[boolean(0 div 0)]");
+        assertEquals(0, result.size());
+        
+    }
+    
 
 }
