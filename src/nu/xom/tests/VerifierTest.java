@@ -146,6 +146,81 @@ public class VerifierTest extends XOMTestCase {
     }
 
     
+    public void testLegalIP6Addresses() {
+        
+        String[] addresses = {
+          "FEDC:BA98:7654:3210:FEDC:BA98:7654:3210",
+          "1080:0:0:0:8:800:200C:4171",
+          "3ffe:2a00:100:7031::1",
+          "1080::8:800:200C:417A",
+          "::192.9.5.5",
+          "::FFFF:129.144.52.38",
+          "2010:836B:4179::836B:4179",
+          "1080:0:0:0:8:800:200C:417A",
+          "FF01:0:0:0:0:0:0:101",
+          "0:0:0:0:0:0:0:1",
+          "0:0:0:0:0:0:0:0",
+          "1080::8:800:200C:417A",
+          "FF01::101",
+          "::1",
+          "::",
+          "0:0:0:0:0:0:13.1.68.3",
+          "0:0:0:0:0:FFFF:129.144.52.38",
+          "::13.1.68.3",
+          "::FFFF:129.144.52.38"
+        };
+        
+        Element element = new Element("test");
+        for (int i = 0; i < addresses.length; i++) {
+            String url = "http://[" + addresses[i] + "]/";
+            element.addAttribute(new Attribute("xml:base", 
+              "http://www.w3.org/XML/1998/namespace", url));
+            assertEquals(url, element.getBaseURI());
+        }    
+        
+    }
+    
+    
+    public void testIllegalIP6Addresses() {
+        
+        String[] addresses = {
+          "FEDC:BA98:7654:3210:GEDC:BA98:7654:3 210",
+          "FEDC:BA98:7654:3210:FEDC:BA98:7654:3210:4352",
+          "FEDC:BA98:7654:3210:GEDC:BA98:7654:3210",
+          "FEDC:BA98:7654:3210:GEDC:BA98:7654:G210",
+          "FEDC:BA98:7654:3210:GEDC:BA98:7654: 3210",
+          "FEDC:BA98:7654:3210:GEDC:BA98:7654:+3210",
+          "FEDC:BA98:7654:3210:GEDC:BA98:7654:3210 ",
+          "FEDC:BA98:7654:3210:GEDC:BA98:7654:32 10",
+          "1080:0:::8:800:200C:4171",
+          "3ffe::100:7031::1",
+          "::192.9.5",
+          "::FFFF:129.144.52.38.56",
+          "::FFFF:129.144.52.A3",
+          "::FFFF:129.144.52.-22",
+          "::FFFF:129.144.52.+22",
+          "::FFFF:256.144.52.+22",
+          "::FFFF:www.apple.com",
+          "1080:0:0:0:8:800:-200C:417A",
+          "1080:0:0:0:-8:800:-200C:417A"
+        };
+        
+        Element element = new Element("test");
+        for (int i = 0; i < addresses.length; i++) {
+            String url = "http://[" + addresses[i] + "]/";
+            try {
+                element.addAttribute(new Attribute("xml:base", 
+                  "http://www.w3.org/XML/1998/namespace", url));
+                fail("Allowed illegal IPv6 address: " +  addresses[i] );
+            }
+            catch (MalformedURIException success) {
+                assertNotNull(success.getMessage());
+            }
+        }    
+        
+    }
+    
+    
     private static String convertToUTF16(int c) {
         if (c <= 0xFFFF) return "" + (char) c;
         char high = UTF16.getLeadSurrogate(c);
