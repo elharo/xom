@@ -391,7 +391,7 @@ class XOMHandler
             document.insertChild(node, position);
             position++;
             if (node.isDocType()) {
-                DocType doctype =(DocType) node;
+                DocType doctype = (DocType) node;
                 internalDTDSubset = new StringBuffer(); 
                 this.doctype = doctype;
             }
@@ -625,13 +625,8 @@ class XOMHandler
         StringBuffer result = new StringBuffer(length);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
-            switch (c) {
-                case '\r': 
-                    result.append("&#x0D;");
-                    break;
-                default:
-                    result.append(c);
-            }
+            if (c == '\r') result.append("&#x0D;");
+            else result.append(c);
         }
         
         return result.toString();
@@ -645,6 +640,7 @@ class XOMHandler
         StringBuffer result = new StringBuffer(length);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
+            // XXX table lookup
             switch (c) {
                 case '\r': 
                     result.append("&#x0D;");
