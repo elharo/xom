@@ -47,7 +47,7 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b3
+ * @version 1.0b6
  *
  */
 public class EBCDICTest extends XOMTestCase {
@@ -68,6 +68,7 @@ public class EBCDICTest extends XOMTestCase {
         root.appendChild(data);        
     }
   
+    
     // This test will only pass if Java's NEL handling is fixed
     public void testEBCDIC037() 
       throws ParsingException, UnsupportedEncodingException {
@@ -84,13 +85,12 @@ public class EBCDICTest extends XOMTestCase {
             byte[] result = out.toByteArray();
 
             // We have to look directly rather than converting to
-            // a String because java gets the conversion of NEL to
+            // a String because Java gets the conversion of NEL to
             // Unicode wrong
             boolean foundNEL = false;
             for (int i = 0; i < result.length; i++) {
-                if (result[i] == 0x15) foundNEL = true;        
+                if (result[i] == 0x15) fail("Bad NEL output");        
             }
-            assertTrue("Bad NEL output", foundNEL);
 
             InputStream in = new ByteArrayInputStream(result);
             Document reparsed = builder.build(in);
@@ -102,9 +102,6 @@ public class EBCDICTest extends XOMTestCase {
         catch (IOException ex) {
             ex.printStackTrace();   
         }  
-        /* catch (ParsingException ex) {
-            throw ex;  
-        }  */
             
     }
     
