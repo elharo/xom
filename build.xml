@@ -33,7 +33,7 @@ to http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.0b10"/>
+    <property name="version" value="1.0b11"/>
     <property name="year"    value="2004"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -66,9 +66,7 @@ to http://www.xom.nu/
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
-    <!-- only needed for servlet samples -->
-    <property name="servlet.jar"    value="${lib2.dir}/servlet.jar"/>
-
+    
     <property name="saxon6.jar"     value="${lib2.dir}/saxon.jar"/>
     <property name="saxon7.jar"     value="${lib2.dir}/saxon-aelfred.jar"/>
     <property name="gnujaxp.jar"    value="${lib2.dir}/gnujaxp.jar"/>
@@ -77,13 +75,26 @@ to http://www.xom.nu/
 
     <property name="excludes"      value=".DS_Store, **/.DS_Store, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb"/>
 
-    <property name="test.outputFormat" value="xml"/>    
+    <property name="test.outputFormat" value="xml"/>   
+    
+    <!-- only needed for servlet samples -->
+    <property name="servlet.jar"    value="${lib2.dir}/servlet.jar"/>
+    <condition property="servlet.jar.installed">
+      <and>
+        <available classname="javax.servlet.ServletException" classpath="${servlet.jar}" />
+        <available classname="javax.servlet.SingleThreadModel" classpath="${servlet.jar}" />
+        <available classname="javax.servlet.http.HttpServletRequest" classpath="${servlet.jar}" />
+        <available classname="javax.servlet.http.HttpServletResponse" classpath="${servlet.jar}"/> 
+        <available classname="javax.servlet.http.HttpServlet" classpath="${servlet.jar}" />
+      </and>
+    </condition> 
     
     <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
       <pathelement location="${normalizer.jar}"/>
       <pathelement location="${junit.jar}"/>
+      <pathelement location="${servlet.jar}"/>
     </path>
 
     <path id="run.class.path">
@@ -109,6 +120,7 @@ to http://www.xom.nu/
       <pathelement location="${build.dest}"/>
       <pathelement location="${tagsoup.jar}"/>
     </path>
+
     
   </target>
   
@@ -150,8 +162,26 @@ XOM Build file
     
   </target>
 
+  <target name="compile" depends="prepare, compile-servlets" description="Compile the source code" unless="servlet.jar.installed">
+    <javac srcdir="${build.src}"
+           destdir="${build.dest}"
+           debug="${debug}"
+           optimize="${optimize}"
+           deprecation="${deprecation}"
+           target="1.2"
+           source="1.3"
+           encoding="UTF-8"
+           excludes="nu/xom/pantry/*.java nu/xom/tools/* nu/xom/samples/*Servlet.java">
+       <classpath refid="compile.class.path"/>
+    </javac>
+    <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
+    <!-- This file requires Java 1.5 to generate so we compile it with a different target
+         and copy it over here. -->
+    <copy file="classes15/nu/xom/JDK15XML1_0Parser.class" tofile="${build.dest}/nu/xom/JDK15XML1_0Parser.class"/>
+  </target>
+
   
-  <target name="compile" depends="prepare" description="Compile the source code">
+  <target name="compile-servlets" depends="prepare" description="Compile the source code including the servlet samples" if="servlet.jar.installed">
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
@@ -277,7 +307,7 @@ XOM Build file
   <target name="betterdocs" depends="betterdoc"/>
 
   <!-- This task requires Ant 1.6 and TagSoup -->
-  <target name="betterdoc" depends="prepare, compile"
+  <target name="betterdoc" depends="compile"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
