@@ -54,7 +54,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0d22
+ * @version 1.0d23
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -146,7 +146,7 @@ public class DOMConverterTest extends XOMTestCase {
         }
     }
 
-    public void testToDOM() throws IOException {      
+    public void testToDOM() {      
         org.w3c.dom.Document domDoc = DOMConverter.convert(xomDocument, impl);
         org.w3c.dom.DocumentType doctype = domDoc.getDoctype();
         
