@@ -60,7 +60,9 @@ class GenericWriter extends TextWriter {
        
         // assume everything has at least the ASCII characters
         if (c <= 127) return false;
-        
+        if (c == 0xA5) return true; // Yen symbol is problematic in some Japanese encodings
+        if (c == 0x203E) return true; // work around Sun bugs in EUC-JP
+
         boolean result = false;
         try {
             wout.write(c);
