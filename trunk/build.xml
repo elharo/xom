@@ -133,7 +133,7 @@ XOM Build file
          basedir="${build.dest}"
          index="yes"
 		 compress="no"
-         excludes="nu/xom/samples/* nu/xom/tests/* nu/xom/benchmarks/* nu/xom/samples nu/xom/tests nu/xom/benchmarks"
+         excludes="nu/xom/samples/* nu/xom/tests/* nu/xom/benchmarks/* nu/xom/samples nu/xom/tests nu/xom/benchmarks nu/xom/pantry/* nu/xom/pantry"
      />
   </target>
 
@@ -167,7 +167,7 @@ XOM Build file
   <target name="zip" depends="jar, javadoc" description="Build zip file for distro">
     <zip destfile="${dist.dir}/${name}-${version}.zip">
       <zipfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, **/testresults/**, **/workspace/**,  **/pantry/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
@@ -177,7 +177,7 @@ XOM Build file
   <target name="tar" depends="jar, javadoc" description="Build tar file for distro">
     <tar destfile="${dist.dir}/${name}-${version}.tar">
       <tarfileset prefix="XOM" dir="." 
-        excludes="**/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
+        excludes="**/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**"/>   
       <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath"/>   
       <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
@@ -198,6 +198,7 @@ XOM Build file
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
            <exclude name="**/MegaTest.java" />
+           <exclude name="**/benchmarks/*.java" />
            <exclude name="**/EBCDICTest.java" />
          </fileset>
       </batchtest>
