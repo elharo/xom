@@ -142,15 +142,24 @@ public class BaseURITest extends XOMTestCase {
         assertEquals(base, root.getBaseURI());
     }
 
-    public void testBaseWithNonASCIICharacters() 
+    public void testXMLBaseWithNonASCIICharacters() 
       throws UnsupportedEncodingException, URISyntaxException {
         String omega = "\u03A9";
+        // In UTF-8 %ce%a9
         String base = "http://www.example.com/" + omega;
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", base));
         // This is a Java 1.4 dependence
         URI uri = new URI(root.getBaseURI());
         assertEquals("/" + omega, uri.getPath());
+    }
+    
+    public void testBaseWithNonASCIICharacters() 
+      throws UnsupportedEncodingException, URISyntaxException {
+        String base = "http://www.example.com/%ce%a9";
+        Element root = new Element("test");
+        root.setBaseURI(base);
+        assertEquals(base, root.getBaseURI());
     }
     
     public void testBadIPv6Base() {
