@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1b1
  *
  */
 class XOMHandler 
@@ -487,6 +487,12 @@ class XOMHandler
             internalDTDSubset.append(name); 
             internalDTDSubset.append(' '); 
             internalDTDSubset.append(model); 
+            // workaround for Crimson bug
+            if (model.indexOf("#PCDATA") > 0 && model.indexOf('|') > 0) {
+                if (model.endsWith(")")) {
+                    internalDTDSubset.append('*');  
+                }
+            }
             internalDTDSubset.append(">\n"); 
         }
         
