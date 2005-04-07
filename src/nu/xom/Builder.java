@@ -1239,8 +1239,14 @@ public class Builder {
         }
       
         public void error(SAXParseException exception) 
-          throws SAXParseException { 
-            throw exception;            
+          throws SAXParseException {
+            
+            if (exception.getMessage().equals("Illegal Namespace prefix: \"xml\".")) {
+                return;
+            }
+            
+            throw exception;
+            
         }
       
         public void fatalError(SAXParseException exception) 
