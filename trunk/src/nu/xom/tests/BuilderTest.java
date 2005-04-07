@@ -1617,7 +1617,7 @@ public class BuilderTest extends XOMTestCase {
 
     
     /* Test for particular bug in Crimson with mixed content declarations */ 
-    public void testSetInternalDTDSubsetWithCrimson() 
+    public void testBuildInternalDTDSubsetWithCrimson() 
       throws ParsingException, IOException {
 
         String dtd = "  <!ELEMENT doc (#PCDATA|a)*>\n";
@@ -1638,6 +1638,59 @@ public class BuilderTest extends XOMTestCase {
         
         String parsedDTD = doc.getDocType().getInternalDTDSubset();
         assertEquals(dtd, parsedDTD);
+        
+    }
+    
+    
+    /* Test for particular bug in Crimson with mixed content declarations */ 
+    public void testBuildXMLNamespaceDeclarationWithCrimson() 
+      throws ParsingException, IOException {
+
+        String dtd = "  <!ELEMENT doc (#PCDATA|a)*>\n";
+        
+        String document = "<doc xmlns:xml='http://www.w3.org/XML/1998/namespace' />";
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        
+        Builder builder = new Builder(crimson);
+        Document doc = builder.build(document, null);
+        
+        assertEquals("<doc />", doc.getRootElement().toXML());
+        
+    }
+    
+    
+    public void testBuildIllegalXMLNamespaceDeclarationWithCrimson() 
+      throws ParsingException, IOException {
+
+        String dtd = "  <!ELEMENT doc (#PCDATA|a)*>\n";
+        
+        String document = "<doc xmlns:xml='http://www.w3.org/XML/2005/namespace' />";
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        
+        Builder builder = new Builder(crimson);
+        try {
+            builder.build(document, null);
+            fail("Allowed wrong namespace URI for xml prefix");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
     
