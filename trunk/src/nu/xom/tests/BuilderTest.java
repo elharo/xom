@@ -1669,8 +1669,6 @@ public class BuilderTest extends XOMTestCase {
     
     public void testBuildIllegalXMLNamespaceDeclarationWithCrimson() 
       throws ParsingException, IOException {
-
-        String dtd = "  <!ELEMENT doc (#PCDATA|a)*>\n";
         
         String document = "<doc xmlns:xml='http://www.w3.org/XML/2005/namespace' />";
         XMLReader crimson;
@@ -1691,6 +1689,52 @@ public class BuilderTest extends XOMTestCase {
         catch (ParsingException success) {
             assertNotNull(success.getMessage());
         }
+        
+    }
+    
+    
+    public void testATTLISTDeclaresXMLSpacePreserveOnlyWithCrimson() 
+      throws ParsingException, IOException {
+
+        String dtd = "<!DOCTYPE a [<!ATTLIST doc xml:space (preserve) 'preserve'>]\n>";
+        
+        String data = dtd + "<doc />";
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        
+        Builder builder = new Builder(crimson);
+        Document doc = builder.build(data, null);
+        assertEquals(1, doc.getRootElement().getAttributeCount());
+        
+    }
+    
+    
+    public void testXHTMLStrictWithCrimson() 
+      throws ParsingException, IOException {
+
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        
+        Builder builder = new Builder(crimson);
+        Document doc = builder.build("http://www.cafeconleche.org/");
+        assertEquals("html", doc.getDocument().getRootElement().getQualifiedName());
+        DocType type = new DocType("root");
+        String subset = doc.getDocType().getInternalDTDSubset();
+        assertEquals("", subset);
         
     }
     
