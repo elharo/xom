@@ -45,7 +45,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1b1
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -314,6 +314,24 @@ public class DocTypeTest extends XOMTestCase {
         DocType doctype = new DocType("root");
         doctype.setInternalDTDSubset("<!ELEMENT test (PCDATA)>");
         assertEquals("<!ELEMENT test (PCDATA)>", doctype.getInternalDTDSubset());
+        
+    }
+
+    
+    /* Test for particular bug in Crimson */ 
+    public void testSetInternalDTDSubsetWithCrimson() {
+        
+        DocType doctype = new DocType("root");
+        String dtd = " <!ELEMENT doc (#PCDATA|a|b|c)*>\n"
+        + "  <!ATTLIST doc id ID #REQUIRED>\n"
+        + "  <!ELEMENT a (#PCDATA|a|b|c)*>\n"
+        + "  <!ATTLIST a id ID #REQUIRED>\n"
+        + "  <!ELEMENT b (#PCDATA|a|b|c)*>\n"
+        + "  <!ATTLIST b id ID #REQUIRED>\n"
+        + "  <!ELEMENT c (#PCDATA|a|b|c)*>\n"
+        + "  <!ATTLIST c id ID #REQUIRED >\n";
+        doctype.setInternalDTDSubset(dtd);
+        assertEquals(dtd, doctype.getInternalDTDSubset());
         
     }
 
