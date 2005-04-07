@@ -75,7 +75,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b1
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1615,6 +1615,32 @@ public class BuilderTest extends XOMTestCase {
         
     }    
 
+    
+    /* Test for particular bug in Crimson with mixed content declarations */ 
+    public void testSetInternalDTDSubsetWithCrimson() 
+      throws ParsingException, IOException {
+
+        String dtd = "  <!ELEMENT doc (#PCDATA|a)*>\n";
+        
+        String document = "<!DOCTYPE a [\n" + dtd + "]>\n<a/>";
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        
+        Builder builder = new Builder(crimson);
+        Document doc = builder.build(document, null);
+        
+        String parsedDTD = doc.getDocType().getInternalDTDSubset();
+        assertEquals(dtd, parsedDTD);
+        
+    }
+    
     
     public void testValidateMalformedDocumentWithCrimson() 
       throws IOException {
