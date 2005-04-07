@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b1
  * 
  */
 public class Builder {
@@ -508,6 +508,13 @@ public class Builder {
             parser.setProperty(
               "http://xml.org/sax/properties/declaration-handler", 
               handler);
+            // Due to Crimson bugs in misidentifying the internal and
+            // external DTD subsets, we only build the internal DTD 
+            // subset if there is no external DTD subset.
+            if (parser.getClass().getName().equals(
+              "org.apache.crimson.parser.XMLReaderImpl")) {
+                handler.usingCrimson = true;
+            }
         }
         catch (SAXException ex) {
             // This parser does not support declaration events.

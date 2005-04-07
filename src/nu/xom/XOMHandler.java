@@ -56,6 +56,7 @@ class XOMHandler
     protected DocType      doctype;
     protected StringBuffer internalDTDSubset;
     protected NodeFactory  factory;
+              boolean      usingCrimson = false;
     
     
     XOMHandler(NodeFactory factory) {
@@ -406,6 +407,13 @@ class XOMHandler
         
         inDTD = false;
         if (doctype != null) {
+            if (usingCrimson) {
+                if (doctype.getPublicID() != null || doctype.getSystemID() != null) {
+                    // Crimson mixes up the internal and external DTD subsets, so we'll just have to skip
+                    // ???? or could we use a locator?
+                    return;
+                }
+            }
             doctype.fastSetInternalDTDSubset(internalDTDSubset.toString());
         }
         
