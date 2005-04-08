@@ -1506,6 +1506,91 @@ public class BuilderTest extends XOMTestCase {
     }
     
 
+/*<!ELEMENT test (#PCDATA)>
+<!-- comment should not be here -->
+<?processing instruction should not be here?>
+<!ATTLIST test name (CDATA) #FIXED "value">
+<!ATTLIST test name CDATA "value">
+<!ATTLIST root anattribute CDATA #REQUIRED>
+<!ATTLIST root anotherattribute CDATA "value">
+<!ENTITY hatch-pic SYSTEM "http://www.example.com/images/cup.gif" NDATA gif>
+<!ENTITY public-pic PUBLIC "public ID" "http://www.example.com/images/cup.gif" NDATA gif>
+<!ENTITY Pub-Status "This is a pre-release of the specification.">
+<!ENTITY open-hatch PUBLIC "-//Textuality//TEXT Standard open-hatch boilerplate//EN" "http://www.textuality.com/boilerplate/OpenHatch.xml">
+<!ENTITY test SYSTEM "http://www.textuality.com/boilerplate/OpenHatch.xml">
+<!NOTATION ISODATE SYSTEM "http://www.iso.ch/cate/d15903.html">
+<!NOTATION DATE PUBLIC "DATE PUBLIC ID" "http://www.iso.ch/cate/d15903.html">
+<!NOTATION gif PUBLIC "-//Textuality//TEXT Standard open-hatch boilerplate//EN"> */    
+    public void testInternalAndExternalDTDSubset() 
+      throws ValidityException, ParsingException, IOException {
+        
+        File input = new File(inputDir, "internalandexternaldtdsubsettest.xml");
+        Builder builder = new Builder(false);
+        Document doc = builder.build(input);
+        String internalSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalSubset.indexOf("<!-- comment -->") > 0);
+        assertTrue(internalSubset.indexOf("<?target PI data?>") > 0);
+        assertTrue(internalSubset.indexOf("<!ELEMENT root (#PCDATA)>") > 0);
+        assertTrue(internalSubset.indexOf("<!ATTLIST root source ENTITY #REQUIRED>") > 0);
+        assertTrue(internalSubset.indexOf("<!ENTITY picture SYSTEM ") > 0);
+        assertTrue(internalSubset.indexOf("picture.jpg\" NDATA JPEG>") > 0);
+        assertTrue(internalSubset.indexOf("<!NOTATION JPEG SYSTEM ") > 0);
+        assertTrue(internalSubset.indexOf("image/jpeg\">") > 0);
+        
+        assertEquals(-1, internalSubset.indexOf("comment should not be here"));
+        assertEquals(-1, internalSubset.indexOf("processing instruction should not be here"));
+        assertEquals(-1, internalSubset.indexOf("anattribute"));
+        assertEquals(-1, internalSubset.indexOf("anotherattribute"));
+        assertEquals(-1, internalSubset.indexOf("hatch-pic"));
+        assertEquals(-1, internalSubset.indexOf("public-pic"));
+        assertEquals(-1, internalSubset.indexOf("open-hatch"));
+        assertEquals(-1, internalSubset.indexOf("Pub-Status-pic"));
+        assertEquals(-1, internalSubset.indexOf("Textuality"));
+        assertEquals(-1, internalSubset.indexOf("15903"));
+        
+    }
+    
+
+    public void testInternalAndExternalDTDSubsetWithCrimson() 
+      throws ValidityException, ParsingException, IOException {
+        
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        
+        Builder builder = new Builder(crimson);
+        File input = new File(inputDir, "internalandexternaldtdsubsettest.xml");
+        Document doc = builder.build(input);
+        String internalSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalSubset.indexOf("<!-- comment -->") > 0);
+        assertTrue(internalSubset.indexOf("<?target PI data?>") > 0);
+        assertTrue(internalSubset.indexOf("<!ELEMENT root (#PCDATA)>") > 0);
+        assertTrue(internalSubset.indexOf("<!ATTLIST root source ENTITY #REQUIRED>") > 0);
+        assertTrue(internalSubset.indexOf("<!ENTITY picture SYSTEM ") > 0);
+        assertTrue(internalSubset.indexOf("picture.jpg\" NDATA JPEG>") > 0);
+        assertTrue(internalSubset.indexOf("<!NOTATION JPEG SYSTEM ") > 0);
+        assertTrue(internalSubset.indexOf("image/jpeg\">") > 0);
+        
+        assertEquals(-1, internalSubset.indexOf("comment should not be here"));
+        assertEquals(-1, internalSubset.indexOf("processing instruction should not be here"));
+        assertEquals(-1, internalSubset.indexOf("anattribute"));
+        assertEquals(-1, internalSubset.indexOf("anotherattribute"));
+        assertEquals(-1, internalSubset.indexOf("hatch-pic"));
+        assertEquals(-1, internalSubset.indexOf("public-pic"));
+        assertEquals(-1, internalSubset.indexOf("open-hatch"));
+        assertEquals(-1, internalSubset.indexOf("Pub-Status-pic"));
+        assertEquals(-1, internalSubset.indexOf("Textuality"));
+        assertEquals(-1, internalSubset.indexOf("15903"));
+        
+    }
+    
+
     // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
     // and possibly other parsers. I've reported the bug in Xerces,
     // and it is fixed in Xerces 2.6.
@@ -1716,7 +1801,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
-    public void testXHTMLStrictWithCrimson() 
+    public void testNoInternalSubsetWithCrimson() 
       throws ParsingException, IOException {
 
         XMLReader crimson;
@@ -1729,10 +1814,9 @@ public class BuilderTest extends XOMTestCase {
             return;
         }
         
+        File input = new File(inputDir, "externalDTDtest.xml");
         Builder builder = new Builder(crimson);
-        Document doc = builder.build("http://www.cafeconleche.org/");
-        assertEquals("html", doc.getDocument().getRootElement().getQualifiedName());
-        DocType type = new DocType("root");
+        Document doc = builder.build(input);
         String subset = doc.getDocType().getInternalDTDSubset();
         assertEquals("", subset);
         
