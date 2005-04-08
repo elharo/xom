@@ -339,7 +339,7 @@ class XOMHandler
     public void processingInstruction(String target, String data) {
         
         if (!inDTD) flushText();
-        if (inExternalSubset) return;
+        if (inDTD && !inInternalSubset()) return;
         Nodes result = factory.makeProcessingInstruction(target, data);
         
         for (int i = 0; i < result.size(); i++) {
@@ -407,13 +407,6 @@ class XOMHandler
         
         inDTD = false;
         if (doctype != null) {
-            if (usingCrimson) {
-                if (doctype.getPublicID() != null || doctype.getSystemID() != null) {
-                    // Crimson mixes up the internal and external DTD subsets, so we'll just have to skip
-                    // ???? or could we use a locator?
-                    return;
-                }
-            }
             doctype.fastSetInternalDTDSubset(internalDTDSubset.toString());
         }
         
@@ -453,7 +446,7 @@ class XOMHandler
     public void comment(char[] text, int start, int length) {
         
         if (!inDTD) flushText();
-        if (inExternalSubset) return;
+        if (inDTD && !inInternalSubset()) return;
 
         Nodes result = factory.makeComment(new String(text, start, length));
         
@@ -490,7 +483,7 @@ class XOMHandler
     
     public void elementDecl(String name, String model) {
         
-        if (!inExternalSubset && doctype != null) {
+        if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ELEMENT ");
             internalDTDSubset.append(name); 
             internalDTDSubset.append(' '); 
@@ -507,6 +500,20 @@ class XOMHandler
     }
   
     
+    // This method only behaves properly when called from the DeclHandler 
+    // and DTDHandler callbacks; i.e. from inside the DTD;
+    // It is not intended for use anywhere in the document.
+    protected boolean inInternalSubset() {
+
+        if (!usingCrimson && !inExternalSubset) return true;
+        String currentURI = locator.getSystemId();
+        if (currentURI == this.documentBaseURI) return true;
+        if (currentURI.equals(this.documentBaseURI)) return true;
+        return false;
+        
+    }
+
+
     public void attributeDecl(String elementName, 
       String attributeName, String type, String mode, 
       String defaultValue)  {
@@ -518,7 +525,7 @@ class XOMHandler
             }
         }
         
-        if (!inExternalSubset && doctype != null) {
+        if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ATTLIST ");
             internalDTDSubset.append(elementName);
             internalDTDSubset.append(' ');
@@ -544,7 +551,7 @@ class XOMHandler
     public void internalEntityDecl(String name, 
        String value) {   
         
-        if (!inExternalSubset && doctype != null) {
+        if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (name.startsWith("%")) {
                 internalDTDSubset.append("% "); 
@@ -564,7 +571,7 @@ class XOMHandler
     public void externalEntityDecl(String name, 
        String publicID, String systemID) {
      
-        if (!inExternalSubset && doctype != null) {
+        if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (name.startsWith("%")) { 
                 internalDTDSubset.append("% ");
@@ -599,7 +606,7 @@ class XOMHandler
             systemID = escapeReservedCharactersInDeclarations(systemID);
         }
         
-        if (!inExternalSubset && doctype != null) {
+        if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!NOTATION ");
             internalDTDSubset.append(name); 
             if (publicID != null) {
@@ -627,7 +634,7 @@ class XOMHandler
      String systemID, String notationName) {
         
         // escapable characters????
-        if (!inExternalSubset && doctype != null) {
+        if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (publicID != null) { 
                 internalDTDSubset.append(name); 

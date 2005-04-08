@@ -163,8 +163,11 @@ class NonVerifyingHandler extends XOMHandler {
     
     public void processingInstruction(String target, String data) {
         
+        // simplify logic???? into two cases in and not in DTD
+        // ditto for comment() method and superclass
         if (!inDTD) flushText();
-        if (inExternalSubset) return;
+        else if (!inInternalSubset()) return;
+        
         ProcessingInstruction result = ProcessingInstruction.build(target, data);
         
         if (!inDTD) {
@@ -202,7 +205,7 @@ class NonVerifyingHandler extends XOMHandler {
     public void comment(char[] text, int start, int length) {
         
         if (!inDTD) flushText();
-        if (inExternalSubset) return;
+        else if (!inInternalSubset()) return;
 
         Comment result = Comment.build(new String(text, start, length));
 
