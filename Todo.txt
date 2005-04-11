@@ -161,6 +161,9 @@ XOMHandler.java for internal DTD subset
 Serializer for NFC in consecutive text nodes
 XIncluder for base URLs and better exception messages
 XOMReader and SAXConverter to allow XSL to work with xml:base attributes
+XOMHandler: Workaround for Crimson bug that fails to report asterisk after mixed content declarations
+XOMHandler: Workaround for Crimson bug that makes xmlsn:xml="correct URI" and error
+XOMHandler: Workaround for Crimson external and internal DTD subset mixup bugs
 
 ~/projects/1.0.1$ cvs -d :pserver:elharo@cvs.dev.java.net:/cvs rtag -r XOM_10  -b BR_1_0 xom
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
