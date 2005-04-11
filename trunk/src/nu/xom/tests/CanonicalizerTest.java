@@ -54,7 +54,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b1
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -682,7 +682,8 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
-            serializer.write(doc.query("/*/*/child312"));
+            Nodes result = doc.query("/*/*/child312");
+            serializer.write(result);
         }
         finally {
             out.close();
