@@ -20,13 +20,16 @@
 */
 package nu.xom.tests;
 
+import java.io.File;
 import java.io.IOException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Elements;
 import nu.xom.IllegalDataException;
+import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
 
@@ -36,7 +39,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d3
+ * @version 1.1b1
  *
  */
 public class IDTest extends XOMTestCase {
@@ -47,18 +50,15 @@ public class IDTest extends XOMTestCase {
     }
 
     
-    public void testBuilderRejectsNonNCNameXmlIdAttributes() 
-      throws IOException {
+    public void testBuilderAllowsNonNCNameXmlIdAttributes() 
+      throws ParsingException, IOException {
         
         Builder builder = new Builder();
         String data = "<root xml:id='p 2'/>";
-        try {
-            builder.build(data, null);
-            fail("Allowed non-NCName for xml:id");
-        }
-        catch (ParsingException success) {
-            assertNotNull(success.getMessage());
-        }
+        Document doc = builder.build(data, null);
+        Element root = doc.getRootElement();
+        Attribute id = root.getAttribute(0);
+        assertEquals("p 2", id.getValue());  
         
     }
     
@@ -112,34 +112,28 @@ public class IDTest extends XOMTestCase {
     }
 
     
-    public void testBuilderDoesNotOvernormalizeXmlIdAttributes() 
+    public void testBuilderDoesNotOverNormalizeXmlIdAttributesWithCarriageReturns() 
       throws ParsingException, IOException {
         
         Builder builder = new Builder();
         String data = "<root xml:id='&#x0D;  p2  '/>";
-        try {
-            builder.build(data, null);
-            fail("Allowed carriage return in xml:id");
-        }
-        catch (ParsingException success) {
-            assertNotNull(success.getMessage());
-        }
+        Document doc = builder.build(data, null);
+        Element root = doc.getRootElement();
+        Attribute id = root.getAttribute(0);
+        assertEquals("\r\u0020p2", id.getValue());
         
     }
 
     
-    public void testBuilderDoesNotOvernormalizeXmlIdAttributes2() 
+    public void testBuilderDoesNotOverNormalizeXmlIdAttributesWithLineFeeds() 
       throws ParsingException, IOException {
         
         Builder builder = new Builder();
         String data = "<root xml:id='&#x0A;  p2  '/>";
-        try {
-            builder.build(data, null);
-            fail("Allowed linefeed in xml:id");
-        }
-        catch (ParsingException success) {
-            assertNotNull(success.getMessage());
-        }
+        Document doc = builder.build(data, null);
+        Element root = doc.getRootElement();
+        Attribute id = root.getAttribute(0);
+        assertEquals("\n\u0020p2", id.getValue());
         
     }
 
@@ -251,6 +245,83 @@ public class IDTest extends XOMTestCase {
         Nodes result = doc.query("id('p2')");
         assertEquals(1, result.size());
         assertEquals(child, result.get(0));
+        
+    }
+    
+    
+    public void testXMLIDTestSuite() 
+      throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        File base = new File("data");
+        base = new File(base, "xmlid");
+        File catalog = new File(base, "catalog.xml");
+        
+        // The test suite needs to be installed separately. If we can't
+        // find the catalog, we just don't run these tests.
+        if (catalog.exists()) {
+            Document doc = builder.build(catalog);
+            Element testsuite = doc.getRootElement();
+            Elements testCatalogs = testsuite.getChildElements("test-catalog");
+            for (int i = 0; i < testCatalogs.size(); i++) {
+                Elements testcases = testCatalogs.get(i).getChildElements("test-case");
+                for (int j = 0; j < testcases.size(); j++) {
+                    Element testcase = testcases.get(j);
+                    String features = testcase.getAttributeValue("features");
+                    if (features != null && features.indexOf("xml11") >= 0) {
+                        continue; // skip test
+                    }
+                    String id = testcase.getAttributeValue("id");
+                    File root = new File(base, testcase.getFirstChildElement("file-path").getValue());
+                    File inputFile = null;
+                    Element scenario = testcase.getFirstChildElement("scenario");
+                    Element input = scenario.getFirstChildElement("input");
+                    inputFile = new File(root, input.getValue());
+                    Elements expectedIDs = scenario.getChildElements("id");
+                    try {
+                        Document inputDoc = builder.build(inputFile);
+                        Nodes recognizedIDs = getIDs(inputDoc);
+                        assertEquals(expectedIDs.size(), recognizedIDs.size());
+                        for (int k = 0; k < expectedIDs.size(); k++) {
+                            assertEquals(expectedIDs.get(i).getValue(), recognizedIDs.get(i).getValue());
+                        }
+                    }
+                    catch (ParsingException ex) {
+                        System.err.println(inputFile);
+                        ex.printStackTrace();
+                    }
+                } // end for
+            }
+            
+        } // end if 
+        
+    }
+
+
+    private Nodes getIDs(Document doc) {
+
+        Element root = doc.getRootElement();
+        Nodes list = new Nodes();
+        getIDs(root, list);
+        return list;
+    }
+    
+    private void getIDs(Element element, Nodes list) {
+
+        for (int i = 0; i < element.getAttributeCount(); i++) {
+            Attribute a = element.getAttribute(i);
+            if (a.getType() == Attribute.Type.ID) {
+                // need to sort these into specific order
+                list.append(a);
+            }
+        }
+        for (int i = 0; i < element.getChildCount(); i++) {
+            Node child = element.getChild(i);
+            if (child instanceof Element) {
+                getIDs((Element) child, list);
+            }
+        }
+        
         
     }
     
