@@ -27,7 +27,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b1
  *
  */
 import nu.xom.Attribute;
@@ -44,6 +44,7 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.JaxenConstants;
 import org.jaxen.JaxenException;
 import org.jaxen.XPath;
+import org.jaxen.util.SingleObjectIterator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -75,9 +76,7 @@ class JaxenNavigator extends DefaultNavigator {
             }
             contextNode = temp;
         }
-        List l = new ArrayList(1);
-        l.add(contextNode);
-        return l.iterator();
+        return new SingleObjectIterator(contextNode);
         
     }
     
@@ -199,11 +198,7 @@ class JaxenNavigator extends DefaultNavigator {
         
         Node parent = (Node) getParentNode(contextNode);
         if (parent == null) return JaxenConstants.EMPTY_ITERATOR;
-        else {
-            List l = new ArrayList(1);
-            l.add(parent);
-            return l.iterator();
-        }
+        else return new SingleObjectIterator(parent);
         
     }
     
@@ -248,6 +243,20 @@ class JaxenNavigator extends DefaultNavigator {
     }
     
     
+    /* public Iterator getFollowingSiblingAxisIterator(Object o) {
+        
+        Node node = (Node) o;
+        ParentNode parent = node.getParent();
+        if (node.isAttribute() || parent == null || node.isNamespace()) {
+            return JaxenConstants.EMPTY_ITERATOR;
+        }
+        else {
+            return new ChildIterator(parent, node);
+        }
+        
+    } */
+    
+    
     public Object getParentNode(Object o) {
         
         Node n;
@@ -286,6 +295,22 @@ class JaxenNavigator extends DefaultNavigator {
         ChildIterator(ParentNode parent) {
             this.parent = parent;
             this.xomCount = parent.getChildCount();
+        }
+        
+        // used for following-sibling
+        // start-node is actually one before the first node
+        ChildIterator(ParentNode parent, Node start) {
+            this.parent = parent;
+            this.xomCount = parent.getChildCount();
+            int index = parent.indexOf(start);
+            // go forwards if necessary for consecutive text nodes
+            if (start.isText()) {
+                while (index < xomCount-1 && parent.getChild(index+1).isText()) {
+                    index++;
+                }
+            }
+            this.xomIndex = index+1;
+            
         }
         
         public boolean hasNext() {
@@ -336,7 +361,6 @@ class JaxenNavigator extends DefaultNavigator {
             else {
                 result = next;
             }
-            // xpathIndex++;
             return result;
             
         }
