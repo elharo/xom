@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -39,7 +39,7 @@ import org.xml.sax.XMLReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d1
+ * @version 1.1b1
  * 
  */
 final class Verifier {
@@ -1320,6 +1320,7 @@ final class Verifier {
         if (parser == null) {
             final InputSource empty = new InputSource(new EmptyReader());
             parser = Builder.findParser(false);
+            // parser = new org.apache.crimson.parser.XMLReaderImpl();
             // Now let's stop this parser from loading any external
             // entities the subset references
             parser.setEntityResolver(new EntityResolver() {
@@ -1331,7 +1332,7 @@ final class Verifier {
             });
         }
         
-        String doc = "<!DOCTYPE root [" + subset + "]><root/>";
+        String doc = "<!DOCTYPE a [" + subset + "]><a/>";
         try {
             parser.parse(new InputSource(new StringReader(doc)));
         }
