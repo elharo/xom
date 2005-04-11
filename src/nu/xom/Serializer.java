@@ -1191,12 +1191,6 @@ public class Serializer {
      *   perform Unicode normalization on all data using normalization
      *   form C (NFC). Performing Unicode normalization may change the
      *   document's infoset. The default is false; do not normalize.
-     * </p>
-     * 
-     * <p>
-     *   The implementation used is IBM's <a target="_top" href=
-     *   "http://oss.software.ibm.com/icu4j/index.html">International
-     *   Components for Unicode <i>for Java</i> (ICU4J) 2.6</a>. 
      *   This version is based on Unicode 4.0. 
      * </p>
      * 
