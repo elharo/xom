@@ -87,13 +87,6 @@ subject line. The XOM home page is http://www.xom.nu/
       </and>
     </condition> 
     
-    <condition property="jaxen.jar.installed">
-      <and>
-        <available classname="org.jaxen.JaxenException" 
-                   classpath="${jaxen.jar}" />
-      </and>
-    </condition> 
-    
      <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
@@ -684,15 +677,6 @@ location="${dist.dir}/xom-maven-${version}.jar" />
        package="jaxen"
        dest="${build.dir}"
   />
-  </target>
-  
-  <target name="jaxen" description="Minimal Jar file for Jaxen" depends="compile-jaxen">
-    <jar jarfile="${jaxen.jar}"
-         index="no"
-		 compress="yes"
-         excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/XPathTestBase.class org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/** org/jaxen/**Test.class org/jaxen/saxpath/base/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/pattern/MockXPathReader.class org/jaxen/pattern/PriorityTest.class" 
-         basedir="${build.dir}/jaxen-classes">
-    </jar>
   </target>
   
 </project>
