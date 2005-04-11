@@ -22,6 +22,7 @@
 package nu.xom;
 
 import java.io.InputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
@@ -109,33 +110,35 @@ final class UnicodeUtil {
             loader = Thread.currentThread().getContextClassLoader();
         }
         
-        InputStream in = loader.getResourceAsStream("nu/xom/comp.xml");
-        if (in == null) return;
-        
+        DataInputStream in = null;
         try {
-            Document doc = (new Builder()).build(in);
-            Element root = doc.getRootElement();
-            Elements mappings = root.getChildElements();
+            
+            InputStream source = loader.getResourceAsStream("nu/xom/compositions.dat");
+            in = new DataInputStream(source);
             compositions = new HashMap();
-            for (int i = 0; i < mappings.size(); i++) {
-                String composed = mappings.get(i).getFirstChildElement("composed").getValue();
-                String decomposed = mappings.get(i).getFirstChildElement("decomposed").getValue();
-                compositions.put(decomposed, composed);
+            try {
+                while (true) {
+                    String composed = in.readUTF();
+                    String decomposed = in.readUTF();
+                    compositions.put(decomposed, composed);
+                }
+            }
+            catch (java.io.EOFException ex) {
+                // finished
             }
         }
-        catch (Exception ex) {
+        catch (IOException ex) {
             throw new RuntimeException("Broken XOM installation: "
-              + "could not load nu/xom/comp.xml", ex);
+              + "could not load nu/xom/compositions.dat", ex);
         }
         finally {
             try {
-                in.close();
+                if (in != null) in.close();
             }
             catch (IOException ex) {
                 // no big deal
             }
         }
-        
     }
     
 
