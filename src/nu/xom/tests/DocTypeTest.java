@@ -318,24 +318,6 @@ public class DocTypeTest extends XOMTestCase {
     }
 
     
-    /* Test for particular bug in Crimson */ 
-    public void testSetInternalDTDSubsetWithCrimson() {
-        
-        DocType doctype = new DocType("root");
-        String dtd = " <!ELEMENT doc (#PCDATA|a|b|c)*>\n"
-        + "  <!ATTLIST doc id ID #REQUIRED>\n"
-        + "  <!ELEMENT a (#PCDATA|a|b|c)*>\n"
-        + "  <!ATTLIST a id ID #REQUIRED>\n"
-        + "  <!ELEMENT b (#PCDATA|a|b|c)*>\n"
-        + "  <!ATTLIST b id ID #REQUIRED>\n"
-        + "  <!ELEMENT c (#PCDATA|a|b|c)*>\n"
-        + "  <!ATTLIST c id ID #REQUIRED >\n";
-        doctype.setInternalDTDSubset(dtd);
-        assertEquals(dtd, doctype.getInternalDTDSubset());
-        
-    }
-
-    
     public void testSetInternalDTDSubsetWithEntityThatPointsToNonexistentURL() {
         
         String subset = 
