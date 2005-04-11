@@ -33,7 +33,7 @@ import java.util.HashMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b1
  *
  */
 final class UnicodeUtil {
