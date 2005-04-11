@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1b1
  * 
  */
 public class Attribute extends Node {
@@ -206,7 +206,8 @@ public class Attribute extends Node {
             if ("xml:id".equals(qualifiedName)) {
                 type = Attribute.Type.ID;
                 value = normalize(value);
-                Verifier.checkNCName(value);
+                // ???? should I only do this if validating?
+                // Verifier.checkNCName(value);
             }
         }        
         
@@ -224,14 +225,29 @@ public class Attribute extends Node {
     private static String normalize(String s) {
 
         int length = s.length();
-        int c = 0;
-        while (c < length && s.charAt(c) == ' ') c++;
-        s = s.substring(c);
+        int pos = 0;
+        while (pos < length && s.charAt(pos) == ' ') pos++;
+        s = s.substring(pos);
         int end = s.length()-1;
         while (end > 0 && s.charAt(end) == ' ') end--;
         s = s.substring(0, end+1);
         
-        return s;
+        length = s.length();
+        StringBuffer sb = new StringBuffer(length);
+        boolean wasSpace = false;
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (c == ' ') {
+                if (wasSpace) continue;
+                sb.append(' ');
+                wasSpace = true;
+            }
+            else {
+                sb.append(c);
+                wasSpace = false;
+            }
+        }
+        return sb.toString();
         
     }
 
@@ -319,6 +335,8 @@ public class Attribute extends Node {
     private void _setValue(String value) {
         
         if ("xml:id".equals(this.getQualifiedName())) {
+            // ???? do I really want to do this. XML ID test case
+            // suggests not
             Verifier.checkNCName(value);
         }
         else {
