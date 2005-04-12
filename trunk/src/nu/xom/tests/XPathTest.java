@@ -2138,5 +2138,160 @@ public class XPathTest extends XOMTestCase {
         
     } */
     
+    
+    public void testJaxenIntegrationTest() throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        Document testDoc = builder.build(
+          "http://cvs.jaxen.codehaus.org/viewrep/~raw,r=HEAD/jaxen/jaxen/xml/test/tests.xml");
+        Elements documents = testDoc.getRootElement().getChildElements("document");
+        for (int i = 0; i < documents.size(); i++) {
+            Element documentElement = documents.get(i);
+            String url = documentElement.getAttributeValue("url");
+            Document source = builder.build(
+              "http://cvs.jaxen.codehaus.org/viewrep/~raw,r=HEAD/jaxen/jaxen/" 
+              + url);
+            Elements contextElements = documentElement.getChildElements("context");
+            for (int j = 0; j < contextElements.size(); j++) {
+                Element contextElement = contextElements.get(j);
+                    
+                // skip tests that use variables
+                // because XOM doesn't support variables in 
+                // XPath expressions
+                if (queryUsesVars(contextElement)) continue;
+                
+                String xpath = contextElement.getAttributeValue("select");
+                XPathContext namespaces = getXPathContext(contextElement);
+                Node context = source.query(xpath).get(0);
+                
+                // process counts
+                Elements tests = contextElement.getChildElements("test");
+                for (int k = 0; k < tests.size(); k++) {
+                    Element test = tests.get(k);
+                    
+                    String select = test.getAttributeValue("select");
+                    System.out.println(select);
+                    Attribute countAttribute = test.getAttribute("count");
+                    int count = -1;
+                    if (countAttribute != null) {
+                        count = Integer.parseInt(countAttribute.getValue());
+                    }
+                    
+                    boolean exceptional = false;
+                    String exception = test.getAttributeValue("exception");
+                    if ("true".equals(exception)) {
+                        exceptional = true;
+                    }
+                    
+                    if (exceptional) {
+                        try {
+                            context.query(select, namespaces);
+                            fail("Evaluated " + select);
+                        }
+                        catch (XPathException success) {
+                            assertNotNull(success.getMessage());
+                        }
+                    }
+                    else {
+                        if (count != -1) {
+                            try {
+                                Nodes results = context.query(select, namespaces);
+                                assertEquals(select, count, results.size());
+                            }
+                            catch (XPathException ex) {
+                                if (ex.getMessage().equals("XPath error: document() function not supported")) {
+                                    continue;
+                                }
+                                throw ex;
+                            }
+                        }
+                        // check valueOfs ????
+                    }
+                }
+                
+                // process valueOfs
+                Elements valueOfs = contextElement.getChildElements("valueOf");
+                for (int k = 0; k < valueOfs.size(); k++) {
+                    checkValueOf(context, valueOfs.get(k), namespaces);
+                }
+                
+            }
+        }
+    }
+
+
+    private void checkValueOf(Node context, Element valueOf, XPathContext namespaces) {
+
+        String select = valueOf.getAttributeValue("select");
+        System.out.println(select);
+        try {
+            Nodes nodes = context.query(select, namespaces);
+            String result = nodes.get(0).getValue();
+            assertEquals(valueOf.getValue(), result);
+        }
+        catch (XPathTypeException ex) {
+            assertNotNull(ex.getMessage());
+        }
+        catch (XPathException ex) {
+            if (ex.getMessage().equals("XPath error: document() function not supported")) {
+                return;
+            }
+            throw ex;
+        }
+        
+    }
+
+
+    private XPathContext getXPathContext(Element contextElement) {
+
+        XPathContext context = new XPathContext();
+        for (int i = 0; i < contextElement.getNamespaceDeclarationCount(); i++) {
+            String prefix = contextElement.getNamespacePrefix(i);
+            if (! "".equals(prefix)) {
+                context.addNamespace(prefix, contextElement.getNamespaceURI(prefix));
+            }
+        }
+        return context;
+    }
+
+
+    private boolean queryUsesVars(Element testElement) {
+
+        for (int i = 0; i < testElement.getAttributeCount(); i++) {
+            Attribute a = testElement.getAttribute(i);
+            if ("http://jaxen.org/test-harness/var".equals(a.getNamespaceURI())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    public void testTextChildInPredicate() {
+        
+        Element item = new Element("item");
+        Document doc = new Document(item);
+        Element name = new Element("name");
+        name.appendChild("a");
+        item.appendChild(name);
+        Element value = new Element("value");
+        value.appendChild("b");
+        item.appendChild(value);
+        Nodes result = doc.query("/item[name/text()='a']/value");
+        assertEquals(1, result.size());
+        assertEquals("b", result.get(0).getValue());
+        
+    }
+
+    
+    public void testSimpleTextChildInPredicate() {
+        
+        Element item = new Element("item");
+        Document doc = new Document(item);
+        item.appendChild("a");
+        Nodes result = doc.query("/item[text()='a']");
+        assertEquals(1, result.size());
+        
+    }
 
 }
