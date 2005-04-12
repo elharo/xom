@@ -273,6 +273,10 @@ class JaxenNavigator extends DefaultNavigator {
     
     public String getTextStringValue(Object o) {
         
+        // ???? shouldn't need this check; fix stringFucntion and evalateObjectObject not to require it
+        if (o instanceof Text) return ((Text) o).getValue();
+        // ???? really need to return multiple consecutive nodes combined
+
         List texts = (List) o;
         String result = "";
         Iterator iterator = texts.iterator();
@@ -443,7 +447,7 @@ class JaxenNavigator extends DefaultNavigator {
 
     
     public boolean isText(Object object) {
-        return object instanceof ArrayList;
+        return object instanceof ArrayList || object instanceof Text;
     }
 
     
