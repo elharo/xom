@@ -259,8 +259,6 @@ class JaxenNavigator extends DefaultNavigator {
     
     public String getTextStringValue(Object o) {
         
-        // ???? shouldn't need this check; fix stringFunction and evalateObjectObject not to require it
-        if (o instanceof Text) return ((Text) o).getValue();
         // ???? really need to return multiple consecutive nodes combined
 
         List texts = (List) o;
