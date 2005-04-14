@@ -243,20 +243,6 @@ class JaxenNavigator extends DefaultNavigator {
     }
     
     
-    /* public Iterator getFollowingSiblingAxisIterator(Object o) {
-        
-        Node node = (Node) o;
-        ParentNode parent = node.getParent();
-        if (node.isAttribute() || parent == null || node.isNamespace()) {
-            return JaxenConstants.EMPTY_ITERATOR;
-        }
-        else {
-            return new ChildIterator(parent, node);
-        }
-        
-    } */
-    
-    
     public Object getParentNode(Object o) {
         
         Node n;
@@ -273,7 +259,7 @@ class JaxenNavigator extends DefaultNavigator {
     
     public String getTextStringValue(Object o) {
         
-        // ???? shouldn't need this check; fix stringFucntion and evalateObjectObject not to require it
+        // ???? shouldn't need this check; fix stringFunction and evalateObjectObject not to require it
         if (o instanceof Text) return ((Text) o).getValue();
         // ???? really need to return multiple consecutive nodes combined
 
@@ -300,22 +286,7 @@ class JaxenNavigator extends DefaultNavigator {
             this.parent = parent;
             this.xomCount = parent.getChildCount();
         }
-        
-        // used for following-sibling
-        // start-node is actually one before the first node
-        ChildIterator(ParentNode parent, Node start) {
-            this.parent = parent;
-            this.xomCount = parent.getChildCount();
-            int index = parent.indexOf(start);
-            // go forwards if necessary for consecutive text nodes
-            if (start.isText()) {
-                while (index < xomCount-1 && parent.getChild(index+1).isText()) {
-                    index++;
-                }
-            }
-            this.xomIndex = index+1;
-            
-        }
+      
         
         public boolean hasNext() {
             
@@ -447,7 +418,15 @@ class JaxenNavigator extends DefaultNavigator {
 
     
     public boolean isText(Object object) {
-        return object instanceof ArrayList || object instanceof Text;
+        // ???? hack: need to use a separate special subclass of ArrayList I can identify
+        if (object instanceof ArrayList) {
+            Iterator iterator = ((List) object).iterator();
+            while (iterator.hasNext()) {
+                if (! (iterator.next() instanceof Text)) return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     
