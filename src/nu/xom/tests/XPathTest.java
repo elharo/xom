@@ -2293,5 +2293,23 @@ public class XPathTest extends XOMTestCase {
         assertEquals(1, result.size());
         
     }
-
+    
+    
+    public void testPrecedingAxisInDocumentOrder() {
+    
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        
+        Element a = new Element("a");
+        root.appendChild(a);
+        Element b = new Element("b");
+        root.appendChild(b);
+        Element c = new Element("c");
+        a.appendChild(c);
+        
+        Nodes result = b.query("preceding::*");
+        assertEquals(2, result.size());
+        assertEquals(a, result.get(0));
+        assertEquals(c, result.get(1));
+    }
 }
