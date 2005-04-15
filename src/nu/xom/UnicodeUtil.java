@@ -1453,46 +1453,8 @@ final class UnicodeUtil {
     // even if this is not right; why do tests still pass????
     // private final static int LAST_HANGUL_SYLLABLE     = 0xAC00; // FIXME 
     private final static int LAST_HANGUL_SYLLABLE = 0xD7A3;
-    
-    private static boolean isComposite(int c) {
 
-        // XXX verify
-        if (c <= 0xA0) return false;
-        if (c >= FIRST_HANGUL_SYLLABLE && c <= LAST_HANGUL_SYLLABLE) {
-            return true;
-        }
-        if (isExcluded(c)) return false;
-        
-        return true;
-    }
     
-    
-    private static int unicodeCharAt(String s, int character) {
-        
-        int length = s.length();
-        int count = 0;
-        
-        for (int i = 0; i < length; i++) {
-            char c = s.charAt(i);
-            if (count == character) {
-                if (isHighSurrogate(c)) {
-                    return combineSurrogatePair(c, s.charAt(i+1));
-                }
-                else return c;
-            }
-            else {
-                count++;
-                if (isHighSurrogate(c)) {
-                    i++;
-                }
-            }
-        }
-        
-        throw new StringIndexOutOfBoundsException(); // message????
-        
-    }
-
-
     static int combineSurrogatePair(char highSurrogate, char lowSurrogate) {
 
         int high = highSurrogate & 0x7FF;
@@ -1584,11 +1546,6 @@ final class UnicodeUtil {
         
     }
 
-
-    private static boolean isJamo(int c) {
-        // XXX replace with named constants
-        return c >= 0x1100 && c <= 0x11FF;
-    }
     
     // return -1 if the character cannot be combined with the starter; 
     // otherwise return the composed character
