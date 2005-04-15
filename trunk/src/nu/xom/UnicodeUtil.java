@@ -83,6 +83,11 @@ final class UnicodeUtil {
     private final static int CANONICAL_COMBINING_CLASS_ATTACHED_BELOW = 202;
     private final static int CANONICAL_COMBINING_CLASS_ATTACHED_ABOVE_RIGHT = 216;
     private final static int CANONICAL_COMBINING_CLASS_BELOW_LEFT = 218;
+
+
+    private static boolean isHighSurrogate(char c) {
+        return c >= HI_SURROGATE_START && c <= HI_SURROGATE_END;
+    }
     private final static int CANONICAL_COMBINING_CLASS_BELOW = 220;
     private final static int CANONICAL_COMBINING_CLASS_BELOW_RIGHT = 222;
     private final static int CANONICAL_COMBINING_CLASS_LEFT = 224;
@@ -142,12 +147,13 @@ final class UnicodeUtil {
     }
     
 
-    static boolean isStarter(int character) {
+    private static boolean isStarter(int character) {
         return getCombiningClass(character) == 0;
     }
 
     
-    static int getCombiningClass(int c) {
+    ///CLOVER:OFF
+    private static int getCombiningClass(int c) {
         // ???? optimize
         
         if (c >= 0x0000 && c <= 0x001F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
@@ -1439,7 +1445,8 @@ final class UnicodeUtil {
         if (c == 0x0F81) return true; // TIBETAN VOWEL SIGN REVERSED II
 
         return false;
-    }
+    } 
+    ///CLOVER:ON
     
     
     private final static int FIRST_HANGUL_SYLLABLE    = 0xAC00;
@@ -1460,7 +1467,7 @@ final class UnicodeUtil {
     }
     
     
-    static int unicodeCharAt(String s, int character) {
+    private static int unicodeCharAt(String s, int character) {
         
         int length = s.length();
         int count = 0;
@@ -1486,11 +1493,6 @@ final class UnicodeUtil {
     }
 
 
-    static boolean isHighSurrogate(char c) {
-        return c >= HI_SURROGATE_START && c <= HI_SURROGATE_END;
-    }
-
-    
     static int combineSurrogatePair(char highSurrogate, char lowSurrogate) {
 
         int high = highSurrogate & 0x7FF;
@@ -1516,7 +1518,7 @@ final class UnicodeUtil {
         
     }
 
-    static char getHighSurrogate(int codepoint) {
+    private static char getHighSurrogate(int codepoint) {
 
         char x = (char) codepoint;
         int u = (codepoint >> 16) & ((1<<5) - 1);
@@ -1526,7 +1528,7 @@ final class UnicodeUtil {
     }
 
 
-    static char getLowSurrogate(int codepoint) {
+    private static char getLowSurrogate(int codepoint) {
 
         char x = (char) codepoint;
         return (char) (LOW_SURROGATE_START | x & ((1<<10) - 1));
@@ -1534,7 +1536,7 @@ final class UnicodeUtil {
     }
     
 
-     static String normalize(String s) {
+    static String normalize(String s) {
 
         boolean needsNormalizing = false;
             
@@ -1615,6 +1617,7 @@ final class UnicodeUtil {
 
     
     // FIXME must recurse this
+    ///CLOVER:OFF
     private static String decompose(int character) {
         
         if (character < 0x00C0) {
@@ -8548,7 +8551,8 @@ final class UnicodeUtil {
         
         return sb.toString();
         
-    }    
+    }
+    ///CLOVER:ON
 
 
     private static String decomposeHangul(char c) {
