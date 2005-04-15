@@ -31,7 +31,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.1b1"/>
+    <property name="version" value="1.1b1-SNAPSHOT"/>
     <property name="year"    value="2005"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -562,7 +562,6 @@ XOM Build file
     <mkdir dir="${clover.dir}"/>
     <clover-setup initString="${clover.dir}/xom_coverage.db">
        <files>
-	       <exclude name="nu/xom/UnicodeUtil.java"/>
 	       <exclude name="nu/xom/Latin6Writer.java"/>
 	       <exclude name="nu/xom/Latin8Writer.java"/>
 	       <exclude name="nu/xom/Latin10Writer.java"/>
@@ -678,10 +677,10 @@ location="${dist.dir}/xom-maven-${version}.jar" />
                      org/jaxen/function/ext/**
                      org/jaxen/saxpath/expr/DefaultPredicated.java
                      org/jaxen/saxpath/helpers/DefaultXPathHandler.java
-                     org/jaxen/saxpath/util/StackedIterator.java
-                     org/jaxen/saxpath/util/XPath2XMLVisitor.java
-                     org/jaxen/saxpath/util/LinkedIterator.java
-                     org/jaxen/saxpath/util/SelfAxisIterator.java
+                     org/jaxen/util/StackedIterator.java
+                     org/jaxen/util/XPath2XMLVisitor.java
+                     org/jaxen/util/LinkedIterator.java
+                     org/jaxen/util/SelfAxisIterator.java
                      ">
        <classpath refid="compile.class.path"/>
     </javac>  
