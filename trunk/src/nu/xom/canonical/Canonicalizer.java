@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import org.xml.sax.helpers.NamespaceSupport;
 
@@ -486,10 +487,11 @@ public class Canonicalizer {
 
         private void writeNamespaceDeclarations(SortedMap map) throws IOException {
 
-            Iterator prefixes = map.keySet().iterator();
+            Iterator prefixes = map.entrySet().iterator();
             while (prefixes.hasNext()) {
-                String prefix = (String) prefixes.next();
-                String uri = (String) map.get(prefix);
+                Map.Entry entry = (Entry) prefixes.next();
+                String prefix = (String) entry.getKey();
+                String uri = (String) entry.getValue();
                 writeRaw(" ");
                 writeNamespaceDeclaration(prefix, uri);
                 inScope.declarePrefix(prefix, uri);
