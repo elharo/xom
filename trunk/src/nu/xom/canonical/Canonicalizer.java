@@ -60,7 +60,7 @@ import nu.xom.XPathContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d7
+ * @version 1.1b1
  *
  */
 public class Canonicalizer {
