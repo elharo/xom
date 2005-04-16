@@ -262,13 +262,13 @@ class JaxenNavigator extends DefaultNavigator {
         // ???? really need to return multiple consecutive nodes combined
 
         List texts = (List) o;
-        String result = "";
+        StringBuffer result = new StringBuffer();
         Iterator iterator = texts.iterator();
         while (iterator.hasNext()) {
             Text text = (Text) iterator.next();
-            result += text.getValue();
+            result.append(text.getValue());
         }
-        return result;
+        return result.toString();
         
     }
     
