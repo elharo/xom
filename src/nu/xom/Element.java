@@ -48,7 +48,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.1b1
  *
  */
 public class Element extends ParentNode {
@@ -1494,7 +1494,6 @@ public class Element extends ParentNode {
                 current = parent;
                 top--;
                 if (current != this) {
-                    parent = current.getParent();
                     index = indexes[top];
                 }
                 endTag = true;
