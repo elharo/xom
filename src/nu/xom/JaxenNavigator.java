@@ -172,14 +172,15 @@ class JaxenNavigator extends DefaultNavigator {
             Element element = (Element) contextNode;
             // ???? can probably avoid this list copy
             Map bindings = element.getNamespacePrefixesInScope();
-            Iterator iterator = bindings.keySet().iterator();
+            Iterator iterator = bindings.entrySet().iterator();
             List result = new ArrayList(bindings.size()+1);
             result.add(new Namespace("xml", 
               "http://www.w3.org/XML/1998/namespace", element));
 
             while (iterator.hasNext()) {
-                String prefix = (String) iterator.next();
-                String uri = (String) bindings.get(prefix);
+                Map.Entry binding = (Map.Entry) iterator.next();
+                String prefix = (String) binding.getKey();
+                String uri = (String) binding.getValue();
                 if (! "".equals(prefix) || ! "".equals(uri)) {
                     Namespace ns = new Namespace(prefix, uri, element);
                     result.add(ns);
