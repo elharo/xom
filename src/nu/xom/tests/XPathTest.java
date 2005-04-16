@@ -2170,7 +2170,6 @@ public class XPathTest extends XOMTestCase {
                     Element test = tests.get(k);
                     
                     String select = test.getAttributeValue("select");
-                    System.out.println(select);
                     Attribute countAttribute = test.getAttribute("count");
                     int count = -1;
                     if (countAttribute != null) {
@@ -2205,7 +2204,7 @@ public class XPathTest extends XOMTestCase {
                                 throw ex;
                             }
                         }
-                        // check valueOfs ????
+                        // XXX check valueOfs ????
                     }
                 }
                 
