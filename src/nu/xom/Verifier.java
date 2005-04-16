@@ -23,6 +23,7 @@ package nu.xom;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.StringTokenizer;
@@ -63,22 +64,21 @@ final class Verifier {
             loader = Thread.currentThread().getContextClassLoader();
             loadFlags(loader);
         }
-        if (flags == null) {
-            throw new RuntimeException(
-                "Verifier couldn't load the lookup table"
-            );
-        }
         
     }
     
     
     private static void loadFlags(ClassLoader loader) {
         
-        DataInputStream in = new DataInputStream(
-          loader.getResourceAsStream("nu/xom/characters.dat"));
-        if (in == null) return;
-        
+        DataInputStream in = null;
         try {
+            InputStream raw = loader.getResourceAsStream("nu/xom/characters.dat");
+            if (raw == null) {
+                throw new RuntimeException("Broken XOM installation: "
+                  + "could not load nu/xom/characters.dat");
+            }
+            // buffer this????
+            in = new DataInputStream(raw);
             flags = new byte[65536];
             in.readFully(flags);
         }
@@ -88,7 +88,7 @@ final class Verifier {
         }
         finally {
             try {
-                in.close();
+                if (in != null) in.close();
             }
             catch (IOException ex) {
                 // no big deal
