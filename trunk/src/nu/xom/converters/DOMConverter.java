@@ -56,7 +56,7 @@ import org.w3c.dom.NodeList;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1b1
  *
  */
 public class DOMConverter {
@@ -511,7 +511,6 @@ public class DOMConverter {
                indexes[top] = 0;
             }
             else {
-                boolean wasEnd = end;
                 end = false;
                 ParentNode xomParent = xomCurrent.getParent();
                 org.w3c.dom.Node grandparent = domParent.getParentNode();
