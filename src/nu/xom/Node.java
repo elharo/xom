@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jaxen.JaxenException;
+import org.jaxen.NamespaceContext;
 
 /**
  *
@@ -423,7 +424,7 @@ public abstract class Node {
         try {
             JaxenConnector connector = new JaxenConnector(xpath);
             if (namespaces == null) {
-                connector.setNamespaceContext((new XPathContext()).getJaxenContext());
+                connector.setNamespaceContext(emptyContext);
             }
             else {
                 connector.setNamespaceContext(namespaces.getJaxenContext());
@@ -476,6 +477,19 @@ public abstract class Node {
         
     }
 
+    
+    private static NamespaceContext emptyContext = new EmptyNamespaceContext();
+    
+    private static class EmptyNamespaceContext implements NamespaceContext {
+
+        public String translateNamespacePrefixToUri(String prefix) {
+            if ("xml".equals(prefix)) return Namespace.XML_NAMESPACE;
+            return null;
+        }
+        
+        
+    }
+    
 
     /**
      * <p>
