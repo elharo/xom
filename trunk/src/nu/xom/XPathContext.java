@@ -33,7 +33,7 @@ import org.jaxen.NamespaceContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1b1
  *
  */
 public final class XPathContext {
@@ -83,7 +83,7 @@ public final class XPathContext {
      * @param prefix the prefix to bind
      * @param uri the namespace URI the prefix is bound to
      * 
-     * @throws NamesapceConflictException if the prefix is 
+     * @throws NamespaceConflictException if the prefix is 
      *     <code>xml</code> and the URI is not
      *     <code>http://www.w3.org/XML/1998/namespace</code>
      * 
