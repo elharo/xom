@@ -81,7 +81,6 @@ final class UnicodeUtil {
     private final static int CANONICAL_COMBINING_CLASS_130 = 130;
     private final static int CANONICAL_COMBINING_CLASS_132 = 132;
     private final static int CANONICAL_COMBINING_CLASS_ATTACHED_BELOW = 202;
-    private final static int CANONICAL_COMBINING_CLASS_ATTACHED_ABOVE_RIGHT = 216;
     private final static int CANONICAL_COMBINING_CLASS_BELOW_LEFT = 218;
 
 
@@ -95,6 +94,7 @@ final class UnicodeUtil {
     private final static int CANONICAL_COMBINING_CLASS_ABOVE_LEFT = 228;
     private final static int CANONICAL_COMBINING_CLASS_ABOVE = 230;
     private final static int CANONICAL_COMBINING_CLASS_ABOVE_RIGHT = 232;
+    private static final int CANONICAL_COMBINING_CLASS_ATTACHED_ABOVE_RIGHT = 216;
     private final static int CANONICAL_COMBINING_CLASS_DOUBLE_BELOW = 233;
     private final static int CANONICAL_COMBINING_CLASS_DOUBLE_ABOVE = 234;
     private final static int CANONICAL_COMBINING_CLASS_IOTA_SUBSCRIPT = 240;
@@ -120,6 +120,7 @@ final class UnicodeUtil {
             
             InputStream source = loader.getResourceAsStream("nu/xom/compositions.dat");
             in = new DataInputStream(source);
+            // ???? would it make sense to store a serialized HashMap instead????
             compositions = new HashMap();
             try {
                 while (true) {
@@ -1300,152 +1301,6 @@ final class UnicodeUtil {
         
         return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
     }
-    
-    
-    
-    private static boolean isExcluded(int c) {
-        
-        // ???? optimize
-        if (c == 0x0958) return true; // DEVANAGARI LETTER QA
-        if (c == 0x0959) return true; // DEVANAGARI LETTER KHHA
-        if (c == 0x095A) return true; // DEVANAGARI LETTER GHHA
-        if (c == 0x095B) return true; // DEVANAGARI LETTER ZA
-        if (c == 0x095C) return true; // DEVANAGARI LETTER DDDHA
-        if (c == 0x095D) return true; // DEVANAGARI LETTER RHA
-        if (c == 0x095E) return true; // DEVANAGARI LETTER FA
-        if (c == 0x095F) return true; // DEVANAGARI LETTER YYA
-        if (c == 0x09DC) return true; // BENGALI LETTER RRA
-        if (c == 0x09DD) return true; // BENGALI LETTER RHA
-        if (c == 0x09DF) return true; // BENGALI LETTER YYA
-        if (c == 0x0A33) return true; // GURMUKHI LETTER LLA
-        if (c == 0x0A36) return true; // GURMUKHI LETTER SHA
-        if (c == 0x0A59) return true; // GURMUKHI LETTER KHHA
-        if (c == 0x0A5A) return true; // GURMUKHI LETTER GHHA
-        if (c == 0x0A5B) return true; // GURMUKHI LETTER ZA
-        if (c == 0x0A5E) return true; // GURMUKHI LETTER FA
-        if (c == 0x0B5C) return true; // ORIYA LETTER RRA
-        if (c == 0x0B5D) return true; // ORIYA LETTER RHA
-        if (c == 0x0F43) return true; // TIBETAN LETTER GHA
-        if (c == 0x0F4D) return true; // TIBETAN LETTER DDHA
-        if (c == 0x0F52) return true; // TIBETAN LETTER DHA
-        if (c == 0x0F57) return true; // TIBETAN LETTER BHA
-        if (c == 0x0F5C) return true; // TIBETAN LETTER DZHA
-        if (c == 0x0F69) return true; // TIBETAN LETTER KSSA
-        if (c == 0x0F76) return true; // TIBETAN VOWEL SIGN VOCALIC R
-        if (c == 0x0F78) return true; // TIBETAN VOWEL SIGN VOCALIC L
-        if (c == 0x0F93) return true; // TIBETAN SUBJOINED LETTER GHA
-        if (c == 0x0F9D) return true; // TIBETAN SUBJOINED LETTER DDHA
-        if (c == 0x0FA2) return true; // TIBETAN SUBJOINED LETTER DHA
-        if (c == 0x0FA7) return true; // TIBETAN SUBJOINED LETTER BHA
-        if (c == 0x0FAC) return true; // TIBETAN SUBJOINED LETTER DZHA
-        if (c == 0x0FB9) return true; // TIBETAN SUBJOINED LETTER KSSA
-        if (c == 0xFB1D) return true; // HEBREW LETTER YOD WITH HIRIQ
-        if (c == 0xFB1F) return true; // HEBREW LIGATURE YIDDISH YOD YOD PATAH
-        if (c == 0xFB2A) return true; // HEBREW LETTER SHIN WITH SHIN DOT
-        if (c == 0xFB2B) return true; // HEBREW LETTER SHIN WITH SIN DOT
-        if (c == 0xFB2C) return true; // HEBREW LETTER SHIN WITH DAGESH AND SHIN DOT
-        if (c == 0xFB2D) return true; // HEBREW LETTER SHIN WITH DAGESH AND SIN DOT
-        if (c == 0xFB2E) return true; // HEBREW LETTER ALEF WITH PATAH
-        if (c == 0xFB2F) return true; // HEBREW LETTER ALEF WITH QAMATS
-        if (c == 0xFB30) return true; // HEBREW LETTER ALEF WITH MAPIQ
-        if (c == 0xFB31) return true; // HEBREW LETTER BET WITH DAGESH
-        if (c == 0xFB32) return true; // HEBREW LETTER GIMEL WITH DAGESH
-        if (c == 0xFB33) return true; // HEBREW LETTER DALET WITH DAGESH
-        if (c == 0xFB34) return true; // HEBREW LETTER HE WITH MAPIQ
-        if (c == 0xFB35) return true; // HEBREW LETTER VAV WITH DAGESH
-        if (c == 0xFB36) return true; // HEBREW LETTER ZAYIN WITH DAGESH
-        if (c == 0xFB38) return true; // HEBREW LETTER TET WITH DAGESH
-        if (c == 0xFB39) return true; // HEBREW LETTER YOD WITH DAGESH
-        if (c == 0xFB3A) return true; // HEBREW LETTER FINAL KAF WITH DAGESH
-        if (c == 0xFB3B) return true; // HEBREW LETTER KAF WITH DAGESH
-        if (c == 0xFB3C) return true; // HEBREW LETTER LAMED WITH DAGESH
-        if (c == 0xFB3E) return true; // HEBREW LETTER MEM WITH DAGESH
-        if (c == 0xFB40) return true; // HEBREW LETTER NUN WITH DAGESH
-        if (c == 0xFB41) return true; // HEBREW LETTER SAMEKH WITH DAGESH
-        if (c == 0xFB43) return true; // HEBREW LETTER FINAL PE WITH DAGESH
-        if (c == 0xFB44) return true; // HEBREW LETTER PE WITH DAGESH
-        if (c == 0xFB46) return true; // HEBREW LETTER TSADI WITH DAGESH
-        if (c == 0xFB47) return true; // HEBREW LETTER QOF WITH DAGESH
-        if (c == 0xFB48) return true; // HEBREW LETTER RESH WITH DAGESH
-        if (c == 0xFB49) return true; // HEBREW LETTER SHIN WITH DAGESH
-        if (c == 0xFB4A) return true; // HEBREW LETTER TAV WITH DAGESH
-        if (c == 0xFB4B) return true; // HEBREW LETTER VAV WITH HOLAM
-        if (c == 0xFB4C) return true; // HEBREW LETTER BET WITH RAFE
-        if (c == 0xFB4D) return true; // HEBREW LETTER KAF WITH RAFE
-        if (c == 0xFB4E) return true; // HEBREW LETTER PE WITH RAFE
-
-        // Post Composition Version precomposed characters
-
-        if (c == 0x2ADC)  return true; // FORKING
-        if (c == 0x1D15E) return true; // MUSICAL SYMBOL HALF NOTE
-        if (c == 0x1D15F) return true; // MUSICAL SYMBOL QUARTER NOTE
-        if (c == 0x1D160) return true; // MUSICAL SYMBOL EIGHTH NOTE
-        if (c == 0x1D161) return true; // MUSICAL SYMBOL SIXTEENTH NOTE
-        if (c == 0x1D162) return true; // MUSICAL SYMBOL THIRTY-SECOND NOTE
-        if (c == 0x1D163) return true; // MUSICAL SYMBOL SIXTY-FOURTH NOTE
-        if (c == 0x1D164) return true; // MUSICAL SYMBOL ONE HUNDRED TWENTY-EIGHTH NOTE
-        if (c == 0x1D1BB) return true; // MUSICAL SYMBOL MINIMA
-        if (c == 0x1D1BC) return true; // MUSICAL SYMBOL MINIMA BLACK
-        if (c == 0x1D1BD) return true; // MUSICAL SYMBOL SEMIMINIMA WHITE
-        if (c == 0x1D1BE) return true; // MUSICAL SYMBOL SEMIMINIMA BLACK
-        if (c == 0x1D1BF) return true; // MUSICAL SYMBOL FUSA WHITE
-        if (c == 0x1D1C0) return true; // MUSICAL SYMBOL FUSA BLACK
-
-        // Singleton Decompositions
-
-        if (c == 0x0340) return true; // COMBINING GRAVE TONE MARK
-        if (c == 0x0341) return true; // COMBINING ACUTE TONE MARK
-        if (c == 0x0343) return true; // COMBINING GREEK KORONIS
-        if (c == 0x0374) return true; // GREEK NUMERAL SIGN
-        if (c == 0x037E) return true; // GREEK QUESTION MARK
-        if (c == 0x0387) return true; // GREEK ANO TELEIA
-        if (c == 0x1F71) return true; // GREEK SMALL LETTER ALPHA WITH OXIA
-        if (c == 0x1F73) return true; // GREEK SMALL LETTER EPSILON WITH OXIA
-        if (c == 0x1F75) return true; // GREEK SMALL LETTER ETA WITH OXIA
-        if (c == 0x1F77) return true; // GREEK SMALL LETTER IOTA WITH OXIA
-        if (c == 0x1F79) return true; // GREEK SMALL LETTER OMICRON WITH OXIA
-        if (c == 0x1F7B) return true; // GREEK SMALL LETTER UPSILON WITH OXIA
-        if (c == 0x1F7D) return true; // GREEK SMALL LETTER OMEGA WITH OXIA
-        if (c == 0x1FBB) return true; // GREEK CAPITAL LETTER ALPHA WITH OXIA
-        if (c == 0x1FBE) return true; // GREEK PROSGEGRAMMENI
-        if (c == 0x1FC9) return true; // GREEK CAPITAL LETTER EPSILON WITH OXIA
-        if (c == 0x1FCB) return true; // GREEK CAPITAL LETTER ETA WITH OXIA
-        if (c == 0x1FD3) return true; // GREEK SMALL LETTER IOTA WITH DIALYTIKA AND OXIA
-        if (c == 0x1FDB) return true; // GREEK CAPITAL LETTER IOTA WITH OXIA
-        if (c == 0x1FE3) return true; // GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND OXIA
-        if (c == 0x1FEB) return true; // GREEK CAPITAL LETTER UPSILON WITH OXIA
-        if (c == 0x1FEE) return true; // GREEK DIALYTIKA AND OXIA
-        if (c == 0x1FEF) return true; // GREEK VARIA
-        if (c == 0x1FF9) return true; // GREEK CAPITAL LETTER OMICRON WITH OXIA
-        if (c == 0x1FFB) return true; // GREEK CAPITAL LETTER OMEGA WITH OXIA
-        if (c == 0x1FFD) return true; // GREEK OXIA
-        if (c == 0x2000) return true; // EN QUAD
-        if (c == 0x2001) return true; // EM QUAD
-        if (c == 0x2126) return true; // OHM SIGN
-        if (c == 0x212A) return true; // KELVIN SIGN
-        if (c == 0x212B) return true; // ANGSTROM SIGN
-        if (c == 0x2329) return true; // LEFT-POINTING ANGLE BRACKET
-        if (c == 0x232A) return true; // RIGHT-POINTING ANGLE BRACKET
-        if (c >= 0xF900 && c <= 0xFA0D) return true; // CJK COMPATIBILITY IDEOGRAPH-F900..CJK COMPATIBILITY IDEOGRAPH-FA0D
-        if (c == 0xFA10) return true; // CJK COMPATIBILITY IDEOGRAPH-FA10
-        if (c == 0xFA12) return true; // CJK COMPATIBILITY IDEOGRAPH-FA12
-        if (c >= 0xFA15 && c <= 0xFA1E) return true; // CJK COMPATIBILITY IDEOGRAPH-FA15..CJK COMPATIBILITY IDEOGRAPH-FA1E
-        if (c == 0xFA20) return true; // CJK COMPATIBILITY IDEOGRAPH-FA20
-        if (c == 0xFA22) return true; // CJK COMPATIBILITY IDEOGRAPH-FA22
-        if (c == 0xFA25) return true; // CJK COMPATIBILITY IDEOGRAPH-FA25
-        if (c == 0xFA26) return true; // CJK COMPATIBILITY IDEOGRAPH-FA26
-        if (c >= 0xFA2A && c <= 0xFA2D) return true; // CJK COMPATIBILITY IDEOGRAPH-FA2A..CJK COMPATIBILITY IDEOGRAPH-FA2D
-        if (c >= 0xFA30 && c <= 0xFA6A) return true; // CJK COMPATIBILITY IDEOGRAPH-FA30..CJK COMPATIBILITY IDEOGRAPH-FA6A
-        if (c >= 0x2F800 && c <= 0x2FA1D) return true; // CJK COMPATIBILITY IDEOGRAPH-2F800..CJK COMPATIBILITY IDEOGRAPH-2FA1D
-
-        // Non-Starter Decompositions
-        if (c == 0x0344) return true; // COMBINING GREEK DIALYTIKA TONOS
-        if (c == 0x0F73) return true; // TIBETAN VOWEL SIGN II
-        if (c == 0x0F75) return true; // TIBETAN VOWEL SIGN UU
-        if (c == 0x0F81) return true; // TIBETAN VOWEL SIGN REVERSED II
-
-        return false;
-    } 
     ///CLOVER:ON
     
     
