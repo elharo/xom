@@ -51,7 +51,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -2192,19 +2192,25 @@ public class XPathTest extends XOMTestCase {
                         }
                     }
                     else {
-                        if (count != -1) {
-                            try {
-                                Nodes results = context.query(select, namespaces);
+                        try {
+                            Nodes results = context.query(select, namespaces);
+                            if (count != -1) {
                                 assertEquals(select, count, results.size());
                             }
-                            catch (XPathException ex) {
-                                if (ex.getMessage().equals("XPath error: document() function not supported")) {
-                                    continue;
-                                }
-                                throw ex;
+                            Elements valueOfs = test.getChildElements("valueOf");
+                            for (int v = 0; v < valueOfs.size(); v++) {
+                                Element vo = valueOfs.get(v);
+                                System.out.println(vo);
+                                checkValueOf(results.get(0), vo, namespaces);
                             }
                         }
-                        // XXX check valueOfs ????
+                        catch (XPathException ex) {
+                            if (ex.getMessage().equals("XPath error: document() function not supported")) {
+                                continue;
+                            }
+                            throw ex;
+                        }
+
                     }
                 }
                 
@@ -2222,7 +2228,6 @@ public class XPathTest extends XOMTestCase {
     private void checkValueOf(Node context, Element valueOf, XPathContext namespaces) {
 
         String select = valueOf.getAttributeValue("select");
-        System.out.println(select);
         try {
             Nodes nodes = context.query(select, namespaces);
             String result = nodes.get(0).getValue();
