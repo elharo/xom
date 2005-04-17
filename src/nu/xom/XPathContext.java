@@ -85,7 +85,9 @@ public final class XPathContext {
      * 
      * @throws NamespaceConflictException if the prefix is 
      *     <code>xml</code> and the URI is not
-     *     <code>http://www.w3.org/XML/1998/namespace</code>
+     *     <code>http://www.w3.org/XML/1998/namespace</code> or the
+     *     prefix is the empty string
+     * @throws NullPointerException if the prefix is null
      * 
      */
     public void addNamespace(String prefix, String uri) {
@@ -96,7 +98,21 @@ public final class XPathContext {
               "Wrong namespace URI for xml prefix: " + uri);
         }
         if ("".equals(uri)) uri = null;
-        namespaces.put(prefix, uri);
+        if (prefix == null) {
+            throw new NullPointerException("Prefixes used in XPath expressions cannot be null");
+        }
+        else if ("".equals(prefix)){
+            throw new NamespaceConflictException(
+              "XPath expressions do not use the default namespace");
+        }
+        
+        // should there be a separate remove method????
+        if (uri == null) {
+            namespaces.remove(prefix);
+        }
+        else {
+            namespaces.put(prefix, uri);
+        }
         
     }
 
