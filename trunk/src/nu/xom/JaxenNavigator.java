@@ -244,6 +244,24 @@ class JaxenNavigator extends DefaultNavigator {
     }
     
     
+    public Iterator getFollowingSiblingAxisIterator(Object o) {
+        
+        Node start;
+        if (o instanceof ArrayList) {
+            List l = (ArrayList) o;
+            start = (Node) l.get(l.size()-1);
+        }
+        else {
+            start = (Node) o;
+        }
+        ParentNode parent = start.getParent();
+        if (parent == null) return JaxenConstants.EMPTY_ITERATOR;
+        int startPos = parent.indexOf(start) + 1;
+        return new ChildIterator(parent, startPos);
+        
+    }
+    
+    
     public Object getParentNode(Object o) {
         
         Node n;
@@ -283,6 +301,13 @@ class JaxenNavigator extends DefaultNavigator {
         
         ChildIterator(ParentNode parent) {
             this.parent = parent;
+            this.xomCount = parent.getChildCount();
+        }
+      
+        
+        ChildIterator(ParentNode parent, int startNode) {
+            this.parent = parent;
+            this.xomIndex = startNode;
             this.xomCount = parent.getChildCount();
         }
       
