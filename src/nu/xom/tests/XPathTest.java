@@ -2200,7 +2200,6 @@ public class XPathTest extends XOMTestCase {
                             Elements valueOfs = test.getChildElements("valueOf");
                             for (int v = 0; v < valueOfs.size(); v++) {
                                 Element vo = valueOfs.get(v);
-                                System.out.println(vo);
                                 checkValueOf(results.get(0), vo, namespaces);
                             }
                         }
