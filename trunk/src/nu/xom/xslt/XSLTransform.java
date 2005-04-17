@@ -52,8 +52,8 @@ import nu.xom.XMLException;
  *   throws XSLException, ParsingException, IOException {
  *     Builder builder = new Builder();
  *     Document stylesheet = builder.build("mystylesheet.xsl");
- *     XSLTransform stylesheet = new XSLTransform(stylesheet);
- *     return stylesheet.transform(doc);
+ *     XSLTransform transform = new XSLTransform(stylesheet);
+ *     return transform.transform(doc);
  * } </pre></blockquote>
  *
  * <p>
@@ -115,7 +115,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1b2
  */
 public final class XSLTransform {
 
