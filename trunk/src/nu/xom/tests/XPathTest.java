@@ -149,7 +149,17 @@ public class XPathTest extends XOMTestCase {
         c.appendChild(d);
         
         Nodes result = a.query("/a/b/*/d");
+        assertEquals(1, result.size());
         assertEquals(d, result.get(0));
+        
+    }
+    
+
+    public void testSimpleChild() {
+     
+        Element a = new Element("a");
+        Nodes result = a.query("/a");
+        assertEquals(1, result.size());
         
     }
     
@@ -1457,58 +1467,52 @@ public class XPathTest extends XOMTestCase {
     
     public void testNamespaceQueryWithNullPrefix() {
         
-        Element parent = new Element("Test", "http://www.example.org");
-        Element child = new Element("child", "http://www.example.org");
-        parent.appendChild(child);
-        
-        XPathContext context = new XPathContext("pre", "http://www.example.org");
-        context.addNamespace(null, "http://www.w3.org");
-        Nodes result = parent.query("child::pre:child", context);
-        assertEquals(1, result.size());
-        assertEquals(child, result.get(0));   
+        try {
+            XPathContext context = new XPathContext("pre", "http://www.example.org");
+            context.addNamespace(null, "http://www.w3.org");
+            fail("Allowed null prefix");
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
     
     
     public void testNamespaceQueryWithNullPrefix2() {
         
-        Element parent = new Element("Test");
-        Element child = new Element("child");
-        parent.appendChild(child);
-        
-        XPathContext context = new XPathContext(null, "http://www.example.org");
-        Nodes result = parent.query("child::child", context);
-        assertEquals(1, result.size());
-        assertEquals(child, result.get(0));   
+        try {
+            XPathContext context = new XPathContext(null, "http://www.example.org");
+            fail("Allowed null prefix");
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
     
     
     public void testNamespaceQueryWithEmptyPrefix() {
         
-        Element parent = new Element("Test", "http://www.example.org");
-        Element child = new Element("child", "http://www.example.org");
-        parent.appendChild(child);
-        
-        XPathContext context = new XPathContext("pre", "http://www.example.org");
-        context.addNamespace("", "http://www.w3.org");
-        Nodes result = parent.query("child::pre:child", context);
-        assertEquals(1, result.size());
-        assertEquals(child, result.get(0));   
+        try {
+            XPathContext context = new XPathContext("pre", "http://www.example.org");
+            context.addNamespace("", "http://www.w3.org");
+        }
+        catch (NamespaceConflictException success) {
+            assertTrue(success.getMessage().length() > 1);
+        }
         
     }
     
     
     public void testNamespaceQueryWithEmptyPrefix2() {
         
-        Element parent = new Element("Test");
-        Element child = new Element("child");
-        parent.appendChild(child);
-        
-        XPathContext context = new XPathContext("", "http://www.example.org");
-        Nodes result = parent.query("child::child", context);
-        assertEquals(1, result.size());
-        assertEquals(child, result.get(0));   
+        try {
+            XPathContext context = new XPathContext("", "http://www.example.org");
+        }
+        catch (NamespaceConflictException success) {
+            assertTrue(success.getMessage().length() > 1);
+        }
         
     }
     
@@ -2314,5 +2318,8 @@ public class XPathTest extends XOMTestCase {
         assertEquals(2, result.size());
         assertEquals(a, result.get(0));
         assertEquals(c, result.get(1));
+        
     }
+    
+    
 }

@@ -27,7 +27,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  *
  */
 import nu.xom.Attribute;
@@ -43,6 +43,8 @@ import org.jaxen.DefaultNavigator;
 import org.jaxen.FunctionCallException;
 import org.jaxen.JaxenConstants;
 import org.jaxen.JaxenException;
+import org.jaxen.NamedAccessNavigator;
+import org.jaxen.UnsupportedAxisException;
 import org.jaxen.XPath;
 import org.jaxen.util.SingleObjectIterator;
 
@@ -50,9 +52,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 
-class JaxenNavigator extends DefaultNavigator {
+class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
     
     public Iterator getSelfAxisIterator(Object contextNode) {
         
@@ -371,6 +374,68 @@ class JaxenNavigator extends DefaultNavigator {
     }
     
 
+    private static class NamedChildIterator implements Iterator {
+    
+        private ParentNode parent;
+
+        private int index = -1;
+        private int xomCount;
+        private Element next;
+        private String localName;
+        private String URI;
+        // XXX can I remove this field?
+        private String prefix;
+        
+        NamedChildIterator(ParentNode parent, String localName, String prefix, String namespaceURI) {
+            this.parent = parent;
+            this.xomCount = parent.getChildCount();
+            this.prefix = prefix;
+            this.localName = localName;
+            if (namespaceURI == null) this.URI = "";
+            else this.URI = namespaceURI;
+            
+            findNext();
+        }
+      
+        private void findNext() {
+            
+            while (++index < xomCount) {
+                Node next = parent.getChild(index);
+                if (next.isElement()) {
+                    Element element = (Element) next;
+                    String elementNamespace = element.getNamespaceURI();
+                    if (elementNamespace.equals(URI)) {
+                        // ???? check prefix?
+                        if (element.getLocalName().equals(localName)) {
+                            this.next = element;
+                            return;
+                        }
+                    }
+                }
+            }
+            next = null;
+        }
+        
+        public boolean hasNext() {
+            return next != null;
+        }
+        
+
+        public Object next() {
+            
+            if (next == null) throw new NoSuchElementException(); // correct ???? necessary?
+            Object result = next;
+            findNext();
+            return result;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+        
+    }
+
+    
     public String getElementNamespaceUri(Object element) {
         return ((Element) element).getNamespaceURI();
     }
@@ -477,6 +542,44 @@ class JaxenNavigator extends DefaultNavigator {
     public XPath parseXPath(String expression) throws JaxenException {
         return new JaxenConnector(expression);
     }
+
+
+    public Iterator getChildAxisIterator(Object parent, String localName, String namespacePrefix, String namespaceURI) 
+      throws UnsupportedAxisException {
+        
+        if (parent instanceof ParentNode) {
+            return new NamedChildIterator((ParentNode) parent, localName, namespacePrefix, namespaceURI);
+        }
+        return JaxenConstants.EMPTY_ITERATOR;
+        
+    }
+
+
+    public Iterator getAttributeAxisIterator(Object contextNode, String localName, String namespacePrefix, String namespaceURI) 
+      throws UnsupportedAxisException {
+
+        // ???? need prefix?
+        try {
+            Element element = (Element) contextNode;
+            Attribute result = null;
+            if (namespaceURI == null) {
+                result = element.getAttribute(localName);
+            }
+            else {
+                result = element.getAttribute(localName, namespaceURI);
+            }
+            
+            if (result == null) return JaxenConstants.EMPTY_ITERATOR;
+            
+            return new SingleObjectIterator(result);
+        }
+        catch (ClassCastException ex) {
+            return JaxenConstants.EMPTY_ITERATOR;
+        }
+        
+    }
+    
+
     
     
 }
