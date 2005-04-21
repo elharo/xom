@@ -48,7 +48,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  *
  */
 public class Element extends ParentNode {
@@ -88,7 +88,7 @@ public class Element extends ParentNode {
      * @throws NamespaceConflictException if <code>name</code>'s prefix  
      *     cannot be used with <code>uri</code>
      * @throws MalformedURIException if <code>uri</code>  
-     *     is not an RFC 2396 absolute URI reference
+     *     is not an RFC 3986 absolute URI reference
      */
     public Element(String name, String uri) {
         
@@ -804,7 +804,7 @@ public class Element extends ParentNode {
      * @param uri the new namespace URI
      * 
      * @throws MalformedURIException if <code>uri</code>  
-     *     is not an absolute RFC2396 URI reference
+     *     is not an absolute RFC 3986 URI reference
      * @throws NamespaceException if this element has a prefix 
      *     and <code>uri</code> is null or the empty string;
      *     or if the element's prefix is shared by an attribute
@@ -1086,7 +1086,7 @@ public class Element extends ParentNode {
      * @param uri the absolute URI reference to map the prefix to
      * 
      * @throws MalformedURIException if <code>URI</code> 
-     *      is not an RFC2396 URI reference
+     *      is not an RFC 3986 URI reference
      * @throws IllegalNameException  if <code>prefix</code> is not 
      *      a legal XML non-colonized name
      * @throws NamespaceConflictException if the mapping conflicts 
@@ -1330,7 +1330,7 @@ public class Element extends ParentNode {
      * @param URI the new base URI for this element
      * 
      * @throws MalformedURIException if <code>URI</code> is 
-     *     not a legal RFC 2396 absolute URI
+     *     not a legal RFC 3986 absolute URI
      */
     public void setBaseURI(String URI) { 
         setActualBaseURI(URI);       

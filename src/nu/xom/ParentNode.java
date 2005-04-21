@@ -42,7 +42,7 @@ import java.util.ArrayList;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.1b2
  *
  */
 public abstract class ParentNode extends Node {
@@ -389,7 +389,7 @@ public abstract class ParentNode extends Node {
      * @param URI the new base URI for this node
      *
      * @throws MalformedURIException if <code>URI</code> is 
-     *     not a legal RFC 2396 absolute URI
+     *     not a legal RFC 3986 absolute URI
      */
     public abstract void setBaseURI(String URI);
 
