@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  * 
  */
 public class Attribute extends Node {
@@ -106,13 +106,17 @@ public class Attribute extends Node {
      * @param value the attribute value
      * 
      * @throws IllegalNameException  if the name is not a namespace 
-     *     well-formed prefixed name
+     *     well-formed name
      * @throws IllegalDataException if the value contains characters 
      *     which are not legal in XML such as vertical tab or a null. 
      *     Note that characters such as " and &amp; are legal, but will
      *     be automatically escaped when the attribute is serialized.
      * @throws MalformedURIException if <code>URI</code> is not 
-     *     an RFC2396 URI reference
+     *     an RFC2396 URI reference ???? 3986?
+     * @throws NamespaceConflictException if there's no prefix,
+     *     but the URI is not the empty string, or the prefix is 
+     *     <code>xml</code> and the URI is not 
+     *     http://www.w3.org/XML/1998/namespace
      */
     public Attribute(String name, String URI, String value) {
         this(name, URI, value, Type.UNDECLARED);
@@ -480,9 +484,11 @@ public class Attribute extends Node {
     private void _setNamespace(String prefix, String URI) {
         
         if (URI == null) URI = "";
+        // ???? intern URI
         if (prefix == null) prefix = "";
         else prefix = prefix.intern();
         
+        // ???? use == to compare?
         if (prefix.equals("xmlns")) {
             throw new IllegalNameException(
               "Attribute objects are not used to represent "
