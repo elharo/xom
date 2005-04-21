@@ -40,7 +40,7 @@ import org.xml.sax.XMLReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  * 
  */
 final class Verifier {
@@ -215,7 +215,7 @@ final class Verifier {
     /**
      * <p>
      * Checks a string to see if it is a syntactically correct 
-     * RFC 2396/RFC 2732 URI reference. Both absolute and relative  
+     * RFC 3986 URI reference. Both absolute and relative  
      * URIs are supported, as are URIs with fragment identifiers.
      * </p>
      * 
@@ -877,7 +877,7 @@ final class Verifier {
     
     /**
      * <p>
-     * Checks a string to see if it is an RFC 2396/RFC 2732 absolute 
+     * Checks a string to see if it is an RFC 3986 absolute 
      * URI reference. URI references can contain fragment identifiers.
      * Absolute URI references must have a scheme.
      * </p>

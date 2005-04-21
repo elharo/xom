@@ -112,7 +112,7 @@ public class Attribute extends Node {
      *     Note that characters such as " and &amp; are legal, but will
      *     be automatically escaped when the attribute is serialized.
      * @throws MalformedURIException if <code>URI</code> is not 
-     *     an RFC2396 URI reference ???? 3986?
+     *     an RFC 3986 URI reference
      * @throws NamespaceConflictException if there's no prefix,
      *     but the URI is not the empty string, or the prefix is 
      *     <code>xml</code> and the URI is not 
@@ -142,7 +142,7 @@ public class Attribute extends Node {
      *     " and &amp; are legal, but will be automatically escaped 
      *     when the attribute is serialized.
      * @throws MalformedURIException if <code>URI</code> is not 
-     *     an RFC2396 absolute URI reference
+     *     an RFC 3986 absolute URI reference
      */
     public Attribute(
       String name, String URI, String value, Type type) {
