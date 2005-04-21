@@ -50,7 +50,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b2
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -798,6 +798,19 @@ public class ElementTest extends XOMTestCase {
              
     }
     
+    public void testRFC2396LegalRFC3986IllegalNamespaceURI() {
+        
+        String name = "red:green";
+        String uri = "dcp.tcp.pft://192.168.0.1:1002:3002?fec=1&crc=0'";
+        try {
+            new Element(name, uri);
+            fail("Allowed RFC 2396 legal but RFC 3986 illegal URI");
+        }
+        catch (MalformedURIException success) {
+            assertNotNull(success.getMessage());
+        }
+             
+    }
 
     public void 
       testSetNamespaceURIConflictsWithAdditionalNamespaceDeclaration() 
