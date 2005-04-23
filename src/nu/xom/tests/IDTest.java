@@ -22,6 +22,7 @@ package nu.xom.tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -39,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  *
  */
 public class IDTest extends XOMTestCase {
@@ -249,6 +250,40 @@ public class IDTest extends XOMTestCase {
     }
     
     
+    public void testXMLIDTestSuiteFromW3CServer() 
+      throws ParsingException, IOException {
+        
+        URL base = new URL("http://www.w3.org/XML/2005/01/xml-id/test-suite.xml");
+        Builder builder = new Builder();
+        Document catalog = builder.build(base.openStream());
+        Element testsuite = catalog.getRootElement();
+        Elements testCatalogs = testsuite.getChildElements("test-catalog");
+        for (int i = 0; i < testCatalogs.size(); i++) {
+            Elements testcases = testCatalogs.get(i).getChildElements("test-case");
+            for (int j = 0; j < testcases.size(); j++) {
+                Element testcase = testcases.get(j);
+                String features = testcase.getAttributeValue("feature");
+                if (features != null && features.indexOf("xml11") >= 0) {
+                    continue; // skip test
+                }
+                String id = testcase.getAttributeValue("id");
+                URL testURL = new URL(base, testcase.getFirstChildElement("file-path").getValue() + "/");
+                Element scenario = testcase.getFirstChildElement("scenario");
+                Element input = scenario.getFirstChildElement("input-file");
+                URL inputFile = new URL(testURL, input.getValue());
+                Elements expectedIDs = scenario.getChildElements("id");
+                Document inputDoc = builder.build(inputFile.openStream());
+                Nodes recognizedIDs = getIDs(inputDoc);
+                assertEquals(expectedIDs.size(), recognizedIDs.size());
+                for (int k = 0; k < expectedIDs.size(); k++) {
+                    assertEquals(expectedIDs.get(i).getValue(), recognizedIDs.get(i).getValue());
+                }
+            } // end for
+        }
+        
+    }
+    
+    
     public void testXMLIDTestSuite() 
       throws ParsingException, IOException {
         
@@ -305,6 +340,7 @@ public class IDTest extends XOMTestCase {
         getIDs(root, list);
         return list;
     }
+    
     
     private void getIDs(Element element, Nodes list) {
 
