@@ -164,6 +164,15 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testSimpleWildCard() {
+     
+        Element a = new Element("a");
+        Nodes result = a.query("/*");
+        assertEquals(1, result.size());
+        
+    }
+    
+
     public void testLongs() {
         
         Document doc = new Document(new Element("root"));
@@ -2318,6 +2327,18 @@ public class XPathTest extends XOMTestCase {
         assertEquals(2, result.size());
         assertEquals(a, result.get(0));
         assertEquals(c, result.get(1));
+        
+    }
+    
+    
+    public void testAttributeWithUnderscore() {
+     
+        Element a = new Element("a");
+        Attribute foo = new Attribute("_foo", "bar");
+        a.addAttribute(foo);
+        Nodes results = a.query("//@_foo");
+        assertEquals(1, results.size());
+        assertEquals(foo, results.get(0));
         
     }
     
