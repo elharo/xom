@@ -189,7 +189,7 @@ class URIUtil {
         ParsedURI(String spec) {
             
             int colon = spec.indexOf(':');
-            int question = -1;
+            int question;
             
             // URIs can only contain one sharp sign
             int sharp = spec.lastIndexOf('#'); 

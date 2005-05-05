@@ -60,7 +60,7 @@ import nu.xom.XPathContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  *
  */
 public class Canonicalizer {
@@ -348,7 +348,6 @@ public class Canonicalizer {
                             current = parent;
                             top--;
                             if (current != element) {
-                                parent = current.getParent();
                                 index = indexes[top];
                             }
                             end = true;
