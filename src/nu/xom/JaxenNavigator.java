@@ -383,13 +383,10 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
         private Element next;
         private String localName;
         private String URI;
-        // XXX can I remove this field?
-        private String prefix;
         
         NamedChildIterator(ParentNode parent, String localName, String prefix, String namespaceURI) {
             this.parent = parent;
             this.xomCount = parent.getChildCount();
-            this.prefix = prefix;
             this.localName = localName;
             if (namespaceURI == null) this.URI = "";
             else this.URI = namespaceURI;
