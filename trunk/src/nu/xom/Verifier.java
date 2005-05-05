@@ -434,7 +434,7 @@ final class Verifier {
             authority = authority.substring(atSign+1);
         }
         
-        int colon = -1;
+        int colon;
         if (authority.startsWith("[")) {
             colon = authority.indexOf("]:");
             if (colon != -1) colon = colon+1;
