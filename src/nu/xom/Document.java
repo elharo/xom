@@ -186,8 +186,8 @@ public class Document extends ParentNode {
         if (oldDocType == null) insertChild(doctype, 0);
         else {
             int position = indexOf(oldDocType);
-            children.remove(position);
-            children.add(position, doctype);
+            removeChild(position);
+            fastInsertChild(doctype, position);
             oldDocType.setParent(null);
             doctype.setParent(this);
         }
@@ -243,8 +243,7 @@ public class Document extends ParentNode {
         int index = indexOf(oldRoot);
         
         oldRoot.setParent(null);
-        children.remove(index);
-        children.add(index, root);
+        children[index] = root;
         root.setParent(this);
         
     }

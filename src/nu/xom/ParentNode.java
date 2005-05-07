@@ -21,8 +21,6 @@
 
 package nu.xom;
 
-import java.util.ArrayList;
-
 
 /**
  * 
@@ -47,8 +45,9 @@ import java.util.ArrayList;
  */
 public abstract class ParentNode extends Node {
 
-    ArrayList children; 
-    String    actualBaseURI;
+    Node[] children; 
+    int    childCount = 0;
+    String actualBaseURI;
 
     /**
      * <p>
@@ -70,8 +69,7 @@ public abstract class ParentNode extends Node {
      * @return the number of children of this node
      */
     public int getChildCount() {
-        if (children == null) return 0;
-        return children.size(); 
+        return childCount; 
     }
 
     
@@ -118,9 +116,27 @@ public abstract class ParentNode extends Node {
 
 
     void fastInsertChild(Node child, int position) {
-        if (children == null) children = new ArrayList(1);
-        children.add(position, child);
+        checkCapacity(this.childCount+1);
+        if (position < childCount) {
+            System.arraycopy(children, position, children, position+1, childCount-position);
+        }
+        children[position] = child;
+        childCount++;
         child.setParent(this);
+    }
+
+
+    private void checkCapacity(int position) {
+
+        if (children == null) {
+            children = new Node[1];
+        }
+        else if (position >= children.length) {
+            Node[] data = new Node[children.length * 2];
+            System.arraycopy(children, 0, data, 0, children.length);
+            this.children = data;
+        }
+        
     }
 
 
@@ -141,7 +157,7 @@ public abstract class ParentNode extends Node {
      * 
      */
     public void appendChild(Node child) {
-        insertChild(child, getChildCount());
+        insertChild(child, childCount);
     }
 
     
@@ -166,7 +182,7 @@ public abstract class ParentNode extends Node {
               "This node has no children"
             );
         }
-        return (Node) children.get(position); 
+        return children[position]; 
         
     }
     
@@ -208,7 +224,10 @@ public abstract class ParentNode extends Node {
         }
         lastPosition = children.indexOf(child);
         return lastPosition; */
-        return children.indexOf(child);
+        for (int i = 0; i < childCount; i++) {
+            if (child == children[i]) return i;
+        }
+        return -1;
         
     }
 
@@ -234,12 +253,18 @@ public abstract class ParentNode extends Node {
               "This node has no children"
             );
         }
-        Node removed = (Node) children.get(position);
+        Node removed = children[position];
         // fill in actual base URI
         // This way does add base URIs to elements created in memory
         // XXX but this is a HotSpot when building; we need a fastRemoveChild
         if (removed.isElement()) fillInBaseURI((Element) removed);
-        children.remove(position);
+        
+        int toCopy = childCount-position-1;
+        if (toCopy > 0) {
+            System.arraycopy(children, position+1, children, position, toCopy);
+        }
+        childCount--;
+        children[childCount] = null;
         removed.setParent(null);
                 
         return removed;  
@@ -279,15 +304,15 @@ public abstract class ParentNode extends Node {
               "Child does not belong to this node"
             );
         }
-        // This next line is a hotspot
-        int position = children.indexOf(child);
+        // This next line is a hot spot
+        int position = indexOf(child);
         if (position == -1) {
             throw new NoSuchChildException(
               "Child does not belong to this node"
             );
         }
         if (child.isElement()) fillInBaseURI((Element) child);
-        children.remove(position);
+        removeChild(position);
         
         child.setParent(null);
 
@@ -331,7 +356,7 @@ public abstract class ParentNode extends Node {
               "Reference node is not a child of this node."
             );
         }
-        int position = children.indexOf(oldChild);
+        int position = indexOf(oldChild);
         if (position == -1)  {
             throw new NoSuchChildException(
               "Reference node is not a child of this node."

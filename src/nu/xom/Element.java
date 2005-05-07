@@ -1060,6 +1060,7 @@ public class Element extends ParentNode {
             result.append(child);
         }   
         this.children = null;
+        this.childCount = 0;
         
         return result;
         
