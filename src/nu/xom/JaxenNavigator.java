@@ -48,6 +48,7 @@ import org.jaxen.UnsupportedAxisException;
 import org.jaxen.XPath;
 import org.jaxen.util.SingleObjectIterator;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -226,7 +227,8 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
             if (element.attributes == null) {
                 return JaxenConstants.EMPTY_ITERATOR;
             }
-            else return element.attributes.iterator();
+            // ???? could optimize with an Array iterator class
+            else return Arrays.asList(element.attributes).iterator();
         }
         catch (ClassCastException ex) {
             return JaxenConstants.EMPTY_ITERATOR;

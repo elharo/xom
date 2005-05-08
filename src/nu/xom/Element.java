@@ -21,7 +21,6 @@
 
 package nu.xom;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -57,8 +56,9 @@ public class Element extends ParentNode {
     private String prefix;
     private String URI;
 
-            ArrayList  attributes = null;
-    private Namespaces namespaces = null;
+            Attribute[] attributes = null;
+    private int numAttributes = 0;
+    private Namespaces  namespaces = null;
 
     /**
      * <p>
@@ -166,6 +166,7 @@ public class Element extends ParentNode {
         // Attach clones of attributes
         if (element.attributes != null) {
             this.attributes = element.copyAttributes();
+            this.numAttributes = element.numAttributes;
         } 
         
         this.actualBaseURI = element.findActualBaseURI();
@@ -175,12 +176,11 @@ public class Element extends ParentNode {
     }
     
 
-    private ArrayList copyAttributes() {
+    private Attribute[] copyAttributes() {
 
-        int size = attributes.size();
-        ArrayList copy = new ArrayList(size);
-        for (int i = 0; i < size; i++) {
-            copy.add(((Attribute) attributes.get(i)).copy());
+        Attribute[] copy = new Attribute[numAttributes];
+        for (int i = 0; i < numAttributes; i++) {
+            copy[i] = (Attribute) attributes[i].copy();
         }
         return copy;
         
@@ -199,6 +199,7 @@ public class Element extends ParentNode {
         // Attach clones of attributes
         if (source.attributes != null) {
             result.attributes = source.copyAttributes();
+            result.numAttributes = source.numAttributes;
         } 
         
         result.actualBaseURI = source.findActualBaseURI();
@@ -456,24 +457,60 @@ public class Element extends ParentNode {
             
         }
         
-        if (attributes == null) attributes = new ArrayList(1);
+        if (attributes == null) attributes = new Attribute[1];
         checkPrefixConflict(attribute);
         
         // Is there already an attribute with this local name
         // and namespace? If so, remove it.
         Attribute oldAttribute = getAttribute(attribute.getLocalName(),
           attribute.getNamespaceURI());
-        if (oldAttribute != null) attributes.remove(oldAttribute);
+        if (oldAttribute != null) remove(oldAttribute);
         
-        attributes.add(attribute);
+        add(attribute);
         attribute.setParent(this);
         
     }
     
     
+    private void add(Attribute attribute) {
+
+        if (numAttributes == attributes.length) {
+            Attribute[] newAttributes = new Attribute[attributes.length * 2];
+            System.arraycopy(attributes, 0, newAttributes, 0, numAttributes);
+            this.attributes = newAttributes;
+        }
+        attributes[numAttributes] = attribute;
+        numAttributes++;
+        
+    }
+
+
+    private boolean remove(Attribute attribute) {
+
+        int index = -1;
+        for (int i = 0; i < attributes.length; i++) {
+            if (attributes[i] == attribute) {
+                index = i;
+                break;
+            }
+        }
+        
+        if (index == -1) return false;
+        
+        int toCopy = numAttributes-index-1;
+        if (toCopy > 0) {
+            System.arraycopy(attributes, index+1, attributes, index, toCopy);
+        }
+        numAttributes--;
+        attributes[numAttributes] = null;
+        return true;
+        
+    }
+
+
     void fastAddAttribute(Attribute attribute) {
-        if (attributes == null) attributes = new ArrayList(1);
-        attributes.add(attribute);
+        if (attributes == null) attributes = new Attribute[1];
+        add(attribute);
         attribute.setParent(this);
     }
 
@@ -503,7 +540,7 @@ public class Element extends ParentNode {
             throw new NullPointerException(
               "Tried to remove null attribute");
         }        
-        if (attributes.remove(attribute)) {
+        if (remove(attribute)) {
             attribute.setParent(null);
             return attribute;
         }
@@ -550,9 +587,8 @@ public class Element extends ParentNode {
       String namespaceURI) {
         
         if (attributes == null) return null;
-        int size = attributes.size();
-        for (int i = 0; i < size; i++) {
-            Attribute a = (Attribute) attributes.get(i);
+        for (int i = 0; i < numAttributes; i++) {
+            Attribute a = attributes[i];
             if (a.getLocalName().equals(localName) 
              && a.getNamespaceURI().equals(namespaceURI)) {
                 return a;
@@ -593,8 +629,7 @@ public class Element extends ParentNode {
      * @return the number of attributes in the container
      */
     public final int getAttributeCount() {
-        if (attributes == null) return 0;
-        return attributes.size();   
+        return numAttributes;   
     }
     
     
@@ -635,7 +670,7 @@ public class Element extends ParentNode {
               "Element does not have any attributes"
             );
         }
-        return (Attribute) attributes.get(index); 
+        return attributes[index]; 
         
     }
 
@@ -762,8 +797,8 @@ public class Element extends ParentNode {
         }
         // Look in the attributes
         if (prefix.length() != 0 && attributes != null) {
-            for (int i = 0; i < attributes.size(); i++) {
-                Attribute a = (Attribute) attributes.get(i);
+            for (int i = 0; i < numAttributes; i++) {
+                Attribute a = attributes[i];
                 if (a.getNamespacePrefix().equals(prefix)) {
                     return a.getNamespaceURI();
                 }   
@@ -845,8 +880,8 @@ public class Element extends ParentNode {
         }
         // Look in the attributes
         if (uri.length() > 0 && attributes != null) {
-            for (int i = 0; i < attributes.size(); i++) {
-                Attribute a = (Attribute) attributes.get(i);
+            for (int i = 0; i < numAttributes; i++) {
+                Attribute a = attributes[i];
                 String attPrefix = a.getNamespacePrefix();
                 if (attPrefix.length() == 0) continue;
                 if (a.getNamespacePrefix().equals(prefix)) {
@@ -1546,8 +1581,8 @@ public class Element extends ParentNode {
         
         // attributes
         if (element.attributes != null) {
-            for (int i = 0; i < element.attributes.size(); i++) {
-                Attribute attribute = (Attribute) element.attributes.get(i);
+            for (int i = 0; i < element.numAttributes; i++) {
+                Attribute attribute = element.attributes[i];
                 result.append(' ');
                 result.append(attribute.toXML());   
             }       
@@ -1702,9 +1737,8 @@ public class Element extends ParentNode {
         String namespaceURI = attribute.getNamespaceURI();
         
         // Look for conflicts
-        int size = attributes.size();
-        for (int i = 0; i < size; i++) {
-            Attribute a = (Attribute) attributes.get(i);
+        for (int i = 0; i < numAttributes; i++) {
+            Attribute a = attributes[i];
             if (a.getNamespacePrefix().equals(prefix)) {
               if (a.getNamespaceURI().equals(namespaceURI)) return;
               throw new NamespaceConflictException(
