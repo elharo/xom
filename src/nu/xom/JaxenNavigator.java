@@ -224,11 +224,7 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
         
         try {
             Element element = (Element) contextNode;
-            if (element.attributes == null) {
-                return JaxenConstants.EMPTY_ITERATOR;
-            }
-            // ???? could optimize with an Array iterator class
-            else return Arrays.asList(element.attributes).iterator();
+            return element.attributeIterator();
         }
         catch (ClassCastException ex) {
             return JaxenConstants.EMPTY_ITERATOR;
