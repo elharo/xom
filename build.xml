@@ -31,7 +31,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.1b1"/>
+    <property name="version" value="1.1b2-SNAPSHOT"/>
     <property name="year"    value="2005"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -41,6 +41,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="deprecation" value="off"/>
 
     <property name="src.dir"    value="./src"/>
+    <property name="fat.src"    value="./fatsrc"/>
     <property name="src15.dir"  value="./src15"/>
     <property name="lib.dir"    value="./lib"/>
     <property name="lib2.dir"   value="./lib2"/>
@@ -149,12 +150,15 @@ XOM Build file
     clean     --> clean up the build directory
     dist      --> the zip and .tar.gz files
     
+  Use the option -Dfat=true to make Text objects bigger but faster.
+
 -------------------------------------------------------------
     </echo>
   </target>
 
+  <target name="prepare" depends="init, prepare-dirs, prepare-fat" />
   
-  <target name="prepare" depends="init">
+  <target name="prepare-dirs" depends="init">
     <mkdir dir="${dist.dir}"/>
     <mkdir dir="${testoutput.dir}"/>
     <mkdir dir="${build.dir}"/>
@@ -164,11 +168,21 @@ XOM Build file
     <mkdir dir="${build.src}"/>
     <mkdir dir="${build.dest}"/>
 
-    <copy todir="${build.src}" filtering="yes">
+    <delete file="${build.src}/nu/xom/Text.java" failonerror="false"/>
+
+    <copy todir="${build.src}">
       <fileset dir="${src.dir}"/>
     </copy>
     
   </target>
+
+  <!-- use Text.java that stores contents in String -->
+  <target name="prepare-fat" depends="init" if="fat">
+	 <copy todir="${build.src}" overwrite="true">
+	    <fileset dir="${fat.src}"/>
+	 </copy>
+  </target>
+
 
   <target name="compile-core" depends="prepare, compile-jaxen" 
           description="Compile the source code">
@@ -191,6 +205,7 @@ XOM Build file
          different target and copy it over here. -->
     <copy file="classes15/nu/xom/JDK15XML1_0Parser.class" tofile="${build.dest}/nu/xom/JDK15XML1_0Parser.class"/>
   </target>
+
 
   <target name="compile" depends="compile-core, compile-servlets" 
           description="Compile the source code" />
@@ -227,7 +242,7 @@ XOM Build file
     </javac>
   </target>
 
-    <target name="minimal" depends="compile" description="Create xom-minimal.jar">
+  <target name="minimal" depends="compile" description="Create xom-minimal.jar">
     <jar jarfile="${build.dir}/${name}-${version}-minimal.jar"
          basedir="${build.dest}"
          index="no"
@@ -536,6 +551,7 @@ XOM Build file
     </junit>
   </target>
  
+
   <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
     <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
       <sysproperty key="org.xml.sax.driver" value="org.apache.xerces.parsers.SAXParser"/> 
