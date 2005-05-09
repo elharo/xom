@@ -56,8 +56,8 @@ public class Element extends ParentNode {
     private String prefix;
     private String URI;
 
-            Attribute[] attributes = null;
-    private int numAttributes = 0;
+    private Attribute[] attributes = null;
+    private int         numAttributes = 0;
     private Namespaces  namespaces = null;
 
     /**
@@ -1747,6 +1747,30 @@ public class Element extends ParentNode {
             }   
         }
         
+    }
+
+
+    Iterator attributeIterator() {
+
+        return new Iterator() {
+
+            int next = 0;
+            
+            public boolean hasNext() {
+                return next < numAttributes;
+            }
+
+            public Object next() {
+                Attribute a = attributes[next];
+                next++;
+                return a;
+            }
+
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+            
+        };
     }
 
     
