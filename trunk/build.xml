@@ -293,7 +293,7 @@ XOM Build file
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*">
 
     <fileset dir="${jaxen.dir}"
-         excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/XPathTestBase.class org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/** org/jaxen/**Test.class org/jaxen/saxpath/base/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/pattern/MockXPathReader.class org/jaxen/pattern/PriorityTest.class">
+         excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/XPathTestBase.class org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/** org/jaxen/**Test.class org/jaxen/saxpath/base/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/pattern/MockXPathReader.class org/jaxen/saxpath/SAXPathParseException.class org/jaxen/pattern/PriorityTest.class">
     </fileset> 
 
       <manifest>
@@ -578,6 +578,7 @@ XOM Build file
     <mkdir dir="${clover.dir}"/>
     <clover-setup initString="${clover.dir}/xom_coverage.db">
        <files>
+	       <exclude name="nu/xom/UnicodeUtil.java"/>
 	       <exclude name="nu/xom/Latin6Writer.java"/>
 	       <exclude name="nu/xom/Latin8Writer.java"/>
 	       <exclude name="nu/xom/Latin10Writer.java"/>
