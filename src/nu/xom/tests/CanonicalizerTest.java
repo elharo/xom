@@ -54,7 +54,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -204,6 +204,24 @@ public class CanonicalizerTest extends XOMTestCase {
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
+        
+    }
+
+    
+    public void testTamin() throws ParsingException, IOException {
+        
+        String input = "<ns1:root xmlns:ns1='http://www.example.org/'><elt1></elt1></ns1:root>";
+        Document doc = builder.build(input, null);
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out);
+        
+        canonicalizer.write(doc);  
+        
+        byte[] result = out.toByteArray();
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals("<ns1:root xmlns:ns1=\"http://www.example.org/\"><elt1></elt1></ns1:root>", s);
         
     }
 

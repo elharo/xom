@@ -408,7 +408,7 @@ public class Canonicalizer {
                     else if (uri.equals("")) {
                         // no need to say xmlns=""
                         if (parentElement == null) continue;    
-                        if ("".equals(parentElement.getNamespaceURI())) {
+                        if ("".equals(parentElement.getNamespaceURI(""))) {
                             continue;
                         }
                         map.put(prefix, uri);
