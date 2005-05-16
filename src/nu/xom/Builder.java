@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  * 
  */
 public class Builder {
@@ -971,14 +971,14 @@ public class Builder {
                             }
                             catch (IndexOutOfBoundsException ex) {
                                 // file name contains a high half and not a low half
-                                url.setLength(0);
+                                url = new StringBuffer(0);
                                 break;
                             }
                         }
                         else {
                             // low half not preceded by high half
                             // Can't create a base URI
-                            url.setLength(0);
+                            url = new StringBuffer(0);
                             break;
                         }
                 }
