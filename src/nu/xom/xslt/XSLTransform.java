@@ -372,8 +372,10 @@ public final class XSLTransform {
      * Builds a <code>Document</code> object from a 
      * <code>Nodes</code> object. This is useful when the stylesheet
      * is known to produce a well-formed document with a single root 
-     * element and no text or attribute nodes. If the stylesheet 
-     * produces anything else, an <code>XMLException</code> is thrown.
+     * element. That is, the <code>Node</code> returned contains
+     * only comments, processing instructions, and exactly one 
+     * element. If the stylesheet produces anything else, 
+     * this method throws <code>XMLException</code>.
      * </p>
      * 
      * @param nodes the nodes to be placed in the new document
