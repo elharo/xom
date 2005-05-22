@@ -58,7 +58,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="testreports.dir" value="./testreports" />
     <property name="jaxen.dir"       value="${build.dir}/jaxen-classes"/>
 
-    <property name="xml-apis.jar"   value="${lib.dir}/xmlParserAPIs.jar"/>
+    <property name="xml-apis.jar"   value="${lib.dir}/xml-apis.jar"/>
     <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.0rc1.jar"/>
@@ -464,7 +464,7 @@ XOM Build file
     </javac>
     
     <java classname="nu.xom.tools.XHTMLJavaDoc" fork="yes"> 
-      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xmlParserAPIs.jar:lib/xalan.jar"/> 
+      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xml-apis.jar:lib/xalan.jar"/> 
       <classpath refid="doc.class.path" />
       <arg value="build/apidocs"/> 
     </java>
@@ -578,6 +578,7 @@ XOM Build file
     <mkdir dir="${clover.dir}"/>
     <clover-setup initString="${clover.dir}/xom_coverage.db">
        <files>
+           <include name="nu/xom/**"/> <!-- work around Ant 1.6.3 bug  #34722 -->
 	       <exclude name="nu/xom/UnicodeUtil.java"/>
 	       <exclude name="nu/xom/Latin6Writer.java"/>
 	       <exclude name="nu/xom/Latin8Writer.java"/>
