@@ -1622,9 +1622,17 @@ public class Element extends ParentNode {
     public final String getValue() {
 
         // non-recursive algorithm avoids stack size limitations
-        if (this.getChildCount() == 0) return "";
-        StringBuffer result = new StringBuffer();
+        int childCount = this.getChildCount();
+        if (childCount == 0) return "";
+
         Node current = this.getChild(0);
+        // optimization for common case where element 
+        // has a single text node child
+        if (childCount == 1 && current.isText()) {
+            return current.getValue();
+        }   
+        
+        StringBuffer result = new StringBuffer();
         int index = 0;
         int[] indexes = new int[10];
         int top = 0;
