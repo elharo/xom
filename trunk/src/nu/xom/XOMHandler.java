@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  *
  */
 class XOMHandler 
@@ -224,7 +224,17 @@ class XOMHandler
             // Optimization for default case where result only contains current
             if (result.size() != 1 || result.get(0) != current) {            
                 if (!parent.isDocument()) {
-                    parent.removeChild(parent.getChildCount() - 1);
+                    // allow factories to detach the element itself in
+                    // finishMakingElement
+                    int childCount = parent.getChildCount();
+                    try {
+                        parent.removeChild(childCount - 1);
+                    }
+                    catch (IndexOutOfBoundsException ex) {
+                        throw new XMLException(
+                          "Factory detached element in finishMakingElement()", 
+                          ex);
+                    }
                     for (int i=0; i < result.size(); i++) {
                         Node node = result.get(i);
                          if (node.isAttribute()) {
