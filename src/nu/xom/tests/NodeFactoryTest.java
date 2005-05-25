@@ -23,6 +23,7 @@ package nu.xom.tests;
 
 import java.io.File;
 import java.io.IOException;
+
 import nu.xom.ParsingException;
 
 import nu.xom.Attribute;
@@ -46,7 +47,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b2
  *
  */
 public class NodeFactoryTest extends XOMTestCase {
@@ -1033,30 +1034,31 @@ public class NodeFactoryTest extends XOMTestCase {
     }
  
     
-    public void testOrderOfCallsWithComment() 
+    public void testFinishMakingElementDetachesItsArgument() 
       throws ParsingException, IOException {
         
-        String data = "<root>1<!-- test -->>2</root>";
+        String data = "<root><a><b /></a></root>";
         Builder builder = new Builder(new NodeFactory() {
             
-            String s = "";
-            
-            public Nodes makeText(String text) {
-                s += text;
-                return super.makeText(text);
-            }
-            
-            public Nodes makeComment(String data) {
+            public Nodes finishMakingElement(Element element) {
                 
-                assertEquals("1", s);
-                return new Nodes();    
+                if (element.getLocalName().equals("b")) {
+                    element.detach();
+                    return new Nodes();    
+                }
+                return new Nodes(element);
             }
             
         });
-        Document doc = builder.build(data, null);
-        assertEquals(2, doc.getRootElement().getChildCount());
+        
+        try {
+            builder.build(data, null);
+            fail("Allowed finishmakingElement to detach its argument");
+        }
+        catch (ParsingException success) {
+            assertNotNull(success.getMessage());
+        }
         
     }
- 
-    
+
 }
