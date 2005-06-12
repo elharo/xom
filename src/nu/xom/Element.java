@@ -1768,10 +1768,15 @@ public class Element extends ParentNode {
                 return next < numAttributes;
             }
 
-            public Object next() {
-                Attribute a = attributes[next];
-                next++;
-                return a;
+            public Object next() throws NoSuchElementException {
+                
+                if (hasNext()) {
+                    Attribute a = attributes[next];
+                    next++;
+                    return a;
+                }
+                throw new NoSuchElementException("No such attribute");
+                
             }
 
             public void remove() {
