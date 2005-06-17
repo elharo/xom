@@ -87,7 +87,7 @@ public class ParsingExceptionTest extends XOMTestCase {
     
     public void testToString() {
         ParsingException ex = new ParsingException(message, 10, 20);
-        assertTrue(ex.toString().endsWith(" at line 10, column 20.")); 
+        assertTrue(ex.toString().endsWith(" at line 10, column 20")); 
     }
     
     
