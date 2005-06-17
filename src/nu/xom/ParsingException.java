@@ -35,7 +35,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b2
  *
  */
 public class ParsingException extends Exception {
@@ -278,8 +278,19 @@ public class ParsingException extends Exception {
      * @return an exception message suitable for display to a developer
      */
     public String toString() {
-        return super.toString() + " at line " 
-          + lineNumber + ", column " + columnNumber + ".";    
+        StringBuffer result = new StringBuffer(super.toString());
+        if (lineNumber >= 0) {
+            result.append(" at line ");
+            result.append(lineNumber);
+            result.append(", column ");
+            result.append(columnNumber);
+        }
+        
+        if (this.uri != null) {
+            result.append(" in ");
+            result.append(uri);
+        }
+        return result.toString();
     }
 
     
