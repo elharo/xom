@@ -29,7 +29,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b2
  *
  */
 class ISOGreekWriter extends TextWriter {
@@ -42,7 +42,7 @@ class ISOGreekWriter extends TextWriter {
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
     boolean needsEscaping(char c) {
-        if (c <= 0xA0) return false;        
+        if (c < 127) return false;     
         switch (c) { // Greek
             case 0x0384: return false; // GREEK TONOS
             case 0x0385: return false; // GREEK DIALYTIKA TONOS
@@ -121,6 +121,9 @@ class ISOGreekWriter extends TextWriter {
             case 0x03CE: return false; // GREEK SMALL LETTER OMEGA WITH TONOS
         }
         switch (c) { // overlap with Latin-1
+            case 0x00A0: return false; // non-breaking space
+            case 0x00A1: return true;  // place holder to enable table lookup
+            case 0x00A2: return true;  // place holder to enable table lookup
             case 0x00A3: return false; // POUND SIGN
             case 0x00A4: return true;  // place holder to enable table lookup
             case 0x00A5: return true;  // place holder to enable table lookup
