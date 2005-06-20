@@ -21,6 +21,9 @@
 
 package nu.xom.tests;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import nu.xom.CycleException;
 import nu.xom.IllegalAddException;
 import nu.xom.IllegalDataException;
@@ -64,6 +67,16 @@ public class XMLExceptionTest extends XOMTestCase {
         XMLException ex = new XMLException(message, cause);
         assertEquals(message, ex.getMessage());
         assertEquals(cause, ex.getCause()); 
+    }
+    
+    
+    public void testPrintStackTrace() {
+        XMLException ex = new XMLException(message, cause);
+        StringWriter out = new StringWriter();
+        PrintWriter pw = new PrintWriter(out);
+        ex.printStackTrace(pw);
+        pw.close();
+        assertTrue(out.toString().indexOf("Caused by: ") > 0);
     }
     
     
