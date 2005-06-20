@@ -680,6 +680,87 @@ public class NodeFactoryTest extends XOMTestCase {
     }
 
 
+    public void testChangeDefaultNamespaceFromEnd() 
+      throws ParsingException, IOException {
+        
+        String data = "<a><b xmlns='http://www.a.com'/></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes finishMakingElement(Element element) {
+                Nodes result = new Nodes(element);
+                element.setNamespaceURI("http://www.b.org/");
+                return result;
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        Element child = (Element) root.getChild(0);
+        assertEquals("http://www.b.org/", child.getNamespaceURI());
+        
+    }
+
+
+    // XXX need to test changing namespaces of attributes too
+    public void testChangePrefixedNamespaceFromEnd() 
+      throws ParsingException, IOException {
+        
+        String data = "<a><pre:b xmlns:pre='http://www.a.com'/></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Nodes finishMakingElement(Element element) {
+                Nodes result = new Nodes(element);
+                element.setNamespaceURI("http://www.b.org/");
+                return result;
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        Element child = (Element) root.getChild(0);
+        assertEquals("http://www.b.org/", child.getNamespaceURI());
+        
+    }
+    
+    
+    public void testChangeDefaultNamespaceFromBeginning() 
+      throws ParsingException, IOException {
+        
+        String data = "<a><b xmlns='http://www.a.com'/></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Element startMakingElement(String name, String namespaceURI) {
+                return new Element(name, "http://www.b.org/");
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        Element child = (Element) root.getChild(0);
+        assertEquals("http://www.b.org/", child.getNamespaceURI());
+        
+    }
+
+
+    public void testChangePrefixedNamespaceFromBeginning() 
+      throws ParsingException, IOException {
+        
+        String data = "<a><pre:b xmlns:pre='http://www.a.com'/></a>";
+        Builder builder = new Builder(new NodeFactory() {
+            
+            public Element startMakingElement(String name, String namespaceURI) {
+                return new Element(name, "http://www.b.org/");
+            }
+            
+        });
+        Document doc = builder.build(data, "http://www.example.org/");
+        Element root = doc.getRootElement();
+        Element child = (Element) root.getChild(0);
+        assertEquals("http://www.b.org/", child.getNamespaceURI());
+        
+    }
+
+
     public void testChangeTextToAttributes() 
       throws ParsingException, IOException {
         

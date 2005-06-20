@@ -185,7 +185,7 @@ class XOMHandler
                     String namespacePrefix = qName.substring(6);
                     String currentValue
                        = element.getNamespaceURI(namespacePrefix); 
-                    if (!namespaceName.equals(currentValue)) {
+                    if (!namespaceName.equals(currentValue) && ! namespacePrefix.equals(element.getNamespacePrefix())) {
                         element.addNamespaceDeclaration(
                           namespacePrefix, namespaceName);
                     }              
@@ -195,7 +195,7 @@ class XOMHandler
                     String namespacePrefix = "";
                     String currentValue 
                       = element.getNamespaceURI(namespacePrefix); 
-                    if (!namespaceName.equals(currentValue)) {
+                    if (!namespaceName.equals(currentValue) && ! "".equals(element.getNamespacePrefix())) {
                         element.addNamespaceDeclaration(namespacePrefix, 
                          namespaceName);
                     }                
