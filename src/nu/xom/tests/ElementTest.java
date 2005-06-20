@@ -137,11 +137,37 @@ public class ElementTest extends XOMTestCase {
         );
         
     }
+    
+    
+    public void testElementNamedXMLNS() {
+        
+        String name = "xmlns";
+        Element e = new Element(name);
+        
+        assertEquals(name, e.getLocalName());
+        assertEquals(name, e.getQualifiedName());
+        assertEquals("",   e.getNamespacePrefix());
+        assertEquals("",   e.getNamespaceURI());
+        
+    }
+
+    
+    public void testElementWithPrefixXMLNS() {
+        
+        try {
+            new Element("xmlns:foo", "http://www.example.org/");
+            fail("Allowed xmlns prefix on element");
+        }
+        catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
 
     
     public void testConstructor1() {
         
-        String name = "sakjdhjhd";
+        String name = "Jethro";
         Element e = new Element(name);
         
         assertEquals(name, e.getLocalName());
@@ -444,6 +470,23 @@ public class ElementTest extends XOMTestCase {
             assertNotNull(success.getMessage());
         }        
     }
+    
+    
+    public void testConflictingDefaultNamespace() {
+        
+        Element e = new Element("foo", "http://www.foo.com/");
+        try {
+            e.addNamespaceDeclaration("", "http://www.bar.com/");
+            fail("Added conflicting default namespace");
+        }
+        catch (NamespaceConflictException success) {
+            String message = success.getMessage();
+            assertTrue(message.indexOf("default namespace") > 0);
+            assertTrue(message.indexOf("http://www.foo.com") > 0);
+            assertTrue(message.indexOf("http://www.bar.com/") > 0);
+        }
+        
+    }
 
         
     public void testNamespaceMappings() {
@@ -502,8 +545,10 @@ public class ElementTest extends XOMTestCase {
             e.addNamespaceDeclaration("pre1", "http://www.blue2.com");
             fail("Added conflicting namespace");    
         }
-        catch (NamespaceConflictException success) { 
-            assertNotNull(success.getMessage());
+        catch (NamespaceConflictException success) {
+            String message = success.getMessage();
+            assertTrue(message.indexOf("http://www.blue2.com") > 0);
+            assertTrue(message.indexOf("pre1") > 0);
         }
         
         try {
@@ -1026,8 +1071,7 @@ public class ElementTest extends XOMTestCase {
             fail("Added comment before start"); 
         }
         catch (IndexOutOfBoundsException success) {
-            // success   
-            assertNotNull(success.getMessage()); 
+            // success 
         }     
         
     }
@@ -1319,8 +1363,10 @@ public class ElementTest extends XOMTestCase {
           e.getNamespaceURI("blue"), 
           copy.getNamespaceURI("blue"));
         assertEquals(e.getValue(), copy.getValue());
-        assertEquals(e.getAttribute("test").getValue(), 
-          copy.getAttribute("test").getValue());
+        
+        Attribute ea = e.getAttribute("test");
+        Attribute ca = copy.getAttribute("test");
+        assertEquals(ea.getValue(), ca.getValue());
         assertEquals(e.getBaseURI(), copy.getBaseURI());
 
     }
