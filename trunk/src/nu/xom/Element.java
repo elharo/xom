@@ -1169,10 +1169,20 @@ public class Element extends ParentNode {
         
         String currentBinding = getLocalNamespaceURI(prefix);
         if (currentBinding != null && !currentBinding.equals(uri)) {
-            throw new NamespaceConflictException(
-              "Additional namespace " + uri 
-              + " conflicts with existing namespace binding."
-            );   
+            
+            String message;
+            if (prefix.equals("")) {
+                message =  "Additional namespace " + uri 
+                  + " conflicts with existing default namespace "
+                  + currentBinding;
+            }
+            else {
+                message = "Additional namespace " + uri 
+                  + " for the prefix " + prefix 
+                  + " conflicts with existing namespace binding "
+                  + currentBinding;
+            }
+            throw new NamespaceConflictException(message);   
         }
         
         if (namespaces == null) namespaces = new Namespaces();
