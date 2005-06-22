@@ -26,13 +26,13 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  * 
  */
 public class XPathTypeException extends XPathException {
     
     
-    private Object returnValue;
+    private final Object returnValue;
 
 
     XPathTypeException(String message, Object returnValue) {
