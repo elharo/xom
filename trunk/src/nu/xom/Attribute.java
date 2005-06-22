@@ -1018,7 +1018,7 @@ public class Attribute extends Node {
         }   
 
 
-        private int type;
+        private final int type;
 
         private Type(int type) {
           this.type = type;
