@@ -21,8 +21,6 @@
 
 package nu.xom;
 
-import nu.xom.Element;
-
 /**
  * <p>
  * Represents a namespace in scope. It is used by XOM's 
@@ -36,7 +34,7 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1b2
  *
  */
 public final class Namespace extends Node {

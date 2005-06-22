@@ -30,14 +30,6 @@ package nu.xom;
  * @version 1.1b2
  *
  */
-import nu.xom.Attribute;
-import nu.xom.Comment;
-import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.ProcessingInstruction;
-import nu.xom.Text;
-import nu.xom.Node;
-import nu.xom.ParentNode;
 
 import org.jaxen.DefaultNavigator;
 import org.jaxen.FunctionCallException;
