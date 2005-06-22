@@ -836,7 +836,7 @@ public class Canonicalizer {
                 write((Attribute) node);
             }
             else if (node instanceof Namespace) {
-                write((Namespace) node);;
+                write((Namespace) node);
             }
             else {
                 writeChild(node);
@@ -966,7 +966,7 @@ public class Canonicalizer {
     // order, and add results as they are found
     private Nodes sort(Nodes in) {
 
-        Node root = in.get(0).getDocument();;
+        Node root = in.get(0).getDocument();
         if (in.size() > 1) {
             Nodes out = new Nodes();
             List list = new ArrayList(in.size());
