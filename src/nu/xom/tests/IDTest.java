@@ -266,7 +266,6 @@ public class IDTest extends XOMTestCase {
                 if (features != null && features.indexOf("xml11") >= 0) {
                     continue; // skip test
                 }
-                String id = testcase.getAttributeValue("id");
                 URL testURL = new URL(base, testcase.getFirstChildElement("file-path").getValue() + "/");
                 Element scenario = testcase.getFirstChildElement("scenario");
                 Element input = scenario.getFirstChildElement("input-file");
@@ -306,7 +305,6 @@ public class IDTest extends XOMTestCase {
                     if (features != null && features.indexOf("xml11") >= 0) {
                         continue; // skip test
                     }
-                    String id = testcase.getAttributeValue("id");
                     File root = new File(base, testcase.getFirstChildElement("file-path").getValue());
                     File inputFile = null;
                     Element scenario = testcase.getFirstChildElement("scenario");
@@ -357,7 +355,6 @@ public class IDTest extends XOMTestCase {
                 getIDs((Element) child, list);
             }
         }
-        
         
     }
     

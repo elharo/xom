@@ -969,7 +969,6 @@ public class VerifierTest extends XOMTestCase {
     // from Unicode FAQ
     // http://www.unicode.org/faq/utf_bom.html#35
     private static int LEAD_OFFSET = 0xD800 - (0x10000 >> 10);
-    private static int SURROGATE_OFFSET = 0x10000 - (0xD800 << 10) - 0xDC00;
     
     private static String convertToUTF16(int c) {
         

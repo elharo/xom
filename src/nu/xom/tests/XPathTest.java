@@ -610,7 +610,7 @@ public class XPathTest extends XOMTestCase {
     public void testAncestorAxis() {
         
         Element grandparent = new Element("Test");
-        Document doc = new Document(grandparent);
+        new Document(grandparent);
         Element parent = new Element("Test");
         Element child = new Element("child");
         parent.appendChild(child);
@@ -627,7 +627,7 @@ public class XPathTest extends XOMTestCase {
     public void testParentAxisWithDocument() {
         
         Element root = new Element("Test");
-        Document doc = new Document(root);
+        new Document(root);
         
         Nodes result = root.query("parent::*");
         assertEquals(0, result.size());
@@ -650,7 +650,7 @@ public class XPathTest extends XOMTestCase {
     public void testSubstringFunction() {
         
         Element root = new Element("Test");
-        Document doc = new Document(root);
+        new Document(root);
         
         Nodes result = root.query("/*[substring('12345', 0, 3)='12']");
         assertEquals(1, result.size());
@@ -1054,7 +1054,7 @@ public class XPathTest extends XOMTestCase {
     public void testAncestorOrSelfAxis() {
         
         Element grandparent = new Element("Test");
-        Document doc = new Document(grandparent);
+        new Document(grandparent);
         Element parent = new Element("Test");
         Element child = new Element("child");
         parent.appendChild(child);
@@ -1491,7 +1491,7 @@ public class XPathTest extends XOMTestCase {
     public void testNamespaceQueryWithNullPrefix2() {
         
         try {
-            XPathContext context = new XPathContext(null, "http://www.example.org");
+            new XPathContext(null, "http://www.example.org");
             fail("Allowed null prefix");
         }
         catch (NullPointerException success) {
@@ -1517,7 +1517,7 @@ public class XPathTest extends XOMTestCase {
     public void testNamespaceQueryWithEmptyPrefix2() {
         
         try {
-            XPathContext context = new XPathContext("", "http://www.example.org");
+            new XPathContext("", "http://www.example.org");
         }
         catch (NamespaceConflictException success) {
             assertTrue(success.getMessage().length() > 1);
@@ -2003,7 +2003,7 @@ public class XPathTest extends XOMTestCase {
          Element child2 = new Element("child2");
          root.appendChild(child1);
          root.appendChild(child2);
-         Document doc = new Document(root);
+         new Document(root);
          
          Nodes result = child2.query("self::*[position()=last()]");
          assertEquals(1, result.size());
@@ -2044,7 +2044,6 @@ public class XPathTest extends XOMTestCase {
             + "</doc>";
         
         Document doc = (new Builder()).build(input, null);
-        XPathContext context = new XPathContext("ietf", "http://www.ietf.org");
         String xpath = "(/*/* | /*/*/namespace::*)\n";
         Nodes result = doc.query(xpath);
         assertEquals(4, result.size());
@@ -2090,7 +2089,7 @@ public class XPathTest extends XOMTestCase {
         root.addAttribute(new Attribute("test", "test"));
         
         try {
-            Nodes nodes = doc.query("//");
+            doc.query("//");
             fail("Queried //");
         }
         catch (XPathException success) {
@@ -2109,7 +2108,7 @@ public class XPathTest extends XOMTestCase {
         root.addAttribute(new Attribute("test", "test"));
         
         try {
-            Nodes nodes = doc.query("// ");
+            doc.query("// ");
             fail("Queried // ");
         }
         catch (XPathException success) {
@@ -2314,7 +2313,7 @@ public class XPathTest extends XOMTestCase {
     public void testPrecedingAxisInDocumentOrder() {
     
         Element root = new Element("root");
-        Document doc = new Document(root);
+        new Document(root);
         
         Element a = new Element("a");
         root.appendChild(a);
