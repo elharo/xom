@@ -2032,9 +2032,9 @@ and expect to see
      
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Element e1 = new Element("test");
-        Document d1 = new Document(e1);
+        new Document(e1);
         Element e2 = new Element("test");
-        Document d2 = new Document(e2);
+        new Document(e2);
         Nodes nodes = new Nodes(e1);
         nodes.append(e2);
         Canonicalizer serializer = new Canonicalizer(out);

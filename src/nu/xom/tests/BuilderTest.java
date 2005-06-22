@@ -1730,8 +1730,6 @@ public class BuilderTest extends XOMTestCase {
     /* Test for particular bug in Crimson with mixed content declarations */ 
     public void testBuildXMLNamespaceDeclarationWithCrimson() 
       throws ParsingException, IOException {
-
-        String dtd = "  <!ELEMENT doc (#PCDATA|a)*>\n";
         
         String document = "<doc xmlns:xml='http://www.w3.org/XML/1998/namespace' />";
         XMLReader crimson;
