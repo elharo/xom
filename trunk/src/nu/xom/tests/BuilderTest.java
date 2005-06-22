@@ -75,7 +75,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b2
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -251,7 +251,7 @@ public class BuilderTest extends XOMTestCase {
         try {
             XMLReader parser = new DoNothingReader();
             Builder builder = new Builder(parser);
-            Document doc = builder.build("http://www.example.org/");
+            builder.build("http://www.example.org/");
             fail("built from bad data");
         }
         catch (ParsingException success) {
@@ -290,7 +290,7 @@ public class BuilderTest extends XOMTestCase {
         try {
             XMLReader parser = new EndOnlyReader();
             Builder builder = new Builder(parser);
-            Document doc = builder.build("http://www.example.org/");
+            builder.build("http://www.example.org/");
             fail("built from bad data");
         }
         catch (ParsingException success) {

@@ -33,7 +33,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1b2
  *
  */
 public class NodesTest extends XOMTestCase {
@@ -62,7 +62,7 @@ public class NodesTest extends XOMTestCase {
     public void testConstructWithNull() {
         
         try {
-            Nodes nodes = new Nodes(null);
+            new Nodes(null);
             fail("constructed with null");
         }
         catch (NullPointerException success) {
@@ -74,8 +74,8 @@ public class NodesTest extends XOMTestCase {
     
     public void testAppendNull() {
         
+        Nodes nodes = new Nodes();
         try {
-            Nodes nodes = new Nodes();
             nodes.append(null);
             fail("appended null");
         }
@@ -88,8 +88,8 @@ public class NodesTest extends XOMTestCase {
     
     public void testInsertNull() {
         
+        Nodes nodes = new Nodes();
         try {
-            Nodes nodes = new Nodes();
             nodes.insert(null, 0);
             fail("inserted null");
         }
