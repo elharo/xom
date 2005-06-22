@@ -45,7 +45,7 @@ import org.xml.sax.helpers.LocatorImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3 
+ * @version 1.1b2 
  */
 public class SAXConverter {
 
@@ -336,8 +336,8 @@ public class SAXConverter {
             if (parent == null) {
                 String uri = element.getNamespaceURI(prefix);
                 if ("".equals(uri)) continue;
+                contentHandler.endPrefixMapping(prefix);  
             }
-            contentHandler.endPrefixMapping(prefix);  
         }
         if (parent != null) {
             // Now handle element's prefix if not declared on ancestor

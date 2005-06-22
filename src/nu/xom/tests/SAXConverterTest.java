@@ -50,7 +50,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b2
  *
  */
 public class SAXConverterTest extends XOMTestCase {
@@ -411,7 +411,7 @@ public class SAXConverterTest extends XOMTestCase {
         }
         
         int getEnds() {
-            return starts;
+            return ends;
         }
         
     }
