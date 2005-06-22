@@ -286,10 +286,10 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
 
     private static class ChildIterator implements Iterator {
     
-        private ParentNode parent;
+        private final ParentNode parent;
 
         private int xomIndex = 0;
-        private int xomCount;
+        private final int xomCount;
         
         ChildIterator(ParentNode parent) {
             this.parent = parent;
@@ -365,13 +365,13 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
 
     private static class NamedChildIterator implements Iterator {
     
-        private ParentNode parent;
+        private final ParentNode parent;
 
         private int index = -1;
-        private int xomCount;
+        private final int xomCount;
         private Element next;
-        private String localName;
-        private String URI;
+        private final String localName;
+        private final String URI;
         
         NamedChildIterator(ParentNode parent, String localName, String prefix, String namespaceURI) {
             this.parent = parent;
@@ -564,8 +564,6 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
         }
         
     }
-    
-
     
     
 }

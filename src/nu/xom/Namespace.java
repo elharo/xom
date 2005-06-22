@@ -39,8 +39,8 @@ package nu.xom;
  */
 public final class Namespace extends Node {
     
-    private String prefix;
-    private String uri;
+    private final String prefix;
+    private final String uri;
     
     /**
      * Namespace URI specified for <code>xml</code> prefix

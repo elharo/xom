@@ -40,15 +40,15 @@ import java.util.Locale;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b2
  * 
  */
 class GenericWriter extends TextWriter {
     
     
-    private ByteArrayOutputStream bout;
-    private OutputStreamWriter wout;
-    private boolean isJapanese = false;
+    private final ByteArrayOutputStream bout;
+    private final OutputStreamWriter    wout;
+    private final boolean               isJapanese;
 
     
     GenericWriter(Writer out, String encoding) 
@@ -64,6 +64,9 @@ class GenericWriter extends TextWriter {
           || encoding.equals("SJIS")
           || encoding.equals("ISO-2022-JP")) {
             isJapanese = true;
+        }
+        else {
+           isJapanese = false; 
         }
         
     }
