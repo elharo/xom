@@ -241,7 +241,7 @@ public class ParsingException extends Exception {
      *   (An exception cannot be its own cause.)
      * @throws IllegalStateException if this method is called twice
      */
-    public Throwable initCause(Throwable cause) {
+    public final Throwable initCause(Throwable cause) {
         
         if (causeSet) {
             throw new IllegalStateException("Can't overwrite cause");
