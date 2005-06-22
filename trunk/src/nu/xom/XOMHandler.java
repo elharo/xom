@@ -674,18 +674,83 @@ class XOMHandler
         StringBuffer result = new StringBuffer(length);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
-            // XXX table lookup
             switch (c) {
                 case '\r': 
                     result.append("&#x0D;");
                     break;
-                case '"': 
+                case 14:
+                    // placeholder for table lookup
+                    break;
+                case 15:
+                    // placeholder for table lookup
+                    break;
+                case 16 :
+                    // placeholder for table lookup
+                    break;
+                case 17:
+                    // placeholder for table lookup
+                    break;
+                case 18:
+                    // placeholder for table lookup
+                    break;
+                case 19:
+                    // placeholder for table lookup
+                    break;
+                case 20:
+                    // placeholder for table lookup
+                    break;
+                case 21:
+                    // placeholder for table lookup
+                    break;
+                case 22:
+                    // placeholder for table lookup
+                    break;
+                case 23:
+                    // placeholder for table lookup
+                    break;
+                case 24:
+                    // placeholder for table lookup
+                    break;
+                case 25:
+                    // placeholder for table lookup
+                    break;
+                case 26:
+                    // placeholder for table lookup
+                    break;
+                case 27:
+                    // placeholder for table lookup
+                    break;
+                case 28:
+                    // placeholder for table lookup
+                    break;
+                case 29:
+                    // placeholder for table lookup
+                    break;
+                case 30:
+                    // placeholder for table lookup
+                    break;
+                case 31:
+                    // placeholder for table lookup
+                    break;
+                case ' ':
+                    result.append(' ');
+                    break;
+                case '!':
+                    result.append('!');
+                    break;
+                case '\"':
                     result.append("&#x22;");
                     break;
-                case '%': 
+                case '#':
+                    result.append('#');
+                    break;
+                case '$':
+                    result.append('$');
+                    break;
+                case '%':
                     result.append("&#x25;");
                     break;
-                case '&': 
+                case '&':
                     result.append("&#x26;");
                     break;
                 default:
@@ -704,19 +769,147 @@ class XOMHandler
         StringBuffer result = new StringBuffer(length);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
-            // XXX table lookup
             switch (c) {
                 case '\r': 
                     result.append("&#x0D;");
                     break;
-                case '%': 
+                case 14:
+                    // placeholder for table lookup
+                    break;
+                case 15:
+                    // placeholder for table lookup
+                    break;
+                case 16 :
+                    // placeholder for table lookup
+                    break;
+                case 17:
+                    // placeholder for table lookup
+                    break;
+                case 18:
+                    // placeholder for table lookup
+                    break;
+                case 19:
+                    // placeholder for table lookup
+                    break;
+                case 20:
+                    // placeholder for table lookup
+                    break;
+                case 21:
+                    // placeholder for table lookup
+                    break;
+                case 22:
+                    // placeholder for table lookup
+                    break;
+                case 23:
+                    // placeholder for table lookup
+                    break;
+                case 24:
+                    // placeholder for table lookup
+                    break;
+                case 25:
+                    // placeholder for table lookup
+                    break;
+                case 26:
+                    // placeholder for table lookup
+                    break;
+                case 27:
+                    // placeholder for table lookup
+                    break;
+                case 28:
+                    // placeholder for table lookup
+                    break;
+                case 29:
+                    // placeholder for table lookup
+                    break;
+                case 30:
+                    // placeholder for table lookup
+                    break;
+                case 31:
+                    // placeholder for table lookup
+                    break;
+                case ' ':
+                    result.append(' ');
+                    break;
+                case '!':
+                    result.append('!');
+                    break;
+                case '\"':
+                    result.append("&quot;");
+                    break;
+                case '#':
+                    result.append('#');
+                    break;
+                case '$':
+                    result.append('$');
+                    break;
+                case '%':
                     result.append("&#x25;");
                     break;
-                case '&': 
+                case '&':
                     result.append("&amp;");
                     break;
-                case '"': 
-                    result.append("&quot;");
+                case '\'':
+                    result.append('\'');
+                    break;
+                case '(':
+                    result.append('(');
+                    break;
+                case ')':
+                    result.append(')');
+                    break;
+                case '*':
+                    result.append('*');
+                    break;
+                case '+':
+                    result.append('+');
+                    break;
+                case ',':
+                    result.append(',');
+                    break;
+                case '-':
+                    result.append('-');
+                    break;
+                case '.':
+                    result.append('.');
+                    break;
+                case '/':
+                    result.append('/');
+                    break;
+                case '0':
+                    result.append('0');
+                    break;
+                case '1':
+                    result.append('1');
+                    break;
+                case '2':
+                    result.append('2');
+                    break;
+                case '3':
+                    result.append('3');
+                    break;
+                case '4':
+                    result.append('4');
+                    break;
+                case '5':
+                    result.append('5');
+                    break;
+                case '6':
+                    result.append('6');
+                    break;
+                case '7':
+                    result.append('7');
+                    break;
+                case '8':
+                    result.append('8');
+                    break;
+                case '9':
+                    result.append('9');
+                    break;
+                case ':':
+                    result.append(':');
+                    break;
+                case ';':
+                    result.append(';');
                     break;
                 case '<': 
                     result.append("&lt;");
