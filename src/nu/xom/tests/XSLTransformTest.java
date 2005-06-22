@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -64,7 +64,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b2
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -1760,8 +1760,7 @@ public class XSLTransformTest extends XOMTestCase {
                             // Fixed in later version of Xalan than is bundled with JDK  
                             continue;
                         } 
-                        else if (cause != null
-                          && cause instanceof MalformedURIException) {
+                        else if (cause instanceof MalformedURIException) {
                             // Some of the tests generate relative namespace URIs
                             // XOM doesn't support
                             continue;
