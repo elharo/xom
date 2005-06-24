@@ -165,7 +165,7 @@ public class Element extends ParentNode {
         
         // Attach clones of attributes
         if (element.attributes != null) {
-            this.attributes = element.copyAttributes();
+            this.attributes = element.copyAttributes(this);
             this.numAttributes = element.numAttributes;
         } 
         
@@ -176,11 +176,12 @@ public class Element extends ParentNode {
     }
     
 
-    private Attribute[] copyAttributes() {
+    private Attribute[] copyAttributes(Element newParent) {
 
         Attribute[] copy = new Attribute[numAttributes];
         for (int i = 0; i < numAttributes; i++) {
             copy[i] = (Attribute) attributes[i].copy();
+            copy[i].setParent(newParent);
         }
         return copy;
         
@@ -198,7 +199,7 @@ public class Element extends ParentNode {
         
         // Attach clones of attributes
         if (source.attributes != null) {
-            result.attributes = source.copyAttributes();
+            result.attributes = source.copyAttributes(result);
             result.numAttributes = source.numAttributes;
         } 
         
