@@ -1308,6 +1308,20 @@ public class ElementTest extends XOMTestCase {
     }
     
     
+    public void testCopyElementWithAttributes() {
+        
+        Element parent = new Element("parent");
+        Attribute a = new Attribute("name", "value");
+        parent.addAttribute(a);
+        Element copy = new Element(parent);
+        assertEquals(parent, copy);
+        Attribute copied = copy.getAttribute(0);
+        assertEquals(a, copied);
+        assertEquals(copy, copied.getParent());
+        
+    }
+    
+    
     public void testCopyEmptyElement() {
         
         Element parent = new Element("parent");
@@ -1343,7 +1357,6 @@ public class ElementTest extends XOMTestCase {
         e.addAttribute(a1);
         e.addAttribute(a2);
         e.addAttribute(a3);
-        
         
         Element e2 = new Element("mv:child", "http://www.mauve.com");
         e.appendChild(e2);
