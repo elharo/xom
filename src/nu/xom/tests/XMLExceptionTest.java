@@ -43,7 +43,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b2
  *
  */
 public class XMLExceptionTest extends XOMTestCase {
