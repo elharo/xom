@@ -106,18 +106,27 @@ final class UnicodeUtil {
     
     private static Map compositions;
     
-    
     private static void loadCompositions() {
-       
-        ClassLoader loader = UnicodeUtil.class.getClassLoader();
-        // FIXME use Verifier logic for loading this
-        if (loader == null) {
+    
+        ClassLoader loader = Verifier.class.getClassLoader();
+        if (loader != null) loadCompositions(loader);
+        // If that didn't work, try a different ClassLoader
+        if (compositions == null) {
             loader = Thread.currentThread().getContextClassLoader();
+            loadCompositions(loader);
         }
+        if (compositions == null) { 
+            throw new RuntimeException("Broken XOM installation: "
+              + "could not load nu/xom/compositions.dat");
+        }
+        
+    }
+    
+    
+    private static void loadCompositions(ClassLoader loader) {
         
         DataInputStream in = null;
         try {
-            
             InputStream source = loader.getResourceAsStream("nu/xom/compositions.dat");
             in = new DataInputStream(source);
             // ???? would it make sense to store a serialized HashMap instead????
@@ -134,8 +143,7 @@ final class UnicodeUtil {
             }
         }
         catch (IOException ex) {
-            throw new RuntimeException("Broken XOM installation: "
-              + "could not load nu/xom/compositions.dat", ex);
+            return;
         }
         finally {
             try {
@@ -145,6 +153,7 @@ final class UnicodeUtil {
                 // no big deal
             }
         }
+        
     }
     
 
