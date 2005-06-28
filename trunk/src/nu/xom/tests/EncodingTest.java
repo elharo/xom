@@ -167,6 +167,8 @@ public class EncodingTest extends XOMTestCase {
     }
     
     public void testGreek() throws ParsingException, IOException {
+        // This test seems to fail in Java 1.5, at least on Mac OS X
+        // It passes in 1.4. The problem is the delete character 127
         checkAll("ISO-8859-7");
     }
     
