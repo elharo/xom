@@ -34,6 +34,15 @@ Should/could the TrAX source and result, Jaxen adapter and so forth go public in
 1.1:
 -------
 
+could some form of filterlist improve xpath performance?
+
+should there be a special iterator for *; can this be combined with named iterator?
+
+should //* somehow avoid the resort?
+
+could we simplify /descendant-or-self::node()/child::* as 
+/descendant-or-self::*/child::* | /self::node()/child::*
+
 Optimize normalization
 
 test running in unsigned java web start
@@ -42,10 +51,6 @@ add a NodeFactory section to the tutorial for processing big documents
 
 check if we've accidentally sealed in jaxen
 what should the manifest say about that?
-
-could/should I strip the junit.jar of clases XOM doesn't use?
-
-should I bundle a minimized version of Junit into xom.jar?
 
 Make a build target for non-LGPL, closed source version
 
@@ -165,12 +170,49 @@ XOMHandler: Workaround for Crimson bug that fails to report asterisk after mixed
 XOMHandler: Workaround for Crimson bug that makes xmlsn:xml="correct URI" and error
 XOMHandler: Workaround for Crimson external and internal DTD subset mixup bugs
 
+Hi Elliote.
+http://www.cafeconleche.org/XOM/apidocs/nu/xom/xslt/XSLTransform.html
+
+has an example
+
+public static Nodes transform(Document in) 
+           throws XSLException, ParsingException, IOException {
+             Builder builder = new Builder();
+             Document stylesheet = builder.build("mystylesheet.xsl");
+             XSLTransform stylesheet = new XSLTransform(stylesheet);
+                           ^^^^^^^^^
+             return stylesheet.transform(doc);
+         } 
+
+stylesheet used twice !
+
+
+
+
+
+
 ~/projects/1.0.1$ cvs -d :pserver:elharo@cvs.dev.java.net:/cvs rtag -r XOM_10  -b BR_1_0 xom
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 cvs [rtag aborted]: received abort signal
 cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
+===============
+Done 1.1b2:
+===============
+
+Child nodes and attributes are now stored directly in arrays without an intermediary list.
+This saves some memory.
+
+A few bug fixes, especially in XPath
+
+===============
+Done 1.1b1:
+===============
+
+Lots of Jaxen fixes
+
+Lots of crimson fixes
 
 ===============
 Done 1.1a3:
