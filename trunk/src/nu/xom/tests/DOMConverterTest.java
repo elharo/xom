@@ -58,7 +58,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1b2
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -449,7 +449,7 @@ public class DOMConverterTest extends XOMTestCase {
     }
     
     
-    // regression found by Wolfgang Hoscheck
+    // regression found by Wolfgang Hoschek
     public void testWolfgang() throws ParsingException, IOException {
         
         String data = "<m>" 
