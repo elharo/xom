@@ -53,7 +53,7 @@
     <dependency>
     	<groupId>jaxen</groupId>
     	<artifactId>jaxen</artifactId>
-    	<version>1.1-beta-4</version>
+    	<version>1.1-beta-7</version>
     	<type>jar</type>
     </dependency>
   </dependencies>
