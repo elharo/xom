@@ -21,11 +21,12 @@
 
 package nu.xom;
 
+import java.io.IOException;
 import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  *
  */
 class UnicodeWriter extends TextWriter {
@@ -39,6 +40,68 @@ class UnicodeWriter extends TextWriter {
      */
     boolean needsEscaping(char c) {
         return false;
+    }  
+
+
+    final void writeMarkup(String s) throws IOException {
+
+         if (normalize) {
+             s = normalize(s);
+         }
+         
+         int unicodeStringLength = getUnicodeLengthForMarkup(s);
+         if (unicodeStringLength >= 0) {
+             out.write(s);
+             if (unicodeStringLength > 0) {
+                 column += unicodeStringLength;
+                 lastCharacterWasSpace = false;
+                 skipFollowingLinefeed = false;
+                 justBroke=false;
+             }
+         }
+         else { // write character by character
+             int length = s.length();
+             for (int i=0; i < length; i++) {
+                 writeMarkup(s.charAt(i));
+             }
+         }
+         
     }
 
+    
+    /*
+     * This is tricky. This method is doing two things:
+     * 
+     * 1. It's counting the number of Unicode characters in s.
+     * 2. It's checking to see if this text contains anything
+     *    that might need to be escaped. 
+     * 
+     * If the latter it returns -1; otherwise it returns the number of characters.
+     */
+    private static int getUnicodeLengthForMarkup(String s) {
+        
+        int unicodeLength = 0;
+        int javaLength = s.length();
+        for (int i = 0; i < javaLength; i++) {
+            char c = s.charAt(i);
+            // ???? lookup table
+            switch (c) { 
+                // These characters cause an adjustment of 
+                // lastCharacterWasSpace, skipFollowingLinefeed, and justBroke
+                // They may need to be escaped but only in doctype declarations.
+                // Should these have their own writeDoctypeDeclaration method????
+                // Also an issue with spaces and such in PIs, XML declaration, comments
+                case ' ':  return -1;
+                case '\n': return -1;
+                case '\t': return -1;
+            }
+            // Count the low surrogates but skip the high surrogates
+            // so surrogate pairs aren't counted twice.
+            if (c < 0xD800 || c > 0xDBFF) unicodeLength++;
+        }
+        return unicodeLength;
+        
+    }
+    
+    
 }
