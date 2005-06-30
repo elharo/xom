@@ -40,7 +40,7 @@ class UnicodeWriter extends TextWriter {
      */
     boolean needsEscaping(char c) {
         return false;
-    }  
+    }
 
 
     final void writeMarkup(String s) throws IOException {
@@ -154,5 +154,53 @@ class UnicodeWriter extends TextWriter {
         
      }
 
+    
+    final void writePCDATA(String s) throws IOException {
+
+         if (normalize) {
+             s = normalize(s);
+         }
+         
+         int unicodeStringLength = getUnicodeLengthForPCDATA(s);
+         if (unicodeStringLength >= 0) {
+             out.write(s);
+             if (unicodeStringLength > 0) {
+                 column += unicodeStringLength;
+                 lastCharacterWasSpace = false;
+                 skipFollowingLinefeed = false;
+                 justBroke=false;
+             }
+         }
+         else {
+             int length = s.length();
+             for (int i=0; i < length; i++) {
+                 writePCDATA(s.charAt(i));
+             }
+         }
+    
+    }
+    
+
+    private static int getUnicodeLengthForPCDATA(String s) {
+        
+        int unicodeLength = 0;
+        int javaLength = s.length();
+        for (int i = 0; i < javaLength; i++) {
+            char c = s.charAt(i);
+            // ???? lookup table
+            switch (c) {
+                case ' ':  return -1;
+                case '\n': return -1;
+                case '&':  return -1;
+                case '<':  return -1;
+                case '>':  return -1;
+                case '\t': return -1;
+                case '\r': return -1;
+            }
+            if (c < 0xd800 || c > 0xDBFF) unicodeLength++;
+        }
+        return unicodeLength;
+
+    }
     
 }

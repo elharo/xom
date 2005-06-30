@@ -406,7 +406,7 @@ abstract class TextWriter {
     // normalization such as <, /, A-Z, etc.?
 
     
-    final void writePCDATA(String s) throws IOException {
+    void writePCDATA(String s) throws IOException {
         
         s = normalize(s);
         int length = s.length();
