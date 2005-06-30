@@ -458,19 +458,32 @@ abstract class TextWriter {
 
     private int fakeIndents = 0;
     
+    private final static String _128_SPACES="                                                                                                                                ";
+    private final static int    _128 = 128;
+    
     void incrementIndent() {
         
         if (indent == 0) return;
-        StringBuffer newIndent = new StringBuffer(indentString);
-        for (int i = 0; i < indent; i++) {
-            newIndent.append(' ');
+        
+        String newIndent;
+        int length = indentString.length() + indent;
+        if (indentString.length() + indent < _128) {
+            newIndent = _128_SPACES.substring(0, length);
+        }
+        else {
+            StringBuffer sb = new StringBuffer(length);
+            sb.append(_128_SPACES);
+            for (int i = _128; i < length; i++) {
+                sb.append(' ');
+            }
+            newIndent = sb.toString();
         }
         
         // limit maximum indent to half of maximum line length
         if (maxLength > 0 && newIndent.length() > maxLength / 2) {
             fakeIndents++; 
         }
-        else this.indentString = newIndent.toString();
+        else this.indentString = newIndent;
         
     }
     
