@@ -287,9 +287,9 @@ public class Serializer {
      * </p>
      * 
      * <p>
-     *   If the element is empty, this method invokes 
-     *   <code>writeEmptyElementTag</code>. If the element is not 
-     *   empty, then: 
+     * If the element is empty, this method invokes 
+     * <code>writeEmptyElementTag</code>. If the element is not 
+     * empty, then: 
      * </p>
      * 
      * <ol>
@@ -573,6 +573,17 @@ public class Serializer {
       throws IOException {
         
         ParentNode parent = element.getParent();
+        
+        // ???? It might be faster/important to do this without calling
+        // getNamespaceDeclarationCount or getNamespacePrefix(i)
+        // Probably we should simply ask the element for an iterator and 
+        // manage that here, rather repeatededly iterating inside 
+        // getNamespacePrefix(int i)
+        
+        // Furthermore we might also want to store a SAX NamespaceContext stack
+        // of namespace prefixes in scope as we descend the tree for quick
+        // checking of whether we've already mapped that prefix
+        
         int count = element.getNamespaceDeclarationCount();
         for (int i = 0; i < count; i++) {
             String additionalPrefix = element.getNamespacePrefix(i);
@@ -590,7 +601,8 @@ public class Serializer {
             
             escaper.writeMarkup(' ');
             writeNamespaceDeclaration(additionalPrefix, uri);
-        } 
+        }
+        
     }
 
 
