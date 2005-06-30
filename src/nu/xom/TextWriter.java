@@ -47,10 +47,10 @@ abstract class TextWriter {
     private int     maxLength = 0;
     private int     indent = 0;
     private String  indentString = "";
-    private int     column = 0;
+    protected int     column = 0;
     // Is an xml:space="preserve" attribute in scope?
     private boolean preserveSpace = false;
-    private boolean normalize = false;
+    protected boolean normalize = false;
     
     protected TextWriter(Writer out, String encoding) {
         this.out = out; 
@@ -66,13 +66,13 @@ abstract class TextWriter {
     }
 
     
-    private boolean lastCharacterWasSpace = false;
+    protected boolean lastCharacterWasSpace = false;
     
     /**
      * Indicates whether a linefeed is just half of a \r\n pair
      * used for a line break.
      */
-    private boolean skipFollowingLinefeed = false;
+    protected boolean skipFollowingLinefeed = false;
     
     private char highSurrogate;
     
@@ -351,7 +351,7 @@ abstract class TextWriter {
     }
     
     
-    private boolean justBroke = false;
+    protected boolean justBroke = false;
     
     boolean justBroke() {
         return justBroke;
@@ -429,7 +429,7 @@ abstract class TextWriter {
     }
 
     
-    final void writeMarkup(String s) throws IOException {
+    void writeMarkup(String s) throws IOException {
         
         s = normalize(s);
         int length = s.length();
@@ -440,7 +440,7 @@ abstract class TextWriter {
     }
     
     
-     private String normalize(String s) {
+     protected String normalize(String s) {
 
         if (normalize) {
             return UnicodeUtil.normalize(s);
