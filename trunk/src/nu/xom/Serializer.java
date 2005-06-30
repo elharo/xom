@@ -46,7 +46,7 @@ import java.util.Locale;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b3
  * 
  */
 public class Serializer {
@@ -388,7 +388,6 @@ public class Serializer {
         else {
             writeEmptyElementTag(element);   
         }
-        escaper.flush();
         
     }
 
@@ -771,8 +770,7 @@ public class Serializer {
         
         if (getIndent() <= 0) return false;
         
-        // XXX check this without getValue
-        if (!"".equals(text.getValue().trim())) return false;
+        if (! text.isWhitespace()) return false;
         ParentNode parent = text.getParent();
         
         int position = parent.indexOf(text);
