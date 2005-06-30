@@ -31,7 +31,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b3
  *
  */
 abstract class TextWriter {
@@ -460,6 +460,7 @@ abstract class TextWriter {
     
     void incrementIndent() {
         
+        if (indent == 0) return;
         StringBuffer newIndent = new StringBuffer(indentString);
         for (int i = 0; i < indent; i++) {
             newIndent.append(' ');
@@ -475,12 +476,15 @@ abstract class TextWriter {
     
     
     void decrementIndent() {
-        if (fakeIndents > 0) fakeIndents--;
+        
+        if (indent == 0) return;
+        else if (fakeIndents > 0) fakeIndents--;
         else {
             indentString = indentString.substring(
               0, indentString.length()-indent
             );
         }
+        
     }
 
 
