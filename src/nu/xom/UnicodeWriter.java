@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -102,6 +102,57 @@ class UnicodeWriter extends TextWriter {
         return unicodeLength;
         
     }
+
+
+    final void writeAttributeValue(String s) throws IOException {
+
+         if (normalize) {
+             s = normalize(s);
+         }
+         int unicodeStringLength = getUnicodeLengthForAttributeValue(s);
+         if (unicodeStringLength >= 0) { 
+             out.write(s);
+             if (unicodeStringLength > 0) {
+                 column += unicodeStringLength;
+                 lastCharacterWasSpace = false;
+                 skipFollowingLinefeed = false;
+                 justBroke=false;
+             }
+         }
+         else {
+             int length = s.length();
+             for (int i=0; i < length; i++) {
+                 writeAttributeValue(s.charAt(i));
+             }
+         }
+
+     }
+
     
+    // All three getUnicodeLengthForFOO methods are very similar.
+    // Could the code duplciation be elimianted efficiently somehow?
+    private static int getUnicodeLengthForAttributeValue(String s) {
+         
+        int unicodeLength = 0;
+        int javaLength = s.length();
+        for (int i = 0; i < javaLength; i++) {
+            char c = s.charAt(i);
+            // ???? lookup table
+            switch (c) {
+                case ' ':  return -1;
+                case '&':  return -1;
+                case '<':  return -1;
+                case '>':  return -1;
+                case '"':  return -1;
+                case '\t': return -1;
+                case '\n': return -1;
+                case '\r': return -1;
+            }
+            if (c < 0xd800 || c > 0xDBFF) unicodeLength++;
+        }
+        return unicodeLength;
+        
+     }
+
     
 }

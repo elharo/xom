@@ -417,7 +417,7 @@ abstract class TextWriter {
     }
 
 
-    final void writeAttributeValue(String s) 
+    void writeAttributeValue(String s) 
       throws IOException {
         
         s = normalize(s);
