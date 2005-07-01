@@ -32,7 +32,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.1b3
  *
  */
 public class Text extends Node {
@@ -456,6 +456,18 @@ public class Text extends Node {
 
     boolean isEmpty() {
         return this.data.length == 0;
+    }
+
+
+    boolean isWhitespace() {
+
+        int length = data.length;
+        for (int i = 0; i < length; i++) {
+            byte c = data[i];
+            if (c == ' ' || c == '\n' || c == '\r' || c == '\t') continue;
+            return false;
+        }
+        return true;
     }
 
     
