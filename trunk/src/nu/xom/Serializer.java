@@ -768,7 +768,7 @@ public class Serializer {
             escaper.writeMarkup("]]>");
         }
         // is this boundary whitespace we can ignore?
-        else if (isBoundaryWhitespace(text)) {
+        else if (isBoundaryWhitespace(text, value)) {
             return; // without writing node
         }
         else {
@@ -778,14 +778,13 @@ public class Serializer {
     }  
     
     
-    private boolean isBoundaryWhitespace(Text text) {
+    private boolean isBoundaryWhitespace(Text text, String value) {
         
         if (getIndent() <= 0) return false;
         
-        if (! text.isWhitespace()) return false;
-        // if (! "".equals(text.getValue().trim())) return false;
         ParentNode parent = text.getParent();
         if (parent.getChildCount() == 1) return false;
+        if (! "".equals(value.trim())) return false;
         
         // ???? This is a huge Hotspot. maybe 12% of serialization time
         // when indenting Is there any way to eliminate this?
@@ -794,7 +793,6 @@ public class Serializer {
         // Instead of getting position we could get those two elements and compare
         // to the text. But you still need the previous and next
         int position = parent.indexOf(text);
-
         
         Node previous = null;
         Node next = null;
