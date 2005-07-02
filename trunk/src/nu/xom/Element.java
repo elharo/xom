@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
+// ???? Why do I still need these imports? Could 
+// I get rid of them? In particular could I get rid of sorting requirement on sets?
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -47,7 +49,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  *
  */
 public class Element extends ParentNode {
@@ -1274,20 +1276,43 @@ public class Element extends ParentNode {
     }
     
     
-    // Used for XPath
+    // Used for XPath and serialization
     Map getNamespacePrefixesInScope() {
         
         HashMap namespaces = new HashMap();
+        
         Element current = this;
         while (current != null) {
-            for (int i = 0; i < current.getNamespaceDeclarationCount(); i++) {
-                String prefix = current.getNamespacePrefix(i);
-                if (!namespaces.containsKey(prefix)) {
-                    namespaces.put(prefix, current.getLocalNamespaceURI(prefix));
+            
+            if (!("xml".equals(current.prefix))) {
+                addPrefixIfNotAlreadyPresent(namespaces, current, current.prefix);
+            }
+            
+            // add attribute prefixes
+            int count = current.getAttributeCount();
+            for (int i = 0; i < count; i++) {
+                Attribute att = current.getAttribute(i);
+                String attPrefix = att.getNamespacePrefix();
+                if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
+                    addPrefixIfNotAlreadyPresent(namespaces, current, attPrefix);
                 }
             }
+            
+            // add additional namespace prefixes
+            // ???? should add more methods to Namespaces to avoid access to private data
+            if (current.namespaces != null) {
+                int namespaceCount = current.namespaces.size();
+                for (int i = 0; i < namespaceCount; i++) {
+                    String nsPrefix = current.namespaces.getPrefix(i);
+                    // XXX do I need to check if prefix is xml? If so I should
+                    // just move that check into addPrefixIfNotAlreadyPresent since it's used
+                    // for attributes, element, and additional
+                    addPrefixIfNotAlreadyPresent(namespaces, current, nsPrefix);
+                }
+            }
+            
             ParentNode parent = current.getParent();
-            if (parent == null || parent.isDocument() || parent instanceof DocumentFragment) {
+            if (parent == null || parent.isDocument() || parent.isDocumentFragment()) {
                 break;
             }
             current = (Element) parent;
@@ -1297,11 +1322,19 @@ public class Element extends ParentNode {
         
     }
 
+
+    private void addPrefixIfNotAlreadyPresent(HashMap namespaces, Element current, String prefix) {
+        if (!namespaces.containsKey(prefix)) {
+            namespaces.put(prefix, current.getLocalNamespaceURI(prefix));
+        }
+    }
+
     
     /**
      * <p>
-     * Returns the index<sup>th</sup> namespace prefix declared on
-     * this element. The index is purely for convenience, and has no
+     * Returns the index<sup>th</sup> namespace prefix <em>declared</em> on
+     * this element. Namespaces inherited from ancestors are not included.
+     * The index is purely for convenience, and has no
      * meaning in itself. This includes the namespaces of the element
      * name and of all attributes' names (except for those with the 
      * prefix <code>xml</code> such as <code>xml:space</code>) as well 
@@ -1773,7 +1806,7 @@ public class Element extends ParentNode {
 
         return new Iterator() {
 
-            int next = 0;
+            private int next = 0;
             
             public boolean hasNext() {
                 return next < numAttributes;
