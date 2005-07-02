@@ -47,11 +47,11 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * <p>
- *   Tests for <code>Serializer</code> functionality.
+ * Tests for <code>Serializer</code> functionality.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b3
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -1470,6 +1470,30 @@ public class SerializerTest extends XOMTestCase {
           "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
           + "<itemSet>\r\n    <!--item1-->\r\n"
           + "</itemSet>\r\n", 
+          result
+        );
+        
+    }
+    
+    
+    public void testOnlyXMLSpaceCountsAsBoundaryWhiteSpace() 
+      throws IOException {
+        
+        String emSpace = "\u2003";
+        Element items = new Element("itemSet");
+        items.appendChild(emSpace);
+        items.appendChild(new Element("a"));
+
+        Document doc = new Document(items);
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<itemSet>\u2003\r\n    <a/>\r\n</itemSet>\r\n", 
           result
         );
         
