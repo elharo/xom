@@ -27,7 +27,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * <p>
@@ -584,7 +586,28 @@ public class Serializer {
         // of namespace prefixes in scope as we descend the tree for quick
         // checking of whether we've already mapped that prefix
         
-        int count = element.getNamespaceDeclarationCount();
+        Map prefixes = element.getNamespacePrefixesInScope();
+        Iterator iterator = prefixes.keySet().iterator();
+        while (iterator.hasNext()) {
+            String additionalPrefix = (String) iterator.next();
+            String uri = (String) prefixes.get(additionalPrefix);
+            // XXX Could I eliminate this check completely? 
+            // Does the method in element already check this?
+            if (parent != null && parent.isElement()) {
+               Element parentElement = (Element) parent;   
+               if (uri.equals(
+                 parentElement.getNamespaceURI(additionalPrefix))) {
+                   continue;
+               } 
+            }
+            else if (uri.equals("")) {
+                continue; // no need to say xmlns=""   
+            }
+            
+            escaper.writeMarkup(' ');
+            writeNamespaceDeclaration(additionalPrefix, uri);
+        }
+        /* int count = element.getNamespaceDeclarationCount();
         for (int i = 0; i < count; i++) {
             String additionalPrefix = element.getNamespacePrefix(i);
             String uri = element.getNamespaceURI(additionalPrefix);
@@ -601,7 +624,7 @@ public class Serializer {
             
             escaper.writeMarkup(' ');
             writeNamespaceDeclaration(additionalPrefix, uri);
-        }
+        } */
         
     }
 
@@ -783,6 +806,9 @@ public class Serializer {
         if (getIndent() <= 0) return false;
         
         ParentNode parent = text.getParent();
+        
+        // ???? cutting next line only breaks a few tests; and what it does
+        // break might be better off if the breakage is accepted as correct behavior
         if (parent.getChildCount() == 1) return false;
         if (! "".equals(value.trim())) return false;
         
