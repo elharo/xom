@@ -783,13 +783,22 @@ public class Serializer {
         if (getIndent() <= 0) return false;
         
         if (! text.isWhitespace()) return false;
+        // if (! "".equals(text.getValue().trim())) return false;
         ParentNode parent = text.getParent();
+        if (parent.getChildCount() == 1) return false;
         
+        // ???? This is a huge Hotspot. maybe 12% of serialization time
+        // when indenting Is there any way to eliminate this?
+        // We only actually need to test a couple of positions, 0 and
+        // parent.getChildCount()-1
+        // Instead of getting position we could get those two elements and compare
+        // to the text. But you still need the previous and next
         int position = parent.indexOf(text);
+
         
-        if (position == 0 && parent.getChildCount() == 1) return false;
         Node previous = null;
         Node next = null;
+        
         if (position != 0) previous = parent.getChild(position-1);
         if (position != parent.getChildCount()-1) {
             next = parent.getChild(position+1);
