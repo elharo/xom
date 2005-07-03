@@ -1304,9 +1304,6 @@ public class Element extends ParentNode {
                 int namespaceCount = current.namespaces.size();
                 for (int i = 0; i < namespaceCount; i++) {
                     String nsPrefix = current.namespaces.getPrefix(i);
-                    // XXX do I need to check if prefix is xml? If so I should
-                    // just move that check into addPrefixIfNotAlreadyPresent since it's used
-                    // for attributes, element, and additional
                     addPrefixIfNotAlreadyPresent(namespaces, current, nsPrefix);
                 }
             }
