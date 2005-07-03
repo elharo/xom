@@ -576,12 +576,6 @@ public class Serializer {
         
         ParentNode parent = element.getParent();
         
-        // ???? It might be faster/important to do this without calling
-        // getNamespaceDeclarationCount or getNamespacePrefix(i)
-        // Probably we should simply ask the element for an iterator and 
-        // manage that here, rather repeatededly iterating inside 
-        // getNamespacePrefix(int i)
-        
         // Furthermore we might also want to store a SAX NamespaceContext stack
         // of namespace prefixes in scope as we descend the tree for quick
         // checking of whether we've already mapped that prefix
@@ -591,14 +585,12 @@ public class Serializer {
         while (iterator.hasNext()) {
             String additionalPrefix = (String) iterator.next();
             String uri = (String) prefixes.get(additionalPrefix);
-            // XXX Could I eliminate this check completely? 
-            // Does the method in element already check this?
             if (parent != null && parent.isElement()) {
                Element parentElement = (Element) parent;   
                if (uri.equals(
                  parentElement.getNamespaceURI(additionalPrefix))) {
                    continue;
-               } 
+               }
             }
             else if (uri.equals("")) {
                 continue; // no need to say xmlns=""   
@@ -607,24 +599,6 @@ public class Serializer {
             escaper.writeMarkup(' ');
             writeNamespaceDeclaration(additionalPrefix, uri);
         }
-        /* int count = element.getNamespaceDeclarationCount();
-        for (int i = 0; i < count; i++) {
-            String additionalPrefix = element.getNamespacePrefix(i);
-            String uri = element.getNamespaceURI(additionalPrefix);
-            if (parent != null && parent.isElement()) {
-               Element parentElement = (Element) parent;   
-               if (uri.equals(
-                 parentElement.getNamespaceURI(additionalPrefix))) {
-                   continue;
-               } 
-            }
-            else if (uri.equals("")) {
-                continue; // no need to say xmlns=""   
-            }
-            
-            escaper.writeMarkup(' ');
-            writeNamespaceDeclaration(additionalPrefix, uri);
-        } */
         
     }
 
@@ -893,8 +867,9 @@ public class Serializer {
      * 
      * @throws IOException if the underlying output stream
      *     encounters an I/O error
-     * @throws XMLException if an <code>Attribute</code> or a 
-     *     <code>Document</code> is passed to this method
+     * @throws XMLException if an <code>Attribute</code>, a 
+     *     <code>Document</code>, or <code>Namespace</code>
+     *     is passed to this method
      */
     protected void writeChild(Node node) throws IOException {
         
