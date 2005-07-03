@@ -34,7 +34,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  *
  */
 public final class Namespace extends Node {
@@ -231,11 +231,6 @@ public final class Namespace extends Node {
      */
     public String toString() {
         return "[Namespace: " + this.toXML() + "]";
-    }
-    
-    
-    boolean isNamespace() {
-        return true;
     }
     
     

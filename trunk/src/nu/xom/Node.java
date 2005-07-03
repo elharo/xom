@@ -54,7 +54,7 @@ import org.jaxen.NamespaceContext;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b3
  *
  */
 public abstract class Node {
@@ -542,10 +542,6 @@ public abstract class Node {
     }
             
     boolean isDocType() {
-        return false;   
-    }
-  
-    boolean isNamespace() {
         return false;   
     }
 
