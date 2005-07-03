@@ -84,20 +84,20 @@ class UnicodeWriter extends TextWriter {
         int javaLength = s.length();
         for (int i = 0; i < javaLength; i++) {
             char c = s.charAt(i);
-            // ???? lookup table
-            switch (c) { 
+            if (c <= ' ') { 
+                // Really we're testing only for \t, \n, and space here.
+                // However all other characters less than or equal to 32
+                // can't appear in markup sections.
                 // These characters cause an adjustment of 
                 // lastCharacterWasSpace, skipFollowingLinefeed, and justBroke
                 // They may need to be escaped but only in doctype declarations.
                 // Should these have their own writeDoctypeDeclaration method????
                 // Also an issue with spaces and such in PIs, XML declaration, comments
-                case ' ':  return -1;
-                case '\n': return -1;
-                case '\t': return -1;
+                return -1;
             }
             // Count the low surrogates but skip the high surrogates
             // so surrogate pairs aren't counted twice.
-            if (c < 0xD800 || c > 0xDBFF) unicodeLength++;
+            else if (c < 0xD800 || c > 0xDBFF) unicodeLength++;
         }
         return unicodeLength;
         
