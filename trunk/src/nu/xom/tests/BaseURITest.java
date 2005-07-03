@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,6 +33,7 @@ import nu.xom.Comment;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.MalformedURIException;
+import nu.xom.Namespace;
 import nu.xom.Node;
 import nu.xom.ParsingException;
 import nu.xom.Text;
@@ -50,7 +51,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  *
  */
 public class BaseURITest extends XOMTestCase {
@@ -84,12 +85,12 @@ public class BaseURITest extends XOMTestCase {
         Element child3 = new Element("child3");
         root.appendChild(child3);
         child3.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base2));
+          Namespace.XML_NAMESPACE, base2));
  
         Element child4 = new Element("child4");
         root.appendChild(child4);
         child4.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base3));
+          Namespace.XML_NAMESPACE, base3));
  
     }
 
@@ -183,12 +184,12 @@ public class BaseURITest extends XOMTestCase {
         String base = "HTTP://WWW.EXAMPLE.COM/" + alphabet;
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
         
         base = "HTTP://WWW.EXAMPLE.COM/" + alphabet.toUpperCase(Locale.ENGLISH);
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI()); 
         
     }
@@ -198,7 +199,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "scheme://authority/data/name;v=1.1/test.db";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
     }
     
@@ -208,7 +209,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "scheme://authority/data/name,1.1/test.db";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
         
     }
@@ -220,7 +221,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "scheme://authority/data$important";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
         
     }
@@ -231,7 +232,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "HTTP://WWW.EXAMPLE.COM/#test";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
         
     }
@@ -242,7 +243,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "http://www.example.com/test?name=value&data=important";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
         
     }
@@ -254,7 +255,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "http://www.example.com/" + unreserved;
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
         
     }
@@ -267,7 +268,7 @@ public class BaseURITest extends XOMTestCase {
             String base = "http://www.example.com/" + delims[i] + "/";
             Element root = new Element("test");
             root.addAttribute(new Attribute("xml:base", 
-              "http://www.w3.org/XML/1998/namespace", base));
+              Namespace.XML_NAMESPACE, base));
             assertEquals("http://www.example.com/%" 
               + Integer.toHexString(delims[i].charAt(0)).toUpperCase() 
               + "/", root.getBaseURI());
@@ -283,7 +284,7 @@ public class BaseURITest extends XOMTestCase {
             String base = "http://www.example.com/" + unwise[i] + "/";
             Element root = new Element("test");
             root.addAttribute(new Attribute("xml:base", 
-              "http://www.w3.org/XML/1998/namespace", base));
+              Namespace.XML_NAMESPACE, base));
             assertEquals("http://www.example.com/%" 
               + Integer.toHexString(unwise[i]).toUpperCase() 
               + "/", root.getBaseURI());
@@ -312,7 +313,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "http://www.example.com/test+test";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
     }
 
@@ -321,7 +322,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "http://invited:test@www.example.com/";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
     }
 
@@ -331,12 +332,12 @@ public class BaseURITest extends XOMTestCase {
         String base = "http://www.example.com/";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         
         Element child = new Element("child");
         root.appendChild(child);
         child.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", ""));
+          Namespace.XML_NAMESPACE, ""));
         Document doc = new Document(root);
         doc.setBaseURI("http://www.cafeaulait.org/");
         assertEquals("http://www.cafeaulait.org/", child.getBaseURI());        
@@ -349,11 +350,11 @@ public class BaseURITest extends XOMTestCase {
         String base = "http://www.example.com/";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         
         Element child = new Element("child");
         child.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", ""));
+          Namespace.XML_NAMESPACE, ""));
         root.appendChild(child);
         new Document(root);
         assertEquals("", child.getBaseURI());        
@@ -365,7 +366,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "http://www.example.com/()-_.!~*'";
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals(base, root.getBaseURI());
     }
 
@@ -378,7 +379,7 @@ public class BaseURITest extends XOMTestCase {
         String base = "http://www.example.com/" + omega;
         Element root = new Element("test");
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", base));
+          Namespace.XML_NAMESPACE, base));
         assertEquals("http://www.example.com/%CE%A9", root.getBaseURI());
         
     }
@@ -435,7 +436,7 @@ public class BaseURITest extends XOMTestCase {
         Element root = doc.getRootElement();
         root.setBaseURI(base1);
         root.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", ""));
+          Namespace.XML_NAMESPACE, ""));
         assertEquals(base1, root.getBaseURI());
     }
 
@@ -519,7 +520,7 @@ public class BaseURITest extends XOMTestCase {
     public void testXMLBaseFailures() {
         
         Attribute base = new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "base.html");
+          Namespace.XML_NAMESPACE, "base.html");
         Element test = new Element("test");
         test.addAttribute(base);
         
@@ -544,7 +545,7 @@ public class BaseURITest extends XOMTestCase {
     public void testSyntacticallyIllegalXMLBaseValuesAreIgnored() {
         
         Attribute base = new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "base.html");
+          Namespace.XML_NAMESPACE, "base.html");
         Element test = new Element("test");
         test.setBaseURI("http://www.example.com/");
         test.addAttribute(base);
@@ -562,7 +563,7 @@ public class BaseURITest extends XOMTestCase {
         
         Element element = new Element("test");
         Attribute base = new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "base.html");
+          Namespace.XML_NAMESPACE, "base.html");
         element.addAttribute(base);
         
         base.setValue("http://www.w3.org/ testing");
@@ -580,7 +581,7 @@ public class BaseURITest extends XOMTestCase {
     public void testXMLBaseValuesCanContainPercentEscapes() {
         
         Attribute base = new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "base.html");
+          Namespace.XML_NAMESPACE, "base.html");
         Element e = new Element("test");
         e.addAttribute(base);
         base.setValue("http://www.w3.org/%20testing");
@@ -636,7 +637,7 @@ public class BaseURITest extends XOMTestCase {
         
         Element element = new Element("test");
         element.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "base.html"));
+          Namespace.XML_NAMESPACE, "base.html"));
         assertEquals("", element.getBaseURI());
         
     }
@@ -688,7 +689,7 @@ public class BaseURITest extends XOMTestCase {
         child.setBaseURI("http://www.example.com/");
         parent.appendChild(child);
         child.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "/test/data/"));
+          Namespace.XML_NAMESPACE, "/test/data/"));
         String base = child.getBaseURI();
         assertEquals("http://www.example.com/test/data/", base);
     }
@@ -701,7 +702,7 @@ public class BaseURITest extends XOMTestCase {
         Element child = new Element("child");
         parent.appendChild(child);
         child.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace",
+          Namespace.XML_NAMESPACE,
           "%GF.html"));
         String base = child.getBaseURI();
         assertEquals("http://www.cafeconleche.org/", base);
@@ -717,7 +718,7 @@ public class BaseURITest extends XOMTestCase {
         child.setBaseURI("http://www.cafeconleche.org/");
         parent.appendChild(child);
         child.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace",
+          Namespace.XML_NAMESPACE,
           "http://www.example.com/%5.html"));
         assertEquals("http://www.cafeconleche.org/", child.getBaseURI());
         
@@ -732,7 +733,7 @@ public class BaseURITest extends XOMTestCase {
         child.setBaseURI("http://www.cafeconleche.org/");
         parent.appendChild(child);
         child.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace",
+          Namespace.XML_NAMESPACE,
           "%TR.html"));
         assertEquals("http://www.cafeconleche.org/", child.getBaseURI());
         
@@ -761,11 +762,11 @@ public class BaseURITest extends XOMTestCase {
         for (int i = 0; i < urls.length; i++) {
             Element e = new Element("test");
             e.addAttribute(new Attribute("xml:base", 
-              "http://www.w3.org/XML/1998/namespace",
+              Namespace.XML_NAMESPACE,
               urls[i]));
             Element child = new Element("child");
             child.addAttribute(new Attribute("xml:base", 
-              "http://www.w3.org/XML/1998/namespace",
+              Namespace.XML_NAMESPACE,
               "TR.html"));
             e.appendChild(child);
             String base = child.getBaseURI();
@@ -798,16 +799,33 @@ public class BaseURITest extends XOMTestCase {
         for (int i = 0; i < urls.length; i++) {
             Element e = new Element("test");
             e.addAttribute(new Attribute("xml:base", 
-              "http://www.w3.org/XML/1998/namespace",
+              Namespace.XML_NAMESPACE,
               urls[i]));
             Element child = new Element("child");
             child.addAttribute(new Attribute("xml:base", 
-              "http://www.w3.org/XML/1998/namespace",
+              Namespace.XML_NAMESPACE,
               "TR.html"));
             e.appendChild(child);
             String base = child.getBaseURI();
             assertEquals("", base);
         }
+
+    }
+
+    
+    public void testURIStartsWithColon() {   
+        
+        String url = ":elharo@metalab.unc.edu?Subject=XOM%20Namespace";
+        Element e = new Element("test");
+        e.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, url));
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE,
+          "TR.html"));
+        e.appendChild(child);
+        String base = child.getBaseURI();
+        assertEquals("", base);
 
     }
 
@@ -925,7 +943,7 @@ public class BaseURITest extends XOMTestCase {
      
         Element top = new Element("top");
         top.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", 
+          Namespace.XML_NAMESPACE, 
           "http://www.example.com/"));
         top.setBaseURI("http://www.w3.org");
         Element bottom = new Element("bottom");
@@ -943,7 +961,7 @@ public class BaseURITest extends XOMTestCase {
      
         Element top = new Element("top");
         top.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", 
+          Namespace.XML_NAMESPACE, 
           "http://www.example.com/"));
         top.setBaseURI("http://www.w3.org");
         Element bottom = new Element("bottom");
@@ -958,13 +976,28 @@ public class BaseURITest extends XOMTestCase {
      
         Element root = new Element("root");
         Attribute baseAttribute = new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "http://www.example.com/data/limit/test.xml");
+          Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/test.xml");
         root.addAttribute(baseAttribute);
         Element child = new Element ("child");
         child.addAttribute(new Attribute("xml:base", 
-          "http://www.w3.org/XML/1998/namespace", "child.xml"));
+          Namespace.XML_NAMESPACE, "child.xml"));
         root.appendChild(child);
         assertEquals("http://www.example.com/data/limit/child.xml", child.getBaseURI());
+        
+    }
+    
+    
+    public void testRelativeBaseURIResolutionWithNumbers() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/test.xml");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "01test.xml"));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/data/limit/01test.xml", child.getBaseURI());
         
     }
     
@@ -1001,7 +1034,7 @@ public class BaseURITest extends XOMTestCase {
         Element root = new Element("root");
         Document doc = new Document(root);
         doc.setBaseURI("http://a/b/c/d;p?q");
-        Attribute base = new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", "g");
+        Attribute base = new Attribute("xml:base", Namespace.XML_NAMESPACE, "g");
         root.addAttribute(base);
         for (int i = 0; i < RFC2396bisCases.length; i += 2) {
             base.setValue(RFC2396bisCases[i]);
@@ -1038,7 +1071,7 @@ public class BaseURITest extends XOMTestCase {
         Element root = new Element("root");
         Document doc = new Document(root);
         doc.setBaseURI("http://a/b/c/d;p?q");
-        Attribute base = new Attribute("xml:base", "http://www.w3.org/XML/1998/namespace", "g");
+        Attribute base = new Attribute("xml:base", Namespace.XML_NAMESPACE, "g");
         root.addAttribute(base);
         for (int i = 0; i < RFC2396bisCases.length; i += 2) {
             base.setValue(RFC2396bisCases[i]);
