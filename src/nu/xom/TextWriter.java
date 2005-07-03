@@ -47,7 +47,7 @@ abstract class TextWriter {
     private int     maxLength = 0;
     private int     indent = 0;
     private String  indentString = "";
-    protected int     column = 0;
+    protected int   column = 0;
     // Is an xml:space="preserve" attribute in scope?
     private boolean preserveSpace = false;
     protected boolean normalize = false;
@@ -74,6 +74,7 @@ abstract class TextWriter {
      */
     protected boolean skipFollowingLinefeed = false;
     
+    // Needed for memory between calls.
     private char highSurrogate;
     
     
@@ -87,50 +88,169 @@ abstract class TextWriter {
     }
     
     
-    // XXX lookup table?
     final void writePCDATA(char c) throws IOException {
         
-        if (needsEscaping(c)) {
-            writeEscapedChar(c);
-        }
-        else if (c == '&') {
-            out.write("&amp;");
-            column += 5;
-            lastCharacterWasSpace = false;
-            skipFollowingLinefeed = false; 
-            justBroke = false;
-        }
-        else if (c == '<') {
-            out.write("&lt;");
-            column += 4;
-            lastCharacterWasSpace = false; 
-            skipFollowingLinefeed = false;
-            justBroke = false;
-        }
-        else if (c == '>') {
-            out.write("&gt;");
-            column += 4;
-            lastCharacterWasSpace = false;  
-            skipFollowingLinefeed = false;
-            justBroke = false;
-        }
-        else if (c == '\r') {
-            if (!adjustingWhiteSpace()  && !lineSeparatorSet) {
-                out.write("&#x0D;");
-                column += 6;
-                justBroke=false;
-            }
-            else if (!adjustingWhiteSpace()  && lineSeparatorSet) {
-                escapeBreakLine();
-            }
-            else {
-                breakLine();
-                lastCharacterWasSpace = true;              
-            }
-            skipFollowingLinefeed = true;
-        }
-        else {
-            write(c);   
+        switch(c) {
+            case '\r':
+                if (!adjustingWhiteSpace()  && !lineSeparatorSet) {
+                    out.write("&#x0D;");
+                    column += 6;
+                    justBroke=false;
+                }
+                else if (!adjustingWhiteSpace()  && lineSeparatorSet) {
+                    escapeBreakLine();
+                }
+                else {
+                    breakLine();
+                    lastCharacterWasSpace = true;              
+                }
+                skipFollowingLinefeed = true;
+                break;
+            case 14:
+                // unreachable
+            case 15:
+                // unreachable
+            case 16:
+                // unreachable
+            case 17:
+                // unreachable
+            case 18:
+                // unreachable
+            case 19:
+                // unreachable
+            case 20:
+                // unreachable
+            case 21:
+                // unreachable
+            case 22:
+                // unreachable
+            case 23:
+                // unreachable
+            case 24:
+                // unreachable
+            case 25:
+                // unreachable
+            case 26:
+                // unreachable
+            case 27:
+                // unreachable
+            case 28:
+                // unreachable
+            case 29:
+                // unreachable
+            case 30:
+                // unreachable
+            case 31:
+                // unreachable
+                throw new XMLException("Bad character snuck into document");
+            case ' ':
+                write(c);
+                break;
+            case '!':
+                write(c);
+                break;
+            case '"':
+                write(c);
+                break;
+            case '#':
+                write(c);
+                break;
+            case '$':
+                write(c);
+                break;
+            case '%':
+                write(c);
+                break;
+            case '&':
+                out.write("&amp;");
+                column += 5;
+                lastCharacterWasSpace = false;
+                skipFollowingLinefeed = false; 
+                justBroke = false;
+                break;
+            case '\'':
+                write(c);
+                break;
+            case '(':
+                write(c);
+                break;
+            case ')':
+                write(c);
+                break;
+            case '*':
+                write(c);
+                break;
+            case '+':
+                write(c);
+                break;
+            case ',':
+                write(c);
+                break;
+            case '-':
+                write(c);
+                break;
+            case '.':
+                write(c);
+                break;
+            case '/':
+                write(c);
+                break;
+            case '0':
+                write(c);
+                break;
+            case '1':
+                write(c);
+                break;
+            case '2':
+                write(c);
+                break;
+            case '3':
+                write(c);
+                break;
+            case '4':
+                write(c);
+                break;
+            case '5':
+                write(c);
+                break;
+            case '6':
+                write(c);
+                break;
+            case '7':
+                write(c);
+                break;
+            case '8':
+                write(c);
+                break;
+            case '9':
+                write(c);
+                break;
+            case ':':
+                write(c);
+                break;
+            case ';':
+                write(c);
+                break;
+            case '<':
+                out.write("&lt;");
+                column += 4;
+                lastCharacterWasSpace = false; 
+                skipFollowingLinefeed = false;
+                justBroke = false;
+                break;
+            case '=':
+                write(c);
+                break;
+            case '>':
+                out.write("&gt;");
+                column += 4;
+                lastCharacterWasSpace = false;  
+                skipFollowingLinefeed = false;
+                justBroke = false;
+                break;
+            default:
+                if (needsEscaping(c)) writeEscapedChar(c);
+                else write(c);
         }
         
     }
@@ -181,6 +301,7 @@ abstract class TextWriter {
     final void writeAttributeValue(char c) 
       throws IOException {
         
+        // XXX Use switch statement like writePCDATA
         if (needsEscaping(c)) {
             writeEscapedChar(c);
         }
@@ -267,10 +388,14 @@ abstract class TextWriter {
         }
         else {
             write(c);  
-        }            
+        }
+        
     }
 
     
+    // XXX We might be able to optimize this by using switch statements
+    // in the methods that call this to separate out the special cases.
+    // --\n, \t, space, etc.--and passing them to a different methos
     private void write(char c) throws IOException {
         
       // Carriage returns are completely handled by
