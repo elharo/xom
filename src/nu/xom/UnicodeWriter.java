@@ -130,25 +130,128 @@ class UnicodeWriter extends TextWriter {
 
     
     // All three getUnicodeLengthForFOO methods are very similar.
-    // Could the code duplciation be elimianted efficiently somehow?
+    // Could the code duplciation be eliminated efficiently somehow?
     private static int getUnicodeLengthForAttributeValue(String s) {
          
         int unicodeLength = 0;
         int javaLength = s.length();
         for (int i = 0; i < javaLength; i++) {
             char c = s.charAt(i);
-            // ???? lookup table
             switch (c) {
-                case ' ':  return -1;
-                case '&':  return -1;
-                case '<':  return -1;
-                case '>':  return -1;
-                case '"':  return -1;
                 case '\t': return -1;
                 case '\n': return -1;
+                case   11: // unreachable
+                case   12: throw new XMLException("Bad character snuck into document");
                 case '\r': return -1;
+                case 14: // unreachable
+                case 15: // unreachable
+                case 16: // unreachable
+                case 17: // unreachable
+                case 18: // unreachable
+                case 19: // unreachable
+                case 20: // unreachable
+                case 21: // unreachable
+                case 22: // unreachable
+                case 23: // unreachable
+                case 24: // unreachable
+                case 25: // unreachable
+                case 26: // unreachable
+                case 27: // unreachable
+                case 28: // unreachable
+                case 29: // unreachable
+                case 30: // unreachable
+                case 31: // unreachable
+                    throw new XMLException("Bad character snuck into document");
+                case ' ':  return -1;
+                case '!':
+                    unicodeLength++;
+                    break;
+                case '"':
+                    return -1;
+                case '#':
+                    unicodeLength++;
+                    break;
+                case '$':
+                    unicodeLength++;
+                    break;
+                case '%':
+                    unicodeLength++;
+                    break;
+                case '&':
+                    return -1;
+                case '\'':
+                    unicodeLength++;
+                    break;
+                case '(':
+                    unicodeLength++;
+                    break;
+                case ')':
+                    unicodeLength++;
+                    break;
+                case '*':
+                    unicodeLength++;
+                    break;
+                case '+':
+                    unicodeLength++;
+                    break;
+                case ',':
+                    unicodeLength++;
+                    break;
+                case '-':
+                    unicodeLength++;
+                    break;
+                case '.':
+                    unicodeLength++;
+                    break;
+                case '/':
+                    unicodeLength++;
+                    break;
+                case '0':
+                    unicodeLength++;
+                    break;
+                case '1':
+                    unicodeLength++;
+                    break;
+                case '2':
+                    unicodeLength++;
+                    break;
+                case '3':
+                    unicodeLength++;
+                    break;
+                case '4':
+                    unicodeLength++;
+                    break;
+                case '5':
+                    unicodeLength++;
+                    break;
+                case '6':
+                    unicodeLength++;
+                    break;
+                case '7':
+                    unicodeLength++;
+                    break;
+                case '8':
+                    unicodeLength++;
+                    break;
+                case '9':
+                    unicodeLength++;
+                    break;
+                case ':':
+                    unicodeLength++;
+                    break;
+                case ';':
+                    unicodeLength++;
+                    break;
+                case '<':
+                    return -1;
+                case '=':
+                    unicodeLength++;
+                    break;
+                case '>':
+                    return -1;
+                default:
+                    if (c < 0xd800 || c > 0xDBFF) unicodeLength++;
             }
-            if (c < 0xd800 || c > 0xDBFF) unicodeLength++;
         }
         return unicodeLength;
         
@@ -187,17 +290,122 @@ class UnicodeWriter extends TextWriter {
         int javaLength = s.length();
         for (int i = 0; i < javaLength; i++) {
             char c = s.charAt(i);
-            // ???? lookup table
             switch (c) {
-                case ' ':  return -1;
-                case '\n': return -1;
-                case '&':  return -1;
-                case '<':  return -1;
-                case '>':  return -1;
                 case '\t': return -1;
+                case '\n': return -1;
+                case   11: // unreachable
+                case   12: throw new XMLException("Bad character snuck into document");
                 case '\r': return -1;
+                case 14: // unreachable
+                case 15: // unreachable
+                case 16: // unreachable
+                case 17: // unreachable
+                case 18: // unreachable
+                case 19: // unreachable
+                case 20: // unreachable
+                case 21: // unreachable
+                case 22: // unreachable
+                case 23: // unreachable
+                case 24: // unreachable
+                case 25: // unreachable
+                case 26: // unreachable
+                case 27: // unreachable
+                case 28: // unreachable
+                case 29: // unreachable
+                case 30: // unreachable
+                case 31: // unreachable
+                    throw new XMLException("Bad character snuck into document");
+                case ' ':  return -1;
+                case '!':
+                    unicodeLength++;
+                    break;
+                case '"':
+                    unicodeLength++;
+                    break;
+                case '#':
+                    unicodeLength++;
+                    break;
+                case '$':
+                    unicodeLength++;
+                    break;
+                case '%':
+                    unicodeLength++;
+                    break;
+                case '&':
+                    return -1;
+                case '\'':
+                    unicodeLength++;
+                    break;
+                case '(':
+                    unicodeLength++;
+                    break;
+                case ')':
+                    unicodeLength++;
+                    break;
+                case '*':
+                    unicodeLength++;
+                    break;
+                case '+':
+                    unicodeLength++;
+                    break;
+                case ',':
+                    unicodeLength++;
+                    break;
+                case '-':
+                    unicodeLength++;
+                    break;
+                case '.':
+                    unicodeLength++;
+                    break;
+                case '/':
+                    unicodeLength++;
+                    break;
+                case '0':
+                    unicodeLength++;
+                    break;
+                case '1':
+                    unicodeLength++;
+                    break;
+                case '2':
+                    unicodeLength++;
+                    break;
+                case '3':
+                    unicodeLength++;
+                    break;
+                case '4':
+                    unicodeLength++;
+                    break;
+                case '5':
+                    unicodeLength++;
+                    break;
+                case '6':
+                    unicodeLength++;
+                    break;
+                case '7':
+                    unicodeLength++;
+                    break;
+                case '8':
+                    unicodeLength++;
+                    break;
+                case '9':
+                    unicodeLength++;
+                    break;
+                case ':':
+                    unicodeLength++;
+                    break;
+                case ';':
+                    unicodeLength++;
+                    break;
+                case '<':
+                    return -1;
+                case '=':
+                    unicodeLength++;
+                    break;
+                case '>':
+                    return -1;
+                default:
+                    if (c < 0xd800 || c > 0xDBFF) unicodeLength++;
             }
-            if (c < 0xd800 || c > 0xDBFF) unicodeLength++;
         }
         return unicodeLength;
 
