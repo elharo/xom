@@ -22,6 +22,7 @@
 package nu.xom.tests;
 
 import nu.xom.Elements;
+import nu.xom.Namespace;
 import nu.xom.Node;
 import nu.xom.Serializer;
 import nu.xom.Element;
@@ -2038,6 +2039,20 @@ public class SerializerTest extends XOMTestCase {
         assertTrue(result.endsWith("<a/>\r\n"));
         assertTrue(result.indexOf(
           "<!DOCTYPE b PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"example.dtd\">") > 0); 
+        
+    }
+
+    
+    public void testSerializeXMLNamespaceDeclaration() 
+      throws ParsingException, IOException {
+        
+        Serializer serializer = new Serializer(out);
+        Element root = new Element("root");
+        root.addNamespaceDeclaration("xml", Namespace.XML_NAMESPACE);
+        Document doc = new Document(root);
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertTrue(result.endsWith("<root/>\r\n"));  
         
     }
 
