@@ -301,95 +301,220 @@ abstract class TextWriter {
     final void writeAttributeValue(char c) 
       throws IOException {
         
-        // XXX Use switch statement like writePCDATA
-        if (needsEscaping(c)) {
-            writeEscapedChar(c);
-        }
-        // Handle white space that the parser might normalize
-        // on roundtrip. We only escape them if the serializer
-        // is not adjusting white space; that is indent is 0
-        // and maxLength is 0.
-        else if (c == '\t' && !adjustingWhiteSpace()) {
-            out.write("&#x09;");
-            column += 6;
-            lastCharacterWasSpace = true;
-            skipFollowingLinefeed = false;
-            justBroke=false;
-        }
-        else if (c == '\n') {
-            if (skipFollowingLinefeed) {
-                skipFollowingLinefeed = false;
-                return;
-            }
-            else if (adjustingWhiteSpace()) {
-                out.write(" ");
-                lastCharacterWasSpace = true;
-                justBroke=false;
-            }
-            else {
-                if (lineSeparatorSet) {
-                    escapeBreakLine();
-                }
-                else {
-                    out.write("&#x0A;");
-                    column += 6; 
-                    justBroke=false;
-                }
-                lastCharacterWasSpace = true;
-            }
-        }
-        else if (c == '"') {
-            out.write("&quot;");
-            column += 6;
-            lastCharacterWasSpace = false;
-            skipFollowingLinefeed = false;
-            justBroke=false;
-        }
-        else if (c == '\r') {
-            if (adjustingWhiteSpace()) {
-                out.write(" ");
-                lastCharacterWasSpace = true;
-                skipFollowingLinefeed = true;  
-                justBroke=false;
-            }
-            else {
-                if (lineSeparatorSet) {
-                    escapeBreakLine();
-                    skipFollowingLinefeed = true;
-                }
-                else {
-                    out.write("&#x0D;");
+        switch(c) {
+            // Handle white space that the parser might normalize
+            // on roundtrip. We only escape them if the serializer
+            // is not adjusting white space; that is indent is 0
+            // and maxLength is 0.
+            case '\t':
+                if (!adjustingWhiteSpace()) {
+                    out.write("&#x09;");
                     column += 6;
+                    lastCharacterWasSpace = true;
+                    skipFollowingLinefeed = false;
                     justBroke=false;
                 }
-            }
+                else {
+                    write(' ');
+                }
+                break;
+            case '\n':
+                if (skipFollowingLinefeed) {
+                    skipFollowingLinefeed = false;
+                    return;
+                }
+                else if (adjustingWhiteSpace()) {
+                    out.write(" ");
+                    lastCharacterWasSpace = true;
+                    justBroke=false;
+                }
+                else {
+                    if (lineSeparatorSet) {
+                        escapeBreakLine();
+                    }
+                    else {
+                        out.write("&#x0A;");
+                        column += 6; 
+                        justBroke=false;
+                    }
+                    lastCharacterWasSpace = true;
+                }
+                break;
+            case 11:
+                // unreachable
+            case 12:
+                // unreachable
+                throw new XMLException("Bad character snuck into document");
+            case '\r':
+                if (adjustingWhiteSpace()) {
+                    out.write(" ");
+                    lastCharacterWasSpace = true;
+                    skipFollowingLinefeed = true;  
+                    justBroke=false;
+                }
+                else {
+                    if (lineSeparatorSet) {
+                        escapeBreakLine();
+                        skipFollowingLinefeed = true;
+                    }
+                    else {
+                        out.write("&#x0D;");
+                        column += 6;
+                        justBroke=false;
+                    }
+                }
+                break;
+            case 14:
+                // unreachable
+            case 15:
+                // unreachable
+            case 16:
+                // unreachable
+            case 17:
+                // unreachable
+            case 18:
+                // unreachable
+            case 19:
+                // unreachable
+            case 20:
+                // unreachable
+            case 21:
+                // unreachable
+            case 22:
+                // unreachable
+            case 23:
+                // unreachable
+            case 24:
+                // unreachable
+            case 25:
+                // unreachable
+            case 26:
+                // unreachable
+            case 27:
+                // unreachable
+            case 28:
+                // unreachable
+            case 29:
+                // unreachable
+            case 30:
+                // unreachable
+            case 31:
+                // unreachable
+                throw new XMLException("Bad character snuck into document");
+            case ' ':
+                write(c);
+                break;
+            case '!':
+                write(c);
+                break;
+            case '"':
+                out.write("&quot;");
+                column += 6;
+                lastCharacterWasSpace = false;
+                skipFollowingLinefeed = false;
+                justBroke=false;
+                break;
+            case '#':
+                write(c);
+                break;
+            case '$':
+                write(c);
+                break;
+            case '%':
+                write(c);
+                break;
+            case '&':
+                out.write("&amp;");
+                column += 5;
+                lastCharacterWasSpace = false;
+                skipFollowingLinefeed = false; 
+                justBroke = false;
+                break;
+            case '\'':
+                write(c);
+                break;
+            case '(':
+                write(c);
+                break;
+            case ')':
+                write(c);
+                break;
+            case '*':
+                write(c);
+                break;
+            case '+':
+                write(c);
+                break;
+            case ',':
+                write(c);
+                break;
+            case '-':
+                write(c);
+                break;
+            case '.':
+                write(c);
+                break;
+            case '/':
+                write(c);
+                break;
+            case '0':
+                write(c);
+                break;
+            case '1':
+                write(c);
+                break;
+            case '2':
+                write(c);
+                break;
+            case '3':
+                write(c);
+                break;
+            case '4':
+                write(c);
+                break;
+            case '5':
+                write(c);
+                break;
+            case '6':
+                write(c);
+                break;
+            case '7':
+                write(c);
+                break;
+            case '8':
+                write(c);
+                break;
+            case '9':
+                write(c);
+                break;
+            case ':':
+                write(c);
+                break;
+            case ';':
+                write(c);
+                break;
+            case '<':
+                out.write("&lt;");
+                column += 4;
+                lastCharacterWasSpace = false; 
+                skipFollowingLinefeed = false;
+                justBroke = false;
+                break;
+            case '=':
+                write(c);
+                break;
+            case '>':
+                out.write("&gt;");
+                column += 4;
+                lastCharacterWasSpace = false;  
+                skipFollowingLinefeed = false;
+                justBroke = false;
+                break;
+            default:
+                if (needsEscaping(c)) writeEscapedChar(c);
+                else write(c);
         }
-        // Handle characters that are illegal in attribute values
-        else if (c == '&') {
-            out.write("&amp;");
-            column += 5;
-            lastCharacterWasSpace = false;
-            skipFollowingLinefeed = false;
-            justBroke=false;
-        }
-        else if (c == '<') {
-            out.write("&lt;");
-            column += 4;
-            lastCharacterWasSpace = false; 
-            skipFollowingLinefeed = false; 
-            justBroke=false;
-        }
-        else if (c == '>') {
-            out.write("&gt;");
-            column += 4;
-            lastCharacterWasSpace = false;  
-            skipFollowingLinefeed = false;
-            justBroke=false;
-        }
-        else {
-            write(c);  
-        }
-        
+
     }
 
     
