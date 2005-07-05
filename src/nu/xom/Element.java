@@ -782,7 +782,7 @@ public class Element extends ParentNode {
     }
 
     
-    String getLocalNamespaceURI(String prefix) {
+    final String getLocalNamespaceURI(String prefix) {
         
         if (prefix.equals(this.prefix)) return this.URI;
         
