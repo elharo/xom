@@ -23,8 +23,10 @@ package nu.xom.xinclude;
 
 /**
  * <p>
- * Indicates that the <code>parse</code> attribute has some value other 
- * than <code>xml</code> or <code>text</code>.
+ * Indicates that the <code>encoding</code> attribute 
+ * is not an EncName as defined in the 
+ * <a href="http://www.w3.org/TR/REC-xml/#charencoding" 
+ * target="_top">XML specification, section 4.3.3, rule 81</a>.
  * </p>
  *
  * @author Elliotte Rusty Harold
