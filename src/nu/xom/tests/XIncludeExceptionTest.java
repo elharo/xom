@@ -1,4 +1,4 @@
-/* Copyright 2003, 2004 Elliotte Rusty Harold
+/* Copyright 2003-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -21,6 +21,7 @@
 
 package nu.xom.tests;
 
+import nu.xom.xinclude.BadEncodingAttributeException;
 import nu.xom.xinclude.BadParseAttributeException;
 import nu.xom.xinclude.MisplacedFallbackException;
 import nu.xom.xinclude.NoIncludeLocationException;
@@ -32,7 +33,7 @@ import nu.xom.xinclude.XIncludeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  *
  */
 public class XIncludeExceptionTest extends XOMTestCase {
@@ -136,15 +137,21 @@ public class XIncludeExceptionTest extends XOMTestCase {
 
     
     public void testBadParseAttributeException() {
-        
         String message = "message";
         Exception ex = new BadParseAttributeException(message);
         assertEquals(message, ex.getMessage());
-        
+    }
+
+    
+    public void testBadEncodingAttributeException() {
+        String message = "message";
+        Exception ex = new BadEncodingAttributeException(message);
+        assertEquals(message, ex.getMessage());
     }
 
     
     public void testNoIncludeLocationException() {
+        
         String message = "message";
         XIncludeException ex = new NoIncludeLocationException(message);
         assertEquals(message, ex.getMessage());
