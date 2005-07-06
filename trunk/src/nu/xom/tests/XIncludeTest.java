@@ -65,7 +65,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b3
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -1733,6 +1733,32 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
+    public void testXPointerExceptionSelfCausation() 
+      throws ParsingException, IOException {   
+        
+        File input = new File(inputDir, "badxptr.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed malformed XPointer");
+        }
+        catch (XIncludeException success) {
+            Exception cause = (Exception) success.getCause();
+            assertNotNull(cause.getMessage());
+            try {
+                cause.initCause(cause);
+                fail("Self causation");
+            }
+            catch (IllegalArgumentException ex) {
+                assertNotNull(ex.getMessage());
+            }
+            
+            
+        }
+        
+    }
+    
+    
     public void testAnotherMalformedXPointer() 
       throws ParsingException, IOException {
         
@@ -2422,7 +2448,31 @@ public class XIncludeTest extends XOMTestCase {
         }
                 
     }
-        
+     
+    public void testXPointerExceptionReinitializeCause() 
+      throws ParsingException, IOException, XIncludeException {
+      
+        File input = new File(inputDir, "xpointerwithpercentescape.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed xpointer attribute with percent escape");
+        }
+        catch (XIncludeException success) {
+            Exception cause = (Exception) success.getCause();
+            try {
+                cause.initCause(new Exception());
+                fail("Reinitialized cause");
+            }
+            catch (IllegalStateException ex) {
+                assertNotNull(ex.getMessage());
+                assertNotNull(ex.getCause());
+            }
+        }
+                
+    }
+    
+    
     
     // WARNING: this test is one interpretation of the XInclude 
     // proposed recommendation. It asserts that encoding attributes 
