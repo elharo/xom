@@ -75,7 +75,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1503,6 +1503,42 @@ public class BuilderTest extends XOMTestCase {
         assertTrue(internalSubset.indexOf("<!NOTATION JPEG SYSTEM ") > 0);
         assertTrue(internalSubset.indexOf("image/jpeg\">") > 0);
         
+    }
+    
+
+    public void testInternalEntityDeclDollarSign() 
+      throws ValidityException, ParsingException, IOException {
+        
+        String input = "<!DOCTYPE root [<!ENTITY test '$!@#$^'>] ><root />";
+        Builder builder = new Builder(false);
+        Document doc = builder.build(input, null);
+        String internalSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalSubset.indexOf("<!ENTITY test \"$!@#$^\">") > 0);
+
+    }
+    
+
+    public void testInternalDTDSubset5To9() 
+      throws ValidityException, ParsingException, IOException {
+        
+        String input = "<!DOCTYPE root [<!ATTLIST root source CDATA '56789'>] ><root />";
+        Builder builder = new Builder(false);
+        Document doc = builder.build(input, null);
+        String internalSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalSubset.indexOf("<!ATTLIST root source CDATA \"56789\">") > 0);
+
+    }
+    
+
+    public void testInternalDTDSubsetPunctuation() 
+      throws ValidityException, ParsingException, IOException {
+        
+        String input = "<!DOCTYPE root [<!ATTLIST root source CDATA '+,()!'>] ><root />";
+        Builder builder = new Builder(false);
+        Document doc = builder.build(input, null);
+        String internalSubset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(internalSubset.indexOf("<!ATTLIST root source CDATA \"+,()!\">") > 0);
+
     }
     
 
