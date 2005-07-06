@@ -2496,6 +2496,40 @@ public class XIncludeTest extends XOMTestCase {
     }
         
     
+    public void testEmptyEncodingAttribute() 
+      throws IOException, ParsingException, XIncludeException {
+      
+        File input = new File(inputDir, "emptyencoding.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed encoding attribute with no value");
+        }
+        catch (BadEncodingAttributeException success) {
+            assertNotNull(success.getMessage());
+            assertTrue(success.getURI().endsWith(input.getName()));
+        }
+                
+    }
+        
+    
+    public void testEncodingAttributeStartsWithDigit() 
+      throws IOException, ParsingException, XIncludeException {
+      
+        File input = new File(inputDir, "digitencoding.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed encoding attribute starting with digit");
+        }
+        catch (BadEncodingAttributeException success) {
+            assertNotNull(success.getMessage());
+            assertTrue(success.getURI().endsWith(input.getName()));
+        }
+                
+    }
+        
+    
     // Test that a malformed parse attribute is not thrown when the
     // fallback element containing it is not activated.
     public void testHiddenError() 
