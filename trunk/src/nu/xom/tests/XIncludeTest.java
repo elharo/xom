@@ -1752,8 +1752,25 @@ public class XIncludeTest extends XOMTestCase {
             catch (IllegalArgumentException ex) {
                 assertNotNull(ex.getMessage());
             }
-            
-            
+        }
+        
+    }
+    
+    
+    public void testXPointerExceptionGetCause() 
+      throws ParsingException, IOException {   
+        
+        File input = new File(inputDir, "badxptr.xml");
+        Document doc = builder.build(input);
+        try {
+            XIncluder.resolve(doc);
+            fail("Allowed malformed XPointer");
+        }
+        catch (XIncludeException success) {
+            Exception cause = (Exception) success.getCause();
+            Exception ex = new Exception();
+            cause.initCause(ex);
+            assertEquals(ex, cause.getCause());
         }
         
     }
@@ -2466,7 +2483,6 @@ public class XIncludeTest extends XOMTestCase {
             }
             catch (IllegalStateException ex) {
                 assertNotNull(ex.getMessage());
-                assertNotNull(ex.getCause());
             }
         }
                 
