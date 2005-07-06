@@ -28,14 +28,14 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  */
 public class BadEncodingAttributeException extends XIncludeException {
 
     
     /**
      * <p>
-     * Constructs a <code>BadParseAttributeException</code> with 
+     * Constructs a <code>BadEncodingAttributeException</code> with 
      * the specified detail message. 
      * </p>
      *
@@ -48,7 +48,7 @@ public class BadEncodingAttributeException extends XIncludeException {
     
     /**
      * <p>
-     * Creates a new <code>BadParseAttributeException</code> with a  
+     * Creates a new <code>BadEncodingAttributeException</code> with a  
      * detail message and the URI of the document that caused 
      * the exception.
      * </p>
