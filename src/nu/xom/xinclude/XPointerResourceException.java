@@ -1,4 +1,4 @@
-/* Copyright 2003, 2004 Elliotte Rusty Harold
+/* Copyright 2003-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -31,7 +31,7 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  */
 class XPointerResourceException extends XPointerException {
 
@@ -46,21 +46,6 @@ class XPointerResourceException extends XPointerException {
      */
     XPointerResourceException(String message) {
         super(message);
-    }
-
-    
-    /**
-     * <p>
-     * Constructs an <code>XPointerResourceException</code> with the 
-     * specified detail message and initial cause. 
-     * </p>
-     *
-     * @param message a string indicating the specific problem
-     * @param cause the initial exception which caused this 
-     *     <code>XPointerException</code>
-     */
-    XPointerResourceException(String message, Throwable cause) {
-        super(message, cause);
     }
 
     
