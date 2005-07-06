@@ -1933,6 +1933,27 @@ public class SerializerTest extends XOMTestCase {
     }
     
     
+    public void testNFCWithKoreanCharacter() 
+      throws IOException {
+        
+        root.appendChild("\u1111\u1171\u11B6"); // see p. 88 of Unicode 4.0 book
+        Serializer serializer = new Serializer(new ByteArrayOutputStream());
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.setOutputStream(out);
+        serializer.write(doc);          
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<root>\uD4DB</root>\r\n", 
+          result
+        );      
+        
+    }
+    
+    
     public void testNullOutputStream() {
         
         try {
