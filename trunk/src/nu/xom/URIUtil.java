@@ -1,4 +1,4 @@
-/* Copyright 2004 Elliotte Rusty Harold
+/* Copyright 2004, 2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -24,21 +24,29 @@ package nu.xom;
 import java.io.UnsupportedEncodingException;
 
 
+/**
+ * These methods are not fully general.
+ * You would need to uncomment some lines to make this a 
+ * public API. Certain assumptionsd are made about previous checks
+ * that cannot otherwise be made. 
+ * 
+ */
 class URIUtil {
 
-    
+    // We assume the URI has already been verified as a potentially 
+    // legal URI. Thus we don't have to check everything here.
     static boolean isOpaque(String uri) {
         
         int colon = uri.indexOf(':');
-        if (colon < 1) return false;
+        // if (colon < 1) return false;
         // This next line is the difference between absolute and opaque
         if (uri.substring(colon+1).startsWith("/")) return false;
         if (!Verifier.isAlpha(uri.charAt(0))) return false;
-        for (int i = 1; i < colon; i++) {
+        /* for (int i = 1; i < colon; i++) {
              if (!Verifier.isSchemeCharacter(uri.charAt(i))) {
                  return false;
              }
-        }
+        } */
         return true;
         
     }
@@ -130,13 +138,7 @@ class URIUtil {
         String output = "";
 
         while (path.length() > 0) {
-            if (path.startsWith("../")) {
-                path = path.substring(3);
-            }
-            else if (path.startsWith("./")) {
-                path = path.substring(2);
-            }
-            else if (path.startsWith("/./")) {
+            if (path.startsWith("/./")) {
                 path = '/' + path.substring(3);
             }
             else if (path.equals("/.")) {
@@ -156,6 +158,12 @@ class URIUtil {
             }
             else if (path.equals(".") || path.equals("..")) {
                 path = "";
+            }
+            else if (path.startsWith("../")) {
+                path = path.substring(3);
+            }
+            else if (path.startsWith("./")) {
+                path = path.substring(2);
             }
             else {
                 int nextSlash = path.indexOf('/');

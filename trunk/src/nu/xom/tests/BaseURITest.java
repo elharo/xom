@@ -830,6 +830,40 @@ public class BaseURITest extends XOMTestCase {
     }
 
     
+    public void testURIStartsWithNumber() {   
+        
+        String url = "7aelharo@metalab.unc.edu?Subject=XOM%20Namespace";
+        Element e = new Element("test");
+        e.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, url));
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE,
+          "TR.html"));
+        e.appendChild(child);
+        String base = child.getBaseURI();
+        assertEquals("", base);
+
+    }
+
+    
+    public void testURISchemeContainsComma() {   
+        
+        String url = "foo,foo:elharo@metalab.unc.edu?Subject=XOM%20Namespace";
+        Element e = new Element("test");
+        e.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, url));
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE,
+          "TR.html"));
+        e.appendChild(child);
+        String base = child.getBaseURI();
+        assertEquals("", base);
+
+    }
+
+    
     public void testXMLBaseUsedToResolveHref() 
       throws ParsingException, IOException {
       
@@ -998,6 +1032,112 @@ public class BaseURITest extends XOMTestCase {
           Namespace.XML_NAMESPACE, "01test.xml"));
         root.appendChild(child);
         assertEquals("http://www.example.com/data/limit/01test.xml", child.getBaseURI());
+        
+    }
+    
+    
+    public void testRelativeBaseURIStartsWithDotSlash() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/test.xml");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "./test.xml"));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/data/limit/test.xml", child.getBaseURI());
+        
+    }
+    
+    
+    public void testRelativeBaseURIIsDot() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/test.xml");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "."));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/data/limit/", child.getBaseURI());
+        
+    }
+    
+    
+    public void testRelativeBaseURIIsDotDot() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/test.xml");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, ".."));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/data/", child.getBaseURI());
+        
+    }
+    
+    
+    public void testRelativeBaseURIStartsWithDotDotSlash() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/test.xml");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "../test.xml"));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/data/test.xml", child.getBaseURI());
+        
+    }
+    
+    
+    public void testAbsoluteBaseURIEndsWithDotDotSlash() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/../");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "test.xml"));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/data/test.xml", child.getBaseURI());
+        
+    }
+    
+    
+    public void testAbsoluteBaseURIEndsWithDotDotSlashDotDot() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/../..");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "test.xml"));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/test.xml", child.getBaseURI());
+        
+    }
+    
+    
+    // I'm not sure about this one; need to check????
+    public void testAbsoluteBaseURIEndsWithDotDot() {
+     
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/..");
+        root.addAttribute(baseAttribute);
+        Element child = new Element ("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "test.xml"));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/data/test.xml", child.getBaseURI());
         
     }
     
