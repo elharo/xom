@@ -56,10 +56,12 @@ class URIUtil {
         
         int colon = uri.indexOf(':');
         if (colon < 1) return false;
-        if (!Verifier.isAlpha(uri.charAt(0))) return false;
+        // We assume the URI has already been verified as a potentially 
+        // legal URI. Thus we don't have to check everything here.
+        /*if (!Verifier.isAlpha(uri.charAt(0))) return false;
         for (int i = 1; i < colon; i++) {
              if (!Verifier.isSchemeCharacter(uri.charAt(i))) return false;
-        }
+        } */
         return true;
         
     } 
