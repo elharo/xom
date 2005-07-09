@@ -27,8 +27,9 @@ import java.io.UnsupportedEncodingException;
 /**
  * These methods are not fully general.
  * You would need to uncomment some lines to make this a 
- * public API. Certain assumptionsd are made about previous checks
- * that cannot otherwise be made. 
+ * public API. Certain preconditons for these methods to 
+ * operate correctly are true in the context of XOM,
+ * but may well not be true in a more general context. 
  * 
  */
 class URIUtil {
@@ -76,42 +77,44 @@ class URIUtil {
         ParsedURI R = new ParsedURI(spec);
         ParsedURI T = new ParsedURI();
         
-        if (R.scheme != null) {
+        // We should be able to skip this check. basically it
+        // asserts that the spec is not an absolute URI already
+        /* if (R.scheme != null) {
             T.scheme    = R.scheme;
             T.authority = R.authority;
             T.query     = R.query;
             T.path      = removeDotSegments(R.path); 
         }
+        else { */
+        if (R.authority != null) {
+            T.authority = R.authority;
+            T.query     = R.query;
+            T.path      = removeDotSegments(R.path); 
+        }
         else {
-            if (R.authority != null) {
-                T.authority = R.authority;
-                T.query     = R.query;
-                T.path      = removeDotSegments(R.path); 
-            }
-            else {
-                if ("".equals(R.path)) {
-                    T.path = base.path;
-                    if (R.query != null) {
-                        T.query = R.query;
-                    }
-                    else {
-                        T.query = base.query;
-                    }
-                }
-                else {
-                    if (R.path.startsWith("/")) {
-                       T.path = removeDotSegments(R.path);
-                    }
-                    else {
-                       T.path = merge(base, R.path);
-                       T.path = removeDotSegments(T.path);
-                    }
+            if ("".equals(R.path)) {
+                T.path = base.path;
+                if (R.query != null) {
                     T.query = R.query;
                 }
-                T.authority = base.authority;
+                else {
+                    T.query = base.query;
+                }
             }
-            T.scheme = base.scheme;
+            else {
+                if (R.path.startsWith("/")) {
+                   T.path = removeDotSegments(R.path);
+                }
+                else {
+                   T.path = merge(base, R.path);
+                   T.path = removeDotSegments(T.path);
+                }
+                T.query = R.query;
+            }
+            T.authority = base.authority;
         }
+        T.scheme = base.scheme;
+        // }
         // Fragment ID of base URI is never considered
         T.fragment = R.fragment; 
         
@@ -268,8 +271,13 @@ class URIUtil {
         
         public String toString() {
         
-            StringBuffer result = new StringBuffer(20);
-            if (scheme != null) result.append(scheme + ':');
+            StringBuffer result = new StringBuffer(30);
+            
+            if (scheme != null) {
+                result.append(scheme);
+                result.append(':');
+            }
+            
             if (schemeSpecificPart != null) {
                 result.append(schemeSpecificPart);
             }
@@ -279,10 +287,18 @@ class URIUtil {
                 result.append(path);
             }
             
-            if (query != null) result.append('?' + query);
-            if (fragment != null) result.append('#' + fragment);
+            if (query != null) {
+                result.append('?');
+                result.append(query);
+            }
+            
+            if (fragment != null) {
+                result.append('#');
+                result.append(fragment);                
+            }
             
             return result.toString();
+            
         }
         
     }
