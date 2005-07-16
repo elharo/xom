@@ -101,7 +101,7 @@ public class Element extends ParentNode {
         int colon = name.indexOf(':');
         if (colon > 0) {
             prefix = name.substring(0, colon);   
-            localName = name.substring(colon + 1).intern();   
+            localName = name.substring(colon + 1);   
         }
         
         // The order of these next two calls
@@ -128,7 +128,7 @@ public class Element extends ParentNode {
         String prefix = "";
         int colon = name.indexOf(':');
         if (colon >= 0) {
-            prefix = name.substring(0, colon).intern();  
+            prefix = name.substring(0, colon);  
         }
         result.prefix = prefix;
         result.localName = localName;
@@ -939,7 +939,6 @@ public class Element extends ParentNode {
     private void _setNamespacePrefix(String prefix) {
         
         if (prefix == null) prefix = "";
-        else prefix = prefix.intern(); 
             
         if (prefix.length() != 0) Verifier.checkNCName(prefix);
 
@@ -1478,7 +1477,7 @@ public class Element extends ParentNode {
                     if ("".equals(baseURI)) baseURI = base;
                     else if (URIUtil.isOpaque(base)) break; 
                     else baseURI = URIUtil.absolutize(base, baseURI);
-                    if (URIUtil.isAbsolute(base)) break;
+                    if (URIUtil.isAbsolute(base)) break;  // ???? base or baseURI
                 }
             }
             current = current.getParent();
