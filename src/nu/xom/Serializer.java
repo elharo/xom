@@ -576,10 +576,6 @@ public class Serializer {
         
         ParentNode parent = element.getParent();
         
-        // Furthermore we might also want to store a SAX NamespaceContext stack
-        // of namespace prefixes in scope as we descend the tree for quick
-        // checking of whether we've already mapped that prefix
-        
         Map prefixes = element.getNamespacePrefixesInScope();
         Iterator iterator = prefixes.keySet().iterator();
         while (iterator.hasNext()) {
