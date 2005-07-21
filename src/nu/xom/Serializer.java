@@ -73,7 +73,7 @@ public class Serializer {
         } 
         try {
             Writer writer = new OutputStreamWriter(out, "UTF8");
-            writer = new BufferedWriter(writer);
+            writer = new UnsynchronizedBufferedWriter(writer);
             escaper = TextWriterFactory.getTextWriter(writer, "UTF-8");
         }
         catch (UnsupportedEncodingException ex) {
