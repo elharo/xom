@@ -88,7 +88,8 @@ class XSLTHandler
         flushText();
         
         // mix namespaceDeclarations into attributes
-        for (int i = 0; i < attributes.getLength(); i++) {
+        int length = attributes.getLength();
+        for (int i = 0; i < length; i++) {
             namespaceDeclarations.addAttribute(
               attributes.getURI(i),
               attributes.getLocalName(i),
@@ -113,7 +114,8 @@ class XSLTHandler
         parents.add(element);
         
         // Attach the attributes
-        for (int i = 0; i < attributes.getLength(); i++) {
+        length = attributes.getLength();
+        for (int i = 0; i < length; i++) {
             String attributeName = attributes.getQName(i);
             // handle namespaces later
             if (attributeName.equals("xmlns") 
@@ -129,7 +131,8 @@ class XSLTHandler
               value, 
               Attribute.Type.UNDECLARED
             ); 
-            for (int j=0; j < nodes.size(); j++) {
+            int size = nodes.size();
+            for (int j=0; j < size; j++) {
                 Node node = nodes.get(j);
                 if (node instanceof Attribute) {
                     Attribute attribute = (Attribute) node;
@@ -158,7 +161,7 @@ class XSLTHandler
         }
         
         // Attach any additional namespaces
-        for (int i = 0; i < attributes.getLength(); i++) {
+        for (int i = 0; i < length; i++) {
             String qName = attributes.getQName(i);
             if (qName.startsWith("xmlns:")) {               
                 String namespaceName = attributes.getValue(i);
