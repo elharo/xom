@@ -24,7 +24,7 @@ package nu.xom;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.1b3
  *
  */
 class NonVerifyingHandler extends XOMHandler {
@@ -46,7 +46,7 @@ class NonVerifyingHandler extends XOMHandler {
         
         current = element;
         // Need to push this, even if it's null 
-        parents.push(element);
+        parents.add(element);
         
         if (parent != document) { 
             // a.k.a. parent not instanceof Document
@@ -128,7 +128,7 @@ class NonVerifyingHandler extends XOMHandler {
         
         // If we're immediately inside a skipped element
         // we need to reset current to null, not to the parent
-        current = (ParentNode) parents.pop();
+        current = (ParentNode) parents.remove(parents.size()-1);
         flushText();
         
         parent = current.getParent();

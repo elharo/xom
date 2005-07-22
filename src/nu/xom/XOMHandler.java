@@ -22,7 +22,7 @@
 
 package nu.xom;
 
-import java.util.Stack;
+import java.util.ArrayList;
 
 import org.xml.sax.ContentHandler;
 import org.xml.sax.DTDHandler;
@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  *
  */
 class XOMHandler 
@@ -48,7 +48,7 @@ class XOMHandler
     // current should be the same node.
     protected ParentNode   parent;
     protected ParentNode   current;
-    protected Stack        parents;
+    protected ArrayList    parents;
     protected boolean      inProlog;
     protected boolean      inDTD;
     protected int          position; // current number of items in prolog
@@ -80,8 +80,8 @@ class XOMHandler
         document = factory.startMakingDocument();
         parent = document;
         current = document;
-        parents = new Stack();
-        parents.push(document);
+        parents = new ArrayList();
+        parents.add(document);
         inProlog = true;
         position = 0;
         buffer = new StringBuffer();
@@ -100,7 +100,7 @@ class XOMHandler
     
     public void endDocument() {
         factory.finishMakingDocument(document);
-        parents.pop();
+        parents.remove(parents.size()-1);
     }
   
     
@@ -125,7 +125,7 @@ class XOMHandler
         
         current = element;
         // Need to push this, even if it's null 
-        parents.push(element);
+        parents.add(element);
         
         if (element != null) { // wasn't filtered out
             if (parent != document) { 
@@ -214,7 +214,7 @@ class XOMHandler
         
         // If we're immediately inside a skipped element
         // we need to reset current to null, not to the parent
-        current = (ParentNode) parents.pop();
+        current = (ParentNode) parents.remove(parents.size()-1);
         flushText();
         
         if (current != null) {
