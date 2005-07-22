@@ -216,17 +216,20 @@ public class Text extends Node {
      * characters such as &amp; and &lt; using entity references such
      * as <code>&amp;amp;</code> and <code>&amp;lt;</code>.
      * It escapes the carriage return (\r) as <code>&amp;#x0D;</code>.
+     * If this text node is a CDATA section, then it may wrap the value 
+     * in CDATA section delimiters instead of escaping.
      * </p>
      * 
      * @return the string form of this text node
      */
     public final String toXML() {
-        return escapeText(getValue());    
+        return escapeText();    
     }
 
     
-    private static String escapeText(String s) {
+    String escapeText() {
         
+        String s = getValue();
         int length = s.length();
         // Give the string buffer enough room for a couple of escaped characters 
         StringBuffer result = new StringBuffer(length+12);
