@@ -32,7 +32,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
-import java.util.Stack;
+import java.util.ArrayList;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a3
+ * @version 1.1b3
  *
  */
 public class XIncluder {
@@ -283,14 +283,14 @@ public class XIncluder {
              IOException, NoIncludeLocationException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {
         
-        Stack stack = new Stack();
+        ArrayList stack = new ArrayList();
         resolveInPlace(in, builder, stack);
         
     }
 
     
     private static void resolveInPlace(
-      Document in, Builder builder, Stack baseURLs) 
+      Document in, Builder builder, ArrayList baseURLs) 
       throws IOException, ParsingException, XIncludeException {
         
         String base = in.getBaseURI();
@@ -299,16 +299,16 @@ public class XIncluder {
             base = "file:/" + base.substring(8);
         }
         
-        baseURLs.push(base);   
+        baseURLs.add(base);   
         Element root = in.getRootElement();
         resolve(root, builder, baseURLs);
-        baseURLs.pop();
+        baseURLs.remove(baseURLs.size()-1);
         
     }
 
     
     private static void resolve(
-      Element element, Builder builder, Stack baseURLs)
+      Element element, Builder builder, ArrayList baseURLs)
       throws IOException, ParsingException, XIncludeException {
         
         resolve(element, builder, baseURLs, null);
@@ -317,7 +317,7 @@ public class XIncluder {
     
     
     private static void resolve(
-      Element element, Builder builder, Stack baseURLs, Document originalDoc)
+      Element element, Builder builder, ArrayList baseURLs, Document originalDoc)
       throws IOException, ParsingException, XIncludeException {
         
         if (isIncludeElement(element)) {
@@ -665,7 +665,7 @@ public class XIncluder {
     // This assumes current implementation of XPointer that
     // always selects exactly one element or throws an exception.
     private static Nodes resolveXPointerSelection(Nodes in, 
-      Builder builder, Stack baseURLs, Document original) 
+      Builder builder, ArrayList baseURLs, Document original) 
       throws IOException, ParsingException, XIncludeException {
 
         Element preinclude = (Element) in.get(0);
@@ -688,7 +688,7 @@ public class XIncluder {
 
     
     private static Nodes resolveSilently(
-      Element element, Builder builder, Stack baseURLs, Document originalDoc)
+      Element element, Builder builder, ArrayList baseURLs, Document originalDoc)
       throws IOException, ParsingException, XIncludeException {
         
         // There is no possibility the element passed to this method 
@@ -736,7 +736,7 @@ public class XIncluder {
 
     
     private static void processFallback(Element includeElement, 
-      Builder builder, Stack baseURLs, ParentNode parent, Exception ex)
+      Builder builder, ArrayList baseURLs, ParentNode parent, Exception ex)
         throws XIncludeException, IOException, ParsingException {
         
            Element fallback 
@@ -765,7 +765,7 @@ public class XIncluder {
     
     // I could probably move the xpointer out of this method
     private static Nodes downloadXMLDocument(
-      URL source, String xpointer, Builder builder, Stack baseURLs,
+      URL source, String xpointer, Builder builder, ArrayList baseURLs,
       String accept, String acceptLanguage, String parentLanguage) 
       throws IOException, ParsingException, XIncludeException, 
         XPointerSyntaxException, XPointerResourceException {
@@ -774,7 +774,7 @@ public class XIncluder {
         if (xpointer == null && baseURLs.indexOf(base) != -1) {
             throw new InclusionLoopException(
               "Tried to include the already included document " + base +
-              " from " + baseURLs.peek(), (String) baseURLs.peek());
+              " from " + baseURLs.get(baseURLs.size()-1), (String) baseURLs.get(baseURLs.size()-1));
         }      
         
         URLConnection uc = source.openConnection();
