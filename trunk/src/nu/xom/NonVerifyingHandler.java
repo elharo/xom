@@ -144,16 +144,16 @@ class NonVerifyingHandler extends XOMHandler {
     // accumulate all text that's in the buffer into a text node
     protected void flushText() {
         
-        if (buffer.length() > 0) {
+        if (buffer != null) {
             Text result;
             if (!inCDATA) {
-                result = Text.build(buffer.toString());
+                result = Text.build(buffer);
             }
             else {
-                result = CDATASection.build(buffer.toString());
+                result = CDATASection.build(buffer);
             }
             parent.fastInsertChild(result, parent.getChildCount());
-            buffer = new StringBuffer();
+            buffer = null;
         }
         inCDATA = false;
         finishedCDATA = false;
