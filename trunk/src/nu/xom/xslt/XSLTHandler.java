@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -21,7 +21,7 @@
 
 package nu.xom.xslt;
 
-import java.util.Stack;
+import java.util.ArrayList;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
@@ -50,14 +50,14 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  *
  */
 class XSLTHandler 
   implements ContentHandler, LexicalHandler {
 
     private Nodes        result;
-    private Stack        parents;
+    private ArrayList    parents;
     private NodeFactory  factory;
     private StringBuffer buffer;
     
@@ -65,7 +65,7 @@ class XSLTHandler
     XSLTHandler(NodeFactory factory) {
         this.factory = factory; 
         result   = new Nodes();
-        parents  = new Stack();
+        parents  = new ArrayList();
         buffer   = new StringBuffer();
     }   
     
@@ -107,10 +107,10 @@ class XSLTHandler
             current = element; 
         }
         else {
-            ParentNode parent = (ParentNode) parents.peek();
+            ParentNode parent = (ParentNode) parents.get(parents.size()-1);
             parent.appendChild(element);
         }
-        parents.push(element);
+        parents.add(element);
         
         // Attach the attributes
         for (int i = 0; i < attributes.getLength(); i++) {
@@ -217,7 +217,7 @@ class XSLTHandler
       String qualifiedName) {
         
         flushText();
-        Element element = (Element) parents.pop();
+        Element element = (Element) parents.remove(parents.size()-1);
         if (parents.isEmpty()) {
             Nodes nodes = factory.finishMakingElement(current);
             for (int i = 0; i < nodes.size(); i++) {
@@ -299,7 +299,7 @@ class XSLTHandler
             }            
         }
         else {
-            ParentNode parent = (ParentNode) parents.peek();
+            ParentNode parent = (ParentNode) parents.get(parents.size()-1);
             for (int i = 0; i < nodes.size(); i++) {
                 Node node = nodes.get(i);
                 if (node instanceof Attribute) {
