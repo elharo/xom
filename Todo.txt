@@ -198,6 +198,20 @@ cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
 ===============
+Done 1.1b3:
+===============
+
+Numerous optimizations including:
+
+Replacing several stacks with ArrayLists
+Using an unsynchronized custom BufferedWriter for serialization
+Using String instead of StringBuffer in characters() in XOMHandler
+
+
+CDATASection.toXML() now outputs its value wrapped in a CDATA section rather than escaped.
+
+
+===============
 Done 1.1b2:
 ===============
 
