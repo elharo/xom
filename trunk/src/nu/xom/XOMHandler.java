@@ -447,7 +447,7 @@ class XOMHandler
     protected boolean finishedCDATA = false;
     
     public void startCDATA() {
-        inCDATA = true;
+        if (buffer == null) inCDATA = true;
         finishedCDATA = false;
     }
     
