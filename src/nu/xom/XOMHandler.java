@@ -84,7 +84,7 @@ class XOMHandler
         parents.add(document);
         inProlog = true;
         position = 0;
-        buffer = new StringBuffer();
+        buffer = null;
         doctype = null;
         if (locator != null) {
             documentBaseURI = locator.getSystemId();
@@ -304,24 +304,28 @@ class XOMHandler
     }
   
     
-    protected StringBuffer buffer;
+    protected String buffer = null;
   
     public void characters(char[] text, int start, int length) {
-        buffer.append(text, start, length); 
+        
+        if (length <= 0) return;
+        if (buffer == null) buffer = new String(text, start, length);
+        else buffer += new String(text, start, length);
         if (finishedCDATA && length > 0) inCDATA = false;
+        
     }
  
     
     // accumulate all text that's in the buffer into a text node
     protected void flushText() {
         
-        if (buffer.length() > 0) {
+        if (buffer != null) {
             Nodes result;
             if (!inCDATA) {
-                result = factory.makeText(buffer.toString());
+                result = factory.makeText(buffer);
             }
             else {
-                result = factory.makeCDATASection(buffer.toString());
+                result = factory.makeCDATASection(buffer);
             }
             for (int i=0; i < result.size(); i++) {
                 Node node = result.get(i);
@@ -332,7 +336,7 @@ class XOMHandler
                     parent.appendChild(node);   
                 }
             }
-            buffer = new StringBuffer();
+            buffer = null;
         }
         inCDATA = false;
         finishedCDATA = false;
@@ -443,7 +447,7 @@ class XOMHandler
     protected boolean finishedCDATA = false;
     
     public void startCDATA() {
-        if (buffer.length() == 0) inCDATA = true;
+        if (buffer != null) inCDATA = true;
         finishedCDATA = false;
     }
     
