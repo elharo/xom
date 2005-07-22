@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,7 +33,7 @@ import nu.xom.*;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  *
  */
 public class CDATASectionTest extends XOMTestCase {
@@ -48,6 +48,7 @@ public class CDATASectionTest extends XOMTestCase {
      + "<child2> <![CDATA[<&>]]> </child2> "
      + "<child3><![CDATA[<&>]]> </child3> "
      + "<child4><![CDATA[<&>]]> <![CDATA[<&>]]></child4> "
+     + "<child5><![CDATA[<&>]]>]]&gt;<![CDATA[<&>]]></child5> "
      + "</test>";
     private Document doc;
     private Builder builder;
@@ -106,6 +107,32 @@ public class CDATASectionTest extends XOMTestCase {
         assertTrue(data instanceof Text);  
         assertEquals("nu.xom.Text", data.getClass().getName());  
         assertEquals("<&> <&>", data.getValue());  
+    }
+    
+    
+    public void testDontAllowCDATASectionToContainCDATASectionEndDelimiter() {
+        Element child5 = doc.getRootElement().getFirstChildElement("child5");
+        assertEquals(1, child5.getChildCount());
+        Node data = child5.getChild(0);
+        assertTrue(data instanceof Text);  
+        assertEquals("<&>]]><&>", data.getValue());
+        assertEquals("&lt;&amp;&gt;]]&gt;&lt;&amp;&gt;", data.toXML());
+    }
+    
+    
+    public void testDontAllowCDATASectionToContainCDATASectionEndDelimiter2() 
+      throws IOException {
+        Element child5 = doc.getRootElement().getFirstChildElement("child5");
+        assertEquals(1, child5.getChildCount());
+        child5.detach();
+        Document doc = new Document(child5);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
+        serializer.flush();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<child5>&lt;&amp;&gt;]]&gt;&lt;&amp;&gt;</child5>\r\n", result);
     }
     
     
