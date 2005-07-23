@@ -145,15 +145,20 @@ class NonVerifyingHandler extends XOMHandler {
     protected void flushText() {
         
         if (buffer != null) {
+            textString = buffer.toString();
+            buffer = null;
+        }
+
+        if (textString != null) {
             Text result;
             if (!inCDATA) {
-                result = Text.build(buffer);
+                result = Text.build(textString);
             }
             else {
-                result = CDATASection.build(buffer);
+                result = CDATASection.build(textString);
             }
             parent.fastInsertChild(result, parent.getChildCount());
-            buffer = null;
+            textString = null;
         }
         inCDATA = false;
         finishedCDATA = false;
