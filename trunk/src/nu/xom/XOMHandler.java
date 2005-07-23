@@ -84,7 +84,7 @@ class XOMHandler
         parents.add(document);
         inProlog = true;
         position = 0;
-        buffer = null;
+        textString = null;
         doctype = null;
         if (locator != null) {
             documentBaseURI = locator.getSystemId();
@@ -304,13 +304,17 @@ class XOMHandler
     }
   
     
-    protected String buffer = null;
+    protected String textString = null;
+    protected StringBuffer buffer = null;
   
     public void characters(char[] text, int start, int length) {
         
         if (length <= 0) return;
-        if (buffer == null) buffer = new String(text, start, length);
-        else buffer += new String(text, start, length);
+        if (textString == null) textString = new String(text, start, length);
+        else {
+            if (buffer == null) buffer = new StringBuffer(textString);
+            buffer.append(text, start, length);
+        }
         if (finishedCDATA && length > 0) inCDATA = false;
         
     }
@@ -320,12 +324,17 @@ class XOMHandler
     protected void flushText() {
         
         if (buffer != null) {
+            textString = buffer.toString();
+            buffer = null;
+        }
+        
+        if (textString != null) {
             Nodes result;
             if (!inCDATA) {
-                result = factory.makeText(buffer);
+                result = factory.makeText(textString);
             }
             else {
-                result = factory.makeCDATASection(buffer);
+                result = factory.makeCDATASection(textString);
             }
             for (int i=0; i < result.size(); i++) {
                 Node node = result.get(i);
@@ -336,7 +345,7 @@ class XOMHandler
                     parent.appendChild(node);   
                 }
             }
-            buffer = null;
+            textString = null;
         }
         inCDATA = false;
         finishedCDATA = false;
@@ -447,7 +456,7 @@ class XOMHandler
     protected boolean finishedCDATA = false;
     
     public void startCDATA() {
-        if (buffer == null) inCDATA = true;
+        if (textString == null) inCDATA = true;
         finishedCDATA = false;
     }
     
