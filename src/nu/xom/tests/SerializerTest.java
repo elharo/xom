@@ -33,6 +33,7 @@ import nu.xom.Comment;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Attribute;
+import nu.xom.Text;
 import nu.xom.UnavailableCharacterException;
 import nu.xom.XMLException;
 
@@ -2284,6 +2285,48 @@ public class SerializerTest extends XOMTestCase {
         protected void write(Element element) throws IOException {
             super.write(element);
         }
+        
+    }
+
+    
+    private static class TextSerializer extends Serializer {
+        
+        TextSerializer(OutputStream out) {
+            super(out);   
+        }
+        
+        protected void write(Text text) throws IOException {
+            super.write(text);
+        }
+        
+    }
+    
+    
+    public void testWriteParentlessTextNode() throws IOException {
+     
+        Text t = new Text("Hello");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        TextSerializer serializer = new TextSerializer(out);
+        serializer.write(t);
+        serializer.flush();
+        byte[] result = out.toByteArray();
+        String s = new String(result, "UTF-8");
+        assertEquals(s, t.getValue());
+        
+    }
+
+    
+    public void testWriteParentlessTextNodeWhileIndenting() throws IOException {
+     
+        Text t = new Text("Hello");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        TextSerializer serializer = new TextSerializer(out);
+        serializer.setIndent(2);
+        serializer.write(t);
+        serializer.flush();
+        byte[] result = out.toByteArray();
+        String s = new String(result, "UTF-8");
+        assertEquals(s, t.getValue());
         
     }
 
