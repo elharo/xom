@@ -422,7 +422,7 @@ public class Serializer {
     protected void writeEndTag(Element element) throws IOException {
         escaper.writeMarkup("</");
         escaper.writeMarkup(element.getQualifiedName());
-        escaper.writeMarkup(">");
+        escaper.writeMarkup('>');
     }
 
     
@@ -577,10 +577,11 @@ public class Serializer {
         ParentNode parent = element.getParent();
         
         Map prefixes = element.getNamespacePrefixesInScope();
-        Iterator iterator = prefixes.keySet().iterator();
+        Iterator iterator = prefixes.entrySet().iterator();
         while (iterator.hasNext()) {
-            String additionalPrefix = (String) iterator.next();
-            String uri = (String) prefixes.get(additionalPrefix);
+            Map.Entry entry = (Map.Entry) iterator.next();
+            String additionalPrefix = (String) entry.getKey();
+            String uri = (String) entry.getValue();
             if (parent != null && parent.isElement()) {
                Element parentElement = (Element) parent;   
                if (uri.equals(
@@ -592,6 +593,7 @@ public class Serializer {
                 continue; // no need to say xmlns=""   
             }
             
+            // XXX replace with a writeSpace method????
             escaper.writeMarkup(' ');
             writeNamespaceDeclaration(additionalPrefix, uri);
         }
@@ -776,10 +778,14 @@ public class Serializer {
         if (getIndent() <= 0) return false;
         
         ParentNode parent = text.getParent();
+        if (parent == null) {
+            return "".equals(value.trim());
+        }
         
         // ???? cutting next line only breaks a few tests; and what it does
         // break might be better off if the breakage is accepted as correct behavior
-        if (parent.getChildCount() == 1) return false;
+        int childCount = parent.getChildCount();
+        if (childCount == 1) return false;
         if (! "".equals(value.trim())) return false;
         
         // ???? This is a huge Hotspot. maybe 12% of serialization time
@@ -794,7 +800,7 @@ public class Serializer {
         Node next = null;
         
         if (position != 0) previous = parent.getChild(position-1);
-        if (position != parent.getChildCount()-1) {
+        if (position != childCount-1) {
             next = parent.getChild(position+1);
         }
         if (previous == null || !previous.isText()) {

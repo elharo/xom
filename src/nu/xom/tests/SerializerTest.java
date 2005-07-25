@@ -2331,6 +2331,20 @@ public class SerializerTest extends XOMTestCase {
     }
 
     
+    public void testWriteWhiteSpaceOnlyTextNodeWhileIndenting() throws IOException {
+     
+        Text t = new Text("  \r\n  ");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        TextSerializer serializer = new TextSerializer(out);
+        serializer.setIndent(2);
+        serializer.write(t);
+        serializer.flush();
+        byte[] result = out.toByteArray();
+        assertEquals(0, result.length);
+        
+    }
+
+    
     public void testWriteRaw() throws IOException {
 
         ExposingSerializer serializer = new ExposingSerializer(out, "UTF-8");
