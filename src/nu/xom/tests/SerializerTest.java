@@ -1202,6 +1202,21 @@ public class SerializerTest extends XOMTestCase {
     }
     
     
+    public void testPunctuationInAttributeValueNonUnicode() 
+      throws IOException, ParsingException {  
+
+        root.addAttribute(new Attribute("test", "$()*+,="));
+        Serializer serializer = new Serializer(out, "ISO-8859-1");
+        serializer.write(doc);
+        out.close();
+        InputStream in = new ByteArrayInputStream(out.toByteArray());
+        Document reparsed = parser.build(in);
+        String result = reparsed.getRootElement().getAttributeValue("test");
+        assertEquals("$()*+,=", result);
+        
+    }
+    
+    
     public void testCRLFInAttributeValueWithIndenting() 
       throws IOException, ParsingException {  
 
