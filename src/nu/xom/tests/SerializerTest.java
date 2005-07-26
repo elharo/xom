@@ -35,6 +35,7 @@ import nu.xom.ProcessingInstruction;
 import nu.xom.Attribute;
 import nu.xom.Text;
 import nu.xom.UnavailableCharacterException;
+import nu.xom.ValidityException;
 import nu.xom.XMLException;
 
 import java.io.ByteArrayInputStream;
@@ -1393,6 +1394,31 @@ public class SerializerTest extends XOMTestCase {
         catch (IllegalArgumentException success) {
             assertNotNull(success.getMessage());
         }
+        
+    }
+
+    
+    public void testReallyBigIndent() throws ValidityException, ParsingException, IOException {
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.setIndent(100);
+        StringBuffer spaces = new StringBuffer(400);
+        for (int i = 0; i < 400; i++) spaces.append(' ');
+        String _400 = spaces.toString();
+        String _300 = spaces.substring(0, 300);
+        String _200 = spaces.substring(0, 200);
+        String _100 = spaces.substring(0, 100);
+        
+        String original ="<a><b><c><d><e>Hello</e></d></c></b></a>";
+        Document doc = parser.build(original, null);
+        serializer.write(doc);
+        String expected ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<a>\r\n"
+          + _100 + "<b>\r\n" + _200 + "<c>\r\n" + _300 + "<d>\r\n" + _400
+          + "<e>Hello</e>\r\n" + _300 + "</d>\r\n" + _200 + "</c>\r\n"
+          + _100 + "</b>\r\n</a>\r\n";
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(expected, result);
         
     }
 
