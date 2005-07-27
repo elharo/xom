@@ -74,6 +74,13 @@ class URIUtil {
         if ("".equals(baseURI) || baseURI == null) return spec;
         
         ParsedURI base = new ParsedURI(baseURI);
+        
+        // This seems to be necessary to handle base URLs like
+        // http://www.example.com/test/data/..
+        // but I don't think it's part of the 3986 algorithm. 
+        // ???? It may be a bug in that algorithm. Check.
+        if (base.path.endsWith("/..")) base.path += '/';
+        
         ParsedURI R = new ParsedURI(spec);
         ParsedURI T = new ParsedURI();
         
