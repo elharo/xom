@@ -645,6 +645,10 @@ final class Verifier {
 
         // http is probably 99% of cases so check it first 
         if ("http".equals(scheme)) return;
+        
+        if (scheme.length() == 0) {
+            throw new MalformedURIException("URIs cannot begin with a colon");            
+        }
         char c = scheme.charAt(0);
         if (!isAlpha(c)) {
             throw new MalformedURIException(
