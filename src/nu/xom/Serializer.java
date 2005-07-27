@@ -21,7 +21,6 @@
 
 package nu.xom;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -68,13 +67,8 @@ public class Serializer {
      */
     public Serializer(OutputStream out) {
         
-        if (out == null) {
-            throw new NullPointerException("Null OutputStream");
-        } 
         try {
-            Writer writer = new OutputStreamWriter(out, "UTF8");
-            writer = new UnsynchronizedBufferedWriter(writer);
-            escaper = TextWriterFactory.getTextWriter(writer, "UTF-8");
+            this.setOutputStream(out, "UTF-8");
         }
         catch (UnsupportedEncodingException ex) {
             throw new RuntimeException(
@@ -146,14 +140,10 @@ public class Serializer {
      */
     public Serializer(OutputStream out, String encoding)
       throws UnsupportedEncodingException {
-        
-        if (out == null) {
-            throw new NullPointerException("Null OutputStream");
-        } 
+
         if (encoding == null) {
             throw new NullPointerException("Null encoding");
         } 
-        
         this.setOutputStream(out, encoding);
         
     }
@@ -195,6 +185,9 @@ public class Serializer {
     private void setOutputStream(OutputStream out, String encoding)
         throws UnsupportedEncodingException {
         
+        if (out == null) {
+            throw new NullPointerException("Null OutputStream");
+        } 
         Writer writer;  
         String encodingUpperCase = encoding.toUpperCase(Locale.ENGLISH);
         // Java's Cp037 encoding is broken, so we have to
@@ -220,7 +213,7 @@ public class Serializer {
            writer = new OutputStreamWriter(out, "TIS620");  
         }
         else writer = new OutputStreamWriter(out, encoding);
-        writer = new BufferedWriter(writer);
+        writer = new UnsynchronizedBufferedWriter(writer);
         this.escaper = TextWriterFactory.getTextWriter(writer, encoding);
         
     }
