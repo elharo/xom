@@ -22,7 +22,6 @@
 package nu.xom.tests;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
@@ -33,15 +32,10 @@ import junit.framework.TestSuite;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a1
+ * @version 1.1b3
  *
  */
-public class XOMTests extends TestCase {
-
-    
-    public XOMTests() {
-        super("All XOM Tests");   
-    }
+public class XOMTests {
 
     
     public static Test suite() {
