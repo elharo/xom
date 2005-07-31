@@ -88,7 +88,7 @@ subject line. The XOM home page is http://www.xom.nu/
       </and>
     </condition> 
     
-     <path id="compile.class.path">
+    <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
       <pathelement location="${parser.jar}"/>
       <pathelement location="${junit.jar}"/>
@@ -563,6 +563,7 @@ XOM Build file
     
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
+    <delete dir="${testoutput.dir}"/>
     <delete dir="clover"/>
     <delete dir="clover_html"/>
     <delete>
