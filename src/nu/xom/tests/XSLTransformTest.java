@@ -64,7 +64,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -75,7 +75,7 @@ public class XSLTransformTest extends XOMTestCase {
     }
 
     
-    // not a literal result element as stylesheet 
+    // Not a literal result element as stylesheet 
     // because it's missing the xsl:version attribute
     private String notAStyleSheet = 
      "<?xml-stylesheet href=\"file.css\" type=\"text/css\"?>" 
@@ -92,7 +92,7 @@ public class XSLTransformTest extends XOMTestCase {
      + "<!--epilog-->";
     
     
-    // This class tests a lot error conditions, which
+    // This class tests a lot of error conditions, which
     // Xalan annoyingly logs to System.err. This hides System.err 
     // before each test and restores it after each test.
     private PrintStream systemErr = System.err;
@@ -114,11 +114,10 @@ public class XSLTransformTest extends XOMTestCase {
         System.setErr(systemErr);
     }
     
-    // primarily this makes sure the XSLTHandler can handle various
+    // Primarily this makes sure the XSLTHandler can handle various
     // edge cases
     public void testIdentityTransform() 
       throws ParsingException, IOException, XSLException {
-        
         
         File stylesheet = new File(inputDir, "identity.xsl");
         Builder builder = new Builder();
@@ -162,6 +161,8 @@ public class XSLTransformTest extends XOMTestCase {
             Document doc = builder.build(notAStyleSheet, 
               "http://www.example.com");
             new XSLTransform(doc);
+            /*Document input = builder.build("<root />", "http://example.org/");
+            Nodes result = xform.transform(input); */
             fail("Compiled non-stylesheet");
         }
         catch (XSLException success) { 
@@ -562,7 +563,7 @@ public class XSLTransformTest extends XOMTestCase {
 
     // Make sure that method="text" doesn't affect what we get
     // since this is not a serialized transform
-    // See http://nagoya.apache.org/bugzilla/show_bug.cgi?id=30197
+    // See http://issues.apache.org/bugzilla/show_bug.cgi?id=30197
     public void testTextMethod() 
       throws ParsingException, IOException, XSLException {
         
@@ -1021,7 +1022,8 @@ public class XSLTransformTest extends XOMTestCase {
         
     }
 
-
+    // XXX need to upgrade to final release of XSLT test suites
+    // and then split into individual tests
     public void testOASISXalanConformanceSuite()  
       throws IOException, ParsingException, XSLException {
         
@@ -1126,7 +1128,7 @@ public class XSLTransformTest extends XOMTestCase {
                                   || id.equals("copy_copy60")
                                   || id.equals("copy_copy59")) {
                                     // Xalan bug;
-                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1081
+                                    // See http://issues.apache.org/jira/browse/XALANJ-1081
                                     // Also see erratum E27 to the XSLT spec.
                                 } 
                                 else if (id.equals("expression_expression02")) {
@@ -1134,13 +1136,13 @@ public class XSLTransformTest extends XOMTestCase {
                                 } 
                                 else if (id.equals("idkey_idkey31")) {
                                     // Known Xalan bug
-                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1325
+                                    // See http://issues.apache.org/jira/browse/XALANJ-1325
                                 } 
                                 else if (id.equals("idkey_idkey61")
                                   || id.equals("idkey_idkey62")) {
                                     // Xalan bug. Fixed in more recent 
                                     // version than bundled with the JDK 1.4.2_05
-                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1318
+                                    // See http://issues.apache.org/jira/browse/XALANJ-1318
                                 } 
                                 else if (id.equals("impincl_impincl11")) {
                                     // Test case bug; reported 2004-09-18
@@ -1150,7 +1152,12 @@ public class XSLTransformTest extends XOMTestCase {
                                   || id.equals("math_math111")) {
                                     // Xalan bug. Fixed in more recent 
                                     // version than bundled with the JDK 1.4.2_05
-                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1278
+                                    // See http://issues.apache.org/jira/browse/XALANJ-1278
+                                }
+                                else if (id.equals("numbering_numbering17")
+                                  || id.equals("numbering_numbering79")) {
+                                    // test suite bug per XSLT 1.0 erratum 24. See
+                                    // See http://issues.apache.org/jira/browse/XALANJ-1979
                                 }
                                 else if (id.equals("position_position104")) {
                                     // Xalan bug. Fixed in more recent 
@@ -1164,7 +1171,7 @@ public class XSLTransformTest extends XOMTestCase {
                                   || id.equals("position_position109")) {
                                     // Xalan bug. Fixed in more recent 
                                     // version than bundled with the JDK 1.4.2_05
-                                    // See http://nagoya.apache.org/jira/browse/XALANJ-1289
+                                    // See http://issues.apache.org/jira/browse/XALANJ-1289
                                 } 
                                 else {
                                     assertEquals("Problem with " + id,
@@ -1207,12 +1214,7 @@ public class XSLTransformTest extends XOMTestCase {
                                 continue;
                             }
                             
-                            if ("axes_axes62".equals(id)) {  
-                                // Bug 12690
-                                // http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12690
-                                continue;
-                            }
-                            else if ("impincl_impincl27".equals(id)) {  
+                            if ("impincl_impincl27".equals(id)) {  
                                 // Test case uses file: URI XOM doesn't support
                                 continue;
                             }
@@ -1227,7 +1229,9 @@ public class XSLTransformTest extends XOMTestCase {
                                 // This has been fixed in Xalan 2.5.2.
                                 // However, it's a bug in earlier versions of Xalan
                                 // including the one bundled with the JDK 1.4.2_05
-                                // See http://nagoya.apache.org/jira/browse/XALANJ-805
+                                // See http://issues.apache.org/jira/browse/XALANJ-805
+                                // XXX I think this might need an updated version of the test cases
+                                // and expected output at this point.
                                 continue;
                             }
                             
@@ -1244,7 +1248,6 @@ public class XSLTransformTest extends XOMTestCase {
      
     } 
     
-   
     public void testOASISMicrosoftConformanceSuite()  
       throws IOException, ParsingException, XSLException {
         
@@ -1323,17 +1326,17 @@ public class XSLTransformTest extends XOMTestCase {
                       || "Namespace-alias__91785".equals(id)
                       || "Namespace-alias__91786".equals(id)) {
                         // a recoverable error Xalan doesn't recover from properly
-                        // http://nagoya.apache.org/jira/browse/XALANJ-1957
+                        // http://issues.apache.org/jira/browse/XALANJ-1957
                         continue;
                     } 
                     else if ("Namespace_XPath_CopyNamespaceNodeToOutput".equals(id)) {
                         // Xalan bug
-                        // http://nagoya.apache.org/jira/browse/XALANJ-1959
+                        // http://issues.apache.org/jira/browse/XALANJ-1959
                         continue;
                     } 
                     else if ("Namespace-alias_Namespace-Alias_WithinRTF".equals(id)) {
                         // Xalan bug
-                        // http://nagoya.apache.org/jira/browse/XALANJ-1960
+                        // http://issues.apache.org/jira/browse/XALANJ-1960
                         continue;
                     } 
                     else if ("Completeness__84361".equals(id) 
@@ -1351,12 +1354,12 @@ public class XSLTransformTest extends XOMTestCase {
                     } 
                     else if ("XSLTFunctions_ElementAvailFunctionFalseTest".equals(id)) {
                         // Xalan bug
-                        // http://nagoya.apache.org/jira/browse/XALANJ-1961
+                        // http://issues.apache.org/jira/browse/XALANJ-1961
                         continue;
                     } 
                     else if ("XSLTFunctions_GenereateIdAppliedToNamespaceNodesOnDifferentElements".equals(id)) {
                         // Xalan bug
-                        // http://nagoya.apache.org/jira/browse/XALANJ-1962
+                        // http://issues.apache.org/jira/browse/XALANJ-1962
                         continue;
                     } 
                     else if ("XSLTFunctions__specialCharInPattern".equals(id)) {
@@ -1373,7 +1376,7 @@ public class XSLTransformTest extends XOMTestCase {
                     } 
                     else if ("BVTs_bvt044".equals(id)) {
                         // a recoverable error Xalan doesn't recover from
-                        // http://nagoya.apache.org/jira/browse/XALANJ-1957
+                        // http://issues.apache.org/jira/browse/XALANJ-1957
                         continue;
                     } 
                     else if ("BVTs_bvt039".equals(id)) {
@@ -1557,7 +1560,7 @@ public class XSLTransformTest extends XOMTestCase {
                             else if ("Whitespaces__91443".equals(id)
                               || "Whitespaces__91444".equals(id)) { 
                                 // Xalan bug
-                                // See http://nagoya.apache.org/jira/browse/XALANJ-1969 
+                                // See http://issues.apache.org/jira/browse/XALANJ-1969 
                                 continue;
                             } 
                             else if ("AVTs__77591".equals(id)) {
@@ -1566,11 +1569,11 @@ public class XSLTransformTest extends XOMTestCase {
                             }
                             else if ("Keys_MultipltKeysInclude".equals(id) ) {
                                // Xalan bug
-                               // http://nagoya.apache.org/jira/browse/XALANJ-1956
+                               // http://issues.apache.org/jira/browse/XALANJ-1956
                             } 
                             else if ("Keys_PerfRepro3".equals(id) ) {
                                // Suspected Xalan bug 
-                               // http://nagoya.apache.org/jira/browse/XALANJ-1955
+                               // http://issues.apache.org/jira/browse/XALANJ-1955
                             } 
                             else if ("Number__84683".equals(id)) {
                                // test suite bug
@@ -1621,7 +1624,7 @@ public class XSLTransformTest extends XOMTestCase {
                             } 
                             else if (id.equals("XSLTFunctions_TestIdFuncInComplexStruct")) {
                                 // I think the Xalan output white space is wrong; 
-                                // http://nagoya.apache.org/jira/browse/XALANJ-1947
+                                // http://issues.apache.org/jira/browse/XALANJ-1947
                             }
                             else {
                                 Document expectedResult;
@@ -1700,7 +1703,7 @@ public class XSLTransformTest extends XOMTestCase {
                         }
                         else if (cause instanceof MissingResourceException) {
                             // Xalan bug;
-                            // http://nagoya.apache.org/jira/secure/ManageAttachments.jspa?id=27366
+                            // http://issues.apache.org/jira/secure/ManageAttachments.jspa?id=27366
                         } 
                         else if ("Include_Include_IncludedStylesheetShouldHaveDifferentBaseUri".equals(id)) {
                            // This test case is wrong; Uses backslash in URI
@@ -1716,12 +1719,12 @@ public class XSLTransformTest extends XOMTestCase {
                         }
                         else if ("BVTs_bvt054".equals(id)) {
                             // Xalan bug 
-                            // http://nagoya.apache.org/jira/browse/XALANJ-1952 
+                            // http://issues.apache.org/jira/browse/XALANJ-1952 
                             continue;
                         } 
                         else if ("BVTs_bvt094".equals(id)) {
                             // Xalan bug 
-                            // http://nagoya.apache.org/jira/browse/XALANJ-1953 
+                            // http://issues.apache.org/jira/browse/XALANJ-1953 
                             continue;
                         } 
                         else if ("Output__78177".equals(id)
@@ -1753,7 +1756,7 @@ public class XSLTransformTest extends XOMTestCase {
                         }
                         else if ("Output__84306".equals(id)) {
                             // Xalan bug
-                            // http://nagoya.apache.org/jira/browse/XALANJ-1954
+                            // http://issues.apache.org/jira/browse/XALANJ-1954
                             continue;
                         }
                         else if ("Output__84014".equals(id)) {
