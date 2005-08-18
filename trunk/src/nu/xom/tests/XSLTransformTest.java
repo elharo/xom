@@ -1218,12 +1218,6 @@ public class XSLTransformTest extends XOMTestCase {
                                 // Test case uses file: URI XOM doesn't support
                                 continue;
                             }
-                            else if ("select_select85".equals(id)) {  
-                                // This has been fixed in Xalan 2.6.0.
-                                // However, it's a bug in earlier versions of Xalan
-                                // including the one bundled with the JDK 1.4.2_05
-                                continue;
-                            }
                             else if ("numberformat_numberformat45".equals(id)
                               || "numberformat_numberformat46".equals(id)) {  
                                 // This has been fixed in Xalan 2.5.2.
