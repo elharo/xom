@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.xml.transform.ErrorListener;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
@@ -115,7 +116,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  */
 public final class XSLTransform {
 
@@ -130,8 +131,24 @@ public final class XSLTransform {
     private Templates   templates;  
     private NodeFactory factory;
     private Map         parameters = new HashMap();
+    private static ErrorListener errorsAreFatal = new FatalListener();
     
     
+    private static class FatalListener implements ErrorListener {
+
+        public void warning(TransformerException exception) {}
+
+        public void error(TransformerException exception) 
+          throws TransformerException {
+            throw exception;
+        }
+
+        public void fatalError(TransformerException exception) 
+          throws TransformerException {
+            throw exception;
+        }
+        
+    }
     
     // I could use one TransformerFactory field instead of local
     // variables but then I'd have to synchronize it; and it would
@@ -147,14 +164,16 @@ public final class XSLTransform {
      * @param source TrAX <code>Source</code> object from 
      *      which the input document is read
      * 
-     * @throws XSLException when an IOException, format error, or
-     *     something else prevents the stylesheet from being compiled 
+     * @throws XSLException when an <code>IOException</code>, 
+     *     format error, or something else prevents the stylesheet 
+     *     from being compiled 
      */ 
      private XSLTransform(Source source) throws XSLException {
          
         try {
             TransformerFactory factory 
               = TransformerFactory.newInstance();
+            factory.setErrorListener(errorsAreFatal);
             this.templates = factory.newTemplates(source);
         }
         catch (TransformerFactoryConfigurationError error) {
@@ -338,6 +357,8 @@ public final class XSLTransform {
             Transformer transformer = templates.newTransformer();
             // work around Xalan bug
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            // work around a Xalan 2.7.0 bug
+            transformer.setErrorListener(errorsAreFatal);
             Iterator iterator = parameters.keySet().iterator();
             while (iterator.hasNext()) {
                 String key = (String) iterator.next();
