@@ -105,7 +105,8 @@ public class Text extends Node {
      * can be serialized such as &lt; and &amp; are allowed.   
      * However, characters such as the form feed, null, 
      * vertical tab, unmatched halves of surrogate pairs,
-     * and 0xFFFE and 0xFFFF are not allowed.
+     * and 0xFFFE and 0xFFFF are not allowed. Passing null is the same 
+     * as passing the empty string.
      * </p>
      * 
      * @param data the text to install in the object
