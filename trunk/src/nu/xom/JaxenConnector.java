@@ -34,11 +34,13 @@ import org.jaxen.XPathFunctionContext;
 /**
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.1b3
  *
  */
 class JaxenConnector extends BaseXPath {
+
     
+    private static final long serialVersionUID = 9025734269448515308L;
     
     private static FunctionContext functionContext = new XPathFunctionContext();
 

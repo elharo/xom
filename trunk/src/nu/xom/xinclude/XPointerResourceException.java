@@ -36,6 +36,8 @@ package nu.xom.xinclude;
 class XPointerResourceException extends XPointerException {
 
     
+    private static final long serialVersionUID = -3854144696916677840L;
+
     /**
      * <p>
      * Constructs an <code>XPointerResourceException</code> with the 

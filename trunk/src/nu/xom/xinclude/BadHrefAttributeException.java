@@ -1,4 +1,4 @@
-/* Copyright 2004 Elliotte Rusty Harold
+/* Copyright 2004, 2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -29,11 +29,14 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  */
 public class BadHrefAttributeException extends XIncludeException {
 
     
+    private static final long serialVersionUID = 4349654324645147403L;
+
+
     /**
      * <p>
      * Constructs a <code>BadHrefAttributeException</code> with 

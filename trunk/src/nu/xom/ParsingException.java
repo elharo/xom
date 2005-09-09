@@ -35,11 +35,13 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  *
  */
 public class ParsingException extends Exception {
 
+
+    private static final long serialVersionUID = -5185450480590174490L;
     
     private Throwable cause;
     private int lineNumber = -1;

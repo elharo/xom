@@ -27,7 +27,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  *
  */
 
@@ -48,7 +48,11 @@ import java.util.NoSuchElementException;
 
 
 class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
-    
+
+
+    private static final long serialVersionUID = 7008740797833836742L;
+
+
     public Iterator getSelfAxisIterator(Object contextNode) {
         
         if (contextNode instanceof Text) {

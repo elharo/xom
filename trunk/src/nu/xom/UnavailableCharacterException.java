@@ -31,11 +31,14 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  *
  */
 public class UnavailableCharacterException extends XMLException {
 
+
+    private static final long serialVersionUID = -8280912714497572798L;
+    
     private final char   unavailableCharacter;
     private final String encoding;
     

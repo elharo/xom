@@ -34,7 +34,9 @@ package nu.xom.xinclude;
  */
 public class BadEncodingAttributeException extends XIncludeException {
 
-    
+    private static final long serialVersionUID = -8856360955880988486L;
+
+
     /**
      * <p>
      * Constructs a <code>BadEncodingAttributeException</code> with 

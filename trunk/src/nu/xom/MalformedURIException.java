@@ -31,12 +31,15 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b3
  *
  */
 public class MalformedURIException extends IllegalDataException {
 
-    
+
+    private static final long serialVersionUID = 6510452627371611735L;
+
+
     /**
      * <p>
      * Creates a new <code>MalformedURIException</code> 

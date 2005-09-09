@@ -111,9 +111,6 @@ that stores all the variables rather than constantly passing them
 back and forth from static methods? That is, make private methods instance 
 methods rather than static????
 
-Could I use the JAR services API to allow the encodings supported to
-be extended via lookup tables????
-
 would it be possible to get a minimal interoperable subset of Big5, SJIS, etc
 and escape all non-interoperable characters?
 
@@ -201,6 +198,8 @@ lock.c:222: failed assertion `strncmp (repository, current_parsed_root->director
 Done 1.1b3:
 ===============
 
+Added SUIDs to Serializable classes (mostly exceptions)
+
 Numerous optimizations including:
 
 Replacing several stacks with ArrayLists
@@ -209,6 +208,10 @@ Using String instead of StringBuffer in characters() in XOMHandler
 
 
 CDATASection.toXML() now outputs its value wrapped in a CDATA section rather than escaped.
+
+Bundling Xalan 2.7 instead of 2.6
+
+Various workarounds for bugs in Xalan 2.7
 
 
 ===============

@@ -26,11 +26,13 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1b3
  * 
  */
 public class XPathException extends RuntimeException {
     
+
+    private static final long serialVersionUID = 6362087755031657439L;
     
     private String expression;
     private Throwable cause;
