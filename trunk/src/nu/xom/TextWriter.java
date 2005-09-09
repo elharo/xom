@@ -36,7 +36,7 @@ import java.io.Writer;
  */
 abstract class TextWriter {
 
-    protected Writer out;
+    protected final Writer out;
     protected String encoding;
     
     private String lineSeparator = "\r\n";
@@ -106,42 +106,24 @@ abstract class TextWriter {
                 }
                 skipFollowingLinefeed = true;
                 break;
-            case 14:
-                // unreachable
-            case 15:
-                // unreachable
-            case 16:
-                // unreachable
-            case 17:
-                // unreachable
-            case 18:
-                // unreachable
-            case 19:
-                // unreachable
-            case 20:
-                // unreachable
-            case 21:
-                // unreachable
-            case 22:
-                // unreachable
-            case 23:
-                // unreachable
-            case 24:
-                // unreachable
-            case 25:
-                // unreachable
-            case 26:
-                // unreachable
-            case 27:
-                // unreachable
-            case 28:
-                // unreachable
-            case 29:
-                // unreachable
-            case 30:
-                // unreachable
-            case 31:
-                // unreachable
+            case 14: // unreachable
+            case 15: // unreachable
+            case 16: // unreachable
+            case 17: // unreachable
+            case 18: // unreachable
+            case 19: // unreachable
+            case 20: // unreachable
+            case 21: // unreachable
+            case 22: // unreachable
+            case 23: // unreachable
+            case 24: // unreachable
+            case 25: // unreachable
+            case 26: // unreachable
+            case 27: // unreachable
+            case 28: // unreachable
+            case 29: // unreachable
+            case 30: // unreachable
+            case 31: // unreachable
                 throw new XMLException("Bad character snuck into document");
             case ' ':
                 write(c);
@@ -520,7 +502,9 @@ abstract class TextWriter {
     
     // XXX We might be able to optimize this by using switch statements
     // in the methods that call this to separate out the special cases.
-    // --\n, \t, space, etc.--and passing them to a different methos
+    // --\n, \t, space, etc.--and passing them to a different method
+    // thsu avoiding the if tests here. See if this method shows up as 
+    // a HotSpot in profiling.
     private void write(char c) throws IOException {
         
       // Carriage returns are completely handled by
