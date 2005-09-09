@@ -28,10 +28,12 @@ package nu.xom.xinclude;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  */
 public class XIncludeException extends Exception {
 
+    
+    private static final long serialVersionUID = 969926723618314277L;
     
     private String uri;
 

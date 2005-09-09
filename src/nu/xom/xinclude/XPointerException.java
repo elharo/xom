@@ -31,6 +31,9 @@ package nu.xom.xinclude;
  */
 class XPointerException extends Exception {
 
+    
+    private static final long serialVersionUID = -533329510409448717L;
+    
     private Throwable cause = null;
 
     /**

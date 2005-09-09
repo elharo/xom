@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -29,13 +29,16 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  * @see ParentNode#removeChild(Node)
  *
  */
 public class NoSuchChildException extends XMLException {
 
-    
+
+    private static final long serialVersionUID = 1944673590646036964L;
+
+
     /**
      * <p>
      * Creates a new <code>NoSuchChildException</code> 

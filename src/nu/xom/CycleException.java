@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -28,12 +28,15 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  *
  */
 public class CycleException extends IllegalAddException {
 
     
+    private static final long serialVersionUID = 6690940405434358625L;
+
+
     /**
      * <p>
      *  Creates a new <code>CycleException</code>

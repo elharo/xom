@@ -28,12 +28,16 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b3
  *
  */
 public class WellformednessException extends XMLException {
 
-     /**
+
+    private static final long serialVersionUID = -4268754263017704202L;
+
+
+    /**
      * <p>
      * Creates a new <code>WellformednessException</code> 
      * with a detail message.

@@ -28,10 +28,11 @@ package nu.xom.xslt;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.1b3
  */
 public class XSLException extends Exception {
 
+    private static final long serialVersionUID = -8605437693812807627L;
     
     private Throwable cause;
 

@@ -26,10 +26,13 @@ package nu.xom.canonical;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d7
+ * @version 1.1b3
  * 
  */
 public class CanonicalizationException extends RuntimeException {
+
+
+    private static final long serialVersionUID = 6935623053373600014L;
     
     private Throwable cause;
 
