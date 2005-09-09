@@ -71,6 +71,21 @@ public class CDATASectionTest extends XOMTestCase {
     }
 
     
+    public void testToXML() {
+        Element child1 = doc.getRootElement().getFirstChildElement("child1");
+        Node cdata = child1.getChild(0);
+        assertEquals("<![CDATA[<&>]]>", cdata.toXML());  
+    }
+
+    
+    public void testToXMLWhenCDATASectionContainsEndDelimiter() {
+        Element child1 = doc.getRootElement().getFirstChildElement("child1");
+        Text cdata = (Text) child1.getChild(0);
+        cdata.setValue("A]]>A");
+        assertEquals("A]]&gt;A", cdata.toXML());  
+    }
+
+    
     public void testUseCDATAWherePossible() {
         Element child1 = doc.getRootElement().getFirstChildElement("child1");
         Node cdata = child1.getChild(0);
