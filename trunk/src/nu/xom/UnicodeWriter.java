@@ -29,7 +29,7 @@ import java.io.Writer;
  * @version 1.1b3
  *
  */
-class UnicodeWriter extends TextWriter {
+final class UnicodeWriter extends TextWriter {
 
     UnicodeWriter(Writer out, String encoding) {
         super(out, encoding);
