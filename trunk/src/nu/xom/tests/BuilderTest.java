@@ -83,9 +83,9 @@ public class BuilderTest extends XOMTestCase {
     
     private File inputDir = new File("data");
 
-     // This class tests error conditions, which Xerces
-    // annoyingly logs to System.err. This hides System.err 
-    // before each test and restores it after each test.
+    // This class tests error conditions, which Xerces
+    // annoyingly logs to System.err. So we hide System.err 
+    // before each test and restore it after each test.
     private PrintStream systemErr = System.err;
     
     protected void setUp() {
