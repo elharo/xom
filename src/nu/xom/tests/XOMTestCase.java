@@ -397,9 +397,8 @@ public class XOMTestCase extends TestCase {
             actualCopy = combineTextNodes(actual);
         }
 
-        assertEquals(message,
-          expectedCopy.getChildCount(), actualCopy.getChildCount());
         int count = expectedCopy.getChildCount();
+        assertEquals(message, count, actualCopy.getChildCount());
         int nonTextNodes = count;
         for (int i = 0; i < count; i++) {
             Node child1 = expectedCopy.getChild(i);
