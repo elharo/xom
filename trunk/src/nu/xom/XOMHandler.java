@@ -315,7 +315,7 @@ class XOMHandler
             if (buffer == null) buffer = new StringBuffer(textString);
             buffer.append(text, start, length);
         }
-        if (finishedCDATA && length > 0) inCDATA = false;
+        if (finishedCDATA) inCDATA = false;
         
     }
  
