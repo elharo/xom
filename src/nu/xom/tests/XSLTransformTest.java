@@ -1565,10 +1565,10 @@ public class XSLTransformTest extends XOMTestCase {
                                // Xalan bug
                                // http://issues.apache.org/jira/browse/XALANJ-1956
                             } 
-                            else if ("Keys_PerfRepro3".equals(id) ) {
+                            /* else if ("Keys_PerfRepro3".equals(id) ) {
                                // Suspected Xalan bug 
                                // http://issues.apache.org/jira/browse/XALANJ-1955
-                            } 
+                            } */
                             else if ("Number__84683".equals(id)) {
                                // test suite bug
                             }
@@ -1788,6 +1788,29 @@ public class XSLTransformTest extends XOMTestCase {
      
     } 
     
+    
+    public void testKeysPerfRepro3()  
+      throws IOException, ParsingException, XSLException {
+        
+        Builder builder = new Builder();
+        NodeFactory stripper = new StrippingFactory();
+        File base = new File("data");
+        base = new File(base, "oasis-xslt-testsuite");
+        base = new File(base, "TESTS");
+
+        File input = new File(base, "MSFT_CONFORMANCE_TESTS/KEYS/input.xml");
+        File style = new File(base, "MSFT_CONFORMANCE_TESTS/KEYS/input.xsl");
+        File output = new File(base, "MSFT_CONFORMANCE_TESTS/KEYS/out/PerfRepro3.txt");;
+ 
+        Document styleDoc = builder.build(style);
+        Document inputDoc = builder.build(input);
+        XSLTransform xform = new XSLTransform(styleDoc);
+        Nodes result = xform.transform(inputDoc);
+        Document expectedResult = builder.build(output);
+        Document actualResult = XSLTransform.toDocument(result);
+        assertEquals(expectedResult, actualResult);
+     
+    } 
     
     public void testToDocumentWithEmptyNodes() {
      
