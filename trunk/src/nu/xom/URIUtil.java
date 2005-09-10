@@ -31,6 +31,9 @@ import java.io.UnsupportedEncodingException;
  * operate correctly are true in the context of XOM,
  * but may well not be true in a more general context. 
  * 
+ * @author Elliotte Rusty Harold
+ * @version 1.1b3
+ *
  */
 class URIUtil {
 
@@ -639,6 +642,38 @@ class URIUtil {
               "Broken VM: does not recognize UTF-8 encoding");   
         }
         
+    }
+
+
+    static String relativize(String base, String abs) {
+ 
+        try {
+            ParsedURI parsedBase = new ParsedURI(base);
+            ParsedURI parsedAbs  = new ParsedURI(abs);
+            
+            if (parsedBase.scheme.equals(parsedAbs.scheme)
+              && parsedBase.authority.equals(parsedAbs.authority)) {
+                
+            
+                String basePath = parsedBase.path;
+                String relPath = parsedAbs.path;
+                
+                while (basePath.length() > 1) {
+                    basePath = basePath.substring(0, basePath.lastIndexOf('/'));
+                    if (relPath.startsWith(basePath)) {
+                        return relPath.substring(basePath.length()+1);
+                    }
+                }
+                
+                return relPath;
+            }
+            else {
+                return abs;
+            }
+        }
+        catch (Exception ex) {
+            return abs;
+        }
     }
 
     

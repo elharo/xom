@@ -594,6 +594,7 @@ class XOMHandler
     public void externalEntityDecl(String name, 
        String publicID, String systemID) {
      
+        
         if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (name.startsWith("%")) { 
@@ -604,6 +605,11 @@ class XOMHandler
                 internalDTDSubset.append(name);
             }
                
+            if (locator != null && URIUtil.isAbsolute(systemID)) {
+                String documentURL = locator.getSystemId();
+                systemID = URIUtil.relativize(documentURL, systemID);
+            }
+
             if (publicID != null) { 
                 internalDTDSubset.append(" PUBLIC \""); 
                 internalDTDSubset.append(publicID); 
