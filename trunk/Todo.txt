@@ -209,9 +209,9 @@ Using String instead of StringBuffer in characters() in XOMHandler
 
 CDATASection.toXML() now outputs its value wrapped in a CDATA section rather than escaped.
 
-Bundling Xalan 2.7 instead of 2.6
+Bundling Xalan 2.7 instead of 2.6 and Xerces 2.7.1 
 
-Various workarounds for bugs in Xalan 2.7
+Various workarounds for bugs in Xalan 2.7 and changes in Xerces 2.7
 
 
 ===============
@@ -229,7 +229,7 @@ Done 1.1b1:
 
 Lots of Jaxen fixes
 
-Lots of crimson fixes
+Lots of Crimson fixes
 
 ===============
 Done 1.1a3:
