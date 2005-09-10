@@ -401,8 +401,13 @@ class XOMHandler
     public void endPrefixMapping(String prefix) {}
 
     public void skippedEntity(String name) {
+        
+        // Xerces 2.7 now calls this method in the DTD 
+        // for parameter entities it doesn't resolve. We can ignore these.
+        if (name.startsWith("%")) return;
         flushText();
-        throw new XMLException("Could not resolve entity " + name);                        
+        throw new XMLException("Could not resolve entity " + name);
+        
     }
     
     
