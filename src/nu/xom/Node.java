@@ -24,7 +24,6 @@ package nu.xom;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jaxen.JaxenException;
 import org.jaxen.NamespaceContext;
 
 /**
@@ -54,7 +53,7 @@ import org.jaxen.NamespaceContext;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 public abstract class Node {
@@ -461,12 +460,10 @@ public abstract class Node {
             ex.setXPath(xpath);
             throw ex;
         }
-        catch (JaxenException ex) {
-            XPathException xpe = new XPathException("XPath error: " + ex.getMessage(), ex);
-            xpe.setXPath(xpath);
-            throw xpe;
-        }
-        catch (RuntimeException ex) {
+        catch (Exception ex) { // JaxenException and RuntimeException
+            // I can't trigger a RuntimeException with the current Jaxen 
+            // code base; but it's been an issue in the past, and I'm 
+            // not convinced it's fully fixed now.
             XPathException xpe = new XPathException("XPath error: " + ex.getMessage(), ex);
             xpe.setXPath(xpath);
             throw xpe;
@@ -483,7 +480,9 @@ public abstract class Node {
     private static class EmptyNamespaceContext implements NamespaceContext {
 
         public String translateNamespacePrefixToUri(String prefix) {
-            if ("xml".equals(prefix)) return Namespace.XML_NAMESPACE;
+            // XML prefix is recognized automatically in Jaxen without 
+            // calling this method.
+            // if ("xml".equals(prefix)) return Namespace.XML_NAMESPACE;
             return null;
         }
         
