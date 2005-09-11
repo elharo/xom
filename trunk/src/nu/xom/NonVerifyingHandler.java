@@ -24,7 +24,7 @@ package nu.xom;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 class NonVerifyingHandler extends XOMHandler {
@@ -57,12 +57,10 @@ class NonVerifyingHandler extends XOMHandler {
         // It may add redundant base URIs in cases like XInclude 
         // where different parts of the document have different 
         // base URIs.
-        if (locator != null) {
-             String baseURI = locator.getSystemId();
-             if (baseURI != null && !baseURI.equals(documentBaseURI)) {
-                 element.setActualBaseURI(baseURI);
-             }
-        }         
+         String baseURI = locator.getSystemId();
+         if (baseURI != null && !baseURI.equals(documentBaseURI)) {
+             element.setActualBaseURI(baseURI);
+         }    
         
         // Attach the attributes; this must be done before the
         // namespaces are attached.      
