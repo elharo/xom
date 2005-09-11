@@ -27,7 +27,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 
@@ -278,17 +278,20 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
 
     
     public String getTextStringValue(Object o) {
-        
-        // ???? really need to return multiple consecutive nodes combined
 
         List texts = (List) o;
-        StringBuffer result = new StringBuffer();
-        Iterator iterator = texts.iterator();
-        while (iterator.hasNext()) {
-            Text text = (Text) iterator.next();
-            result.append(text.getValue());
+        if (texts.size() == 1) {
+            return ((Text) texts.get(0)).getValue();
         }
-        return result.toString();
+        else {
+            StringBuffer result = new StringBuffer();
+            Iterator iterator = texts.iterator();
+            while (iterator.hasNext()) {
+                Text text = (Text) iterator.next();
+                result.append(text.getValue());
+            }
+            return result.toString();
+        }
         
     }
     
