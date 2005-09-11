@@ -40,7 +40,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b4
  *
  */
 public abstract class ParentNode extends Node {
@@ -451,11 +451,6 @@ public abstract class ParentNode extends Node {
             return actualBase;
         }
         
-    }
-
-    
-    final boolean isParentNode() {
-        return true;
     }
 
 
