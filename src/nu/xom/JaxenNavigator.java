@@ -356,7 +356,6 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
                 // need to make sure at least one of these texts is non-empty
                 if (empty) return next();
                 else result = texts;
-                // XXX test a child that ends in several empty text nodes preceded by child elements
             }
             else if (next.isDocType()) {
                 return next();

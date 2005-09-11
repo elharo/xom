@@ -51,7 +51,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b4
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -467,6 +467,29 @@ public class XPathTest extends XOMTestCase {
         parent.appendChild(child1);
         Element child2 = new Element("child2");
         parent.appendChild(child2);
+        
+        Nodes result = parent.query("node()");
+        assertEquals(2, result.size());
+        assertEquals(child1, result.get(0));   
+        assertEquals(child2, result.get(1));   
+        
+        result = parent.query("node()[1]");
+        assertEquals(1, result.size());
+        assertEquals(child1, result.get(0));
+        
+    }
+    
+
+    public void testEmptyTextNodesAtEndOfParent() {
+        
+        Element parent = new Element("Test");
+        Element child1 = new Element("child1");
+        parent.appendChild(child1);
+        Element child2 = new Element("child2");
+        parent.appendChild(child2);
+        parent.appendChild(new Text(""));
+        parent.appendChild(new Text(""));
+        parent.appendChild(new Text(""));
         
         Nodes result = parent.query("node()");
         assertEquals(2, result.size());
