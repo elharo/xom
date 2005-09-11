@@ -402,7 +402,9 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
                     Element element = (Element) next;
                     String elementNamespace = element.getNamespaceURI();
                     if (elementNamespace.equals(URI)) {
-                        // ???? check prefix?
+                        // I don't need to worry about the prefix here because XPath only iterates
+                        // by local name and namespace URI. The prefix doesn't matter. 
+                        // This does assume that this class is non-public.
                         if (element.getLocalName().equals(localName)) {
                             this.next = element;
                             return;
@@ -420,7 +422,7 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
 
         public Object next() {
             
-            if (next == null) throw new NoSuchElementException(); // correct ???? necessary?
+            if (next == null) throw new NoSuchElementException(); // Correct? Yes. Necessary????
             Object result = next;
             findNext();
             return result;
@@ -504,7 +506,9 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
 
     
     public boolean isText(Object object) {
-        // ???? hack: need to use a separate special subclass of ArrayList I can identify
+        // ???? hack: need to use a separate special subclass of ArrayList I can identify.
+        // BUt may not be necessary since this is not a public API. I don't 
+        // think there's any way to get a different ArrayList into this method.
         if (object instanceof ArrayList) {
             Iterator iterator = ((List) object).iterator();
             while (iterator.hasNext()) {
@@ -555,7 +559,9 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
     public Iterator getAttributeAxisIterator(Object contextNode, String localName, String namespacePrefix, String namespaceURI) 
       throws UnsupportedAxisException {
 
-        // ???? need prefix?
+        // I don't need to worry about the prefix here because XPath only iterates
+        // by local name and namespace URI. The prefix doesn't matter. 
+        // This does assume that this class is non-public.
         try {
             Element element = (Element) contextNode;
             Attribute result = null;
