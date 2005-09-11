@@ -142,14 +142,19 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
     
     private static boolean hasID(Element top, String id) {
 
-        for (int i = 0; i < top.getAttributeCount(); i++) {
+        int count = top.getAttributeCount();
+        for (int i = 0; i < count; i++) {
             Attribute a = top.getAttribute(i);
             if (Attribute.Type.ID == a.getType()) {
-                // ???? really need to fully normalize here
+                // Do not need to fully normalize here
+                // because if the value passed to the id() function
+                // contains any spaces; then it is converted into a
+                // search for multiple IDs, none of which have spaces
                 return a.getValue().trim().equals(id);
             }
         }
         return false;
+        
     }
 
 
