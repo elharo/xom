@@ -51,7 +51,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 public class BaseURITest extends XOMTestCase {
@@ -1217,6 +1217,42 @@ public class BaseURITest extends XOMTestCase {
             base.setValue(RFC2396bisCases[i]);
             assertEquals(RFC2396bisCases[i], RFC2396bisCases[i+1], root.getBaseURI());
         } 
+        
+    }
+    
+    public void testSlashDotDot() {
+    
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com/");
+        Attribute base = new Attribute("xml:base", Namespace.XML_NAMESPACE, "g");
+        root.addAttribute(base);
+        base.setValue("..");
+        assertEquals("http://www.example.com/", root.getBaseURI());
+        
+    }
+    
+    public void testSlashDotDotSlashDotDot() {
+    
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com/");
+        Attribute base = new Attribute("xml:base", Namespace.XML_NAMESPACE, "g");
+        root.addAttribute(base);
+        base.setValue("../..");
+        assertEquals("http://www.example.com/", root.getBaseURI());
+        
+    }
+    
+    public void testSlashDot() {
+    
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        doc.setBaseURI("http://www.example.com/");
+        Attribute base = new Attribute("xml:base", Namespace.XML_NAMESPACE, "g");
+        root.addAttribute(base);
+        base.setValue(".");
+        assertEquals("http://www.example.com/", root.getBaseURI());
         
     }
     
