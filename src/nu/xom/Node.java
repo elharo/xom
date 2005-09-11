@@ -548,9 +548,5 @@ public abstract class Node {
         return false;
     }
     
-    boolean isParentNode() {
-        return false;
-    }
-    
     
 }
