@@ -32,7 +32,7 @@ import java.io.UnsupportedEncodingException;
  * but may well not be true in a more general context. 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 class URIUtil {
@@ -84,6 +84,8 @@ class URIUtil {
         // ???? It may be a bug in that algorithm. Check.
         if (base.path.endsWith("/..")) base.path += '/';
         
+        // The variable names R and T violate Java naming conventions.
+        // They are taken from the pseudo-code in the RFC 3986 spec.
         ParsedURI R = new ParsedURI(spec);
         ParsedURI T = new ParsedURI();
         
@@ -171,7 +173,9 @@ class URIUtil {
                     output = output.substring(0, lastSlash);
                 }
             }
-            else if (path.equals(".") || path.equals("..")) {
+            // These next three cases are unreachable in the context of XOM.
+            // They may be needed in a more general public URIUtil.
+            /* else if (path.equals(".") || path.equals("..")) {
                 path = "";
             }
             else if (path.startsWith("../")) {
@@ -179,7 +183,7 @@ class URIUtil {
             }
             else if (path.startsWith("./")) {
                 path = path.substring(2);
-            }
+            } */
             else {
                 int nextSlash = path.indexOf('/');
                 if (nextSlash == 0) nextSlash = path.indexOf('/', 1);
