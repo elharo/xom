@@ -1121,14 +1121,12 @@ public class Builder {
             parser.parse(in);
         }
         catch (SAXParseException ex) {
-            Throwable cause = ex.getException();
-            if (cause == null) cause = ex;
             ParsingException pex = new ParsingException(
                 ex.getMessage(),
                 ex.getSystemId(),
                 ex.getLineNumber(),
                 ex.getColumnNumber(),
-                cause);
+                ex);
             throw pex;
         }
         catch (SAXException ex) {
