@@ -1086,6 +1086,10 @@ public class Builder {
             URL u = new URL(uri);
             String path = u.getFile();
             if (path == null || path.length() == 0 
+              // We handle here the case where we have a URL such as 
+              // http://www.cafeaulait.org with no trailing slash.
+              // Java's URL class assigns the path "/" to this case
+              // but does not change the URL. 
               || ("/".equals(path) && !(uri.endsWith("/")))) {
                 uri += '/';
             }
