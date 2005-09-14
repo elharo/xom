@@ -75,7 +75,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1999,6 +1999,25 @@ public class BuilderTest extends XOMTestCase {
         catch (ParsingException ex) {
             assertNotNull(ex.getMessage());
             assertNull(ex.getURI());
+        }
+        
+    }   
+    
+    
+    public void testNestedExceptionWithSAXParseException() 
+      throws IOException {
+        
+        Reader reader = new StringReader("<root ");
+        Builder builder = new Builder();
+        try {
+            builder.build(reader);   
+            fail("Allowed malformed doc");
+        }
+        catch (ValidityException ex) {
+            fail("Parser threw validity error instead of well-formedness error");
+        }
+        catch (ParsingException ex) {
+            assertNotNull(ex.getCause());
         }
         
     }   
