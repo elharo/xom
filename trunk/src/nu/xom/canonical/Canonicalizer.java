@@ -60,7 +60,7 @@ import nu.xom.XPathContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b4
  *
  */
 public class Canonicalizer {
@@ -431,11 +431,11 @@ public class Canonicalizer {
                     ParentNode parent = element.getParent();
                     // Here we have to check for the nearest default on parents in the
                     // output tree, not the input tree
-                    while (parent != null && parent instanceof Element 
+                    while (parent instanceof Element 
                       && !(nodes.contains(parent))) {
                         parent = parent.getParent();
                     }
-                    if (parent != null && parent instanceof Element) {
+                    if (parent instanceof Element) {
                         String uri = ((Element) parent).getNamespaceURI("");
                         if (! "".equals(uri)) {
                             map.put("", "");
