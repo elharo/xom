@@ -42,12 +42,12 @@ import java.util.List;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.1b4
  *
  */
 public final class Nodes {
     
-    private List nodes;
+    private final List nodes;
     
     
     /**
