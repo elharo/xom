@@ -26,7 +26,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 final class UnicodeWriter extends TextWriter {
@@ -43,7 +43,7 @@ final class UnicodeWriter extends TextWriter {
     }
 
 
-    final void writeMarkup(String s) throws IOException {
+    void writeMarkup(String s) throws IOException {
 
          if (normalize) {
              s = normalize(s);
@@ -104,7 +104,7 @@ final class UnicodeWriter extends TextWriter {
     }
 
 
-    final void writeAttributeValue(String s) throws IOException {
+    void writeAttributeValue(String s) throws IOException {
 
          if (normalize) {
              s = normalize(s);
@@ -258,7 +258,7 @@ final class UnicodeWriter extends TextWriter {
      }
 
     
-    final void writePCDATA(String s) throws IOException {
+     void writePCDATA(String s) throws IOException {
 
          if (normalize) {
              s = normalize(s);
