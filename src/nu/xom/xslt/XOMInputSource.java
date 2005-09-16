@@ -29,7 +29,7 @@ import org.xml.sax.InputSource;
 class XOMInputSource extends InputSource {
 
     
-    private Nodes nodes;
+    private final Nodes nodes;
     
     
     XOMInputSource(Nodes nodes) {

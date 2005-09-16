@@ -31,13 +31,13 @@ import org.xml.sax.XMLReader;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b4
  *
  */
 class XOMSource extends SAXSource {
     
 
-    private Nodes source;
+    private final Nodes source;
 
     
     /**
