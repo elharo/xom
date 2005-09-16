@@ -50,15 +50,15 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 class XSLTHandler 
   implements ContentHandler, LexicalHandler {
 
-    private Nodes        result;
-    private ArrayList    parents;
-    private NodeFactory  factory;
+    private final Nodes       result;
+    private final ArrayList   parents;
+    private final NodeFactory factory;
     private StringBuffer buffer;
     
     
