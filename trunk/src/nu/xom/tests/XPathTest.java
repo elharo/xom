@@ -438,6 +438,42 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testStartsWith() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("foo", "bar"));
+        parent.appendChild(child);
+        Element child2 = new Element("child");
+        child2.addAttribute(new Attribute("foo", "big"));
+        parent.appendChild(child2);
+        
+        Nodes result = parent.query(".//*[starts-with(@foo, 'ba')]");
+        assertEquals(1, result.size());
+        assertEquals(child, result.get(0));
+        
+    }
+    
+
+    // a jaxen extension function
+    public void testEndsWith() {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("foo", "bar"));
+        parent.appendChild(child);
+        
+        try {
+            parent.query(".//*[ends-with(@foo, 'ar')]");
+            fail("Allowed Jaxen extension function");
+        }
+        catch (XPathException success) {
+            assertTrue(success.getMessage().indexOf("ends-with") >= 0);
+        }
+        
+    }
+    
+
     public void testEmptyTextNodesDontCount() {
         
         Element parent = new Element("Test");
@@ -865,7 +901,7 @@ public class XPathTest extends XOMTestCase {
             fail("allowed document() function");
         }
         catch(XPathException success) {
-            assertTrue(success.getMessage().indexOf("document() ") >= 0);
+            assertTrue(success.getMessage().indexOf("document") >= 0);
         }
         
     }
@@ -882,7 +918,7 @@ public class XPathTest extends XOMTestCase {
             fail("allowed document() function");
         }
         catch(XPathException success) {
-            assertTrue(success.getMessage().indexOf("document() ") >= 0);
+            assertTrue(success.getMessage().indexOf("document") >= 0);
         }
         
     }
@@ -901,7 +937,7 @@ public class XPathTest extends XOMTestCase {
             fail("allowed document() function");
         }
         catch(XPathException success) {
-            assertTrue(success.getMessage().indexOf("document() ") >= 0);
+            assertTrue(success.getMessage().indexOf("document") >= 0);
         }
         
     }
@@ -2239,7 +2275,8 @@ public class XPathTest extends XOMTestCase {
                             }
                         }
                         catch (XPathException ex) {
-                            if (ex.getMessage().equals("XPath error: document() function not supported")) {
+                            if (ex.getMessage().equalsIgnoreCase("XPath error: No such function document")
+                              || ex.getMessage().equalsIgnoreCase("XPath error: No such function evaluate")) {
                                 continue;
                             }
                             throw ex;
@@ -2271,7 +2308,11 @@ public class XPathTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
         catch (XPathException ex) {
-            if (ex.getMessage().equals("XPath error: document() function not supported")) {
+            if (ex.getMessage().equalsIgnoreCase("XPath error: No such function document")
+              || ex.getMessage().equalsIgnoreCase("XPath error: No such function upper-case")
+              || ex.getMessage().equalsIgnoreCase("XPath error: No such function lower-case")              
+              || ex.getMessage().equalsIgnoreCase("XPath error: No such function ends-with")              
+            ) {
                 return;
             }
             throw ex;
