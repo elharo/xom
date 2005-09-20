@@ -427,6 +427,20 @@ public class SAXConverterTest extends XOMTestCase {
     }
     
     
+    public void testChildNamespace() 
+      throws ParsingException, IOException, SAXException {
+     
+        String data = "<a><pre:b xmlns:pre='http://www.example.com'/></a>";
+        Document doc = builder.build(data, null);
+        XMLPrefixMapCounter handler = new XMLPrefixMapCounter();
+        SAXConverter converter = new SAXConverter(handler);
+        converter.convert(doc);
+        assertEquals(1, handler.getStarts());
+        assertEquals(1, handler.getEnds());
+        
+    }
+    
+    
     private static class XMLPrefixMapCounter extends DefaultHandler {
         
         private int starts = 0;
