@@ -242,15 +242,16 @@ public class SAXConverter {
         }
         
         // start prefix mapping
-        int count = element.getNamespaceDeclarationCount();
-        for (int i = 0; i < count; i++) {
+        int namespaceCount = element.getNamespaceDeclarationCount();
+        for (int i = 0; i < namespaceCount; i++) {
             String prefix = element.getNamespacePrefix(i);
             convertNamespace(element, prefix);
         }
         
-        // add attributes
+        // prepare attributes
         AttributesImpl saxAttributes = new AttributesImpl();
-        for (int i = 0; i < element.getAttributeCount(); i++) {
+        int attributeCount = element.getAttributeCount();
+        for (int i = 0; i < attributeCount; i++) {
             Attribute attribute = element.getAttribute(i);
             // The base URIs provided by the locator have already 
             // accounted for any xml:base attributes. We do not
@@ -268,20 +269,24 @@ public class SAXConverter {
               attribute.getValue());
         }
         
-        
         contentHandler.startElement(
           element.getNamespaceURI(),
           element.getLocalName(), 
           element.getQualifiedName(), 
           saxAttributes);
-        for (int i = 0; i < element.getChildCount(); i++) {
+        int childCount = element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
             process(element.getChild(i));   
         }
         contentHandler.endElement(element.getNamespaceURI(),
           element.getLocalName(), element.getQualifiedName());
         
         // end prefix mappings
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < namespaceCount; i++) {
+            // XXX Possible optimization: rather than calling 
+            // getNamespacePrefix(i) here we could save a list/array of
+            // the additional namespaces when getting the start prefix
+            // mappings and iterate through that list now.
             String prefix = element.getNamespacePrefix(i);
             if (parent == null) {
                 String uri = element.getNamespaceURI(prefix);
