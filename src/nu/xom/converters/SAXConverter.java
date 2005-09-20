@@ -208,7 +208,13 @@ public class SAXConverter {
     }
     
     
-    private void convertNamespace(Element element, String prefix)
+    /**
+     * @param element
+     * @param prefix
+     * @return true if and only if startPrefixMapping was called
+     * @throws SAXException
+     */
+    private boolean convertNamespace(Element element, String prefix)
       throws SAXException {
         
         String uri = element.getNamespaceURI(prefix);
@@ -219,14 +225,15 @@ public class SAXConverter {
         }
         
         if (parent != null && uri.equals(parent.getNamespaceURI(prefix))) {
-            return;   
+            return false; 
         }
         else if (parent == null && "".equals(uri)) {
             // Do not fire startPrefixMapping event for no namespace
             // on root element
-            return;
+            return false;
         }
         contentHandler.startPrefixMapping(prefix, element.getNamespaceURI(prefix)); 
+        return true; // i.e. converted
         
     }
 
@@ -243,9 +250,15 @@ public class SAXConverter {
         
         // start prefix mapping
         int namespaceCount = element.getNamespaceDeclarationCount();
+        String[] prefixes = new String[namespaceCount];
+        int prefixCount = 0;
         for (int i = 0; i < namespaceCount; i++) {
             String prefix = element.getNamespacePrefix(i);
-            convertNamespace(element, prefix);
+            boolean converted = convertNamespace(element, prefix);
+            if (converted) {
+                prefixes[prefixCount] = prefix;
+                prefixCount++;
+            }
         }
         
         // prepare attributes
@@ -282,17 +295,8 @@ public class SAXConverter {
           element.getLocalName(), element.getQualifiedName());
         
         // end prefix mappings
-        for (int i = 0; i < namespaceCount; i++) {
-            // XXX Possible optimization: rather than calling 
-            // getNamespacePrefix(i) here we could save a list/array of
-            // the additional namespaces when getting the start prefix
-            // mappings and iterate through that list now.
-            String prefix = element.getNamespacePrefix(i);
-            if (parent == null) {
-                String uri = element.getNamespaceURI(prefix);
-                if ("".equals(uri)) continue;
-                contentHandler.endPrefixMapping(prefix);  
-            }
+        for (int i = 0; i < prefixCount; i++) {
+            contentHandler.endPrefixMapping(prefixes[i]);
         }
     
     }
