@@ -242,59 +242,11 @@ public class SAXConverter {
         }
         
         // start prefix mapping
-        for (int i = 0; 
-             i < element.getNamespaceDeclarationCount(); 
-             i++) {
+        int count = element.getNamespaceDeclarationCount();
+        for (int i = 0; i < count; i++) {
             String prefix = element.getNamespacePrefix(i);
             convertNamespace(element, prefix);
         }
-        if (parent != null) {
-            // now handle element's prefix if not declared on ancestor
-            String prefix = element.getNamespacePrefix();
-            if (!element.getNamespaceURI(prefix)
-              .equals(parent.getNamespaceURI(prefix))) {
-                contentHandler.startPrefixMapping(prefix, 
-                  element.getNamespaceURI(prefix));  
-            }
-            
-            // Handle attributes' prefixes if not declared on ancestor
-            for (int i = 0; i < element.getAttributeCount(); i++) {
-                Attribute att = element.getAttribute(i);
-                String attPrefix = att.getNamespacePrefix();
-                if (!element.getNamespaceURI(attPrefix)
-                  .equals(parent.getNamespaceURI(attPrefix))
-                  && !element.getNamespacePrefix()
-                  .equals(attPrefix)
-                  // SAX never calls startPrefixMapping for the xml prefix
-                  && !"xml".equals(attPrefix)) {
-                    contentHandler.startPrefixMapping(attPrefix, 
-                      element.getNamespaceURI(attPrefix));  
-                }
-            }                
-        }
-        else { // declare all prefixes
-            String prefix = element.getNamespacePrefix();
-            if (!prefix.equals("") && !"xml".equals(prefix)) {
-                contentHandler.startPrefixMapping(prefix, 
-                  element.getNamespaceURI());  
-            }
-            
-            // Handle attributes' prefixes if not declared on ancestor
-            for (int i = 0; i < element.getAttributeCount(); i++) {
-                Attribute att = element.getAttribute(i);
-                String attPrefix = att.getNamespacePrefix();
-                if ("xml".equals(attPrefix)) {
-                    continue;   
-                }
-                else if (!attPrefix.equals("") &&
-                  !attPrefix.equals(element.getNamespacePrefix())){
-                    contentHandler.startPrefixMapping(attPrefix, 
-                      att.getNamespaceURI());  
-                }
-            }
-            
-        }
-        
         
         // add attributes
         AttributesImpl saxAttributes = new AttributesImpl();
@@ -329,9 +281,7 @@ public class SAXConverter {
           element.getLocalName(), element.getQualifiedName());
         
         // end prefix mappings
-        for (int i = 0; 
-             i < element.getNamespaceDeclarationCount(); 
-             i++) {
+        for (int i = 0; i < count; i++) {
             String prefix = element.getNamespacePrefix(i);
             if (parent == null) {
                 String uri = element.getNamespaceURI(prefix);
@@ -339,45 +289,7 @@ public class SAXConverter {
                 contentHandler.endPrefixMapping(prefix);  
             }
         }
-        if (parent != null) {
-            // Now handle element's prefix if not declared on ancestor
-            String prefix = element.getNamespacePrefix();
-            if (!element.getNamespaceURI(prefix)
-              .equals(parent.getNamespaceURI(prefix))) {
-                contentHandler.endPrefixMapping(prefix);  
-            }
-            
-            // Handle attributes' prefixes if not declared on ancestor
-            for (int i = 0; i < element.getAttributeCount(); i++) {
-                Attribute att = element.getAttribute(i);
-                String attPrefix = att.getNamespacePrefix();
-                if (!element.getNamespaceURI(attPrefix)
-                  .equals(parent.getNamespaceURI(attPrefix))
-                  && !element.getNamespacePrefix().equals(
-                  attPrefix)
-                  && !"xml".equals(attPrefix)) {
-                    contentHandler.endPrefixMapping(attPrefix);  
-                }
-            }                
-        }
-        else { // undeclare all prefixes
-            String prefix = element.getNamespacePrefix();
-            if (!prefix.equals("")  && !"xml".equals(prefix)) {
-                contentHandler.endPrefixMapping(prefix);  
-            }
-            
-            // Handle attributes' prefixes if not declared on ancestor
-            for (int i = 0; i < element.getAttributeCount(); i++) {
-                Attribute att = element.getAttribute(i);
-                String attPrefix = att.getNamespacePrefix();
-                if (!attPrefix.equals("") && !attPrefix
-                  .equals(element.getNamespacePrefix())
-                  && !"xml".equals(attPrefix)) {
-                    contentHandler.endPrefixMapping(attPrefix);  
-                }
-            }
-            
-        }
+    
     }
     
     
