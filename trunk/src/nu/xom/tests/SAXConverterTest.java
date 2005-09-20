@@ -1,4 +1,4 @@
-/* Copyright 2003, 2004 Elliotte Rusty Harold
+/* Copyright 2003-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -50,7 +50,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b4
  *
  */
 public class SAXConverterTest extends XOMTestCase {
@@ -248,6 +248,26 @@ public class SAXConverterTest extends XOMTestCase {
     }
     
     
+    public void testPrefixAndAdditionalNamespace()  
+      throws IOException, SAXException, ParsingException {
+        
+        Element root = new Element("xsl:root", "http://www.w3.org/1999/XSL/Transform");
+        root.addNamespaceDeclaration("xsl", "http://www.w3.org/1999/XSL/Transform");
+        Document doc = new Document(root);  
+        convertAndCompare(doc); 
+        
+    }
+    
+    
+    public void testPrefixAndAdditionalNamespaceFromParser()  
+      throws IOException, SAXException, ParsingException {
+        Document doc = builder.build(
+          "<SOAP:Envelope xmlns:SOAP='http://schemas.xmlsoap.org/soap/envelope/'/>", 
+          null); 
+        convertAndCompare(doc);
+    }
+    
+    
     public void testChildElementAddsNamespace()  
       throws IOException, SAXException, ParsingException {
         
@@ -379,10 +399,24 @@ public class SAXConverterTest extends XOMTestCase {
     }
     
     
-    public void testNoRedundantPrefixMappingEvents() 
+    public void testNoRedundantPrefixMappingEventsForDefaultNamespace() 
       throws ParsingException, IOException, SAXException {
      
         String data = "<root xmlns='http://www.example.org'> <a> <b/> </a> </root>";
+        Document doc = builder.build(data, null);
+        XMLPrefixMapCounter handler = new XMLPrefixMapCounter();
+        SAXConverter converter = new SAXConverter(handler);
+        converter.convert(doc);
+        assertEquals(1, handler.getStarts());
+        assertEquals(1, handler.getEnds());
+        
+    }
+    
+    
+    public void testNoRedundantPrefixMappingEventsForPrefixedNamespace() 
+      throws ParsingException, IOException, SAXException {
+     
+        String data = "<a:root xmlns:a='http://www.example.org' />";
         Document doc = builder.build(data, null);
         XMLPrefixMapCounter handler = new XMLPrefixMapCounter();
         SAXConverter converter = new SAXConverter(handler);
