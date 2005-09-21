@@ -209,10 +209,10 @@ public class SAXConverter {
     
     
     /**
-     * @param element
-     * @param prefix
+     * @param element the context in which the prefix is mapped
+     * @param prefix the prefix to pass to statPrefixMapping
      * @return true if and only if startPrefixMapping was called
-     * @throws SAXException
+     * @throws SAXException if the ContentHandler throws an exception
      */
     private boolean convertNamespace(Element element, String prefix)
       throws SAXException {
@@ -232,7 +232,7 @@ public class SAXConverter {
             // on root element
             return false;
         }
-        contentHandler.startPrefixMapping(prefix, element.getNamespaceURI(prefix)); 
+        contentHandler.startPrefixMapping(prefix, uri); 
         return true; // i.e. converted
         
     }
@@ -241,12 +241,6 @@ public class SAXConverter {
     private void convertElement(Element element) throws SAXException {
         
         locator.setSystemId(element.getBaseURI());
-        
-        ParentNode parentNode = element.getParent();
-        Element parent = null;
-        if (parentNode instanceof Element) {
-            parent = (Element) parentNode;   
-        }
         
         // start prefix mapping
         int namespaceCount = element.getNamespaceDeclarationCount();
