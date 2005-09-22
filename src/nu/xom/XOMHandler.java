@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 class XOMHandler 
@@ -598,7 +598,6 @@ class XOMHandler
     
     public void externalEntityDecl(String name, 
        String publicID, String systemID) {
-     
         
         if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
@@ -612,7 +611,16 @@ class XOMHandler
                
             if (locator != null && URIUtil.isAbsolute(systemID)) {
                 String documentURL = locator.getSystemId();
-                systemID = URIUtil.relativize(documentURL, systemID);
+                // work around Crimson style file:/root URLs
+                if (documentURL != null) {
+                    if (documentURL.startsWith("file:/") && !documentURL.startsWith("file:///")) {
+                        documentURL = "file://" + documentURL.substring(5); 
+                    }
+                    if (systemID.startsWith("file:/") && !systemID.startsWith("file:///")) {
+                        systemID = "file://" + systemID.substring(5); 
+                    }
+                    systemID = URIUtil.relativize(documentURL, systemID);
+                }
             }
 
             if (publicID != null) { 
