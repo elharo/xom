@@ -27,6 +27,7 @@ import java.io.PrintStream;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -45,7 +46,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.1b4
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -318,7 +319,7 @@ public class DocTypeTest extends XOMTestCase {
     }
 
     
-    public void testSetInternalDTDSubsetWithEntityThatPointsToNonexistentURL() {
+    public void testSetInternalDTDSubsetWithEntityThatPointsToNonExistentURL() {
         
         String subset = 
           "<!ENTITY % test SYSTEM 'http://www.example.com/notexists.dtd'>\n"
@@ -328,7 +329,38 @@ public class DocTypeTest extends XOMTestCase {
         assertEquals(subset, doctype.getInternalDTDSubset());
         
     }
+    
+    
+    public void testSetInternalDTDSubsetWithRelativeURL() 
+      throws ParsingException, IOException {
+    
+        Builder builder = new Builder();
+        Document doc = builder.build("data/outer21.xml");
+        String subset = doc.getDocType().getInternalDTDSubset();
+        assertEquals(subset, subset.indexOf("file:/"), -1);
 
+    }
+    
+    
+    public void testSetInternalDTDSubsetWithRelativeURLAndCrimson() 
+      throws ParsingException, IOException {
+        
+        XMLReader crimson;
+        try {
+            crimson = XMLReaderFactory.createXMLReader(
+              "org.apache.crimson.parser.XMLReaderImpl");
+        } 
+        catch (SAXException ex) {
+            // can't test Crimson if you can't load it
+            return;
+        }
+        Builder builder = new Builder(crimson);
+        Document doc = builder.build("data/outer21.xml");
+        String subset = doc.getDocType().getInternalDTDSubset();
+        assertEquals(subset, subset.indexOf("file:/"), -1);
+
+    }
+    
     
     public void testSetMalformedInternalDTDSubset() {
         
