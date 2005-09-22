@@ -40,7 +40,7 @@ import org.xml.sax.XMLReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b4
  * 
  */
 final class Verifier {
@@ -1330,6 +1330,7 @@ final class Verifier {
             parser.setEntityResolver(new EntityResolver() {
 
                 public InputSource resolveEntity(String publicID, String systemID) {
+                    System.out.println("j " + systemID);
                     return empty;
                 }   
             
@@ -1338,7 +1339,12 @@ final class Verifier {
         
         String doc = "<!DOCTYPE a [" + subset + "]><a/>";
         try {
-            parser.parse(new InputSource(new StringReader(doc)));
+            InputSource source = new InputSource(new StringReader(doc));
+            // just to make sure relative URLs can be resolved; don't
+            // actually need to connect to this; the EntityResolver
+            // prevents that
+            source.setSystemId("http://www.example.org/");
+            parser.parse(source);
         }
         catch (SAXException ex) {
             IllegalDataException idex = new IllegalDataException(
