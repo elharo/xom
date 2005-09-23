@@ -1330,7 +1330,6 @@ final class Verifier {
             parser.setEntityResolver(new EntityResolver() {
 
                 public InputSource resolveEntity(String publicID, String systemID) {
-                    System.out.println("j " + systemID);
                     return empty;
                 }   
             
