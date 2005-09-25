@@ -33,7 +33,7 @@ import nu.xom.*;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b4
  *
  */
 public class CDATASectionTest extends XOMTestCase {
@@ -74,7 +74,8 @@ public class CDATASectionTest extends XOMTestCase {
     public void testToXML() {
         Element child1 = doc.getRootElement().getFirstChildElement("child1");
         Node cdata = child1.getChild(0);
-        assertEquals("<![CDATA[<&>]]>", cdata.toXML());  
+        String result = cdata.toXML();
+        assertEquals("<![CDATA[<&>]]>", result);  
     }
 
     
