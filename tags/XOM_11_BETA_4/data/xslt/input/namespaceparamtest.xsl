@@ -1,0 +1,1 @@
+<?xml version="1.0"?> <xsl:stylesheet version="1.0"                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"                xmlns:pre="http://www.xom.nu/"><xsl:param name="pre:test" select="1" /><xsl:template match="/">  <root><xsl:value-of select="$pre:test"/></root></xsl:template></xsl:stylesheet>
