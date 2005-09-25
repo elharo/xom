@@ -21,8 +21,13 @@
 
 package nu.xom.tests;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 import nu.xom.Element;
 import nu.xom.XPathException;
+import nu.xom.XPathTypeException;
 
 /**
  * <p>
@@ -30,7 +35,7 @@ import nu.xom.XPathException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d2
+ * @version 1.1b4
  *
  */
 public class XPathExceptionTest extends XOMTestCase {
@@ -141,5 +146,25 @@ public class XPathExceptionTest extends XOMTestCase {
         
     }
     
+    public void testSerializeXPathTypeException() throws IOException {
+        
+        Element parent = new Element("Test");
+        Element child = new Element("child");
+        parent.appendChild(child);
+        
+        try {
+            parent.query("count(*)");
+            fail("Allowed query to return number");
+        }
+        catch (XPathTypeException success) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ObjectOutputStream oout = new ObjectOutputStream(out);
+            oout.writeObject(success);
+            oout.close();
+        }
+        
+    }
+    
+
     
 }
