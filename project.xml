@@ -11,14 +11,14 @@
 
   <shortDescription>Dual Streaming/Tree API for Processing XML</shortDescription>
 
- <siteAddress>www.xom.nu</siteAddress>
+  <siteAddress>www.xom.nu</siteAddress>
 
   <mailingLists>
-        <mailingList>
-            <name>XOM Interest Mailing List</name>
-            <archive>http://lists.ibiblio.org/pipermail/xom-interest/</archive>
-        </mailingList>
-    </mailingLists>
+    <mailingList>
+      <name>XOM Interest Mailing List</name>
+      <archive>http://lists.ibiblio.org/pipermail/xom-interest/</archive>
+    </mailingList>
+  </mailingLists>
 
  <developers>
 
@@ -41,7 +41,7 @@
     <dependency>
     	<groupId>xerces</groupId>
     	<artifactId>xercesImpl</artifactId>
-    	<version>2.7.1</version>
+    	<version>2.6.2</version>
     	<type>jar</type>
     </dependency>  
     <dependency>
@@ -53,24 +53,17 @@
     <dependency>
     	<groupId>jaxen</groupId>
     	<artifactId>jaxen</artifactId>
-    	<version>1.1-beta-7</version>
+    	<version>1.1-beta-8</version>
     	<type>jar</type>
     </dependency>
   </dependencies>
   
-  
   <build>
-
     <nagEmailAddress>elharo@metalab.unc.edu</nagEmailAddress>
-
     <sourceDirectory>src</sourceDirectory>
-
     <unitTestSourceDirectory>src</unitTestSourceDirectory>
-
     <!-- Unit test classes -->
-
     <unitTest>
-
       <includes>
         <include>**/*Test.java</include>
       </includes>
