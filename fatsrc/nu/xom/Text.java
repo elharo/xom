@@ -21,8 +21,6 @@
 
 package nu.xom;
 
-import java.io.UnsupportedEncodingException;
-
 /**
  * <p>
  *   This class represents a run of text. 
@@ -32,7 +30,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b4 fat
  *
  */
 public class Text extends Node {
@@ -201,12 +199,78 @@ public class Text extends Node {
      * @return the string form of this text node
      */
     public final String toXML() {
-        return escapeText(data);    
+        return escapeText();    
+    }
+    
+    
+    boolean isText() {
+        return true;   
+    } 
+
+
+    /**
+     * <p>
+     * Returns a <code>String</code> 
+     * representation of this <code>Text</code> suitable for
+     * debugging and diagnosis. This is <em>not</em>
+     * the XML representation of this <code>Text</code> node.
+     * </p>
+     * 
+     * @return a non-XML string representation of this node
+     */
+    public final String toString() {
+        
+        return "[" + getClass().getName() + ": " 
+          + escapeLineBreaksAndTruncate(getValue()) + "]";
+          
+    }
+    
+    
+    static String escapeLineBreaksAndTruncate(String s) {
+        
+        int length = s.length();
+        boolean tooLong = length > 40;
+        if (length > 40) {
+            length = 35;
+            s = s.substring(0, 35);
+        }
+        
+        StringBuffer result = new StringBuffer(length);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '\n': 
+                    result.append("\\n");
+                    break;
+                case '\r': 
+                    result.append("\\r");
+                    break;
+                case '\t': 
+                    result.append("\\t");
+                    break;
+                default:
+                    result.append(c);
+            }
+        }
+        if (tooLong) result.append("...");
+        
+        return result.toString();
+        
     }
 
     
-    private static String escapeText(String s) {
+    boolean isCDATASection() {
+        return false;
+    }
+
+
+    boolean isEmpty() {
+        return this.data.length() == 0;
+    }
+
+    String escapeText() {
         
+        String s = getValue();
         int length = s.length();
         // Give the string buffer enough room for a couple of escaped characters 
         StringBuffer result = new StringBuffer(length+12);
@@ -371,72 +435,5 @@ public class Text extends Node {
         return result.toString();
         
     }
-    
-    
-    boolean isText() {
-        return true;   
-    } 
-
-
-    /**
-     * <p>
-     * Returns a <code>String</code> 
-     * representation of this <code>Text</code> suitable for
-     * debugging and diagnosis. This is <em>not</em>
-     * the XML representation of this <code>Text</code> node.
-     * </p>
-     * 
-     * @return a non-XML string representation of this node
-     */
-    public final String toString() {
         
-        return "[" + getClass().getName() + ": " 
-          + escapeLineBreaksAndTruncate(getValue()) + "]";
-          
-    }
-    
-    
-    static String escapeLineBreaksAndTruncate(String s) {
-        
-        int length = s.length();
-        boolean tooLong = length > 40;
-        if (length > 40) {
-            length = 35;
-            s = s.substring(0, 35);
-        }
-        
-        StringBuffer result = new StringBuffer(length);
-        for (int i = 0; i < length; i++) {
-            char c = s.charAt(i);
-            switch (c) {
-                case '\n': 
-                    result.append("\\n");
-                    break;
-                case '\r': 
-                    result.append("\\r");
-                    break;
-                case '\t': 
-                    result.append("\\t");
-                    break;
-                default:
-                    result.append(c);
-            }
-        }
-        if (tooLong) result.append("...");
-        
-        return result.toString();
-        
-    }
-
-    
-    boolean isCDATASection() {
-        return false;
-    }
-
-
-    boolean isEmpty() {
-        return this.data.length() == 0;
-    }
-
-    
 }
