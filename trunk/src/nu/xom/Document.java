@@ -22,14 +22,14 @@
 package nu.xom;
 
 /**
- *  <p>
+ * <p>
  * The <code>Document</code> class represents
  * a complete XML document including its root element,
  * prolog, and epilog.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b5
  * 
  */
 public class Document extends ParentNode {
@@ -63,7 +63,8 @@ public class Document extends ParentNode {
     public Document(Document doc) {
 
       insertChild(doc.getRootElement().copy(), 0);
-      for (int i = 0; i < doc.getChildCount(); i++) {
+      int count = doc.getChildCount();
+      for (int i = 0; i < count; i++) {
           Node child = doc.getChild(i);
           if (!(child.isElement())) {
               this.insertChild(child.copy(), i);
@@ -186,7 +187,7 @@ public class Document extends ParentNode {
         if (oldDocType == null) insertChild(doctype, 0);
         else {
             int position = indexOf(oldDocType);
-            removeChild(position);
+            super.removeChild(position);
             fastInsertChild(doctype, position);
             oldDocType.setParent(null);
             doctype.setParent(this);
