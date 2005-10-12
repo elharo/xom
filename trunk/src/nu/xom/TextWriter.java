@@ -31,13 +31,13 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b5
  *
  */
 abstract class TextWriter {
 
     protected final Writer out;
-    protected String encoding;
+    protected final String encoding;
     
     private String lineSeparator = "\r\n";
     // true if the user has requested a specific 
