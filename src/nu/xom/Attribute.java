@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b5
  * 
  */
 public class Attribute extends Node {
@@ -338,7 +338,7 @@ public class Attribute extends Node {
     
     private void _setValue(String value) {
         
-        if ("xml:id".equals(this.getQualifiedName())) {
+        if ("xml".equals(this.prefix) && "id".equals(this.localName)) {
             // ???? do I really want to do this. XML ID test case
             // suggests not
             Verifier.checkNCName(value);
