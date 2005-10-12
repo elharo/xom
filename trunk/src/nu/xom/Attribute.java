@@ -167,7 +167,7 @@ public class Attribute extends Node {
         }
         _setNamespace(prefix, URI);
         _setValue(value);
-        if ("xml:id".equals(this.getQualifiedName())) {
+        if ("xml".equals(this.prefix) && "id".equals(this.localName)) {
             _setType(Attribute.Type.ID);
         }   
         else {
@@ -290,7 +290,7 @@ public class Attribute extends Node {
     
     
     private boolean isXMLID() {
-        return "xml:id".equals(this.getQualifiedName());
+        return "xml".equals(this.prefix) && "id".equals(this.localName);
     }
 
     
