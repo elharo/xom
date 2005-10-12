@@ -191,7 +191,6 @@ public class Serializer {
         Writer writer;  
         String encodingUpperCase = encoding.toUpperCase(Locale.ENGLISH);
         if (encodingUpperCase.equals("UTF-8")) {
-           // For compatibility with Java 1.2 and earlier
            writer = new OutputStreamWriter(out, "UTF-8");  
         }
         else if (encodingUpperCase.equals("UTF-16") 
