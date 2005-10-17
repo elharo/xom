@@ -875,10 +875,26 @@ public class Canonicalizer {
      * @throws IOException if the underlying <code>OutputStream</code>
      *      encounters an I/O error
      */
-    public final void write(Node node) throws IOException {  
-        serializer.nodes = null;
-        serializer.write(node);        
+    public final void write(Node node) throws IOException {
+        
+        // FIXME do this without copying the tree. This happened 
+        // to handle the Aust test cases. See this thread:
+        // http://lists.ibiblio.org/pipermail/xom-interest/2005-October/002656.html
+        if (node instanceof Element) {
+            Document doc = node.getDocument();
+            if (doc == null) {
+                ParentNode root = (ParentNode) node;
+                while (root.getParent() != null) root = node.getParent();
+                doc = new Document((Element) root);
+            }
+            write(node.query(".//. | .//@* | .//namespace::*"));             
+        }
+        else {
+            serializer.nodes = null;
+            serializer.write(node);
+        }
         serializer.flush();
+        
     }  
  
     

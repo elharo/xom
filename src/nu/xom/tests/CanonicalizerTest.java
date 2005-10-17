@@ -54,7 +54,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.1b5
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -1556,6 +1556,84 @@ public class CanonicalizerTest extends XOMTestCase {
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
+        
+    }
+    
+    public static void testAust() throws Exception {
+        
+        Element e1 = new Element("a:a", "urn:a");
+        Element e2 = new Element("a:b", "urn:a");
+        e1.appendChild(e2);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer c = new Canonicalizer(out,
+        Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
+        c.write(e2);
+        String s = out.toString("UTF8");
+        assertEquals("<a:b xmlns:a=\"urn:a\"></a:b>", s);
+        
+    }
+    
+    
+    public static void testAust4() throws Exception {
+        
+        Element e1 = new Element("a:a", "urn:a");
+        Element e2 = new Element("a:b", "urn:a");
+        e1.appendChild(e2);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
+        XPathContext context = new XPathContext("a", "urn:a");
+        Document doc = new Document(e1);
+        canonicalizer.write(doc.query("(//. | //@* | //namespace::*)[ancestor-or-self::a:b]", context));  
+
+        String s = out.toString("UTF8");
+        assertEquals("<a:b xmlns:a=\"urn:a\"></a:b>", s);
+        
+    }
+    
+    
+    public static void testAust5() throws Exception {
+        
+        Element e1 = new Element("a:a", "urn:a");
+        Element e2 = new Element("a:b", "urn:a");
+        e1.appendChild(e2);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
+        Document doc = new Document(e1);
+        Nodes set = new Nodes(e2);
+        canonicalizer.write(set);  
+
+        String s = out.toString("UTF8");
+        // The namespace was not explicitly included in 
+        // the set so it should not be output.
+        assertEquals("<a:b></a:b>", s);
+        
+    }
+    
+    
+    public static void testAust3() throws Exception {
+        
+        Element e2 = new Element("a:b", "urn:a");
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+            new Canonicalizer(os,
+        Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION).write(e2);
+        String s = os.toString("UTF8");
+        assertEquals("<a:b xmlns:a=\"urn:a\"></a:b>", s);
+        
+    }
+    
+    
+    public static void testAust2() throws Exception {
+        
+        Element e1 = new Element("a:a", "urn:a");
+        Element e2 = new Element("a:b", "urn:a");
+        e1.appendChild(e2);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+            new Canonicalizer(os,
+        Canonicalizer.CANONICAL_XML).write(e2);
+        String s = os.toString("UTF8");
+        assertEquals("<a:b xmlns:a=\"urn:a\"></a:b>", s);
         
     }
     
