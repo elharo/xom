@@ -195,6 +195,21 @@ cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
 ===============
+Done 1.1b5:
+===============
+
+Small optimizations in Attribute class
+
+Fixed bug in Cacnonicalizer when canonicalizing a non-detached element
+
+===============
+Done 1.1b4:
+===============
+
+Fixed bug in SAXConverter where start/endNamespacePrefixMapping could be called multiple times for the same namespace
+
+
+===============
 Done 1.1b3:
 ===============
 
