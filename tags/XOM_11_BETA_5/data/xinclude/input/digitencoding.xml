@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<test>
+  <xi:include parse="text" encoding="8-UTF" href="utf8.xml" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:fallback>Failure!</xi:fallback>
+  </xi:include>
+</test>

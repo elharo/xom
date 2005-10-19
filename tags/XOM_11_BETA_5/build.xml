@@ -1,0 +1,717 @@
+<?xml version="1.0"?>
+<!-- Copyright 2002-2005 Elliotte Rusty Harold
+
+This library is free software; you can redistribute 
+it and/or modify it under the terms of version 2.1 of 
+the GNU Lesser General Public License as published by  
+the Free Software Foundation.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General 
+Public License along with this library; if not, write to the 
+Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+Boston, MA  02111-1307  USA
+
+You can contact Elliotte Rusty Harold by sending e-mail to
+elharo@metalab.unc.edu. Please include the word "XOM" in the
+subject line. The XOM home page is http://www.xom.nu/
+-->
+<project name="XOM" default="help" basedir=".">
+
+    <description>
+      Build XOM
+    </description>
+   
+  <!-- set global properties for this build -->
+  <target name="init">
+    <tstamp/>
+    <property name="Name"    value="XOM"/>
+    <property name="name"    value="xom"/>
+    <property name="version" value="1.1b5"/>
+    <property name="year"    value="2005"/>
+
+    <echo message="----------- ${Name} ${version} ------------"/>
+
+    <property name="debug"       value="on"/>
+    <property name="optimize"    value="off"/>
+    <property name="deprecation" value="off"/>
+
+    <property name="src.dir"    value="./src"/>
+    <property name="fat.src"    value="./fatsrc"/>
+    <property name="src15.dir"  value="./src15"/>
+    <property name="lib.dir"    value="./lib"/>
+    <property name="lib2.dir"   value="./lib2"/>
+    <property name="packages"   value="nu.xom.*"/>
+
+    <property name="build.dir"       value="./build"/>
+    <property name="build15.dir"     value="./classes15"/>
+    <property name="build.src"       value="./build/src"/>
+    <property name="build.dest"      value="./build/classes"/>
+    <property name="build.javadocs"  value="./build/apidocs"/>
+    <property name="testoutput.dir"  value="./testresults"/>
+    <property name="dist.dir"        value="./dist"/>    
+    <property name="clover.dir"      value="./clover"/>
+    <property name="testreports.dir" value="./testreports" />
+    <property name="jaxen.dir"       value="${build.dir}/jaxen-classes"/>
+
+    <property name="xml-apis.jar"   value="${lib.dir}/xml-apis.jar"/>
+    <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
+    <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
+    <property name="serializer.jar" value="${lib.dir}/serializer.jar"/>
+    <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.0rc1.jar"/>
+    <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
+    <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
+    <property name="xom-core"       value="${build.dest}"/>
+    
+    <property name="saxon6.jar"     value="${lib2.dir}/saxon.jar"/>
+    <property name="saxon7.jar"     value="${lib2.dir}/saxon-aelfred.jar"/>
+    <property name="gnujaxp.jar"    value="${lib2.dir}/gnujaxp.jar"/>
+    <property name="resolver.jar"   value="${lib2.dir}/resolver.jar"/>
+    <property name="dom4j.jar"      value="${lib2.dir}/dom4j-1.5.1.jar"/>
+
+    <property name="excludes"       value=".clover, .DS_Store, **/.DS_Store, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, jester.txt, jesterbuild.xml, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb"/>
+
+    <property name="test.outputFormat" value="xml"/>   
+    
+    <!-- only needed for servlet samples -->
+    <property name="servlet.jar"    value="${lib2.dir}/servlet.jar"/>
+    <condition property="servlet.jar.installed">
+      <and>
+        <available classname="javax.servlet.ServletException" classpath="${servlet.jar}" />
+        <available classname="javax.servlet.SingleThreadModel" classpath="${servlet.jar}" />
+        <available classname="javax.servlet.http.HttpServletRequest" classpath="${servlet.jar}" />
+        <available classname="javax.servlet.http.HttpServletResponse" classpath="${servlet.jar}"/> 
+        <available classname="javax.servlet.http.HttpServlet" classpath="${servlet.jar}" />
+      </and>
+    </condition> 
+    
+    <path id="compile.class.path">
+      <pathelement location="${xml-apis.jar}"/>
+      <pathelement location="${parser.jar}"/>
+      <pathelement location="${junit.jar}"/>
+      <pathelement location="${jaxen.dir}"/>
+      <pathelement location="${servlet.jar}"/>
+    </path>
+
+    <path id="run.class.path">
+      <pathelement location="${xml-apis.jar}"/>
+      <pathelement location="${parser.jar}"/>
+      <pathelement location="${xom-core}"/>
+      <pathelement location="${jaxen.dir}"/>
+      <pathelement location="${xslt.jar}"/>
+      <pathelement location="${serializer.jar}"/>
+    </path>
+    
+    <path id="test.class.path">
+      <path refid="run.class.path"/>
+      <pathelement location="${junit.jar}"/>
+      <pathelement location="${saxon6.jar}"/>
+      <pathelement location="${saxon7.jar}"/>
+      <pathelement location="${gnujaxp.jar}"/>
+      <pathelement location="${resolver.jar}"/>
+      <pathelement location="${dom4j.jar}"/>
+    </path>
+    
+    <path id="doc.class.path">
+      <path refid="test.class.path"/>
+      <pathelement location="${build.dest}"/>
+      <pathelement location="${tagsoup.jar}"/>
+    </path>
+
+    <available property="tagsoup.installed" classname="org.ccil.cowan.tagsoup.Parser">
+      <classpath>
+        <pathelement location="${tagsoup.jar}" />
+      </classpath>
+    </available>
+    
+    <available property="clover.installed" 
+               file="clover.jar" filepath="${ant-home}/lib/clover.jar" />
+    
+  </target>
+  
+  <target name="help">
+    <echo>
+XOM Build file
+-------------------------------------------------------------
+    
+  available targets are:
+    
+    help      --> print this message
+    jar       --> build the xom.jar file
+    samples   --> build the xom-samples.jar file
+    compile   --> compile the source code
+    compile15 --> compile the classes that depend on Java 1.5
+    javadoc   --> generate the API documentation
+    betterdoc --> better formatted API documentation (requires Ant 1.6)
+    test      --> run JUnit test suite
+    testui    --> run Junit test suite in GUI 
+    clean     --> clean up the build directory
+    dist      --> the zip and .tar.gz files
+    
+  Use the option -Dfat=true to make Text objects bigger but faster.
+
+-------------------------------------------------------------
+    </echo>
+  </target>
+
+  <target name="prepare" depends="init, prepare-dirs, prepare-fat" />
+  
+  <target name="prepare-dirs" depends="init">
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${testoutput.dir}"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/jaxen"/>
+    <mkdir dir="${build.dir}/jaxen-classes"/>
+    <mkdir dir="${build15.dir}"/>
+    <mkdir dir="${build.src}"/>
+    <mkdir dir="${build.dest}"/>
+
+    <delete file="${build.src}/nu/xom/Text.java" failonerror="false"/>
+
+    <copy todir="${build.src}">
+      <fileset dir="${src.dir}"/>
+    </copy>
+    
+  </target>
+
+  <!-- use Text.java that stores contents in String -->
+  <target name="prepare-fat" depends="init" if="fat">
+	 <copy todir="${build.src}" overwrite="true">
+	    <fileset dir="${fat.src}"/>
+	 </copy>
+  </target>
+
+
+  <target name="compile-core" depends="prepare, compile-jaxen" 
+          description="Compile the source code">
+    <javac srcdir="${build.src}"
+           destdir="${build.dest}"
+           debug="${debug}"
+           optimize="${optimize}"
+           deprecation="${deprecation}"
+           target="1.2"
+           source="1.3"
+           encoding="UTF-8"
+           excludes="nu/xom/pantry/* nu/xom/tools/* nu/xom/samples/*Servlet.java">
+       <classpath refid="compile.class.path"/>
+    </javac>
+    <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
+
+    <copy file="${build.src}/nu/xom/compositions.dat" tofile="${build.dest}/nu/xom/compositions.dat" />
+
+    <!-- This file requires Java 1.5 to generate so we compile it with a 
+         different target and copy it over here. -->
+    <copy file="classes15/nu/xom/JDK15XML1_0Parser.class" tofile="${build.dest}/nu/xom/JDK15XML1_0Parser.class"/>
+  </target>
+
+
+  <target name="compile" depends="compile-core, compile-servlets" 
+          description="Compile the source code" />
+  
+  <target name="compile-servlets" depends="compile-core" if="servlet.jar.installed"
+          description="Compile the source code including the servlet samples">
+    <javac srcdir="${build.src}"
+           sourcepath=""
+           destdir="${build.dest}"
+           debug="${debug}"
+           optimize="${optimize}"
+           deprecation="${deprecation}"
+           target="1.2"
+           source="1.3"
+           encoding="UTF-8">
+       <classpath refid="compile.class.path"/>
+       <include name="nu/xom/samples/*Servlet.java" />
+    </javac>
+  </target>
+
+  
+  <!-- This task requires Java 1.5 to complete successfully -->
+  <target name="compile15" depends="prepare" description="Compile the JDK15XML1_0Parser" >
+    <javac srcdir="${src15.dir}"
+           destdir="${build15.dir}"
+           debug="${debug}"
+           optimize="${optimize}"
+           deprecation="${deprecation}"
+           target="1.2"
+           source="1.3"
+           encoding="UTF-8"
+           failonerror="false">
+       <classpath refid="compile.class.path"/>
+    </javac>
+  </target>
+
+  <target name="minimal" depends="compile" description="Create xom-minimal.jar">
+    <jar jarfile="${build.dir}/${name}-${version}-minimal.jar"
+         basedir="${build.dest}"
+         index="no"
+		 compress="yes"
+         includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
+         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*">
+      <manifest>
+        <attribute name="Sealed" value="true"/>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Specification-Title"    value="XOM"/>
+        <attribute name="Specification-Version"  value="${version}"/>
+        <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
+        <attribute name="Implementation-Title"   value="XOM"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+        <attribute name="Main-Class" value="nu.xom.Info"/>
+        <section name="nu/xom/">
+          <attribute name="Specification-Title"   value="XOM core classes"/>
+          <attribute name="Implementation-Title"  value="nu.xom"/>
+        </section>
+        <section name="nu/xom/xslt/">
+          <attribute name="Specification-Title"   value="XOM XSLT interface"/>
+          <attribute name="Implementation-Title"  value="nu.xom.xslt"/>
+        </section>
+        <section name="nu/xom/xinclude/">
+          <attribute name="Specification-Title"   value="XOM XInclude engine"/>
+          <attribute name="Implementation-Title"  value="nu.xom.xinclude"/>
+        </section>
+        <section name="nu/xom/converters/">
+          <attribute name="Specification-Title"   value="XOM converters to other object models"/>
+          <attribute name="Implementation-Title"  value="nu.xom.converters"/>
+        </section>
+        <section name="nu/xom/canonical/">
+          <attribute name="Specification-Title"   value="XOM Canonical XML support"/>
+          <attribute name="Implementation-Title"  value="nu.xom.canonical"/>
+        </section>
+      </manifest>
+    </jar>
+  </target>
+
+
+  <target name="jar" depends="compile" description="Create xom.jar">
+    <jar jarfile="${build.dir}/${name}-${version}.jar"
+         basedir="${build.dest}"
+         index="no"
+		 compress="yes"
+         includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
+         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*">
+
+    <fileset dir="${jaxen.dir}"
+         excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/XPathTestBase.class org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/** org/jaxen/**Test.class org/jaxen/saxpath/base/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/pattern/** org/jaxen/saxpath/SAXPathParseException.class org/jaxen/pattern/PriorityTest.class">
+    </fileset> 
+
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Specification-Title"    value="XOM"/>
+        <attribute name="Specification-Version"  value="${version}"/>
+        <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
+        <attribute name="Implementation-Title"   value="XOM"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+        <attribute name="Main-Class" value="nu.xom.Info"/>
+        <section name="nu/xom/">
+          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM core classes"/>
+          <attribute name="Implementation-Title"  value="nu.xom"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+       </section>
+        <section name="org/jaxen/">
+          <attribute name="Specification-Title"   value="Jaxen XPath engine"/>
+          <attribute name="Implementation-Title"  value="org.jaxen"/>
+          <attribute name="Implementation-Version" value="1.1d4"/>
+          <attribute name="Implementation-Vendor"  value="CodeHaus"/>
+        </section>
+        <section name="nu/xom/xslt/">
+          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM XSLT interface"/>
+          <attribute name="Implementation-Title"  value="nu.xom.xslt"/>
+        </section>
+        <section name="nu/xom/xinclude/">
+          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM XInclude engine"/>
+          <attribute name="Implementation-Title"  value="nu.xom.xinclude"/>
+        </section>
+        <section name="nu/xom/converters/">
+          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM converters to other object models"/>
+          <attribute name="Implementation-Title"  value="nu.xom.converters"/>
+        </section>
+        <section name="nu/xom/canonical/">
+          <attribute name="Sealed" value="true"/>
+          <attribute name="Specification-Title"   value="XOM Canonical XML support"/>
+          <attribute name="Implementation-Title"  value="nu.xom.canonical"/>
+        </section>
+      </manifest>
+    </jar>
+  </target>
+
+  
+  <target name="samples" depends="compile" description="Create xom-samples.jar">
+    <jar jarfile="${build.dir}/${name}-samples.jar"
+         basedir="${build.dest}"
+         index="yes"
+		 compress="yes"
+         includes="nu/xom/samples/* nu/xom/benchmarks/*"
+         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/pantry/*">
+      <manifest>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Specification-Title"    value="XOM Samples"/>
+        <attribute name="Specification-Version"  value="${version}"/>
+        <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
+        <attribute name="Implementation-Title"   value="XOM Samples"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+<!-- I can't get this to work yet
+        <attribute name="Main-Class" value="nu.xom.samples.XMLPrinter"/>
+        <attribute name="Class-Path" value="${name}-${version}.jar"/> -->
+      </manifest>
+    </jar>
+  </target>
+
+  
+  <target name="javadoc" depends="prepare"
+          description="Generate the API documentation">
+          
+    <mkdir dir="${build.javadocs}"/>
+    
+    <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
+             sourcepath="${build.src}"
+             destdir="${build.javadocs}"
+             author="true"
+             version="true"
+             overview="overview.html"
+             use="true"
+             splitindex="true"
+             noindex="false"
+             windowtitle="${Name} ${version}  API"
+             docencoding="UTF-8"
+             charset="UTF-8"
+             link="http://www.junit.org/junit/javadoc/3.8.1"
+             doctitle="${Name} ${version}"
+             bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
+			 &lt;br /&gt; &lt;a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40metalab%2Eunc%2Eedu?Subject=XOM'&gt;elharo&#64;metalab&#46;unc&#46;edu&lt;/a&gt;">
+      <classpath refid="test.class.path"/>
+      
+    <fileset dir="${build.src}" defaultexcludes="yes">
+      <include name="nu/xom/tests/XOMTestCase.java" />
+    </fileset>
+      
+    </javadoc>
+  </target>
+  
+  
+  <!-- I can never remember the exact target name -->
+  <target name="javadocs"   depends="javadoc" />
+  <target name="apidocs"    depends="javadoc"/>
+  <target name="apidoc"     depends="javadoc"/>
+  <target name="betterdocs" depends="betterdoc"/>
+
+  <target name="-checkForTagSoup" unless="tagsoup.installed">
+    <echo>
+    Better documentation requires TagSoup to be installed 
+    in the lib2 directory. You can download it from
+    http://mercury.ccil.org/~cowan/XML/tagsoup/
+    </echo>
+  </target>
+
+  <target name="-checkForClover" unless="clover.installed">
+    <echo>
+    The task you are trying to run requires Clover to be installed 
+    in the $ANT_HOME/lib directory. You can purchase Clover from
+    http://www.cenqua.com/clover/
+    </echo>
+  </target>
+
+  <!-- This task requires Ant 1.6 and TagSoup -->
+  <target name="betterdoc" depends="compile, -checkForTagSoup" if="tagsoup.installed"
+          description="Generate the API documentation">
+    <mkdir dir="${build.javadocs}"/>
+    <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
+             sourcepath="${build.src}"
+             destdir="${build.javadocs}"
+             author="true"
+             version="true"
+             overview="overview.html"
+             use="true"
+             splitindex="true"
+             noindex="false"
+             windowtitle="${Name} ${version}  API"
+             docencoding="UTF-8"
+             charset="UTF-8"
+             noqualifier="java.lang:java.io"
+             link="http://www.junit.org/junit/javadoc/3.8.1"
+             doctitle="${Name} ${version}"
+             bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
+			 &lt;br/&gt; &lt;a href='mailto:elharo@metalab.unc.edu?Subject=XOM'&gt;elharo@metalab.unc.edu&lt;/a&gt;">
+      <classpath refid="test.class.path"/>
+      
+    <fileset dir="${build.src}" defaultexcludes="yes">
+      <include name="nu/xom/tests/XOMTestCase.java" />
+    </fileset>
+    </javadoc>
+    
+    <javac srcdir="${build.src}"
+           destdir="${build.dest}"
+           debug="${debug}"
+           optimize="${optimize}"
+           deprecation="${deprecation}"
+           target="1.2"
+           source="1.3"
+           encoding="UTF-8"
+           includes="nu/xom/tools/*">
+      <classpath>
+        <pathelement path="${compile.class.path}"/>
+        <pathelement path="${tagsoup.jar}"/> 
+      </classpath>
+    </javac>
+    
+    <java classname="nu.xom.tools.XHTMLJavaDoc" fork="yes"> 
+      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xml-apis.jar:lib/xalan.jar"/> 
+      <classpath refid="doc.class.path" />
+      <arg value="build/apidocs"/> 
+    </java>
+  </target>
+
+  
+  <target name="dist" depends="zip, tar.gz, maven" />
+ 
+  <target name="zip" depends="jar, betterdoc, samples, minimal" 
+          description="Build zip file for distro">
+    <zip destfile="${dist.dir}/${name}-${version}.zip">
+      <zipfileset prefix="XOM" dir="." excludes="${excludes}"/>   
+      <zipfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
+        excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, **/.DS_Store"/>   
+      <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
+      <zipfileset fullpath="XOM/${name}-${version}-minimal.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
+      <zipfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>   
+    </zip>
+  </target>
+  
+  
+  <target name="tar" depends="jar, betterdoc, samples, minimal" 
+          description="Build tar file for distro">
+    <tar destfile="${dist.dir}/${name}-${version}.tar">
+      <tarfileset prefix="XOM" dir="." 
+        excludes="${excludes}"/>   
+      <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
+        excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, **/.DS_Store"/>   
+      <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
+      <tarfileset fullpath="XOM/${name}-${version}-minimal.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/>   
+      <tarfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>   
+    </tar>
+  </target>
+  
+  
+  <target name="tar.gz" depends="tar" description="Build tar.gz file for distro">
+     <gzip src="${dist.dir}/${name}-${version}.tar" zipfile="${dist.dir}/${name}-${version}.tar.gz"/>
+  </target>
+
+ 
+  <!-- This task requires the ANT optional.jar -->
+  <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
+
+    <junit printsummary="off" fork="yes">
+       <classpath refid="test.class.path" />
+       <formatter type="${test.outputFormat}" />
+       <batchtest fork="yes" todir="${testoutput.dir}">
+         <fileset dir="${build.src}">
+           <include name="**/*Test.java" />
+           <exclude name="**/pantry/*" />
+           <exclude name="**/MegaTest.java" />
+           <exclude name="**/benchmarks/*.java" />
+           <exclude name="**/EBCDICTest.java" />
+         </fileset>
+      </batchtest>
+    </junit>
+
+    <junitreport todir="${testoutput.dir}">
+      <fileset dir="${testoutput.dir}">
+        <include name="TEST-*.xml" />
+      </fileset>
+      <report todir="${testoutput.dir}" />
+    </junitreport>
+
+  </target>
+ 
+ 
+  <target name="testjar" depends="jar" description="Run JUnit tests using jar file">
+    <junit printsummary="on" fork="no">
+       <classpath>
+          <pathelement location="${xom.jar}"/>
+       </classpath>
+       <classpath refid="run.class.path" />
+       <formatter type="${test.outputFormat}" />
+       <batchtest fork="yes" todir="${testoutput.dir}">
+         <fileset dir="${build.src}">
+           <include name="**/*Test.java" />
+           <exclude name="**/pantry/*" />
+           <exclude name="**/MegaTest.java" />
+           <exclude name="**/benchmarks/*.java" />
+           <exclude name="**/EBCDICTest.java" />
+         </fileset>
+      </batchtest>
+    </junit>
+  </target>
+ 
+
+  <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
+    <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
+      <sysproperty key="org.xml.sax.driver" value="org.apache.xerces.parsers.SAXParser"/> 
+      <classpath refid="test.class.path" />
+      <arg value="nu.xom.tests.XOMTests"/> 
+    </java>
+  </target>
+  
+    
+  <target name="clean" depends="init" description="Remove build files">
+    <delete dir="${build.dir}"/>
+    <delete dir="${testoutput.dir}"/>
+    <delete dir=".clover"/>
+    <delete dir="clover"/>
+    <delete dir="clover_html"/>
+    <delete>
+      <fileset dir="." includes="junit*properties"/>
+    </delete>
+  </target>
+
+  
+  <!-- These tasks require Clover -->
+  <taskdef resource="clovertasks"/>
+  
+  <target name="with.clover" depends="init, -checkForClover">
+    <mkdir dir="${clover.dir}"/>
+    <clover-setup initString="${clover.dir}/xom_coverage.db">
+       <files>
+           <include name="nu/xom/**"/> <!-- work around Ant 1.6.3 bug  #34722 -->
+	       <exclude name="nu/xom/UnicodeUtil.java"/>
+	       <exclude name="nu/xom/Latin6Writer.java"/>
+	       <exclude name="nu/xom/Latin8Writer.java"/>
+	       <exclude name="nu/xom/Latin10Writer.java"/>
+	       <exclude name="nu/xom/tests/FastTests.java"/>
+	       <exclude name="nu/xom/tests/XOMTests.java"/>
+	       <exclude name="nu/xom/samples/**"/>
+	       <exclude name="nu/xom/pantry/**"/>
+	       <exclude name="nu/xom/benchmarks/**"/>
+           <exclude name="nu/xom/tools/**" />
+       </files>
+    </clover-setup>
+  </target>
+
+  
+  <property name="ant-home" value="/opt/ant"/>
+
+  <target name="clover.html" depends="with.clover">
+    <clover-report>
+       <current outfile="clover_html" title="Clover results for ${Name} ${version}">
+	     <format type="html"/>
+       </current>	 
+    </clover-report>
+  </target>
+  
+ 
+  <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
+  <target name="clovertest" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
+    <junit printsummary="on" fork="no">
+       <classpath refid="test.class.path" />
+        <classpath>
+          <pathelement path="${ant-home}/lib/clover.jar"/>
+        </classpath>
+        <formatter type="${test.outputFormat}" />
+       <batchtest fork="yes" todir="${testoutput.dir}">
+         <fileset dir="${build.src}">
+           <include name="**/*Test.java" />
+           <exclude name="**/pantry/*.java" />
+           <exclude name="**/MegaTest.java" />
+           <exclude name="**/benchmarks/*.java" />
+           <exclude name="**/tools/*.java" />
+           <exclude name="**/EBCDICTest.java" />
+	       <exclude name="nu/xom/tests/FastTests.java"/>
+	       <exclude name="nu/xom/tests/XOMTests.java"/>
+         </fileset>
+      </batchtest>
+    </junit>
+  </target> 
+
+  <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
+  <target name="fastclover" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
+    <junit printsummary="on" fork="no">
+       <classpath refid="test.class.path" />
+        <classpath>
+          <pathelement path="${ant-home}/lib/clover.jar"/>
+        </classpath>
+        <formatter type="${test.outputFormat}" />
+       <batchtest fork="yes" todir="${testoutput.dir}">
+         <fileset dir="${build.src}">
+           <include name="**/*Test.java" />
+           <exclude name="**/pantry/*.java" />
+           <exclude name="**/EncodingTest.java" />
+           <exclude name="**/XIncludeTest.java" />
+           <exclude name="**/MegaTest.java" />
+           <exclude name="**/benchmarks/*.java" />
+           <exclude name="**/tools/*.java" />
+           <exclude name="**/EBCDICTest.java" />
+	       <exclude name="nu/xom/tests/FastTests.java"/>
+	       <exclude name="nu/xom/tests/XOMTests.java"/>
+         </fileset>
+      </batchtest>
+    </junit>
+  </target> 
+
+<!-- Generate a Maven JAR for uploading to the maven
+    bug repository and hence placement onto ibiblio and mirrors. 
+    See http://maven.apache.org/repository-upload.html -->
+  <target name="maven" depends="jar" >
+    <property name="pom.template" location="project.xml" />
+    <property name="pom.file" location="${build.dir}/project.xml" />
+    <property name="package.jar"
+location="${build.dir}/${name}-${version}.jar"/>
+    <property name="license" location="LICENSE.txt" />
+    <property name="xom-maven.jar"
+location="${dist.dir}/xom-maven-${version}.jar" />
+    <copy file="${pom.template}" tofile="${pom.file}">
+      <filterset>
+       <filter token="VERSION" value="${version}"/>
+     </filterset>
+    </copy>
+    <jar destFile="${xom-maven.jar}">
+      <fileset file="${pom.file}" />
+      <fileset file="${license}" />
+      <fileset file="${package.jar}" />
+    </jar>
+  </target>
+
+  <target name="compile-jaxen" description="Compile Jaxen" depends="get-jaxen">
+    <javac srcdir="${build.dir}/jaxen/src/java/main"
+           destdir="${build.dir}/jaxen-classes"
+           debug="${debug}"
+           optimize="${optimize}"
+           deprecation="${deprecation}"
+           target="1.2"
+           source="1.3"
+           encoding="UTF-8"
+           excludes="org/jaxen/dom/** 
+                     org/jaxen/jdom/** 
+                     org/jaxen/dom4j/** 
+                     org/jaxen/pattern/** 
+                     org/jaxen/javabean/** 
+                     org/jaxen/xom/**
+                     org/jaxen/function/xslt/**
+                     org/jaxen/function/ext/**
+                     org/jaxen/saxpath/expr/DefaultPredicated.java
+                     org/jaxen/saxpath/helpers/DefaultXPathHandler.java
+                     org/jaxen/util/StackedIterator.java
+                     org/jaxen/util/XPath2XMLVisitor.java
+                     org/jaxen/util/LinkedIterator.java
+                     org/jaxen/util/SelfAxisIterator.java
+                     ">
+       <classpath refid="compile.class.path"/>
+    </javac>  
+  </target>
+  
+  <target name="get-jaxen" description="Download Jaxen source code" depends="prepare">
+      <cvs cvsRoot=":pserver:anonymous@cvs.jaxen.codehaus.org:/home/projects/jaxen/scm"
+       package="jaxen"
+       dest="${build.dir}"
+  />
+  </target>
+  
+</project>
