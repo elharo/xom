@@ -54,7 +54,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b5
+ * @version 1.1b6
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -1558,6 +1558,37 @@ public class CanonicalizerTest extends XOMTestCase {
         assertEquals(expected, s);
         
     }
+    
+    public static void testAustB() throws IOException {
+        
+        Element e1 = new Element("a:a", "urn:a");
+        Element e2 = new Element("b");
+        e1.appendChild(e2);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer c = new Canonicalizer(out,
+        Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
+        c.write(e1);
+        String s = out.toString("UTF8");
+        assertEquals("<a:a xmlns:a=\"urn:a\"><b></b></a:a>", s);
+        
+    }
+    
+    
+    public static void testAustB2() throws IOException {
+        
+        Element e1 = new Element("a:a", "urn:a");
+        Element e2 = new Element("b");
+        e1.appendChild(e2);
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer c = new Canonicalizer(out);
+        c.write(e1);
+        String s = out.toString("UTF8");
+        assertEquals("<a:a xmlns:a=\"urn:a\"><b></b></a:a>", s);
+        
+    }
+    
     
     public static void testAust() throws Exception {
         
