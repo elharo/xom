@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -44,7 +44,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1b6
  *
  */
 class XPointer {
@@ -54,7 +54,7 @@ class XPointer {
     private XPointer() {}
     
     
-    public static Nodes query(Document doc, String xptr) 
+    static Nodes query(Document doc, String xptr) 
       throws XPointerSyntaxException, XPointerResourceException {    
             
         Nodes result = new Nodes();
@@ -281,7 +281,7 @@ class XPointer {
     }
     
     
-    public static Element findByID(Element element, String id) {
+    static Element findByID(Element element, String id) {
          
         Node current = element;
         boolean end = false;
