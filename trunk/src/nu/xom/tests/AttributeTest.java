@@ -21,12 +21,18 @@
 
 package nu.xom.tests;
 
+import java.io.File;
+import java.io.IOException;
+
 import nu.xom.Attribute;
+import nu.xom.Builder;
+import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.IllegalDataException;
 import nu.xom.IllegalNameException;
 import nu.xom.MalformedURIException;
 import nu.xom.NamespaceConflictException;
+import nu.xom.ParsingException;
 
 /**
  * <p>
@@ -34,7 +40,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.1b6
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -692,6 +698,18 @@ public class AttributeTest extends XOMTestCase {
         assertEquals("a=\"" + data + "\"", a.toXML());
         
     }
-
     
+    // Test for a bug that was caught by other tests; but not 
+    // sufficiently isolated by them
+    public void testPrefixedAttributeBug() throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        File f = new File("data");
+        f = new File(f, "xtest.xml");   
+        Document input = builder.build(f);
+        String s = input.toXML();
+        Document output = builder.build(s, f.toURL().toExternalForm());
+        assertEquals(input, output);
+        
+    }    
 }
