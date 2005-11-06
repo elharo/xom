@@ -64,7 +64,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b6
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -1229,8 +1229,8 @@ public class XSLTransformTest extends XOMTestCase {
                                 continue;
                             }
                             
-                            System.err.println(id);
-                            System.err.println(ex.getMessage());
+                            System.out.println(id);
+                            System.out.println(ex.getMessage());
                             throw ex;
                         }
                     }
@@ -1659,7 +1659,6 @@ public class XSLTransformTest extends XOMTestCase {
                     // point to external DTD subsets that can't be loaded
                 }
                 catch (ParsingException ex) {
-                    
                     // several stylesheets use relative namespace URIs XOM
                     // does not support; skip the test
                     if (ex.getCause() instanceof MalformedURIException) {
@@ -1763,10 +1762,10 @@ public class XSLTransformTest extends XOMTestCase {
                             continue;
                         }
                         else {
-                            System.err.println(id + ": " + ex.getMessage());
-                            System.err.println("in " + style);
+                            System.out.println(id + ": " + ex.getMessage());
+                            System.out.println("in " + style);
                             if (cause != null) {
-                                System.err.println("cause: " + cause.getMessage());                                
+                                System.out.println("cause: " + cause.getMessage());                                
                             }
                             throw ex;
                         }
