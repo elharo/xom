@@ -1621,7 +1621,8 @@ public class XSLTransformTest extends XOMTestCase {
                                 // http://issues.apache.org/jira/browse/XALANJ-1947
                             }
                             else if (id.equals("XSLTFunctions__testOn-0.00")) {
-                                // XXX What's going on here? Why is this failing?
+                                // Possible Xalan bug. See
+                                // http://issues.apache.org/jira/browse/XALANJ-2226
                             }
                             else {
                                 Document expectedResult;
@@ -1764,10 +1765,6 @@ public class XSLTransformTest extends XOMTestCase {
                             // XOM doesn't support
                             continue;
                         }
-                        else if (id.equals("Sorting__89749")) {
-                            // XXX what's happening here?
-                            // seems to work with Xalan command line
-                        }
                         else {
                             System.out.println(id + ": " + ex.getMessage());
                             System.out.println("in " + style);
@@ -1817,6 +1814,31 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals(expectedResult, actualResult);
      
     } 
+    
+    
+    public void testSorting__89749()  
+      throws IOException, ParsingException, XSLException {
+        
+        Builder builder = new Builder();
+        NodeFactory stripper = new StrippingFactory();
+        File base = new File("data");
+        base = new File(base, "oasis-xslt-testsuite");
+        base = new File(base, "TESTS");
+
+        File input = new File(base, "MSFT_CONFORMANCE_TESTS/Sorting/sorttest.xml");
+        File style = new File(base, "MSFT_CONFORMANCE_TESTS/Sorting/2_5_13_repeat.xsl");
+        File output = new File(base, "MSFT_CONFORMANCE_TESTS/Sorting/out/89749.txt");;
+ 
+        Document styleDoc = builder.build(style);
+        Document inputDoc = builder.build(input);
+        XSLTransform xform = new XSLTransform(styleDoc);
+        Nodes result = xform.transform(inputDoc);
+        /*Document expectedResult = builder.build(output);
+        Document actualResult = XSLTransform.toDocument(result);
+        assertEquals(expectedResult, actualResult); */
+     
+    } 
+    
     
     public void testToDocumentWithEmptyNodes() {
      
