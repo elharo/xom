@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.1b6
  *
  */
 class XOMHandler 
@@ -94,6 +94,7 @@ class XOMHandler
             // but some parsers including Xerces seem to get this wrong, so we'll 
             document.setBaseURI(documentBaseURI);
         }
+        buffer = null;
         
     }
   
