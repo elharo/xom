@@ -2028,6 +2028,72 @@ and expect to see
     }
 
     
+    public void testDontPutElementInDocument() throws IOException {
+     
+
+        Element element = new Element("pre:foo", "http://www.example.org");
+        assertNull(element.getDocument());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(element);
+            assertNull(element.getDocument());
+        }
+        finally {
+            out.close();
+        }
+        
+    }
+
+    
+    public void testCanonicalizeElementInDocument() throws IOException {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        Element element = new Element("pre:foo", "http://www.example.org");
+        root.appendChild(element);
+        element.appendChild("  value \n value");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(element);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = 
+          "<pre:foo xmlns:pre=\"http://www.example.org\">  value \n value</pre:foo>"
+          .getBytes("UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+
+    
+    public void testExclusiveCanonicalizeElementInDocument() throws IOException {
+     
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        Element element = new Element("pre:foo", "http://www.example.org");
+        root.appendChild(element);
+        element.appendChild("  value \n value");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out, Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
+            serializer.write(element);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = 
+          "<pre:foo xmlns:pre=\"http://www.example.org\">  value \n value</pre:foo>"
+          .getBytes("UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+
+    
     public void testCanonicalizeDocumentTypeDeclaration() throws IOException {
      
         DocType doctype = new DocType("root", "http://www.example.org");
