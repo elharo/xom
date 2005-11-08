@@ -877,17 +877,20 @@ public class Canonicalizer {
      */
     public final void write(Node node) throws IOException {
         
-        // FIXME do this without copying the tree. This happened 
-        // to handle the Aust test cases. See this thread:
+        // See this thread:
         // http://lists.ibiblio.org/pipermail/xom-interest/2005-October/002656.html
         if (node instanceof Element) {
             Document doc = node.getDocument();
+            Element pseudoRoot = null;
             if (doc == null) {
+                pseudoRoot = new Element("pseudo");
+                doc = new Document(pseudoRoot);
                 ParentNode root = (ParentNode) node;
                 while (root.getParent() != null) root = node.getParent();
-                doc = new Document((Element) root);
+                pseudoRoot.appendChild(root);
             }
-            write(node.query(".//. | .//@* | .//namespace::*"));             
+            write(node.query(".//. | .//@* | .//namespace::*"));
+            if (pseudoRoot != null) pseudoRoot.removeChild(0);
         }
         else {
             serializer.nodes = null;
