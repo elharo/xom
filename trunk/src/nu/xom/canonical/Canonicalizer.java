@@ -886,7 +886,7 @@ public class Canonicalizer {
                 pseudoRoot = new Element("pseudo");
                 doc = new Document(pseudoRoot);
                 ParentNode root = (ParentNode) node;
-                while (root.getParent() != null) root = node.getParent();
+                while (root.getParent() != null) root = root.getParent();
                 pseudoRoot.appendChild(root);
             }
             write(node.query(".//. | .//@* | .//namespace::*"));
