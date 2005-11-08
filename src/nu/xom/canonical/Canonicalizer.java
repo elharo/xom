@@ -311,7 +311,6 @@ public class Canonicalizer {
         protected final void write(Element element) 
           throws IOException {
 
-            if (inScope == null) inScope = new NamespaceSupport();
             // treat empty elements differently to avoid an
             // instanceof test
             if (element.getChildCount() == 0) {
