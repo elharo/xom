@@ -27,7 +27,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.1b6
  *
  */
 
@@ -507,7 +507,7 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
     
     public boolean isText(Object object) {
         // ???? hack: need to use a separate special subclass of ArrayList I can identify.
-        // BUt may not be necessary since this is not a public API. I don't 
+        // But may not be necessary since this is not a public API. I don't 
         // think there's any way to get a different ArrayList into this method.
         if (object instanceof ArrayList) {
             Iterator iterator = ((List) object).iterator();
