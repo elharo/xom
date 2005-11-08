@@ -1621,7 +1621,7 @@ public class XSLTransformTest extends XOMTestCase {
                                 // http://issues.apache.org/jira/browse/XALANJ-1947
                             }
                             else if (id.equals("XSLTFunctions__testOn-0.00")) {
-                                // Possible Xalan bug. See
+                                // Possible test suite bug. See
                                 // http://issues.apache.org/jira/browse/XALANJ-2226
                             }
                             else {
