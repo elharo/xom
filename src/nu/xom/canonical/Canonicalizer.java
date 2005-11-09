@@ -888,8 +888,12 @@ public class Canonicalizer {
                 while (root.getParent() != null) root = root.getParent();
                 pseudoRoot.appendChild(root);
             }
-            write(node.query(".//. | .//@* | .//namespace::*"));
-            if (pseudoRoot != null) pseudoRoot.removeChild(0);
+            try {
+                write(node.query(".//. | .//@* | .//namespace::*"));
+            }
+            finally {
+                if (pseudoRoot != null) pseudoRoot.removeChild(0);
+            }
         }
         else {
             serializer.nodes = null;

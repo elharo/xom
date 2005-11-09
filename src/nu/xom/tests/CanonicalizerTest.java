@@ -30,6 +30,7 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -2070,6 +2071,31 @@ and expect to see
     }
 
     
+    public void testNoInfiniteLoopWhenWritingADocumentlessElement() throws IOException {
+     
+        Element root = new Element("root");
+        Element a = new Element("a");
+        root.appendChild(a);
+        Element b = new Element("b");
+        a.appendChild(b);
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            Canonicalizer serializer = new Canonicalizer(out);
+            serializer.write(b);
+        }
+        finally {
+            out.close();
+        }           
+        byte[] actual = out.toByteArray();
+        byte[] expected = 
+          "<b></b>"
+          .getBytes("UTF-8");
+        assertEquals(expected, actual);
+        
+    }
+
+    
     public void testExclusiveCanonicalizeElementInDocument() throws IOException {
      
         Element root = new Element("root");
@@ -2251,5 +2277,30 @@ and expect to see
         }
         
     }
+    
+    
+    // This class forces IOExceptions when writing
+    private static class UnwriteableOutputStream extends OutputStream {
+
+        public void write(int b) throws IOException {
+            throw new IOException();
+        }
+        
+    }
+    
+    
+    public void testDetachElementWhenExceptionIsThrown() {
+        
+        Element e = new Element("a");
+        Canonicalizer canonicalizer = new Canonicalizer(new UnwriteableOutputStream());
+        try {
+            canonicalizer.write(e);
+        }
+        catch (IOException ex) {
+        }
+        assertNull(e.getParent());
+        
+    }
+    
     
 }
