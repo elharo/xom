@@ -70,6 +70,8 @@ class XOMHandler
 
     
     Document getDocument() {
+        // See http://www.servlets.com/archive/servlet/ReadMsg?msgId=554071&listName=jdom-interest
+        // We may be leaking memory here in some circumstances????
         return document;
     }
 
