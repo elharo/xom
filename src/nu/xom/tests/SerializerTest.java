@@ -54,7 +54,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b7
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -779,6 +779,36 @@ public class SerializerTest extends XOMTestCase {
           int c = result.charAt(i);
           if (c == '\r') assertTrue(result.charAt(i+1) == '\n');    
         }     
+        
+    }
+    
+    
+    public void testSettingOutputStreamDoesNotSetLineSeparator() 
+      throws IOException { 
+        
+        root.appendChild("This\rstring");          
+        Serializer serializer = new Serializer(System.out, "UTF-8");
+        
+        serializer.setOutputStream(out);
+        
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertTrue(result.indexOf("This&#x0D;string") > 0);
+        
+    }
+    
+    
+    public void testSettingOutputStreamDoesNotUnnecessarilyEscapeLineBreaks() 
+      throws IOException { 
+        
+        root.appendChild("This\rstring");          
+        Serializer serializer = new Serializer(System.out, "UTF-8");
+        
+        serializer.setOutputStream(out);
+        serializer.setLineSeparator("\r\n");
+        serializer.write(doc);
+        String result = out.toString("UTF-8");
+        assertTrue(result.indexOf("This\r\nstring") > 0);
         
     }
     

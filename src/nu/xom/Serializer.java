@@ -47,7 +47,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.1b7
  * 
  */
 public class Serializer {
@@ -173,11 +173,12 @@ public class Serializer {
         String lineSeparator = getLineSeparator();
         boolean nfc = getUnicodeNormalizationFormC(); 
         String encoding = escaper.getEncoding();
+        boolean lineSeparatorSet = escaper.lineSeparatorSet;
         setOutputStream(out, encoding);   
         setIndent(indent);
         setMaxLength(maxLength);
         setUnicodeNormalizationFormC(nfc);
-        setLineSeparator(lineSeparator); 
+        if (lineSeparatorSet) setLineSeparator(lineSeparator); 
         
     }
 
@@ -786,7 +787,7 @@ public class Serializer {
         if (! "".equals(value.trim())) return false;
         
         // ???? This is a huge Hotspot. maybe 12% of serialization time
-        // when indenting Is there any way to eliminate this?
+        // when indenting. Is there any way to eliminate this?
         // We only actually need to test a couple of positions, 0 and
         // parent.getChildCount()-1
         // Instead of getting position we could get those two elements and compare
