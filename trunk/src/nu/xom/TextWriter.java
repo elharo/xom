@@ -31,7 +31,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b5
+ * @version 1.1b7
  *
  */
 abstract class TextWriter {
@@ -42,7 +42,7 @@ abstract class TextWriter {
     private String lineSeparator = "\r\n";
     // true if the user has requested a specific 
     // line separator
-    private boolean lineSeparatorSet = false;
+            boolean lineSeparatorSet = false;
     private boolean inDocType = false;
     private int     maxLength = 0;
     private int     indent = 0;
@@ -96,9 +96,6 @@ abstract class TextWriter {
                     out.write("&#x0D;");
                     column += 6;
                     justBroke=false;
-                }
-                else if (!adjustingWhiteSpace()  && lineSeparatorSet) {
-                    escapeBreakLine();
                 }
                 else {
                     breakLine();
@@ -603,7 +600,7 @@ abstract class TextWriter {
     }
     
     
-    final void escapeBreakLine() throws IOException {
+    private final void escapeBreakLine() throws IOException {
         
         if ("\n".equals(lineSeparator)) {
             out.write("&#x0A;");
