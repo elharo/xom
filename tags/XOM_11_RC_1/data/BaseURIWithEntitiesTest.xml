@@ -1,0 +1,4 @@
+<!DOCTYPE test [
+  <!ENTITY entity SYSTEM "entities/external.xml">
+]>
+<test>&entity;</test>
