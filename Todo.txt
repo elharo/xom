@@ -92,6 +92,8 @@ consider using a WeakHashMap to hold all mappings of nodes to base URIs
 Could Builder hold a cache of interned strings to use while building?
 Does NUX BinaryXMLCODEC do something like this?
 
+Add a binary distribution that's like the full distribution but no source.
+Shoudl the source distribution not include the binary?
 
 1.0.1:
 --------
@@ -195,12 +197,34 @@ cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
 ===============
+Done 1.1b7/RC1:
+===============
+
+Fixed bug that could unnecessarily escape carriage returns and linefeeds and numeric character references
+
+Fixed bug that could sometimes change line breaks
+
+Avoid leaking memory from Builkder when not reusing it.
+
+===============
+Done 1.1b6:
+===============
+
+Fixed bug that could append a text node to a document when parsing a malformed document, followed by a well-formed document. 
+
+Fixed infinite loop in Canonicalizer when canonicalizing an element with at least two ancestors but in no document
+
+Canonicalizer no longer puts detached elements in a document when canonicalizing them
+
+
+===============
 Done 1.1b5:
 ===============
 
 Small optimizations in Attribute class
 
-Fixed bug in Cacnonicalizer when canonicalizing a non-detached element
+Fixed bug in Canonicalizer when canonicalizing a non-detached element
+
 
 ===============
 Done 1.1b4:
@@ -237,6 +261,7 @@ Child nodes and attributes are now stored directly in arrays without an intermed
 This saves some memory.
 
 A few bug fixes, especially in XPath
+
 
 ===============
 Done 1.1b1:
