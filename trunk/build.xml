@@ -122,6 +122,13 @@ subject line. The XOM home page is http://www.xom.nu/
       <pathelement location="${tagsoup.jar}"/>
     </path>
 
+    <!-- set these properties for debugging -->
+    <property name="compile.classpath" refid="compile.class.path"/>
+    <property name="test.classpath" refid="test.class.path"/>
+    <property name="run.classpath" refid="run.class.path"/>
+    <property name="doc.classpath" refid="doc.class.path"/>
+
+
     <available property="tagsoup.installed" classname="org.ccil.cowan.tagsoup.Parser">
       <classpath>
         <pathelement location="${tagsoup.jar}" />
@@ -688,6 +695,7 @@ location="${dist.dir}/xom-maven-${version}.jar" />
            target="1.2"
            source="1.3"
            encoding="UTF-8"
+           includeAntRuntime="no"
            excludes="org/jaxen/dom/** 
                      org/jaxen/jdom/** 
                      org/jaxen/dom4j/** 
@@ -714,9 +722,9 @@ location="${dist.dir}/xom-maven-${version}.jar" />
   />
   </target>
 
-  <target name="version" description="Print the Xalan version in the classpath">
+  <target name="debug" depends="init" description="Print various Ant properties">
+    <echoproperties/>
     <java classname="org.apache.xalan.Version" fork="yes">
-      <sysproperty key="org.xml.sax.driver" value="org.apache.xerces.parsers.SAXParser"/> 
       <classpath refid="test.class.path" />
     </java>
   </target>
