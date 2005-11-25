@@ -713,5 +713,12 @@ location="${dist.dir}/xom-maven-${version}.jar" />
        dest="${build.dir}"
   />
   </target>
+
+  <target name="version" description="Print the Xalan version in the classpath">
+    <java classname="org.apache.xalan.Version" fork="yes">
+      <sysproperty key="org.xml.sax.driver" value="org.apache.xerces.parsers.SAXParser"/> 
+      <classpath refid="test.class.path" />
+    </java>
+  </target>
   
 </project>
