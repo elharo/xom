@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1b6
+ * @version 1.1b7
  *
  */
 class XOMHandler 
@@ -70,9 +70,21 @@ class XOMHandler
 
     
     Document getDocument() {
-        // See http://www.servlets.com/archive/servlet/ReadMsg?msgId=554071&listName=jdom-interest
-        // We may be leaking memory here in some circumstances????
         return document;
+    }
+
+
+    // See http://www.servlets.com/archive/servlet/ReadMsg?msgId=554071&listName=jdom-interest
+    // This method is called to avoid leaking document sized leaking memory
+    // when a Builder is not imediately reused
+    void freeMemory() {
+        document = null;
+        parent = null;
+        current = null;
+        parents = null;
+        locator = null;
+        doctype = null;
+        internalDTDSubset = null;
     }
 
     

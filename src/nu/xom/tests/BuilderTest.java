@@ -35,6 +35,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UTFDataFormatException;
 import java.io.Writer;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -75,7 +76,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.1b7
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -701,6 +702,23 @@ public class BuilderTest extends XOMTestCase {
  
         Document roundtrip = builder.build(document.toXML(), null);
         assertEquals(document, roundtrip);
+        
+    }
+    
+    
+    public void testMemoryFreedByBuilder()
+      throws IOException, ParsingException, InterruptedException {
+        
+        String data = "<root />";
+        
+        Document document = builder.build(data, null);
+        WeakReference ref = new WeakReference(document);
+        document = null;
+        System.gc();
+        System.gc();
+        System.gc();
+        Thread.sleep(1000);
+        assertNull(ref.get());
         
     }
     

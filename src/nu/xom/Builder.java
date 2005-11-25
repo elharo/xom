@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.1b7
  * 
  */
 public class Builder {
@@ -1121,8 +1121,12 @@ public class Builder {
     private Document build(InputSource in) 
       throws ParsingException, ValidityException, IOException {
 
+        XOMHandler handler = (XOMHandler) parser.getContentHandler();
+        Document result = null;
         try {
             parser.parse(in);
+            result = handler.getDocument();
+
         }
         catch (SAXParseException ex) {
             ParsingException pex = new ParsingException(
@@ -1173,10 +1177,10 @@ public class Builder {
                 throw ex;
             }
         }
+        finally {
+            handler.freeMemory();
+        }
         
-        XOMHandler handler = (XOMHandler) parser.getContentHandler();
-        ErrorHandler errorHandler = parser.getErrorHandler();
-        Document result = handler.getDocument();
         if (result == null) {
             ParsingException ex = new ParsingException(
               "Parser did not build document", 
@@ -1189,6 +1193,7 @@ public class Builder {
             result.setBaseURI(in.getSystemId());
         }
         
+        ErrorHandler errorHandler = parser.getErrorHandler();
         if (errorHandler instanceof ValidityRequired) {
             ValidityRequired validityHandler 
               = (ValidityRequired) errorHandler;
