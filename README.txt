@@ -2,10 +2,10 @@ XOM is a library. By itself, it doesn't do much of anything. It exists
 only to be used by other programs. It requires Java 1.2 or later. 
 
 To install it you'll need to place the XOM JAR archive somewhere in your
-CLASSPATH. This archive is the file named something like xom-1.0.jar. 
+CLASSPATH. This archive is the file named something like xom-1.1.jar. 
 (The version number may have changed if I've forgotten
 to update this document.) You can either put it in your jre/lib/ext
-directory, add xom-1.0.jar to your CLASSPATH environment variable, or
+directory, add xom-1.1.jar to your CLASSPATH environment variable, or
 use the -classpath option when invoking javac and java.
 
 To check your download you can run one of the sample programs found in
@@ -16,15 +16,12 @@ command line like this:
 
 $ java -classpath xom-samples.jar:xom-1.0.jar nu.xom.samples.PrettyPrinter filename.xml
 
-Java 1.3 and earlier do not have a built-in XML parser so in these environments you'll also need to install XOM's supporting libraries. These include xalan.jar, xercesImpl.jar, normalizer.jar, and xmlParserAPIs.jar, and are found in the lib directory. The versions shipped with XOM are quite a bit faster and less buggy than the ones bundled with the JDK, so you may well want to use them even in Java 1.4 and later. For example,
+Java 1.3 and earlier do not have a built-in XML parser so in these environments you'll also need to install XOM's supporting libraries. These include xalan.jar, xercesImpl.jar, and xmlParserAPIs.jar, and are found in the lib directory. The versions shipped with XOM are quite a bit faster and less buggy than the ones bundled with the JDK, so you may well want to use them even in Java 1.4 and later. For example,
 
-$ java -classpath xom-samples.jar:xom-1.0.jar:lib/xmlParserAPIs.jar:lib/xercesImpl.jar:lib/normalizer.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml
+$ java -classpath xom-samples.jar:xom-1.1.jar:lib/xmlParserAPIs.jar:lib/xercesImpl.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml
 
 You could leave out xalan.jar if you don't use any of the classes in
-nu.xom.xslt. normalizer.jar is needed in all versions of Java. However,
-it's only actually used by the setUnicodeNormalizationFormC() method in
-Serializer. If you don't call this method, you can omit this archive in
-space-limited environments. junit.jar is only used for testing, and is
+nu.xom.xslt. junit.jar is only used for testing, and is
 not needed for normal operation of XOM.
 
 If you want to build XOM from source, you'll need to have Apache Ant
@@ -36,7 +33,7 @@ requires Ant 1.6, and the test target only works in Ant 1.5. It does not
 work in Ant 1.6, though the testui target does.
 
 =======================================================================
-XOM is Copyright 2004 Elliotte Rusty Harold
+XOM is Copyright 2004, 2005 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
