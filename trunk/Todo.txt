@@ -1,12 +1,12 @@
 Todo:
 
-1.3:
+1.4:
 ---
 
 digital signatures?
 encryption?
 
-1.2:
+1.3:
 -----
 
 DTD API?
@@ -31,8 +31,17 @@ Should Builder/NodeFactory have a build(Document) method that allows one to pass
 
 Should/could the TrAX source and result, Jaxen adapter and so forth go public in the converters package?
 
-1.1:
--------
+1.2:
+-----
+I'm trying to convert a w3c.dom.Document into a xom one, but need to
+pass in my own node factory.
+
+there isnt any option to pass one down, nor can I easily tack one in
+by a bit of subclassing, as the DomConverter doesnt use a node factory
+and doesnt have a method createNodeFactory() that I could have
+overridden.
+
+Look at some more of Wolfgang's optimizations
 
 could some form of filterlist improve xpath performance?
 
@@ -95,16 +104,11 @@ Does NUX BinaryXMLCODEC do something like this?
 Add a binary distribution that's like the full distribution but no source.
 Shoudl the source distribution not include the binary?
 
-1.0.1:
---------
-
 Could DOMConversion be done in parallel in two separate threads?
 
-DHollenbeck suggests that implementing Array lists directly in ParentNode
-rather than using Collections API would save memory and time.
+DHollenbeck suggests using char[] arrays internally rather than Strings
+ would save memory and time.
 See http://lists.ibiblio.org/pipermail/xom-interest/2004-January/000898.html
-
-He also suggests using char[] arrays internally rather than Strings
 
 Can XInclude be rewritten to be non-recursive? Isn't it already?
 
@@ -158,6 +162,7 @@ cvs -d :pserver:elharo@cvs.dev.java.net:/cvs rtag XOM_11a3 xom
 
 
 Backport Fixes to make in 1.0.1
+-------
 
 TextWriter.java 1.1a2
 XOMTestCase.java
@@ -195,6 +200,12 @@ lock.c:222: failed assertion `strncmp (repository, current_parsed_root->director
 cvs [rtag aborted]: received abort signal
 cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
+
+===============
+Done 1.1
+===============
+
+Documentation updates
 
 ===============
 Done 1.1b7/RC1:
