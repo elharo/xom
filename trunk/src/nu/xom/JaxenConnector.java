@@ -34,7 +34,7 @@ import org.jaxen.XPathFunctionContext;
 /**
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.1.1b1
  *
  */
 class JaxenConnector extends BaseXPath {
@@ -61,12 +61,12 @@ class JaxenConnector extends BaseXPath {
         while (iterator.hasNext()) {
             Object next = iterator.next();
             if (next instanceof List) {
-                List l = (List) next;
+                List list = (List) next;
                 // replace the list with the first item in the list
-                iterator.set(l.get(0));
+                iterator.set(list.get(0));
                 // insert any subsequent Text objects into the list
-                if (l.size() > 1) {
-                    Iterator texts = l.listIterator(1);
+                if (list.size() > 1) {
+                    Iterator texts = list.listIterator(1);
                     while (texts.hasNext()) {
                         iterator.add(texts.next());
                     }
