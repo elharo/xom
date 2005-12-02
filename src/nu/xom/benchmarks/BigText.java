@@ -36,7 +36,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.1.1b1
  *
  */
 class BigText {
@@ -71,7 +71,8 @@ class BigText {
             int W2 = 0xDC00;
             W2 = W2 | (uprime & 0x7FF );
             W1 = W1 | (uprime & 0xFF800);
-            sb.append( ((char) W1) + "" + ((char) W2) );
+            sb.append( ((char) W1) );
+            sb.append( ((char) W2) );
         }
         
         root.appendChild(sb.toString());
