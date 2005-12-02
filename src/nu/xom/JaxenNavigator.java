@@ -27,7 +27,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b6
+ * @version 1.1.1b1
  *
  */
 
@@ -249,8 +249,8 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
         
         Node start;
         if (o instanceof ArrayList) {
-            List l = (ArrayList) o;
-            start = (Node) l.get(l.size()-1);
+            List list = (ArrayList) o;
+            start = (Node) list.get(list.size()-1);
         }
         else {
             start = (Node) o;
