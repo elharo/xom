@@ -64,7 +64,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b6
+ * @version 1.1.1b1
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -1803,7 +1803,7 @@ public class XSLTransformTest extends XOMTestCase {
 
         File input = new File(base, "MSFT_CONFORMANCE_TESTS/KEYS/input.xml");
         File style = new File(base, "MSFT_CONFORMANCE_TESTS/KEYS/input.xsl");
-        File output = new File(base, "MSFT_CONFORMANCE_TESTS/KEYS/out/PerfRepro3.txt");;
+        File output = new File(base, "MSFT_CONFORMANCE_TESTS/KEYS/out/PerfRepro3.txt");
  
         Document styleDoc = builder.build(style);
         Document inputDoc = builder.build(input);
