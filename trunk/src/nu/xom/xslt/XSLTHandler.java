@@ -50,7 +50,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.2b1
  *
  */
 class XSLTHandler 
@@ -343,6 +343,8 @@ class XSLTHandler
     // LexicalHandler events
     public void startCDATA() {}
     public void endCDATA() {}
+    // ???? For Bill Pugh, would this method be called if xsl:output
+    // specifies a Doctype? If it is, then we coudl add a DOCTYPE to the result tree.
     public void startDTD(String name, String publicID, String systemID) {}
     public void endDTD() {}
     public void startEntity(String name) {}
