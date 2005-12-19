@@ -76,7 +76,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b7
+ * @version 1.2b1
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -2895,6 +2895,19 @@ public class BuilderTest extends XOMTestCase {
         catch (ParsingException success) {
             assertEquals(cause, success.getCause());
         }
+        
+    }
+    
+
+    public void testCantTurnOffNamespaceHandling() 
+      throws SAXException, IOException, ParsingException {
+        
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+          "org.apache.xerces.parsers.SAXParser");
+        parser.setFeature("http://xml.org/sax/features/namespaces", false);
+        Builder builder = new Builder(parser);
+        Document doc = builder.build("<data xmlns='http://www.example.org'/>", null);
+        assertEquals("http://www.example.org", doc.getRootElement().getNamespaceURI());
         
     }
     
