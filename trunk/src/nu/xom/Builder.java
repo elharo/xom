@@ -262,6 +262,8 @@ public class Builder {
         String parserName = baseParser.getClass().getName();
         parser.setFeature(
           "http://xml.org/sax/features/namespace-prefixes", true);
+        parser.setFeature(
+          "http://xml.org/sax/features/namespaces", true);
         if (!validate) {
             if (parserName.equals(  // Crimson workaround
               "org.apache.crimson.parser.XMLReaderImpl")) {
