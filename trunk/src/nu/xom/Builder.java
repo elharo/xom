@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b7
+ * @version 1.2b1
  * 
  */
 public class Builder {
@@ -260,9 +260,9 @@ public class Builder {
         }
         
         String parserName = baseParser.getClass().getName();
+        parser.setFeature(
+          "http://xml.org/sax/features/namespace-prefixes", true);
         if (!validate) {
-            parser.setFeature(
-              "http://xml.org/sax/features/namespace-prefixes", true);
             if (parserName.equals(  // Crimson workaround
               "org.apache.crimson.parser.XMLReaderImpl")) {
                 parser.setErrorHandler(
@@ -280,9 +280,7 @@ public class Builder {
                 );
             }
         }
-        else {  
-            parser.setFeature(
-              "http://xml.org/sax/features/namespace-prefixes", true);
+        else {
             parser.setFeature(
               "http://xml.org/sax/features/validation", true);
             parser.setErrorHandler(new ValidityRequired());
