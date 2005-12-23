@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b6
+ * @version 1.2d1
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -64,6 +64,17 @@ public class AttributeTest extends XOMTestCase {
         assertEquals(0, a1.getChildCount());
     }
     
+    
+    public void testNullType() {
+        try {
+            a1.setType(null);
+            fail("Didn't throw NullPointerException");
+        }
+        catch (NullPointerException success) {
+            assertNotNull(success.getMessage());  
+        }
+    }
+
     
     public void testGetChild() {
         try {

@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b5
+ * @version 1.2d1
  * 
  */
 public class Attribute extends Node {
@@ -277,9 +277,13 @@ public class Attribute extends Node {
      * </p>
      * 
      * @param type the DTD type of this attribute
+     * @throws NullPointerException if <code>type</code> is null
      */
     public void setType(Type type) {
         
+        if (type == null) {
+            throw new NullPointerException("Null attribute type");
+        }
         if (isXMLID() && ! Type.ID.equals(type)) {
             throw new IllegalDataException(
               "Can't change type of xml:id attribute to " + type);
