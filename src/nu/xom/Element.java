@@ -49,7 +49,7 @@ import java.util.TreeSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.2d1
  *
  */
 public class Element extends ParentNode {
@@ -1768,7 +1768,7 @@ public class Element extends ParentNode {
      * 
      * @return a non-XML string representation of this element
      */
-    public final String toString() {
+    public String toString() {
         return 
           "[" + getClass().getName() + ": " + getQualifiedName() + "]";
     }

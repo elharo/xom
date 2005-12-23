@@ -50,7 +50,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.2d1
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -116,6 +116,26 @@ public class ElementTest extends XOMTestCase {
         assertEquals(2, elements.size());
         elements = element.getChildElements("", null);
         assertEquals(1, elements.size());  
+        
+    }
+    
+    private static class TestElement extends Element {
+
+        public TestElement(String name) {
+            super(name);
+        }
+        
+        public String toString() {
+            return "foo";
+        }
+        
+    }
+    
+    
+    public void testOverrideToString() {
+        
+        Element element = new TestElement("bar");
+        assertEquals("foo", element.toString());
         
     }
     
