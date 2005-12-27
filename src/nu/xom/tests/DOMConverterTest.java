@@ -37,6 +37,8 @@ import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Elements;
+import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
@@ -58,7 +60,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.2d1
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -654,5 +656,36 @@ public class DOMConverterTest extends XOMTestCase {
         
         assertEquals(xomDocIn, xomDocOut);
         
-    }    
+    }
+    
+    public void testUseFactory() {
+
+        Document xomDocOut = DOMConverter.convert(domDocument, new ANodeFactory());
+        assertTrue(xomDocOut instanceof ADocument);
+        Element root = xomDocOut.getRootElement();
+        assertTrue(root instanceof AElement);
+        Node doctype = xomDocOut.getChild(0);
+        assertTrue(doctype instanceof ADocType);
+        Node pi = xomDocOut.getChild(1);
+        assertTrue(pi instanceof AProcessingInstruction);
+        Node comment = xomDocOut.getChild(2);
+        assertTrue(comment instanceof AComment);
+        assertTrue(root.getChild(0) instanceof AText);
+        Elements children = root.getChildElements();
+        for (int i = 0; i < children.size(); i++) {
+            Element child = children.get(i);
+            assertTrue(child instanceof AElement);
+            for (int j = 0; j < child.getAttributeCount(); j++) {
+                assertTrue(child.getAttribute(j) instanceof AnAttribute);
+            }
+        }
+        
+    }
+    
+    public void testUseMinimizingFactory() {
+        Document xomDocOut = DOMConverter.convert(domDocument, new NodeFactoryTest.MinimizingFactory());
+        assertEquals(0, xomDocOut.getRootElement().getChildCount());
+        
+    }
+    
 }
