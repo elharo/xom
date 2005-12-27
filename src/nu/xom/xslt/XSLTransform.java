@@ -100,7 +100,7 @@ import nu.xom.XMLException;
  *      option to the <b>java</b> interpreter</li>
  *    <li>The class named in the  <code>lib/jaxp.properties</code> 
  *       properties file in the JRE directory, in a line like this one:
- * <pre>javax.xml.parsers.DocumentBuilderFactory=<i>classname</i></pre>
+ * <pre>javax.xml.transform.TransformerFactory=<i>classname</i></pre>
  *    </li>
  *    <li>The class named in the 
  * <code>META-INF/services/javax.xml.transform.TransformerFactory</code>
@@ -116,7 +116,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.2d1
  */
 public final class XSLTransform {
 
