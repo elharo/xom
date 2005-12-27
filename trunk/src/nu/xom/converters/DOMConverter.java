@@ -27,6 +27,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Node;
+import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.ParentNode;
 import nu.xom.ProcessingInstruction;
@@ -56,7 +57,7 @@ import org.w3c.dom.NodeList;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.2d1
  *
  */
 public class DOMConverter {
@@ -94,30 +95,7 @@ public class DOMConverter {
      *     XML document
      */
     public static Document convert(org.w3c.dom.Document domDocument) {
-        
-        org.w3c.dom.Element domRoot = domDocument.getDocumentElement();
-        Element xomRoot = convert(domRoot);
-        Document xomDocument = new Document(xomRoot);
-        
-        org.w3c.dom.Node current = domDocument.getFirstChild();
-        
-        // prolog
-        for (int position = 0; 
-             current.getNodeType() != org.w3c.dom.Node.ELEMENT_NODE; 
-             position++, current = current.getNextSibling()) {
-            xomDocument.insertChild(convert(current), position);
-        }
-        // root element       
-        current = current.getNextSibling();
-        
-        // epilog
-        while (current != null) {
-            xomDocument.appendChild(convert(current));
-            current = current.getNextSibling();   
-        }       
-                       
-        return xomDocument;
-        
+        return convert(domDocument, new NodeFactory());
     }
 
     
@@ -140,11 +118,16 @@ public class DOMConverter {
      *     XML fragment
      */
     public static Nodes convert(DocumentFragment fragment) {
+        return convert(fragment, new NodeFactory());
+    }
+
+    // need javadoc????
+    public static Nodes convert(DocumentFragment fragment, NodeFactory factory) {
         
         Nodes result = new Nodes();  
         NodeList children = fragment.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
-            result.append(convert(children.item(i)));
+            result.append(convert(children.item(i), factory));
         }
      
         return result;
@@ -152,22 +135,22 @@ public class DOMConverter {
     }
 
     
-    private static Node convert(org.w3c.dom.Node node) {
+    private static Node convert(org.w3c.dom.Node node, NodeFactory factory) {
         
         int type = node.getNodeType();
         switch (type) {
             case org.w3c.dom.Node.ELEMENT_NODE:
-                return convert((org.w3c.dom.Element) node);   
+                return convert((org.w3c.dom.Element) node, factory);   
             case org.w3c.dom.Node.COMMENT_NODE:
-                return convert((org.w3c.dom.Comment) node);   
+                return convert((org.w3c.dom.Comment) node, factory);   
             case org.w3c.dom.Node.DOCUMENT_TYPE_NODE:
-                return convert((org.w3c.dom.DocumentType) node);   
+                return convert((org.w3c.dom.DocumentType) node, factory);   
             case org.w3c.dom.Node.TEXT_NODE:
-                return convert((org.w3c.dom.Text) node);
+                return convert((org.w3c.dom.Text) node, factory);
             case org.w3c.dom.Node.CDATA_SECTION_NODE:
                 return convert((org.w3c.dom.Text) node);
             case org.w3c.dom.Node.PROCESSING_INSTRUCTION_NODE:
-                return convert((org.w3c.dom.ProcessingInstruction) node);
+                return convert((org.w3c.dom.ProcessingInstruction) node, factory);
             default:   
                 throw new XMLException(
                   "Unexpected DOM node type: " + type);
@@ -196,6 +179,11 @@ public class DOMConverter {
         return new Comment(comment.getNodeValue());
     }
 
+    private static Comment convert(org.w3c.dom.Comment comment, NodeFactory factory) {       
+        Nodes result = factory.makeComment(comment.getNodeValue());
+        return (Comment) result.get(0);
+    }
+
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.Text</code> object 
@@ -215,6 +203,12 @@ public class DOMConverter {
      */
     public static Text convert(org.w3c.dom.Text text) {       
         return new Text(text.getNodeValue());       
+    }
+
+    
+    private static Text convert(org.w3c.dom.Text text, NodeFactory factory) {       
+        Nodes result = factory.makeText(text.getNodeValue());
+        return (Text) result.get(0);
     }
 
     
@@ -250,6 +244,17 @@ public class DOMConverter {
     }
 
 
+    private static Attribute convert(Attr attribute, NodeFactory factory) {
+        
+        String name = attribute.getName();
+        String uri = attribute.getNamespaceURI();
+        if (uri == null) uri = "";
+        Nodes result = factory.makeAttribute(name, uri, attribute.getNodeValue(), Attribute.Type.UNDECLARED);
+        return (Attribute) result.get(0);
+        
+    }
+
+
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.ProcessingInstruction</code> 
@@ -270,8 +275,14 @@ public class DOMConverter {
      */
     public static ProcessingInstruction convert(
         org.w3c.dom.ProcessingInstruction pi) {
-        return new ProcessingInstruction(
-          pi.getTarget(), pi.getNodeValue());
+        return convert(pi, new NodeFactory());
+    }
+
+    
+    private static ProcessingInstruction convert(
+        org.w3c.dom.ProcessingInstruction pi, NodeFactory factory) {
+        Nodes result = factory.makeProcessingInstruction(pi.getTarget(), pi.getNodeValue());
+        return (ProcessingInstruction) result.get(0);
     }
 
     
@@ -304,6 +315,20 @@ public class DOMConverter {
     }
 
     
+    private static DocType convert(org.w3c.dom.DocumentType doctype, NodeFactory factory) {
+
+        Nodes nodes = factory.makeDocType(
+                doctype.getName(),
+                doctype.getPublicId(),
+                doctype.getSystemId());
+        DocType result = (DocType) nodes.get(0);
+        result.setInternalDTDSubset(doctype.getInternalSubset());
+        
+        return result;
+
+    }
+
+    
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.Element</code> 
@@ -320,9 +345,14 @@ public class DOMConverter {
      *     is not a well-formed XML element
      */
     public static Element convert(org.w3c.dom.Element element) {
+        return convert(element, new NodeFactory());
+    }
+ 
+    
+    private static Element convert(org.w3c.dom.Element element, NodeFactory factory) {
         
         org.w3c.dom.Node current = element;
-        Element result = makeElement(element);
+        Element result = makeElement(element, factory);
         ParentNode parent = result;
         boolean backtracking = false;
         while (true) {
@@ -346,12 +376,12 @@ public class DOMConverter {
             
             int type = current.getNodeType();
             if (type == org.w3c.dom.Node.ELEMENT_NODE) {
-                Element child = makeElement((org.w3c.dom.Element) current);
+                Element child = makeElement((org.w3c.dom.Element) current, factory);
                 parent.appendChild(child);
                 if (current.hasChildNodes()) parent = child;
             }
             else {
-                Node child = convert(current);
+                Node child = convert(current, factory);
                 parent.appendChild(child);
             }
             
@@ -359,14 +389,14 @@ public class DOMConverter {
         
         return result;  
         
-    }
- 
+    }    
     
-    private static Element makeElement(org.w3c.dom.Element element) {
+    
+    private static Element makeElement(org.w3c.dom.Element element, NodeFactory factory) {
         
         String namespaceURI = element.getNamespaceURI();
         String tagName = element.getTagName();
-        Element result = new Element(tagName, namespaceURI);
+        Element result = factory.startMakingElement(tagName, namespaceURI);
         
         // fill element's attributes and additional namespace declarations
         NamedNodeMap attributes = element.getAttributes();
@@ -385,7 +415,7 @@ public class DOMConverter {
                 }
             }
             else { 
-                result.addAttribute(new Attribute(name, uri, value));
+                result.addAttribute((Attribute) factory.makeAttribute(name, uri, value, Attribute.Type.UNDECLARED).get(0));
             }
         }
         return result;
@@ -635,6 +665,34 @@ public class DOMConverter {
         
         return result;
         
+    }
+
+
+    public static Document convert(org.w3c.dom.Document domDocument, NodeFactory factory) {
+        
+        org.w3c.dom.Element domRoot = domDocument.getDocumentElement();
+        Element xomRoot = convert(domRoot, factory);
+        Document xomDocument = factory.startMakingDocument();
+        xomDocument.setRootElement(xomRoot);
+        
+        org.w3c.dom.Node current = domDocument.getFirstChild();
+        
+        // prolog
+        for (int position = 0; 
+             current.getNodeType() != org.w3c.dom.Node.ELEMENT_NODE; 
+             position++, current = current.getNextSibling()) {
+            xomDocument.insertChild(convert(current, factory), position);
+        }
+        // root element       
+        current = current.getNextSibling();
+        
+        // epilog
+        while (current != null) {
+            xomDocument.appendChild(convert(current, factory));
+            current = current.getNextSibling();   
+        }       
+                       
+        return xomDocument;
     }
 
     
