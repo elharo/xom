@@ -14,7 +14,7 @@ class formats an XML document by inserting and removing white space
 around element boundaries. In Java 1.4 and later you can run it from the
 command line like this:
 
-$ java -classpath xom-samples.jar:xom-1.0.jar nu.xom.samples.PrettyPrinter filename.xml
+$ java -classpath xom-samples.jar:xom-1.1.jar nu.xom.samples.PrettyPrinter filename.xml
 
 Java 1.3 and earlier do not have a built-in XML parser so in these environments you'll also need to install XOM's supporting libraries. These include xalan.jar, xercesImpl.jar, and xml-apis.jar, and are found in the lib directory. The versions shipped with XOM are quite a bit faster and less buggy than the ones bundled with the JDK, so you may well want to use them even in Java 1.4 and later. For example,
 
