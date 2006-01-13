@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -127,15 +127,22 @@ public class DOMConverter {
         Nodes result = new Nodes();  
         NodeList children = fragment.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
-            result.append(convert(children.item(i), factory));
+            Nodes nodes = convert(children.item(i), factory);
+            appendNodes(result, nodes);
         }
      
         return result;
         
     }
+    
+    private static void appendNodes(Nodes parent, Nodes children) {
+        for (int i = 0; i < children.size(); i++) {
+            parent.append(children.get(i));
+        } 
+    }
 
     
-    private static Node convert(org.w3c.dom.Node node, NodeFactory factory) {
+    private static Nodes convert(org.w3c.dom.Node node, NodeFactory factory) {
         
         int type = node.getNodeType();
         switch (type) {
@@ -148,7 +155,7 @@ public class DOMConverter {
             case org.w3c.dom.Node.TEXT_NODE:
                 return convert((org.w3c.dom.Text) node, factory);
             case org.w3c.dom.Node.CDATA_SECTION_NODE:
-                return convert((org.w3c.dom.Text) node);
+                return convert((org.w3c.dom.Text) node, factory);
             case org.w3c.dom.Node.PROCESSING_INSTRUCTION_NODE:
                 return convert((org.w3c.dom.ProcessingInstruction) node, factory);
             default:   
@@ -179,9 +186,8 @@ public class DOMConverter {
         return new Comment(comment.getNodeValue());
     }
 
-    private static Comment convert(org.w3c.dom.Comment comment, NodeFactory factory) {       
-        Nodes result = factory.makeComment(comment.getNodeValue());
-        return (Comment) result.get(0);
+    private static Nodes convert(org.w3c.dom.Comment comment, NodeFactory factory) {       
+        return factory.makeComment(comment.getNodeValue());
     }
 
     /**
@@ -206,9 +212,8 @@ public class DOMConverter {
     }
 
     
-    private static Text convert(org.w3c.dom.Text text, NodeFactory factory) {       
-        Nodes result = factory.makeText(text.getNodeValue());
-        return (Text) result.get(0);
+    private static Nodes convert(org.w3c.dom.Text text, NodeFactory factory) {       
+        return factory.makeText(text.getNodeValue());
     }
 
     
@@ -275,14 +280,13 @@ public class DOMConverter {
      */
     public static ProcessingInstruction convert(
         org.w3c.dom.ProcessingInstruction pi) {
-        return convert(pi, new NodeFactory());
+        return new ProcessingInstruction(pi.getTarget(), pi.getNodeValue());
     }
 
     
-    private static ProcessingInstruction convert(
+    private static Nodes convert(
         org.w3c.dom.ProcessingInstruction pi, NodeFactory factory) {
-        Nodes result = factory.makeProcessingInstruction(pi.getTarget(), pi.getNodeValue());
-        return (ProcessingInstruction) result.get(0);
+        return factory.makeProcessingInstruction(pi.getTarget(), pi.getNodeValue());
     }
 
     
@@ -315,16 +319,21 @@ public class DOMConverter {
     }
 
     
-    private static DocType convert(org.w3c.dom.DocumentType doctype, NodeFactory factory) {
+    private static Nodes convert(org.w3c.dom.DocumentType doctype, NodeFactory factory) {
 
         Nodes nodes = factory.makeDocType(
                 doctype.getName(),
                 doctype.getPublicId(),
                 doctype.getSystemId());
-        DocType result = (DocType) nodes.get(0);
-        result.setInternalDTDSubset(doctype.getInternalSubset());
+        for (int i = 0; i < nodes.size(); i++) {
+            Node node = nodes.get(i);
+            if (node instanceof DocType) {
+                ((DocType) node).setInternalDTDSubset(doctype.getInternalSubset());
+                break;
+            }
+        }
         
-        return result;
+        return nodes;
 
     }
 
@@ -345,11 +354,11 @@ public class DOMConverter {
      *     is not a well-formed XML element
      */
     public static Element convert(org.w3c.dom.Element element) {
-        return convert(element, new NodeFactory());
+        return (Element) convert(element, new NodeFactory()).get(0);
     }
  
     
-    private static Element convert(org.w3c.dom.Element element, NodeFactory factory) {
+    private static Nodes convert(org.w3c.dom.Element element, NodeFactory factory) {
         
         org.w3c.dom.Node current = element;
         Element result = makeElement(element, factory);
@@ -381,13 +390,15 @@ public class DOMConverter {
                 if (current.hasChildNodes()) parent = child;
             }
             else {
-                Node child = convert(current, factory);
-                parent.appendChild(child);
+                Nodes children = convert(current, factory);
+                for (int i = 0; i < children.size(); i++) {
+                    parent.appendChild(children.get(i));
+                }
             }
             
         }
         
-        return result;  
+        return factory.finishMakingElement(result);
         
     }    
     
@@ -396,7 +407,15 @@ public class DOMConverter {
         
         String namespaceURI = element.getNamespaceURI();
         String tagName = element.getTagName();
-        Element result = factory.startMakingElement(tagName, namespaceURI);
+        
+        Element result;
+        if (element.getParentNode() == null 
+          || element.getParentNode().getNodeType() == org.w3c.dom.Node.DOCUMENT_NODE) {
+            result = factory.makeRootElement(tagName, namespaceURI);
+        }
+        else {
+            result = factory.startMakingElement(tagName, namespaceURI);
+        }
         
         // fill element's attributes and additional namespace declarations
         NamedNodeMap attributes = element.getAttributes();
@@ -414,8 +433,13 @@ public class DOMConverter {
                     result.addNamespaceDeclaration(prefix, value); 
                 }
             }
-            else { 
-                result.addAttribute((Attribute) factory.makeAttribute(name, uri, value, Attribute.Type.UNDECLARED).get(0));
+            else {
+                Nodes nodes = factory.makeAttribute(name, uri, value, Attribute.Type.UNDECLARED);
+                for (int j = 0; j < nodes.size(); j++) {
+                    Node child = nodes.get(j);
+                    if (child instanceof Attribute) result.addAttribute((Attribute) child);
+                    else result.appendChild(child);
+                }
             }
         }
         return result;
@@ -671,24 +695,49 @@ public class DOMConverter {
     public static Document convert(org.w3c.dom.Document domDocument, NodeFactory factory) {
         
         org.w3c.dom.Element domRoot = domDocument.getDocumentElement();
-        Element xomRoot = convert(domRoot, factory);
+        Element xomRoot = factory.makeRootElement(domRoot.getTagName(), domRoot.getNamespaceURI());
         Document xomDocument = factory.startMakingDocument();
         xomDocument.setRootElement(xomRoot);
+        Nodes result = convert(domRoot, factory);
+        boolean beforeRoot = true;
+        int p = 0;
+        for (int i = 0; i < result.size(); i++) {
+            Node n = result.get(i);
+            if (beforeRoot) {
+                if (n instanceof Element) {
+                    xomDocument.setRootElement((Element) n);
+                    beforeRoot = false;
+                }
+                else {
+                    xomDocument.insertChild(n, p++);
+                }
+            }
+            else {
+                xomDocument.appendChild(n);
+            }
+        }
         
         org.w3c.dom.Node current = domDocument.getFirstChild();
         
         // prolog
         for (int position = 0; 
              current.getNodeType() != org.w3c.dom.Node.ELEMENT_NODE; 
-             position++, current = current.getNextSibling()) {
-            xomDocument.insertChild(convert(current, factory), position);
+             current = current.getNextSibling()) {
+            Nodes nodes = convert(current, factory);
+            // FIXME fix for multiples
+            for (int i = 0; i < nodes.size(); i++) {
+                xomDocument.insertChild(nodes.get(i), position++);
+            }
         }
         // root element       
         current = current.getNextSibling();
         
         // epilog
         while (current != null) {
-            xomDocument.appendChild(convert(current, factory));
+            Nodes nodes = convert(current, factory);
+            for (int i = 0; i < nodes.size(); i++) {
+                xomDocument.appendChild(nodes.get(i));
+            }
             current = current.getNextSibling();   
         }       
                        

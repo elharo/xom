@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -683,7 +683,8 @@ public class DOMConverterTest extends XOMTestCase {
     }
     
     public void testUseMinimizingFactory() {
-        Document xomDocOut = DOMConverter.convert(domDocument, new NodeFactoryTest.MinimizingFactory());
+        Document xomDocOut = DOMConverter.convert(
+          domDocument, new NodeFactoryTest.MinimizingFactory());
         assertEquals(0, xomDocOut.getRootElement().getChildCount());
         
     }
