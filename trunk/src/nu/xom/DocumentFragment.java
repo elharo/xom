@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -30,7 +30,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.2d1
  *
  */
 class DocumentFragment extends ParentNode {
@@ -40,21 +40,23 @@ class DocumentFragment extends ParentNode {
     }
 
 
-    public void setBaseURI(String URI) {}
+    public void setBaseURI(String URI) {
+        throw new UnsupportedOperationException("XOM bug");
+    }
 
 
     public String getValue() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("XOM bug");
     }
 
     
     public Node copy() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("XOM bug");
     }
 
 
     public String toXML() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("XOM bug");
     }
 
     
