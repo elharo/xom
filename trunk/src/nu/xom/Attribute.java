@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -278,6 +278,8 @@ public class Attribute extends Node {
      * 
      * @param type the DTD type of this attribute
      * @throws NullPointerException if <code>type</code> is null
+     * @throws IllegalDataException if this is an <code>xml:id</code>
+     *     attribute and the <code>type</code> is not ID
      */
     public void setType(Type type) {
         
