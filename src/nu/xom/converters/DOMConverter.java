@@ -98,6 +98,82 @@ public class DOMConverter {
         return convert(domDocument, new NodeFactory());
     }
 
+
+    // ???? should this return a Nodes instead?
+    /**
+     * <p>
+     * Translates a DOM <code>org.w3c.dom.Document</code> object 
+     * into an equivalent <code>nu.xom.Document</code> object as 
+     * controlled by a factory.
+     * The original DOM document is not changed.
+     * Some DOM <code>Document</code> objects cannot 
+     * be serialized as namespace well-formed XML, and  
+     * thus cannot be converted to XOM.
+     * </p>
+     * 
+     * @param domDocument the DOM document to translate
+     * @param factory the factory that converts each DOM node into
+     *    zero or more XOM nodes
+     *
+     * @return a XOM document
+     * 
+     * @throws XMLException if the DOM document is not a well-formed 
+     *     XML document
+     */
+    public static Document convert(
+      org.w3c.dom.Document domDocument, NodeFactory factory) {
+        
+        org.w3c.dom.Element domRoot = domDocument.getDocumentElement();
+        Element xomRoot = factory.makeRootElement(
+          domRoot.getTagName(), domRoot.getNamespaceURI());
+        Document xomDocument = factory.startMakingDocument();
+        xomDocument.setRootElement(xomRoot);
+        Nodes result = convert(domRoot, factory);
+        boolean beforeRoot = true;
+        int p = 0;
+        for (int i = 0; i < result.size(); i++) {
+            Node n = result.get(i);
+            if (beforeRoot) {
+                if (n instanceof Element) {
+                    xomDocument.setRootElement((Element) n);
+                    beforeRoot = false;
+                }
+                else {
+                    xomDocument.insertChild(n, p++);
+                }
+            }
+            else {
+                xomDocument.appendChild(n);
+            }
+        }
+        
+        org.w3c.dom.Node current = domDocument.getFirstChild();
+        
+        // prolog
+        for (int position = 0; 
+             current.getNodeType() != org.w3c.dom.Node.ELEMENT_NODE; 
+             current = current.getNextSibling()) {
+            Nodes nodes = convert(current, factory);
+            // FIXME fix for multiples
+            for (int i = 0; i < nodes.size(); i++) {
+                xomDocument.insertChild(nodes.get(i), position++);
+            }
+        }
+        // root element       
+        current = current.getNextSibling();
+        
+        // epilog
+        while (current != null) {
+            Nodes nodes = convert(current, factory);
+            for (int i = 0; i < nodes.size(); i++) {
+                xomDocument.appendChild(nodes.get(i));
+            }
+            current = current.getNextSibling();   
+        }       
+                       
+        return xomDocument;
+    }
+    
     
     /**
      * <p>
@@ -121,7 +197,28 @@ public class DOMConverter {
         return convert(fragment, new NodeFactory());
     }
 
-    // need javadoc????
+    
+    /**
+     * <p>
+     * Translates a DOM <code>org.w3c.dom.DocumentFragment</code>  
+     * object into an equivalent <code>nu.xom.Nodes</code> object,
+     * converting each DOM node as specified by a factory.
+     * The original DOM document fragment is not changed.
+     * Some DOM <code>DocumentFragment</code> objects cannot 
+     * be serialized as namespace well-balanced XML, and  
+     * thus cannot be converted to XOM.
+     * </p>
+     * 
+     * @param fragment the DOM document fragment to translate
+     * @param factory the NodeFactory that converts each DOM node into
+     *     a XOM node
+     * 
+     * @return a <code>Nodes</code> containing the converted 
+     *     fragment members
+     * 
+     * @throws XMLException if the DOM object is not a well-balanced 
+     *     XML fragment
+     */
     public static Nodes convert(DocumentFragment fragment, NodeFactory factory) {
         
         Nodes result = new Nodes();  
@@ -134,6 +231,7 @@ public class DOMConverter {
         return result;
         
     }
+    
     
     private static void appendNodes(Nodes parent, Nodes children) {
         for (int i = 0; i < children.size(); i++) {
@@ -689,59 +787,6 @@ public class DOMConverter {
         
         return result;
         
-    }
-
-
-    public static Document convert(org.w3c.dom.Document domDocument, NodeFactory factory) {
-        
-        org.w3c.dom.Element domRoot = domDocument.getDocumentElement();
-        Element xomRoot = factory.makeRootElement(domRoot.getTagName(), domRoot.getNamespaceURI());
-        Document xomDocument = factory.startMakingDocument();
-        xomDocument.setRootElement(xomRoot);
-        Nodes result = convert(domRoot, factory);
-        boolean beforeRoot = true;
-        int p = 0;
-        for (int i = 0; i < result.size(); i++) {
-            Node n = result.get(i);
-            if (beforeRoot) {
-                if (n instanceof Element) {
-                    xomDocument.setRootElement((Element) n);
-                    beforeRoot = false;
-                }
-                else {
-                    xomDocument.insertChild(n, p++);
-                }
-            }
-            else {
-                xomDocument.appendChild(n);
-            }
-        }
-        
-        org.w3c.dom.Node current = domDocument.getFirstChild();
-        
-        // prolog
-        for (int position = 0; 
-             current.getNodeType() != org.w3c.dom.Node.ELEMENT_NODE; 
-             current = current.getNextSibling()) {
-            Nodes nodes = convert(current, factory);
-            // FIXME fix for multiples
-            for (int i = 0; i < nodes.size(); i++) {
-                xomDocument.insertChild(nodes.get(i), position++);
-            }
-        }
-        // root element       
-        current = current.getNextSibling();
-        
-        // epilog
-        while (current != null) {
-            Nodes nodes = convert(current, factory);
-            for (int i = 0; i < nodes.size(); i++) {
-                xomDocument.appendChild(nodes.get(i));
-            }
-            current = current.getNextSibling();   
-        }       
-                       
-        return xomDocument;
     }
 
     
