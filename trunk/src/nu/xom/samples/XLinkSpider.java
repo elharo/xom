@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -38,13 +38,12 @@ import nu.xom.Elements;
 /**
  * 
  * <p>
- * Demonstrates the reading of attributes in namespaces,
- * as well as maintaining a stack of hierarchy-based state
- * during document traversal.
+ * Demonstrates the reading of attributes in namespaces
+ * and the <code>getBaseURI()</code> method.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.2d1
  *
  */
 public class XLinkSpider {
@@ -55,8 +54,6 @@ public class XLinkSpider {
     
     public static final String XLINK_NS 
       = "http://www.w3.org/1999/xlink";
-    public static final String XML_NS 
-      = "http://www.w3.org/XML/1998/namespace";
     
     public void search(URL url) {
         
@@ -64,7 +61,7 @@ public class XLinkSpider {
             String systemID = url.toExternalForm();
             Document doc = parser.build(systemID);
             System.out.println(url);
-            search(doc.getRootElement(), url);
+            search(doc.getRootElement());
         }
         catch (Exception ex) {
             // just skip this document
@@ -78,14 +75,13 @@ public class XLinkSpider {
         
     }
 
-    private void search(Element element, URL base) {
+    private void search(Element element) {
 
-        Attribute href = element.getAttribute("href", XLINK_NS); 
-        Attribute xmlbase = element.getAttribute("base", XML_NS);
+        Attribute href = element.getAttribute("href", XLINK_NS);
+        
+        URL base = null;
         try {
-            if (xmlbase != null) {
-                base = new URL(base, xmlbase.getValue());
-            }
+            base = new URL(element.getBaseURI());
         }
         catch (MalformedURLException ex) {
             // Probably just no protocol handler for the 
@@ -115,7 +111,7 @@ public class XLinkSpider {
         }
         Elements children = element.getChildElements();
         for (int i = 0; i < children.size(); i++) {
-            search(children.get(i), base);
+            search(children.get(i));
         }
         
     }
@@ -132,6 +128,6 @@ public class XLinkSpider {
             }
         }
       
-    }   // end main()
+    }  // end main()
 
 }
