@@ -39,6 +39,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
+import nu.xom.NodeFactory;
 import nu.xom.Nodes;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
@@ -685,7 +686,22 @@ public class DOMConverterTest extends XOMTestCase {
     public void testUseMinimizingFactory() {
         Document xomDocOut = DOMConverter.convert(
           domDocument, new NodeFactoryTest.MinimizingFactory());
-        assertEquals(0, xomDocOut.getRootElement().getChildCount());
+        assertEquals(0, xomDocOut.getRootElement().getChildCount());    
+    }
+    
+    public void testUseStrippingFactory() {
+        Document xomDocOut = DOMConverter.convert(
+          domDocument, new StrippingFactory());
+        assertEquals("Hello dear\nvery importanthere's the link\n"
+     + "text in a namespace\ntext in a namespace", xomDocOut.getRootElement().getValue());    
+    }
+    
+    private static class StrippingFactory extends NodeFactory {
+        
+        public Element startMakingElement(String name, String namespaceURI) {
+            if (! "test".equals(name)) return null;
+            return super.startMakingElement(name, namespaceURI);
+        }
         
     }
     

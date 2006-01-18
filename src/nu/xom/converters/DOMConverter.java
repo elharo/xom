@@ -460,6 +460,20 @@ public class DOMConverter {
         
         org.w3c.dom.Node current = element;
         Element result = makeElement(element, factory);
+        
+        if (result == null) {
+            Nodes out = new Nodes();   
+            NodeList children = element.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                Nodes temp = convert(children.item(i), factory);
+                for (int j = 0; j < temp.size(); j++) {
+                    out.append(temp.get(j));
+                }
+            }
+            return out;
+        }
+        
+        
         ParentNode parent = result;
         boolean backtracking = false;
         while (true) {
@@ -477,15 +491,17 @@ public class DOMConverter {
             else {
                 current = current.getParentNode();
                 backtracking = true;
-                parent = parent.getParent();
+                if (parent.getParent() != null) parent = parent.getParent();
                 continue;
             }
             
             int type = current.getNodeType();
             if (type == org.w3c.dom.Node.ELEMENT_NODE) {
                 Element child = makeElement((org.w3c.dom.Element) current, factory);
-                parent.appendChild(child);
-                if (current.hasChildNodes()) parent = child;
+                if (child != null) {
+                    parent.appendChild(child);
+                    if (current.hasChildNodes()) parent = child;
+                }
             }
             else {
                 Nodes children = convert(current, factory);
@@ -514,6 +530,7 @@ public class DOMConverter {
         else {
             result = factory.startMakingElement(tagName, namespaceURI);
         }
+        if (result == null) return null;
         
         // fill element's attributes and additional namespace declarations
         NamedNodeMap attributes = element.getAttributes();
