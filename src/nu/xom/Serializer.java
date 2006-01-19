@@ -328,14 +328,7 @@ public class Serializer {
         }
         
         if (hasRealChildren) {
-            
             boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
-            if (escaper.isIndenting() 
-              && !wasPreservingWhiteSpace 
-              && !escaper.justBroke()) {
-                escaper.breakLine();
-            }
-        
             writeStartTag(element);
             // adjust for xml:space
             String newXMLSpaceValue = element.getAttributeValue(
@@ -349,7 +342,6 @@ public class Serializer {
                 }
             }
             
-            escaper.incrementIndent();
             // children
             for (int i = 0; i < childCount; i++) {
                 Node child = element.getChild(i);
@@ -372,12 +364,6 @@ public class Serializer {
                     writeChild(child);
                 }
             }
-            escaper.decrementIndent();
-            if (escaper.getIndent() > 0 && !escaper.isPreserveSpace()) {
-                if (hasNonTextChildren(element)) {
-                    escaper.breakLine();
-                }
-            }
             writeEndTag(element);
             
             // restore parent value
@@ -387,12 +373,6 @@ public class Serializer {
                         
         }
         else {
-            boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
-            if (escaper.isIndenting() 
-              && !wasPreservingWhiteSpace 
-              && !escaper.justBroke()) {
-                escaper.breakLine();
-            }
             writeEmptyElementTag(element);   
         }
         
@@ -425,9 +405,17 @@ public class Serializer {
      *     encounters an I/O error
      */
     protected void writeEndTag(Element element) throws IOException {
+        
+        escaper.decrementIndent();
+        if (escaper.getIndent() > 0 && !escaper.isPreserveSpace()) {
+            if (hasNonTextChildren(element)) {
+                escaper.breakLine();
+            }
+        }
         escaper.writeMarkup("</");
         escaper.writeMarkup(element.getQualifiedName());
         escaper.writeMarkup('>');
+        
     }
 
     
@@ -456,6 +444,7 @@ public class Serializer {
     protected void writeStartTag(Element element) throws IOException {
         writeTagBeginning(element);
         escaper.writeMarkup('>');
+        escaper.incrementIndent();
     }
 
     
@@ -499,10 +488,17 @@ public class Serializer {
     // and writeEmptyElementTag
     private void writeTagBeginning(Element element) 
       throws IOException {
+        
+        if (escaper.isIndenting() 
+          && !escaper.isPreserveSpace() 
+          && !escaper.justBroke()) {
+            escaper.breakLine();
+        }
         escaper.writeMarkup('<');
         escaper.writeMarkup(element.getQualifiedName());
         writeAttributes(element);           
         writeNamespaceDeclarations(element);
+        
     }
 
 
