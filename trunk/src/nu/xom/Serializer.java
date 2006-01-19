@@ -300,8 +300,8 @@ public class Serializer {
      * </ol>
      * 
      * <p>
-     *   It may break lines or add white space if the serializer has
-     *   been configured to indent or use a maximum line length.
+     * It may break lines or add white space if the serializer has
+     * been configured to indent or use a maximum line length.
      * </p>
      * 
      * @param element the <code>Element</code> to serialize
@@ -330,17 +330,6 @@ public class Serializer {
         if (hasRealChildren) {
             boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
             writeStartTag(element);
-            // adjust for xml:space
-            String newXMLSpaceValue = element.getAttributeValue(
-              "space", "http://www.w3.org/XML/1998/namespace");
-            if  (newXMLSpaceValue != null) {
-                if ("preserve".equals(newXMLSpaceValue)){
-                    escaper.setPreserveSpace(true);
-                }
-                else if ("default".equals(newXMLSpaceValue)){
-                    escaper.setPreserveSpace(false);
-                }
-            }
             
             // children
             for (int i = 0; i < childCount; i++) {
@@ -367,10 +356,7 @@ public class Serializer {
             writeEndTag(element);
             
             // restore parent value
-            if  (newXMLSpaceValue != null) {
-                escaper.setPreserveSpace(wasPreservingWhiteSpace);
-            }
-                        
+            escaper.setPreserveSpace(wasPreservingWhiteSpace);
         }
         else {
             writeEmptyElementTag(element);   
@@ -445,6 +431,16 @@ public class Serializer {
         writeTagBeginning(element);
         escaper.writeMarkup('>');
         escaper.incrementIndent();
+        String xmlSpaceValue = element.getAttributeValue(
+           "space", "http://www.w3.org/XML/1998/namespace");
+        if  (xmlSpaceValue != null) {
+            if ("preserve".equals(xmlSpaceValue)){
+                escaper.setPreserveSpace(true);
+            }
+            else if ("default".equals(xmlSpaceValue)){
+                escaper.setPreserveSpace(false);
+            }
+        }
     }
 
     
