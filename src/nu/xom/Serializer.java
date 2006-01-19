@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -47,7 +47,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b7
+ * @version 1.2d1
  * 
  */
 public class Serializer {
@@ -314,13 +314,6 @@ public class Serializer {
      */
     protected void write(Element element) throws IOException {
 
-        boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
-        if (escaper.isIndenting() 
-          && !wasPreservingWhiteSpace 
-          && !escaper.justBroke()) {
-            escaper.breakLine();
-        }
-        
         // workaround for case where only children are empty text nodes
         boolean hasRealChildren = false;
         int childCount = element.getChildCount();
@@ -335,6 +328,14 @@ public class Serializer {
         }
         
         if (hasRealChildren) {
+            
+            boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
+            if (escaper.isIndenting() 
+              && !wasPreservingWhiteSpace 
+              && !escaper.justBroke()) {
+                escaper.breakLine();
+            }
+        
             writeStartTag(element);
             // adjust for xml:space
             String newXMLSpaceValue = element.getAttributeValue(
@@ -1202,6 +1203,7 @@ public class Serializer {
     public String getEncoding() {
         return escaper.getEncoding();   
     }
+    
     
     /**
      * <p>
