@@ -387,6 +387,12 @@ public class Serializer {
                         
         }
         else {
+            boolean wasPreservingWhiteSpace = escaper.isPreserveSpace();
+            if (escaper.isIndenting() 
+              && !wasPreservingWhiteSpace 
+              && !escaper.justBroke()) {
+                escaper.breakLine();
+            }
             writeEmptyElementTag(element);   
         }
         
