@@ -54,7 +54,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b7
+ * @version 1.2d1
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -1526,6 +1526,49 @@ public class SerializerTest extends XOMTestCase {
         );
         
     }
+
+    
+    public void testIndentingFromSubclassThatAvoidsWriteElement() 
+      throws IOException {
+        
+        Element items = new Element("itemSet");
+        items.appendChild(new Element("item1"));
+        items.appendChild(new Element("item2"));
+        Document doc = new Document(items);
+        Serializer serializer = new AvoidWriteElement(out);
+        serializer.setIndent(4);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<itemSet>\r\n    <item1></item1>\r\n    <item2></item2>\r\n"
+          + "</itemSet>\r\n", 
+          result
+        );
+        
+    }
+    
+    
+    private static class AvoidWriteElement extends Serializer {
+
+        public AvoidWriteElement(OutputStream out) {
+            super(out);
+        }
+        
+        protected void write(Element element) throws IOException {
+
+            writeStartTag(element);
+            for (int i = 0; i < element.getChildCount(); i++) {
+                Node child = element.getChild(i);
+                writeChild(child);
+            }
+            writeEndTag(element);
+            
+        }
+        
+    }     
 
     
     public void testIndentAndBreakBeforeComment() throws IOException {
