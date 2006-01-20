@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1b7
+ * @version 1.2d1
  *
  */
 class XOMHandler 
@@ -336,7 +336,7 @@ class XOMHandler
  
     
     // accumulate all text that's in the buffer into a text node
-    protected void flushText() {
+    private void flushText() {
         
         if (buffer != null) {
             textString = buffer.toString();
