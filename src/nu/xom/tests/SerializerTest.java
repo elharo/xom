@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -1889,53 +1889,7 @@ public class SerializerTest extends XOMTestCase {
     }
 
 
-    public void testUnicodeNFCTestSuite() 
-      throws ParsingException, IOException {
-        
-        Builder builder = new Builder();
-        Document doc = builder.build("data/nfctests.xml");
-        Elements tests = doc.getRootElement().getChildElements("test");
-        int size = tests.size();
-        for (int i = 0; i < size; i++) {
-            // System.out.println(i);
-            Element test = tests.get(i);
-            test.detach();
-            Document testdoc = new Document(test);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Serializer serializer = new Serializer(out);
-            serializer.setUnicodeNormalizationFormC(true);
-            serializer.write(testdoc);
-            serializer.flush();
-            String result = new String(out.toByteArray(), "UTF-8");
-            Document resultDoc = builder.build(result, null);
-            Element root = resultDoc.getRootElement();
-            String c1 = root.getAttributeValue("c1");
-            String c2 = root.getAttributeValue("c2");
-            String c3 = root.getAttributeValue("c3");
-            String c4 = root.getAttributeValue("c4");
-            String c5 = root.getAttributeValue("c5");
-            /* String v1 = root.getAttributeValue("v1");
-            String v2 = root.getAttributeValue("v2");
-            String v3 = root.getAttributeValue("v3");
-            String v4 = root.getAttributeValue("v4");
-            String v5 = root.getAttributeValue("v5"); */
-            
-            assertEquals(root.getValue(), c1, c2);
-            assertEquals(c2, c3);
-            // I'm not sure the v's are correct past the BMP
-            //assertEquals(root.getValue(), c1, v1);
-            // assertEquals(c1, v2);
-            // assertEquals(c1, v3);
-            
-            assertEquals(c4, c5);
-            // assertEquals(c4, v4);
-            // assertEquals(c4, v5);
-            
-        }
-        
-    }
 
-    
     public void testNFCInAttribute() throws IOException {
         
         root.addAttribute(new Attribute("c\u0327", "c\u0327")); // c with combining cedilla
@@ -2507,6 +2461,20 @@ public class SerializerTest extends XOMTestCase {
     }    
 
     
+    public void testWriteParentedElementInANamespace() throws IOException {
+
+        ElementSerializer serializer = new ElementSerializer(out, "UTF-8");
+        Element a = new Element("a", "http://www.example.org");
+        Element b = new Element("b", "http://www.example.org");
+        b.appendChild(a);
+        serializer.write(a);
+        serializer.flush();
+        String result = out.toString("UTF-8");
+        assertEquals("<a/>", result);
+        
+    }    
+
+    
     public void testWriteEscaped() throws IOException {
 
         ExposingSerializer serializer = new ExposingSerializer(out, "UTF-8");
@@ -2686,4 +2654,50 @@ public class SerializerTest extends XOMTestCase {
     }
 
     
+    public void testUnicodeNFCTestSuite() 
+      throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        Document doc = builder.build("data/nfctests.xml");
+        Elements tests = doc.getRootElement().getChildElements("test");
+        int size = tests.size();
+        for (int i = 0; i < size; i++) {
+            // System.out.println(i);
+            Element test = tests.get(i);
+            test.detach();
+            Document testdoc = new Document(test);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            Serializer serializer = new Serializer(out);
+            serializer.setUnicodeNormalizationFormC(true);
+            serializer.write(testdoc);
+            serializer.flush();
+            String result = new String(out.toByteArray(), "UTF-8");
+            Document resultDoc = builder.build(result, null);
+            Element root = resultDoc.getRootElement();
+            String c1 = root.getAttributeValue("c1");
+            String c2 = root.getAttributeValue("c2");
+            String c3 = root.getAttributeValue("c3");
+            String c4 = root.getAttributeValue("c4");
+            String c5 = root.getAttributeValue("c5");
+            /* String v1 = root.getAttributeValue("v1");
+            String v2 = root.getAttributeValue("v2");
+            String v3 = root.getAttributeValue("v3");
+            String v4 = root.getAttributeValue("v4");
+            String v5 = root.getAttributeValue("v5"); */
+            
+            assertEquals(root.getValue(), c1, c2);
+            assertEquals(c2, c3);
+            // I'm not sure the v's are correct past the BMP
+            //assertEquals(root.getValue(), c1, v1);
+            // assertEquals(c1, v2);
+            // assertEquals(c1, v3);
+            
+            assertEquals(c4, c5);
+            // assertEquals(c4, v4);
+            // assertEquals(c4, v5);
+            
+        }
+        
+    }
+
 }
