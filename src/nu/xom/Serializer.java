@@ -29,6 +29,7 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import org.xml.sax.helpers.NamespaceSupport;
 
 /**
  * <p>
@@ -54,6 +55,8 @@ public class Serializer {
 
     private TextWriter escaper;
     private boolean preserveBaseURI = false;
+    // ???? reset when exception is thrown; or even add a reset method
+    private NamespaceSupport namespaces = new NamespaceSupport();
 
     
     /**
@@ -242,6 +245,8 @@ public class Serializer {
     public void write(Document doc) throws IOException {
         
         escaper.reset();
+        namespaces.reset();
+        namespaces.declarePrefix("", "");
         // The OutputStreamWriter automatically inserts
         // the byte order mark if necessary.
         writeXMLDeclaration();
@@ -281,9 +286,7 @@ public class Serializer {
     /**
      * <p>
      * Serializes an element onto the output stream using the current
-     * options. The result is guaranteed to be well-formed. If 
-     * <code>element</code> does not have a parent element, the output  
-     * will also be namespace well-formed.
+     * options. The result is guaranteed to be well-formed.
      * </p>
      * 
      * <p>
@@ -361,7 +364,7 @@ public class Serializer {
         else {
             writeEmptyElementTag(element);   
         }
-        
+                
     }
 
     
@@ -401,6 +404,7 @@ public class Serializer {
         escaper.writeMarkup("</");
         escaper.writeMarkup(element.getQualifiedName());
         escaper.writeMarkup('>');
+        namespaces.popContext();
         
     }
 
@@ -428,6 +432,7 @@ public class Serializer {
      *     that is not available in the current encoding
      */
     protected void writeStartTag(Element element) throws IOException {
+        
         writeTagBeginning(element);
         escaper.writeMarkup('>');
         escaper.incrementIndent();
@@ -441,6 +446,7 @@ public class Serializer {
                 escaper.setPreserveSpace(false);
             }
         }
+        
     }
 
     
@@ -477,6 +483,7 @@ public class Serializer {
       throws IOException {
         writeTagBeginning(element);
         escaper.writeMarkup("/>");
+        namespaces.popContext();
     }
 
     
@@ -484,6 +491,8 @@ public class Serializer {
     // and writeEmptyElementTag
     private void writeTagBeginning(Element element) 
       throws IOException {
+        
+        namespaces.pushContext();
         
         if (escaper.isIndenting() 
           && !escaper.isPreserveSpace() 
@@ -571,23 +580,21 @@ public class Serializer {
     protected void writeNamespaceDeclarations(Element element)
       throws IOException {
         
-        ParentNode parent = element.getParent();
-        
-        Map prefixes = element.getNamespacePrefixesInScope();
-        Iterator iterator = prefixes.entrySet().iterator();
+        Map elementNamespaces = element.getNamespaces();
+
+        Iterator iterator = elementNamespaces.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
             String additionalPrefix = (String) entry.getKey();
             String uri = (String) entry.getValue();
-            if (parent != null && parent.isElement()) {
-               Element parentElement = (Element) parent;   
-               if (uri.equals(
-                 parentElement.getNamespaceURI(additionalPrefix))) {
-                   continue;
-               }
+            String currentValue = namespaces.getURI(additionalPrefix);
+            // NamespaceSupport returns null for no namespace, not the 
+            // empty string like XOM does
+            if (currentValue == null && "".equals(uri)) {
+                continue;
             }
-            else if (uri.equals("")) {
-                continue; // no need to say xmlns=""   
+            else if (uri.equals(currentValue)) {
+                continue;
             }
             
             // XXX replace with a writeSpace method????
@@ -619,6 +626,7 @@ public class Serializer {
     protected void writeNamespaceDeclaration(String prefix, String uri)
       throws IOException {
         
+        namespaces.declarePrefix(prefix, uri);
         if ("".equals(prefix)) {
             escaper.writeMarkup("xmlns"); 
         }

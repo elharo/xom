@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -23,6 +23,7 @@ package nu.xom;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -34,7 +35,7 @@ import java.util.HashMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.2d1
  */
 class Namespaces {
     
@@ -78,6 +79,13 @@ class Namespaces {
     // array returned.
     ArrayList getPrefixes() {
         return this.prefixes;
+    }
+    
+    
+    // This violates encapsulation. Don't change the 
+    // map returned.
+    Map getMap() {
+        return this.namespaces;
     }
     
     

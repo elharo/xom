@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -1361,22 +1361,7 @@ public class Element extends ParentNode {
      */
     public final String getNamespacePrefix(int index) {
         
-        SortedSet allPrefixes;
-        if (namespaces != null) {
-            allPrefixes = new TreeSet(namespaces.getPrefixes());
-        } 
-        else allPrefixes = new TreeSet();
-        
-        if (!("xml".equals(prefix))) allPrefixes.add(prefix);
-        
-        // add attribute prefixes
-        for (int i = 0; i < getAttributeCount(); i++) {
-            Attribute att = getAttribute(i);
-            String attPrefix = att.getNamespacePrefix();
-            if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
-                allPrefixes.add(attPrefix);    
-            }
-        }
+        SortedSet allPrefixes = getNamespacePrefixes();
         
         Iterator iterator = allPrefixes.iterator();
         try {
@@ -1390,8 +1375,56 @@ public class Element extends ParentNode {
               "No " + index + "th namespace");   
         }
         
-    }    
+    }
 
+
+    private SortedSet getNamespacePrefixes() {
+
+        SortedSet allPrefixes;
+        if (namespaces != null) {
+            allPrefixes = new TreeSet(namespaces.getPrefixes());
+        } 
+        else allPrefixes = new TreeSet();
+        
+        if (!("xml".equals(prefix))) allPrefixes.add(prefix);
+        
+        // add attribute prefixes
+        // XXX pull out attribute count
+        for (int i = 0; i < getAttributeCount(); i++) {
+            Attribute att = getAttribute(i);
+            String attPrefix = att.getNamespacePrefix();
+            if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
+                allPrefixes.add(attPrefix);    
+            }
+        }
+        return allPrefixes;
+        
+    }
+    
+    
+    Map getNamespaces() {
+
+        Map allNamespaces;
+        if (namespaces != null) {
+            allNamespaces = new HashMap(namespaces.getMap());
+        } 
+        else allNamespaces = new HashMap();
+        
+        if (!("xml".equals(prefix))) allNamespaces.put(prefix, URI);
+        
+        // add attribute prefixes
+        // XXX pull out attribute count
+        for (int i = 0; i < getAttributeCount(); i++) {
+            Attribute att = getAttribute(i);
+            String attPrefix = att.getNamespacePrefix();
+            if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
+                allNamespaces.put(attPrefix, att.getNamespaceURI());    
+            }
+        }
+        return allNamespaces;
+        
+    }   
+    
     
     /**
      * 
