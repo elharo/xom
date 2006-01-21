@@ -720,6 +720,38 @@ public class SerializerTest extends XOMTestCase {
     }
 
     
+    public void testChildElementInNoNamespaceParentInDefaultNamespace() 
+      throws IOException, ParsingException { 
+
+        Element root = new Element("root", "http://www.example.org/");
+        Element child1 = new Element("child");
+        root.appendChild(child1);
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
+        serializer.flush();
+        String s = out.toString("UTF-8");
+        assertTrue(s.indexOf("xmlns=\"\"") > 0);
+        
+    }
+    
+    
+    public void testSimpleSerialize() 
+      throws IOException, ParsingException { 
+
+        Element root = new Element("root");
+        Document doc = new Document(root);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Serializer serializer = new Serializer(out);
+        serializer.write(doc);
+        serializer.flush();
+        String s = out.toString("UTF-8");
+        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<root/>\r\n", s);
+        
+    }
+    
+    
     public void testPrologAndEpilog() 
       throws IOException, ParsingException { 
         
@@ -2470,7 +2502,7 @@ public class SerializerTest extends XOMTestCase {
         serializer.write(a);
         serializer.flush();
         String result = out.toString("UTF-8");
-        assertEquals("<a/>", result);
+        assertEquals("<a xmlns=\"http://www.example.org\"/>", result);
         
     }    
 
