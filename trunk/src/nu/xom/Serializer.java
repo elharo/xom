@@ -55,7 +55,7 @@ public class Serializer {
 
     private TextWriter escaper;
     private boolean preserveBaseURI = false;
-    // ???? reset when exception is thrown; or even add a reset method
+    // ???? reset when exception is thrown?
     private NamespaceSupport namespaces = new NamespaceSupport();
 
     
@@ -585,9 +585,9 @@ public class Serializer {
         Iterator iterator = elementNamespaces.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
-            String additionalPrefix = (String) entry.getKey();
+            String prefix = (String) entry.getKey();
             String uri = (String) entry.getValue();
-            String currentValue = namespaces.getURI(additionalPrefix);
+            String currentValue = namespaces.getURI(prefix);
             // NamespaceSupport returns null for no namespace, not the 
             // empty string like XOM does
             if (currentValue == null && "".equals(uri)) {
@@ -599,7 +599,7 @@ public class Serializer {
             
             // XXX replace with a writeSpace method????
             escaper.writeMarkup(' ');
-            writeNamespaceDeclaration(additionalPrefix, uri);
+            writeNamespaceDeclaration(prefix, uri);
         }
         
     }
