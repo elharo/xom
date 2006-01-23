@@ -275,9 +275,9 @@ public class Serializer {
      */
     protected void writeXMLDeclaration() throws IOException {
         
-        escaper.writeMarkup("<?xml version=\"1.0\" encoding=\"");
+        escaper.writeUncheckedMarkup("<?xml version=\"1.0\" encoding=\"");
         escaper.writeMarkup(escaper.getEncoding());
-        escaper.writeMarkup("\"?>");
+        escaper.writeUncheckedMarkup("\"?>");
         escaper.breakLine();
         
     }
@@ -401,9 +401,10 @@ public class Serializer {
                 escaper.breakLine();
             }
         }
-        escaper.writeMarkup("</");
+        escaper.write('<');
+        escaper.write('/');
         escaper.writeMarkup(element.getQualifiedName());
-        escaper.writeMarkup('>');
+        escaper.write('>');
         namespaces.popContext();
         
     }
@@ -434,7 +435,7 @@ public class Serializer {
     protected void writeStartTag(Element element) throws IOException {
         
         writeTagBeginning(element);
-        escaper.writeMarkup('>');
+        escaper.write('>');
         escaper.incrementIndent();
         String xmlSpaceValue = element.getAttributeValue(
            "space", "http://www.w3.org/XML/1998/namespace");
@@ -482,7 +483,8 @@ public class Serializer {
     protected void writeEmptyElementTag(Element element) 
       throws IOException {
         writeTagBeginning(element);
-        escaper.writeMarkup("/>");
+        escaper.write('/');
+        escaper.write('>');
         namespaces.popContext();
     }
 
@@ -499,7 +501,7 @@ public class Serializer {
           && !escaper.justBroke()) {
             escaper.breakLine();
         }
-        escaper.writeMarkup('<');
+        escaper.write('<');
         escaper.writeMarkup(element.getQualifiedName());
         writeAttributes(element);           
         writeNamespaceDeclarations(element);
@@ -541,7 +543,7 @@ public class Serializer {
                   || !element.getBaseURI()
                        .equals(parent.getBaseURI())) {
                        
-                    escaper.writeMarkup(' ');
+                    escaper.write(' ');
                     Attribute baseAttribute = new Attribute(
                       "xml:base", 
                       "http://www.w3.org/XML/1998/namespace", 
@@ -554,7 +556,7 @@ public class Serializer {
         int attributeCount = element.getAttributeCount();
         for (int i = 0; i < attributeCount; i++) {
             Attribute attribute = element.getAttribute(i);
-            escaper.writeMarkup(' ');
+            escaper.write(' ');
             write(attribute);
         }  
     }
@@ -597,8 +599,7 @@ public class Serializer {
                 continue;
             }
             
-            // XXX replace with a writeSpace method????
-            escaper.writeMarkup(' ');
+            escaper.write(' ');
             writeNamespaceDeclaration(prefix, uri);
         }
         
@@ -628,15 +629,16 @@ public class Serializer {
         
         namespaces.declarePrefix(prefix, uri);
         if ("".equals(prefix)) {
-            escaper.writeMarkup("xmlns"); 
+            escaper.writeUncheckedMarkup("xmlns"); 
         }
         else {
-            escaper.writeMarkup("xmlns:"); 
+            escaper.writeUncheckedMarkup("xmlns:"); 
             escaper.writeMarkup(prefix); 
         } 
-        escaper.writeMarkup("=\""); 
+        escaper.write('='); 
+        escaper.write('"'); 
         escaper.writePCDATA(uri);   
-        escaper.writeMarkup('\"');
+        escaper.write('"');
         
     }
 
@@ -658,9 +660,10 @@ public class Serializer {
      */
     protected void write(Attribute attribute) throws IOException {
         escaper.writeMarkup(attribute.getQualifiedName());
-        escaper.writeMarkup("=\"");
+        escaper.write('=');
+        escaper.write('"');
         escaper.writeAttributeValue(attribute.getValue());
-        escaper.writeMarkup('\"');  
+        escaper.write('"');  
     }
     
     
@@ -711,13 +714,13 @@ public class Serializer {
       throws IOException {
         
         if (escaper.isIndenting()) escaper.breakLine();
-        escaper.writeMarkup("<?");
+        escaper.writeUncheckedMarkup("<?");
         escaper.writeMarkup(instruction.getTarget());
         String value = instruction.getValue();
         // for canonical XML, only output a space after the target
         // if there is a value
         if (!"".equals(value)) {
-            escaper.writeMarkup(' ');
+            escaper.write(' ');
             escaper.writeMarkup(value);
         }
         escaper.writeMarkup("?>"); 
@@ -763,9 +766,9 @@ public class Serializer {
                    }   
                 }
             }
-            escaper.writeMarkup("<![CDATA[");
+            escaper.writeUncheckedMarkup("<![CDATA[");
             escaper.writeMarkup(value);
-            escaper.writeMarkup("]]>");
+            escaper.writeUncheckedMarkup("]]>");
         }
         // is this boundary whitespace we can ignore?
         else if (isBoundaryWhitespace(text, value)) {
@@ -835,7 +838,7 @@ public class Serializer {
      */
     protected void write(DocType doctype) throws IOException {
         
-        escaper.writeMarkup("<!DOCTYPE ");
+        escaper.writeUncheckedMarkup("<!DOCTYPE ");
         escaper.writeMarkup(doctype.getRootElementName());
         if (doctype.getPublicID() != null) {
           escaper.writeMarkup(" PUBLIC \"" + doctype.getPublicID() 
@@ -848,15 +851,15 @@ public class Serializer {
         
         String internalDTDSubset = doctype.getInternalDTDSubset();
         if (!internalDTDSubset.equals("")) {
-            escaper.writeMarkup(" [");    
+            escaper.writeUncheckedMarkup(" [");    
             escaper.breakLine();
             escaper.setInDocType(true);
             escaper.writeMarkup(internalDTDSubset); 
             escaper.setInDocType(false);
-            escaper.writeMarkup("]"); 
+            escaper.write(']'); 
         }
 
-        escaper.writeMarkup(">");
+        escaper.write('>');
         
     }   
 

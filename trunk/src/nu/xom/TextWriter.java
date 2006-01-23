@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -31,7 +31,7 @@ import java.io.Writer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b7
+ * @version 1.2d1
  *
  */
 abstract class TextWriter {
@@ -500,9 +500,9 @@ abstract class TextWriter {
     // XXX We might be able to optimize this by using switch statements
     // in the methods that call this to separate out the special cases.
     // --\n, \t, space, etc.--and passing them to a different method
-    // thsu avoiding the if tests here. See if this method shows up as 
+    // thus avoiding the if tests here. See if this method shows up as 
     // a HotSpot in profiling.
-    private void write(char c) throws IOException {
+    void write(char c) throws IOException {
         
       // Carriage returns are completely handled by
       // writePCDATA and writeAttributeValue. They never
@@ -623,7 +623,7 @@ abstract class TextWriter {
     // normalization is not performed on c. Currently this is 
     // only called for ASCII characters like <, >, and the space, 
     // which should be OK
-    protected final void writeMarkup(char c) throws IOException {
+    final void writeMarkup(char c) throws IOException {
         
         if (needsEscaping(c)) {
             throw new UnavailableCharacterException(c, encoding);
@@ -631,6 +631,7 @@ abstract class TextWriter {
         write(c);   
 
     }
+
     
     // XXX should we have a special package protected 
     // method to be used only for ASCII characters we know don't need escaping or
@@ -666,6 +667,18 @@ abstract class TextWriter {
         int length = s.length();
         for (int i=0; i < length; i++) {
             writeMarkup(s.charAt(i));
+        }
+        
+    }
+    
+    
+    // This is for ASCII characters like < and = we know are
+    // available in all encodings and do not need to be normalized
+    void writeUncheckedMarkup(String s) throws IOException {
+        
+        int length = s.length();
+        for (int i=0; i < length; i++) {
+            write(s.charAt(i));
         }
         
     }
