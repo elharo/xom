@@ -23,7 +23,6 @@ package nu.xom;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <p>
@@ -79,13 +78,6 @@ class Namespaces {
     // array returned.
     ArrayList getPrefixes() {
         return this.prefixes;
-    }
-    
-    
-    // This violates encapsulation. Don't change the 
-    // map returned.
-    Map getMap() {
-        return this.namespaces;
     }
     
     

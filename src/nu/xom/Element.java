@@ -60,7 +60,7 @@ public class Element extends ParentNode {
 
     private Attribute[] attributes = null;
     private int         numAttributes = 0;
-    private Namespaces  namespaces = null;
+            Namespaces  namespaces = null;
 
     /**
      * <p>
@@ -1399,31 +1399,7 @@ public class Element extends ParentNode {
         }
         return allPrefixes;
         
-    }
-    
-    
-    Map getNamespaces() {
-
-        Map allNamespaces;
-        if (namespaces != null) {
-            allNamespaces = new HashMap(namespaces.getMap());
-        } 
-        else allNamespaces = new HashMap();
-        
-        if (!("xml".equals(prefix))) allNamespaces.put(prefix, URI);
-        
-        // add attribute prefixes
-        // XXX pull out attribute count
-        for (int i = 0; i < getAttributeCount(); i++) {
-            Attribute att = getAttribute(i);
-            String attPrefix = att.getNamespacePrefix();
-            if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
-                allNamespaces.put(attPrefix, att.getNamespaceURI());    
-            }
-        }
-        return allNamespaces;
-        
-    }   
+    } 
     
     
     /**
