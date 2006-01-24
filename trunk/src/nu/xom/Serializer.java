@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -582,26 +583,49 @@ public class Serializer {
     protected void writeNamespaceDeclarations(Element element)
       throws IOException {
         
-        Map elementNamespaces = element.getNamespaces();
-
-        Iterator iterator = elementNamespaces.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            String prefix = (String) entry.getKey();
-            String uri = (String) entry.getValue();
-            String currentValue = namespaces.getURI(prefix);
-            // NamespaceSupport returns null for no namespace, not the 
-            // empty string like XOM does
-            if (currentValue == null && "".equals(uri)) {
-                continue;
-            }
-            else if (uri.equals(currentValue)) {
-                continue;
-            }
-            
-            escaper.write(' ');
-            writeNamespaceDeclaration(prefix, uri);
+        String prefix = element.getNamespacePrefix();
+        if (!("xml".equals(prefix))) {
+            writeNamespaceDeclarationIfNecessary(prefix, element.getNamespaceURI());
         }
+        
+        // write attribute namespaces
+        int attCount = element.getAttributeCount();
+        for (int i = 0; i < attCount; i++) {
+            Attribute att = element.getAttribute(i);
+            String attPrefix = att.getNamespacePrefix();
+            if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
+                writeNamespaceDeclarationIfNecessary(attPrefix, att.getNamespaceURI());    
+            }
+        }
+        
+        // write additional namespaces
+        Namespaces namespaces = element.namespaces;
+        if (namespaces == null) return;
+        int namespaceCount = namespaces.size();
+        for (int i = 0; i < namespaceCount; i++) {
+            String additionalPrefix = namespaces.getPrefix(i);
+            String uri = namespaces.getURI(additionalPrefix);
+            writeNamespaceDeclarationIfNecessary(additionalPrefix, uri);
+        }
+        
+    }
+    
+    
+    private void writeNamespaceDeclarationIfNecessary(String prefix, String uri) 
+      throws IOException {
+        
+        String currentValue = namespaces.getURI(prefix);
+        // NamespaceSupport returns null for no namespace, not the 
+        // empty string like XOM does
+        if (currentValue == null && "".equals(uri)) {
+            return;
+        }
+        else if (uri.equals(currentValue)) {
+            return;
+        }
+        
+        escaper.write(' ');
+        writeNamespaceDeclaration(prefix, uri);      
         
     }
 
