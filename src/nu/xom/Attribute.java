@@ -1083,7 +1083,7 @@ public class Attribute extends Node {
             StringBuffer result 
               = new StringBuffer("[Attribute.Type: ");
             result.append(getName()); 
-            result.append("]");
+            result.append(']');
             return result.toString();    
             
         }         

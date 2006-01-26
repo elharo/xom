@@ -1600,7 +1600,7 @@ public class Element extends ParentNode {
     
     private static void writeStartTag(Element element, StringBuffer result) {
         
-        result.append("<");
+        result.append('<');
         result.append(element.getQualifiedName());
 
         ParentNode parentNode = element.getParent();
@@ -1652,7 +1652,7 @@ public class Element extends ParentNode {
         
         result.append("</");
         result.append(element.getQualifiedName());
-        result.append(">");
+        result.append('>');
         
     }
     
