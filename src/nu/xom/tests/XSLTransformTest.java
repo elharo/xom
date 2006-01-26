@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -64,7 +64,7 @@ import nu.xom.xslt.XSLTransform;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1.1b1
+ * @version 1.2d1
  *
  */
 public class XSLTransformTest extends XOMTestCase {
@@ -1827,7 +1827,7 @@ public class XSLTransformTest extends XOMTestCase {
 
         File input = new File(base, "MSFT_CONFORMANCE_TESTS/Sorting/sorttest.xml");
         File style = new File(base, "MSFT_CONFORMANCE_TESTS/Sorting/2_5_13_repeat.xsl");
-        File output = new File(base, "MSFT_CONFORMANCE_TESTS/Sorting/out/89749.txt");;
+        File output = new File(base, "MSFT_CONFORMANCE_TESTS/Sorting/out/89749.txt");
  
         Document styleDoc = builder.build(style);
         Document inputDoc = builder.build(input);
