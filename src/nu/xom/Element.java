@@ -1362,7 +1362,6 @@ public class Element extends ParentNode {
     public final String getNamespacePrefix(int index) {
         
         SortedSet allPrefixes = getNamespacePrefixes();
-        
         Iterator iterator = allPrefixes.iterator();
         try {
             for (int i = 0; i < index; i++) {
@@ -1389,8 +1388,8 @@ public class Element extends ParentNode {
         if (!("xml".equals(prefix))) allPrefixes.add(prefix);
         
         // add attribute prefixes
-        // XXX pull out attribute count
-        for (int i = 0; i < getAttributeCount(); i++) {
+        int count = getAttributeCount();
+        for (int i = 0; i < count; i++) {
             Attribute att = getAttribute(i);
             String attPrefix = att.getNamespacePrefix();
             if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
