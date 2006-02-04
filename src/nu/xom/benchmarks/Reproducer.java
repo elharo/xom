@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -43,7 +43,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.2d1
  *
  */
 class Reproducer {
@@ -65,12 +65,15 @@ class Reproducer {
             // the document and removes any dependence on the DTD.
             Document document = parser.build(args[0]);
 
-            long prewalk = System.currentTimeMillis();         
-            // Process it starting at the root
-            iterator.copy(document);
-            long postwalk = System.currentTimeMillis();
-            System.out.println((postwalk - prewalk) 
-              + "ms to build tree");
+            // warmup Hotspot
+            bench(iterator, document);
+            
+            long ms = 0;
+            int repeat = 100;
+            for (int i = 1; i < repeat; i++) {
+                ms += bench(iterator, document);
+            }
+            System.out.println(ms/(double) repeat + "ms to build tree on average");
 
         }
         catch (IOException ex) { 
@@ -80,6 +83,15 @@ class Reproducer {
           System.out.println(ex); 
         }
   
+    }
+
+    private static long bench(Reproducer iterator, Document document) throws IOException {
+
+        long prewalk = System.currentTimeMillis();         
+        // Process it starting at the root
+        iterator.copy(document);
+        long postwalk = System.currentTimeMillis();
+        return postwalk - prewalk;
     }
 
     private Document copy(Document doc)
