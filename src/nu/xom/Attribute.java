@@ -200,18 +200,17 @@ public class Attribute extends Node {
       String qualifiedName, String URI, String value, Type type, String localName) {
         
         Attribute result = new Attribute();
-    
-        // XXX two indedOfs
         String prefix = "";
-        if (qualifiedName.indexOf(':') >= 0) {
-            prefix = qualifiedName.substring(0, qualifiedName.indexOf(':'));
+        int prefixPosition = qualifiedName.indexOf(':');     
+        if (prefixPosition >= 0) {
+            prefix = qualifiedName.substring(0, prefixPosition);
             if ("xml:id".equals(qualifiedName)) {
                 type = Attribute.Type.ID;
                 value = normalize(value);
                 // ???? should I only do this if validating?
                 // Verifier.checkNCName(value);
             }
-        }        
+        }   
         
         result.localName = localName;
         result.prefix = prefix;
