@@ -149,13 +149,10 @@ public class Attribute extends Node {
 
         prefix = "";
         String localName = name;
-        // ???? Warning: do not cache the value returned by indexOf here
-        // and in build
-        // without profiling. My current tests show doing this slows 
-        // down the parse by about 7%. I can't explain it.
-        if (name.indexOf(':') > 0) {
-            prefix = name.substring(0, name.indexOf(':'));   
-            localName = name.substring(name.indexOf(':') + 1);
+        int prefixPosition = name.indexOf(':');
+        if (prefixPosition > 0) {
+            prefix = name.substring(0, prefixPosition);   
+            localName = name.substring(prefixPosition + 1);
         }
 
         try {
@@ -204,6 +201,7 @@ public class Attribute extends Node {
         
         Attribute result = new Attribute();
     
+        // XXX two indedOfs
         String prefix = "";
         if (qualifiedName.indexOf(':') >= 0) {
             prefix = qualifiedName.substring(0, qualifiedName.indexOf(':'));
@@ -490,7 +488,6 @@ public class Attribute extends Node {
         if (URI == null) URI = "";
         if (prefix == null) prefix = "";
         
-        // ???? use == to compare?
         if (prefix.equals("xmlns")) {
             throw new IllegalNameException(
               "Attribute objects are not used to represent "
