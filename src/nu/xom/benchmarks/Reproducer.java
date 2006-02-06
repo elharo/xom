@@ -60,9 +60,6 @@ class Reproducer {
         Reproducer iterator = new Reproducer();
         Builder parser = new Builder();
         try {
-            // Separate out the basic I/O by parsing document,
-            // and then serializing into a byte array. This caches
-            // the document and removes any dependence on the DTD.
             Document document = parser.build(args[0]);
 
             // warmup Hotspot
