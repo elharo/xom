@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -32,7 +32,7 @@ import nu.xom.NamespaceConflictException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d6
+ * @version 1.2d1
  *
  */
 public class NamespacesTest extends XOMTestCase {
@@ -299,6 +299,20 @@ public class NamespacesTest extends XOMTestCase {
         assertEquals(2, test.getNamespaceDeclarationCount());
         test.addNamespaceDeclaration("xsi", "http://www.w3.org/2001/xmlschema-instance");
         assertEquals(3, test.getNamespaceDeclarationCount());
+           
+    }
+
+
+    public void testGetNegativeNamespacePrefix() {
+        
+        Element test = new Element("pre:test", "http://www.example.com/");
+        try {
+            test.getNamespacePrefix(-1);
+            fail("Got negative prefix");
+        }
+        catch (IndexOutOfBoundsException success) {
+            assertNotNull(success.getMessage());
+        }
            
     }
 
