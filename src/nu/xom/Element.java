@@ -1361,6 +1361,16 @@ public class Element extends ParentNode {
      */
     public final String getNamespacePrefix(int index) {
         
+        // XXX can I reuse set? or not use a Set at all?
+        // suppose the zeroth prefix is the namespace prefix is the first prefix
+        // found for the element, attributes, and namespace declarations, in that order.
+        // The second prefix is the next and so on.
+        
+        if (index < 0) {
+            throw new IndexOutOfBoundsException(
+              "Negative prefix number");
+        }
+        
         SortedSet allPrefixes = getNamespacePrefixes();
         Iterator iterator = allPrefixes.iterator();
         try {
@@ -1371,6 +1381,7 @@ public class Element extends ParentNode {
         }
         catch (NoSuchElementException ex) {
             throw new IndexOutOfBoundsException(
+              // ???? fix to use 3rd, 2nd, 1st as appropriate
               "No " + index + "th namespace");   
         }
         
