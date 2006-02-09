@@ -214,6 +214,40 @@ public class SerializerTest extends XOMTestCase {
     }
 
     
+    public void testElementBeginsWithXML() 
+      throws ParsingException, IOException {
+    
+        String input = "<xml:tree/>";
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<xml:tree/>\r\n";  
+        
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(output, result);
+            
+    }
+
+    
+    public void testElementHasAdditionalNamespaces() 
+      throws ParsingException, IOException {
+    
+        String input = "<tree xmlns:foo='http://www.example.org/'/>";
+        String output = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<tree xmlns:foo=\"http://www.example.org/\"/>\r\n";  
+        
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(output, result);
+            
+    }
+
+    
     public void testOjeon() 
       throws ParsingException, IOException {
     
