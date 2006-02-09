@@ -683,6 +683,21 @@ public class DOMConverterTest extends XOMTestCase {
         
     }
     
+    public void testUseFactoryWithPrologAndEpilog() {
+
+        org.w3c.dom.Comment before = domDocument.createComment("before");
+        org.w3c.dom.Comment after = domDocument.createComment("after");
+        domDocument.appendChild(after);
+        domDocument.insertBefore(before, domDocument.getFirstChild());
+        Document xomDocOut = DOMConverter.convert(domDocument, new ANodeFactory());
+        assertTrue(xomDocOut instanceof ADocument);
+        Comment bc = (Comment) xomDocOut.getChild(0);
+        Comment ac = (Comment) xomDocOut.getChild(xomDocOut.getChildCount()-1);
+        assertTrue(bc instanceof AComment);
+        assertTrue(ac instanceof AComment);
+        
+    }
+    
     public void testUseMinimizingFactory() {
         Document xomDocOut = DOMConverter.convert(
           domDocument, new NodeFactoryTest.MinimizingFactory());
