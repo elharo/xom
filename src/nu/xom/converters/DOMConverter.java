@@ -346,18 +346,6 @@ public class DOMConverter {
         
     }
 
-
-    private static Attribute convert(Attr attribute, NodeFactory factory) {
-        
-        String name = attribute.getName();
-        String uri = attribute.getNamespaceURI();
-        if (uri == null) uri = "";
-        Nodes result = factory.makeAttribute(name, uri, attribute.getNodeValue(), Attribute.Type.UNDECLARED);
-        return (Attribute) result.get(0);
-        
-    }
-
-
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.ProcessingInstruction</code> 
