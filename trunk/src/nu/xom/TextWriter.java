@@ -926,5 +926,10 @@ abstract class TextWriter {
         return this.normalize;   
     }
 
+
+    void writeName(String name) throws IOException {
+        writeMarkup(name);
+    }
+
     
 }
