@@ -274,7 +274,7 @@ public class Serializer {
     protected void writeXMLDeclaration() throws IOException {
         
         escaper.writeUncheckedMarkup("<?xml version=\"1.0\" encoding=\"");
-        escaper.writeMarkup(escaper.getEncoding());
+        escaper.writeUncheckedMarkup(escaper.getEncoding());
         escaper.writeUncheckedMarkup("\"?>");
         escaper.breakLine();
         
@@ -401,7 +401,7 @@ public class Serializer {
         }
         escaper.write('<');
         escaper.write('/');
-        escaper.writeMarkup(element.getQualifiedName());
+        escaper.writeName(element.getQualifiedName());
         escaper.write('>');
         namespaces.popContext();
         
@@ -500,7 +500,7 @@ public class Serializer {
             escaper.breakLine();
         }
         escaper.write('<');
-        escaper.writeMarkup(element.getQualifiedName());
+        escaper.writeName(element.getQualifiedName());
         writeAttributes(element);           
         writeNamespaceDeclarations(element);
         
@@ -654,7 +654,7 @@ public class Serializer {
         }
         else {
             escaper.writeUncheckedMarkup("xmlns:"); 
-            escaper.writeMarkup(prefix); 
+            escaper.writeName(prefix); 
         } 
         escaper.write('='); 
         escaper.write('"'); 
@@ -680,7 +680,7 @@ public class Serializer {
      * 
      */
     protected void write(Attribute attribute) throws IOException {
-        escaper.writeMarkup(attribute.getQualifiedName());
+        escaper.writeName(attribute.getQualifiedName());
         escaper.write('=');
         escaper.write('"');
         escaper.writeAttributeValue(attribute.getValue());
@@ -706,9 +706,9 @@ public class Serializer {
      */
     protected void write(Comment comment) throws IOException {
         if (escaper.isIndenting()) escaper.breakLine();
-        escaper.writeMarkup("<!--");
+        escaper.writeUncheckedMarkup("<!--");
         escaper.writeMarkup(comment.getValue());
-        escaper.writeMarkup("-->");
+        escaper.writeUncheckedMarkup("-->");
     }
     
     
@@ -736,7 +736,7 @@ public class Serializer {
         
         if (escaper.isIndenting()) escaper.breakLine();
         escaper.writeUncheckedMarkup("<?");
-        escaper.writeMarkup(instruction.getTarget());
+        escaper.writeName(instruction.getTarget());
         String value = instruction.getValue();
         // for canonical XML, only output a space after the target
         // if there is a value
@@ -744,7 +744,7 @@ public class Serializer {
             escaper.write(' ');
             escaper.writeMarkup(value);
         }
-        escaper.writeMarkup("?>"); 
+        escaper.writeUncheckedMarkup("?>"); 
         
     }
     
@@ -860,7 +860,7 @@ public class Serializer {
     protected void write(DocType doctype) throws IOException {
         
         escaper.writeUncheckedMarkup("<!DOCTYPE ");
-        escaper.writeMarkup(doctype.getRootElementName());
+        escaper.writeName(doctype.getRootElementName());
         if (doctype.getPublicID() != null) {
           escaper.writeMarkup(" PUBLIC \"" + doctype.getPublicID() 
            + "\" \"" + doctype.getSystemID() + "\"");

@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003, 2005 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2005, 2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -26,7 +26,7 @@ import java.io.Writer;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.2d1
  *
  */
 final class UnicodeWriter extends TextWriter {
@@ -69,6 +69,23 @@ final class UnicodeWriter extends TextWriter {
     }
 
     
+    // Names don't contain white space
+    void writeName(String name) throws IOException {
+
+         if (normalize) {
+             name = normalize(name);
+         }
+         
+         int unicodeStringLength = getUnicodeLengthForName(name);
+         out.write(name);
+         column += unicodeStringLength;
+         lastCharacterWasSpace = false;
+         skipFollowingLinefeed = false;
+         justBroke=false;
+         
+    }
+
+    
     /*
      * This is tricky. This method is doing two things:
      * 
@@ -83,6 +100,7 @@ final class UnicodeWriter extends TextWriter {
         int unicodeLength = 0;
         int javaLength = s.length();
         for (int i = 0; i < javaLength; i++) {
+            // Benchmarking shows using toCharArray to be a little slower than using charAt
             char c = s.charAt(i);
             if (c <= ' ') { 
                 // Really we're testing only for \t, \n, and space here.
@@ -104,6 +122,19 @@ final class UnicodeWriter extends TextWriter {
     }
 
 
+    private static int getUnicodeLengthForName(String name) {
+        
+        int unicodeLength = 0;
+        int javaLength = name.length();
+        for (int i = 0; i < javaLength; i++) {
+            char c = name.charAt(i);
+            if (c < 0xD800 || c > 0xDBFF) unicodeLength++;
+        }
+        return unicodeLength;
+        
+    }    
+    
+    
     void writeAttributeValue(String s) throws IOException {
 
          if (normalize) {
