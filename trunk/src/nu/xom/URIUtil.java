@@ -152,7 +152,7 @@ class URIUtil {
     
     private static String removeDotSegments(String path) {
     
-        String output = "";
+        StringBuffer output = new StringBuffer();
 
         while (path.length() > 0) {
             if (path.startsWith("/./")) {
@@ -163,15 +163,13 @@ class URIUtil {
             }
             else if (path.startsWith("/../")) {
                 path = '/' + path.substring(4);
-                int lastSlash = output.lastIndexOf('/');
-                if (lastSlash != -1) output = output.substring(0, lastSlash);
+                int lastSlash = output.toString().lastIndexOf('/');
+                if (lastSlash != -1) output.setLength(lastSlash);
             }
             else if (path.equals("/..")) {
                 path = "/";
-                int lastSlash = output.lastIndexOf('/');
-                if (lastSlash != -1) {
-                    output = output.substring(0, lastSlash);
-                }
+                int lastSlash = output.toString().lastIndexOf('/');
+                if (lastSlash != -1) output.setLength(lastSlash);
             }
             // These next three cases are unreachable in the context of XOM.
             // They may be needed in a more general public URIUtil.
@@ -188,17 +186,17 @@ class URIUtil {
                 int nextSlash = path.indexOf('/');
                 if (nextSlash == 0) nextSlash = path.indexOf('/', 1);
                 if (nextSlash == -1) {
-                    output += path;
+                    output.append(path);
                     path = "";
                 }
                 else {
-                    output += path.substring(0, nextSlash);
+                    output.append(path.substring(0, nextSlash));
                     path = path.substring(nextSlash);
                 }
             }
         }
         
-        return output;
+        return output.toString();
         
     }
 
