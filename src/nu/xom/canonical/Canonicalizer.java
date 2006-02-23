@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -60,7 +60,7 @@ import nu.xom.XPathContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.2d1
  *
  */
 public class Canonicalizer {
@@ -883,7 +883,7 @@ public class Canonicalizer {
             Element pseudoRoot = null;
             if (doc == null) {
                 pseudoRoot = new Element("pseudo");
-                doc = new Document(pseudoRoot);
+                new Document(pseudoRoot);
                 ParentNode root = (ParentNode) node;
                 while (root.getParent() != null) root = root.getParent();
                 pseudoRoot.appendChild(root);
