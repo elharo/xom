@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003, 2005 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2005, 2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -36,7 +36,7 @@ import java.io.InputStream;
  *
  *
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.2d1
  */
 class EncodingHeuristics {
 
@@ -51,7 +51,7 @@ class EncodingHeuristics {
     * characters.
     * </p>
     *
-    * @param in   <code>InputStream</code> to read from. 
+    * @param  in      <code>InputStream</code> to read from. 
     * @return String  The name of the encoding.
     * @throws IOException if the stream cannot be reset back 
     *      to where it was when the method was invoked.
@@ -148,7 +148,8 @@ class EncodingHeuristics {
               // and all byte sequences are legal Latin-1 sequences 
               // so I don't have to worry about encoding errors if I  
               // slip past the end of the XML/text declaration
-              String declaration=new String(data, 0, length, "8859_1");
+              String declaration = new String(data, 0, length, "8859_1");
+              
               // If any of these throw a 
               // StringIndexOutOfBoundsException,
               // we just fall into the catch block and return null
@@ -174,7 +175,11 @@ class EncodingHeuristics {
             }
         
         }   
-        catch (Exception ex) {
+        catch (IOException ex) {
+            in.reset();
+            return "UTF-8";        
+        }
+        catch (RuntimeException ex) {
             in.reset();
             return "UTF-8";        
         }
