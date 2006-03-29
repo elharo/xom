@@ -1,4 +1,4 @@
-/* Copyright 2004, 2005 Elliotte Rusty Harold
+/* Copyright 2004-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -32,7 +32,7 @@ import java.io.UnsupportedEncodingException;
  * but may well not be true in a more general context. 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.2d1
  *
  */
 class URIUtil {
@@ -648,34 +648,31 @@ class URIUtil {
 
 
     static String relativize(String base, String abs) {
- 
-        try {
-            ParsedURI parsedBase = new ParsedURI(base);
-            ParsedURI parsedAbs  = new ParsedURI(abs);
+
+        ParsedURI parsedBase = new ParsedURI(base);
+        ParsedURI parsedAbs  = new ParsedURI(abs);
+        
+        parsedBase.path = removeDotSegments(parsedBase.path);
+        
+        if (parsedBase.scheme.equals(parsedAbs.scheme)
+          && parsedBase.authority.equals(parsedAbs.authority)) {
+        
+            String basePath = parsedBase.path;
+            String relPath = parsedAbs.path;
             
-            if (parsedBase.scheme.equals(parsedAbs.scheme)
-              && parsedBase.authority.equals(parsedAbs.authority)) {
-                
-            
-                String basePath = parsedBase.path;
-                String relPath = parsedAbs.path;
-                
-                while (basePath.length() > 1) {
-                    basePath = basePath.substring(0, basePath.lastIndexOf('/'));
-                    if (relPath.startsWith(basePath)) {
-                        return relPath.substring(basePath.length()+1);
-                    }
+            while (basePath.length() > 1) {
+                basePath = basePath.substring(0, basePath.lastIndexOf('/'));
+                if (relPath.startsWith(basePath)) {
+                    return relPath.substring(basePath.length()+1);
                 }
-                
-                return relPath;
             }
-            else {
-                return abs;
-            }
+            
+            return relPath;
         }
-        catch (Exception ex) {
+        else {
             return abs;
         }
+
     }
 
     
