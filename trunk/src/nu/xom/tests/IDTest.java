@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.2d1
  *
  */
 public class IDTest extends XOMTestCase {
@@ -64,37 +64,23 @@ public class IDTest extends XOMTestCase {
     }
     
     
-    public void testIDMustBeNCName() {
+    public void testIDCanBeNonNCName() {
         
         Attribute id = new Attribute("xml:id", 
           "http://www.w3.org/XML/1998/namespace", "name");
         assertEquals("name", id.getValue());
-        
-        try {
-            id.setValue("not a name");
-            fail("allowed non-NCName as value of xml:id attribute");
-        }
-        catch (IllegalDataException success) {
-            assertNotNull(success.getMessage());
-            assertEquals("not a name", success.getData());
-        }
+        id.setValue("not a name");
+        assertEquals(id.getValue(), "not a name");
         
     }
 
     
-    public void testNameSetIDMustBeNCName() {
+    public void testNameSetIDNeedNotBeNCName() {
         
         Attribute id = new Attribute("id", "not a name");
-        
-        try {
-            id.setNamespace("xml", 
-              "http://www.w3.org/XML/1998/namespace");
-            fail("allowed non-NCName as value of xml:id attribute");
-        }
-        catch (IllegalDataException success) {
-            assertNotNull(success.getMessage());
-            assertEquals("not a name", success.getData());
-        }
+        id.setNamespace("xml", 
+          "http://www.w3.org/XML/1998/namespace");
+         assertEquals(Attribute.Type.ID, id.getType());
         
     }
 
@@ -214,25 +200,6 @@ public class IDTest extends XOMTestCase {
     }
 
     
-    public void testCantChangeValueOfXMLIDAttributeToNonNCName() {
-        
-        Attribute id = new Attribute("xml:id", 
-          "http://www.w3.org/XML/1998/namespace", "p2");
-        Attribute id2 = new Attribute(id);
-        try {
-            id.setValue("not a name");
-            fail("Allowed non-name for xml:id");
-        }
-        catch (IllegalDataException success) {
-            assertNotNull(success.getMessage());
-        }
-        
-        // nothing changed
-        assertEquals(id, id2);
-        
-    }
-
-    
     public void testXPathRecognizesXmlIDAttributes() 
       throws ParsingException, IOException {
         
@@ -268,14 +235,21 @@ public class IDTest extends XOMTestCase {
                 }
                 URL testURL = new URL(base, testcase.getFirstChildElement("file-path").getValue() + "/");
                 Element scenario = testcase.getFirstChildElement("scenario");
+                boolean errorExpected = scenario.getAttribute("operation").getValue().equals("error");
                 Element input = scenario.getFirstChildElement("input-file");
                 URL inputFile = new URL(testURL, input.getValue());
                 Elements expectedIDs = scenario.getChildElements("id");
-                Document inputDoc = builder.build(inputFile.openStream());
-                Nodes recognizedIDs = getIDs(inputDoc);
-                assertEquals(expectedIDs.size(), recognizedIDs.size());
-                for (int k = 0; k < expectedIDs.size(); k++) {
-                    assertEquals(expectedIDs.get(i).getValue(), recognizedIDs.get(i).getValue());
+                try {
+                    Document inputDoc = builder.build(inputFile.openStream());
+                    Nodes recognizedIDs = getIDs(inputDoc);
+                    assertEquals(expectedIDs.size(), recognizedIDs.size());
+                    for (int k = 0; k < expectedIDs.size(); k++) {
+                        assertEquals(expectedIDs.get(i).getValue(), recognizedIDs.get(i).getValue());
+                    }
+                    if (errorExpected) fail("Did not detect xml:id error");
+                }
+                catch (ParsingException ex) {
+                    if (!errorExpected) throw ex;
                 }
             } // end for
         }
