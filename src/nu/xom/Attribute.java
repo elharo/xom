@@ -164,7 +164,7 @@ public class Attribute extends Node {
         }
         _setNamespace(prefix, URI);
         _setValue(value);
-        if ("xml".equals(this.prefix) && "id".equals(this.localName)) {
+        if (isXMLID()) {
             _setType(Attribute.Type.ID);
         }   
         else {
@@ -207,8 +207,6 @@ public class Attribute extends Node {
             if ("xml:id".equals(qualifiedName)) {
                 type = Attribute.Type.ID;
                 value = normalize(value);
-                // ???? should I only do this if validating?
-                // Verifier.checkNCName(value);
             }
         }   
         
@@ -340,17 +338,8 @@ public class Attribute extends Node {
 
     
     private void _setValue(String value) {
-        
-        if ("xml".equals(this.prefix) && "id".equals(this.localName)) {
-            // ???? do I really want to do this. XML ID test case
-            // suggests not
-            Verifier.checkNCName(value);
-        }
-        else {
-            Verifier.checkPCDATA(value);
-        }
+        Verifier.checkPCDATA(value);
         this.value = value;
-        
     }
 
 
@@ -471,14 +460,12 @@ public class Attribute extends Node {
      * </ul>
      */
     public void setNamespace(String prefix, String URI) {
-        
-        if ("xml".equals(prefix) && "id".equals(this.localName)) {
-            Verifier.checkNCName(this.value);
+               
+        _setNamespace(prefix, URI);
+        if (isXMLID()) {
             this.setType(Attribute.Type.ID);
         }
-        
-        _setNamespace(prefix, URI);
-        
+
     }
 
     
