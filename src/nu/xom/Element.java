@@ -1281,7 +1281,7 @@ public class Element extends ParentNode {
         HashMap namespaces = new HashMap();
         
         Element current = this;
-        while (current != null) {
+        while (true) {
             
             if (!("xml".equals(current.prefix))) {
                 addPrefixIfNotAlreadyPresent(namespaces, current, current.prefix);
