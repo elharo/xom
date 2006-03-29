@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -1462,6 +1462,20 @@ public class BuilderTest extends XOMTestCase {
         Element root = doc.getRootElement();
         Element external = root.getFirstChildElement("external");
         assertEquals("Hello from an entity!", external.getValue());
+        
+    }
+     
+    
+    public void testExternalEntityRelativeURLResolution()
+      throws IOException, ParsingException {
+        
+        String url = "file://" + inputDir.getAbsolutePath();
+        String docURL = url + "/base/../sib/content/pe.xml";
+        System.out.println(url);
+        Builder builder = new Builder(false);
+        Document doc = builder.build(docURL);
+        String subset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(subset.indexOf("SYSTEM \"pe.txt\"") > 1);
         
     }
      
