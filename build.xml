@@ -31,8 +31,8 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.1"/>
-    <property name="year"    value="2005"/>
+    <property name="version" value="1.2d1"/>
+    <property name="year"    value="2006"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
@@ -59,7 +59,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="jaxen.dir"       value="${build.dir}/jaxen-classes"/>
 
     <property name="xml-apis.jar"   value="${lib.dir}/xml-apis.jar"/>
-    <property name="parser.jar"     value="${lib.dir}/xercesImpl.jar"/>
+    <property name="parser.jar"     value="${lib.dir}/dtd-xercesImpl.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
     <property name="serializer.jar" value="${lib.dir}/serializer.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.0rc3.jar"/>
@@ -472,7 +472,7 @@ XOM Build file
     </javac>
     
     <java classname="nu.xom.tools.XHTMLJavaDoc" fork="yes"> 
-      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl.jar:lib/xml-apis.jar:lib/xalan.jar"/> 
+      <jvmarg value="-Xbootclasspath/p:lib/dtd-xercesImpl.jar:lib/xml-apis.jar:lib/xalan.jar"/> 
       <classpath refid="doc.class.path" />
       <arg value="build/apidocs"/> 
     </java>
@@ -739,6 +739,10 @@ location="${dist.dir}/xom-maven-${version}.jar" />
     <java classname="org.apache.xalan.Version" fork="yes">
       <classpath refid="test.class.path" />
     </java>
+  </target>
+  
+  <target name="website" depends="init" description="Print various Ant properties">
+    <ant antfile="build.xml" dir="website"/>
   </target>
   
 </project>
