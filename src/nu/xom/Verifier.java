@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -40,7 +40,7 @@ import org.xml.sax.XMLReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.2d1
  * 
  */
 final class Verifier {
@@ -177,7 +177,7 @@ final class Verifier {
      */
     static void checkPCDATA(String text) {
         
-        if (text == null) throwIllegalCharacterDataException(text, "Null text");
+        if (text == null) throw new IllegalCharacterDataException("Null text");
 
         char[] data = text.toCharArray();
         for (int i = 0, len = data.length; i < len; i++) {
