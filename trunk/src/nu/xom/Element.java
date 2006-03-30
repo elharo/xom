@@ -1257,7 +1257,7 @@ public class Element extends ParentNode {
         // add attribute prefixes
         int count = getAttributeCount();
         for (int i = 0; i < count; i++) {
-            Attribute att = getAttribute(i);
+            Attribute att = attributes[i];
             String attPrefix = att.getNamespacePrefix();
             if (attPrefix.length() != 0 && !"xml".equals(attPrefix)) {
                 if (allPrefixes == null) {
