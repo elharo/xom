@@ -631,7 +631,7 @@ public class Element extends ParentNode {
      * @return the number of attributes in the container
      */
     public final int getAttributeCount() {
-        return numAttributes;   
+        return numAttributes;
     }
     
     
@@ -1344,9 +1344,9 @@ public class Element extends ParentNode {
      * If the namespaces on the element change for any reason 
      * (adding or removing an attribute in a namespace, adding 
      * or removing a namespace declaration, changing the prefix 
-     * of an element, etc.) then then this method may skip or 
-     * repeat prefixes. Don't change the prefixes of an element  
-     * while iterating across them. 
+     * of an element, etc.) then this method may skip or repeat
+     * prefixes. Don't change the prefixes of an element while
+     * iterating across them. 
      * </p>
      * 
      * @param index the prefix to return
@@ -1367,7 +1367,7 @@ public class Element extends ParentNode {
         
         if (index < 0) {
             throw new IndexOutOfBoundsException(
-              "Negative prefix number");
+              "Negative prefix number " + index);
         }
         
         Set allPrefixes = getNamespacePrefixes();
@@ -1389,21 +1389,20 @@ public class Element extends ParentNode {
 
     private Set getNamespacePrefixes() {
 
-        Set allPrefixes;
-        if (namespaces != null) {
-            allPrefixes = new LinkedHashSet(namespaces.getPrefixes());
-        } 
-        else allPrefixes = new LinkedHashSet();
-        
+        Set allPrefixes = new LinkedHashSet();
         if (!("xml".equals(prefix))) allPrefixes.add(prefix);
+        if (namespaces != null) {
+            allPrefixes.addAll(namespaces.getPrefixes());
+        }
         
-        // add attribute prefixes
-        int count = getAttributeCount();
-        for (int i = 0; i < count; i++) {
-            Attribute att = getAttribute(i);
-            String attPrefix = att.getNamespacePrefix();
-            if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
-                allPrefixes.add(attPrefix);    
+        if (attributes != null) {
+            int count = getAttributeCount();
+            for (int i = 0; i < count; i++) {
+                Attribute att = attributes[i];
+                String attPrefix = att.getNamespacePrefix();
+                if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
+                    allPrefixes.add(attPrefix);    
+                }
             }
         }
         return allPrefixes;
