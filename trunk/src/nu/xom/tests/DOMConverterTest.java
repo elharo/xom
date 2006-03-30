@@ -183,7 +183,7 @@ public class DOMConverterTest extends XOMTestCase {
         assertEquals("test", root.getLocalName());
         assertEquals("", root.getNamespaceURI());
         
-        assertTrue(doctype != null);
+        assertNotNull(doctype);
         assertTrue(xomDoc.getChild(0) instanceof DocType);
         assertTrue(xomDoc.getChild(4) instanceof nu.xom.Comment);
         assertTrue(xomDoc.getChild(2) instanceof nu.xom.Comment);
