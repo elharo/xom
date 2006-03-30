@@ -29,7 +29,6 @@ import java.util.NoSuchElementException;
 // ???? Why do I still need these imports? Could 
 // I get rid of them? In particular could I get rid of sorting requirement on sets?
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
@@ -1371,7 +1370,7 @@ public class Element extends ParentNode {
               "Negative prefix number");
         }
         
-        SortedSet allPrefixes = getNamespacePrefixes();
+        Set allPrefixes = getNamespacePrefixes();
         Iterator iterator = allPrefixes.iterator();
         try {
             for (int i = 0; i < index; i++) {
@@ -1388,9 +1387,9 @@ public class Element extends ParentNode {
     }
 
 
-    private SortedSet getNamespacePrefixes() {
+    private Set getNamespacePrefixes() {
 
-        SortedSet allPrefixes;
+        Set allPrefixes;
         if (namespaces != null) {
             allPrefixes = new TreeSet(namespaces.getPrefixes());
         } 
