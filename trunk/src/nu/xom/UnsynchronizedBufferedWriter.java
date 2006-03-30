@@ -83,7 +83,7 @@ final class UnsynchronizedBufferedWriter extends Writer {
 
     
     public void close() throws IOException {
-        throw new UnsupportedOperationException("How;d we get here?");
+        throw new UnsupportedOperationException("How'd we get here?");
     }
 
 }
