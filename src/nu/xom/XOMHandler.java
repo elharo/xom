@@ -582,8 +582,10 @@ class XOMHandler
             if (defaultValue != null) {
                 internalDTDSubset.append(' ');
                 internalDTDSubset.append('"');
-                internalDTDSubset.append(escapeReservedCharactersInDefaultAttributeValues(defaultValue));
-                internalDTDSubset.append("\"");         
+                internalDTDSubset.append(
+                  escapeReservedCharactersInDefaultAttributeValues(defaultValue)
+                );
+                internalDTDSubset.append('\"');         
             }
             internalDTDSubset.append(">\n");   
         }
@@ -613,7 +615,7 @@ class XOMHandler
     
     public void externalEntityDecl(String name, 
        String publicID, String systemID) {
-        
+
         if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (name.startsWith("%")) { 
@@ -645,7 +647,7 @@ class XOMHandler
                 internalDTDSubset.append(systemID);       
             }
             else {
-                // need to escape system ID????
+                // need to escape system ID???? could it contain an ampersand?
                 internalDTDSubset.append(" SYSTEM \""); 
                 internalDTDSubset.append(systemID); 
             }
