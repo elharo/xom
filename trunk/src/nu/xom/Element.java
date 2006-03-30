@@ -27,9 +27,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 // ???? Why do I still need these imports? Could 
-// I get rid of them? In particular could I get rid of sorting requirement on sets?
+// I get rid of them? 
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 
 /**
  * <p>
@@ -1391,9 +1391,9 @@ public class Element extends ParentNode {
 
         Set allPrefixes;
         if (namespaces != null) {
-            allPrefixes = new TreeSet(namespaces.getPrefixes());
+            allPrefixes = new LinkedHashSet(namespaces.getPrefixes());
         } 
-        else allPrefixes = new TreeSet();
+        else allPrefixes = new LinkedHashSet();
         
         if (!("xml".equals(prefix))) allPrefixes.add(prefix);
         
