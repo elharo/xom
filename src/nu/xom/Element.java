@@ -1287,12 +1287,14 @@ public class Element extends ParentNode {
             }
             
             // add attribute prefixes
-            int count = current.getAttributeCount();
-            for (int i = 0; i < count; i++) {
-                Attribute att = current.getAttribute(i);
-                String attPrefix = att.getNamespacePrefix();
-                if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
-                    addPrefixIfNotAlreadyPresent(namespaces, current, attPrefix);
+            if (current.attributes != null) {
+                int count = current.numAttributes;
+                for (int i = 0; i < count; i++) {
+                    Attribute att = current.attributes[i];
+                    String attPrefix = att.getNamespacePrefix();
+                    if (attPrefix.length() != 0 && !("xml".equals(attPrefix))) {
+                        addPrefixIfNotAlreadyPresent(namespaces, current, attPrefix);
+                    }
                 }
             }
             
@@ -1369,6 +1371,10 @@ public class Element extends ParentNode {
             throw new IndexOutOfBoundsException(
               "Negative prefix number " + index);
         }
+        else if (index == 0) {
+            if (!("xml".equals(prefix))) return prefix;
+        }
+        
         
         Set allPrefixes = getNamespacePrefixes();
         Iterator iterator = allPrefixes.iterator();
