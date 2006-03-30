@@ -1465,13 +1465,38 @@ public class BuilderTest extends XOMTestCase {
         
     }
      
-    
+    // See http://lists.ibiblio.org/pipermail/xom-interest/2006-March/002962.html
     public void testExternalEntityRelativeURLResolution()
       throws IOException, ParsingException {
         
         String url = "file://" + inputDir.getAbsolutePath();
         String docURL = url + "/base/../sib/content/pe.xml";
-        System.out.println(url);
+        Builder builder = new Builder(false);
+        Document doc = builder.build(docURL);
+        String subset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(subset.indexOf("SYSTEM \"pe.txt\"") > 1);
+        
+    }
+     
+    
+    public void testExternalEntityRelativeURLResolution2()
+      throws IOException, ParsingException {
+        
+        String url = "file://" + inputDir.getAbsolutePath();
+        String docURL = url + "/base/../sib/content/ep.xml";
+        Builder builder = new Builder(false);
+        Document doc = builder.build(docURL);
+        String subset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(subset.indexOf("SYSTEM \"pe.txt\"") > 1);
+        
+    }
+     
+    
+    public void testExternalEntityRelativeURLResolution3()
+      throws IOException, ParsingException {
+        
+        String url = "file://" + inputDir.getAbsolutePath();
+        String docURL = url + "/sib/content/ep.xml";
         Builder builder = new Builder(false);
         Document doc = builder.build(docURL);
         String subset = doc.getDocType().getInternalDTDSubset();
@@ -1670,7 +1695,7 @@ public class BuilderTest extends XOMTestCase {
     
     // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
     // and possibly other parsers. I've reported the bug in Xerces,
-    // and it should be fixed in Xerces 2.6.
+    // and it is fixed in Xerces 2.6.
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
         builder.build("http://www.ibiblio.org/xml/redirecttest.xml");
@@ -2102,13 +2127,8 @@ public class BuilderTest extends XOMTestCase {
       throws ParsingException, IOException {
         
         Document doc = builder.build(new File(inputDir, "undeclare.xml"));
-        String expectedResult = "<?xml version=\"1.0\"?>\n" 
-          + "<root xmlns=\"http://www.example.org\" " 
-          + "xmlns:pre=\"http://www.red.com/\" test=\"test\" " 
-          + "pre:red=\"value\">some data<something xmlns=\"\" />" 
-          + "</root>\n";
         String actual = doc.toXML();
-        assertEquals(expectedResult, actual);
+        assertTrue(actual.indexOf("some data<something xmlns=\"\" />") > 0);
         
     }
     
