@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -49,7 +49,8 @@ final class UnsynchronizedBufferedWriter extends Writer {
     public void write(String s, int offset, int length) throws IOException {
     
         while (length > 0) {
-            int n = Math.min(CAPACITY - position, length);
+            int n = CAPACITY - position;
+            if (length < n) n = length;
             s.getChars(offset, offset + n, buffer, position);
             position += n;
             offset += n;
