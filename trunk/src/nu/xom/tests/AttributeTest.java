@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -431,9 +431,9 @@ public class AttributeTest extends XOMTestCase {
 
         assertEquals(c1, c1);
         assertEquals(c1.hashCode(), c1.hashCode());
-        assertTrue(!c1.equals(c2));
-        assertTrue(!c1.equals(c3));
-        assertTrue(!c1.equals(null));
+        assertFalse(c1.equals(c2));
+        assertFalse(c1.equals(c3));
+        assertFalse(c1.equals(null));
         assertFalse(c1.equals("limit"));
         assertFalse(c1.equals(new Element("test")));
     }
@@ -441,8 +441,8 @@ public class AttributeTest extends XOMTestCase {
     
     public void testTypeEquals() {
         assertEquals(Attribute.Type.CDATA, Attribute.Type.CDATA);
-        assertTrue(!Attribute.Type.CDATA.equals(Attribute.Type.NMTOKEN));
-        assertTrue(!Attribute.Type.CDATA.equals(null));
+        assertFalse(Attribute.Type.CDATA.equals(Attribute.Type.NMTOKEN));
+        assertFalse(Attribute.Type.CDATA.equals(null));
         assertFalse(Attribute.Type.CDATA.equals("CDATA"));
         assertFalse(Attribute.Type.CDATA.equals(new Element("CDATA")));
     }
@@ -456,7 +456,7 @@ public class AttributeTest extends XOMTestCase {
         assertEquals(c1.getLocalName(), c2.getLocalName());
         assertEquals(c1.getQualifiedName(), c2.getQualifiedName());
         assertEquals(c1.getValue(), c2.getValue());
-        assertTrue(!c1.equals(c2));
+        assertFalse(c1.equals(c2));
         assertNull(c2.getParent());
 
     }
@@ -633,18 +633,18 @@ public class AttributeTest extends XOMTestCase {
     
     public void testDistinctTypes() {
     
-        assertTrue(!(Attribute.Type.CDATA.equals(Attribute.Type.UNDECLARED)));
+        assertFalse((Attribute.Type.CDATA.equals(Attribute.Type.UNDECLARED)));
            
-        assertTrue(!(Attribute.Type.ID.equals(Attribute.Type.CDATA)));  
-        assertTrue(!(Attribute.Type.IDREF.equals(Attribute.Type.ID)));  
-        assertTrue(!(Attribute.Type.IDREFS.equals(Attribute.Type.IDREF)));   
-        assertTrue(!(Attribute.Type.NMTOKEN.equals(Attribute.Type.IDREFS)));   
-        assertTrue(!(Attribute.Type.NMTOKENS.equals(Attribute.Type.NMTOKEN)));  
-        assertTrue(!(Attribute.Type.NOTATION.equals(Attribute.Type.NMTOKENS)));   
-        assertTrue(!(Attribute.Type.ENTITY.equals(Attribute.Type.NOTATION)));   
-        assertTrue(!(Attribute.Type.ENTITIES.equals(Attribute.Type.ENTITY)));   
-        assertTrue(!(Attribute.Type.ENUMERATION.equals(Attribute.Type.ENTITIES)));  
-        assertTrue(!(Attribute.Type.CDATA.equals(Attribute.Type.ENUMERATION)));
+        assertFalse((Attribute.Type.ID.equals(Attribute.Type.CDATA)));  
+        assertFalse((Attribute.Type.IDREF.equals(Attribute.Type.ID)));  
+        assertFalse((Attribute.Type.IDREFS.equals(Attribute.Type.IDREF)));   
+        assertFalse((Attribute.Type.NMTOKEN.equals(Attribute.Type.IDREFS)));   
+        assertFalse((Attribute.Type.NMTOKENS.equals(Attribute.Type.NMTOKEN)));  
+        assertFalse((Attribute.Type.NOTATION.equals(Attribute.Type.NMTOKENS)));   
+        assertFalse((Attribute.Type.ENTITY.equals(Attribute.Type.NOTATION)));   
+        assertFalse((Attribute.Type.ENTITIES.equals(Attribute.Type.ENTITY)));   
+        assertFalse((Attribute.Type.ENUMERATION.equals(Attribute.Type.ENTITIES)));  
+        assertFalse((Attribute.Type.CDATA.equals(Attribute.Type.ENUMERATION)));
     }
 
 

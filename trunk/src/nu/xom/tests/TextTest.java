@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,7 +33,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d7
+ * @version 1.2d1
  *
  */
 public class TextTest extends XOMTestCase {
@@ -138,8 +138,8 @@ public class TextTest extends XOMTestCase {
 
         assertEquals(c1, c1);
         assertEquals(c1.hashCode(), c1.hashCode());
-        assertTrue(!c1.equals(c2));
-        assertTrue(!c1.equals(c3));
+        assertFalse(c1.equals(c2));
+        assertFalse(c1.equals(c3));
         
     }
 
@@ -151,7 +151,7 @@ public class TextTest extends XOMTestCase {
 
         assertEquals(c1.getValue(), c2.getValue());
         assertEquals(c1, c2);
-        assertTrue(!c1.equals(c2));
+        assertFalse(c1.equals(c2));
         assertNull(c2.getParent());
 
     }
