@@ -1,4 +1,4 @@
-/* Copyright 2003 Elliotte Rusty Harold
+/* Copyright 2003, 2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -29,40 +29,46 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.2d1
  *
  */
 public class AttributeTypeTest extends XOMTestCase {
 
+    
     public AttributeTypeTest(String name) {
         super(name);   
     }
 
+    
     public void testEquals() {
-        assertEquals(Attribute.Type.CDATA, Attribute.Type.CDATA);
-        assertEquals(Attribute.Type.ID, Attribute.Type.ID);
-        assertEquals(Attribute.Type.IDREF, Attribute.Type.IDREF);
-        assertEquals(Attribute.Type.IDREFS, Attribute.Type.IDREFS);
-        assertEquals(Attribute.Type.UNDECLARED, Attribute.Type.UNDECLARED);
-        assertEquals(Attribute.Type.NMTOKEN, Attribute.Type.NMTOKEN);
-        assertEquals(Attribute.Type.NMTOKENS, Attribute.Type.NMTOKENS);
-        assertEquals(Attribute.Type.NOTATION, Attribute.Type.NOTATION);
-        assertEquals(Attribute.Type.ENTITY, Attribute.Type.ENTITY);
-        assertEquals(Attribute.Type.ENTITIES, Attribute.Type.ENTITIES);
-        assertTrue(Attribute.Type.ENTITIES != Attribute.Type.ENTITY);
-        assertTrue(Attribute.Type.CDATA != Attribute.Type.ID);
-        assertTrue(Attribute.Type.ID != Attribute.Type.IDREF);
-        assertTrue(Attribute.Type.ID != Attribute.Type.IDREFS);
-        assertTrue(Attribute.Type.ID != Attribute.Type.NMTOKEN);
-        assertTrue(Attribute.Type.ID != Attribute.Type.NMTOKENS);
-        assertTrue(Attribute.Type.UNDECLARED != Attribute.Type.CDATA);
-        assertTrue(Attribute.Type.NMTOKEN != Attribute.Type.CDATA);
+        
+        assertEquals(Attribute.Type.CDATA,       Attribute.Type.CDATA);
+        assertEquals(Attribute.Type.ID,          Attribute.Type.ID);
+        assertEquals(Attribute.Type.IDREF,       Attribute.Type.IDREF);
+        assertEquals(Attribute.Type.IDREFS,      Attribute.Type.IDREFS);
+        assertEquals(Attribute.Type.UNDECLARED,  Attribute.Type.UNDECLARED);
+        assertEquals(Attribute.Type.NMTOKEN,     Attribute.Type.NMTOKEN);
+        assertEquals(Attribute.Type.NMTOKENS,    Attribute.Type.NMTOKENS);
+        assertEquals(Attribute.Type.NOTATION,    Attribute.Type.NOTATION);
+        assertEquals(Attribute.Type.ENTITY,      Attribute.Type.ENTITY);
+        assertEquals(Attribute.Type.ENTITIES,    Attribute.Type.ENTITIES);
+        assertNotSame(Attribute.Type.ENTITIES,   Attribute.Type.ENTITY);
+        assertNotSame(Attribute.Type.CDATA,      Attribute.Type.ID);
+        assertNotSame(Attribute.Type.ID,         Attribute.Type.IDREF);
+        assertNotSame(Attribute.Type.ID,         Attribute.Type.IDREFS);
+        assertNotSame(Attribute.Type.ID,         Attribute.Type.NMTOKEN);
+        assertNotSame(Attribute.Type.ID,         Attribute.Type.NMTOKENS);
+        assertNotSame(Attribute.Type.UNDECLARED, Attribute.Type.CDATA);
+        assertNotSame(Attribute.Type.NMTOKEN,    Attribute.Type.CDATA);
         
         assertFalse(Attribute.Type.CDATA.equals(new Integer(1)));
         assertFalse(Attribute.Type.CDATA.equals(new Text("data")));
+        
     }
 
+    
     public void testToString() {
+        
         assertNotNull(Attribute.Type.CDATA.toString());
         assertNotNull(Attribute.Type.ID.toString());
         assertNotNull(Attribute.Type.IDREF.toString());
@@ -109,7 +115,9 @@ public class AttributeTypeTest extends XOMTestCase {
 
     }
 
+    
     public void testGetName() {
+        
         assertEquals("ENUMERATION", Attribute.Type.ENUMERATION.getName());
         assertEquals("NOTATION", Attribute.Type.NOTATION.getName());
         assertEquals("ENTITY", Attribute.Type.ENTITY.getName());
@@ -122,4 +130,5 @@ public class AttributeTypeTest extends XOMTestCase {
         assertEquals("NMTOKENS", Attribute.Type.NMTOKENS.getName());
     }
 
+    
 }
