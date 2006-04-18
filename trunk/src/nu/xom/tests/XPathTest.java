@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -51,7 +51,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.2b1
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -650,6 +650,22 @@ public class XPathTest extends XOMTestCase {
             assertNotNull(success.getMessage());
         }
         
+    }
+    
+
+    public void testLookupPrefix() {
+        XPathContext context = new XPathContext();
+        context.addNamespace("foo", "http://www.example.org");
+        String url = context.lookup("foo");
+        assertEquals("http://www.example.org", url);
+    }
+    
+
+    public void testLookupNonexistentPrefix() {
+        XPathContext context = new XPathContext();
+        context.addNamespace("foo", "http://www.example.org");
+        String url = context.lookup("bar");
+        assertNull(url);
     }
     
 
