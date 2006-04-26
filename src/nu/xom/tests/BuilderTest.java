@@ -641,7 +641,7 @@ public class BuilderTest extends XOMTestCase {
             fail("Built from null input stream");
         }
         catch (NullPointerException success) {
-            // expected
+            assertNotNull(success.getMessage());
         }
         
     }
