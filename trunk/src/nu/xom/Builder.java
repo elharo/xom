@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -576,12 +576,14 @@ public class Builder {
      * @throws ValidityException if a validity error is detected; 
      *     only thrown if the builder has been instructed to validate
      * @throws ParsingException  if a well-formedness error is detected
-     * @throws IOException  if an I/O error such as a broken 
-     *     socket prevents the document from being fully read.
+     * @throws IOException       if an I/O error such as a broken 
+     *     socket prevents the document from being fully read
+     * @throws NullPointerException  if <code>in</code> is null
      */
     public Document build(InputStream in) 
       throws ParsingException, ValidityException, IOException {
 
+        if (in == null) throw new NullPointerException("Null InputStream");
         InputSource source = new InputSource(in);
         return build(source);
         
