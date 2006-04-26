@@ -632,6 +632,21 @@ public class BuilderTest extends XOMTestCase {
     }
 
     
+    public void testBuildFromNullInputStream()
+      throws IOException, ParsingException {
+        
+        InputStream in = null;
+        try {
+            builder.build(in);
+            fail("Built from null input stream");
+        }
+        catch (NullPointerException success) {
+            // expected
+        }
+        
+    }
+
+    
     public void testBuildFromStringWithBase()
       throws IOException, ParsingException {
         Document document = builder.build(source, base);
