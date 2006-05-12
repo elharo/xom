@@ -1506,6 +1506,44 @@ public class BuilderTest extends XOMTestCase {
         
     }
      
+      
+    public void testBuildFromURLThatContainsNonexistentPart()
+      throws IOException, ParsingException {
+        
+        String url = "file://" + inputDir.getAbsolutePath();
+        String docURL = url + "/nonexistent/../test.xml";
+        Builder builder = new Builder(false);
+        Document doc = builder.build(docURL);
+        assertNotNull(doc);
+        
+    }
+    
+    
+    public void testBuildFromURLThatContainsNonexistentPart2()
+      throws IOException, ParsingException {
+        
+        String url = "file://" + inputDir.getAbsolutePath();
+        String docURL = url + "/nonexistent/../sib/content/pe.xml";
+        System.out.println(docURL);
+        Builder builder = new Builder(false);
+        Document doc = builder.build(docURL);
+        assertNotNull(doc);
+        
+    }
+    
+
+    public void testExternalEntityRelativeURLResolutionIncludingNonexistentDirectoryInBaseURL()
+      throws IOException, ParsingException {
+        
+        String url = "file://" + inputDir.getAbsolutePath();
+        String docURL = url + "/nonexistent/../sib/content/pe.xml";
+        Builder builder = new Builder(false);
+        Document doc = builder.build(docURL);
+        String subset = doc.getDocType().getInternalDTDSubset();
+        assertTrue(subset.indexOf("SYSTEM \"pe.txt\"") > 1);
+        
+    }
+    
     
     public void testExternalEntityRelativeURLResolution3()
       throws IOException, ParsingException {
