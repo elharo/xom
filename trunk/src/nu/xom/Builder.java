@@ -1081,21 +1081,41 @@ public class Builder {
     
     // needed to work around a bug in Xerces and Crimson
     // for URLs with no trailing slashes (no path part) 
-    // such as http://www.cafeconleche.org
+    // such as http://www.cafeconleche.org.
+    // Also needed to work around a VM bug involving file URLs such as
+    // file:///tmp/nosuchdirectory/../foo.xml
+    // where "nosuchdirectory" does not exist.
+    // ???? should this move into the URIUtil class?
     private String canonicalizeURL(String uri) {
         
         try {
             URL u = new URL(uri);
             String path = u.getFile();
+            String scheme = u.getProtocol();
+            String authority = u.getHost();
+            String query = u.getQuery();
+            int port = u.getPort();
+            // fragment ID not needed
             if (path == null || path.length() == 0 
               // We handle here the case where we have a URL such as 
               // http://www.cafeaulait.org with no trailing slash.
               // Java's URL class assigns the path "/" to this case
               // but does not change the URL. 
               || ("/".equals(path) && !(uri.endsWith("/")))) {
-                uri += '/';
+                path += '/';
             }
-            return uri;
+            // If this proves to be a hot spot we could probably take this path
+            // only if the scheme is file; not in the more common case where
+            // it's http
+            path = URIUtil.removeDotSegments(path);
+            StringBuffer canonicalForm = new StringBuffer(uri.length()); 
+            canonicalForm.append(scheme);
+            canonicalForm.append("://");
+            if (authority != null) canonicalForm.append(authority); 
+            if (port >= 0) canonicalForm.append(":" + port);
+            canonicalForm.append(path);
+            if (query != null) canonicalForm.append("?" + query);
+            return canonicalForm.toString();
         }
         catch (MalformedURLException ex) {
             return uri;
