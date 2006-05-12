@@ -150,7 +150,7 @@ class URIUtil {
     }
     
     
-    private static String removeDotSegments(String path) {
+    static String removeDotSegments(String path) {
     
         StringBuffer output = new StringBuffer();
 
@@ -173,6 +173,8 @@ class URIUtil {
             }
             // These next three cases are unreachable in the context of XOM.
             // They may be needed in a more general public URIUtil.
+            // ???? need to consider whether these are still unreachable now that
+            // Builder.canonicalizeURL is calling this method.
             /* else if (path.equals(".") || path.equals("..")) {
                 path = "";
             }
