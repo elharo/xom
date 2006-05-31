@@ -48,7 +48,7 @@ import java.util.LinkedHashSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2b1
  *
  */
 public class Element extends ParentNode {
@@ -179,6 +179,7 @@ public class Element extends ParentNode {
 
     private Attribute[] copyAttributes(Element newParent) {
 
+        if (numAttributes == 0) return null;
         Attribute[] copy = new Attribute[numAttributes];
         for (int i = 0; i < numAttributes; i++) {
             copy[i] = (Attribute) attributes[i].copy();
