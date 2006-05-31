@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2b1
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -722,5 +722,19 @@ public class AttributeTest extends XOMTestCase {
         Document output = builder.build(s, f.toURL().toExternalForm());
         assertEquals(input, output);
         
-    }    
+    }
+
+    
+    public void testDoubleAdd() {
+        
+        Element e = new Element("test");
+        Attribute a = new Attribute("foo", "bar");
+        e.addAttribute(a);
+        e.removeAttribute(a);
+        Element copy = new Element(e);
+        copy.addAttribute(new Attribute("a", "newvalue"));
+        assertEquals(1, copy.getAttributeCount());
+        
+    }
+    
 }
