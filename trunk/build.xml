@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 2002-2005 Elliotte Rusty Harold
+<!-- Copyright 2002-2006 Elliotte Rusty Harold
 
 This library is free software; you can redistribute 
 it and/or modify it under the terms of version 2.1 of 
@@ -31,7 +31,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.2d1"/>
+    <property name="version" value="1.2b1"/>
     <property name="year"    value="2006"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -318,13 +318,13 @@ XOM Build file
           <attribute name="Sealed" value="true"/>
           <attribute name="Specification-Title"   value="XOM core classes"/>
           <attribute name="Implementation-Title"  value="nu.xom"/>
-        <attribute name="Implementation-Version" value="${version}"/>
-        <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+        <attribute name="Implementation-Version"  value="${version}"/>
+        <attribute name="Implementation-Vendor"   value="Elliotte Rusty Harold"/>          
        </section>
         <section name="org/jaxen/">
-          <attribute name="Specification-Title"   value="Jaxen XPath engine"/>
-          <attribute name="Implementation-Title"  value="org.jaxen"/>
-          <attribute name="Implementation-Version" value="1.1d4"/>
+          <attribute name="Specification-Title"    value="Jaxen XPath engine"/>
+          <attribute name="Implementation-Title"   value="org.jaxen"/>
+          <attribute name="Implementation-Version" value="1.1b10"/>
           <attribute name="Implementation-Vendor"  value="CodeHaus"/>
         </section>
         <section name="nu/xom/xslt/">
@@ -528,7 +528,7 @@ XOM Build file
   <!-- This task requires the ANT optional.jar -->
   <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
 
-    <junit printsummary="off" fork="yes">
+    <junit fork="yes">
        <classpath refid="test.class.path" />
        <formatter type="${test.outputFormat}" />
        <batchtest fork="yes" todir="${testoutput.dir}">
@@ -728,10 +728,7 @@ location="${dist.dir}/xom-maven-${version}.jar" />
   </target>
   
   <target name="get-jaxen" description="Download Jaxen source code" depends="prepare">
-      <cvs cvsRoot=":pserver:anonymous@cvs.jaxen.codehaus.org:/home/projects/jaxen/scm"
-       package="jaxen"
-       dest="${build.dir}"
-  />
+      <unzip src="jaxen-1.1-src.zip" dest="${build.dir}" />
   </target>
 
   <target name="debug" depends="init" description="Print various Ant properties">
