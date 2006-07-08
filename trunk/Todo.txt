@@ -33,13 +33,6 @@ Should/could the TrAX source and result, Jaxen adapter and so forth go public in
 
 1.2:
 -----
-I'm trying to convert a w3c.dom.Document into a xom one, but need to
-pass in my own node factory.
-
-there isnt any option to pass one down, nor can I easily tack one in
-by a bit of subclassing, as the DomConverter doesnt use a node factory
-and doesnt have a method createNodeFactory() that I could have
-overridden.
 
 Look at some more of Wolfgang's optimizations
 
@@ -102,7 +95,7 @@ Could Builder hold a cache of interned strings to use while building?
 Does NUX BinaryXMLCODEC do something like this?
 
 Add a binary distribution that's like the full distribution but no source.
-Shoudl the source distribution not include the binary?
+Should the source distribution not include the binary?
 
 Could DOMConversion be done in parallel in two separate threads?
 
@@ -156,7 +149,7 @@ For 1.5 use ant.java.version property and an equals condition
 
 Wolfgang's ant build file for smaller vs. faster jars (Text class)
 
-Add tools page to web site (Ant, tagSoup, Clover, etc.)
+Add tools page to web site (Ant, TagSoup, Clover, etc.)
 
 cvs -d :pserver:elharo@cvs.dev.java.net:/cvs rtag XOM_11a3 xom
 
@@ -200,6 +193,23 @@ lock.c:222: failed assertion `strncmp (repository, current_parsed_root->director
 cvs [rtag aborted]: received abort signal
 cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
+
+===============
+Done 1.2b1
+===============
+
+xml:id attributes no longer checked for NCNames
+
+Upgraded to Xerces 2.8.0, DTD-only version
+
+DOMConverter can accept a NodeFactory to be used in creating the XOM document
+
+No longer possible to set an attribute's type to null.
+
+Jaxen source is bundled. Ant no longer checks it out of CVS.
+
+Added a lookup method to XPathContext that retrieves a namespace URI given a prefix
+
 
 ===============
 Done 1.1
