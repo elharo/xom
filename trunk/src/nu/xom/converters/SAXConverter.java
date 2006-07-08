@@ -217,6 +217,7 @@ public class SAXConverter {
     private boolean convertNamespace(Element element, String prefix)
       throws SAXException {
         
+        // XXX could store a stack of these in a namespaceSupport to avoid going up to the parent
         String uri = element.getNamespaceURI(prefix);
         ParentNode parentNode = element.getParent();
         Element parent = null;
