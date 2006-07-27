@@ -1298,7 +1298,7 @@ public class Builder {
     // I added this because XIncluder needed it.
     /**
      * <p>
-     * Returns this builder's <code>NodeFactory</code>. It may return
+     * Returns this builder's <code>NodeFactory</code>. It returns
      * null if a factory was not supplied when the builder was created.
      * </p>
      * 
