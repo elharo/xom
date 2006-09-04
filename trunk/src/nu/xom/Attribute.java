@@ -166,7 +166,6 @@ public class Attribute extends Node {
         _setValue(value);
         if (isXMLID()) {
             _setType(Attribute.Type.ID);
-            this.value = normalize(value);
         }   
         else {
             _setType(type);
@@ -338,6 +337,9 @@ public class Attribute extends Node {
     
     private void _setValue(String value) {
         Verifier.checkPCDATA(value);
+        if (this.isXMLID()) {
+            value = normalize(value);
+        }
         this.value = value;
     }
 
