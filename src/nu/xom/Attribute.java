@@ -38,7 +38,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2b2
  * 
  */
 public class Attribute extends Node {
@@ -166,6 +166,7 @@ public class Attribute extends Node {
         _setValue(value);
         if (isXMLID()) {
             _setType(Attribute.Type.ID);
+            this.value = normalize(value);
         }   
         else {
             _setType(type);
