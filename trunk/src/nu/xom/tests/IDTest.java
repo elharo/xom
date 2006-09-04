@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2b2
  *
  */
 public class IDTest extends XOMTestCase {
@@ -71,6 +71,15 @@ public class IDTest extends XOMTestCase {
         assertEquals("name", id.getValue());
         id.setValue("not a name");
         assertEquals(id.getValue(), "not a name");
+        
+    }
+
+    
+    public void testAttributeConstructorNormalizesValue() {
+        
+        Attribute id = new Attribute("xml:id", 
+          "http://www.w3.org/XML/1998/namespace", " name ");
+        assertEquals("name", id.getValue());
         
     }
 
