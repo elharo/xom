@@ -325,13 +325,11 @@ public class Attribute extends Node {
      * </p>
      * 
      * @param value the value assigned to the attribute
+     * 
      * @throws IllegalDataException if the value contains characters 
      *     which are not legal in XML such as vertical tab or a null. 
      *     Characters such as " and &amp; are legal, but will be 
      *     automatically escaped when the attribute is serialized.
-     * @throws MalformedURIException if this is an 
-     *     <code>xml:base</code> attribute, and the value is not a
-     *     legal IRI
      */
     public void setValue(String value) {
         _setValue(value);
