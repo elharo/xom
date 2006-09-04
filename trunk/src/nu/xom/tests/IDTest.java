@@ -192,6 +192,16 @@ public class IDTest extends XOMTestCase {
     }
 
     
+    public void testValueSetXmlIdAttributeIsNormalized() {
+        
+        Attribute id = new Attribute("xml:id", 
+          "http://www.w3.org/XML/1998/namespace", "value");
+        id.setValue("\r\n  a3 ");
+        assertEquals("a3", id.getValue());
+        
+    }
+
+    
     public void testCantChangeTypeOfXMLIDAttribute() {
         
         Attribute id = new Attribute("xml:id", 
