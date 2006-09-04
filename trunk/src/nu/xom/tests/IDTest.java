@@ -196,7 +196,7 @@ public class IDTest extends XOMTestCase {
         
         Attribute id = new Attribute("xml:id", 
           "http://www.w3.org/XML/1998/namespace", "value");
-        id.setValue("\r\n  a3 ");
+        id.setValue("   a3 ");
         assertEquals("a3", id.getValue());
         
     }
