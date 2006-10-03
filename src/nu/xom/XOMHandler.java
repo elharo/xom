@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2b1
  *
  */
 class XOMHandler 
@@ -75,7 +75,7 @@ class XOMHandler
 
 
     // See http://www.servlets.com/archive/servlet/ReadMsg?msgId=554071&listName=jdom-interest
-    // This method is called to avoid leaking document sized leaking memory
+    // This method is called to avoid leaking document sized memory
     // when a Builder is not imediately reused
     void freeMemory() {
         document = null;
