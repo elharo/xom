@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b1
+ * @version 1.2b2
  * 
  */
 public class Builder {
@@ -962,7 +962,7 @@ public class Builder {
                             i++;
                             try {
                                 char low = absolute.charAt(i);
-                                String character = String.valueOf(c)+String.valueOf(low);
+                                String character = String.valueOf(c)+low;
                                 byte[] data = character.getBytes("UTF8");
                                 // Always exactly 4 bytes, unless the encoder is buggy
                                 for (int j=0; j < 4; j++) {
