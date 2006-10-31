@@ -33,7 +33,7 @@ import org.jaxen.NamespaceContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b1
+ * @version 1.2b2
  *
  */
 public final class XPathContext {
@@ -153,6 +153,18 @@ public final class XPathContext {
         
     }
 
+    /**
+     * Returns the namespace URI associated with a specified prefix in
+     * this context. It returns null if this prefix is not bound
+     * to a namespace in this context. The prefix is not checked 
+     * for validity. If you pass in a prefix that is not an NCName,
+     * this method simply returns null. 
+     * 
+     * @param prefix the prefix to look up
+     * 
+     * @return the namespace URI associated with the specified prefix in
+     *          this context or null
+     */
     public String lookup(String prefix) {
         return (String) namespaces.get(prefix);
     }
