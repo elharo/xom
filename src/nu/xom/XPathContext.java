@@ -105,6 +105,7 @@ public final class XPathContext {
             throw new NamespaceConflictException(
               "XPath expressions do not use the default namespace");
         }
+        Verifier.checkNCName(prefix);
         
         // should there be a separate remove method????
         if (uri == null) {

@@ -34,6 +34,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import nu.xom.IllegalNameException;
 import nu.xom.Namespace;
 import nu.xom.NamespaceConflictException;
 import nu.xom.Node;
@@ -51,7 +52,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b1
+ * @version 1.2b2
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -647,6 +648,28 @@ public class XPathTest extends XOMTestCase {
             fail("Rebound xml prefix");
         }
         catch (NamespaceConflictException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+    }
+    
+
+    public void testCantBindNonPrefix() {
+        
+        XPathContext context = new XPathContext();
+        try {
+            context.addNamespace("foo:bar", "http://www.example.org");
+            fail("Allowed preix with colon");
+        }
+        catch (IllegalNameException success) {
+            assertNotNull(success.getMessage());
+        }
+        
+        try {
+            context.addNamespace("foo bar", "http://www.example.org");
+            fail("Allowed preix with space");
+        }
+        catch (IllegalNameException success) {
             assertNotNull(success.getMessage());
         }
         
