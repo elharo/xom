@@ -48,7 +48,7 @@ import java.util.LinkedHashSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b1
+ * @version 1.2b2
  *
  */
 public class Element extends ParentNode {
@@ -1114,6 +1114,11 @@ public class Element extends ParentNode {
      * </p>
      * 
      * <p>
+     * You can supply an empty string for the prefix to declare a 
+     * default namespace, provided the element itself has a prefix.
+     * </p>
+     * 
+     * <p>
      * If you do redeclare a prefix that is already used
      * by an element or attribute name, the additional 
      * namespace is added if and only if the URI is the same.
@@ -1126,7 +1131,7 @@ public class Element extends ParentNode {
      * @throws MalformedURIException if <code>URI</code> 
      *      is not an RFC 3986 URI reference
      * @throws IllegalNameException  if <code>prefix</code> is not 
-     *      a legal XML non-colonized name
+     *      a legal XML non-colonized name or the empty string
      * @throws NamespaceConflictException if the mapping conflicts 
      *     with an existing element, attribute,
      *     or additional namespace declaration
