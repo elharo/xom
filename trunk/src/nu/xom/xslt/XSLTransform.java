@@ -48,13 +48,13 @@ import nu.xom.XMLException;
  * Serves as an interface to a TrAX aware XSLT processor such as Xalan
  * or Saxon. The following example shows how to apply an XSL 
  * Transformation to a XOM document and get the transformation result 
- * in the form of a XOM <code>Nodes</code>:</p>
+ * in the form of a XOM <code>Nodes</code> object:</p>
  * <blockquote><pre>public static Nodes transform(Document in) 
  *   throws XSLException, ParsingException, IOException {
  *     Builder builder = new Builder();
  *     Document stylesheet = builder.build("mystylesheet.xsl");
  *     XSLTransform transform = new XSLTransform(stylesheet);
- *     return transform.transform(doc);
+ *     return transform.transform(in);
  * } </pre></blockquote>
  *
  * <p>
@@ -116,7 +116,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2b2
  */
 public final class XSLTransform {
 
