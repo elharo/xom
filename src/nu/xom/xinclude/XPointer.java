@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -44,7 +44,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b6
+ * @version 1.2b2
  *
  */
 class XPointer {
@@ -72,7 +72,7 @@ class XPointer {
         catch (IllegalNameException ex) {
             // not a bare name; try element() scheme
             List elementSchemeData = findElementSchemeData(xptr);
-            if (elementSchemeData.size() == 0) {
+            if (elementSchemeData.isEmpty()) {
                 // This may be a legal XPointer, but it doesn't 
                 // have an element() scheme so we can't handle it. 
                 throw new XPointerSyntaxException(
