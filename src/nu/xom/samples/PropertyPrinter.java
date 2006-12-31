@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003 2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -39,7 +39,7 @@ import nu.xom.Node;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.2b2
  *
  */
 public class PropertyPrinter {
@@ -90,11 +90,11 @@ public class PropertyPrinter {
             prefix = element.getNamespacePrefix();
         }
         else if (node instanceof Attribute) {
-            Element element = (Element) node;
-            name = element.getQualifiedName();
-            localName = element.getLocalName();
-            uri = element.getNamespaceURI();
-            prefix = element.getNamespacePrefix();
+            Attribute attribute = (Attribute) node;
+            name      = attribute.getQualifiedName();
+            localName = attribute.getLocalName();
+            uri       = attribute.getNamespaceURI();
+            prefix    = attribute.getNamespacePrefix();
         }
 
       
