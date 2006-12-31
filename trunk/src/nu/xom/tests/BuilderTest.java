@@ -38,7 +38,9 @@ import java.io.Writer;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 
+import org.apache.xerces.parsers.SAXParser;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -76,7 +78,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b1
+ * @version 1.2b2
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -3388,6 +3390,16 @@ public class BuilderTest extends XOMTestCase {
                 in.close();
             }
         }
+        
+    }
+    
+    public void testLocatorReturnsNullSystemID() throws ParsingException, IOException {
+     
+        XMLReader reader = new SAXParser();
+        reader = new LocatorFilter(reader);
+        Builder builder = new Builder(reader);
+        URL u = new URL("http://www.cafeconleche.org/");
+        builder.build(u.openStream());
         
     }
     
