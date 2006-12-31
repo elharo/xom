@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b1
+ * @version 1.2b2
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -434,7 +434,6 @@ public class AttributeTest extends XOMTestCase {
         assertFalse(c1.equals(c2));
         assertFalse(c1.equals(c3));
         assertFalse(c1.equals(null));
-        assertFalse(c1.equals("limit"));
         assertFalse(c1.equals(new Element("test")));
     }
 
