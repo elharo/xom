@@ -305,7 +305,7 @@ public class XPathTest extends XOMTestCase {
         
     }
     
-    
+    /* Commented out because files have been removed 
     public void testFranceschet1() throws ParsingException, IOException {
      
         Builder builder = new Builder();
@@ -417,7 +417,7 @@ public class XPathTest extends XOMTestCase {
             }
         }
         
-    }
+    } */
     
 
     public void testQueryThatReturnsNumber() {
