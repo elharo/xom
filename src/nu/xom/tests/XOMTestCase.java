@@ -414,29 +414,22 @@ public class XOMTestCase extends TestCase {
         }
         
         // now compare everything that isn't text using the original
-        // element objects
-        for (int i = 0; i < nonTextNodes; i++) {
-            Node expectedChild = getNonTextNode(expected, i);
-            Node actualChild = getNonTextNode(actual, i);
+        // element objects; we already know they have the same number
+        // of non-text nodes
+        int a = 0; // actualIndex
+        int e = expected.getChildCount();
+        for (int i = 0; i < e; i++) {
+            Node expectedChild = expected.getChild(i);
+            if (expectedChild instanceof Text) continue;            
+            // find the next nontext child of actual
+            Node actualChild = actual.getChild(a);
+            a++;
+            while (actualChild instanceof Text) {
+                actualChild = actual.getChild(a);
+                a++;
+            }
             assertEquals(message, expectedChild, actualChild);
         }
-        
-    }
-
-    
-    private static Node getNonTextNode(Element element, int index) {
-
-        int nonTextCount = 0;
-        int count = element.getChildCount();
-        for (int i = 0; i < count; i++) {
-            Node child = element.getChild(i);
-            if (! (child instanceof Text) ) {
-                if (nonTextCount == index) return child;
-                nonTextCount++;
-            }
-        }
-        throw new RuntimeException(
-          "Bug in XOMTestCase: this statement should not be reachable");
         
     }
 
