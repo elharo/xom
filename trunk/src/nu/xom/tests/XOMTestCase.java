@@ -288,7 +288,8 @@ public class XOMTestCase extends TestCase {
      * qualified names, namespace URI, attributes,
      * declared namespaces, and children
      * are equal. Consecutive text node children are coalesced
-     * before the comparison is made. If the two nodes are not equal, 
+     * before the comparison is made. Empty text nodes are removed.
+     * If the two nodes are not equal, 
      * a <code>ComparisonFailure</code> is thrown with the given 
      * message.
      * </p>
@@ -375,6 +376,7 @@ public class XOMTestCase extends TestCase {
             Node child = element.getChild(i);
             if (child instanceof Text) {
                 if (previousWasText) return true;
+                else if ("".equals(child.getValue())) return true;
                 else previousWasText = true;
             }
             else {
@@ -451,6 +453,7 @@ public class XOMTestCase extends TestCase {
         for (int i = 0; i < count; i++) {
             Node child = element.getChild(i);
             if (child instanceof Text) {
+                if ("".equals(child.getValue())) continue;
                 sb.setLength(0);
                 do {
                     sb.append(child.getValue());

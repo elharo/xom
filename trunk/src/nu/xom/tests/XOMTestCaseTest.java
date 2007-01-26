@@ -98,6 +98,23 @@ public class XOMTestCaseTest extends XOMTestCase {
     }
     
     
+    public void testCompareChildren() {
+    
+        Element e1 = new Element("e");
+        Element e2 = new Element("e");
+        e1.appendChild(new Comment("a"));
+        e2.appendChild(new Comment("b"));
+        try {
+            assertEquals("BOO!", e1, e2);
+            fail("didn't check children");
+        }
+        catch (ComparisonFailure ex) {
+            assertTrue(ex.getMessage().indexOf("BOO!") >= 0 );
+        }
+        
+    }
+
+
     public void testCompareMismatchedNullNodeTypes() {
      
         Node n1 = new Text("");
@@ -210,21 +227,13 @@ public class XOMTestCaseTest extends XOMTestCase {
     }
     
     
-    public void testCompareChildren() {
-     
-        Element e1 = new Element("e");
-        Element e2 = new Element("e");
-        e1.appendChild(new Comment("a"));
-        e2.appendChild(new Comment("b"));
-        try {
-            assertEquals("BOO!", e1, e2);
-            fail("didn't check children");
-        }
-        catch (ComparisonFailure ex) {
-            assertTrue(ex.getMessage().indexOf("BOO!") >= 0 );
-        }
+    public void testAssertEqualsEmptyElementsAndElementThatOnlyContainsEmptyText() {
+        
+        Element e1 = new Element("a");
+        Element e2 = new Element("a");
+        e2.appendChild("");
+        assertEquals(e1, e2);
         
     }
-    
-    
+        
 }
