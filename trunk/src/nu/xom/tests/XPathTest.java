@@ -2253,13 +2253,13 @@ public class XPathTest extends XOMTestCase {
         
         Builder builder = new Builder();
         Document testDoc = builder.build(
-          "http://cvs.jaxen.codehaus.org/viewrep/~raw,r=HEAD/jaxen/jaxen/xml/test/tests.xml");
+          "http://svn.jaxen.codehaus.org/browse/~raw,r=trunk/jaxen/trunk/jaxen/xml/test/tests.xml");
         Elements documents = testDoc.getRootElement().getChildElements("document");
         for (int i = 0; i < documents.size(); i++) {
             Element documentElement = documents.get(i);
             String url = documentElement.getAttributeValue("url");
             Document source = builder.build(
-              "http://cvs.jaxen.codehaus.org/viewrep/~raw,r=HEAD/jaxen/jaxen/" 
+              "http://svn.jaxen.codehaus.org/browse/~raw,r=trunk/jaxen/trunk/jaxen/" 
               + url);
             Elements contextElements = documentElement.getChildElements("context");
             for (int j = 0; j < contextElements.size(); j++) {
