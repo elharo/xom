@@ -6,7 +6,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
  * <p>
- *  Makes sure SAX does not ahve a locator. 
+ *  Makes sure SAX does not have a locator. 
  * </p>
  * 
  * @author Elliotte Rusty Harold
