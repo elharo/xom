@@ -1526,7 +1526,6 @@ public class BuilderTest extends XOMTestCase {
         
         String url = "file://" + inputDir.getAbsolutePath();
         String docURL = url + "/nonexistent/../sib/content/pe.xml";
-        System.out.println(docURL);
         Builder builder = new Builder(false);
         Document doc = builder.build(docURL);
         assertNotNull(doc);
