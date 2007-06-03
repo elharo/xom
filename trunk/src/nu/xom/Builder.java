@@ -1148,7 +1148,6 @@ public class Builder {
         try {
             parser.parse(in);
             result = handler.getDocument();
-
         }
         catch (SAXParseException ex) {
             ParsingException pex = new ParsingException(
