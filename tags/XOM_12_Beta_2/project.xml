@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<project>
+  <pomVersion>3</pomVersion>
+  <id>xom</id>
+  <name>xom</name>
+  <groupId>xom</groupId>
+  <currentVersion>@VERSION@</currentVersion>
+
+  <inceptionYear>2002</inceptionYear>
+  <package>nu.xom</package>
+
+  <shortDescription>Dual Streaming/Tree API for Processing XML</shortDescription>
+
+  <siteAddress>www.xom.nu</siteAddress>
+
+  <mailingLists>
+    <mailingList>
+      <name>XOM Interest Mailing List</name>
+      <archive>http://lists.ibiblio.org/pipermail/xom-interest/</archive>
+    </mailingList>
+  </mailingLists>
+
+ <developers>
+
+    <developer>
+      <name>Elliotte Rusty Harold</name>
+      <id>elharo</id>
+      <email>elharo@metalab.unc.edu</email>
+      <organization>Cafe au Lait</organization>
+    </developer>
+
+  </developers>
+
+  <dependencies>
+    <dependency>
+    	<groupId>xerces</groupId>
+    	<artifactId>xmlParserAPIs</artifactId>
+    	<version>2.6.2</version>
+    	<type>jar</type>
+    </dependency>  
+    <dependency>
+    	<groupId>xerces</groupId>
+    	<artifactId>xercesImpl</artifactId>
+    	<version>2.6.2</version>
+    	<type>jar</type>
+    </dependency>  
+    <dependency>
+    	<groupId>xalan</groupId>
+    	<artifactId>xalan</artifactId>
+    	<version>2.7.0</version>
+    	<type>jar</type>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <nagEmailAddress>elharo@metalab.unc.edu</nagEmailAddress>
+    <sourceDirectory>src</sourceDirectory>
+    <unitTestSourceDirectory>src</unitTestSourceDirectory>
+    <!-- Unit test classes -->
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+    </unitTest>
+  </build>  
+  
+</project>  
