@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2006 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.2b2
  *
  */
 public class XIncluder {
@@ -624,13 +624,17 @@ public class XIncluder {
       throws MalformedURLException, BadHrefAttributeException {
         
         Element parent = new Element("c");
-        parent.setBaseURI(baseURL.toExternalForm());
+        String base = baseURL.toExternalForm();
+        parent.setBaseURI(base);
         Element child = new Element("c");
         parent.appendChild(child);
         child.addAttribute(new Attribute(
           "xml:base", "http://www.w3.org/XML/1998/namespace", href));
         URL result = new URL(child.getBaseURI());
-        if (!"".equals(href) && result.equals(baseURL)) {
+        // avoid URL DNS lookup; see 
+        // http://michaelscharf.blogspot.com/2006/11/javaneturlequals-and-hashcode-make.html
+        if (!"".equals(href) 
+            && result.toExternalForm().equals(base)) {
             if (! baseURL.toExternalForm().endsWith(href)) {
                 throw new BadHrefAttributeException(href 
                   + " is not a syntactically correct IRI");
