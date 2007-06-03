@@ -889,6 +889,7 @@ public class Canonicalizer {
                 pseudoRoot.appendChild(root);
             }
             try {
+                // XXX Consider if it's faster to do this without XPath
                 write(node.query(".//. | .//@* | .//namespace::*"));
             }
             finally {
