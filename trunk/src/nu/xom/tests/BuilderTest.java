@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2007 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -24,6 +24,7 @@ package nu.xom.tests;
 import java.io.ByteArrayOutputStream;
 import java.io.CharConversionException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,7 +39,6 @@ import java.io.Writer;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 
 import org.apache.xerces.parsers.SAXParser;
 import org.xml.sax.Attributes;
@@ -3393,13 +3393,35 @@ public class BuilderTest extends XOMTestCase {
         
     }
     
-    public void testLocatorReturnsNullSystemID() throws ParsingException, IOException {
-     
+    public void testLocatorReturnsNullSystemIDWithoutRelativeURL() 
+      throws ParsingException, IOException {
+        
         XMLReader reader = new SAXParser();
         reader = new LocatorFilter(reader);
         Builder builder = new Builder(reader);
-        URL u = new URL("http://www.cafeconleche.org/");
-        builder.build(u.openStream());
+        InputStream in = new FileInputStream("data/nonquirky.xhtml");
+        builder.build(in);
+        
+    }
+    
+    public void testLocatorReturnsNullSystemIDWithRelativeURL() 
+      throws ParsingException, IOException {
+        
+        XMLReader reader = new SAXParser();
+        reader = new LocatorFilter(reader);
+        Builder builder = new Builder(reader);
+        InputStream in = new FileInputStream("data/quirks.xhtml");
+        try {
+        	builder.build(in);
+        	fail("How did it find the DTD");
+        }
+        catch (IOException success) {
+        	assertNotNull(success.getMessage());
+        	// Here we expect that because there's no Locator
+        	// there's no base URRL. As a result, the DTD is looked fo rin the
+        	// current working directory, which is the wrong place. 
+        	// Therefore this IOException is thrown. 
+        }
         
     }
     
