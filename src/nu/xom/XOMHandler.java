@@ -76,7 +76,7 @@ class XOMHandler
 
     // See http://www.servlets.com/archive/servlet/ReadMsg?msgId=554071&listName=jdom-interest
     // This method is called to avoid leaking document sized memory
-    // when a Builder is not imediately reused
+    // when a Builder is not immediately reused
     void freeMemory() {
         document = null;
         parent = null;
