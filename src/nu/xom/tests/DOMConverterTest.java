@@ -38,6 +38,7 @@ import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import nu.xom.Namespace;
 import nu.xom.Node;
 import nu.xom.NodeFactory;
 import nu.xom.Nodes;
@@ -47,6 +48,7 @@ import nu.xom.Text;
 import nu.xom.XMLException;
 import nu.xom.converters.DOMConverter;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.DocumentFragment;
@@ -61,7 +63,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2b2
  *
  */
 public class DOMConverterTest extends XOMTestCase {
@@ -625,10 +627,23 @@ public class DOMConverterTest extends XOMTestCase {
         org.w3c.dom.Document domDoc = DOMConverter.convert(doc, impl);
         org.w3c.dom.Element domRoot = domDoc.getDocumentElement();
         assertEquals(1, domRoot.getAttributes().getLength());
-         
+        assertEquals("preserve", domRoot.getAttributeNS("http://www.w3.org/XML/1998/namespace", "space"));
+        
     }
  
     
+    public void testConvertXMLSpaceAttributeFromDOMToXOM() 
+      throws SAXException, IOException, ParserConfigurationException {
+   
+        DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+        df.setNamespaceAware(true);
+        org.w3c.dom.Document doc = df.newDocumentBuilder().parse(new InputSource(new StringReader("<root xml:space='preserve'/>")));
+        Document xom = DOMConverter.convert (doc);
+        assertEquals("preserve", xom.getRootElement().getAttributeValue("space", Namespace.XML_NAMESPACE));
+        
+    }
+  
+
     public void testConvertXMLPrefixedElementFromXOMToDOM() 
       throws SAXException, IOException {
      
