@@ -664,7 +664,7 @@ public class BaseURITest extends XOMTestCase {
         Document doc = builder.build(
           "http://www.ibiblio.org/xml/redirecttest.xml");
         assertEquals(
-          "http://www.ibiblio.org/xml/redirected/target.xml", 
+          "http://www.cafeconleche.org/redirecttest.xml", 
           doc.getBaseURI()
         );
         
