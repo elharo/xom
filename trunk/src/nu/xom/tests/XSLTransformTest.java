@@ -1698,8 +1698,14 @@ public class XSLTransformTest extends XOMTestCase {
                         ) {
                             // binds XML namespace to prefix other than xml
                         }
+                        else if ("ProcessingInstruction__78200".equals(id)
+                                || "ProcessingInstruction__78202".equals(id)
+                                || "ProcessingInstruction__78203".equals(id)
+                                ) {
+                            // bad test case; uses non-absolute domain name to locate DTD
+                        }
                         else {
-                            System.err.println(id + ": " + ex.getMessage());
+                            System.out.println(id + ": " + ex.getMessage());
                             throw ex;
                         }
                     }
