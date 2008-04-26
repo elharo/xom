@@ -31,6 +31,12 @@ Should Builder/NodeFactory have a build(Document) method that allows one to pass
 
 Should/could the TrAX source and result, Jaxen adapter and so forth go public in the converters package?
 
+Per Michael Kay: 
+Is there any way of building a XOM document from a stream of SAX events?
+That is, something that implements ContentHandler, is called to receive the
+SAX events, and returns the document node?
+
+
 1.2:
 -----
 
@@ -225,7 +231,7 @@ Fixed bug that could unnecessarily escape carriage returns and linefeeds and num
 
 Fixed bug that could sometimes change line breaks
 
-Avoid leaking memory from Builkder when not reusing it.
+Avoid leaking memory from Builder when not reusing it.
 
 ===============
 Done 1.1b6:
