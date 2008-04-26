@@ -1852,9 +1852,12 @@ public class XSLTransformTest extends XOMTestCase {
           File base = new File("data");
           base = new File(base, "oasis-xslt-testsuite");
           base = new File(base, "TESTS");
-
+          base = new File(base, "Xalan_Conformance_Tests");
+          
           File input = new File(base, path + ".xml");
           File style = new File(base, path + ".xsl");
+          
+          base = new File(base, "REF_OUT");
           File output = new File(base, path + ".out");
 
           Document styleDoc = builder.build(style);
