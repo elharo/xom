@@ -324,7 +324,7 @@ XOM Build file
         <section name="org/jaxen/">
           <attribute name="Specification-Title"    value="Jaxen XPath engine"/>
           <attribute name="Implementation-Title"   value="org.jaxen"/>
-          <attribute name="Implementation-Version" value="1.1.1"/>
+          <attribute name="Implementation-Version" value="1.1.2"/>
           <attribute name="Implementation-Vendor"  value="CodeHaus"/>
         </section>
         <section name="nu/xom/xslt/">
@@ -699,7 +699,7 @@ location="${dist.dir}/xom-maven-${version}.jar" />
   </target>
 
   <target name="compile-jaxen" description="Compile Jaxen" depends="get-jaxen">
-    <javac srcdir="${build.dir}/jaxen/src/java/main"
+    <javac srcdir="${build.dir}/jaxen-1.1.2/src/java/main"
            destdir="${build.dir}/jaxen-classes"
            debug="${debug}"
            optimize="${optimize}"
@@ -728,7 +728,7 @@ location="${dist.dir}/xom-maven-${version}.jar" />
   </target>
   
   <target name="get-jaxen" description="Download Jaxen source code" depends="prepare">
-      <unzip src="jaxen-1.1.1-src.zip" dest="${build.dir}" />
+      <unzip src="jaxen-1.1.2-src.zip" dest="${build.dir}" />
   </target>
 
   <target name="debug" depends="init" description="Print various Ant properties">
