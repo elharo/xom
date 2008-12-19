@@ -55,7 +55,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.2b3
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -336,19 +336,42 @@ public class CanonicalizerTest extends XOMTestCase {
     }
         
 
-    public void testExclusiveDoesntRenderUnusedPrefix() 
-      throws IOException {
-     
-        Element pdu = new Element("n0:tuck", "http://a.example");
-        pdu.addNamespaceDeclaration("pre", "http://www.example.org/");
+    public void testExclusiveDoesntRenderUnusedPrefix() throws IOException {
    
-        String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
+      Element pdu = new Element("n0:tuck", "http://a.example");
+      pdu.addNamespaceDeclaration("pre", "http://www.example.org/");
+ 
+      String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      Canonicalizer canonicalizer = new Canonicalizer(out,
+        Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
+      
+      Document doc = new Document(pdu);
+      canonicalizer.write(doc);  
+      
+      out.close();
+      String s = new String(out.toByteArray(), "UTF8");
+      assertEquals(expected, s);
+      
+    }
+    
+    
+    public void testExclusiveDoesntRenderUnusedDefaultNamespace() throws IOException {
+
+        Element root = new Element("A", "http://foo.example.com");
+        Element child = new Element("n2:B", "http://b.example.com");
+        root.appendChild(child);
+        Element grandchild = new Element("n2:C", "http://b.example.com");
+        child.appendChild(grandchild);
+        grandchild.addAttribute(new Attribute("Attribute", "something"));
+        
+        String expected = "<n2:C xmlns:n2=\"http://b.example.com\" Attribute=\"something\"></n2:C>";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
-        Document doc = new Document(pdu);
-        canonicalizer.write(doc);  
+        new Document(root);
+        canonicalizer.write(grandchild);  
         
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
@@ -357,6 +380,30 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
+    public void testExclusiveDoesntRenderUnusedPrefixedNamespace() throws IOException {
+
+        Element root = new Element("A", "http://foo.example.com");
+        Element child = new Element("n1:B", "http://bar.example.com");
+        root.appendChild(child);
+        Element grandchild = new Element("n2:C", "http://b.example.com");
+        child.appendChild(grandchild);
+        grandchild.addAttribute(new Attribute("Attribute", "something"));
+        
+        String expected = "<n2:C xmlns:n2=\"http://b.example.com\" Attribute=\"something\"></n2:C>";
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Canonicalizer canonicalizer = new Canonicalizer(out,
+          Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
+        
+        new Document(root);
+        canonicalizer.write(grandchild);  
+        
+        out.close();
+        String s = new String(out.toByteArray(), "UTF8");
+        assertEquals(expected, s);
+        
+    }
+
+  
     public void testWriteDefaultNamespace() throws IOException {
 
         Element pdu = new Element("tuck", "http://www.example.org/");

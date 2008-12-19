@@ -26,9 +26,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -890,7 +892,33 @@ public class Canonicalizer {
             }
             try {
                 // XXX Consider if it's faster to do this without XPath
-                write(node.query(".//. | .//@* | .//namespace::*"));
+                Nodes nodes = node.query(".//. | .//@* | .//namespace::*");
+                if (exclusive) { // only include namespace nodes in scope
+                    Set prefixes = new HashSet(nodes.size());
+                    for (int i = 0; i < nodes.size(); i++) {
+                        Node n = nodes.get(i);
+                        if (n instanceof Element) {
+                            String prefix = ((Element) n).getNamespacePrefix();
+                            prefixes.add(prefix);
+                        }
+                        else if (n instanceof Attribute) {
+                            String prefix = ((Attribute) n).getNamespacePrefix();
+                            if (! "".equals(prefix)) prefixes.add(prefix);
+                        }
+                    }
+                    // run through the namespaces and remove any that aren't visibly utilized
+                    for (int i = 0; i < nodes.size(); i++) {
+                        Node n = nodes.get(i);
+                        if (n instanceof Namespace) {
+                            String prefix = ((Namespace) n).getPrefix();
+                            if (! prefixes.contains((prefix))) {
+                                nodes.remove(i);
+                                i--;
+                            }
+                        }
+                    }
+                }
+                write(nodes);
             }
             finally {
                 if (pseudoRoot != null) pseudoRoot.removeChild(0);
