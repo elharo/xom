@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2005, 2008 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -55,7 +55,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b6
+ * @version 1.2b2
  *
  */
 public class CanonicalizerTest extends XOMTestCase {
@@ -99,7 +99,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
         byte[] result = out.toByteArray();
         out.close();
-        String s = new String(out.toByteArray(), "UTF8");
+        String s = new String(result, "UTF8");
         assertEquals(expected, s);
         
     }
@@ -125,7 +125,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
         byte[] result = out.toByteArray();
         out.close();
-        String s = new String(out.toByteArray(), "UTF8");
+        String s = new String(result, "UTF8");
         assertEquals(expected, s);
         
     }
@@ -144,7 +144,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
         byte[] result = out.toByteArray();
         out.close();
-        String s = new String(out.toByteArray(), "UTF8");
+        String s = new String(result, "UTF8");
         assertEquals(expected, s);
         
     }
@@ -164,7 +164,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
         byte[] result = out.toByteArray();
         out.close();
-        String s = new String(out.toByteArray(), "UTF8");
+        String s = new String(result, "UTF8");
         assertEquals(expected, s);
         
     }
@@ -203,7 +203,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
         byte[] result = out.toByteArray();
         out.close();
-        String s = new String(out.toByteArray(), "UTF8");
+        String s = new String(result, "UTF8");
         assertEquals(expected, s);
         
     }
@@ -221,7 +221,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
         byte[] result = out.toByteArray();
         out.close();
-        String s = new String(out.toByteArray(), "UTF8");
+        String s = new String(result, "UTF8");
         assertEquals("<ns1:root xmlns:ns1=\"http://www.example.org/\"><elt1></elt1></ns1:root>", s);
         
     }
@@ -245,7 +245,7 @@ public class CanonicalizerTest extends XOMTestCase {
         
         byte[] result = out.toByteArray();
         out.close();
-        String s = new String(out.toByteArray(), "UTF8");
+        String s = new String(result, "UTF8");
         assertEquals(expected, s);
         
     }
@@ -267,7 +267,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("//@*"));  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -288,7 +287,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("//@*"));  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -309,7 +307,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc);  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -332,7 +329,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc);  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -354,7 +350,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc);  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -375,7 +370,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Nodes subset = doc.query("//namespace::node()");
         canonicalizer.write(subset);  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -404,7 +398,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Nodes subset = doc.query("/* | //child | //@*");
         canonicalizer.write(subset);  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -428,7 +421,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc);  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -453,7 +445,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc);  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -475,7 +466,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("//* | //namespace::node()"));  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -1553,7 +1543,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context));  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -1632,7 +1621,7 @@ public class CanonicalizerTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
-        Document doc = new Document(e1);
+        new Document(e1);
         Nodes set = new Nodes(e2);
         canonicalizer.write(set);  
 
@@ -1688,7 +1677,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]", context));  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -1720,7 +1708,6 @@ and expect to see
         Document doc = new Document(root);
         canonicalizer.write(doc.query("/root//node()"));  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -1748,9 +1735,8 @@ and expect to see
         Nodes subset = doc.query(
           "(//. | //@* | //namespace::*)[ancestor-or-self::n1:elem1]",
           context);
-        canonicalizer.write(subset);  
+        canonicalizer.write(subset);
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -1781,7 +1767,6 @@ and expect to see
           context);
         canonicalizer.write(subset);  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -1808,7 +1793,6 @@ and expect to see
           " (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", 
           context));  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -1834,7 +1818,6 @@ and expect to see
         XPathContext context = new XPathContext("n1", "http://example.net");
         canonicalizer.write(doc.query(" (//. | //@* | //namespace::*)[ancestor-or-self::n1:elem2]", context));  
         
-        byte[] result = out.toByteArray();
         out.close();
         String s = new String(out.toByteArray(), "UTF8");
         assertEquals(expected, s);
@@ -2099,7 +2082,7 @@ and expect to see
     public void testExclusiveCanonicalizeElementInDocument() throws IOException {
      
         Element root = new Element("root");
-        Document doc = new Document(root);
+        new Document(root);
         Element element = new Element("pre:foo", "http://www.example.org");
         root.appendChild(element);
         element.appendChild("  value \n value");
