@@ -1815,6 +1815,10 @@ public class XSLTransformTest extends XOMTestCase {
     } 
     
     
+    /**
+     * This test sometimes fails when run as part of the entire test suite
+     * for all of XOM (i.e. FastTests) but not when run as part of just this file.
+     */
     public void testKeysPerfRepro3()  
       throws IOException, ParsingException, XSLException {
         
@@ -1836,6 +1840,7 @@ public class XSLTransformTest extends XOMTestCase {
         assertEquals(expectedResult, actualResult);
      
     } 
+    
     
     /**
      * This test sometimes fails when run as part of the entire test suite
