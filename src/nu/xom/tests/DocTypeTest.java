@@ -46,7 +46,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.2b3
  *
  */
 public class DocTypeTest extends XOMTestCase {
@@ -57,9 +57,9 @@ public class DocTypeTest extends XOMTestCase {
     }
     
     
-    String name = "MyName";
-    String systemID = "http://www.w3.org/TR/some.dtd";
-    String publicID = "-//Me//some public ID";
+    private String name = "MyName";
+    private String systemID = "http://www.w3.org/TR/some.dtd";
+    private String publicID = "-//Me//some public ID";
 
 
     // This class tests error conditions, which Xerces
