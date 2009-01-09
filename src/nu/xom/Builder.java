@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.2b3
  * 
  */
 public class Builder {
@@ -67,9 +67,16 @@ public class Builder {
     static {  
 
         try {
-            String versionString = Version.getVersion();
-            versionString = versionString.substring(9, 12);
-            xercesVersion = Double.valueOf(versionString).doubleValue();
+            String x = Version.getVersion();
+            String versionString = x.substring(9);
+            int firstPeriod = versionString.indexOf(".");
+            int secondPeriod = versionString.lastIndexOf(".");
+            String major = versionString.substring(0, firstPeriod);
+            String minor = versionString.substring(firstPeriod+1, secondPeriod);
+            if (Integer.parseInt(minor) < 10 && Integer.parseInt(major) < 3) {
+                xercesVersion = Double.parseDouble(x.substring(9,12));
+            }
+            // else it's 2.6 or later which is all we really need to know
         }
         catch (Exception ex) {
             // The version string format changed so presumably it's
@@ -301,7 +308,10 @@ public class Builder {
         if (parserName.equals("nu.xom.XML1_0Parser") 
          || parserName.equals("nu.xom.JDK15XML1_0Parser")
          || parserName.equals("org.apache.xerces.parsers.SAXParser")
-         || parserName.equals("com.sun.org.apache.xerces.internal.parsers.SAXParser")) {
+         || parserName.equals("com.sun.org.apache.xerces.internal.parsers.SAXParser")
+         || parserName.equals("org.apache.xerces.jaxp.SAXParserImpl$JAXPSAXParser") // xerces-2.9.x
+         || parserName.equals("com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser")) // JDK 1.6
+        {
             try {
                 parser.setFeature(
                  "http://apache.org/xml/features/allow-java-encodings", true);
