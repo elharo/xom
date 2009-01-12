@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,7 +33,7 @@ import java.util.HashMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b1
+ * @version 1.2b3
  *
  */
 final class UnicodeUtil {
@@ -166,78 +166,8 @@ final class UnicodeUtil {
     private static int getCombiningClass(int c) {
         // ???? optimize
         
-        if (c >= 0x0000 && c <= 0x001F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x0020) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x0021 && c <= 0x0023) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x0024) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x0025 && c <= 0x0027) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x0028) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x0029) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x002A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x002B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x002C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x002D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x002E && c <= 0x002F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x0030 && c <= 0x0039) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x003A && c <= 0x003B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x003C && c <= 0x003E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x003F && c <= 0x0040) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x0041 && c <= 0x005A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x005B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x005C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x005D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x005E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x005F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x0060) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x0061 && c <= 0x007A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x007B) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x007C) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x007D) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x007E) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x007F && c <= 0x009F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00A0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00A1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x00A2 && c <= 0x00A5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x00A6 && c <= 0x00A7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00A8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00A9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00AA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00AB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00AC) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00AD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00AE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00AF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00B0) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00B1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x00B2 && c <= 0x00B3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00B4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00B5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00B6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00B7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00B8) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00B9) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00BA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00BB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x00BC && c <= 0x00BE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00BF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x00C0 && c <= 0x00D6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00D7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x00D8 && c <= 0x00F6) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x00F7) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x00F8 && c <= 0x01BA) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x01BB) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x01BC && c <= 0x01BF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x01C0 && c <= 0x01C3) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x01C4 && c <= 0x0236) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x0250 && c <= 0x02AF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x02B0 && c <= 0x02C1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x02C2 && c <= 0x02C5) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x02C6 && c <= 0x02D1) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x02D2 && c <= 0x02DF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x02E0 && c <= 0x02E4) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x02E5 && c <= 0x02ED) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c == 0x02EE) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
-        if (c >= 0x02EF && c <= 0x02FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        if (c <= 0x02FF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+ 
         if (c == 0x034F) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
         if (c >= 0x0374 && c <= 0x0375) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
         if (c == 0x037A) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
@@ -1133,12 +1063,14 @@ final class UnicodeUtil {
         if (c >= 0xE0100 && c <= 0xE01EF) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
         if (c >= 0xF0000 && c <= 0xFFFFD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
         if (c >= 0x100000 && c <= 0x10FFFD) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;
+        
         if (c >= 0x0334 && c <= 0x0338) return CANONICAL_COMBINING_CLASS_OVERLAY;
         if (c >= 0x20D2 && c <= 0x20D3) return CANONICAL_COMBINING_CLASS_OVERLAY;
         if (c >= 0x20D8 && c <= 0x20DA) return CANONICAL_COMBINING_CLASS_OVERLAY;
         if (c >= 0x20E5 && c <= 0x20E6) return CANONICAL_COMBINING_CLASS_OVERLAY;
         if (c == 0x20EA) return CANONICAL_COMBINING_CLASS_OVERLAY;
         if (c >= 0x1D167 && c <= 0x1D169) return CANONICAL_COMBINING_CLASS_OVERLAY;
+        
         if (c == 0x093C) return CANONICAL_COMBINING_CLASS_NUKTA;
         if (c == 0x09BC) return CANONICAL_COMBINING_CLASS_NUKTA;
         if (c == 0x0A3C) return CANONICAL_COMBINING_CLASS_NUKTA;
@@ -1146,7 +1078,9 @@ final class UnicodeUtil {
         if (c == 0x0B3C) return CANONICAL_COMBINING_CLASS_NUKTA;
         if (c == 0x0CBC) return CANONICAL_COMBINING_CLASS_NUKTA;
         if (c == 0x1037) return CANONICAL_COMBINING_CLASS_NUKTA;
+        
         if (c >= 0x3099 && c <= 0x309A) return CANONICAL_COMBINING_CLASS_KANA_VOICING;
+        
         if (c == 0x094D) return CANONICAL_COMBINING_CLASS_VIRAMA;
         if (c == 0x09CD) return CANONICAL_COMBINING_CLASS_VIRAMA;
         if (c == 0x0A4D) return CANONICAL_COMBINING_CLASS_VIRAMA;
@@ -1163,6 +1097,7 @@ final class UnicodeUtil {
         if (c == 0x1714) return CANONICAL_COMBINING_CLASS_VIRAMA;
         if (c == 0x1734) return CANONICAL_COMBINING_CLASS_VIRAMA;
         if (c == 0x17D2) return CANONICAL_COMBINING_CLASS_VIRAMA;
+        
         if (c == 0x05B0) return CANONICAL_COMBINING_CLASS_10;
         if (c == 0x05B1) return CANONICAL_COMBINING_CLASS_11;
         if (c == 0x05B2) return CANONICAL_COMBINING_CLASS_12;
