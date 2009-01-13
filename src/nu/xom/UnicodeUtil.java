@@ -631,6929 +631,6148 @@ final class UnicodeUtil {
             return decomposeHangul((char) character);
         }
         
-        StringBuffer sb = new StringBuffer(2);
-        if (character == 0x00C0) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0300);
+        // XXX use lookup table prepopulated with large string at first use
+        else if (character == 0x00C0) {
+            return "\u0041\u0300";
         }
         else if (character == 0x00C1) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0301);
+            return "\u0041\u0301";
         }
         else if (character == 0x00C2) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0302);
+            return "\u0041\u0302";
         }
         else if (character == 0x00C3) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0303);
+            return "\u0041\u0303";
         }
         else if (character == 0x00C4) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0308);
+            return "\u0041\u0308";
         }
         else if (character == 0x00C5) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x030A);
+            return "\u0041\u030A";
         }
         else if (character == 0x00C7) {
-            sb.append((char) 0x0043);
-            sb.append((char) 0x0327);
+            return "\u0043\u0327";
         }
         else if (character == 0x00C8) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0300);
+            return "\u0045\u0300";
         }
         else if (character == 0x00C9) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0301);
+            return "\u0045\u0301";
         }
         else if (character == 0x00CA) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0302);
+            return "\u0045\u0302";
         }
         else if (character == 0x00CB) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0308);
+            return "\u0045\u0308";
         }
         else if (character == 0x00CC) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0300);
+            return "\u0049\u0300";
         }
         else if (character == 0x00CD) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0301);
+            return "\u0049\u0301";
         }
         else if (character == 0x00CE) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0302);
+            return "\u0049\u0302";
         }
         else if (character == 0x00CF) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0308);
+            return "\u0049\u0308";
         }
         else if (character == 0x00D1) {
-            sb.append((char) 0x004E);
-            sb.append((char) 0x0303);
+            return "\u004E\u0303";
         }
         else if (character == 0x00D2) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0300);
+            return "\u004F\u0300";
         }
         else if (character == 0x00D3) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0301);
+            return "\u004F\u0301";
         }
         else if (character == 0x00D4) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0302);
+            return "\u004F\u0302";
         }
         else if (character == 0x00D5) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0303);
+            return "\u004F\u0303";
         }
         else if (character == 0x00D6) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0308);
+            return "\u004F\u0308";
         }
         else if (character == 0x00D9) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0300);
+            return "\u0055\u0300";
         }
         else if (character == 0x00DA) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0301);
+            return "\u0055\u0301";
         }
         else if (character == 0x00DB) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0302);
+            return "\u0055\u0302";
         }
         else if (character == 0x00DC) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0308);
+            return "\u0055\u0308";
         }
         else if (character == 0x00DD) {
-            sb.append((char) 0x0059);
-            sb.append((char) 0x0301);
+            return "\u0059\u0301";
         }
         else if (character == 0x00E0) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0300);
+            return "\u0061\u0300";
         }
         else if (character == 0x00E1) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0301);
+            return "\u0061\u0301";
         }
         else if (character == 0x00E2) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0302);
+            return "\u0061\u0302";
         }
         else if (character == 0x00E3) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0303);
+            return "\u0061\u0303";
         }
         else if (character == 0x00E4) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0308);
+            return "\u0061\u0308";
         }
         else if (character == 0x00E5) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x030A);
+            return "\u0061\u030A";
         }
         else if (character == 0x00E7) {
-            sb.append((char) 0x0063);
-            sb.append((char) 0x0327);
+            return "\u0063\u0327";
         }
         else if (character == 0x00E8) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0300);
+            return "\u0065\u0300";
         }
         else if (character == 0x00E9) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0301);
+            return "\u0065\u0301";
         }
         else if (character == 0x00EA) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0302);
+            return "\u0065\u0302";
         }
         else if (character == 0x00EB) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0308);
+            return "\u0065\u0308";
         }
         else if (character == 0x00EC) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0300);
+            return "\u0069\u0300";
         }
         else if (character == 0x00ED) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0301);
+            return "\u0069\u0301";
         }
         else if (character == 0x00EE) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0302);
+            return "\u0069\u0302";
         }
         else if (character == 0x00EF) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0308);
+            return "\u0069\u0308";
         }
         else if (character == 0x00F1) {
-            sb.append((char) 0x006E);
-            sb.append((char) 0x0303);
+            return "\u006E\u0303";
         }
         else if (character == 0x00F2) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0300);
+            return "\u006F\u0300";
         }
         else if (character == 0x00F3) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0301);
+            return "\u006F\u0301";
         }
         else if (character == 0x00F4) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0302);
+            return "\u006F\u0302";
         }
         else if (character == 0x00F5) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0303);
+            return "\u006F\u0303";
         }
         else if (character == 0x00F6) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0308);
+            return "\u006F\u0308";
         }
         else if (character == 0x00F9) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0300);
+            return "\u0075\u0300";
         }
         else if (character == 0x00FA) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0301);
+            return "\u0075\u0301";
         }
         else if (character == 0x00FB) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0302);
+            return "\u0075\u0302";
         }
         else if (character == 0x00FC) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0308);
+            return "\u0075\u0308";
         }
         else if (character == 0x00FD) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x0301);
+            return "\u0079\u0301";
         }
         else if (character == 0x00FF) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x0308);
+            return "\u0079\u0308";
         }
         else if (character == 0x0100) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0304);
+            return "\u0041\u0304";
         }
         else if (character == 0x0101) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0304);
+            return "\u0061\u0304";
         }
         else if (character == 0x0102) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0306);
+            return "\u0041\u0306";
         }
         else if (character == 0x0103) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0306);
+            return "\u0061\u0306";
         }
         else if (character == 0x0104) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0328);
+            return "\u0041\u0328";
         }
         else if (character == 0x0105) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0328);
+            return "\u0061\u0328";
         }
         else if (character == 0x0106) {
-            sb.append((char) 0x0043);
-            sb.append((char) 0x0301);
+            return "\u0043\u0301";
         }
         else if (character == 0x0107) {
-            sb.append((char) 0x0063);
-            sb.append((char) 0x0301);
+            return "\u0063\u0301";
         }
         else if (character == 0x0108) {
-            sb.append((char) 0x0043);
-            sb.append((char) 0x0302);
+            return "\u0043\u0302";
         }
         else if (character == 0x0109) {
-            sb.append((char) 0x0063);
-            sb.append((char) 0x0302);
+            return "\u0063\u0302";
         }
         else if (character == 0x010A) {
-            sb.append((char) 0x0043);
-            sb.append((char) 0x0307);
+            return "\u0043\u0307";
         }
         else if (character == 0x010B) {
-            sb.append((char) 0x0063);
-            sb.append((char) 0x0307);
+            return "\u0063\u0307";
         }
         else if (character == 0x010C) {
-            sb.append((char) 0x0043);
-            sb.append((char) 0x030C);
+            return "\u0043\u030C";
         }
         else if (character == 0x010D) {
-            sb.append((char) 0x0063);
-            sb.append((char) 0x030C);
+            return "\u0063\u030C";
         }
         else if (character == 0x010E) {
-            sb.append((char) 0x0044);
-            sb.append((char) 0x030C);
+            return "\u0044\u030C";
         }
         else if (character == 0x010F) {
-            sb.append((char) 0x0064);
-            sb.append((char) 0x030C);
+            return "\u0064\u030C";
         }
         else if (character == 0x0112) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0304);
+            return "\u0045\u0304";
         }
         else if (character == 0x0113) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0304);
+            return "\u0065\u0304";
         }
         else if (character == 0x0114) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0306);
+            return "\u0045\u0306";
         }
         else if (character == 0x0115) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0306);
+            return "\u0065\u0306";
         }
         else if (character == 0x0116) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0307);
+            return "\u0045\u0307";
         }
         else if (character == 0x0117) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0307);
+            return "\u0065\u0307";
         }
         else if (character == 0x0118) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0328);
+            return "\u0045\u0328";
         }
         else if (character == 0x0119) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0328);
+            return "\u0065\u0328";
         }
         else if (character == 0x011A) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x030C);
+            return "\u0045\u030C";
         }
         else if (character == 0x011B) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x030C);
+            return "\u0065\u030C";
         }
         else if (character == 0x011C) {
-            sb.append((char) 0x0047);
-            sb.append((char) 0x0302);
+            return "\u0047\u0302";
         }
         else if (character == 0x011D) {
-            sb.append((char) 0x0067);
-            sb.append((char) 0x0302);
+            return "\u0067\u0302";
         }
         else if (character == 0x011E) {
-            sb.append((char) 0x0047);
-            sb.append((char) 0x0306);
+            return "\u0047\u0306";
         }
         else if (character == 0x011F) {
-            sb.append((char) 0x0067);
-            sb.append((char) 0x0306);
+            return "\u0067\u0306";
         }
         else if (character == 0x0120) {
-            sb.append((char) 0x0047);
-            sb.append((char) 0x0307);
+            return "\u0047\u0307";
         }
         else if (character == 0x0121) {
-            sb.append((char) 0x0067);
-            sb.append((char) 0x0307);
+            return "\u0067\u0307";
         }
         else if (character == 0x0122) {
-            sb.append((char) 0x0047);
-            sb.append((char) 0x0327);
+            return "\u0047\u0327";
         }
         else if (character == 0x0123) {
-            sb.append((char) 0x0067);
-            sb.append((char) 0x0327);
+            return "\u0067\u0327";
         }
         else if (character == 0x0124) {
-            sb.append((char) 0x0048);
-            sb.append((char) 0x0302);
+            return "\u0048\u0302";
         }
         else if (character == 0x0125) {
-            sb.append((char) 0x0068);
-            sb.append((char) 0x0302);
+            return "\u0068\u0302";
         }
         else if (character == 0x0128) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0303);
+            return "\u0049\u0303";
         }
         else if (character == 0x0129) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0303);
+            return "\u0069\u0303";
         }
         else if (character == 0x012A) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0304);
+            return "\u0049\u0304";
         }
         else if (character == 0x012B) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0304);
+            return "\u0069\u0304";
         }
         else if (character == 0x012C) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0306);
+            return "\u0049\u0306";
         }
         else if (character == 0x012D) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0306);
+            return "\u0069\u0306";
         }
         else if (character == 0x012E) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0328);
+            return "\u0049\u0328";
         }
         else if (character == 0x012F) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0328);
+            return "\u0069\u0328";
         }
         else if (character == 0x0130) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0307);
+            return "\u0049\u0307";
         }
         else if (character == 0x0134) {
-            sb.append((char) 0x004A);
-            sb.append((char) 0x0302);
+            return "\u004A\u0302";
         }
         else if (character == 0x0135) {
-            sb.append((char) 0x006A);
-            sb.append((char) 0x0302);
+            return "\u006A\u0302";
         }
         else if (character == 0x0136) {
-            sb.append((char) 0x004B);
-            sb.append((char) 0x0327);
+            return "\u004B\u0327";
         }
         else if (character == 0x0137) {
-            sb.append((char) 0x006B);
-            sb.append((char) 0x0327);
+            return "\u006B\u0327";
         }
         else if (character == 0x0139) {
-            sb.append((char) 0x004C);
-            sb.append((char) 0x0301);
+            return "\u004C\u0301";
         }
         else if (character == 0x013A) {
-            sb.append((char) 0x006C);
-            sb.append((char) 0x0301);
+            return "\u006C\u0301";
         }
         else if (character == 0x013B) {
-            sb.append((char) 0x004C);
-            sb.append((char) 0x0327);
+            return "\u004C\u0327";
         }
         else if (character == 0x013C) {
-            sb.append((char) 0x006C);
-            sb.append((char) 0x0327);
+            return "\u006C\u0327";
         }
         else if (character == 0x013D) {
-            sb.append((char) 0x004C);
-            sb.append((char) 0x030C);
+            return "\u004C\u030C";
         }
         else if (character == 0x013E) {
-            sb.append((char) 0x006C);
-            sb.append((char) 0x030C);
+            return "\u006C\u030C";
         }
         else if (character == 0x0143) {
-            sb.append((char) 0x004E);
-            sb.append((char) 0x0301);
+            return "\u004E\u0301";
         }
         else if (character == 0x0144) {
-            sb.append((char) 0x006E);
-            sb.append((char) 0x0301);
+            return "\u006E\u0301";
         }
         else if (character == 0x0145) {
-            sb.append((char) 0x004E);
-            sb.append((char) 0x0327);
+            return "\u004E\u0327";
         }
         else if (character == 0x0146) {
-            sb.append((char) 0x006E);
-            sb.append((char) 0x0327);
+            return "\u006E\u0327";
         }
         else if (character == 0x0147) {
-            sb.append((char) 0x004E);
-            sb.append((char) 0x030C);
+            return "\u004E\u030C";
         }
         else if (character == 0x0148) {
-            sb.append((char) 0x006E);
-            sb.append((char) 0x030C);
+            return "\u006E\u030C";
         }
         else if (character == 0x014C) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0304);
+            return "\u004F\u0304";
         }
         else if (character == 0x014D) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0304);
+            return "\u006F\u0304";
         }
         else if (character == 0x014E) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0306);
+            return "\u004F\u0306";
         }
         else if (character == 0x014F) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0306);
+            return "\u006F\u0306";
         }
         else if (character == 0x0150) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x030B);
+            return "\u004F\u030B";
         }
         else if (character == 0x0151) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x030B);
+            return "\u006F\u030B";
         }
         else if (character == 0x0154) {
-            sb.append((char) 0x0052);
-            sb.append((char) 0x0301);
+            return "\u0052\u0301";
         }
         else if (character == 0x0155) {
-            sb.append((char) 0x0072);
-            sb.append((char) 0x0301);
+            return "\u0072\u0301";
         }
         else if (character == 0x0156) {
-            sb.append((char) 0x0052);
-            sb.append((char) 0x0327);
+            return "\u0052\u0327";
         }
         else if (character == 0x0157) {
-            sb.append((char) 0x0072);
-            sb.append((char) 0x0327);
+            return "\u0072\u0327";
         }
         else if (character == 0x0158) {
-            sb.append((char) 0x0052);
-            sb.append((char) 0x030C);
+            return "\u0052\u030C";
         }
         else if (character == 0x0159) {
-            sb.append((char) 0x0072);
-            sb.append((char) 0x030C);
+            return "\u0072\u030C";
         }
         else if (character == 0x015A) {
-            sb.append((char) 0x0053);
-            sb.append((char) 0x0301);
+            return "\u0053\u0301";
         }
         else if (character == 0x015B) {
-            sb.append((char) 0x0073);
-            sb.append((char) 0x0301);
+            return "\u0073\u0301";
         }
         else if (character == 0x015C) {
-            sb.append((char) 0x0053);
-            sb.append((char) 0x0302);
+            return "\u0053\u0302";
         }
         else if (character == 0x015D) {
-            sb.append((char) 0x0073);
-            sb.append((char) 0x0302);
+            return "\u0073\u0302";
         }
         else if (character == 0x015E) {
-            sb.append((char) 0x0053);
-            sb.append((char) 0x0327);
+            return "\u0053\u0327";
         }
         else if (character == 0x015F) {
-            sb.append((char) 0x0073);
-            sb.append((char) 0x0327);
+            return "\u0073\u0327";
         }
         else if (character == 0x0160) {
-            sb.append((char) 0x0053);
-            sb.append((char) 0x030C);
+            return "\u0053\u030C";
         }
         else if (character == 0x0161) {
-            sb.append((char) 0x0073);
-            sb.append((char) 0x030C);
+            return "\u0073\u030C";
         }
         else if (character == 0x0162) {
-            sb.append((char) 0x0054);
-            sb.append((char) 0x0327);
+            return "\u0054\u0327";
         }
         else if (character == 0x0163) {
-            sb.append((char) 0x0074);
-            sb.append((char) 0x0327);
+            return "\u0074\u0327";
         }
         else if (character == 0x0164) {
-            sb.append((char) 0x0054);
-            sb.append((char) 0x030C);
+            return "\u0054\u030C";
         }
         else if (character == 0x0165) {
-            sb.append((char) 0x0074);
-            sb.append((char) 0x030C);
+            return "\u0074\u030C";
         }
         else if (character == 0x0168) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0303);
+            return "\u0055\u0303";
         }
         else if (character == 0x0169) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0303);
+            return "\u0075\u0303";
         }
         else if (character == 0x016A) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0304);
+            return "\u0055\u0304";
         }
         else if (character == 0x016B) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0304);
+            return "\u0075\u0304";
         }
         else if (character == 0x016C) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0306);
+            return "\u0055\u0306";
         }
         else if (character == 0x016D) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0306);
+            return "\u0075\u0306";
         }
         else if (character == 0x016E) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x030A);
+            return "\u0055\u030A";
         }
         else if (character == 0x016F) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x030A);
+            return "\u0075\u030A";
         }
         else if (character == 0x0170) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x030B);
+            return "\u0055\u030B";
         }
         else if (character == 0x0171) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x030B);
+            return "\u0075\u030B";
         }
         else if (character == 0x0172) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0328);
+            return "\u0055\u0328";
         }
         else if (character == 0x0173) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0328);
+            return "\u0075\u0328";
         }
         else if (character == 0x0174) {
-            sb.append((char) 0x0057);
-            sb.append((char) 0x0302);
+            return "\u0057\u0302";
         }
         else if (character == 0x0175) {
-            sb.append((char) 0x0077);
-            sb.append((char) 0x0302);
+            return "\u0077\u0302";
         }
         else if (character == 0x0176) {
-            sb.append((char) 0x0059);
-            sb.append((char) 0x0302);
+            return "\u0059\u0302";
         }
         else if (character == 0x0177) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x0302);
+            return "\u0079\u0302";
         }
         else if (character == 0x0178) {
-            sb.append((char) 0x0059);
-            sb.append((char) 0x0308);
+            return "\u0059\u0308";
         }
         else if (character == 0x0179) {
-            sb.append((char) 0x005A);
-            sb.append((char) 0x0301);
+            return "\u005A\u0301";
         }
         else if (character == 0x017A) {
-            sb.append((char) 0x007A);
-            sb.append((char) 0x0301);
+            return "\u007A\u0301";
         }
         else if (character == 0x017B) {
-            sb.append((char) 0x005A);
-            sb.append((char) 0x0307);
+            return "\u005A\u0307";
         }
         else if (character == 0x017C) {
-            sb.append((char) 0x007A);
-            sb.append((char) 0x0307);
+            return "\u007A\u0307";
         }
         else if (character == 0x017D) {
-            sb.append((char) 0x005A);
-            sb.append((char) 0x030C);
+            return "\u005A\u030C";
         }
         else if (character == 0x017E) {
-            sb.append((char) 0x007A);
-            sb.append((char) 0x030C);
+            return "\u007A\u030C";
         }
         else if (character == 0x01A0) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x031B);
+            return "\u004F\u031B";
         }
         else if (character == 0x01A1) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x031B);
+            return "\u006F\u031B";
         }
         else if (character == 0x01AF) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x031B);
+            return "\u0055\u031B";
         }
         else if (character == 0x01B0) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x031B);
+            return "\u0075\u031B";
         }
         else if (character == 0x01CD) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x030C);
+            return "\u0041\u030C";
         }
         else if (character == 0x01CE) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x030C);
+            return "\u0061\u030C";
         }
         else if (character == 0x01CF) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x030C);
+            return "\u0049\u030C";
         }
         else if (character == 0x01D0) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x030C);
+            return "\u0069\u030C";
         }
         else if (character == 0x01D1) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x030C);
+            return "\u004F\u030C";
         }
         else if (character == 0x01D2) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x030C);
+            return "\u006F\u030C";
         }
         else if (character == 0x01D3) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x030C);
+            return "\u0055\u030C";
         }
         else if (character == 0x01D4) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x030C);
+            return "\u0075\u030C";
         }
         else if (character == 0x01D5) {
-            sb.append((char) 0x00DC);
-            sb.append((char) 0x0304);
+            return "\u00DC\u0304";
         }
         else if (character == 0x01D6) {
-            sb.append((char) 0x00FC);
-            sb.append((char) 0x0304);
+            return "\u00FC\u0304";
         }
         else if (character == 0x01D7) {
-            sb.append((char) 0x00DC);
-            sb.append((char) 0x0301);
+            return "\u00DC\u0301";
         }
         else if (character == 0x01D8) {
-            sb.append((char) 0x00FC);
-            sb.append((char) 0x0301);
+            return "\u00FC\u0301";
         }
         else if (character == 0x01D9) {
-            sb.append((char) 0x00DC);
-            sb.append((char) 0x030C);
+            return "\u00DC\u030C";
         }
         else if (character == 0x01DA) {
-            sb.append((char) 0x00FC);
-            sb.append((char) 0x030C);
+            return "\u00FC\u030C";
         }
         else if (character == 0x01DB) {
-            sb.append((char) 0x00DC);
-            sb.append((char) 0x0300);
+            return "\u00DC\u0300";
         }
         else if (character == 0x01DC) {
-            sb.append((char) 0x00FC);
-            sb.append((char) 0x0300);
+            return "\u00FC\u0300";
         }
         else if (character == 0x01DE) {
-            sb.append((char) 0x00C4);
-            sb.append((char) 0x0304);
+            return "\u00C4\u0304";
         }
         else if (character == 0x01DF) {
-            sb.append((char) 0x00E4);
-            sb.append((char) 0x0304);
+            return "\u00E4\u0304";
         }
         else if (character == 0x01E0) {
-            sb.append((char) 0x0226);
-            sb.append((char) 0x0304);
+            return "\u0226\u0304";
         }
         else if (character == 0x01E1) {
-            sb.append((char) 0x0227);
-            sb.append((char) 0x0304);
+            return "\u0227\u0304";
         }
         else if (character == 0x01E2) {
-            sb.append((char) 0x00C6);
-            sb.append((char) 0x0304);
+            return "\u00C6\u0304";
         }
         else if (character == 0x01E3) {
-            sb.append((char) 0x00E6);
-            sb.append((char) 0x0304);
+            return "\u00E6\u0304";
         }
         else if (character == 0x01E6) {
-            sb.append((char) 0x0047);
-            sb.append((char) 0x030C);
+            return "\u0047\u030C";
         }
         else if (character == 0x01E7) {
-            sb.append((char) 0x0067);
-            sb.append((char) 0x030C);
+            return "\u0067\u030C";
         }
         else if (character == 0x01E8) {
-            sb.append((char) 0x004B);
-            sb.append((char) 0x030C);
+            return "\u004B\u030C";
         }
         else if (character == 0x01E9) {
-            sb.append((char) 0x006B);
-            sb.append((char) 0x030C);
+            return "\u006B\u030C";
         }
         else if (character == 0x01EA) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0328);
+            return "\u004F\u0328";
         }
         else if (character == 0x01EB) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0328);
+            return "\u006F\u0328";
         }
         else if (character == 0x01EC) {
-            sb.append((char) 0x01EA);
-            sb.append((char) 0x0304);
+            return "\u01EA\u0304";
         }
         else if (character == 0x01ED) {
-            sb.append((char) 0x01EB);
-            sb.append((char) 0x0304);
+            return "\u01EB\u0304";
         }
         else if (character == 0x01EE) {
-            sb.append((char) 0x01B7);
-            sb.append((char) 0x030C);
+            return "\u01B7\u030C";
         }
         else if (character == 0x01EF) {
-            sb.append((char) 0x0292);
-            sb.append((char) 0x030C);
+            return "\u0292\u030C";
         }
         else if (character == 0x01F0) {
-            sb.append((char) 0x006A);
-            sb.append((char) 0x030C);
+            return "\u006A\u030C";
         }
         else if (character == 0x01F4) {
-            sb.append((char) 0x0047);
-            sb.append((char) 0x0301);
+            return "\u0047\u0301";
         }
         else if (character == 0x01F5) {
-            sb.append((char) 0x0067);
-            sb.append((char) 0x0301);
+            return "\u0067\u0301";
         }
         else if (character == 0x01F8) {
-            sb.append((char) 0x004E);
-            sb.append((char) 0x0300);
+            return "\u004E\u0300";
         }
         else if (character == 0x01F9) {
-            sb.append((char) 0x006E);
-            sb.append((char) 0x0300);
+            return "\u006E\u0300";
         }
         else if (character == 0x01FA) {
-            sb.append((char) 0x00C5);
-            sb.append((char) 0x0301);
+            return "\u00C5\u0301";
         }
         else if (character == 0x01FB) {
-            sb.append((char) 0x00E5);
-            sb.append((char) 0x0301);
+            return "\u00E5\u0301";
         }
         else if (character == 0x01FC) {
-            sb.append((char) 0x00C6);
-            sb.append((char) 0x0301);
+            return "\u00C6\u0301";
         }
         else if (character == 0x01FD) {
-            sb.append((char) 0x00E6);
-            sb.append((char) 0x0301);
+            return "\u00E6\u0301";
         }
         else if (character == 0x01FE) {
-            sb.append((char) 0x00D8);
-            sb.append((char) 0x0301);
+            return "\u00D8\u0301";
         }
         else if (character == 0x01FF) {
-            sb.append((char) 0x00F8);
-            sb.append((char) 0x0301);
+            return "\u00F8\u0301";
         }
         else if (character == 0x0200) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x030F);
+            return "\u0041\u030F";
         }
         else if (character == 0x0201) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x030F);
+            return "\u0061\u030F";
         }
         else if (character == 0x0202) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0311);
+            return "\u0041\u0311";
         }
         else if (character == 0x0203) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0311);
+            return "\u0061\u0311";
         }
         else if (character == 0x0204) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x030F);
+            return "\u0045\u030F";
         }
         else if (character == 0x0205) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x030F);
+            return "\u0065\u030F";
         }
         else if (character == 0x0206) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0311);
+            return "\u0045\u0311";
         }
         else if (character == 0x0207) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0311);
+            return "\u0065\u0311";
         }
         else if (character == 0x0208) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x030F);
+            return "\u0049\u030F";
         }
         else if (character == 0x0209) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x030F);
+            return "\u0069\u030F";
         }
         else if (character == 0x020A) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0311);
+            return "\u0049\u0311";
         }
         else if (character == 0x020B) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0311);
+            return "\u0069\u0311";
         }
         else if (character == 0x020C) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x030F);
+            return "\u004F\u030F";
         }
         else if (character == 0x020D) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x030F);
+            return "\u006F\u030F";
         }
         else if (character == 0x020E) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0311);
+            return "\u004F\u0311";
         }
         else if (character == 0x020F) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0311);
+            return "\u006F\u0311";
         }
         else if (character == 0x0210) {
-            sb.append((char) 0x0052);
-            sb.append((char) 0x030F);
+            return "\u0052\u030F";
         }
         else if (character == 0x0211) {
-            sb.append((char) 0x0072);
-            sb.append((char) 0x030F);
+            return "\u0072\u030F";
         }
         else if (character == 0x0212) {
-            sb.append((char) 0x0052);
-            sb.append((char) 0x0311);
+            return "\u0052\u0311";
         }
         else if (character == 0x0213) {
-            sb.append((char) 0x0072);
-            sb.append((char) 0x0311);
+            return "\u0072\u0311";
         }
         else if (character == 0x0214) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x030F);
+            return "\u0055\u030F";
         }
         else if (character == 0x0215) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x030F);
+            return "\u0075\u030F";
         }
         else if (character == 0x0216) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0311);
+            return "\u0055\u0311";
         }
         else if (character == 0x0217) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0311);
+            return "\u0075\u0311";
         }
         else if (character == 0x0218) {
-            sb.append((char) 0x0053);
-            sb.append((char) 0x0326);
+            return "\u0053\u0326";
         }
         else if (character == 0x0219) {
-            sb.append((char) 0x0073);
-            sb.append((char) 0x0326);
+            return "\u0073\u0326";
         }
         else if (character == 0x021A) {
-            sb.append((char) 0x0054);
-            sb.append((char) 0x0326);
+            return "\u0054\u0326";
         }
         else if (character == 0x021B) {
-            sb.append((char) 0x0074);
-            sb.append((char) 0x0326);
+            return "\u0074\u0326";
         }
         else if (character == 0x021E) {
-            sb.append((char) 0x0048);
-            sb.append((char) 0x030C);
+            return "\u0048\u030C";
         }
         else if (character == 0x021F) {
-            sb.append((char) 0x0068);
-            sb.append((char) 0x030C);
+            return "\u0068\u030C";
         }
         else if (character == 0x0226) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0307);
+            return "\u0041\u0307";
         }
         else if (character == 0x0227) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0307);
+            return "\u0061\u0307";
         }
         else if (character == 0x0228) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0327);
+            return "\u0045\u0327";
         }
         else if (character == 0x0229) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0327);
+            return "\u0065\u0327";
         }
         else if (character == 0x022A) {
-            sb.append((char) 0x00D6);
-            sb.append((char) 0x0304);
+            return "\u00D6\u0304";
         }
         else if (character == 0x022B) {
-            sb.append((char) 0x00F6);
-            sb.append((char) 0x0304);
+            return "\u00F6\u0304";
         }
         else if (character == 0x022C) {
-            sb.append((char) 0x00D5);
-            sb.append((char) 0x0304);
+            return "\u00D5\u0304";
         }
         else if (character == 0x022D) {
-            sb.append((char) 0x00F5);
-            sb.append((char) 0x0304);
+            return "\u00F5\u0304";
         }
         else if (character == 0x022E) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0307);
+            return "\u004F\u0307";
         }
         else if (character == 0x022F) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0307);
+            return "\u006F\u0307";
         }
         else if (character == 0x0230) {
-            sb.append((char) 0x022E);
-            sb.append((char) 0x0304);
+            return "\u022E\u0304";
         }
         else if (character == 0x0231) {
-            sb.append((char) 0x022F);
-            sb.append((char) 0x0304);
+            return "\u022F\u0304";
         }
         else if (character == 0x0232) {
-            sb.append((char) 0x0059);
-            sb.append((char) 0x0304);
+            return "\u0059\u0304";
         }
         else if (character == 0x0233) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x0304);
+            return "\u0079\u0304";
         }
         else if (character == 0x0340) {
-            sb.append((char) 0x0300);
+            return "\u0300";
         }
         else if (character == 0x0341) {
-            sb.append((char) 0x0301);
+            return "\u0301";
         }
         else if (character == 0x0343) {
-            sb.append((char) 0x0313);
+            return "\u0313";
         }
         else if (character == 0x0344) {
-            sb.append((char) 0x0308);
-            sb.append((char) 0x0301);
+            return "\u0308\u0301";
         }
         else if (character == 0x0374) {
-            sb.append((char) 0x02B9);
+            return "\u02B9";
         }
         else if (character == 0x037E) {
-            sb.append((char) 0x003B);
+            return "\u003B";
         }
         else if (character == 0x0385) {
-            sb.append((char) 0x00A8);
-            sb.append((char) 0x0301);
+            return "\u00A8\u0301";
         }
         else if (character == 0x0386) {
-            sb.append((char) 0x0391);
-            sb.append((char) 0x0301);
+            return "\u0391\u0301";
         }
         else if (character == 0x0387) {
-            sb.append((char) 0x00B7);
+            return "\u00B7";
         }
         else if (character == 0x0388) {
-            sb.append((char) 0x0395);
-            sb.append((char) 0x0301);
+            return "\u0395\u0301";
         }
         else if (character == 0x0389) {
-            sb.append((char) 0x0397);
-            sb.append((char) 0x0301);
+            return "\u0397\u0301";
         }
         else if (character == 0x038A) {
-            sb.append((char) 0x0399);
-            sb.append((char) 0x0301);
+            return "\u0399\u0301";
         }
         else if (character == 0x038C) {
-            sb.append((char) 0x039F);
-            sb.append((char) 0x0301);
+            return "\u039F\u0301";
         }
         else if (character == 0x038E) {
-            sb.append((char) 0x03A5);
-            sb.append((char) 0x0301);
+            return "\u03A5\u0301";
         }
         else if (character == 0x038F) {
-            sb.append((char) 0x03A9);
-            sb.append((char) 0x0301);
+            return "\u03A9\u0301";
         }
         else if (character == 0x0390) {
-            sb.append((char) 0x03CA);
-            sb.append((char) 0x0301);
+            return "\u03CA\u0301";
         }
         else if (character == 0x03AA) {
-            sb.append((char) 0x0399);
-            sb.append((char) 0x0308);
+            return "\u0399\u0308";
         }
         else if (character == 0x03AB) {
-            sb.append((char) 0x03A5);
-            sb.append((char) 0x0308);
+            return "\u03A5\u0308";
         }
         else if (character == 0x03AC) {
-            sb.append((char) 0x03B1);
-            sb.append((char) 0x0301);
+            return "\u03B1\u0301";
         }
         else if (character == 0x03AD) {
-            sb.append((char) 0x03B5);
-            sb.append((char) 0x0301);
+            return "\u03B5\u0301";
         }
         else if (character == 0x03AE) {
-            sb.append((char) 0x03B7);
-            sb.append((char) 0x0301);
+            return "\u03B7\u0301";
         }
         else if (character == 0x03AF) {
-            sb.append((char) 0x03B9);
-            sb.append((char) 0x0301);
+            return "\u03B9\u0301";
         }
         else if (character == 0x03B0) {
-            sb.append((char) 0x03CB);
-            sb.append((char) 0x0301);
+            return "\u03CB\u0301";
         }
         else if (character == 0x03CA) {
-            sb.append((char) 0x03B9);
-            sb.append((char) 0x0308);
+            return "\u03B9\u0308";
         }
         else if (character == 0x03CB) {
-            sb.append((char) 0x03C5);
-            sb.append((char) 0x0308);
+            return "\u03C5\u0308";
         }
         else if (character == 0x03CC) {
-            sb.append((char) 0x03BF);
-            sb.append((char) 0x0301);
+            return "\u03BF\u0301";
         }
         else if (character == 0x03CD) {
-            sb.append((char) 0x03C5);
-            sb.append((char) 0x0301);
+            return "\u03C5\u0301";
         }
         else if (character == 0x03CE) {
-            sb.append((char) 0x03C9);
-            sb.append((char) 0x0301);
+            return "\u03C9\u0301";
         }
         else if (character == 0x03D3) {
-            sb.append((char) 0x03D2);
-            sb.append((char) 0x0301);
+            return "\u03D2\u0301";
         }
         else if (character == 0x03D4) {
-            sb.append((char) 0x03D2);
-            sb.append((char) 0x0308);
+            return "\u03D2\u0308";
         }
         else if (character == 0x0400) {
-            sb.append((char) 0x0415);
-            sb.append((char) 0x0300);
+            return "\u0415\u0300";
         }
         else if (character == 0x0401) {
-            sb.append((char) 0x0415);
-            sb.append((char) 0x0308);
+            return "\u0415\u0308";
         }
         else if (character == 0x0403) {
-            sb.append((char) 0x0413);
-            sb.append((char) 0x0301);
+            return "\u0413\u0301";
         }
         else if (character == 0x0407) {
-            sb.append((char) 0x0406);
-            sb.append((char) 0x0308);
+            return "\u0406\u0308";
         }
         else if (character == 0x040C) {
-            sb.append((char) 0x041A);
-            sb.append((char) 0x0301);
+            return "\u041A\u0301";
         }
         else if (character == 0x040D) {
-            sb.append((char) 0x0418);
-            sb.append((char) 0x0300);
+            return "\u0418\u0300";
         }
         else if (character == 0x040E) {
-            sb.append((char) 0x0423);
-            sb.append((char) 0x0306);
+            return "\u0423\u0306";
         }
         else if (character == 0x0419) {
-            sb.append((char) 0x0418);
-            sb.append((char) 0x0306);
+            return "\u0418\u0306";
         }
         else if (character == 0x0439) {
-            sb.append((char) 0x0438);
-            sb.append((char) 0x0306);
+            return "\u0438\u0306";
         }
         else if (character == 0x0450) {
-            sb.append((char) 0x0435);
-            sb.append((char) 0x0300);
+            return "\u0435\u0300";
         }
         else if (character == 0x0451) {
-            sb.append((char) 0x0435);
-            sb.append((char) 0x0308);
+            return "\u0435\u0308";
         }
         else if (character == 0x0453) {
-            sb.append((char) 0x0433);
-            sb.append((char) 0x0301);
+            return "\u0433\u0301";
         }
         else if (character == 0x0457) {
-            sb.append((char) 0x0456);
-            sb.append((char) 0x0308);
+            return "\u0456\u0308";
         }
         else if (character == 0x045C) {
-            sb.append((char) 0x043A);
-            sb.append((char) 0x0301);
+            return "\u043A\u0301";
         }
         else if (character == 0x045D) {
-            sb.append((char) 0x0438);
-            sb.append((char) 0x0300);
+            return "\u0438\u0300";
         }
         else if (character == 0x045E) {
-            sb.append((char) 0x0443);
-            sb.append((char) 0x0306);
+            return "\u0443\u0306";
         }
         else if (character == 0x0476) {
-            sb.append((char) 0x0474);
-            sb.append((char) 0x030F);
+            return "\u0474\u030F";
         }
         else if (character == 0x0477) {
-            sb.append((char) 0x0475);
-            sb.append((char) 0x030F);
+            return "\u0475\u030F";
         }
         else if (character == 0x04C1) {
-            sb.append((char) 0x0416);
-            sb.append((char) 0x0306);
+            return "\u0416\u0306";
         }
         else if (character == 0x04C2) {
-            sb.append((char) 0x0436);
-            sb.append((char) 0x0306);
+            return "\u0436\u0306";
         }
         else if (character == 0x04D0) {
-            sb.append((char) 0x0410);
-            sb.append((char) 0x0306);
+            return "\u0410\u0306";
         }
         else if (character == 0x04D1) {
-            sb.append((char) 0x0430);
-            sb.append((char) 0x0306);
+            return "\u0430\u0306";
         }
         else if (character == 0x04D2) {
-            sb.append((char) 0x0410);
-            sb.append((char) 0x0308);
+            return "\u0410\u0308";
         }
         else if (character == 0x04D3) {
-            sb.append((char) 0x0430);
-            sb.append((char) 0x0308);
+            return "\u0430\u0308";
         }
         else if (character == 0x04D6) {
-            sb.append((char) 0x0415);
-            sb.append((char) 0x0306);
+            return "\u0415\u0306";
         }
         else if (character == 0x04D7) {
-            sb.append((char) 0x0435);
-            sb.append((char) 0x0306);
+            return "\u0435\u0306";
         }
         else if (character == 0x04DA) {
-            sb.append((char) 0x04D8);
-            sb.append((char) 0x0308);
+            return "\u04D8\u0308";
         }
         else if (character == 0x04DB) {
-            sb.append((char) 0x04D9);
-            sb.append((char) 0x0308);
+            return "\u04D9\u0308";
         }
         else if (character == 0x04DC) {
-            sb.append((char) 0x0416);
-            sb.append((char) 0x0308);
+            return "\u0416\u0308";
         }
         else if (character == 0x04DD) {
-            sb.append((char) 0x0436);
-            sb.append((char) 0x0308);
+            return "\u0436\u0308";
         }
         else if (character == 0x04DE) {
-            sb.append((char) 0x0417);
-            sb.append((char) 0x0308);
+            return "\u0417\u0308";
         }
         else if (character == 0x04DF) {
-            sb.append((char) 0x0437);
-            sb.append((char) 0x0308);
+            return "\u0437\u0308";
         }
         else if (character == 0x04E2) {
-            sb.append((char) 0x0418);
-            sb.append((char) 0x0304);
+            return "\u0418\u0304";
         }
         else if (character == 0x04E3) {
-            sb.append((char) 0x0438);
-            sb.append((char) 0x0304);
+            return "\u0438\u0304";
         }
         else if (character == 0x04E4) {
-            sb.append((char) 0x0418);
-            sb.append((char) 0x0308);
+            return "\u0418\u0308";
         }
         else if (character == 0x04E5) {
-            sb.append((char) 0x0438);
-            sb.append((char) 0x0308);
+            return "\u0438\u0308";
         }
         else if (character == 0x04E6) {
-            sb.append((char) 0x041E);
-            sb.append((char) 0x0308);
+            return "\u041E\u0308";
         }
         else if (character == 0x04E7) {
-            sb.append((char) 0x043E);
-            sb.append((char) 0x0308);
+            return "\u043E\u0308";
         }
         else if (character == 0x04EA) {
-            sb.append((char) 0x04E8);
-            sb.append((char) 0x0308);
+            return "\u04E8\u0308";
         }
         else if (character == 0x04EB) {
-            sb.append((char) 0x04E9);
-            sb.append((char) 0x0308);
+            return "\u04E9\u0308";
         }
         else if (character == 0x04EC) {
-            sb.append((char) 0x042D);
-            sb.append((char) 0x0308);
+            return "\u042D\u0308";
         }
         else if (character == 0x04ED) {
-            sb.append((char) 0x044D);
-            sb.append((char) 0x0308);
+            return "\u044D\u0308";
         }
         else if (character == 0x04EE) {
-            sb.append((char) 0x0423);
-            sb.append((char) 0x0304);
+            return "\u0423\u0304";
         }
         else if (character == 0x04EF) {
-            sb.append((char) 0x0443);
-            sb.append((char) 0x0304);
+            return "\u0443\u0304";
         }
         else if (character == 0x04F0) {
-            sb.append((char) 0x0423);
-            sb.append((char) 0x0308);
+            return "\u0423\u0308";
         }
         else if (character == 0x04F1) {
-            sb.append((char) 0x0443);
-            sb.append((char) 0x0308);
+            return "\u0443\u0308";
         }
         else if (character == 0x04F2) {
-            sb.append((char) 0x0423);
-            sb.append((char) 0x030B);
+            return "\u0423\u030B";
         }
         else if (character == 0x04F3) {
-            sb.append((char) 0x0443);
-            sb.append((char) 0x030B);
+            return "\u0443\u030B";
         }
         else if (character == 0x04F4) {
-            sb.append((char) 0x0427);
-            sb.append((char) 0x0308);
+            return "\u0427\u0308";
         }
         else if (character == 0x04F5) {
-            sb.append((char) 0x0447);
-            sb.append((char) 0x0308);
+            return "\u0447\u0308";
         }
         else if (character == 0x04F8) {
-            sb.append((char) 0x042B);
-            sb.append((char) 0x0308);
+            return "\u042B\u0308";
         }
         else if (character == 0x04F9) {
-            sb.append((char) 0x044B);
-            sb.append((char) 0x0308);
+            return "\u044B\u0308";
         }
         else if (character == 0x0622) {
-            sb.append((char) 0x0627);
-            sb.append((char) 0x0653);
+            return "\u0627\u0653";
         }
         else if (character == 0x0623) {
-            sb.append((char) 0x0627);
-            sb.append((char) 0x0654);
+            return "\u0627\u0654";
         }
         else if (character == 0x0624) {
-            sb.append((char) 0x0648);
-            sb.append((char) 0x0654);
+            return "\u0648\u0654";
         }
         else if (character == 0x0625) {
-            sb.append((char) 0x0627);
-            sb.append((char) 0x0655);
+            return "\u0627\u0655";
         }
         else if (character == 0x0626) {
-            sb.append((char) 0x064A);
-            sb.append((char) 0x0654);
+            return "\u064A\u0654";
         }
         else if (character == 0x06C0) {
-            sb.append((char) 0x06D5);
-            sb.append((char) 0x0654);
+            return "\u06D5\u0654";
         }
         else if (character == 0x06C2) {
-            sb.append((char) 0x06C1);
-            sb.append((char) 0x0654);
+            return "\u06C1\u0654";
         }
         else if (character == 0x06D3) {
-            sb.append((char) 0x06D2);
-            sb.append((char) 0x0654);
+            return "\u06D2\u0654";
         }
         else if (character == 0x0929) {
-            sb.append((char) 0x0928);
-            sb.append((char) 0x093C);
+            return "\u0928\u093C";
         }
         else if (character == 0x0931) {
-            sb.append((char) 0x0930);
-            sb.append((char) 0x093C);
+            return "\u0930\u093C";
         }
         else if (character == 0x0934) {
-            sb.append((char) 0x0933);
-            sb.append((char) 0x093C);
+            return "\u0933\u093C";
         }
         else if (character == 0x0958) {
-            sb.append((char) 0x0915);
-            sb.append((char) 0x093C);
+            return "\u0915\u093C";
         }
         else if (character == 0x0959) {
-            sb.append((char) 0x0916);
-            sb.append((char) 0x093C);
+            return "\u0916\u093C";
         }
         else if (character == 0x095A) {
-            sb.append((char) 0x0917);
-            sb.append((char) 0x093C);
+            return "\u0917\u093C";
         }
         else if (character == 0x095B) {
-            sb.append((char) 0x091C);
-            sb.append((char) 0x093C);
+            return "\u091C\u093C";
         }
         else if (character == 0x095C) {
-            sb.append((char) 0x0921);
-            sb.append((char) 0x093C);
+            return "\u0921\u093C";
         }
         else if (character == 0x095D) {
-            sb.append((char) 0x0922);
-            sb.append((char) 0x093C);
+            return "\u0922\u093C";
         }
         else if (character == 0x095E) {
-            sb.append((char) 0x092B);
-            sb.append((char) 0x093C);
+            return "\u092B\u093C";
         }
         else if (character == 0x095F) {
-            sb.append((char) 0x092F);
-            sb.append((char) 0x093C);
+            return "\u092F\u093C";
         }
         else if (character == 0x09CB) {
-            sb.append((char) 0x09C7);
-            sb.append((char) 0x09BE);
+            return "\u09C7\u09BE";
         }
         else if (character == 0x09CC) {
-            sb.append((char) 0x09C7);
-            sb.append((char) 0x09D7);
+            return "\u09C7\u09D7";
         }
         else if (character == 0x09DC) {
-            sb.append((char) 0x09A1);
-            sb.append((char) 0x09BC);
+            return "\u09A1\u09BC";
         }
         else if (character == 0x09DD) {
-            sb.append((char) 0x09A2);
-            sb.append((char) 0x09BC);
+            return "\u09A2\u09BC";
         }
         else if (character == 0x09DF) {
-            sb.append((char) 0x09AF);
-            sb.append((char) 0x09BC);
+            return "\u09AF\u09BC";
         }
         else if (character == 0x0A33) {
-            sb.append((char) 0x0A32);
-            sb.append((char) 0x0A3C);
+            return "\u0A32\u0A3C";
         }
         else if (character == 0x0A36) {
-            sb.append((char) 0x0A38);
-            sb.append((char) 0x0A3C);
+            return "\u0A38\u0A3C";
         }
         else if (character == 0x0A59) {
-            sb.append((char) 0x0A16);
-            sb.append((char) 0x0A3C);
+            return "\u0A16\u0A3C";
         }
         else if (character == 0x0A5A) {
-            sb.append((char) 0x0A17);
-            sb.append((char) 0x0A3C);
+            return "\u0A17\u0A3C";
         }
         else if (character == 0x0A5B) {
-            sb.append((char) 0x0A1C);
-            sb.append((char) 0x0A3C);
+            return "\u0A1C\u0A3C";
         }
         else if (character == 0x0A5E) {
-            sb.append((char) 0x0A2B);
-            sb.append((char) 0x0A3C);
+            return "\u0A2B\u0A3C";
         }
         else if (character == 0x0B48) {
-            sb.append((char) 0x0B47);
-            sb.append((char) 0x0B56);
+            return "\u0B47\u0B56";
         }
         else if (character == 0x0B4B) {
-            sb.append((char) 0x0B47);
-            sb.append((char) 0x0B3E);
+            return "\u0B47\u0B3E";
         }
         else if (character == 0x0B4C) {
-            sb.append((char) 0x0B47);
-            sb.append((char) 0x0B57);
+            return "\u0B47\u0B57";
         }
         else if (character == 0x0B5C) {
-            sb.append((char) 0x0B21);
-            sb.append((char) 0x0B3C);
+            return "\u0B21\u0B3C";
         }
         else if (character == 0x0B5D) {
-            sb.append((char) 0x0B22);
-            sb.append((char) 0x0B3C);
+            return "\u0B22\u0B3C";
         }
         else if (character == 0x0B94) {
-            sb.append((char) 0x0B92);
-            sb.append((char) 0x0BD7);
+            return "\u0B92\u0BD7";
         }
         else if (character == 0x0BCA) {
-            sb.append((char) 0x0BC6);
-            sb.append((char) 0x0BBE);
+            return "\u0BC6\u0BBE";
         }
         else if (character == 0x0BCB) {
-            sb.append((char) 0x0BC7);
-            sb.append((char) 0x0BBE);
+            return "\u0BC7\u0BBE";
         }
         else if (character == 0x0BCC) {
-            sb.append((char) 0x0BC6);
-            sb.append((char) 0x0BD7);
+            return "\u0BC6\u0BD7";
         }
         else if (character == 0x0C48) {
-            sb.append((char) 0x0C46);
-            sb.append((char) 0x0C56);
+            return "\u0C46\u0C56";
         }
         else if (character == 0x0CC0) {
-            sb.append((char) 0x0CBF);
-            sb.append((char) 0x0CD5);
+            return "\u0CBF\u0CD5";
         }
         else if (character == 0x0CC7) {
-            sb.append((char) 0x0CC6);
-            sb.append((char) 0x0CD5);
+            return "\u0CC6\u0CD5";
         }
         else if (character == 0x0CC8) {
-            sb.append((char) 0x0CC6);
-            sb.append((char) 0x0CD6);
+            return "\u0CC6\u0CD6";
         }
         else if (character == 0x0CCA) {
-            sb.append((char) 0x0CC6);
-            sb.append((char) 0x0CC2);
+            return "\u0CC6\u0CC2";
         }
         else if (character == 0x0CCB) {
-            sb.append((char) 0x0CCA);
-            sb.append((char) 0x0CD5);
+            return "\u0CCA\u0CD5";
         }
         else if (character == 0x0D4A) {
-            sb.append((char) 0x0D46);
-            sb.append((char) 0x0D3E);
+            return "\u0D46\u0D3E";
         }
         else if (character == 0x0D4B) {
-            sb.append((char) 0x0D47);
-            sb.append((char) 0x0D3E);
+            return "\u0D47\u0D3E";
         }
         else if (character == 0x0D4C) {
-            sb.append((char) 0x0D46);
-            sb.append((char) 0x0D57);
+            return "\u0D46\u0D57";
         }
         else if (character == 0x0DDA) {
-            sb.append((char) 0x0DD9);
-            sb.append((char) 0x0DCA);
+            return "\u0DD9\u0DCA";
         }
         else if (character == 0x0DDC) {
-            sb.append((char) 0x0DD9);
-            sb.append((char) 0x0DCF);
+            return "\u0DD9\u0DCF";
         }
         else if (character == 0x0DDD) {
-            sb.append((char) 0x0DDC);
-            sb.append((char) 0x0DCA);
+            return "\u0DDC\u0DCA";
         }
         else if (character == 0x0DDE) {
-            sb.append((char) 0x0DD9);
-            sb.append((char) 0x0DDF);
+            return "\u0DD9\u0DDF";
         }
         else if (character == 0x0F43) {
-            sb.append((char) 0x0F42);
-            sb.append((char) 0x0FB7);
+            return "\u0F42\u0FB7";
         }
         else if (character == 0x0F4D) {
-            sb.append((char) 0x0F4C);
-            sb.append((char) 0x0FB7);
+            return "\u0F4C\u0FB7";
         }
         else if (character == 0x0F52) {
-            sb.append((char) 0x0F51);
-            sb.append((char) 0x0FB7);
+            return "\u0F51\u0FB7";
         }
         else if (character == 0x0F57) {
-            sb.append((char) 0x0F56);
-            sb.append((char) 0x0FB7);
+            return "\u0F56\u0FB7";
         }
         else if (character == 0x0F5C) {
-            sb.append((char) 0x0F5B);
-            sb.append((char) 0x0FB7);
+            return "\u0F5B\u0FB7";
         }
         else if (character == 0x0F69) {
-            sb.append((char) 0x0F40);
-            sb.append((char) 0x0FB5);
+            return "\u0F40\u0FB5";
         }
         else if (character == 0x0F73) {
-            sb.append((char) 0x0F71);
-            sb.append((char) 0x0F72);
+            return "\u0F71\u0F72";
         }
         else if (character == 0x0F75) {
-            sb.append((char) 0x0F71);
-            sb.append((char) 0x0F74);
+            return "\u0F71\u0F74";
         }
         else if (character == 0x0F76) {
-            sb.append((char) 0x0FB2);
-            sb.append((char) 0x0F80);
+            return "\u0FB2\u0F80";
         }
         else if (character == 0x0F78) {
-            sb.append((char) 0x0FB3);
-            sb.append((char) 0x0F80);
+            return "\u0FB3\u0F80";
         }
         else if (character == 0x0F81) {
-            sb.append((char) 0x0F71);
-            sb.append((char) 0x0F80);
+            return "\u0F71\u0F80";
         }
         else if (character == 0x0F93) {
-            sb.append((char) 0x0F92);
-            sb.append((char) 0x0FB7);
+            return "\u0F92\u0FB7";
         }
         else if (character == 0x0F9D) {
-            sb.append((char) 0x0F9C);
-            sb.append((char) 0x0FB7);
+            return "\u0F9C\u0FB7";
         }
         else if (character == 0x0FA2) {
-            sb.append((char) 0x0FA1);
-            sb.append((char) 0x0FB7);
+            return "\u0FA1\u0FB7";
         }
         else if (character == 0x0FA7) {
-            sb.append((char) 0x0FA6);
-            sb.append((char) 0x0FB7);
+            return "\u0FA6\u0FB7";
         }
         else if (character == 0x0FAC) {
-            sb.append((char) 0x0FAB);
-            sb.append((char) 0x0FB7);
+            return "\u0FAB\u0FB7";
         }
         else if (character == 0x0FB9) {
-            sb.append((char) 0x0F90);
-            sb.append((char) 0x0FB5);
+            return "\u0F90\u0FB5";
         }
         else if (character == 0x1026) {
-            sb.append((char) 0x1025);
-            sb.append((char) 0x102E);
+            return "\u1025\u102E";
+        }
+        else if (character == 0x1B06) {
+            return "\u1B05\u1B35";
+        }
+        else if (character == 0x1B08) {
+            return "\u1B07\u1B35";
+        }
+        else if (character == 0x1B0A) {
+            return "\u1B09\u1B35";
+        }
+        else if (character == 0x1B0C) {
+            return "\u1B0B\u1B35";
+        }
+        else if (character == 0x1B0E) {
+            return "\u1B0D\u1B35";
+        }
+        else if (character == 0x1B12) {
+            return "\u1B11\u1B35";
+        }
+        else if (character == 0x1B3B) {
+            return "\u1B3A\u1B35";
+        }
+        else if (character == 0x1B3D) {
+            return "\u1B3C\u1B35";
+        }
+        else if (character == 0x1B40) {
+            return "\u1B3E\u1B35";
+        }
+        else if (character == 0x1B41) {
+            return "\u1B3F\u1B35";
+        }
+        else if (character == 0x1B43) {
+            return "\u1B42\u1B35";
         }
         else if (character == 0x1E00) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0325);
+            return "\u0041\u0325";
         }
         else if (character == 0x1E01) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0325);
+            return "\u0061\u0325";
         }
         else if (character == 0x1E02) {
-            sb.append((char) 0x0042);
-            sb.append((char) 0x0307);
+            return "\u0042\u0307";
         }
         else if (character == 0x1E03) {
-            sb.append((char) 0x0062);
-            sb.append((char) 0x0307);
+            return "\u0062\u0307";
         }
         else if (character == 0x1E04) {
-            sb.append((char) 0x0042);
-            sb.append((char) 0x0323);
+            return "\u0042\u0323";
         }
         else if (character == 0x1E05) {
-            sb.append((char) 0x0062);
-            sb.append((char) 0x0323);
+            return "\u0062\u0323";
         }
         else if (character == 0x1E06) {
-            sb.append((char) 0x0042);
-            sb.append((char) 0x0331);
+            return "\u0042\u0331";
         }
         else if (character == 0x1E07) {
-            sb.append((char) 0x0062);
-            sb.append((char) 0x0331);
+            return "\u0062\u0331";
         }
         else if (character == 0x1E08) {
-            sb.append((char) 0x00C7);
-            sb.append((char) 0x0301);
+            return "\u00C7\u0301";
         }
         else if (character == 0x1E09) {
-            sb.append((char) 0x00E7);
-            sb.append((char) 0x0301);
+            return "\u00E7\u0301";
         }
         else if (character == 0x1E0A) {
-            sb.append((char) 0x0044);
-            sb.append((char) 0x0307);
+            return "\u0044\u0307";
         }
         else if (character == 0x1E0B) {
-            sb.append((char) 0x0064);
-            sb.append((char) 0x0307);
+            return "\u0064\u0307";
         }
         else if (character == 0x1E0C) {
-            sb.append((char) 0x0044);
-            sb.append((char) 0x0323);
+            return "\u0044\u0323";
         }
         else if (character == 0x1E0D) {
-            sb.append((char) 0x0064);
-            sb.append((char) 0x0323);
+            return "\u0064\u0323";
         }
         else if (character == 0x1E0E) {
-            sb.append((char) 0x0044);
-            sb.append((char) 0x0331);
+            return "\u0044\u0331";
         }
         else if (character == 0x1E0F) {
-            sb.append((char) 0x0064);
-            sb.append((char) 0x0331);
+            return "\u0064\u0331";
         }
         else if (character == 0x1E10) {
-            sb.append((char) 0x0044);
-            sb.append((char) 0x0327);
+            return "\u0044\u0327";
         }
         else if (character == 0x1E11) {
-            sb.append((char) 0x0064);
-            sb.append((char) 0x0327);
+            return "\u0064\u0327";
         }
         else if (character == 0x1E12) {
-            sb.append((char) 0x0044);
-            sb.append((char) 0x032D);
+            return "\u0044\u032D";
         }
         else if (character == 0x1E13) {
-            sb.append((char) 0x0064);
-            sb.append((char) 0x032D);
+            return "\u0064\u032D";
         }
         else if (character == 0x1E14) {
-            sb.append((char) 0x0112);
-            sb.append((char) 0x0300);
+            return "\u0112\u0300";
         }
         else if (character == 0x1E15) {
-            sb.append((char) 0x0113);
-            sb.append((char) 0x0300);
+            return "\u0113\u0300";
         }
         else if (character == 0x1E16) {
-            sb.append((char) 0x0112);
-            sb.append((char) 0x0301);
+            return "\u0112\u0301";
         }
         else if (character == 0x1E17) {
-            sb.append((char) 0x0113);
-            sb.append((char) 0x0301);
+            return "\u0113\u0301";
         }
         else if (character == 0x1E18) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x032D);
+            return "\u0045\u032D";
         }
         else if (character == 0x1E19) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x032D);
+            return "\u0065\u032D";
         }
         else if (character == 0x1E1A) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0330);
+            return "\u0045\u0330";
         }
         else if (character == 0x1E1B) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0330);
+            return "\u0065\u0330";
         }
         else if (character == 0x1E1C) {
-            sb.append((char) 0x0228);
-            sb.append((char) 0x0306);
+            return "\u0228\u0306";
         }
         else if (character == 0x1E1D) {
-            sb.append((char) 0x0229);
-            sb.append((char) 0x0306);
+            return "\u0229\u0306";
         }
         else if (character == 0x1E1E) {
-            sb.append((char) 0x0046);
-            sb.append((char) 0x0307);
+            return "\u0046\u0307";
         }
         else if (character == 0x1E1F) {
-            sb.append((char) 0x0066);
-            sb.append((char) 0x0307);
+            return "\u0066\u0307";
         }
         else if (character == 0x1E20) {
-            sb.append((char) 0x0047);
-            sb.append((char) 0x0304);
+            return "\u0047\u0304";
         }
         else if (character == 0x1E21) {
-            sb.append((char) 0x0067);
-            sb.append((char) 0x0304);
+            return "\u0067\u0304";
         }
         else if (character == 0x1E22) {
-            sb.append((char) 0x0048);
-            sb.append((char) 0x0307);
+            return "\u0048\u0307";
         }
         else if (character == 0x1E23) {
-            sb.append((char) 0x0068);
-            sb.append((char) 0x0307);
+            return "\u0068\u0307";
         }
         else if (character == 0x1E24) {
-            sb.append((char) 0x0048);
-            sb.append((char) 0x0323);
+            return "\u0048\u0323";
         }
         else if (character == 0x1E25) {
-            sb.append((char) 0x0068);
-            sb.append((char) 0x0323);
+            return "\u0068\u0323";
         }
         else if (character == 0x1E26) {
-            sb.append((char) 0x0048);
-            sb.append((char) 0x0308);
+            return "\u0048\u0308";
         }
         else if (character == 0x1E27) {
-            sb.append((char) 0x0068);
-            sb.append((char) 0x0308);
+            return "\u0068\u0308";
         }
         else if (character == 0x1E28) {
-            sb.append((char) 0x0048);
-            sb.append((char) 0x0327);
+            return "\u0048\u0327";
         }
         else if (character == 0x1E29) {
-            sb.append((char) 0x0068);
-            sb.append((char) 0x0327);
+            return "\u0068\u0327";
         }
         else if (character == 0x1E2A) {
-            sb.append((char) 0x0048);
-            sb.append((char) 0x032E);
+            return "\u0048\u032E";
         }
         else if (character == 0x1E2B) {
-            sb.append((char) 0x0068);
-            sb.append((char) 0x032E);
+            return "\u0068\u032E";
         }
         else if (character == 0x1E2C) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0330);
+            return "\u0049\u0330";
         }
         else if (character == 0x1E2D) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0330);
+            return "\u0069\u0330";
         }
         else if (character == 0x1E2E) {
-            sb.append((char) 0x00CF);
-            sb.append((char) 0x0301);
+            return "\u00CF\u0301";
         }
         else if (character == 0x1E2F) {
-            sb.append((char) 0x00EF);
-            sb.append((char) 0x0301);
+            return "\u00EF\u0301";
         }
         else if (character == 0x1E30) {
-            sb.append((char) 0x004B);
-            sb.append((char) 0x0301);
+            return "\u004B\u0301";
         }
         else if (character == 0x1E31) {
-            sb.append((char) 0x006B);
-            sb.append((char) 0x0301);
+            return "\u006B\u0301";
         }
         else if (character == 0x1E32) {
-            sb.append((char) 0x004B);
-            sb.append((char) 0x0323);
+            return "\u004B\u0323";
         }
         else if (character == 0x1E33) {
-            sb.append((char) 0x006B);
-            sb.append((char) 0x0323);
+            return "\u006B\u0323";
         }
         else if (character == 0x1E34) {
-            sb.append((char) 0x004B);
-            sb.append((char) 0x0331);
+            return "\u004B\u0331";
         }
         else if (character == 0x1E35) {
-            sb.append((char) 0x006B);
-            sb.append((char) 0x0331);
+            return "\u006B\u0331";
         }
         else if (character == 0x1E36) {
-            sb.append((char) 0x004C);
-            sb.append((char) 0x0323);
+            return "\u004C\u0323";
         }
         else if (character == 0x1E37) {
-            sb.append((char) 0x006C);
-            sb.append((char) 0x0323);
+            return "\u006C\u0323";
         }
         else if (character == 0x1E38) {
-            sb.append((char) 0x1E36);
-            sb.append((char) 0x0304);
+            return "\u1E36\u0304";
         }
         else if (character == 0x1E39) {
-            sb.append((char) 0x1E37);
-            sb.append((char) 0x0304);
+            return "\u1E37\u0304";
         }
         else if (character == 0x1E3A) {
-            sb.append((char) 0x004C);
-            sb.append((char) 0x0331);
+            return "\u004C\u0331";
         }
         else if (character == 0x1E3B) {
-            sb.append((char) 0x006C);
-            sb.append((char) 0x0331);
+            return "\u006C\u0331";
         }
         else if (character == 0x1E3C) {
-            sb.append((char) 0x004C);
-            sb.append((char) 0x032D);
+            return "\u004C\u032D";
         }
         else if (character == 0x1E3D) {
-            sb.append((char) 0x006C);
-            sb.append((char) 0x032D);
+            return "\u006C\u032D";
         }
         else if (character == 0x1E3E) {
-            sb.append((char) 0x004D);
-            sb.append((char) 0x0301);
+            return "\u004D\u0301";
         }
         else if (character == 0x1E3F) {
-            sb.append((char) 0x006D);
-            sb.append((char) 0x0301);
+            return "\u006D\u0301";
         }
         else if (character == 0x1E40) {
-            sb.append((char) 0x004D);
-            sb.append((char) 0x0307);
+            return "\u004D\u0307";
         }
         else if (character == 0x1E41) {
-            sb.append((char) 0x006D);
-            sb.append((char) 0x0307);
+            return "\u006D\u0307";
         }
         else if (character == 0x1E42) {
-            sb.append((char) 0x004D);
-            sb.append((char) 0x0323);
+            return "\u004D\u0323";
         }
         else if (character == 0x1E43) {
-            sb.append((char) 0x006D);
-            sb.append((char) 0x0323);
+            return "\u006D\u0323";
         }
         else if (character == 0x1E44) {
-            sb.append((char) 0x004E);
-            sb.append((char) 0x0307);
+            return "\u004E\u0307";
         }
         else if (character == 0x1E45) {
-            sb.append((char) 0x006E);
-            sb.append((char) 0x0307);
+            return "\u006E\u0307";
         }
         else if (character == 0x1E46) {
-            sb.append((char) 0x004E);
-            sb.append((char) 0x0323);
+            return "\u004E\u0323";
         }
         else if (character == 0x1E47) {
-            sb.append((char) 0x006E);
-            sb.append((char) 0x0323);
+            return "\u006E\u0323";
         }
         else if (character == 0x1E48) {
-            sb.append((char) 0x004E);
-            sb.append((char) 0x0331);
+            return "\u004E\u0331";
         }
         else if (character == 0x1E49) {
-            sb.append((char) 0x006E);
-            sb.append((char) 0x0331);
+            return "\u006E\u0331";
         }
         else if (character == 0x1E4A) {
-            sb.append((char) 0x004E);
-            sb.append((char) 0x032D);
+            return "\u004E\u032D";
         }
         else if (character == 0x1E4B) {
-            sb.append((char) 0x006E);
-            sb.append((char) 0x032D);
+            return "\u006E\u032D";
         }
         else if (character == 0x1E4C) {
-            sb.append((char) 0x00D5);
-            sb.append((char) 0x0301);
+            return "\u00D5\u0301";
         }
         else if (character == 0x1E4D) {
-            sb.append((char) 0x00F5);
-            sb.append((char) 0x0301);
+            return "\u00F5\u0301";
         }
         else if (character == 0x1E4E) {
-            sb.append((char) 0x00D5);
-            sb.append((char) 0x0308);
+            return "\u00D5\u0308";
         }
         else if (character == 0x1E4F) {
-            sb.append((char) 0x00F5);
-            sb.append((char) 0x0308);
+            return "\u00F5\u0308";
         }
         else if (character == 0x1E50) {
-            sb.append((char) 0x014C);
-            sb.append((char) 0x0300);
+            return "\u014C\u0300";
         }
         else if (character == 0x1E51) {
-            sb.append((char) 0x014D);
-            sb.append((char) 0x0300);
+            return "\u014D\u0300";
         }
         else if (character == 0x1E52) {
-            sb.append((char) 0x014C);
-            sb.append((char) 0x0301);
+            return "\u014C\u0301";
         }
         else if (character == 0x1E53) {
-            sb.append((char) 0x014D);
-            sb.append((char) 0x0301);
+            return "\u014D\u0301";
         }
         else if (character == 0x1E54) {
-            sb.append((char) 0x0050);
-            sb.append((char) 0x0301);
+            return "\u0050\u0301";
         }
         else if (character == 0x1E55) {
-            sb.append((char) 0x0070);
-            sb.append((char) 0x0301);
+            return "\u0070\u0301";
         }
         else if (character == 0x1E56) {
-            sb.append((char) 0x0050);
-            sb.append((char) 0x0307);
+            return "\u0050\u0307";
         }
         else if (character == 0x1E57) {
-            sb.append((char) 0x0070);
-            sb.append((char) 0x0307);
+            return "\u0070\u0307";
         }
         else if (character == 0x1E58) {
-            sb.append((char) 0x0052);
-            sb.append((char) 0x0307);
+            return "\u0052\u0307";
         }
         else if (character == 0x1E59) {
-            sb.append((char) 0x0072);
-            sb.append((char) 0x0307);
+            return "\u0072\u0307";
         }
         else if (character == 0x1E5A) {
-            sb.append((char) 0x0052);
-            sb.append((char) 0x0323);
+            return "\u0052\u0323";
         }
         else if (character == 0x1E5B) {
-            sb.append((char) 0x0072);
-            sb.append((char) 0x0323);
+            return "\u0072\u0323";
         }
         else if (character == 0x1E5C) {
-            sb.append((char) 0x1E5A);
-            sb.append((char) 0x0304);
+            return "\u1E5A\u0304";
         }
         else if (character == 0x1E5D) {
-            sb.append((char) 0x1E5B);
-            sb.append((char) 0x0304);
+            return "\u1E5B\u0304";
         }
         else if (character == 0x1E5E) {
-            sb.append((char) 0x0052);
-            sb.append((char) 0x0331);
+            return "\u0052\u0331";
         }
         else if (character == 0x1E5F) {
-            sb.append((char) 0x0072);
-            sb.append((char) 0x0331);
+            return "\u0072\u0331";
         }
         else if (character == 0x1E60) {
-            sb.append((char) 0x0053);
-            sb.append((char) 0x0307);
+            return "\u0053\u0307";
         }
         else if (character == 0x1E61) {
-            sb.append((char) 0x0073);
-            sb.append((char) 0x0307);
+            return "\u0073\u0307";
         }
         else if (character == 0x1E62) {
-            sb.append((char) 0x0053);
-            sb.append((char) 0x0323);
+            return "\u0053\u0323";
         }
         else if (character == 0x1E63) {
-            sb.append((char) 0x0073);
-            sb.append((char) 0x0323);
+            return "\u0073\u0323";
         }
         else if (character == 0x1E64) {
-            sb.append((char) 0x015A);
-            sb.append((char) 0x0307);
+            return "\u015A\u0307";
         }
         else if (character == 0x1E65) {
-            sb.append((char) 0x015B);
-            sb.append((char) 0x0307);
+            return "\u015B\u0307";
         }
         else if (character == 0x1E66) {
-            sb.append((char) 0x0160);
-            sb.append((char) 0x0307);
+            return "\u0160\u0307";
         }
         else if (character == 0x1E67) {
-            sb.append((char) 0x0161);
-            sb.append((char) 0x0307);
+            return "\u0161\u0307";
         }
         else if (character == 0x1E68) {
-            sb.append((char) 0x1E62);
-            sb.append((char) 0x0307);
+            return "\u1E62\u0307";
         }
         else if (character == 0x1E69) {
-            sb.append((char) 0x1E63);
-            sb.append((char) 0x0307);
+            return "\u1E63\u0307";
         }
         else if (character == 0x1E6A) {
-            sb.append((char) 0x0054);
-            sb.append((char) 0x0307);
+            return "\u0054\u0307";
         }
         else if (character == 0x1E6B) {
-            sb.append((char) 0x0074);
-            sb.append((char) 0x0307);
+            return "\u0074\u0307";
         }
         else if (character == 0x1E6C) {
-            sb.append((char) 0x0054);
-            sb.append((char) 0x0323);
+            return "\u0054\u0323";
         }
         else if (character == 0x1E6D) {
-            sb.append((char) 0x0074);
-            sb.append((char) 0x0323);
+            return "\u0074\u0323";
         }
         else if (character == 0x1E6E) {
-            sb.append((char) 0x0054);
-            sb.append((char) 0x0331);
+            return "\u0054\u0331";
         }
         else if (character == 0x1E6F) {
-            sb.append((char) 0x0074);
-            sb.append((char) 0x0331);
+            return "\u0074\u0331";
         }
         else if (character == 0x1E70) {
-            sb.append((char) 0x0054);
-            sb.append((char) 0x032D);
+            return "\u0054\u032D";
         }
         else if (character == 0x1E71) {
-            sb.append((char) 0x0074);
-            sb.append((char) 0x032D);
+            return "\u0074\u032D";
         }
         else if (character == 0x1E72) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0324);
+            return "\u0055\u0324";
         }
         else if (character == 0x1E73) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0324);
+            return "\u0075\u0324";
         }
         else if (character == 0x1E74) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0330);
+            return "\u0055\u0330";
         }
         else if (character == 0x1E75) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0330);
+            return "\u0075\u0330";
         }
         else if (character == 0x1E76) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x032D);
+            return "\u0055\u032D";
         }
         else if (character == 0x1E77) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x032D);
+            return "\u0075\u032D";
         }
         else if (character == 0x1E78) {
-            sb.append((char) 0x0168);
-            sb.append((char) 0x0301);
+            return "\u0168\u0301";
         }
         else if (character == 0x1E79) {
-            sb.append((char) 0x0169);
-            sb.append((char) 0x0301);
+            return "\u0169\u0301";
         }
         else if (character == 0x1E7A) {
-            sb.append((char) 0x016A);
-            sb.append((char) 0x0308);
+            return "\u016A\u0308";
         }
         else if (character == 0x1E7B) {
-            sb.append((char) 0x016B);
-            sb.append((char) 0x0308);
+            return "\u016B\u0308";
         }
         else if (character == 0x1E7C) {
-            sb.append((char) 0x0056);
-            sb.append((char) 0x0303);
+            return "\u0056\u0303";
         }
         else if (character == 0x1E7D) {
-            sb.append((char) 0x0076);
-            sb.append((char) 0x0303);
+            return "\u0076\u0303";
         }
         else if (character == 0x1E7E) {
-            sb.append((char) 0x0056);
-            sb.append((char) 0x0323);
+            return "\u0056\u0323";
         }
         else if (character == 0x1E7F) {
-            sb.append((char) 0x0076);
-            sb.append((char) 0x0323);
+            return "\u0076\u0323";
         }
         else if (character == 0x1E80) {
-            sb.append((char) 0x0057);
-            sb.append((char) 0x0300);
+            return "\u0057\u0300";
         }
         else if (character == 0x1E81) {
-            sb.append((char) 0x0077);
-            sb.append((char) 0x0300);
+            return "\u0077\u0300";
         }
         else if (character == 0x1E82) {
-            sb.append((char) 0x0057);
-            sb.append((char) 0x0301);
+            return "\u0057\u0301";
         }
         else if (character == 0x1E83) {
-            sb.append((char) 0x0077);
-            sb.append((char) 0x0301);
+            return "\u0077\u0301";
         }
         else if (character == 0x1E84) {
-            sb.append((char) 0x0057);
-            sb.append((char) 0x0308);
+            return "\u0057\u0308";
         }
         else if (character == 0x1E85) {
-            sb.append((char) 0x0077);
-            sb.append((char) 0x0308);
+            return "\u0077\u0308";
         }
         else if (character == 0x1E86) {
-            sb.append((char) 0x0057);
-            sb.append((char) 0x0307);
+            return "\u0057\u0307";
         }
         else if (character == 0x1E87) {
-            sb.append((char) 0x0077);
-            sb.append((char) 0x0307);
+            return "\u0077\u0307";
         }
         else if (character == 0x1E88) {
-            sb.append((char) 0x0057);
-            sb.append((char) 0x0323);
+            return "\u0057\u0323";
         }
         else if (character == 0x1E89) {
-            sb.append((char) 0x0077);
-            sb.append((char) 0x0323);
+            return "\u0077\u0323";
         }
         else if (character == 0x1E8A) {
-            sb.append((char) 0x0058);
-            sb.append((char) 0x0307);
+            return "\u0058\u0307";
         }
         else if (character == 0x1E8B) {
-            sb.append((char) 0x0078);
-            sb.append((char) 0x0307);
+            return "\u0078\u0307";
         }
         else if (character == 0x1E8C) {
-            sb.append((char) 0x0058);
-            sb.append((char) 0x0308);
+            return "\u0058\u0308";
         }
         else if (character == 0x1E8D) {
-            sb.append((char) 0x0078);
-            sb.append((char) 0x0308);
+            return "\u0078\u0308";
         }
         else if (character == 0x1E8E) {
-            sb.append((char) 0x0059);
-            sb.append((char) 0x0307);
+            return "\u0059\u0307";
         }
         else if (character == 0x1E8F) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x0307);
+            return "\u0079\u0307";
         }
         else if (character == 0x1E90) {
-            sb.append((char) 0x005A);
-            sb.append((char) 0x0302);
+            return "\u005A\u0302";
         }
         else if (character == 0x1E91) {
-            sb.append((char) 0x007A);
-            sb.append((char) 0x0302);
+            return "\u007A\u0302";
         }
         else if (character == 0x1E92) {
-            sb.append((char) 0x005A);
-            sb.append((char) 0x0323);
+            return "\u005A\u0323";
         }
         else if (character == 0x1E93) {
-            sb.append((char) 0x007A);
-            sb.append((char) 0x0323);
+            return "\u007A\u0323";
         }
         else if (character == 0x1E94) {
-            sb.append((char) 0x005A);
-            sb.append((char) 0x0331);
+            return "\u005A\u0331";
         }
         else if (character == 0x1E95) {
-            sb.append((char) 0x007A);
-            sb.append((char) 0x0331);
+            return "\u007A\u0331";
         }
         else if (character == 0x1E96) {
-            sb.append((char) 0x0068);
-            sb.append((char) 0x0331);
+            return "\u0068\u0331";
         }
         else if (character == 0x1E97) {
-            sb.append((char) 0x0074);
-            sb.append((char) 0x0308);
+            return "\u0074\u0308";
         }
         else if (character == 0x1E98) {
-            sb.append((char) 0x0077);
-            sb.append((char) 0x030A);
+            return "\u0077\u030A";
         }
         else if (character == 0x1E99) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x030A);
+            return "\u0079\u030A";
         }
         else if (character == 0x1E9B) {
-            sb.append((char) 0x017F);
-            sb.append((char) 0x0307);
+            return "\u017F\u0307";
         }
         else if (character == 0x1EA0) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0323);
+            return "\u0041\u0323";
         }
         else if (character == 0x1EA1) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0323);
+            return "\u0061\u0323";
         }
         else if (character == 0x1EA2) {
-            sb.append((char) 0x0041);
-            sb.append((char) 0x0309);
+            return "\u0041\u0309";
         }
         else if (character == 0x1EA3) {
-            sb.append((char) 0x0061);
-            sb.append((char) 0x0309);
+            return "\u0061\u0309";
         }
         else if (character == 0x1EA4) {
-            sb.append((char) 0x00C2);
-            sb.append((char) 0x0301);
+            return "\u00C2\u0301";
         }
         else if (character == 0x1EA5) {
-            sb.append((char) 0x00E2);
-            sb.append((char) 0x0301);
+            return "\u00E2\u0301";
         }
         else if (character == 0x1EA6) {
-            sb.append((char) 0x00C2);
-            sb.append((char) 0x0300);
+            return "\u00C2\u0300";
         }
         else if (character == 0x1EA7) {
-            sb.append((char) 0x00E2);
-            sb.append((char) 0x0300);
+            return "\u00E2\u0300";
         }
         else if (character == 0x1EA8) {
-            sb.append((char) 0x00C2);
-            sb.append((char) 0x0309);
+            return "\u00C2\u0309";
         }
         else if (character == 0x1EA9) {
-            sb.append((char) 0x00E2);
-            sb.append((char) 0x0309);
+            return "\u00E2\u0309";
         }
         else if (character == 0x1EAA) {
-            sb.append((char) 0x00C2);
-            sb.append((char) 0x0303);
+            return "\u00C2\u0303";
         }
         else if (character == 0x1EAB) {
-            sb.append((char) 0x00E2);
-            sb.append((char) 0x0303);
+            return "\u00E2\u0303";
         }
         else if (character == 0x1EAC) {
-            sb.append((char) 0x1EA0);
-            sb.append((char) 0x0302);
+            return "\u1EA0\u0302";
         }
         else if (character == 0x1EAD) {
-            sb.append((char) 0x1EA1);
-            sb.append((char) 0x0302);
+            return "\u1EA1\u0302";
         }
         else if (character == 0x1EAE) {
-            sb.append((char) 0x0102);
-            sb.append((char) 0x0301);
+            return "\u0102\u0301";
         }
         else if (character == 0x1EAF) {
-            sb.append((char) 0x0103);
-            sb.append((char) 0x0301);
+            return "\u0103\u0301";
         }
         else if (character == 0x1EB0) {
-            sb.append((char) 0x0102);
-            sb.append((char) 0x0300);
+            return "\u0102\u0300";
         }
         else if (character == 0x1EB1) {
-            sb.append((char) 0x0103);
-            sb.append((char) 0x0300);
+            return "\u0103\u0300";
         }
         else if (character == 0x1EB2) {
-            sb.append((char) 0x0102);
-            sb.append((char) 0x0309);
+            return "\u0102\u0309";
         }
         else if (character == 0x1EB3) {
-            sb.append((char) 0x0103);
-            sb.append((char) 0x0309);
+            return "\u0103\u0309";
         }
         else if (character == 0x1EB4) {
-            sb.append((char) 0x0102);
-            sb.append((char) 0x0303);
+            return "\u0102\u0303";
         }
         else if (character == 0x1EB5) {
-            sb.append((char) 0x0103);
-            sb.append((char) 0x0303);
+            return "\u0103\u0303";
         }
         else if (character == 0x1EB6) {
-            sb.append((char) 0x1EA0);
-            sb.append((char) 0x0306);
+            return "\u1EA0\u0306";
         }
         else if (character == 0x1EB7) {
-            sb.append((char) 0x1EA1);
-            sb.append((char) 0x0306);
+            return "\u1EA1\u0306";
         }
         else if (character == 0x1EB8) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0323);
+            return "\u0045\u0323";
         }
         else if (character == 0x1EB9) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0323);
+            return "\u0065\u0323";
         }
         else if (character == 0x1EBA) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0309);
+            return "\u0045\u0309";
         }
         else if (character == 0x1EBB) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0309);
+            return "\u0065\u0309";
         }
         else if (character == 0x1EBC) {
-            sb.append((char) 0x0045);
-            sb.append((char) 0x0303);
+            return "\u0045\u0303";
         }
         else if (character == 0x1EBD) {
-            sb.append((char) 0x0065);
-            sb.append((char) 0x0303);
+            return "\u0065\u0303";
         }
         else if (character == 0x1EBE) {
-            sb.append((char) 0x00CA);
-            sb.append((char) 0x0301);
+            return "\u00CA\u0301";
         }
         else if (character == 0x1EBF) {
-            sb.append((char) 0x00EA);
-            sb.append((char) 0x0301);
+            return "\u00EA\u0301";
         }
         else if (character == 0x1EC0) {
-            sb.append((char) 0x00CA);
-            sb.append((char) 0x0300);
+            return "\u00CA\u0300";
         }
         else if (character == 0x1EC1) {
-            sb.append((char) 0x00EA);
-            sb.append((char) 0x0300);
+            return "\u00EA\u0300";
         }
         else if (character == 0x1EC2) {
-            sb.append((char) 0x00CA);
-            sb.append((char) 0x0309);
+            return "\u00CA\u0309";
         }
         else if (character == 0x1EC3) {
-            sb.append((char) 0x00EA);
-            sb.append((char) 0x0309);
+            return "\u00EA\u0309";
         }
         else if (character == 0x1EC4) {
-            sb.append((char) 0x00CA);
-            sb.append((char) 0x0303);
+            return "\u00CA\u0303";
         }
         else if (character == 0x1EC5) {
-            sb.append((char) 0x00EA);
-            sb.append((char) 0x0303);
+            return "\u00EA\u0303";
         }
         else if (character == 0x1EC6) {
-            sb.append((char) 0x1EB8);
-            sb.append((char) 0x0302);
+            return "\u1EB8\u0302";
         }
         else if (character == 0x1EC7) {
-            sb.append((char) 0x1EB9);
-            sb.append((char) 0x0302);
+            return "\u1EB9\u0302";
         }
         else if (character == 0x1EC8) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0309);
+            return "\u0049\u0309";
         }
         else if (character == 0x1EC9) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0309);
+            return "\u0069\u0309";
         }
         else if (character == 0x1ECA) {
-            sb.append((char) 0x0049);
-            sb.append((char) 0x0323);
+            return "\u0049\u0323";
         }
         else if (character == 0x1ECB) {
-            sb.append((char) 0x0069);
-            sb.append((char) 0x0323);
+            return "\u0069\u0323";
         }
         else if (character == 0x1ECC) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0323);
+            return "\u004F\u0323";
         }
         else if (character == 0x1ECD) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0323);
+            return "\u006F\u0323";
         }
         else if (character == 0x1ECE) {
-            sb.append((char) 0x004F);
-            sb.append((char) 0x0309);
+            return "\u004F\u0309";
         }
         else if (character == 0x1ECF) {
-            sb.append((char) 0x006F);
-            sb.append((char) 0x0309);
+            return "\u006F\u0309";
         }
         else if (character == 0x1ED0) {
-            sb.append((char) 0x00D4);
-            sb.append((char) 0x0301);
+            return "\u00D4\u0301";
         }
         else if (character == 0x1ED1) {
-            sb.append((char) 0x00F4);
-            sb.append((char) 0x0301);
+            return "\u00F4\u0301";
         }
         else if (character == 0x1ED2) {
-            sb.append((char) 0x00D4);
-            sb.append((char) 0x0300);
+            return "\u00D4\u0300";
         }
         else if (character == 0x1ED3) {
-            sb.append((char) 0x00F4);
-            sb.append((char) 0x0300);
+            return "\u00F4\u0300";
         }
         else if (character == 0x1ED4) {
-            sb.append((char) 0x00D4);
-            sb.append((char) 0x0309);
+            return "\u00D4\u0309";
         }
         else if (character == 0x1ED5) {
-            sb.append((char) 0x00F4);
-            sb.append((char) 0x0309);
+            return "\u00F4\u0309";
         }
         else if (character == 0x1ED6) {
-            sb.append((char) 0x00D4);
-            sb.append((char) 0x0303);
+            return "\u00D4\u0303";
         }
         else if (character == 0x1ED7) {
-            sb.append((char) 0x00F4);
-            sb.append((char) 0x0303);
+            return "\u00F4\u0303";
         }
         else if (character == 0x1ED8) {
-            sb.append((char) 0x1ECC);
-            sb.append((char) 0x0302);
+            return "\u1ECC\u0302";
         }
         else if (character == 0x1ED9) {
-            sb.append((char) 0x1ECD);
-            sb.append((char) 0x0302);
+            return "\u1ECD\u0302";
         }
         else if (character == 0x1EDA) {
-            sb.append((char) 0x01A0);
-            sb.append((char) 0x0301);
+            return "\u01A0\u0301";
         }
         else if (character == 0x1EDB) {
-            sb.append((char) 0x01A1);
-            sb.append((char) 0x0301);
+            return "\u01A1\u0301";
         }
         else if (character == 0x1EDC) {
-            sb.append((char) 0x01A0);
-            sb.append((char) 0x0300);
+            return "\u01A0\u0300";
         }
         else if (character == 0x1EDD) {
-            sb.append((char) 0x01A1);
-            sb.append((char) 0x0300);
+            return "\u01A1\u0300";
         }
         else if (character == 0x1EDE) {
-            sb.append((char) 0x01A0);
-            sb.append((char) 0x0309);
+            return "\u01A0\u0309";
         }
         else if (character == 0x1EDF) {
-            sb.append((char) 0x01A1);
-            sb.append((char) 0x0309);
+            return "\u01A1\u0309";
         }
         else if (character == 0x1EE0) {
-            sb.append((char) 0x01A0);
-            sb.append((char) 0x0303);
+            return "\u01A0\u0303";
         }
         else if (character == 0x1EE1) {
-            sb.append((char) 0x01A1);
-            sb.append((char) 0x0303);
+            return "\u01A1\u0303";
         }
         else if (character == 0x1EE2) {
-            sb.append((char) 0x01A0);
-            sb.append((char) 0x0323);
+            return "\u01A0\u0323";
         }
         else if (character == 0x1EE3) {
-            sb.append((char) 0x01A1);
-            sb.append((char) 0x0323);
+            return "\u01A1\u0323";
         }
         else if (character == 0x1EE4) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0323);
+            return "\u0055\u0323";
         }
         else if (character == 0x1EE5) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0323);
+            return "\u0075\u0323";
         }
         else if (character == 0x1EE6) {
-            sb.append((char) 0x0055);
-            sb.append((char) 0x0309);
+            return "\u0055\u0309";
         }
         else if (character == 0x1EE7) {
-            sb.append((char) 0x0075);
-            sb.append((char) 0x0309);
+            return "\u0075\u0309";
         }
         else if (character == 0x1EE8) {
-            sb.append((char) 0x01AF);
-            sb.append((char) 0x0301);
+            return "\u01AF\u0301";
         }
         else if (character == 0x1EE9) {
-            sb.append((char) 0x01B0);
-            sb.append((char) 0x0301);
+            return "\u01B0\u0301";
         }
         else if (character == 0x1EEA) {
-            sb.append((char) 0x01AF);
-            sb.append((char) 0x0300);
+            return "\u01AF\u0300";
         }
         else if (character == 0x1EEB) {
-            sb.append((char) 0x01B0);
-            sb.append((char) 0x0300);
+            return "\u01B0\u0300";
         }
         else if (character == 0x1EEC) {
-            sb.append((char) 0x01AF);
-            sb.append((char) 0x0309);
+            return "\u01AF\u0309";
         }
         else if (character == 0x1EED) {
-            sb.append((char) 0x01B0);
-            sb.append((char) 0x0309);
+            return "\u01B0\u0309";
         }
         else if (character == 0x1EEE) {
-            sb.append((char) 0x01AF);
-            sb.append((char) 0x0303);
+            return "\u01AF\u0303";
         }
         else if (character == 0x1EEF) {
-            sb.append((char) 0x01B0);
-            sb.append((char) 0x0303);
+            return "\u01B0\u0303";
         }
         else if (character == 0x1EF0) {
-            sb.append((char) 0x01AF);
-            sb.append((char) 0x0323);
+            return "\u01AF\u0323";
         }
         else if (character == 0x1EF1) {
-            sb.append((char) 0x01B0);
-            sb.append((char) 0x0323);
+            return "\u01B0\u0323";
         }
         else if (character == 0x1EF2) {
-            sb.append((char) 0x0059);
-            sb.append((char) 0x0300);
+            return "\u0059\u0300";
         }
         else if (character == 0x1EF3) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x0300);
+            return "\u0079\u0300";
         }
         else if (character == 0x1EF4) {
-            sb.append((char) 0x0059);
-            sb.append((char) 0x0323);
+            return "\u0059\u0323";
         }
         else if (character == 0x1EF5) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x0323);
+            return "\u0079\u0323";
         }
         else if (character == 0x1EF6) {
-            sb.append((char) 0x0059);
-            sb.append((char) 0x0309);
+            return "\u0059\u0309";
         }
         else if (character == 0x1EF7) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x0309);
+            return "\u0079\u0309";
         }
         else if (character == 0x1EF8) {
-            sb.append((char) 0x0059);
-            sb.append((char) 0x0303);
+            return "\u0059\u0303";
         }
         else if (character == 0x1EF9) {
-            sb.append((char) 0x0079);
-            sb.append((char) 0x0303);
+            return "\u0079\u0303";
         }
         else if (character == 0x1F00) {
-            sb.append((char) 0x03B1);
-            sb.append((char) 0x0313);
+            return "\u03B1\u0313";
         }
         else if (character == 0x1F01) {
-            sb.append((char) 0x03B1);
-            sb.append((char) 0x0314);
+            return "\u03B1\u0314";
         }
         else if (character == 0x1F02) {
-            sb.append((char) 0x1F00);
-            sb.append((char) 0x0300);
+            return "\u1F00\u0300";
         }
         else if (character == 0x1F03) {
-            sb.append((char) 0x1F01);
-            sb.append((char) 0x0300);
+            return "\u1F01\u0300";
         }
         else if (character == 0x1F04) {
-            sb.append((char) 0x1F00);
-            sb.append((char) 0x0301);
+            return "\u1F00\u0301";
         }
         else if (character == 0x1F05) {
-            sb.append((char) 0x1F01);
-            sb.append((char) 0x0301);
+            return "\u1F01\u0301";
         }
         else if (character == 0x1F06) {
-            sb.append((char) 0x1F00);
-            sb.append((char) 0x0342);
+            return "\u1F00\u0342";
         }
         else if (character == 0x1F07) {
-            sb.append((char) 0x1F01);
-            sb.append((char) 0x0342);
+            return "\u1F01\u0342";
         }
         else if (character == 0x1F08) {
-            sb.append((char) 0x0391);
-            sb.append((char) 0x0313);
+            return "\u0391\u0313";
         }
         else if (character == 0x1F09) {
-            sb.append((char) 0x0391);
-            sb.append((char) 0x0314);
+            return "\u0391\u0314";
         }
         else if (character == 0x1F0A) {
-            sb.append((char) 0x1F08);
-            sb.append((char) 0x0300);
+            return "\u1F08\u0300";
         }
         else if (character == 0x1F0B) {
-            sb.append((char) 0x1F09);
-            sb.append((char) 0x0300);
+            return "\u1F09\u0300";
         }
         else if (character == 0x1F0C) {
-            sb.append((char) 0x1F08);
-            sb.append((char) 0x0301);
+            return "\u1F08\u0301";
         }
         else if (character == 0x1F0D) {
-            sb.append((char) 0x1F09);
-            sb.append((char) 0x0301);
+            return "\u1F09\u0301";
         }
         else if (character == 0x1F0E) {
-            sb.append((char) 0x1F08);
-            sb.append((char) 0x0342);
+            return "\u1F08\u0342";
         }
         else if (character == 0x1F0F) {
-            sb.append((char) 0x1F09);
-            sb.append((char) 0x0342);
+            return "\u1F09\u0342";
         }
         else if (character == 0x1F10) {
-            sb.append((char) 0x03B5);
-            sb.append((char) 0x0313);
+            return "\u03B5\u0313";
         }
         else if (character == 0x1F11) {
-            sb.append((char) 0x03B5);
-            sb.append((char) 0x0314);
+            return "\u03B5\u0314";
         }
         else if (character == 0x1F12) {
-            sb.append((char) 0x1F10);
-            sb.append((char) 0x0300);
+            return "\u1F10\u0300";
         }
         else if (character == 0x1F13) {
-            sb.append((char) 0x1F11);
-            sb.append((char) 0x0300);
+            return "\u1F11\u0300";
         }
         else if (character == 0x1F14) {
-            sb.append((char) 0x1F10);
-            sb.append((char) 0x0301);
+            return "\u1F10\u0301";
         }
         else if (character == 0x1F15) {
-            sb.append((char) 0x1F11);
-            sb.append((char) 0x0301);
+            return "\u1F11\u0301";
         }
         else if (character == 0x1F18) {
-            sb.append((char) 0x0395);
-            sb.append((char) 0x0313);
+            return "\u0395\u0313";
         }
         else if (character == 0x1F19) {
-            sb.append((char) 0x0395);
-            sb.append((char) 0x0314);
+            return "\u0395\u0314";
         }
         else if (character == 0x1F1A) {
-            sb.append((char) 0x1F18);
-            sb.append((char) 0x0300);
+            return "\u1F18\u0300";
         }
         else if (character == 0x1F1B) {
-            sb.append((char) 0x1F19);
-            sb.append((char) 0x0300);
+            return "\u1F19\u0300";
         }
         else if (character == 0x1F1C) {
-            sb.append((char) 0x1F18);
-            sb.append((char) 0x0301);
+            return "\u1F18\u0301";
         }
         else if (character == 0x1F1D) {
-            sb.append((char) 0x1F19);
-            sb.append((char) 0x0301);
+            return "\u1F19\u0301";
         }
         else if (character == 0x1F20) {
-            sb.append((char) 0x03B7);
-            sb.append((char) 0x0313);
+            return "\u03B7\u0313";
         }
         else if (character == 0x1F21) {
-            sb.append((char) 0x03B7);
-            sb.append((char) 0x0314);
+            return "\u03B7\u0314";
         }
         else if (character == 0x1F22) {
-            sb.append((char) 0x1F20);
-            sb.append((char) 0x0300);
+            return "\u1F20\u0300";
         }
         else if (character == 0x1F23) {
-            sb.append((char) 0x1F21);
-            sb.append((char) 0x0300);
+            return "\u1F21\u0300";
         }
         else if (character == 0x1F24) {
-            sb.append((char) 0x1F20);
-            sb.append((char) 0x0301);
+            return "\u1F20\u0301";
         }
         else if (character == 0x1F25) {
-            sb.append((char) 0x1F21);
-            sb.append((char) 0x0301);
+            return "\u1F21\u0301";
         }
         else if (character == 0x1F26) {
-            sb.append((char) 0x1F20);
-            sb.append((char) 0x0342);
+            return "\u1F20\u0342";
         }
         else if (character == 0x1F27) {
-            sb.append((char) 0x1F21);
-            sb.append((char) 0x0342);
+            return "\u1F21\u0342";
         }
         else if (character == 0x1F28) {
-            sb.append((char) 0x0397);
-            sb.append((char) 0x0313);
+            return "\u0397\u0313";
         }
         else if (character == 0x1F29) {
-            sb.append((char) 0x0397);
-            sb.append((char) 0x0314);
+            return "\u0397\u0314";
         }
         else if (character == 0x1F2A) {
-            sb.append((char) 0x1F28);
-            sb.append((char) 0x0300);
+            return "\u1F28\u0300";
         }
         else if (character == 0x1F2B) {
-            sb.append((char) 0x1F29);
-            sb.append((char) 0x0300);
+            return "\u1F29\u0300";
         }
         else if (character == 0x1F2C) {
-            sb.append((char) 0x1F28);
-            sb.append((char) 0x0301);
+            return "\u1F28\u0301";
         }
         else if (character == 0x1F2D) {
-            sb.append((char) 0x1F29);
-            sb.append((char) 0x0301);
+            return "\u1F29\u0301";
         }
         else if (character == 0x1F2E) {
-            sb.append((char) 0x1F28);
-            sb.append((char) 0x0342);
+            return "\u1F28\u0342";
         }
         else if (character == 0x1F2F) {
-            sb.append((char) 0x1F29);
-            sb.append((char) 0x0342);
+            return "\u1F29\u0342";
         }
         else if (character == 0x1F30) {
-            sb.append((char) 0x03B9);
-            sb.append((char) 0x0313);
+            return "\u03B9\u0313";
         }
         else if (character == 0x1F31) {
-            sb.append((char) 0x03B9);
-            sb.append((char) 0x0314);
+            return "\u03B9\u0314";
         }
         else if (character == 0x1F32) {
-            sb.append((char) 0x1F30);
-            sb.append((char) 0x0300);
+            return "\u1F30\u0300";
         }
         else if (character == 0x1F33) {
-            sb.append((char) 0x1F31);
-            sb.append((char) 0x0300);
+            return "\u1F31\u0300";
         }
         else if (character == 0x1F34) {
-            sb.append((char) 0x1F30);
-            sb.append((char) 0x0301);
+            return "\u1F30\u0301";
         }
         else if (character == 0x1F35) {
-            sb.append((char) 0x1F31);
-            sb.append((char) 0x0301);
+            return "\u1F31\u0301";
         }
         else if (character == 0x1F36) {
-            sb.append((char) 0x1F30);
-            sb.append((char) 0x0342);
+            return "\u1F30\u0342";
         }
         else if (character == 0x1F37) {
-            sb.append((char) 0x1F31);
-            sb.append((char) 0x0342);
+            return "\u1F31\u0342";
         }
         else if (character == 0x1F38) {
-            sb.append((char) 0x0399);
-            sb.append((char) 0x0313);
+            return "\u0399\u0313";
         }
         else if (character == 0x1F39) {
-            sb.append((char) 0x0399);
-            sb.append((char) 0x0314);
+            return "\u0399\u0314";
         }
         else if (character == 0x1F3A) {
-            sb.append((char) 0x1F38);
-            sb.append((char) 0x0300);
+            return "\u1F38\u0300";
         }
         else if (character == 0x1F3B) {
-            sb.append((char) 0x1F39);
-            sb.append((char) 0x0300);
+            return "\u1F39\u0300";
         }
         else if (character == 0x1F3C) {
-            sb.append((char) 0x1F38);
-            sb.append((char) 0x0301);
+            return "\u1F38\u0301";
         }
         else if (character == 0x1F3D) {
-            sb.append((char) 0x1F39);
-            sb.append((char) 0x0301);
+            return "\u1F39\u0301";
         }
         else if (character == 0x1F3E) {
-            sb.append((char) 0x1F38);
-            sb.append((char) 0x0342);
+            return "\u1F38\u0342";
         }
         else if (character == 0x1F3F) {
-            sb.append((char) 0x1F39);
-            sb.append((char) 0x0342);
+            return "\u1F39\u0342";
         }
         else if (character == 0x1F40) {
-            sb.append((char) 0x03BF);
-            sb.append((char) 0x0313);
+            return "\u03BF\u0313";
         }
         else if (character == 0x1F41) {
-            sb.append((char) 0x03BF);
-            sb.append((char) 0x0314);
+            return "\u03BF\u0314";
         }
         else if (character == 0x1F42) {
-            sb.append((char) 0x1F40);
-            sb.append((char) 0x0300);
+            return "\u1F40\u0300";
         }
         else if (character == 0x1F43) {
-            sb.append((char) 0x1F41);
-            sb.append((char) 0x0300);
+            return "\u1F41\u0300";
         }
         else if (character == 0x1F44) {
-            sb.append((char) 0x1F40);
-            sb.append((char) 0x0301);
+            return "\u1F40\u0301";
         }
         else if (character == 0x1F45) {
-            sb.append((char) 0x1F41);
-            sb.append((char) 0x0301);
+            return "\u1F41\u0301";
         }
         else if (character == 0x1F48) {
-            sb.append((char) 0x039F);
-            sb.append((char) 0x0313);
+            return "\u039F\u0313";
         }
         else if (character == 0x1F49) {
-            sb.append((char) 0x039F);
-            sb.append((char) 0x0314);
+            return "\u039F\u0314";
         }
         else if (character == 0x1F4A) {
-            sb.append((char) 0x1F48);
-            sb.append((char) 0x0300);
+            return "\u1F48\u0300";
         }
         else if (character == 0x1F4B) {
-            sb.append((char) 0x1F49);
-            sb.append((char) 0x0300);
+            return "\u1F49\u0300";
         }
         else if (character == 0x1F4C) {
-            sb.append((char) 0x1F48);
-            sb.append((char) 0x0301);
+            return "\u1F48\u0301";
         }
         else if (character == 0x1F4D) {
-            sb.append((char) 0x1F49);
-            sb.append((char) 0x0301);
+            return "\u1F49\u0301";
         }
         else if (character == 0x1F50) {
-            sb.append((char) 0x03C5);
-            sb.append((char) 0x0313);
+            return "\u03C5\u0313";
         }
         else if (character == 0x1F51) {
-            sb.append((char) 0x03C5);
-            sb.append((char) 0x0314);
+            return "\u03C5\u0314";
         }
         else if (character == 0x1F52) {
-            sb.append((char) 0x1F50);
-            sb.append((char) 0x0300);
+            return "\u1F50\u0300";
         }
         else if (character == 0x1F53) {
-            sb.append((char) 0x1F51);
-            sb.append((char) 0x0300);
+            return "\u1F51\u0300";
         }
         else if (character == 0x1F54) {
-            sb.append((char) 0x1F50);
-            sb.append((char) 0x0301);
+            return "\u1F50\u0301";
         }
         else if (character == 0x1F55) {
-            sb.append((char) 0x1F51);
-            sb.append((char) 0x0301);
+            return "\u1F51\u0301";
         }
         else if (character == 0x1F56) {
-            sb.append((char) 0x1F50);
-            sb.append((char) 0x0342);
+            return "\u1F50\u0342";
         }
         else if (character == 0x1F57) {
-            sb.append((char) 0x1F51);
-            sb.append((char) 0x0342);
+            return "\u1F51\u0342";
         }
         else if (character == 0x1F59) {
-            sb.append((char) 0x03A5);
-            sb.append((char) 0x0314);
+            return "\u03A5\u0314";
         }
         else if (character == 0x1F5B) {
-            sb.append((char) 0x1F59);
-            sb.append((char) 0x0300);
+            return "\u1F59\u0300";
         }
         else if (character == 0x1F5D) {
-            sb.append((char) 0x1F59);
-            sb.append((char) 0x0301);
+            return "\u1F59\u0301";
         }
         else if (character == 0x1F5F) {
-            sb.append((char) 0x1F59);
-            sb.append((char) 0x0342);
+            return "\u1F59\u0342";
         }
         else if (character == 0x1F60) {
-            sb.append((char) 0x03C9);
-            sb.append((char) 0x0313);
+            return "\u03C9\u0313";
         }
         else if (character == 0x1F61) {
-            sb.append((char) 0x03C9);
-            sb.append((char) 0x0314);
+            return "\u03C9\u0314";
         }
         else if (character == 0x1F62) {
-            sb.append((char) 0x1F60);
-            sb.append((char) 0x0300);
+            return "\u1F60\u0300";
         }
         else if (character == 0x1F63) {
-            sb.append((char) 0x1F61);
-            sb.append((char) 0x0300);
+            return "\u1F61\u0300";
         }
         else if (character == 0x1F64) {
-            sb.append((char) 0x1F60);
-            sb.append((char) 0x0301);
+            return "\u1F60\u0301";
         }
         else if (character == 0x1F65) {
-            sb.append((char) 0x1F61);
-            sb.append((char) 0x0301);
+            return "\u1F61\u0301";
         }
         else if (character == 0x1F66) {
-            sb.append((char) 0x1F60);
-            sb.append((char) 0x0342);
+            return "\u1F60\u0342";
         }
         else if (character == 0x1F67) {
-            sb.append((char) 0x1F61);
-            sb.append((char) 0x0342);
+            return "\u1F61\u0342";
         }
         else if (character == 0x1F68) {
-            sb.append((char) 0x03A9);
-            sb.append((char) 0x0313);
+            return "\u03A9\u0313";
         }
         else if (character == 0x1F69) {
-            sb.append((char) 0x03A9);
-            sb.append((char) 0x0314);
+            return "\u03A9\u0314";
         }
         else if (character == 0x1F6A) {
-            sb.append((char) 0x1F68);
-            sb.append((char) 0x0300);
+            return "\u1F68\u0300";
         }
         else if (character == 0x1F6B) {
-            sb.append((char) 0x1F69);
-            sb.append((char) 0x0300);
+            return "\u1F69\u0300";
         }
         else if (character == 0x1F6C) {
-            sb.append((char) 0x1F68);
-            sb.append((char) 0x0301);
+            return "\u1F68\u0301";
         }
         else if (character == 0x1F6D) {
-            sb.append((char) 0x1F69);
-            sb.append((char) 0x0301);
+            return "\u1F69\u0301";
         }
         else if (character == 0x1F6E) {
-            sb.append((char) 0x1F68);
-            sb.append((char) 0x0342);
+            return "\u1F68\u0342";
         }
         else if (character == 0x1F6F) {
-            sb.append((char) 0x1F69);
-            sb.append((char) 0x0342);
+            return "\u1F69\u0342";
         }
         else if (character == 0x1F70) {
-            sb.append((char) 0x03B1);
-            sb.append((char) 0x0300);
+            return "\u03B1\u0300";
         }
         else if (character == 0x1F71) {
-            sb.append((char) 0x03AC);
+            return "\u03AC";
         }
         else if (character == 0x1F72) {
-            sb.append((char) 0x03B5);
-            sb.append((char) 0x0300);
+            return "\u03B5\u0300";
         }
         else if (character == 0x1F73) {
-            sb.append((char) 0x03AD);
+            return "\u03AD";
         }
         else if (character == 0x1F74) {
-            sb.append((char) 0x03B7);
-            sb.append((char) 0x0300);
+            return "\u03B7\u0300";
         }
         else if (character == 0x1F75) {
-            sb.append((char) 0x03AE);
+            return "\u03AE";
         }
         else if (character == 0x1F76) {
-            sb.append((char) 0x03B9);
-            sb.append((char) 0x0300);
+            return "\u03B9\u0300";
         }
         else if (character == 0x1F77) {
-            sb.append((char) 0x03AF);
+            return "\u03AF";
         }
         else if (character == 0x1F78) {
-            sb.append((char) 0x03BF);
-            sb.append((char) 0x0300);
+            return "\u03BF\u0300";
         }
         else if (character == 0x1F79) {
-            sb.append((char) 0x03CC);
+            return "\u03CC";
         }
         else if (character == 0x1F7A) {
-            sb.append((char) 0x03C5);
-            sb.append((char) 0x0300);
+            return "\u03C5\u0300";
         }
         else if (character == 0x1F7B) {
-            sb.append((char) 0x03CD);
+            return "\u03CD";
         }
         else if (character == 0x1F7C) {
-            sb.append((char) 0x03C9);
-            sb.append((char) 0x0300);
+            return "\u03C9\u0300";
         }
         else if (character == 0x1F7D) {
-            sb.append((char) 0x03CE);
+            return "\u03CE";
         }
         else if (character == 0x1F80) {
-            sb.append((char) 0x1F00);
-            sb.append((char) 0x0345);
+            return "\u1F00\u0345";
         }
         else if (character == 0x1F81) {
-            sb.append((char) 0x1F01);
-            sb.append((char) 0x0345);
+            return "\u1F01\u0345";
         }
         else if (character == 0x1F82) {
-            sb.append((char) 0x1F02);
-            sb.append((char) 0x0345);
+            return "\u1F02\u0345";
         }
         else if (character == 0x1F83) {
-            sb.append((char) 0x1F03);
-            sb.append((char) 0x0345);
+            return "\u1F03\u0345";
         }
         else if (character == 0x1F84) {
-            sb.append((char) 0x1F04);
-            sb.append((char) 0x0345);
+            return "\u1F04\u0345";
         }
         else if (character == 0x1F85) {
-            sb.append((char) 0x1F05);
-            sb.append((char) 0x0345);
+            return "\u1F05\u0345";
         }
         else if (character == 0x1F86) {
-            sb.append((char) 0x1F06);
-            sb.append((char) 0x0345);
+            return "\u1F06\u0345";
         }
         else if (character == 0x1F87) {
-            sb.append((char) 0x1F07);
-            sb.append((char) 0x0345);
+            return "\u1F07\u0345";
         }
         else if (character == 0x1F88) {
-            sb.append((char) 0x1F08);
-            sb.append((char) 0x0345);
+            return "\u1F08\u0345";
         }
         else if (character == 0x1F89) {
-            sb.append((char) 0x1F09);
-            sb.append((char) 0x0345);
+            return "\u1F09\u0345";
         }
         else if (character == 0x1F8A) {
-            sb.append((char) 0x1F0A);
-            sb.append((char) 0x0345);
+            return "\u1F0A\u0345";
         }
         else if (character == 0x1F8B) {
-            sb.append((char) 0x1F0B);
-            sb.append((char) 0x0345);
+            return "\u1F0B\u0345";
         }
         else if (character == 0x1F8C) {
-            sb.append((char) 0x1F0C);
-            sb.append((char) 0x0345);
+            return "\u1F0C\u0345";
         }
         else if (character == 0x1F8D) {
-            sb.append((char) 0x1F0D);
-            sb.append((char) 0x0345);
+            return "\u1F0D\u0345";
         }
         else if (character == 0x1F8E) {
-            sb.append((char) 0x1F0E);
-            sb.append((char) 0x0345);
+            return "\u1F0E\u0345";
         }
         else if (character == 0x1F8F) {
-            sb.append((char) 0x1F0F);
-            sb.append((char) 0x0345);
+            return "\u1F0F\u0345";
         }
         else if (character == 0x1F90) {
-            sb.append((char) 0x1F20);
-            sb.append((char) 0x0345);
+            return "\u1F20\u0345";
         }
         else if (character == 0x1F91) {
-            sb.append((char) 0x1F21);
-            sb.append((char) 0x0345);
+            return "\u1F21\u0345";
         }
         else if (character == 0x1F92) {
-            sb.append((char) 0x1F22);
-            sb.append((char) 0x0345);
+            return "\u1F22\u0345";
         }
         else if (character == 0x1F93) {
-            sb.append((char) 0x1F23);
-            sb.append((char) 0x0345);
+            return "\u1F23\u0345";
         }
         else if (character == 0x1F94) {
-            sb.append((char) 0x1F24);
-            sb.append((char) 0x0345);
+            return "\u1F24\u0345";
         }
         else if (character == 0x1F95) {
-            sb.append((char) 0x1F25);
-            sb.append((char) 0x0345);
+            return "\u1F25\u0345";
         }
         else if (character == 0x1F96) {
-            sb.append((char) 0x1F26);
-            sb.append((char) 0x0345);
+            return "\u1F26\u0345";
         }
         else if (character == 0x1F97) {
-            sb.append((char) 0x1F27);
-            sb.append((char) 0x0345);
+            return "\u1F27\u0345";
         }
         else if (character == 0x1F98) {
-            sb.append((char) 0x1F28);
-            sb.append((char) 0x0345);
+            return "\u1F28\u0345";
         }
         else if (character == 0x1F99) {
-            sb.append((char) 0x1F29);
-            sb.append((char) 0x0345);
+            return "\u1F29\u0345";
         }
         else if (character == 0x1F9A) {
-            sb.append((char) 0x1F2A);
-            sb.append((char) 0x0345);
+            return "\u1F2A\u0345";
         }
         else if (character == 0x1F9B) {
-            sb.append((char) 0x1F2B);
-            sb.append((char) 0x0345);
+            return "\u1F2B\u0345";
         }
         else if (character == 0x1F9C) {
-            sb.append((char) 0x1F2C);
-            sb.append((char) 0x0345);
+            return "\u1F2C\u0345";
         }
         else if (character == 0x1F9D) {
-            sb.append((char) 0x1F2D);
-            sb.append((char) 0x0345);
+            return "\u1F2D\u0345";
         }
         else if (character == 0x1F9E) {
-            sb.append((char) 0x1F2E);
-            sb.append((char) 0x0345);
+            return "\u1F2E\u0345";
         }
         else if (character == 0x1F9F) {
-            sb.append((char) 0x1F2F);
-            sb.append((char) 0x0345);
+            return "\u1F2F\u0345";
         }
         else if (character == 0x1FA0) {
-            sb.append((char) 0x1F60);
-            sb.append((char) 0x0345);
+            return "\u1F60\u0345";
         }
         else if (character == 0x1FA1) {
-            sb.append((char) 0x1F61);
-            sb.append((char) 0x0345);
+            return "\u1F61\u0345";
         }
         else if (character == 0x1FA2) {
-            sb.append((char) 0x1F62);
-            sb.append((char) 0x0345);
+            return "\u1F62\u0345";
         }
         else if (character == 0x1FA3) {
-            sb.append((char) 0x1F63);
-            sb.append((char) 0x0345);
+            return "\u1F63\u0345";
         }
         else if (character == 0x1FA4) {
-            sb.append((char) 0x1F64);
-            sb.append((char) 0x0345);
+            return "\u1F64\u0345";
         }
         else if (character == 0x1FA5) {
-            sb.append((char) 0x1F65);
-            sb.append((char) 0x0345);
+            return "\u1F65\u0345";
         }
         else if (character == 0x1FA6) {
-            sb.append((char) 0x1F66);
-            sb.append((char) 0x0345);
+            return "\u1F66\u0345";
         }
         else if (character == 0x1FA7) {
-            sb.append((char) 0x1F67);
-            sb.append((char) 0x0345);
+            return "\u1F67\u0345";
         }
         else if (character == 0x1FA8) {
-            sb.append((char) 0x1F68);
-            sb.append((char) 0x0345);
+            return "\u1F68\u0345";
         }
         else if (character == 0x1FA9) {
-            sb.append((char) 0x1F69);
-            sb.append((char) 0x0345);
+            return "\u1F69\u0345";
         }
         else if (character == 0x1FAA) {
-            sb.append((char) 0x1F6A);
-            sb.append((char) 0x0345);
+            return "\u1F6A\u0345";
         }
         else if (character == 0x1FAB) {
-            sb.append((char) 0x1F6B);
-            sb.append((char) 0x0345);
+            return "\u1F6B\u0345";
         }
         else if (character == 0x1FAC) {
-            sb.append((char) 0x1F6C);
-            sb.append((char) 0x0345);
+            return "\u1F6C\u0345";
         }
         else if (character == 0x1FAD) {
-            sb.append((char) 0x1F6D);
-            sb.append((char) 0x0345);
+            return "\u1F6D\u0345";
         }
         else if (character == 0x1FAE) {
-            sb.append((char) 0x1F6E);
-            sb.append((char) 0x0345);
+            return "\u1F6E\u0345";
         }
         else if (character == 0x1FAF) {
-            sb.append((char) 0x1F6F);
-            sb.append((char) 0x0345);
+            return "\u1F6F\u0345";
         }
         else if (character == 0x1FB0) {
-            sb.append((char) 0x03B1);
-            sb.append((char) 0x0306);
+            return "\u03B1\u0306";
         }
         else if (character == 0x1FB1) {
-            sb.append((char) 0x03B1);
-            sb.append((char) 0x0304);
+            return "\u03B1\u0304";
         }
         else if (character == 0x1FB2) {
-            sb.append((char) 0x1F70);
-            sb.append((char) 0x0345);
+            return "\u1F70\u0345";
         }
         else if (character == 0x1FB3) {
-            sb.append((char) 0x03B1);
-            sb.append((char) 0x0345);
+            return "\u03B1\u0345";
         }
         else if (character == 0x1FB4) {
-            sb.append((char) 0x03AC);
-            sb.append((char) 0x0345);
+            return "\u03AC\u0345";
         }
         else if (character == 0x1FB6) {
-            sb.append((char) 0x03B1);
-            sb.append((char) 0x0342);
+            return "\u03B1\u0342";
         }
         else if (character == 0x1FB7) {
-            sb.append((char) 0x1FB6);
-            sb.append((char) 0x0345);
+            return "\u1FB6\u0345";
         }
         else if (character == 0x1FB8) {
-            sb.append((char) 0x0391);
-            sb.append((char) 0x0306);
+            return "\u0391\u0306";
         }
         else if (character == 0x1FB9) {
-            sb.append((char) 0x0391);
-            sb.append((char) 0x0304);
+            return "\u0391\u0304";
         }
         else if (character == 0x1FBA) {
-            sb.append((char) 0x0391);
-            sb.append((char) 0x0300);
+            return "\u0391\u0300";
         }
         else if (character == 0x1FBB) {
-            sb.append((char) 0x0386);
+            return "\u0386";
         }
         else if (character == 0x1FBC) {
-            sb.append((char) 0x0391);
-            sb.append((char) 0x0345);
+            return "\u0391\u0345";
         }
         else if (character == 0x1FBE) {
-            sb.append((char) 0x03B9);
+            return "\u03B9";
         }
         else if (character == 0x1FC1) {
-            sb.append((char) 0x00A8);
-            sb.append((char) 0x0342);
+            return "\u00A8\u0342";
         }
         else if (character == 0x1FC2) {
-            sb.append((char) 0x1F74);
-            sb.append((char) 0x0345);
+            return "\u1F74\u0345";
         }
         else if (character == 0x1FC3) {
-            sb.append((char) 0x03B7);
-            sb.append((char) 0x0345);
+            return "\u03B7\u0345";
         }
         else if (character == 0x1FC4) {
-            sb.append((char) 0x03AE);
-            sb.append((char) 0x0345);
+            return "\u03AE\u0345";
         }
         else if (character == 0x1FC6) {
-            sb.append((char) 0x03B7);
-            sb.append((char) 0x0342);
+            return "\u03B7\u0342";
         }
         else if (character == 0x1FC7) {
-            sb.append((char) 0x1FC6);
-            sb.append((char) 0x0345);
+            return "\u1FC6\u0345";
         }
         else if (character == 0x1FC8) {
-            sb.append((char) 0x0395);
-            sb.append((char) 0x0300);
+            return "\u0395\u0300";
         }
         else if (character == 0x1FC9) {
-            sb.append((char) 0x0388);
+            return "\u0388";
         }
         else if (character == 0x1FCA) {
-            sb.append((char) 0x0397);
-            sb.append((char) 0x0300);
+            return "\u0397\u0300";
         }
         else if (character == 0x1FCB) {
-            sb.append((char) 0x0389);
+            return "\u0389";
         }
         else if (character == 0x1FCC) {
-            sb.append((char) 0x0397);
-            sb.append((char) 0x0345);
+            return "\u0397\u0345";
         }
         else if (character == 0x1FCD) {
-            sb.append((char) 0x1FBF);
-            sb.append((char) 0x0300);
+            return "\u1FBF\u0300";
         }
         else if (character == 0x1FCE) {
-            sb.append((char) 0x1FBF);
-            sb.append((char) 0x0301);
+            return "\u1FBF\u0301";
         }
         else if (character == 0x1FCF) {
-            sb.append((char) 0x1FBF);
-            sb.append((char) 0x0342);
+            return "\u1FBF\u0342";
         }
         else if (character == 0x1FD0) {
-            sb.append((char) 0x03B9);
-            sb.append((char) 0x0306);
+            return "\u03B9\u0306";
         }
         else if (character == 0x1FD1) {
-            sb.append((char) 0x03B9);
-            sb.append((char) 0x0304);
+            return "\u03B9\u0304";
         }
         else if (character == 0x1FD2) {
-            sb.append((char) 0x03CA);
-            sb.append((char) 0x0300);
+            return "\u03CA\u0300";
         }
         else if (character == 0x1FD3) {
-            sb.append((char) 0x0390);
+            return "\u0390";
         }
         else if (character == 0x1FD6) {
-            sb.append((char) 0x03B9);
-            sb.append((char) 0x0342);
+            return "\u03B9\u0342";
         }
         else if (character == 0x1FD7) {
-            sb.append((char) 0x03CA);
-            sb.append((char) 0x0342);
+            return "\u03CA\u0342";
         }
         else if (character == 0x1FD8) {
-            sb.append((char) 0x0399);
-            sb.append((char) 0x0306);
+            return "\u0399\u0306";
         }
         else if (character == 0x1FD9) {
-            sb.append((char) 0x0399);
-            sb.append((char) 0x0304);
+            return "\u0399\u0304";
         }
         else if (character == 0x1FDA) {
-            sb.append((char) 0x0399);
-            sb.append((char) 0x0300);
+            return "\u0399\u0300";
         }
         else if (character == 0x1FDB) {
-            sb.append((char) 0x038A);
+            return "\u038A";
         }
         else if (character == 0x1FDD) {
-            sb.append((char) 0x1FFE);
-            sb.append((char) 0x0300);
+            return "\u1FFE\u0300";
         }
         else if (character == 0x1FDE) {
-            sb.append((char) 0x1FFE);
-            sb.append((char) 0x0301);
+            return "\u1FFE\u0301";
         }
         else if (character == 0x1FDF) {
-            sb.append((char) 0x1FFE);
-            sb.append((char) 0x0342);
+            return "\u1FFE\u0342";
         }
         else if (character == 0x1FE0) {
-            sb.append((char) 0x03C5);
-            sb.append((char) 0x0306);
+            return "\u03C5\u0306";
         }
         else if (character == 0x1FE1) {
-            sb.append((char) 0x03C5);
-            sb.append((char) 0x0304);
+            return "\u03C5\u0304";
         }
         else if (character == 0x1FE2) {
-            sb.append((char) 0x03CB);
-            sb.append((char) 0x0300);
+            return "\u03CB\u0300";
         }
         else if (character == 0x1FE3) {
-            sb.append((char) 0x03B0);
+            return "\u03B0";
         }
         else if (character == 0x1FE4) {
-            sb.append((char) 0x03C1);
-            sb.append((char) 0x0313);
+            return "\u03C1\u0313";
         }
         else if (character == 0x1FE5) {
-            sb.append((char) 0x03C1);
-            sb.append((char) 0x0314);
+            return "\u03C1\u0314";
         }
         else if (character == 0x1FE6) {
-            sb.append((char) 0x03C5);
-            sb.append((char) 0x0342);
+            return "\u03C5\u0342";
         }
         else if (character == 0x1FE7) {
-            sb.append((char) 0x03CB);
-            sb.append((char) 0x0342);
+            return "\u03CB\u0342";
         }
         else if (character == 0x1FE8) {
-            sb.append((char) 0x03A5);
-            sb.append((char) 0x0306);
+            return "\u03A5\u0306";
         }
         else if (character == 0x1FE9) {
-            sb.append((char) 0x03A5);
-            sb.append((char) 0x0304);
+            return "\u03A5\u0304";
         }
         else if (character == 0x1FEA) {
-            sb.append((char) 0x03A5);
-            sb.append((char) 0x0300);
+            return "\u03A5\u0300";
         }
         else if (character == 0x1FEB) {
-            sb.append((char) 0x038E);
+            return "\u038E";
         }
         else if (character == 0x1FEC) {
-            sb.append((char) 0x03A1);
-            sb.append((char) 0x0314);
+            return "\u03A1\u0314";
         }
         else if (character == 0x1FED) {
-            sb.append((char) 0x00A8);
-            sb.append((char) 0x0300);
+            return "\u00A8\u0300";
         }
         else if (character == 0x1FEE) {
-            sb.append((char) 0x0385);
+            return "\u0385";
         }
         else if (character == 0x1FEF) {
-            sb.append((char) 0x0060);
+            return "\u0060";
         }
         else if (character == 0x1FF2) {
-            sb.append((char) 0x1F7C);
-            sb.append((char) 0x0345);
+            return "\u1F7C\u0345";
         }
         else if (character == 0x1FF3) {
-            sb.append((char) 0x03C9);
-            sb.append((char) 0x0345);
+            return "\u03C9\u0345";
         }
         else if (character == 0x1FF4) {
-            sb.append((char) 0x03CE);
-            sb.append((char) 0x0345);
+            return "\u03CE\u0345";
         }
         else if (character == 0x1FF6) {
-            sb.append((char) 0x03C9);
-            sb.append((char) 0x0342);
+            return "\u03C9\u0342";
         }
         else if (character == 0x1FF7) {
-            sb.append((char) 0x1FF6);
-            sb.append((char) 0x0345);
+            return "\u1FF6\u0345";
         }
         else if (character == 0x1FF8) {
-            sb.append((char) 0x039F);
-            sb.append((char) 0x0300);
+            return "\u039F\u0300";
         }
         else if (character == 0x1FF9) {
-            sb.append((char) 0x038C);
+            return "\u038C";
         }
         else if (character == 0x1FFA) {
-            sb.append((char) 0x03A9);
-            sb.append((char) 0x0300);
+            return "\u03A9\u0300";
         }
         else if (character == 0x1FFB) {
-            sb.append((char) 0x038F);
+            return "\u038F";
         }
         else if (character == 0x1FFC) {
-            sb.append((char) 0x03A9);
-            sb.append((char) 0x0345);
+            return "\u03A9\u0345";
         }
         else if (character == 0x1FFD) {
-            sb.append((char) 0x00B4);
+            return "\u00B4";
         }
         else if (character == 0x2000) {
-            sb.append((char) 0x2002);
+            return "\u2002";
         }
         else if (character == 0x2001) {
-            sb.append((char) 0x2003);
+            return "\u2003";
         }
         else if (character == 0x2126) {
-            sb.append((char) 0x03A9);
+            return "\u03A9";
         }
         else if (character == 0x212A) {
-            sb.append((char) 0x004B);
+            return "\u004B";
         }
         else if (character == 0x212B) {
-            sb.append((char) 0x00C5);
+            return "\u00C5";
         }
         else if (character == 0x219A) {
-            sb.append((char) 0x2190);
-            sb.append((char) 0x0338);
+            return "\u2190\u0338";
         }
         else if (character == 0x219B) {
-            sb.append((char) 0x2192);
-            sb.append((char) 0x0338);
+            return "\u2192\u0338";
         }
         else if (character == 0x21AE) {
-            sb.append((char) 0x2194);
-            sb.append((char) 0x0338);
+            return "\u2194\u0338";
         }
         else if (character == 0x21CD) {
-            sb.append((char) 0x21D0);
-            sb.append((char) 0x0338);
+            return "\u21D0\u0338";
         }
         else if (character == 0x21CE) {
-            sb.append((char) 0x21D4);
-            sb.append((char) 0x0338);
+            return "\u21D4\u0338";
         }
         else if (character == 0x21CF) {
-            sb.append((char) 0x21D2);
-            sb.append((char) 0x0338);
+            return "\u21D2\u0338";
         }
         else if (character == 0x2204) {
-            sb.append((char) 0x2203);
-            sb.append((char) 0x0338);
+            return "\u2203\u0338";
         }
         else if (character == 0x2209) {
-            sb.append((char) 0x2208);
-            sb.append((char) 0x0338);
+            return "\u2208\u0338";
         }
         else if (character == 0x220C) {
-            sb.append((char) 0x220B);
-            sb.append((char) 0x0338);
+            return "\u220B\u0338";
         }
         else if (character == 0x2224) {
-            sb.append((char) 0x2223);
-            sb.append((char) 0x0338);
+            return "\u2223\u0338";
         }
         else if (character == 0x2226) {
-            sb.append((char) 0x2225);
-            sb.append((char) 0x0338);
+            return "\u2225\u0338";
         }
         else if (character == 0x2241) {
-            sb.append((char) 0x223C);
-            sb.append((char) 0x0338);
+            return "\u223C\u0338";
         }
         else if (character == 0x2244) {
-            sb.append((char) 0x2243);
-            sb.append((char) 0x0338);
+            return "\u2243\u0338";
         }
         else if (character == 0x2247) {
-            sb.append((char) 0x2245);
-            sb.append((char) 0x0338);
+            return "\u2245\u0338";
         }
         else if (character == 0x2249) {
-            sb.append((char) 0x2248);
-            sb.append((char) 0x0338);
+            return "\u2248\u0338";
         }
         else if (character == 0x2260) {
-            sb.append((char) 0x003D);
-            sb.append((char) 0x0338);
+            return "\u003D\u0338";
         }
         else if (character == 0x2262) {
-            sb.append((char) 0x2261);
-            sb.append((char) 0x0338);
+            return "\u2261\u0338";
         }
         else if (character == 0x226D) {
-            sb.append((char) 0x224D);
-            sb.append((char) 0x0338);
+            return "\u224D\u0338";
         }
         else if (character == 0x226E) {
-            sb.append((char) 0x003C);
-            sb.append((char) 0x0338);
+            return "\u003C\u0338";
         }
         else if (character == 0x226F) {
-            sb.append((char) 0x003E);
-            sb.append((char) 0x0338);
+            return "\u003E\u0338";
         }
         else if (character == 0x2270) {
-            sb.append((char) 0x2264);
-            sb.append((char) 0x0338);
+            return "\u2264\u0338";
         }
         else if (character == 0x2271) {
-            sb.append((char) 0x2265);
-            sb.append((char) 0x0338);
+            return "\u2265\u0338";
         }
         else if (character == 0x2274) {
-            sb.append((char) 0x2272);
-            sb.append((char) 0x0338);
+            return "\u2272\u0338";
         }
         else if (character == 0x2275) {
-            sb.append((char) 0x2273);
-            sb.append((char) 0x0338);
+            return "\u2273\u0338";
         }
         else if (character == 0x2278) {
-            sb.append((char) 0x2276);
-            sb.append((char) 0x0338);
+            return "\u2276\u0338";
         }
         else if (character == 0x2279) {
-            sb.append((char) 0x2277);
-            sb.append((char) 0x0338);
+            return "\u2277\u0338";
         }
         else if (character == 0x2280) {
-            sb.append((char) 0x227A);
-            sb.append((char) 0x0338);
+            return "\u227A\u0338";
         }
         else if (character == 0x2281) {
-            sb.append((char) 0x227B);
-            sb.append((char) 0x0338);
+            return "\u227B\u0338";
         }
         else if (character == 0x2284) {
-            sb.append((char) 0x2282);
-            sb.append((char) 0x0338);
+            return "\u2282\u0338";
         }
         else if (character == 0x2285) {
-            sb.append((char) 0x2283);
-            sb.append((char) 0x0338);
+            return "\u2283\u0338";
         }
         else if (character == 0x2288) {
-            sb.append((char) 0x2286);
-            sb.append((char) 0x0338);
+            return "\u2286\u0338";
         }
         else if (character == 0x2289) {
-            sb.append((char) 0x2287);
-            sb.append((char) 0x0338);
+            return "\u2287\u0338";
         }
         else if (character == 0x22AC) {
-            sb.append((char) 0x22A2);
-            sb.append((char) 0x0338);
+            return "\u22A2\u0338";
         }
         else if (character == 0x22AD) {
-            sb.append((char) 0x22A8);
-            sb.append((char) 0x0338);
+            return "\u22A8\u0338";
         }
         else if (character == 0x22AE) {
-            sb.append((char) 0x22A9);
-            sb.append((char) 0x0338);
+            return "\u22A9\u0338";
         }
         else if (character == 0x22AF) {
-            sb.append((char) 0x22AB);
-            sb.append((char) 0x0338);
+            return "\u22AB\u0338";
         }
         else if (character == 0x22E0) {
-            sb.append((char) 0x227C);
-            sb.append((char) 0x0338);
+            return "\u227C\u0338";
         }
         else if (character == 0x22E1) {
-            sb.append((char) 0x227D);
-            sb.append((char) 0x0338);
+            return "\u227D\u0338";
         }
         else if (character == 0x22E2) {
-            sb.append((char) 0x2291);
-            sb.append((char) 0x0338);
+            return "\u2291\u0338";
         }
         else if (character == 0x22E3) {
-            sb.append((char) 0x2292);
-            sb.append((char) 0x0338);
+            return "\u2292\u0338";
         }
         else if (character == 0x22EA) {
-            sb.append((char) 0x22B2);
-            sb.append((char) 0x0338);
+            return "\u22B2\u0338";
         }
         else if (character == 0x22EB) {
-            sb.append((char) 0x22B3);
-            sb.append((char) 0x0338);
+            return "\u22B3\u0338";
         }
         else if (character == 0x22EC) {
-            sb.append((char) 0x22B4);
-            sb.append((char) 0x0338);
+            return "\u22B4\u0338";
         }
         else if (character == 0x22ED) {
-            sb.append((char) 0x22B5);
-            sb.append((char) 0x0338);
+            return "\u22B5\u0338";
         }
         else if (character == 0x2329) {
-            sb.append((char) 0x3008);
+            return "\u3008";
         }
         else if (character == 0x232A) {
-            sb.append((char) 0x3009);
+            return "\u3009";
         }
         else if (character == 0x2ADC) {
-            sb.append((char) 0x2ADD);
-            sb.append((char) 0x0338);
+            return "\u2ADD\u0338";
         }
         else if (character == 0x304C) {
-            sb.append((char) 0x304B);
-            sb.append((char) 0x3099);
+            return "\u304B\u3099";
         }
         else if (character == 0x304E) {
-            sb.append((char) 0x304D);
-            sb.append((char) 0x3099);
+            return "\u304D\u3099";
         }
         else if (character == 0x3050) {
-            sb.append((char) 0x304F);
-            sb.append((char) 0x3099);
+            return "\u304F\u3099";
         }
         else if (character == 0x3052) {
-            sb.append((char) 0x3051);
-            sb.append((char) 0x3099);
+            return "\u3051\u3099";
         }
         else if (character == 0x3054) {
-            sb.append((char) 0x3053);
-            sb.append((char) 0x3099);
+            return "\u3053\u3099";
         }
         else if (character == 0x3056) {
-            sb.append((char) 0x3055);
-            sb.append((char) 0x3099);
+            return "\u3055\u3099";
         }
         else if (character == 0x3058) {
-            sb.append((char) 0x3057);
-            sb.append((char) 0x3099);
+            return "\u3057\u3099";
         }
         else if (character == 0x305A) {
-            sb.append((char) 0x3059);
-            sb.append((char) 0x3099);
+            return "\u3059\u3099";
         }
         else if (character == 0x305C) {
-            sb.append((char) 0x305B);
-            sb.append((char) 0x3099);
+            return "\u305B\u3099";
         }
         else if (character == 0x305E) {
-            sb.append((char) 0x305D);
-            sb.append((char) 0x3099);
+            return "\u305D\u3099";
         }
         else if (character == 0x3060) {
-            sb.append((char) 0x305F);
-            sb.append((char) 0x3099);
+            return "\u305F\u3099";
         }
         else if (character == 0x3062) {
-            sb.append((char) 0x3061);
-            sb.append((char) 0x3099);
+            return "\u3061\u3099";
         }
         else if (character == 0x3065) {
-            sb.append((char) 0x3064);
-            sb.append((char) 0x3099);
+            return "\u3064\u3099";
         }
         else if (character == 0x3067) {
-            sb.append((char) 0x3066);
-            sb.append((char) 0x3099);
+            return "\u3066\u3099";
         }
         else if (character == 0x3069) {
-            sb.append((char) 0x3068);
-            sb.append((char) 0x3099);
+            return "\u3068\u3099";
         }
         else if (character == 0x3070) {
-            sb.append((char) 0x306F);
-            sb.append((char) 0x3099);
+            return "\u306F\u3099";
         }
         else if (character == 0x3071) {
-            sb.append((char) 0x306F);
-            sb.append((char) 0x309A);
+            return "\u306F\u309A";
         }
         else if (character == 0x3073) {
-            sb.append((char) 0x3072);
-            sb.append((char) 0x3099);
+            return "\u3072\u3099";
         }
         else if (character == 0x3074) {
-            sb.append((char) 0x3072);
-            sb.append((char) 0x309A);
+            return "\u3072\u309A";
         }
         else if (character == 0x3076) {
-            sb.append((char) 0x3075);
-            sb.append((char) 0x3099);
+            return "\u3075\u3099";
         }
         else if (character == 0x3077) {
-            sb.append((char) 0x3075);
-            sb.append((char) 0x309A);
+            return "\u3075\u309A";
         }
         else if (character == 0x3079) {
-            sb.append((char) 0x3078);
-            sb.append((char) 0x3099);
+            return "\u3078\u3099";
         }
         else if (character == 0x307A) {
-            sb.append((char) 0x3078);
-            sb.append((char) 0x309A);
+            return "\u3078\u309A";
         }
         else if (character == 0x307C) {
-            sb.append((char) 0x307B);
-            sb.append((char) 0x3099);
+            return "\u307B\u3099";
         }
         else if (character == 0x307D) {
-            sb.append((char) 0x307B);
-            sb.append((char) 0x309A);
+            return "\u307B\u309A";
         }
         else if (character == 0x3094) {
-            sb.append((char) 0x3046);
-            sb.append((char) 0x3099);
+            return "\u3046\u3099";
         }
         else if (character == 0x309E) {
-            sb.append((char) 0x309D);
-            sb.append((char) 0x3099);
+            return "\u309D\u3099";
         }
         else if (character == 0x30AC) {
-            sb.append((char) 0x30AB);
-            sb.append((char) 0x3099);
+            return "\u30AB\u3099";
         }
         else if (character == 0x30AE) {
-            sb.append((char) 0x30AD);
-            sb.append((char) 0x3099);
+            return "\u30AD\u3099";
         }
         else if (character == 0x30B0) {
-            sb.append((char) 0x30AF);
-            sb.append((char) 0x3099);
+            return "\u30AF\u3099";
         }
         else if (character == 0x30B2) {
-            sb.append((char) 0x30B1);
-            sb.append((char) 0x3099);
+            return "\u30B1\u3099";
         }
         else if (character == 0x30B4) {
-            sb.append((char) 0x30B3);
-            sb.append((char) 0x3099);
+            return "\u30B3\u3099";
         }
         else if (character == 0x30B6) {
-            sb.append((char) 0x30B5);
-            sb.append((char) 0x3099);
+            return "\u30B5\u3099";
         }
         else if (character == 0x30B8) {
-            sb.append((char) 0x30B7);
-            sb.append((char) 0x3099);
+            return "\u30B7\u3099";
         }
         else if (character == 0x30BA) {
-            sb.append((char) 0x30B9);
-            sb.append((char) 0x3099);
+            return "\u30B9\u3099";
         }
         else if (character == 0x30BC) {
-            sb.append((char) 0x30BB);
-            sb.append((char) 0x3099);
+            return "\u30BB\u3099";
         }
         else if (character == 0x30BE) {
-            sb.append((char) 0x30BD);
-            sb.append((char) 0x3099);
+            return "\u30BD\u3099";
         }
         else if (character == 0x30C0) {
-            sb.append((char) 0x30BF);
-            sb.append((char) 0x3099);
+            return "\u30BF\u3099";
         }
         else if (character == 0x30C2) {
-            sb.append((char) 0x30C1);
-            sb.append((char) 0x3099);
+            return "\u30C1\u3099";
         }
         else if (character == 0x30C5) {
-            sb.append((char) 0x30C4);
-            sb.append((char) 0x3099);
+            return "\u30C4\u3099";
         }
         else if (character == 0x30C7) {
-            sb.append((char) 0x30C6);
-            sb.append((char) 0x3099);
+            return "\u30C6\u3099";
         }
         else if (character == 0x30C9) {
-            sb.append((char) 0x30C8);
-            sb.append((char) 0x3099);
+            return "\u30C8\u3099";
         }
         else if (character == 0x30D0) {
-            sb.append((char) 0x30CF);
-            sb.append((char) 0x3099);
+            return "\u30CF\u3099";
         }
         else if (character == 0x30D1) {
-            sb.append((char) 0x30CF);
-            sb.append((char) 0x309A);
+            return "\u30CF\u309A";
         }
         else if (character == 0x30D3) {
-            sb.append((char) 0x30D2);
-            sb.append((char) 0x3099);
+            return "\u30D2\u3099";
         }
         else if (character == 0x30D4) {
-            sb.append((char) 0x30D2);
-            sb.append((char) 0x309A);
+            return "\u30D2\u309A";
         }
         else if (character == 0x30D6) {
-            sb.append((char) 0x30D5);
-            sb.append((char) 0x3099);
+            return "\u30D5\u3099";
         }
         else if (character == 0x30D7) {
-            sb.append((char) 0x30D5);
-            sb.append((char) 0x309A);
+            return "\u30D5\u309A";
         }
         else if (character == 0x30D9) {
-            sb.append((char) 0x30D8);
-            sb.append((char) 0x3099);
+            return "\u30D8\u3099";
         }
         else if (character == 0x30DA) {
-            sb.append((char) 0x30D8);
-            sb.append((char) 0x309A);
+            return "\u30D8\u309A";
         }
         else if (character == 0x30DC) {
-            sb.append((char) 0x30DB);
-            sb.append((char) 0x3099);
+            return "\u30DB\u3099";
         }
         else if (character == 0x30DD) {
-            sb.append((char) 0x30DB);
-            sb.append((char) 0x309A);
+            return "\u30DB\u309A";
         }
         else if (character == 0x30F4) {
-            sb.append((char) 0x30A6);
-            sb.append((char) 0x3099);
+            return "\u30A6\u3099";
         }
         else if (character == 0x30F7) {
-            sb.append((char) 0x30EF);
-            sb.append((char) 0x3099);
+            return "\u30EF\u3099";
         }
         else if (character == 0x30F8) {
-            sb.append((char) 0x30F0);
-            sb.append((char) 0x3099);
+            return "\u30F0\u3099";
         }
         else if (character == 0x30F9) {
-            sb.append((char) 0x30F1);
-            sb.append((char) 0x3099);
+            return "\u30F1\u3099";
         }
         else if (character == 0x30FA) {
-            sb.append((char) 0x30F2);
-            sb.append((char) 0x3099);
+            return "\u30F2\u3099";
         }
         else if (character == 0x30FE) {
-            sb.append((char) 0x30FD);
-            sb.append((char) 0x3099);
+            return "\u30FD\u3099";
         }
         else if (character == 0xF900) {
-            sb.append((char) 0x8C48);
+            return "\u8C48";
         }
         else if (character == 0xF901) {
-            sb.append((char) 0x66F4);
+            return "\u66F4";
         }
         else if (character == 0xF902) {
-            sb.append((char) 0x8ECA);
+            return "\u8ECA";
         }
         else if (character == 0xF903) {
-            sb.append((char) 0x8CC8);
+            return "\u8CC8";
         }
         else if (character == 0xF904) {
-            sb.append((char) 0x6ED1);
+            return "\u6ED1";
         }
         else if (character == 0xF905) {
-            sb.append((char) 0x4E32);
+            return "\u4E32";
         }
         else if (character == 0xF906) {
-            sb.append((char) 0x53E5);
+            return "\u53E5";
         }
         else if (character == 0xF907) {
-            sb.append((char) 0x9F9C);
+            return "\u9F9C";
         }
         else if (character == 0xF908) {
-            sb.append((char) 0x9F9C);
+            return "\u9F9C";
         }
         else if (character == 0xF909) {
-            sb.append((char) 0x5951);
+            return "\u5951";
         }
         else if (character == 0xF90A) {
-            sb.append((char) 0x91D1);
+            return "\u91D1";
         }
         else if (character == 0xF90B) {
-            sb.append((char) 0x5587);
+            return "\u5587";
         }
         else if (character == 0xF90C) {
-            sb.append((char) 0x5948);
+            return "\u5948";
         }
         else if (character == 0xF90D) {
-            sb.append((char) 0x61F6);
+            return "\u61F6";
         }
         else if (character == 0xF90E) {
-            sb.append((char) 0x7669);
+            return "\u7669";
         }
         else if (character == 0xF90F) {
-            sb.append((char) 0x7F85);
+            return "\u7F85";
         }
         else if (character == 0xF910) {
-            sb.append((char) 0x863F);
+            return "\u863F";
         }
         else if (character == 0xF911) {
-            sb.append((char) 0x87BA);
+            return "\u87BA";
         }
         else if (character == 0xF912) {
-            sb.append((char) 0x88F8);
+            return "\u88F8";
         }
         else if (character == 0xF913) {
-            sb.append((char) 0x908F);
+            return "\u908F";
         }
         else if (character == 0xF914) {
-            sb.append((char) 0x6A02);
+            return "\u6A02";
         }
         else if (character == 0xF915) {
-            sb.append((char) 0x6D1B);
+            return "\u6D1B";
         }
         else if (character == 0xF916) {
-            sb.append((char) 0x70D9);
+            return "\u70D9";
         }
         else if (character == 0xF917) {
-            sb.append((char) 0x73DE);
+            return "\u73DE";
         }
         else if (character == 0xF918) {
-            sb.append((char) 0x843D);
+            return "\u843D";
         }
         else if (character == 0xF919) {
-            sb.append((char) 0x916A);
+            return "\u916A";
         }
         else if (character == 0xF91A) {
-            sb.append((char) 0x99F1);
+            return "\u99F1";
         }
         else if (character == 0xF91B) {
-            sb.append((char) 0x4E82);
+            return "\u4E82";
         }
         else if (character == 0xF91C) {
-            sb.append((char) 0x5375);
+            return "\u5375";
         }
         else if (character == 0xF91D) {
-            sb.append((char) 0x6B04);
+            return "\u6B04";
         }
         else if (character == 0xF91E) {
-            sb.append((char) 0x721B);
+            return "\u721B";
         }
         else if (character == 0xF91F) {
-            sb.append((char) 0x862D);
+            return "\u862D";
         }
         else if (character == 0xF920) {
-            sb.append((char) 0x9E1E);
+            return "\u9E1E";
         }
         else if (character == 0xF921) {
-            sb.append((char) 0x5D50);
+            return "\u5D50";
         }
         else if (character == 0xF922) {
-            sb.append((char) 0x6FEB);
+            return "\u6FEB";
         }
         else if (character == 0xF923) {
-            sb.append((char) 0x85CD);
+            return "\u85CD";
         }
         else if (character == 0xF924) {
-            sb.append((char) 0x8964);
+            return "\u8964";
         }
         else if (character == 0xF925) {
-            sb.append((char) 0x62C9);
+            return "\u62C9";
         }
         else if (character == 0xF926) {
-            sb.append((char) 0x81D8);
+            return "\u81D8";
         }
         else if (character == 0xF927) {
-            sb.append((char) 0x881F);
+            return "\u881F";
         }
         else if (character == 0xF928) {
-            sb.append((char) 0x5ECA);
+            return "\u5ECA";
         }
         else if (character == 0xF929) {
-            sb.append((char) 0x6717);
+            return "\u6717";
         }
         else if (character == 0xF92A) {
-            sb.append((char) 0x6D6A);
+            return "\u6D6A";
         }
         else if (character == 0xF92B) {
-            sb.append((char) 0x72FC);
+            return "\u72FC";
         }
         else if (character == 0xF92C) {
-            sb.append((char) 0x90CE);
+            return "\u90CE";
         }
         else if (character == 0xF92D) {
-            sb.append((char) 0x4F86);
+            return "\u4F86";
         }
         else if (character == 0xF92E) {
-            sb.append((char) 0x51B7);
+            return "\u51B7";
         }
         else if (character == 0xF92F) {
-            sb.append((char) 0x52DE);
+            return "\u52DE";
         }
         else if (character == 0xF930) {
-            sb.append((char) 0x64C4);
+            return "\u64C4";
         }
         else if (character == 0xF931) {
-            sb.append((char) 0x6AD3);
+            return "\u6AD3";
         }
         else if (character == 0xF932) {
-            sb.append((char) 0x7210);
+            return "\u7210";
         }
         else if (character == 0xF933) {
-            sb.append((char) 0x76E7);
+            return "\u76E7";
         }
         else if (character == 0xF934) {
-            sb.append((char) 0x8001);
+            return "\u8001";
         }
         else if (character == 0xF935) {
-            sb.append((char) 0x8606);
+            return "\u8606";
         }
         else if (character == 0xF936) {
-            sb.append((char) 0x865C);
+            return "\u865C";
         }
         else if (character == 0xF937) {
-            sb.append((char) 0x8DEF);
+            return "\u8DEF";
         }
         else if (character == 0xF938) {
-            sb.append((char) 0x9732);
+            return "\u9732";
         }
         else if (character == 0xF939) {
-            sb.append((char) 0x9B6F);
+            return "\u9B6F";
         }
         else if (character == 0xF93A) {
-            sb.append((char) 0x9DFA);
+            return "\u9DFA";
         }
         else if (character == 0xF93B) {
-            sb.append((char) 0x788C);
+            return "\u788C";
         }
         else if (character == 0xF93C) {
-            sb.append((char) 0x797F);
+            return "\u797F";
         }
         else if (character == 0xF93D) {
-            sb.append((char) 0x7DA0);
+            return "\u7DA0";
         }
         else if (character == 0xF93E) {
-            sb.append((char) 0x83C9);
+            return "\u83C9";
         }
         else if (character == 0xF93F) {
-            sb.append((char) 0x9304);
+            return "\u9304";
         }
         else if (character == 0xF940) {
-            sb.append((char) 0x9E7F);
+            return "\u9E7F";
         }
         else if (character == 0xF941) {
-            sb.append((char) 0x8AD6);
+            return "\u8AD6";
         }
         else if (character == 0xF942) {
-            sb.append((char) 0x58DF);
+            return "\u58DF";
         }
         else if (character == 0xF943) {
-            sb.append((char) 0x5F04);
+            return "\u5F04";
         }
         else if (character == 0xF944) {
-            sb.append((char) 0x7C60);
+            return "\u7C60";
         }
         else if (character == 0xF945) {
-            sb.append((char) 0x807E);
+            return "\u807E";
         }
         else if (character == 0xF946) {
-            sb.append((char) 0x7262);
+            return "\u7262";
         }
         else if (character == 0xF947) {
-            sb.append((char) 0x78CA);
+            return "\u78CA";
         }
         else if (character == 0xF948) {
-            sb.append((char) 0x8CC2);
+            return "\u8CC2";
         }
         else if (character == 0xF949) {
-            sb.append((char) 0x96F7);
+            return "\u96F7";
         }
         else if (character == 0xF94A) {
-            sb.append((char) 0x58D8);
+            return "\u58D8";
         }
         else if (character == 0xF94B) {
-            sb.append((char) 0x5C62);
+            return "\u5C62";
         }
         else if (character == 0xF94C) {
-            sb.append((char) 0x6A13);
+            return "\u6A13";
         }
         else if (character == 0xF94D) {
-            sb.append((char) 0x6DDA);
+            return "\u6DDA";
         }
         else if (character == 0xF94E) {
-            sb.append((char) 0x6F0F);
+            return "\u6F0F";
         }
         else if (character == 0xF94F) {
-            sb.append((char) 0x7D2F);
+            return "\u7D2F";
         }
         else if (character == 0xF950) {
-            sb.append((char) 0x7E37);
+            return "\u7E37";
         }
         else if (character == 0xF951) {
-            sb.append((char) 0x964B);
+            return "\u964B";
         }
         else if (character == 0xF952) {
-            sb.append((char) 0x52D2);
+            return "\u52D2";
         }
         else if (character == 0xF953) {
-            sb.append((char) 0x808B);
+            return "\u808B";
         }
         else if (character == 0xF954) {
-            sb.append((char) 0x51DC);
+            return "\u51DC";
         }
         else if (character == 0xF955) {
-            sb.append((char) 0x51CC);
+            return "\u51CC";
         }
         else if (character == 0xF956) {
-            sb.append((char) 0x7A1C);
+            return "\u7A1C";
         }
         else if (character == 0xF957) {
-            sb.append((char) 0x7DBE);
+            return "\u7DBE";
         }
         else if (character == 0xF958) {
-            sb.append((char) 0x83F1);
+            return "\u83F1";
         }
         else if (character == 0xF959) {
-            sb.append((char) 0x9675);
+            return "\u9675";
         }
         else if (character == 0xF95A) {
-            sb.append((char) 0x8B80);
+            return "\u8B80";
         }
         else if (character == 0xF95B) {
-            sb.append((char) 0x62CF);
+            return "\u62CF";
         }
         else if (character == 0xF95C) {
-            sb.append((char) 0x6A02);
+            return "\u6A02";
         }
         else if (character == 0xF95D) {
-            sb.append((char) 0x8AFE);
+            return "\u8AFE";
         }
         else if (character == 0xF95E) {
-            sb.append((char) 0x4E39);
+            return "\u4E39";
         }
         else if (character == 0xF95F) {
-            sb.append((char) 0x5BE7);
+            return "\u5BE7";
         }
         else if (character == 0xF960) {
-            sb.append((char) 0x6012);
+            return "\u6012";
         }
         else if (character == 0xF961) {
-            sb.append((char) 0x7387);
+            return "\u7387";
         }
         else if (character == 0xF962) {
-            sb.append((char) 0x7570);
+            return "\u7570";
         }
         else if (character == 0xF963) {
-            sb.append((char) 0x5317);
+            return "\u5317";
         }
         else if (character == 0xF964) {
-            sb.append((char) 0x78FB);
+            return "\u78FB";
         }
         else if (character == 0xF965) {
-            sb.append((char) 0x4FBF);
+            return "\u4FBF";
         }
         else if (character == 0xF966) {
-            sb.append((char) 0x5FA9);
+            return "\u5FA9";
         }
         else if (character == 0xF967) {
-            sb.append((char) 0x4E0D);
+            return "\u4E0D";
         }
         else if (character == 0xF968) {
-            sb.append((char) 0x6CCC);
+            return "\u6CCC";
         }
         else if (character == 0xF969) {
-            sb.append((char) 0x6578);
+            return "\u6578";
         }
         else if (character == 0xF96A) {
-            sb.append((char) 0x7D22);
+            return "\u7D22";
         }
         else if (character == 0xF96B) {
-            sb.append((char) 0x53C3);
+            return "\u53C3";
         }
         else if (character == 0xF96C) {
-            sb.append((char) 0x585E);
+            return "\u585E";
         }
         else if (character == 0xF96D) {
-            sb.append((char) 0x7701);
+            return "\u7701";
         }
         else if (character == 0xF96E) {
-            sb.append((char) 0x8449);
+            return "\u8449";
         }
         else if (character == 0xF96F) {
-            sb.append((char) 0x8AAA);
+            return "\u8AAA";
         }
         else if (character == 0xF970) {
-            sb.append((char) 0x6BBA);
+            return "\u6BBA";
         }
         else if (character == 0xF971) {
-            sb.append((char) 0x8FB0);
+            return "\u8FB0";
         }
         else if (character == 0xF972) {
-            sb.append((char) 0x6C88);
+            return "\u6C88";
         }
         else if (character == 0xF973) {
-            sb.append((char) 0x62FE);
+            return "\u62FE";
         }
         else if (character == 0xF974) {
-            sb.append((char) 0x82E5);
+            return "\u82E5";
         }
         else if (character == 0xF975) {
-            sb.append((char) 0x63A0);
+            return "\u63A0";
         }
         else if (character == 0xF976) {
-            sb.append((char) 0x7565);
+            return "\u7565";
         }
         else if (character == 0xF977) {
-            sb.append((char) 0x4EAE);
+            return "\u4EAE";
         }
         else if (character == 0xF978) {
-            sb.append((char) 0x5169);
+            return "\u5169";
         }
         else if (character == 0xF979) {
-            sb.append((char) 0x51C9);
+            return "\u51C9";
         }
         else if (character == 0xF97A) {
-            sb.append((char) 0x6881);
+            return "\u6881";
         }
         else if (character == 0xF97B) {
-            sb.append((char) 0x7CE7);
+            return "\u7CE7";
         }
         else if (character == 0xF97C) {
-            sb.append((char) 0x826F);
+            return "\u826F";
         }
         else if (character == 0xF97D) {
-            sb.append((char) 0x8AD2);
+            return "\u8AD2";
         }
         else if (character == 0xF97E) {
-            sb.append((char) 0x91CF);
+            return "\u91CF";
         }
         else if (character == 0xF97F) {
-            sb.append((char) 0x52F5);
+            return "\u52F5";
         }
         else if (character == 0xF980) {
-            sb.append((char) 0x5442);
+            return "\u5442";
         }
         else if (character == 0xF981) {
-            sb.append((char) 0x5973);
+            return "\u5973";
         }
         else if (character == 0xF982) {
-            sb.append((char) 0x5EEC);
+            return "\u5EEC";
         }
         else if (character == 0xF983) {
-            sb.append((char) 0x65C5);
+            return "\u65C5";
         }
         else if (character == 0xF984) {
-            sb.append((char) 0x6FFE);
+            return "\u6FFE";
         }
         else if (character == 0xF985) {
-            sb.append((char) 0x792A);
+            return "\u792A";
         }
         else if (character == 0xF986) {
-            sb.append((char) 0x95AD);
+            return "\u95AD";
         }
         else if (character == 0xF987) {
-            sb.append((char) 0x9A6A);
+            return "\u9A6A";
         }
         else if (character == 0xF988) {
-            sb.append((char) 0x9E97);
+            return "\u9E97";
         }
         else if (character == 0xF989) {
-            sb.append((char) 0x9ECE);
+            return "\u9ECE";
         }
         else if (character == 0xF98A) {
-            sb.append((char) 0x529B);
+            return "\u529B";
         }
         else if (character == 0xF98B) {
-            sb.append((char) 0x66C6);
+            return "\u66C6";
         }
         else if (character == 0xF98C) {
-            sb.append((char) 0x6B77);
+            return "\u6B77";
         }
         else if (character == 0xF98D) {
-            sb.append((char) 0x8F62);
+            return "\u8F62";
         }
         else if (character == 0xF98E) {
-            sb.append((char) 0x5E74);
+            return "\u5E74";
         }
         else if (character == 0xF98F) {
-            sb.append((char) 0x6190);
+            return "\u6190";
         }
         else if (character == 0xF990) {
-            sb.append((char) 0x6200);
+            return "\u6200";
         }
         else if (character == 0xF991) {
-            sb.append((char) 0x649A);
+            return "\u649A";
         }
         else if (character == 0xF992) {
-            sb.append((char) 0x6F23);
+            return "\u6F23";
         }
         else if (character == 0xF993) {
-            sb.append((char) 0x7149);
+            return "\u7149";
         }
         else if (character == 0xF994) {
-            sb.append((char) 0x7489);
+            return "\u7489";
         }
         else if (character == 0xF995) {
-            sb.append((char) 0x79CA);
+            return "\u79CA";
         }
         else if (character == 0xF996) {
-            sb.append((char) 0x7DF4);
+            return "\u7DF4";
         }
         else if (character == 0xF997) {
-            sb.append((char) 0x806F);
+            return "\u806F";
         }
         else if (character == 0xF998) {
-            sb.append((char) 0x8F26);
+            return "\u8F26";
         }
         else if (character == 0xF999) {
-            sb.append((char) 0x84EE);
+            return "\u84EE";
         }
         else if (character == 0xF99A) {
-            sb.append((char) 0x9023);
+            return "\u9023";
         }
         else if (character == 0xF99B) {
-            sb.append((char) 0x934A);
+            return "\u934A";
         }
         else if (character == 0xF99C) {
-            sb.append((char) 0x5217);
+            return "\u5217";
         }
         else if (character == 0xF99D) {
-            sb.append((char) 0x52A3);
+            return "\u52A3";
         }
         else if (character == 0xF99E) {
-            sb.append((char) 0x54BD);
+            return "\u54BD";
         }
         else if (character == 0xF99F) {
-            sb.append((char) 0x70C8);
+            return "\u70C8";
         }
         else if (character == 0xF9A0) {
-            sb.append((char) 0x88C2);
+            return "\u88C2";
         }
         else if (character == 0xF9A1) {
-            sb.append((char) 0x8AAA);
+            return "\u8AAA";
         }
         else if (character == 0xF9A2) {
-            sb.append((char) 0x5EC9);
+            return "\u5EC9";
         }
         else if (character == 0xF9A3) {
-            sb.append((char) 0x5FF5);
+            return "\u5FF5";
         }
         else if (character == 0xF9A4) {
-            sb.append((char) 0x637B);
+            return "\u637B";
         }
         else if (character == 0xF9A5) {
-            sb.append((char) 0x6BAE);
+            return "\u6BAE";
         }
         else if (character == 0xF9A6) {
-            sb.append((char) 0x7C3E);
+            return "\u7C3E";
         }
         else if (character == 0xF9A7) {
-            sb.append((char) 0x7375);
+            return "\u7375";
         }
         else if (character == 0xF9A8) {
-            sb.append((char) 0x4EE4);
+            return "\u4EE4";
         }
         else if (character == 0xF9A9) {
-            sb.append((char) 0x56F9);
+            return "\u56F9";
         }
         else if (character == 0xF9AA) {
-            sb.append((char) 0x5BE7);
+            return "\u5BE7";
         }
         else if (character == 0xF9AB) {
-            sb.append((char) 0x5DBA);
+            return "\u5DBA";
         }
         else if (character == 0xF9AC) {
-            sb.append((char) 0x601C);
+            return "\u601C";
         }
         else if (character == 0xF9AD) {
-            sb.append((char) 0x73B2);
+            return "\u73B2";
         }
         else if (character == 0xF9AE) {
-            sb.append((char) 0x7469);
+            return "\u7469";
         }
         else if (character == 0xF9AF) {
-            sb.append((char) 0x7F9A);
+            return "\u7F9A";
         }
         else if (character == 0xF9B0) {
-            sb.append((char) 0x8046);
+            return "\u8046";
         }
         else if (character == 0xF9B1) {
-            sb.append((char) 0x9234);
+            return "\u9234";
         }
         else if (character == 0xF9B2) {
-            sb.append((char) 0x96F6);
+            return "\u96F6";
         }
         else if (character == 0xF9B3) {
-            sb.append((char) 0x9748);
+            return "\u9748";
         }
         else if (character == 0xF9B4) {
-            sb.append((char) 0x9818);
+            return "\u9818";
         }
         else if (character == 0xF9B5) {
-            sb.append((char) 0x4F8B);
+            return "\u4F8B";
         }
         else if (character == 0xF9B6) {
-            sb.append((char) 0x79AE);
+            return "\u79AE";
         }
         else if (character == 0xF9B7) {
-            sb.append((char) 0x91B4);
+            return "\u91B4";
         }
         else if (character == 0xF9B8) {
-            sb.append((char) 0x96B8);
+            return "\u96B8";
         }
         else if (character == 0xF9B9) {
-            sb.append((char) 0x60E1);
+            return "\u60E1";
         }
         else if (character == 0xF9BA) {
-            sb.append((char) 0x4E86);
+            return "\u4E86";
         }
         else if (character == 0xF9BB) {
-            sb.append((char) 0x50DA);
+            return "\u50DA";
         }
         else if (character == 0xF9BC) {
-            sb.append((char) 0x5BEE);
+            return "\u5BEE";
         }
         else if (character == 0xF9BD) {
-            sb.append((char) 0x5C3F);
+            return "\u5C3F";
         }
         else if (character == 0xF9BE) {
-            sb.append((char) 0x6599);
+            return "\u6599";
         }
         else if (character == 0xF9BF) {
-            sb.append((char) 0x6A02);
+            return "\u6A02";
         }
         else if (character == 0xF9C0) {
-            sb.append((char) 0x71CE);
+            return "\u71CE";
         }
         else if (character == 0xF9C1) {
-            sb.append((char) 0x7642);
+            return "\u7642";
         }
         else if (character == 0xF9C2) {
-            sb.append((char) 0x84FC);
+            return "\u84FC";
         }
         else if (character == 0xF9C3) {
-            sb.append((char) 0x907C);
+            return "\u907C";
         }
         else if (character == 0xF9C4) {
-            sb.append((char) 0x9F8D);
+            return "\u9F8D";
         }
         else if (character == 0xF9C5) {
-            sb.append((char) 0x6688);
+            return "\u6688";
         }
         else if (character == 0xF9C6) {
-            sb.append((char) 0x962E);
+            return "\u962E";
         }
         else if (character == 0xF9C7) {
-            sb.append((char) 0x5289);
+            return "\u5289";
         }
         else if (character == 0xF9C8) {
-            sb.append((char) 0x677B);
+            return "\u677B";
         }
         else if (character == 0xF9C9) {
-            sb.append((char) 0x67F3);
+            return "\u67F3";
         }
         else if (character == 0xF9CA) {
-            sb.append((char) 0x6D41);
+            return "\u6D41";
         }
         else if (character == 0xF9CB) {
-            sb.append((char) 0x6E9C);
+            return "\u6E9C";
         }
         else if (character == 0xF9CC) {
-            sb.append((char) 0x7409);
+            return "\u7409";
         }
         else if (character == 0xF9CD) {
-            sb.append((char) 0x7559);
+            return "\u7559";
         }
         else if (character == 0xF9CE) {
-            sb.append((char) 0x786B);
+            return "\u786B";
         }
         else if (character == 0xF9CF) {
-            sb.append((char) 0x7D10);
+            return "\u7D10";
         }
         else if (character == 0xF9D0) {
-            sb.append((char) 0x985E);
+            return "\u985E";
         }
         else if (character == 0xF9D1) {
-            sb.append((char) 0x516D);
+            return "\u516D";
         }
         else if (character == 0xF9D2) {
-            sb.append((char) 0x622E);
+            return "\u622E";
         }
         else if (character == 0xF9D3) {
-            sb.append((char) 0x9678);
+            return "\u9678";
         }
         else if (character == 0xF9D4) {
-            sb.append((char) 0x502B);
+            return "\u502B";
         }
         else if (character == 0xF9D5) {
-            sb.append((char) 0x5D19);
+            return "\u5D19";
         }
         else if (character == 0xF9D6) {
-            sb.append((char) 0x6DEA);
+            return "\u6DEA";
         }
         else if (character == 0xF9D7) {
-            sb.append((char) 0x8F2A);
+            return "\u8F2A";
         }
         else if (character == 0xF9D8) {
-            sb.append((char) 0x5F8B);
+            return "\u5F8B";
         }
         else if (character == 0xF9D9) {
-            sb.append((char) 0x6144);
+            return "\u6144";
         }
         else if (character == 0xF9DA) {
-            sb.append((char) 0x6817);
+            return "\u6817";
         }
         else if (character == 0xF9DB) {
-            sb.append((char) 0x7387);
+            return "\u7387";
         }
         else if (character == 0xF9DC) {
-            sb.append((char) 0x9686);
+            return "\u9686";
         }
         else if (character == 0xF9DD) {
-            sb.append((char) 0x5229);
+            return "\u5229";
         }
         else if (character == 0xF9DE) {
-            sb.append((char) 0x540F);
+            return "\u540F";
         }
         else if (character == 0xF9DF) {
-            sb.append((char) 0x5C65);
+            return "\u5C65";
         }
         else if (character == 0xF9E0) {
-            sb.append((char) 0x6613);
+            return "\u6613";
         }
         else if (character == 0xF9E1) {
-            sb.append((char) 0x674E);
+            return "\u674E";
         }
         else if (character == 0xF9E2) {
-            sb.append((char) 0x68A8);
+            return "\u68A8";
         }
         else if (character == 0xF9E3) {
-            sb.append((char) 0x6CE5);
+            return "\u6CE5";
         }
         else if (character == 0xF9E4) {
-            sb.append((char) 0x7406);
+            return "\u7406";
         }
         else if (character == 0xF9E5) {
-            sb.append((char) 0x75E2);
+            return "\u75E2";
         }
         else if (character == 0xF9E6) {
-            sb.append((char) 0x7F79);
+            return "\u7F79";
         }
         else if (character == 0xF9E7) {
-            sb.append((char) 0x88CF);
+            return "\u88CF";
         }
         else if (character == 0xF9E8) {
-            sb.append((char) 0x88E1);
+            return "\u88E1";
         }
         else if (character == 0xF9E9) {
-            sb.append((char) 0x91CC);
+            return "\u91CC";
         }
         else if (character == 0xF9EA) {
-            sb.append((char) 0x96E2);
+            return "\u96E2";
         }
         else if (character == 0xF9EB) {
-            sb.append((char) 0x533F);
+            return "\u533F";
         }
         else if (character == 0xF9EC) {
-            sb.append((char) 0x6EBA);
+            return "\u6EBA";
         }
         else if (character == 0xF9ED) {
-            sb.append((char) 0x541D);
+            return "\u541D";
         }
         else if (character == 0xF9EE) {
-            sb.append((char) 0x71D0);
+            return "\u71D0";
         }
         else if (character == 0xF9EF) {
-            sb.append((char) 0x7498);
+            return "\u7498";
         }
         else if (character == 0xF9F0) {
-            sb.append((char) 0x85FA);
+            return "\u85FA";
         }
         else if (character == 0xF9F1) {
-            sb.append((char) 0x96A3);
+            return "\u96A3";
         }
         else if (character == 0xF9F2) {
-            sb.append((char) 0x9C57);
+            return "\u9C57";
         }
         else if (character == 0xF9F3) {
-            sb.append((char) 0x9E9F);
+            return "\u9E9F";
         }
         else if (character == 0xF9F4) {
-            sb.append((char) 0x6797);
+            return "\u6797";
         }
         else if (character == 0xF9F5) {
-            sb.append((char) 0x6DCB);
+            return "\u6DCB";
         }
         else if (character == 0xF9F6) {
-            sb.append((char) 0x81E8);
+            return "\u81E8";
         }
         else if (character == 0xF9F7) {
-            sb.append((char) 0x7ACB);
+            return "\u7ACB";
         }
         else if (character == 0xF9F8) {
-            sb.append((char) 0x7B20);
+            return "\u7B20";
         }
         else if (character == 0xF9F9) {
-            sb.append((char) 0x7C92);
+            return "\u7C92";
         }
         else if (character == 0xF9FA) {
-            sb.append((char) 0x72C0);
+            return "\u72C0";
         }
         else if (character == 0xF9FB) {
-            sb.append((char) 0x7099);
+            return "\u7099";
         }
         else if (character == 0xF9FC) {
-            sb.append((char) 0x8B58);
+            return "\u8B58";
         }
         else if (character == 0xF9FD) {
-            sb.append((char) 0x4EC0);
+            return "\u4EC0";
         }
         else if (character == 0xF9FE) {
-            sb.append((char) 0x8336);
+            return "\u8336";
         }
         else if (character == 0xF9FF) {
-            sb.append((char) 0x523A);
+            return "\u523A";
         }
         else if (character == 0xFA00) {
-            sb.append((char) 0x5207);
+            return "\u5207";
         }
         else if (character == 0xFA01) {
-            sb.append((char) 0x5EA6);
+            return "\u5EA6";
         }
         else if (character == 0xFA02) {
-            sb.append((char) 0x62D3);
+            return "\u62D3";
         }
         else if (character == 0xFA03) {
-            sb.append((char) 0x7CD6);
+            return "\u7CD6";
         }
         else if (character == 0xFA04) {
-            sb.append((char) 0x5B85);
+            return "\u5B85";
         }
         else if (character == 0xFA05) {
-            sb.append((char) 0x6D1E);
+            return "\u6D1E";
         }
         else if (character == 0xFA06) {
-            sb.append((char) 0x66B4);
+            return "\u66B4";
         }
         else if (character == 0xFA07) {
-            sb.append((char) 0x8F3B);
+            return "\u8F3B";
         }
         else if (character == 0xFA08) {
-            sb.append((char) 0x884C);
+            return "\u884C";
         }
         else if (character == 0xFA09) {
-            sb.append((char) 0x964D);
+            return "\u964D";
         }
         else if (character == 0xFA0A) {
-            sb.append((char) 0x898B);
+            return "\u898B";
         }
         else if (character == 0xFA0B) {
-            sb.append((char) 0x5ED3);
+            return "\u5ED3";
         }
         else if (character == 0xFA0C) {
-            sb.append((char) 0x5140);
+            return "\u5140";
         }
         else if (character == 0xFA0D) {
-            sb.append((char) 0x55C0);
+            return "\u55C0";
         }
         else if (character == 0xFA10) {
-            sb.append((char) 0x585A);
+            return "\u585A";
         }
         else if (character == 0xFA12) {
-            sb.append((char) 0x6674);
+            return "\u6674";
         }
         else if (character == 0xFA15) {
-            sb.append((char) 0x51DE);
+            return "\u51DE";
         }
         else if (character == 0xFA16) {
-            sb.append((char) 0x732A);
+            return "\u732A";
         }
         else if (character == 0xFA17) {
-            sb.append((char) 0x76CA);
+            return "\u76CA";
         }
         else if (character == 0xFA18) {
-            sb.append((char) 0x793C);
+            return "\u793C";
         }
         else if (character == 0xFA19) {
-            sb.append((char) 0x795E);
+            return "\u795E";
         }
         else if (character == 0xFA1A) {
-            sb.append((char) 0x7965);
+            return "\u7965";
         }
         else if (character == 0xFA1B) {
-            sb.append((char) 0x798F);
+            return "\u798F";
         }
         else if (character == 0xFA1C) {
-            sb.append((char) 0x9756);
+            return "\u9756";
         }
         else if (character == 0xFA1D) {
-            sb.append((char) 0x7CBE);
+            return "\u7CBE";
         }
         else if (character == 0xFA1E) {
-            sb.append((char) 0x7FBD);
+            return "\u7FBD";
         }
         else if (character == 0xFA20) {
-            sb.append((char) 0x8612);
+            return "\u8612";
         }
         else if (character == 0xFA22) {
-            sb.append((char) 0x8AF8);
+            return "\u8AF8";
         }
         else if (character == 0xFA25) {
-            sb.append((char) 0x9038);
+            return "\u9038";
         }
         else if (character == 0xFA26) {
-            sb.append((char) 0x90FD);
+            return "\u90FD";
         }
         else if (character == 0xFA2A) {
-            sb.append((char) 0x98EF);
+            return "\u98EF";
         }
         else if (character == 0xFA2B) {
-            sb.append((char) 0x98FC);
+            return "\u98FC";
         }
         else if (character == 0xFA2C) {
-            sb.append((char) 0x9928);
+            return "\u9928";
         }
         else if (character == 0xFA2D) {
-            sb.append((char) 0x9DB4);
+            return "\u9DB4";
         }
         else if (character == 0xFA30) {
-            sb.append((char) 0x4FAE);
+            return "\u4FAE";
         }
         else if (character == 0xFA31) {
-            sb.append((char) 0x50E7);
+            return "\u50E7";
         }
         else if (character == 0xFA32) {
-            sb.append((char) 0x514D);
+            return "\u514D";
         }
         else if (character == 0xFA33) {
-            sb.append((char) 0x52C9);
+            return "\u52C9";
         }
         else if (character == 0xFA34) {
-            sb.append((char) 0x52E4);
+            return "\u52E4";
         }
         else if (character == 0xFA35) {
-            sb.append((char) 0x5351);
+            return "\u5351";
         }
         else if (character == 0xFA36) {
-            sb.append((char) 0x559D);
+            return "\u559D";
         }
         else if (character == 0xFA37) {
-            sb.append((char) 0x5606);
+            return "\u5606";
         }
         else if (character == 0xFA38) {
-            sb.append((char) 0x5668);
+            return "\u5668";
         }
         else if (character == 0xFA39) {
-            sb.append((char) 0x5840);
+            return "\u5840";
         }
         else if (character == 0xFA3A) {
-            sb.append((char) 0x58A8);
+            return "\u58A8";
         }
         else if (character == 0xFA3B) {
-            sb.append((char) 0x5C64);
+            return "\u5C64";
         }
         else if (character == 0xFA3C) {
-            sb.append((char) 0x5C6E);
+            return "\u5C6E";
         }
         else if (character == 0xFA3D) {
-            sb.append((char) 0x6094);
+            return "\u6094";
         }
         else if (character == 0xFA3E) {
-            sb.append((char) 0x6168);
+            return "\u6168";
         }
         else if (character == 0xFA3F) {
-            sb.append((char) 0x618E);
+            return "\u618E";
         }
         else if (character == 0xFA40) {
-            sb.append((char) 0x61F2);
+            return "\u61F2";
         }
         else if (character == 0xFA41) {
-            sb.append((char) 0x654F);
+            return "\u654F";
         }
         else if (character == 0xFA42) {
-            sb.append((char) 0x65E2);
+            return "\u65E2";
         }
         else if (character == 0xFA43) {
-            sb.append((char) 0x6691);
+            return "\u6691";
         }
         else if (character == 0xFA44) {
-            sb.append((char) 0x6885);
+            return "\u6885";
         }
         else if (character == 0xFA45) {
-            sb.append((char) 0x6D77);
+            return "\u6D77";
         }
         else if (character == 0xFA46) {
-            sb.append((char) 0x6E1A);
+            return "\u6E1A";
         }
         else if (character == 0xFA47) {
-            sb.append((char) 0x6F22);
+            return "\u6F22";
         }
         else if (character == 0xFA48) {
-            sb.append((char) 0x716E);
+            return "\u716E";
         }
         else if (character == 0xFA49) {
-            sb.append((char) 0x722B);
+            return "\u722B";
         }
         else if (character == 0xFA4A) {
-            sb.append((char) 0x7422);
+            return "\u7422";
         }
         else if (character == 0xFA4B) {
-            sb.append((char) 0x7891);
+            return "\u7891";
         }
         else if (character == 0xFA4C) {
-            sb.append((char) 0x793E);
+            return "\u793E";
         }
         else if (character == 0xFA4D) {
-            sb.append((char) 0x7949);
+            return "\u7949";
         }
         else if (character == 0xFA4E) {
-            sb.append((char) 0x7948);
+            return "\u7948";
         }
         else if (character == 0xFA4F) {
-            sb.append((char) 0x7950);
+            return "\u7950";
         }
         else if (character == 0xFA50) {
-            sb.append((char) 0x7956);
+            return "\u7956";
         }
         else if (character == 0xFA51) {
-            sb.append((char) 0x795D);
+            return "\u795D";
         }
         else if (character == 0xFA52) {
-            sb.append((char) 0x798D);
+            return "\u798D";
         }
         else if (character == 0xFA53) {
-            sb.append((char) 0x798E);
+            return "\u798E";
         }
         else if (character == 0xFA54) {
-            sb.append((char) 0x7A40);
+            return "\u7A40";
         }
         else if (character == 0xFA55) {
-            sb.append((char) 0x7A81);
+            return "\u7A81";
         }
         else if (character == 0xFA56) {
-            sb.append((char) 0x7BC0);
+            return "\u7BC0";
         }
         else if (character == 0xFA57) {
-            sb.append((char) 0x7DF4);
+            return "\u7DF4";
         }
         else if (character == 0xFA58) {
-            sb.append((char) 0x7E09);
+            return "\u7E09";
         }
         else if (character == 0xFA59) {
-            sb.append((char) 0x7E41);
+            return "\u7E41";
         }
         else if (character == 0xFA5A) {
-            sb.append((char) 0x7F72);
+            return "\u7F72";
         }
         else if (character == 0xFA5B) {
-            sb.append((char) 0x8005);
+            return "\u8005";
         }
         else if (character == 0xFA5C) {
-            sb.append((char) 0x81ED);
+            return "\u81ED";
         }
         else if (character == 0xFA5D) {
-            sb.append((char) 0x8279);
+            return "\u8279";
         }
         else if (character == 0xFA5E) {
-            sb.append((char) 0x8279);
+            return "\u8279";
         }
         else if (character == 0xFA5F) {
-            sb.append((char) 0x8457);
+            return "\u8457";
         }
         else if (character == 0xFA60) {
-            sb.append((char) 0x8910);
+            return "\u8910";
         }
         else if (character == 0xFA61) {
-            sb.append((char) 0x8996);
+            return "\u8996";
         }
         else if (character == 0xFA62) {
-            sb.append((char) 0x8B01);
+            return "\u8B01";
         }
         else if (character == 0xFA63) {
-            sb.append((char) 0x8B39);
+            return "\u8B39";
         }
         else if (character == 0xFA64) {
-            sb.append((char) 0x8CD3);
+            return "\u8CD3";
         }
         else if (character == 0xFA65) {
-            sb.append((char) 0x8D08);
+            return "\u8D08";
         }
         else if (character == 0xFA66) {
-            sb.append((char) 0x8FB6);
+            return "\u8FB6";
         }
         else if (character == 0xFA67) {
-            sb.append((char) 0x9038);
+            return "\u9038";
         }
         else if (character == 0xFA68) {
-            sb.append((char) 0x96E3);
+            return "\u96E3";
         }
         else if (character == 0xFA69) {
-            sb.append((char) 0x97FF);
+            return "\u97FF";
         }
         else if (character == 0xFA6A) {
-            sb.append((char) 0x983B);
+            return "\u983B";
+        }
+        else if (character == 0xFA70) {
+            return "\u4E26";
+        }
+        else if (character == 0xFA71) {
+            return "\u51B5";
+        }
+        else if (character == 0xFA72) {
+            return "\u5168";
+        }
+        else if (character == 0xFA73) {
+            return "\u4F80";
+        }
+        else if (character == 0xFA74) {
+            return "\u5145";
+        }
+        else if (character == 0xFA75) {
+            return "\u5180";
+        }
+        else if (character == 0xFA76) {
+            return "\u52C7";
+        }
+        else if (character == 0xFA77) {
+            return "\u52FA";
+        }
+        else if (character == 0xFA78) {
+            return "\u559D";
+        }
+        else if (character == 0xFA79) {
+            return "\u5555";
+        }
+        else if (character == 0xFA7A) {
+            return "\u5599";
+        }
+        else if (character == 0xFA7B) {
+            return "\u55E2";
+        }
+        else if (character == 0xFA7C) {
+            return "\u585A";
+        }
+        else if (character == 0xFA7D) {
+            return "\u58B3";
+        }
+        else if (character == 0xFA7E) {
+            return "\u5944";
+        }
+        else if (character == 0xFA7F) {
+            return "\u5954";
+        }
+        else if (character == 0xFA80) {
+            return "\u5A62";
+        }
+        else if (character == 0xFA81) {
+            return "\u5B28";
+        }
+        else if (character == 0xFA82) {
+            return "\u5ED2";
+        }
+        else if (character == 0xFA83) {
+            return "\u5ED9";
+        }
+        else if (character == 0xFA84) {
+            return "\u5F69";
+        }
+        else if (character == 0xFA85) {
+            return "\u5FAD";
+        }
+        else if (character == 0xFA86) {
+            return "\u60D8";
+        }
+        else if (character == 0xFA87) {
+            return "\u614E";
+        }
+        else if (character == 0xFA88) {
+            return "\u6108";
+        }
+        else if (character == 0xFA89) {
+            return "\u618E";
+        }
+        else if (character == 0xFA8A) {
+            return "\u6160";
+        }
+        else if (character == 0xFA8B) {
+            return "\u61F2";
+        }
+        else if (character == 0xFA8C) {
+            return "\u6234";
+        }
+        else if (character == 0xFA8D) {
+            return "\u63C4";
+        }
+        else if (character == 0xFA8E) {
+            return "\u641C";
+        }
+        else if (character == 0xFA8F) {
+            return "\u6452";
+        }
+        else if (character == 0xFA90) {
+            return "\u6556";
+        }
+        else if (character == 0xFA91) {
+            return "\u6674";
+        }
+        else if (character == 0xFA92) {
+            return "\u6717";
+        }
+        else if (character == 0xFA93) {
+            return "\u671B";
+        }
+        else if (character == 0xFA94) {
+            return "\u6756";
+        }
+        else if (character == 0xFA95) {
+            return "\u6B79";
+        }
+        else if (character == 0xFA96) {
+            return "\u6BBA";
+        }
+        else if (character == 0xFA97) {
+            return "\u6D41";
+        }
+        else if (character == 0xFA98) {
+            return "\u6EDB";
+        }
+        else if (character == 0xFA99) {
+            return "\u6ECB";
+        }
+        else if (character == 0xFA9A) {
+            return "\u6F22";
+        }
+        else if (character == 0xFA9B) {
+            return "\u701E";
+        }
+        else if (character == 0xFA9C) {
+            return "\u716E";
+        }
+        else if (character == 0xFA9D) {
+            return "\u77A7";
+        }
+        else if (character == 0xFA9E) {
+            return "\u7235";
+        }
+        else if (character == 0xFA9F) {
+            return "\u72AF";
+        }
+        else if (character == 0xFAA0) {
+            return "\u732A";
+        }
+        else if (character == 0xFAA1) {
+            return "\u7471";
+        }
+        else if (character == 0xFAA2) {
+            return "\u7506";
+        }
+        else if (character == 0xFAA3) {
+            return "\u753B";
+        }
+        else if (character == 0xFAA4) {
+            return "\u761D";
+        }
+        else if (character == 0xFAA5) {
+            return "\u761F";
+        }
+        else if (character == 0xFAA6) {
+            return "\u76CA";
+        }
+        else if (character == 0xFAA7) {
+            return "\u76DB";
+        }
+        else if (character == 0xFAA8) {
+            return "\u76F4";
+        }
+        else if (character == 0xFAA9) {
+            return "\u774A";
+        }
+        else if (character == 0xFAAA) {
+            return "\u7740";
+        }
+        else if (character == 0xFAAB) {
+            return "\u78CC";
+        }
+        else if (character == 0xFAAC) {
+            return "\u7AB1";
+        }
+        else if (character == 0xFAAD) {
+            return "\u7BC0";
+        }
+        else if (character == 0xFAAE) {
+            return "\u7C7B";
+        }
+        else if (character == 0xFAAF) {
+            return "\u7D5B";
+        }
+        else if (character == 0xFAB0) {
+            return "\u7DF4";
+        }
+        else if (character == 0xFAB1) {
+            return "\u7F3E";
+        }
+        else if (character == 0xFAB2) {
+            return "\u8005";
+        }
+        else if (character == 0xFAB3) {
+            return "\u8352";
+        }
+        else if (character == 0xFAB4) {
+            return "\u83EF";
+        }
+        else if (character == 0xFAB5) {
+            return "\u8779";
+        }
+        else if (character == 0xFAB6) {
+            return "\u8941";
+        }
+        else if (character == 0xFAB7) {
+            return "\u8986";
+        }
+        else if (character == 0xFAB8) {
+            return "\u8996";
+        }
+        else if (character == 0xFAB9) {
+            return "\u8ABF";
+        }
+        else if (character == 0xFABA) {
+            return "\u8AF8";
+        }
+        else if (character == 0xFABB) {
+            return "\u8ACB";
+        }
+        else if (character == 0xFABC) {
+            return "\u8B01";
+        }
+        else if (character == 0xFABD) {
+            return "\u8AFE";
+        }
+        else if (character == 0xFABE) {
+            return "\u8AED";
+        }
+        else if (character == 0xFABF) {
+            return "\u8B39";
+        }
+        else if (character == 0xFAC0) {
+            return "\u8B8A";
+        }
+        else if (character == 0xFAC1) {
+            return "\u8D08";
+        }
+        else if (character == 0xFAC2) {
+            return "\u8F38";
+        }
+        else if (character == 0xFAC3) {
+            return "\u9072";
+        }
+        else if (character == 0xFAC4) {
+            return "\u9199";
+        }
+        else if (character == 0xFAC5) {
+            return "\u9276";
+        }
+        else if (character == 0xFAC6) {
+            return "\u967C";
+        }
+        else if (character == 0xFAC7) {
+            return "\u96E3";
+        }
+        else if (character == 0xFAC8) {
+            return "\u9756";
+        }
+        else if (character == 0xFAC9) {
+            return "\u97DB";
+        }
+        else if (character == 0xFACA) {
+            return "\u97FF";
+        }
+        else if (character == 0xFACB) {
+            return "\u980B";
+        }
+        else if (character == 0xFACC) {
+            return "\u983B";
+        }
+        else if (character == 0xFACD) {
+            return "\u9B12";
+        }
+        else if (character == 0xFACE) {
+            return "\u9F9C";
+        }
+        else if (character == 0xFACF) {
+            return "\ud84a\udc4a";
+        }
+        else if (character == 0xFAD0) {
+            return "\ud84a\udc44";
+        }
+        else if (character == 0xFAD1) {
+            return "\ud84c\udfd5";
+        }
+        else if (character == 0xFAD2) {
+            return "\u3B9D";
+        }
+        else if (character == 0xFAD3) {
+            return "\u4018";
+        }
+        else if (character == 0xFAD4) {
+            return "\u4039";
+        }
+        else if (character == 0xFAD5) {
+            return "\ud854\ude49";
+        }
+        else if (character == 0xFAD6) {
+            return "\ud857\udcd0";
+        }
+        else if (character == 0xFAD7) {
+            return "\ud85f\uded3";
+        }
+        else if (character == 0xFAD8) {
+            return "\u9F43";
+        }
+        else if (character == 0xFAD9) {
+            return "\u9F8E";
         }
         else if (character == 0xFB1D) {
-            sb.append((char) 0x05D9);
-            sb.append((char) 0x05B4);
+            return "\u05D9\u05B4";
         }
         else if (character == 0xFB1F) {
-            sb.append((char) 0x05F2);
-            sb.append((char) 0x05B7);
+            return "\u05F2\u05B7";
         }
         else if (character == 0xFB2A) {
-            sb.append((char) 0x05E9);
-            sb.append((char) 0x05C1);
+            return "\u05E9\u05C1";
         }
         else if (character == 0xFB2B) {
-            sb.append((char) 0x05E9);
-            sb.append((char) 0x05C2);
+            return "\u05E9\u05C2";
         }
         else if (character == 0xFB2C) {
-            sb.append((char) 0xFB49);
-            sb.append((char) 0x05C1);
+            return "\uFB49\u05C1";
         }
         else if (character == 0xFB2D) {
-            sb.append((char) 0xFB49);
-            sb.append((char) 0x05C2);
+            return "\uFB49\u05C2";
         }
         else if (character == 0xFB2E) {
-            sb.append((char) 0x05D0);
-            sb.append((char) 0x05B7);
+            return "\u05D0\u05B7";
         }
         else if (character == 0xFB2F) {
-            sb.append((char) 0x05D0);
-            sb.append((char) 0x05B8);
+            return "\u05D0\u05B8";
         }
         else if (character == 0xFB30) {
-            sb.append((char) 0x05D0);
-            sb.append((char) 0x05BC);
+            return "\u05D0\u05BC";
         }
         else if (character == 0xFB31) {
-            sb.append((char) 0x05D1);
-            sb.append((char) 0x05BC);
+            return "\u05D1\u05BC";
         }
         else if (character == 0xFB32) {
-            sb.append((char) 0x05D2);
-            sb.append((char) 0x05BC);
+            return "\u05D2\u05BC";
         }
         else if (character == 0xFB33) {
-            sb.append((char) 0x05D3);
-            sb.append((char) 0x05BC);
+            return "\u05D3\u05BC";
         }
         else if (character == 0xFB34) {
-            sb.append((char) 0x05D4);
-            sb.append((char) 0x05BC);
+            return "\u05D4\u05BC";
         }
         else if (character == 0xFB35) {
-            sb.append((char) 0x05D5);
-            sb.append((char) 0x05BC);
+            return "\u05D5\u05BC";
         }
         else if (character == 0xFB36) {
-            sb.append((char) 0x05D6);
-            sb.append((char) 0x05BC);
+            return "\u05D6\u05BC";
         }
         else if (character == 0xFB38) {
-            sb.append((char) 0x05D8);
-            sb.append((char) 0x05BC);
+            return "\u05D8\u05BC";
         }
         else if (character == 0xFB39) {
-            sb.append((char) 0x05D9);
-            sb.append((char) 0x05BC);
+            return "\u05D9\u05BC";
         }
         else if (character == 0xFB3A) {
-            sb.append((char) 0x05DA);
-            sb.append((char) 0x05BC);
+            return "\u05DA\u05BC";
         }
         else if (character == 0xFB3B) {
-            sb.append((char) 0x05DB);
-            sb.append((char) 0x05BC);
+            return "\u05DB\u05BC";
         }
         else if (character == 0xFB3C) {
-            sb.append((char) 0x05DC);
-            sb.append((char) 0x05BC);
+            return "\u05DC\u05BC";
         }
         else if (character == 0xFB3E) {
-            sb.append((char) 0x05DE);
-            sb.append((char) 0x05BC);
+            return "\u05DE\u05BC";
         }
         else if (character == 0xFB40) {
-            sb.append((char) 0x05E0);
-            sb.append((char) 0x05BC);
+            return "\u05E0\u05BC";
         }
         else if (character == 0xFB41) {
-            sb.append((char) 0x05E1);
-            sb.append((char) 0x05BC);
+            return "\u05E1\u05BC";
         }
         else if (character == 0xFB43) {
-            sb.append((char) 0x05E3);
-            sb.append((char) 0x05BC);
+            return "\u05E3\u05BC";
         }
         else if (character == 0xFB44) {
-            sb.append((char) 0x05E4);
-            sb.append((char) 0x05BC);
+            return "\u05E4\u05BC";
         }
         else if (character == 0xFB46) {
-            sb.append((char) 0x05E6);
-            sb.append((char) 0x05BC);
+            return "\u05E6\u05BC";
         }
         else if (character == 0xFB47) {
-            sb.append((char) 0x05E7);
-            sb.append((char) 0x05BC);
+            return "\u05E7\u05BC";
         }
         else if (character == 0xFB48) {
-            sb.append((char) 0x05E8);
-            sb.append((char) 0x05BC);
+            return "\u05E8\u05BC";
         }
         else if (character == 0xFB49) {
-            sb.append((char) 0x05E9);
-            sb.append((char) 0x05BC);
+            return "\u05E9\u05BC";
         }
         else if (character == 0xFB4A) {
-            sb.append((char) 0x05EA);
-            sb.append((char) 0x05BC);
+            return "\u05EA\u05BC";
         }
         else if (character == 0xFB4B) {
-            sb.append((char) 0x05D5);
-            sb.append((char) 0x05B9);
+            return "\u05D5\u05B9";
         }
         else if (character == 0xFB4C) {
-            sb.append((char) 0x05D1);
-            sb.append((char) 0x05BF);
+            return "\u05D1\u05BF";
         }
         else if (character == 0xFB4D) {
-            sb.append((char) 0x05DB);
-            sb.append((char) 0x05BF);
+            return "\u05DB\u05BF";
         }
         else if (character == 0xFB4E) {
-            sb.append((char) 0x05E4);
-            sb.append((char) 0x05BF);
+            return "\u05E4\u05BF";
         }
         else if (character == 0x1D15E) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd57);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd65);
+            return "\ud834\udd57\ud834\udd65";
         }
         else if (character == 0x1D15F) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd58);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd65);
+            return "\ud834\udd58\ud834\udd65";
         }
         else if (character == 0x1D160) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd5f);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd6e);
+            return "\ud834\udd5f\ud834\udd6e";
         }
         else if (character == 0x1D161) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd5f);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd6f);
+            return "\ud834\udd5f\ud834\udd6f";
         }
         else if (character == 0x1D162) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd5f);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd70);
+            return "\ud834\udd5f\ud834\udd70";
         }
         else if (character == 0x1D163) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd5f);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd71);
+            return "\ud834\udd5f\ud834\udd71";
         }
         else if (character == 0x1D164) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd5f);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd72);
+            return "\ud834\udd5f\ud834\udd72";
         }
         else if (character == 0x1D1BB) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xddb9);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd65);
+            return "\ud834\uddb9\ud834\udd65";
         }
         else if (character == 0x1D1BC) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xddba);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd65);
+            return "\ud834\uddba\ud834\udd65";
         }
         else if (character == 0x1D1BD) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xddbb);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd6e);
+            return "\ud834\uddbb\ud834\udd6e";
         }
         else if (character == 0x1D1BE) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xddbc);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd6e);
+            return "\ud834\uddbc\ud834\udd6e";
         }
         else if (character == 0x1D1BF) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xddbb);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd6f);
+            return "\ud834\uddbb\ud834\udd6f";
         }
         else if (character == 0x1D1C0) {
-            sb.append((char) 0xd834);
-            sb.append((char) 0xddbc);
-            sb.append((char) 0xd834);
-            sb.append((char) 0xdd6f);
+            return "\ud834\uddbc\ud834\udd6f";
         }
         else if (character == 0x2F800) {
-            sb.append((char) 0x4E3D);
+            return "\u4E3D";
         }
         else if (character == 0x2F801) {
-            sb.append((char) 0x4E38);
+            return "\u4E38";
         }
         else if (character == 0x2F802) {
-            sb.append((char) 0x4E41);
+            return "\u4E41";
         }
         else if (character == 0x2F803) {
-            sb.append((char) 0xd840);
-            sb.append((char) 0xdd22);
+            return "\ud840\udd22";
         }
         else if (character == 0x2F804) {
-            sb.append((char) 0x4F60);
+            return "\u4F60";
         }
         else if (character == 0x2F805) {
-            sb.append((char) 0x4FAE);
+            return "\u4FAE";
         }
         else if (character == 0x2F806) {
-            sb.append((char) 0x4FBB);
+            return "\u4FBB";
         }
         else if (character == 0x2F807) {
-            sb.append((char) 0x5002);
+            return "\u5002";
         }
         else if (character == 0x2F808) {
-            sb.append((char) 0x507A);
+            return "\u507A";
         }
         else if (character == 0x2F809) {
-            sb.append((char) 0x5099);
+            return "\u5099";
         }
         else if (character == 0x2F80A) {
-            sb.append((char) 0x50E7);
+            return "\u50E7";
         }
         else if (character == 0x2F80B) {
-            sb.append((char) 0x50CF);
+            return "\u50CF";
         }
         else if (character == 0x2F80C) {
-            sb.append((char) 0x349E);
+            return "\u349E";
         }
         else if (character == 0x2F80D) {
-            sb.append((char) 0xd841);
-            sb.append((char) 0xde3a);
+            return "\ud841\ude3a";
         }
         else if (character == 0x2F80E) {
-            sb.append((char) 0x514D);
+            return "\u514D";
         }
         else if (character == 0x2F80F) {
-            sb.append((char) 0x5154);
+            return "\u5154";
         }
         else if (character == 0x2F810) {
-            sb.append((char) 0x5164);
+            return "\u5164";
         }
         else if (character == 0x2F811) {
-            sb.append((char) 0x5177);
+            return "\u5177";
         }
         else if (character == 0x2F812) {
-            sb.append((char) 0xd841);
-            sb.append((char) 0xdd1c);
+            return "\ud841\udd1c";
         }
         else if (character == 0x2F813) {
-            sb.append((char) 0x34B9);
+            return "\u34B9";
         }
         else if (character == 0x2F814) {
-            sb.append((char) 0x5167);
+            return "\u5167";
         }
         else if (character == 0x2F815) {
-            sb.append((char) 0x518D);
+            return "\u518D";
         }
         else if (character == 0x2F816) {
-            sb.append((char) 0xd841);
-            sb.append((char) 0xdd4b);
+            return "\ud841\udd4b";
         }
         else if (character == 0x2F817) {
-            sb.append((char) 0x5197);
+            return "\u5197";
         }
         else if (character == 0x2F818) {
-            sb.append((char) 0x51A4);
+            return "\u51A4";
         }
         else if (character == 0x2F819) {
-            sb.append((char) 0x4ECC);
+            return "\u4ECC";
         }
         else if (character == 0x2F81A) {
-            sb.append((char) 0x51AC);
+            return "\u51AC";
         }
         else if (character == 0x2F81B) {
-            sb.append((char) 0x51B5);
+            return "\u51B5";
         }
         else if (character == 0x2F81C) {
-            sb.append((char) 0xd864);
-            sb.append((char) 0xdddf);
+            return "\ud864\udddf";
         }
         else if (character == 0x2F81D) {
-            sb.append((char) 0x51F5);
+            return "\u51F5";
         }
         else if (character == 0x2F81E) {
-            sb.append((char) 0x5203);
+            return "\u5203";
         }
         else if (character == 0x2F81F) {
-            sb.append((char) 0x34DF);
+            return "\u34DF";
         }
         else if (character == 0x2F820) {
-            sb.append((char) 0x523B);
+            return "\u523B";
         }
         else if (character == 0x2F821) {
-            sb.append((char) 0x5246);
+            return "\u5246";
         }
         else if (character == 0x2F822) {
-            sb.append((char) 0x5272);
+            return "\u5272";
         }
         else if (character == 0x2F823) {
-            sb.append((char) 0x5277);
+            return "\u5277";
         }
         else if (character == 0x2F824) {
-            sb.append((char) 0x3515);
+            return "\u3515";
         }
         else if (character == 0x2F825) {
-            sb.append((char) 0x52C7);
+            return "\u52C7";
         }
         else if (character == 0x2F826) {
-            sb.append((char) 0x52C9);
+            return "\u52C9";
         }
         else if (character == 0x2F827) {
-            sb.append((char) 0x52E4);
+            return "\u52E4";
         }
         else if (character == 0x2F828) {
-            sb.append((char) 0x52FA);
+            return "\u52FA";
         }
         else if (character == 0x2F829) {
-            sb.append((char) 0x5305);
+            return "\u5305";
         }
         else if (character == 0x2F82A) {
-            sb.append((char) 0x5306);
+            return "\u5306";
         }
         else if (character == 0x2F82B) {
-            sb.append((char) 0x5317);
+            return "\u5317";
         }
         else if (character == 0x2F82C) {
-            sb.append((char) 0x5349);
+            return "\u5349";
         }
         else if (character == 0x2F82D) {
-            sb.append((char) 0x5351);
+            return "\u5351";
         }
         else if (character == 0x2F82E) {
-            sb.append((char) 0x535A);
+            return "\u535A";
         }
         else if (character == 0x2F82F) {
-            sb.append((char) 0x5373);
+            return "\u5373";
         }
         else if (character == 0x2F830) {
-            sb.append((char) 0x537D);
+            return "\u537D";
         }
         else if (character == 0x2F831) {
-            sb.append((char) 0x537F);
+            return "\u537F";
         }
         else if (character == 0x2F832) {
-            sb.append((char) 0x537F);
+            return "\u537F";
         }
         else if (character == 0x2F833) {
-            sb.append((char) 0x537F);
+            return "\u537F";
         }
         else if (character == 0x2F834) {
-            sb.append((char) 0xd842);
-            sb.append((char) 0xde2c);
+            return "\ud842\ude2c";
         }
         else if (character == 0x2F835) {
-            sb.append((char) 0x7070);
+            return "\u7070";
         }
         else if (character == 0x2F836) {
-            sb.append((char) 0x53CA);
+            return "\u53CA";
         }
         else if (character == 0x2F837) {
-            sb.append((char) 0x53DF);
+            return "\u53DF";
         }
         else if (character == 0x2F838) {
-            sb.append((char) 0xd842);
-            sb.append((char) 0xdf63);
+            return "\ud842\udf63";
         }
         else if (character == 0x2F839) {
-            sb.append((char) 0x53EB);
+            return "\u53EB";
         }
         else if (character == 0x2F83A) {
-            sb.append((char) 0x53F1);
+            return "\u53F1";
         }
         else if (character == 0x2F83B) {
-            sb.append((char) 0x5406);
+            return "\u5406";
         }
         else if (character == 0x2F83C) {
-            sb.append((char) 0x549E);
+            return "\u549E";
         }
         else if (character == 0x2F83D) {
-            sb.append((char) 0x5438);
+            return "\u5438";
         }
         else if (character == 0x2F83E) {
-            sb.append((char) 0x5448);
+            return "\u5448";
         }
         else if (character == 0x2F83F) {
-            sb.append((char) 0x5468);
+            return "\u5468";
         }
         else if (character == 0x2F840) {
-            sb.append((char) 0x54A2);
+            return "\u54A2";
         }
         else if (character == 0x2F841) {
-            sb.append((char) 0x54F6);
+            return "\u54F6";
         }
         else if (character == 0x2F842) {
-            sb.append((char) 0x5510);
+            return "\u5510";
         }
         else if (character == 0x2F843) {
-            sb.append((char) 0x5553);
+            return "\u5553";
         }
         else if (character == 0x2F844) {
-            sb.append((char) 0x5563);
+            return "\u5563";
         }
         else if (character == 0x2F845) {
-            sb.append((char) 0x5584);
+            return "\u5584";
         }
         else if (character == 0x2F846) {
-            sb.append((char) 0x5584);
+            return "\u5584";
         }
         else if (character == 0x2F847) {
-            sb.append((char) 0x5599);
+            return "\u5599";
         }
         else if (character == 0x2F848) {
-            sb.append((char) 0x55AB);
+            return "\u55AB";
         }
         else if (character == 0x2F849) {
-            sb.append((char) 0x55B3);
+            return "\u55B3";
         }
         else if (character == 0x2F84A) {
-            sb.append((char) 0x55C2);
+            return "\u55C2";
         }
         else if (character == 0x2F84B) {
-            sb.append((char) 0x5716);
+            return "\u5716";
         }
         else if (character == 0x2F84C) {
-            sb.append((char) 0x5606);
+            return "\u5606";
         }
         else if (character == 0x2F84D) {
-            sb.append((char) 0x5717);
+            return "\u5717";
         }
         else if (character == 0x2F84E) {
-            sb.append((char) 0x5651);
+            return "\u5651";
         }
         else if (character == 0x2F84F) {
-            sb.append((char) 0x5674);
+            return "\u5674";
         }
         else if (character == 0x2F850) {
-            sb.append((char) 0x5207);
+            return "\u5207";
         }
         else if (character == 0x2F851) {
-            sb.append((char) 0x58EE);
+            return "\u58EE";
         }
         else if (character == 0x2F852) {
-            sb.append((char) 0x57CE);
+            return "\u57CE";
         }
         else if (character == 0x2F853) {
-            sb.append((char) 0x57F4);
+            return "\u57F4";
         }
         else if (character == 0x2F854) {
-            sb.append((char) 0x580D);
+            return "\u580D";
         }
         else if (character == 0x2F855) {
-            sb.append((char) 0x578B);
+            return "\u578B";
         }
         else if (character == 0x2F856) {
-            sb.append((char) 0x5832);
+            return "\u5832";
         }
         else if (character == 0x2F857) {
-            sb.append((char) 0x5831);
+            return "\u5831";
         }
         else if (character == 0x2F858) {
-            sb.append((char) 0x58AC);
+            return "\u58AC";
         }
         else if (character == 0x2F859) {
-            sb.append((char) 0xd845);
-            sb.append((char) 0xdce4);
+            return "\ud845\udce4";
         }
         else if (character == 0x2F85A) {
-            sb.append((char) 0x58F2);
+            return "\u58F2";
         }
         else if (character == 0x2F85B) {
-            sb.append((char) 0x58F7);
+            return "\u58F7";
         }
         else if (character == 0x2F85C) {
-            sb.append((char) 0x5906);
+            return "\u5906";
         }
         else if (character == 0x2F85D) {
-            sb.append((char) 0x591A);
+            return "\u591A";
         }
         else if (character == 0x2F85E) {
-            sb.append((char) 0x5922);
+            return "\u5922";
         }
         else if (character == 0x2F85F) {
-            sb.append((char) 0x5962);
+            return "\u5962";
         }
         else if (character == 0x2F860) {
-            sb.append((char) 0xd845);
-            sb.append((char) 0xdea8);
+            return "\ud845\udea8";
         }
         else if (character == 0x2F861) {
-            sb.append((char) 0xd845);
-            sb.append((char) 0xdeea);
+            return "\ud845\udeea";
         }
         else if (character == 0x2F862) {
-            sb.append((char) 0x59EC);
+            return "\u59EC";
         }
         else if (character == 0x2F863) {
-            sb.append((char) 0x5A1B);
+            return "\u5A1B";
         }
         else if (character == 0x2F864) {
-            sb.append((char) 0x5A27);
+            return "\u5A27";
         }
         else if (character == 0x2F865) {
-            sb.append((char) 0x59D8);
+            return "\u59D8";
         }
         else if (character == 0x2F866) {
-            sb.append((char) 0x5A66);
+            return "\u5A66";
         }
         else if (character == 0x2F867) {
-            sb.append((char) 0x36EE);
+            return "\u36EE";
         }
         else if (character == 0x2F868) {
-            sb.append((char) 0x36FC);
+            return "\u36FC";
         }
         else if (character == 0x2F869) {
-            sb.append((char) 0x5B08);
+            return "\u5B08";
         }
         else if (character == 0x2F86A) {
-            sb.append((char) 0x5B3E);
+            return "\u5B3E";
         }
         else if (character == 0x2F86B) {
-            sb.append((char) 0x5B3E);
+            return "\u5B3E";
         }
         else if (character == 0x2F86C) {
-            sb.append((char) 0xd846);
-            sb.append((char) 0xddc8);
+            return "\ud846\uddc8";
         }
         else if (character == 0x2F86D) {
-            sb.append((char) 0x5BC3);
+            return "\u5BC3";
         }
         else if (character == 0x2F86E) {
-            sb.append((char) 0x5BD8);
+            return "\u5BD8";
         }
         else if (character == 0x2F86F) {
-            sb.append((char) 0x5BE7);
+            return "\u5BE7";
         }
         else if (character == 0x2F870) {
-            sb.append((char) 0x5BF3);
+            return "\u5BF3";
         }
         else if (character == 0x2F871) {
-            sb.append((char) 0xd846);
-            sb.append((char) 0xdf18);
+            return "\ud846\udf18";
         }
         else if (character == 0x2F872) {
-            sb.append((char) 0x5BFF);
+            return "\u5BFF";
         }
         else if (character == 0x2F873) {
-            sb.append((char) 0x5C06);
+            return "\u5C06";
         }
         else if (character == 0x2F874) {
-            sb.append((char) 0x5F53);
+            return "\u5F53";
         }
         else if (character == 0x2F875) {
-            sb.append((char) 0x5C22);
+            return "\u5C22";
         }
         else if (character == 0x2F876) {
-            sb.append((char) 0x3781);
+            return "\u3781";
         }
         else if (character == 0x2F877) {
-            sb.append((char) 0x5C60);
+            return "\u5C60";
         }
         else if (character == 0x2F878) {
-            sb.append((char) 0x5C6E);
+            return "\u5C6E";
         }
         else if (character == 0x2F879) {
-            sb.append((char) 0x5CC0);
+            return "\u5CC0";
         }
         else if (character == 0x2F87A) {
-            sb.append((char) 0x5C8D);
+            return "\u5C8D";
         }
         else if (character == 0x2F87B) {
-            sb.append((char) 0xd847);
-            sb.append((char) 0xdde4);
+            return "\ud847\udde4";
         }
         else if (character == 0x2F87C) {
-            sb.append((char) 0x5D43);
+            return "\u5D43";
         }
         else if (character == 0x2F87D) {
-            sb.append((char) 0xd847);
-            sb.append((char) 0xdde6);
+            return "\ud847\udde6";
         }
         else if (character == 0x2F87E) {
-            sb.append((char) 0x5D6E);
+            return "\u5D6E";
         }
         else if (character == 0x2F87F) {
-            sb.append((char) 0x5D6B);
+            return "\u5D6B";
         }
         else if (character == 0x2F880) {
-            sb.append((char) 0x5D7C);
+            return "\u5D7C";
         }
         else if (character == 0x2F881) {
-            sb.append((char) 0x5DE1);
+            return "\u5DE1";
         }
         else if (character == 0x2F882) {
-            sb.append((char) 0x5DE2);
+            return "\u5DE2";
         }
         else if (character == 0x2F883) {
-            sb.append((char) 0x382F);
+            return "\u382F";
         }
         else if (character == 0x2F884) {
-            sb.append((char) 0x5DFD);
+            return "\u5DFD";
         }
         else if (character == 0x2F885) {
-            sb.append((char) 0x5E28);
+            return "\u5E28";
         }
         else if (character == 0x2F886) {
-            sb.append((char) 0x5E3D);
+            return "\u5E3D";
         }
         else if (character == 0x2F887) {
-            sb.append((char) 0x5E69);
+            return "\u5E69";
         }
         else if (character == 0x2F888) {
-            sb.append((char) 0x3862);
+            return "\u3862";
         }
         else if (character == 0x2F889) {
-            sb.append((char) 0xd848);
-            sb.append((char) 0xdd83);
+            return "\ud848\udd83";
         }
         else if (character == 0x2F88A) {
-            sb.append((char) 0x387C);
+            return "\u387C";
         }
         else if (character == 0x2F88B) {
-            sb.append((char) 0x5EB0);
+            return "\u5EB0";
         }
         else if (character == 0x2F88C) {
-            sb.append((char) 0x5EB3);
+            return "\u5EB3";
         }
         else if (character == 0x2F88D) {
-            sb.append((char) 0x5EB6);
+            return "\u5EB6";
         }
         else if (character == 0x2F88E) {
-            sb.append((char) 0x5ECA);
+            return "\u5ECA";
         }
         else if (character == 0x2F88F) {
-            sb.append((char) 0xd868);
-            sb.append((char) 0xdf92);
+            return "\ud868\udf92";
         }
         else if (character == 0x2F890) {
-            sb.append((char) 0x5EFE);
+            return "\u5EFE";
         }
         else if (character == 0x2F891) {
-            sb.append((char) 0xd848);
-            sb.append((char) 0xdf31);
+            return "\ud848\udf31";
         }
         else if (character == 0x2F892) {
-            sb.append((char) 0xd848);
-            sb.append((char) 0xdf31);
+            return "\ud848\udf31";
         }
         else if (character == 0x2F893) {
-            sb.append((char) 0x8201);
+            return "\u8201";
         }
         else if (character == 0x2F894) {
-            sb.append((char) 0x5F22);
+            return "\u5F22";
         }
         else if (character == 0x2F895) {
-            sb.append((char) 0x5F22);
+            return "\u5F22";
         }
         else if (character == 0x2F896) {
-            sb.append((char) 0x38C7);
+            return "\u38C7";
         }
         else if (character == 0x2F897) {
-            sb.append((char) 0xd84c);
-            sb.append((char) 0xdeb8);
+            return "\ud84c\udeb8";
         }
         else if (character == 0x2F898) {
-            sb.append((char) 0xd858);
-            sb.append((char) 0xddda);
+            return "\ud858\uddda";
         }
         else if (character == 0x2F899) {
-            sb.append((char) 0x5F62);
+            return "\u5F62";
         }
         else if (character == 0x2F89A) {
-            sb.append((char) 0x5F6B);
+            return "\u5F6B";
         }
         else if (character == 0x2F89B) {
-            sb.append((char) 0x38E3);
+            return "\u38E3";
         }
         else if (character == 0x2F89C) {
-            sb.append((char) 0x5F9A);
+            return "\u5F9A";
         }
         else if (character == 0x2F89D) {
-            sb.append((char) 0x5FCD);
+            return "\u5FCD";
         }
         else if (character == 0x2F89E) {
-            sb.append((char) 0x5FD7);
+            return "\u5FD7";
         }
         else if (character == 0x2F89F) {
-            sb.append((char) 0x5FF9);
+            return "\u5FF9";
         }
         else if (character == 0x2F8A0) {
-            sb.append((char) 0x6081);
+            return "\u6081";
         }
         else if (character == 0x2F8A1) {
-            sb.append((char) 0x393A);
+            return "\u393A";
         }
         else if (character == 0x2F8A2) {
-            sb.append((char) 0x391C);
+            return "\u391C";
         }
         else if (character == 0x2F8A3) {
-            sb.append((char) 0x6094);
+            return "\u6094";
         }
         else if (character == 0x2F8A4) {
-            sb.append((char) 0xd849);
-            sb.append((char) 0xded4);
+            return "\ud849\uded4";
         }
         else if (character == 0x2F8A5) {
-            sb.append((char) 0x60C7);
+            return "\u60C7";
         }
         else if (character == 0x2F8A6) {
-            sb.append((char) 0x6148);
+            return "\u6148";
         }
         else if (character == 0x2F8A7) {
-            sb.append((char) 0x614C);
+            return "\u614C";
         }
         else if (character == 0x2F8A8) {
-            sb.append((char) 0x614E);
+            return "\u614E";
         }
         else if (character == 0x2F8A9) {
-            sb.append((char) 0x614C);
+            return "\u614C";
         }
         else if (character == 0x2F8AA) {
-            sb.append((char) 0x617A);
+            return "\u617A";
         }
         else if (character == 0x2F8AB) {
-            sb.append((char) 0x618E);
+            return "\u618E";
         }
         else if (character == 0x2F8AC) {
-            sb.append((char) 0x61B2);
+            return "\u61B2";
         }
         else if (character == 0x2F8AD) {
-            sb.append((char) 0x61A4);
+            return "\u61A4";
         }
         else if (character == 0x2F8AE) {
-            sb.append((char) 0x61AF);
+            return "\u61AF";
         }
         else if (character == 0x2F8AF) {
-            sb.append((char) 0x61DE);
+            return "\u61DE";
         }
         else if (character == 0x2F8B0) {
-            sb.append((char) 0x61F2);
+            return "\u61F2";
         }
         else if (character == 0x2F8B1) {
-            sb.append((char) 0x61F6);
+            return "\u61F6";
         }
         else if (character == 0x2F8B2) {
-            sb.append((char) 0x6210);
+            return "\u6210";
         }
         else if (character == 0x2F8B3) {
-            sb.append((char) 0x621B);
+            return "\u621B";
         }
         else if (character == 0x2F8B4) {
-            sb.append((char) 0x625D);
+            return "\u625D";
         }
         else if (character == 0x2F8B5) {
-            sb.append((char) 0x62B1);
+            return "\u62B1";
         }
         else if (character == 0x2F8B6) {
-            sb.append((char) 0x62D4);
+            return "\u62D4";
         }
         else if (character == 0x2F8B7) {
-            sb.append((char) 0x6350);
+            return "\u6350";
         }
         else if (character == 0x2F8B8) {
-            sb.append((char) 0xd84a);
-            sb.append((char) 0xdf0c);
+            return "\ud84a\udf0c";
         }
         else if (character == 0x2F8B9) {
-            sb.append((char) 0x633D);
+            return "\u633D";
         }
         else if (character == 0x2F8BA) {
-            sb.append((char) 0x62FC);
+            return "\u62FC";
         }
         else if (character == 0x2F8BB) {
-            sb.append((char) 0x6368);
+            return "\u6368";
         }
         else if (character == 0x2F8BC) {
-            sb.append((char) 0x6383);
+            return "\u6383";
         }
         else if (character == 0x2F8BD) {
-            sb.append((char) 0x63E4);
+            return "\u63E4";
         }
         else if (character == 0x2F8BE) {
-            sb.append((char) 0xd84a);
-            sb.append((char) 0xdff1);
+            return "\ud84a\udff1";
         }
         else if (character == 0x2F8BF) {
-            sb.append((char) 0x6422);
+            return "\u6422";
         }
         else if (character == 0x2F8C0) {
-            sb.append((char) 0x63C5);
+            return "\u63C5";
         }
         else if (character == 0x2F8C1) {
-            sb.append((char) 0x63A9);
+            return "\u63A9";
         }
         else if (character == 0x2F8C2) {
-            sb.append((char) 0x3A2E);
+            return "\u3A2E";
         }
         else if (character == 0x2F8C3) {
-            sb.append((char) 0x6469);
+            return "\u6469";
         }
         else if (character == 0x2F8C4) {
-            sb.append((char) 0x647E);
+            return "\u647E";
         }
         else if (character == 0x2F8C5) {
-            sb.append((char) 0x649D);
+            return "\u649D";
         }
         else if (character == 0x2F8C6) {
-            sb.append((char) 0x6477);
+            return "\u6477";
         }
         else if (character == 0x2F8C7) {
-            sb.append((char) 0x3A6C);
+            return "\u3A6C";
         }
         else if (character == 0x2F8C8) {
-            sb.append((char) 0x654F);
+            return "\u654F";
         }
         else if (character == 0x2F8C9) {
-            sb.append((char) 0x656C);
+            return "\u656C";
         }
         else if (character == 0x2F8CA) {
-            sb.append((char) 0xd84c);
-            sb.append((char) 0xdc0a);
+            return "\ud84c\udc0a";
         }
         else if (character == 0x2F8CB) {
-            sb.append((char) 0x65E3);
+            return "\u65E3";
         }
         else if (character == 0x2F8CC) {
-            sb.append((char) 0x66F8);
+            return "\u66F8";
         }
         else if (character == 0x2F8CD) {
-            sb.append((char) 0x6649);
+            return "\u6649";
         }
         else if (character == 0x2F8CE) {
-            sb.append((char) 0x3B19);
+            return "\u3B19";
         }
         else if (character == 0x2F8CF) {
-            sb.append((char) 0x6691);
+            return "\u6691";
         }
         else if (character == 0x2F8D0) {
-            sb.append((char) 0x3B08);
+            return "\u3B08";
         }
         else if (character == 0x2F8D1) {
-            sb.append((char) 0x3AE4);
+            return "\u3AE4";
         }
         else if (character == 0x2F8D2) {
-            sb.append((char) 0x5192);
+            return "\u5192";
         }
         else if (character == 0x2F8D3) {
-            sb.append((char) 0x5195);
+            return "\u5195";
         }
         else if (character == 0x2F8D4) {
-            sb.append((char) 0x6700);
+            return "\u6700";
         }
         else if (character == 0x2F8D5) {
-            sb.append((char) 0x669C);
+            return "\u669C";
         }
         else if (character == 0x2F8D6) {
-            sb.append((char) 0x80AD);
+            return "\u80AD";
         }
         else if (character == 0x2F8D7) {
-            sb.append((char) 0x43D9);
+            return "\u43D9";
         }
         else if (character == 0x2F8D8) {
-            sb.append((char) 0x6717);
+            return "\u6717";
         }
         else if (character == 0x2F8D9) {
-            sb.append((char) 0x671B);
+            return "\u671B";
         }
         else if (character == 0x2F8DA) {
-            sb.append((char) 0x6721);
+            return "\u6721";
         }
         else if (character == 0x2F8DB) {
-            sb.append((char) 0x675E);
+            return "\u675E";
         }
         else if (character == 0x2F8DC) {
-            sb.append((char) 0x6753);
+            return "\u6753";
         }
         else if (character == 0x2F8DD) {
-            sb.append((char) 0xd84c);
-            sb.append((char) 0xdfc3);
+            return "\ud84c\udfc3";
         }
         else if (character == 0x2F8DE) {
-            sb.append((char) 0x3B49);
+            return "\u3B49";
         }
         else if (character == 0x2F8DF) {
-            sb.append((char) 0x67FA);
+            return "\u67FA";
         }
         else if (character == 0x2F8E0) {
-            sb.append((char) 0x6785);
+            return "\u6785";
         }
         else if (character == 0x2F8E1) {
-            sb.append((char) 0x6852);
+            return "\u6852";
         }
         else if (character == 0x2F8E2) {
-            sb.append((char) 0x6885);
+            return "\u6885";
         }
         else if (character == 0x2F8E3) {
-            sb.append((char) 0xd84d);
-            sb.append((char) 0xdc6d);
+            return "\ud84d\udc6d";
         }
         else if (character == 0x2F8E4) {
-            sb.append((char) 0x688E);
+            return "\u688E";
         }
         else if (character == 0x2F8E5) {
-            sb.append((char) 0x681F);
+            return "\u681F";
         }
         else if (character == 0x2F8E6) {
-            sb.append((char) 0x6914);
+            return "\u6914";
         }
         else if (character == 0x2F8E7) {
-            sb.append((char) 0x3B9D);
+            return "\u3B9D";
         }
         else if (character == 0x2F8E8) {
-            sb.append((char) 0x6942);
+            return "\u6942";
         }
         else if (character == 0x2F8E9) {
-            sb.append((char) 0x69A3);
+            return "\u69A3";
         }
         else if (character == 0x2F8EA) {
-            sb.append((char) 0x69EA);
+            return "\u69EA";
         }
         else if (character == 0x2F8EB) {
-            sb.append((char) 0x6AA8);
+            return "\u6AA8";
         }
         else if (character == 0x2F8EC) {
-            sb.append((char) 0xd84d);
-            sb.append((char) 0xdea3);
+            return "\ud84d\udea3";
         }
         else if (character == 0x2F8ED) {
-            sb.append((char) 0x6ADB);
+            return "\u6ADB";
         }
         else if (character == 0x2F8EE) {
-            sb.append((char) 0x3C18);
+            return "\u3C18";
         }
         else if (character == 0x2F8EF) {
-            sb.append((char) 0x6B21);
+            return "\u6B21";
         }
         else if (character == 0x2F8F0) {
-            sb.append((char) 0xd84e);
-            sb.append((char) 0xdca7);
+            return "\ud84e\udca7";
         }
         else if (character == 0x2F8F1) {
-            sb.append((char) 0x6B54);
+            return "\u6B54";
         }
         else if (character == 0x2F8F2) {
-            sb.append((char) 0x3C4E);
+            return "\u3C4E";
         }
         else if (character == 0x2F8F3) {
-            sb.append((char) 0x6B72);
+            return "\u6B72";
         }
         else if (character == 0x2F8F4) {
-            sb.append((char) 0x6B9F);
+            return "\u6B9F";
         }
         else if (character == 0x2F8F5) {
-            sb.append((char) 0x6BBA);
+            return "\u6BBA";
         }
         else if (character == 0x2F8F6) {
-            sb.append((char) 0x6BBB);
+            return "\u6BBB";
         }
         else if (character == 0x2F8F7) {
-            sb.append((char) 0xd84e);
-            sb.append((char) 0xde8d);
+            return "\ud84e\ude8d";
         }
         else if (character == 0x2F8F8) {
-            sb.append((char) 0xd847);
-            sb.append((char) 0xdd0b);
+            return "\ud847\udd0b";
         }
         else if (character == 0x2F8F9) {
-            sb.append((char) 0xd84e);
-            sb.append((char) 0xdefa);
+            return "\ud84e\udefa";
         }
         else if (character == 0x2F8FA) {
-            sb.append((char) 0x6C4E);
+            return "\u6C4E";
         }
         else if (character == 0x2F8FB) {
-            sb.append((char) 0xd84f);
-            sb.append((char) 0xdcbc);
+            return "\ud84f\udcbc";
         }
         else if (character == 0x2F8FC) {
-            sb.append((char) 0x6CBF);
+            return "\u6CBF";
         }
         else if (character == 0x2F8FD) {
-            sb.append((char) 0x6CCD);
+            return "\u6CCD";
         }
         else if (character == 0x2F8FE) {
-            sb.append((char) 0x6C67);
+            return "\u6C67";
         }
         else if (character == 0x2F8FF) {
-            sb.append((char) 0x6D16);
+            return "\u6D16";
         }
         else if (character == 0x2F900) {
-            sb.append((char) 0x6D3E);
+            return "\u6D3E";
         }
         else if (character == 0x2F901) {
-            sb.append((char) 0x6D77);
+            return "\u6D77";
         }
         else if (character == 0x2F902) {
-            sb.append((char) 0x6D41);
+            return "\u6D41";
         }
         else if (character == 0x2F903) {
-            sb.append((char) 0x6D69);
+            return "\u6D69";
         }
         else if (character == 0x2F904) {
-            sb.append((char) 0x6D78);
+            return "\u6D78";
         }
         else if (character == 0x2F905) {
-            sb.append((char) 0x6D85);
+            return "\u6D85";
         }
         else if (character == 0x2F906) {
-            sb.append((char) 0xd84f);
-            sb.append((char) 0xdd1e);
+            return "\ud84f\udd1e";
         }
         else if (character == 0x2F907) {
-            sb.append((char) 0x6D34);
+            return "\u6D34";
         }
         else if (character == 0x2F908) {
-            sb.append((char) 0x6E2F);
+            return "\u6E2F";
         }
         else if (character == 0x2F909) {
-            sb.append((char) 0x6E6E);
+            return "\u6E6E";
         }
         else if (character == 0x2F90A) {
-            sb.append((char) 0x3D33);
+            return "\u3D33";
         }
         else if (character == 0x2F90B) {
-            sb.append((char) 0x6ECB);
+            return "\u6ECB";
         }
         else if (character == 0x2F90C) {
-            sb.append((char) 0x6EC7);
+            return "\u6EC7";
         }
         else if (character == 0x2F90D) {
-            sb.append((char) 0xd84f);
-            sb.append((char) 0xded1);
+            return "\ud84f\uded1";
         }
         else if (character == 0x2F90E) {
-            sb.append((char) 0x6DF9);
+            return "\u6DF9";
         }
         else if (character == 0x2F90F) {
-            sb.append((char) 0x6F6E);
+            return "\u6F6E";
         }
         else if (character == 0x2F910) {
-            sb.append((char) 0xd84f);
-            sb.append((char) 0xdf5e);
+            return "\ud84f\udf5e";
         }
         else if (character == 0x2F911) {
-            sb.append((char) 0xd84f);
-            sb.append((char) 0xdf8e);
+            return "\ud84f\udf8e";
         }
         else if (character == 0x2F912) {
-            sb.append((char) 0x6FC6);
+            return "\u6FC6";
         }
         else if (character == 0x2F913) {
-            sb.append((char) 0x7039);
+            return "\u7039";
         }
         else if (character == 0x2F914) {
-            sb.append((char) 0x701E);
+            return "\u701E";
         }
         else if (character == 0x2F915) {
-            sb.append((char) 0x701B);
+            return "\u701B";
         }
         else if (character == 0x2F916) {
-            sb.append((char) 0x3D96);
+            return "\u3D96";
         }
         else if (character == 0x2F917) {
-            sb.append((char) 0x704A);
+            return "\u704A";
         }
         else if (character == 0x2F918) {
-            sb.append((char) 0x707D);
+            return "\u707D";
         }
         else if (character == 0x2F919) {
-            sb.append((char) 0x7077);
+            return "\u7077";
         }
         else if (character == 0x2F91A) {
-            sb.append((char) 0x70AD);
+            return "\u70AD";
         }
         else if (character == 0x2F91B) {
-            sb.append((char) 0xd841);
-            sb.append((char) 0xdd25);
+            return "\ud841\udd25";
         }
         else if (character == 0x2F91C) {
-            sb.append((char) 0x7145);
+            return "\u7145";
         }
         else if (character == 0x2F91D) {
-            sb.append((char) 0xd850);
-            sb.append((char) 0xde63);
+            return "\ud850\ude63";
         }
         else if (character == 0x2F91E) {
-            sb.append((char) 0x719C);
+            return "\u719C";
         }
         else if (character == 0x2F91F) {
-            sb.append((char) 0xd850);
-            sb.append((char) 0xdfab);
+            return "\ud850\udfab";
         }
         else if (character == 0x2F920) {
-            sb.append((char) 0x7228);
+            return "\u7228";
         }
         else if (character == 0x2F921) {
-            sb.append((char) 0x7235);
+            return "\u7235";
         }
         else if (character == 0x2F922) {
-            sb.append((char) 0x7250);
+            return "\u7250";
         }
         else if (character == 0x2F923) {
-            sb.append((char) 0xd851);
-            sb.append((char) 0xde08);
+            return "\ud851\ude08";
         }
         else if (character == 0x2F924) {
-            sb.append((char) 0x7280);
+            return "\u7280";
         }
         else if (character == 0x2F925) {
-            sb.append((char) 0x7295);
+            return "\u7295";
         }
         else if (character == 0x2F926) {
-            sb.append((char) 0xd851);
-            sb.append((char) 0xdf35);
+            return "\ud851\udf35";
         }
         else if (character == 0x2F927) {
-            sb.append((char) 0xd852);
-            sb.append((char) 0xdc14);
+            return "\ud852\udc14";
         }
         else if (character == 0x2F928) {
-            sb.append((char) 0x737A);
+            return "\u737A";
         }
         else if (character == 0x2F929) {
-            sb.append((char) 0x738B);
+            return "\u738B";
         }
         else if (character == 0x2F92A) {
-            sb.append((char) 0x3EAC);
+            return "\u3EAC";
         }
         else if (character == 0x2F92B) {
-            sb.append((char) 0x73A5);
+            return "\u73A5";
         }
         else if (character == 0x2F92C) {
-            sb.append((char) 0x3EB8);
+            return "\u3EB8";
         }
         else if (character == 0x2F92D) {
-            sb.append((char) 0x3EB8);
+            return "\u3EB8";
         }
         else if (character == 0x2F92E) {
-            sb.append((char) 0x7447);
+            return "\u7447";
         }
         else if (character == 0x2F92F) {
-            sb.append((char) 0x745C);
+            return "\u745C";
         }
         else if (character == 0x2F930) {
-            sb.append((char) 0x7471);
+            return "\u7471";
         }
         else if (character == 0x2F931) {
-            sb.append((char) 0x7485);
+            return "\u7485";
         }
         else if (character == 0x2F932) {
-            sb.append((char) 0x74CA);
+            return "\u74CA";
         }
         else if (character == 0x2F933) {
-            sb.append((char) 0x3F1B);
+            return "\u3F1B";
         }
         else if (character == 0x2F934) {
-            sb.append((char) 0x7524);
+            return "\u7524";
         }
         else if (character == 0x2F935) {
-            sb.append((char) 0xd853);
-            sb.append((char) 0xdc36);
+            return "\ud853\udc36";
         }
         else if (character == 0x2F936) {
-            sb.append((char) 0x753E);
+            return "\u753E";
         }
         else if (character == 0x2F937) {
-            sb.append((char) 0xd853);
-            sb.append((char) 0xdc92);
+            return "\ud853\udc92";
         }
         else if (character == 0x2F938) {
-            sb.append((char) 0x7570);
+            return "\u7570";
         }
         else if (character == 0x2F939) {
-            sb.append((char) 0xd848);
-            sb.append((char) 0xdd9f);
+            return "\ud848\udd9f";
         }
         else if (character == 0x2F93A) {
-            sb.append((char) 0x7610);
+            return "\u7610";
         }
         else if (character == 0x2F93B) {
-            sb.append((char) 0xd853);
-            sb.append((char) 0xdfa1);
+            return "\ud853\udfa1";
         }
         else if (character == 0x2F93C) {
-            sb.append((char) 0xd853);
-            sb.append((char) 0xdfb8);
+            return "\ud853\udfb8";
         }
         else if (character == 0x2F93D) {
-            sb.append((char) 0xd854);
-            sb.append((char) 0xdc44);
+            return "\ud854\udc44";
         }
         else if (character == 0x2F93E) {
-            sb.append((char) 0x3FFC);
+            return "\u3FFC";
         }
         else if (character == 0x2F93F) {
-            sb.append((char) 0x4008);
+            return "\u4008";
         }
         else if (character == 0x2F940) {
-            sb.append((char) 0x76F4);
+            return "\u76F4";
         }
         else if (character == 0x2F941) {
-            sb.append((char) 0xd854);
-            sb.append((char) 0xdcf3);
+            return "\ud854\udcf3";
         }
         else if (character == 0x2F942) {
-            sb.append((char) 0xd854);
-            sb.append((char) 0xdcf2);
+            return "\ud854\udcf2";
         }
         else if (character == 0x2F943) {
-            sb.append((char) 0xd854);
-            sb.append((char) 0xdd19);
+            return "\ud854\udd19";
         }
         else if (character == 0x2F944) {
-            sb.append((char) 0xd854);
-            sb.append((char) 0xdd33);
+            return "\ud854\udd33";
         }
         else if (character == 0x2F945) {
-            sb.append((char) 0x771E);
+            return "\u771E";
         }
         else if (character == 0x2F946) {
-            sb.append((char) 0x771F);
+            return "\u771F";
         }
         else if (character == 0x2F947) {
-            sb.append((char) 0x771F);
+            return "\u771F";
         }
         else if (character == 0x2F948) {
-            sb.append((char) 0x774A);
+            return "\u774A";
         }
         else if (character == 0x2F949) {
-            sb.append((char) 0x4039);
+            return "\u4039";
         }
         else if (character == 0x2F94A) {
-            sb.append((char) 0x778B);
+            return "\u778B";
         }
         else if (character == 0x2F94B) {
-            sb.append((char) 0x4046);
+            return "\u4046";
         }
         else if (character == 0x2F94C) {
-            sb.append((char) 0x4096);
+            return "\u4096";
         }
         else if (character == 0x2F94D) {
-            sb.append((char) 0xd855);
-            sb.append((char) 0xdc1d);
+            return "\ud855\udc1d";
         }
         else if (character == 0x2F94E) {
-            sb.append((char) 0x784E);
+            return "\u784E";
         }
         else if (character == 0x2F94F) {
-            sb.append((char) 0x788C);
+            return "\u788C";
         }
         else if (character == 0x2F950) {
-            sb.append((char) 0x78CC);
+            return "\u78CC";
         }
         else if (character == 0x2F951) {
-            sb.append((char) 0x40E3);
+            return "\u40E3";
         }
         else if (character == 0x2F952) {
-            sb.append((char) 0xd855);
-            sb.append((char) 0xde26);
+            return "\ud855\ude26";
         }
         else if (character == 0x2F953) {
-            sb.append((char) 0x7956);
+            return "\u7956";
         }
         else if (character == 0x2F954) {
-            sb.append((char) 0xd855);
-            sb.append((char) 0xde9a);
+            return "\ud855\ude9a";
         }
         else if (character == 0x2F955) {
-            sb.append((char) 0xd855);
-            sb.append((char) 0xdec5);
+            return "\ud855\udec5";
         }
         else if (character == 0x2F956) {
-            sb.append((char) 0x798F);
+            return "\u798F";
         }
         else if (character == 0x2F957) {
-            sb.append((char) 0x79EB);
+            return "\u79EB";
         }
         else if (character == 0x2F958) {
-            sb.append((char) 0x412F);
+            return "\u412F";
         }
         else if (character == 0x2F959) {
-            sb.append((char) 0x7A40);
+            return "\u7A40";
         }
         else if (character == 0x2F95A) {
-            sb.append((char) 0x7A4A);
+            return "\u7A4A";
         }
         else if (character == 0x2F95B) {
-            sb.append((char) 0x7A4F);
+            return "\u7A4F";
         }
         else if (character == 0x2F95C) {
-            sb.append((char) 0xd856);
-            sb.append((char) 0xdd7c);
+            return "\ud856\udd7c";
         }
         else if (character == 0x2F95D) {
-            sb.append((char) 0xd856);
-            sb.append((char) 0xdea7);
+            return "\ud856\udea7";
         }
         else if (character == 0x2F95E) {
-            sb.append((char) 0xd856);
-            sb.append((char) 0xdea7);
+            return "\ud856\udea7";
         }
         else if (character == 0x2F95F) {
-            sb.append((char) 0x7AEE);
+            return "\u7AEE";
         }
         else if (character == 0x2F960) {
-            sb.append((char) 0x4202);
+            return "\u4202";
         }
         else if (character == 0x2F961) {
-            sb.append((char) 0xd856);
-            sb.append((char) 0xdfab);
+            return "\ud856\udfab";
         }
         else if (character == 0x2F962) {
-            sb.append((char) 0x7BC6);
+            return "\u7BC6";
         }
         else if (character == 0x2F963) {
-            sb.append((char) 0x7BC9);
+            return "\u7BC9";
         }
         else if (character == 0x2F964) {
-            sb.append((char) 0x4227);
+            return "\u4227";
         }
         else if (character == 0x2F965) {
-            sb.append((char) 0xd857);
-            sb.append((char) 0xdc80);
+            return "\ud857\udc80";
         }
         else if (character == 0x2F966) {
-            sb.append((char) 0x7CD2);
+            return "\u7CD2";
         }
         else if (character == 0x2F967) {
-            sb.append((char) 0x42A0);
+            return "\u42A0";
         }
         else if (character == 0x2F968) {
-            sb.append((char) 0x7CE8);
+            return "\u7CE8";
         }
         else if (character == 0x2F969) {
-            sb.append((char) 0x7CE3);
+            return "\u7CE3";
         }
         else if (character == 0x2F96A) {
-            sb.append((char) 0x7D00);
+            return "\u7D00";
         }
         else if (character == 0x2F96B) {
-            sb.append((char) 0xd857);
-            sb.append((char) 0xdf86);
+            return "\ud857\udf86";
         }
         else if (character == 0x2F96C) {
-            sb.append((char) 0x7D63);
+            return "\u7D63";
         }
         else if (character == 0x2F96D) {
-            sb.append((char) 0x4301);
+            return "\u4301";
         }
         else if (character == 0x2F96E) {
-            sb.append((char) 0x7DC7);
+            return "\u7DC7";
         }
         else if (character == 0x2F96F) {
-            sb.append((char) 0x7E02);
+            return "\u7E02";
         }
         else if (character == 0x2F970) {
-            sb.append((char) 0x7E45);
+            return "\u7E45";
         }
         else if (character == 0x2F971) {
-            sb.append((char) 0x4334);
+            return "\u4334";
         }
         else if (character == 0x2F972) {
-            sb.append((char) 0xd858);
-            sb.append((char) 0xde28);
+            return "\ud858\ude28";
         }
         else if (character == 0x2F973) {
-            sb.append((char) 0xd858);
-            sb.append((char) 0xde47);
+            return "\ud858\ude47";
         }
         else if (character == 0x2F974) {
-            sb.append((char) 0x4359);
+            return "\u4359";
         }
         else if (character == 0x2F975) {
-            sb.append((char) 0xd858);
-            sb.append((char) 0xded9);
+            return "\ud858\uded9";
         }
         else if (character == 0x2F976) {
-            sb.append((char) 0x7F7A);
+            return "\u7F7A";
         }
         else if (character == 0x2F977) {
-            sb.append((char) 0xd858);
-            sb.append((char) 0xdf3e);
+            return "\ud858\udf3e";
         }
         else if (character == 0x2F978) {
-            sb.append((char) 0x7F95);
+            return "\u7F95";
         }
         else if (character == 0x2F979) {
-            sb.append((char) 0x7FFA);
+            return "\u7FFA";
         }
         else if (character == 0x2F97A) {
-            sb.append((char) 0x8005);
+            return "\u8005";
         }
         else if (character == 0x2F97B) {
-            sb.append((char) 0xd859);
-            sb.append((char) 0xdcda);
+            return "\ud859\udcda";
         }
         else if (character == 0x2F97C) {
-            sb.append((char) 0xd859);
-            sb.append((char) 0xdd23);
+            return "\ud859\udd23";
         }
         else if (character == 0x2F97D) {
-            sb.append((char) 0x8060);
+            return "\u8060";
         }
         else if (character == 0x2F97E) {
-            sb.append((char) 0xd859);
-            sb.append((char) 0xdda8);
+            return "\ud859\udda8";
         }
         else if (character == 0x2F97F) {
-            sb.append((char) 0x8070);
+            return "\u8070";
         }
         else if (character == 0x2F980) {
-            sb.append((char) 0xd84c);
-            sb.append((char) 0xdf5f);
+            return "\ud84c\udf5f";
         }
         else if (character == 0x2F981) {
-            sb.append((char) 0x43D5);
+            return "\u43D5";
         }
         else if (character == 0x2F982) {
-            sb.append((char) 0x80B2);
+            return "\u80B2";
         }
         else if (character == 0x2F983) {
-            sb.append((char) 0x8103);
+            return "\u8103";
         }
         else if (character == 0x2F984) {
-            sb.append((char) 0x440B);
+            return "\u440B";
         }
         else if (character == 0x2F985) {
-            sb.append((char) 0x813E);
+            return "\u813E";
         }
         else if (character == 0x2F986) {
-            sb.append((char) 0x5AB5);
+            return "\u5AB5";
         }
         else if (character == 0x2F987) {
-            sb.append((char) 0xd859);
-            sb.append((char) 0xdfa7);
+            return "\ud859\udfa7";
         }
         else if (character == 0x2F988) {
-            sb.append((char) 0xd859);
-            sb.append((char) 0xdfb5);
+            return "\ud859\udfb5";
         }
         else if (character == 0x2F989) {
-            sb.append((char) 0xd84c);
-            sb.append((char) 0xdf93);
+            return "\ud84c\udf93";
         }
         else if (character == 0x2F98A) {
-            sb.append((char) 0xd84c);
-            sb.append((char) 0xdf9c);
+            return "\ud84c\udf9c";
         }
         else if (character == 0x2F98B) {
-            sb.append((char) 0x8201);
+            return "\u8201";
         }
         else if (character == 0x2F98C) {
-            sb.append((char) 0x8204);
+            return "\u8204";
         }
         else if (character == 0x2F98D) {
-            sb.append((char) 0x8F9E);
+            return "\u8F9E";
         }
         else if (character == 0x2F98E) {
-            sb.append((char) 0x446B);
+            return "\u446B";
         }
         else if (character == 0x2F98F) {
-            sb.append((char) 0x8291);
+            return "\u8291";
         }
         else if (character == 0x2F990) {
-            sb.append((char) 0x828B);
+            return "\u828B";
         }
         else if (character == 0x2F991) {
-            sb.append((char) 0x829D);
+            return "\u829D";
         }
         else if (character == 0x2F992) {
-            sb.append((char) 0x52B3);
+            return "\u52B3";
         }
         else if (character == 0x2F993) {
-            sb.append((char) 0x82B1);
+            return "\u82B1";
         }
         else if (character == 0x2F994) {
-            sb.append((char) 0x82B3);
+            return "\u82B3";
         }
         else if (character == 0x2F995) {
-            sb.append((char) 0x82BD);
+            return "\u82BD";
         }
         else if (character == 0x2F996) {
-            sb.append((char) 0x82E6);
+            return "\u82E6";
         }
         else if (character == 0x2F997) {
-            sb.append((char) 0xd85a);
-            sb.append((char) 0xdf3c);
+            return "\ud85a\udf3c";
         }
         else if (character == 0x2F998) {
-            sb.append((char) 0x82E5);
+            return "\u82E5";
         }
         else if (character == 0x2F999) {
-            sb.append((char) 0x831D);
+            return "\u831D";
         }
         else if (character == 0x2F99A) {
-            sb.append((char) 0x8363);
+            return "\u8363";
         }
         else if (character == 0x2F99B) {
-            sb.append((char) 0x83AD);
+            return "\u83AD";
         }
         else if (character == 0x2F99C) {
-            sb.append((char) 0x8323);
+            return "\u8323";
         }
         else if (character == 0x2F99D) {
-            sb.append((char) 0x83BD);
+            return "\u83BD";
         }
         else if (character == 0x2F99E) {
-            sb.append((char) 0x83E7);
+            return "\u83E7";
         }
         else if (character == 0x2F99F) {
-            sb.append((char) 0x8457);
+            return "\u8457";
         }
         else if (character == 0x2F9A0) {
-            sb.append((char) 0x8353);
+            return "\u8353";
         }
         else if (character == 0x2F9A1) {
-            sb.append((char) 0x83CA);
+            return "\u83CA";
         }
         else if (character == 0x2F9A2) {
-            sb.append((char) 0x83CC);
+            return "\u83CC";
         }
         else if (character == 0x2F9A3) {
-            sb.append((char) 0x83DC);
+            return "\u83DC";
         }
         else if (character == 0x2F9A4) {
-            sb.append((char) 0xd85b);
-            sb.append((char) 0xdc36);
+            return "\ud85b\udc36";
         }
         else if (character == 0x2F9A5) {
-            sb.append((char) 0xd85b);
-            sb.append((char) 0xdd6b);
+            return "\ud85b\udd6b";
         }
         else if (character == 0x2F9A6) {
-            sb.append((char) 0xd85b);
-            sb.append((char) 0xdcd5);
+            return "\ud85b\udcd5";
         }
         else if (character == 0x2F9A7) {
-            sb.append((char) 0x452B);
+            return "\u452B";
         }
         else if (character == 0x2F9A8) {
-            sb.append((char) 0x84F1);
+            return "\u84F1";
         }
         else if (character == 0x2F9A9) {
-            sb.append((char) 0x84F3);
+            return "\u84F3";
         }
         else if (character == 0x2F9AA) {
-            sb.append((char) 0x8516);
+            return "\u8516";
         }
         else if (character == 0x2F9AB) {
-            sb.append((char) 0xd85c);
-            sb.append((char) 0xdfca);
+            return "\ud85c\udfca";
         }
         else if (character == 0x2F9AC) {
-            sb.append((char) 0x8564);
+            return "\u8564";
         }
         else if (character == 0x2F9AD) {
-            sb.append((char) 0xd85b);
-            sb.append((char) 0xdf2c);
+            return "\ud85b\udf2c";
         }
         else if (character == 0x2F9AE) {
-            sb.append((char) 0x455D);
+            return "\u455D";
         }
         else if (character == 0x2F9AF) {
-            sb.append((char) 0x4561);
+            return "\u4561";
         }
         else if (character == 0x2F9B0) {
-            sb.append((char) 0xd85b);
-            sb.append((char) 0xdfb1);
+            return "\ud85b\udfb1";
         }
         else if (character == 0x2F9B1) {
-            sb.append((char) 0xd85c);
-            sb.append((char) 0xdcd2);
+            return "\ud85c\udcd2";
         }
         else if (character == 0x2F9B2) {
-            sb.append((char) 0x456B);
+            return "\u456B";
         }
         else if (character == 0x2F9B3) {
-            sb.append((char) 0x8650);
+            return "\u8650";
         }
         else if (character == 0x2F9B4) {
-            sb.append((char) 0x865C);
+            return "\u865C";
         }
         else if (character == 0x2F9B5) {
-            sb.append((char) 0x8667);
+            return "\u8667";
         }
         else if (character == 0x2F9B6) {
-            sb.append((char) 0x8669);
+            return "\u8669";
         }
         else if (character == 0x2F9B7) {
-            sb.append((char) 0x86A9);
+            return "\u86A9";
         }
         else if (character == 0x2F9B8) {
-            sb.append((char) 0x8688);
+            return "\u8688";
         }
         else if (character == 0x2F9B9) {
-            sb.append((char) 0x870E);
+            return "\u870E";
         }
         else if (character == 0x2F9BA) {
-            sb.append((char) 0x86E2);
+            return "\u86E2";
         }
         else if (character == 0x2F9BB) {
-            sb.append((char) 0x8779);
+            return "\u8779";
         }
         else if (character == 0x2F9BC) {
-            sb.append((char) 0x8728);
+            return "\u8728";
         }
         else if (character == 0x2F9BD) {
-            sb.append((char) 0x876B);
+            return "\u876B";
         }
         else if (character == 0x2F9BE) {
-            sb.append((char) 0x8786);
+            return "\u8786";
         }
         else if (character == 0x2F9BF) {
-            sb.append((char) 0x45D7);
+            return "\u45D7";
         }
         else if (character == 0x2F9C0) {
-            sb.append((char) 0x87E1);
+            return "\u87E1";
         }
         else if (character == 0x2F9C1) {
-            sb.append((char) 0x8801);
+            return "\u8801";
         }
         else if (character == 0x2F9C2) {
-            sb.append((char) 0x45F9);
+            return "\u45F9";
         }
         else if (character == 0x2F9C3) {
-            sb.append((char) 0x8860);
+            return "\u8860";
         }
         else if (character == 0x2F9C4) {
-            sb.append((char) 0x8863);
+            return "\u8863";
         }
         else if (character == 0x2F9C5) {
-            sb.append((char) 0xd85d);
-            sb.append((char) 0xde67);
+            return "\ud85d\ude67";
         }
         else if (character == 0x2F9C6) {
-            sb.append((char) 0x88D7);
+            return "\u88D7";
         }
         else if (character == 0x2F9C7) {
-            sb.append((char) 0x88DE);
+            return "\u88DE";
         }
         else if (character == 0x2F9C8) {
-            sb.append((char) 0x4635);
+            return "\u4635";
         }
         else if (character == 0x2F9C9) {
-            sb.append((char) 0x88FA);
+            return "\u88FA";
         }
         else if (character == 0x2F9CA) {
-            sb.append((char) 0x34BB);
+            return "\u34BB";
         }
         else if (character == 0x2F9CB) {
-            sb.append((char) 0xd85e);
-            sb.append((char) 0xdcae);
+            return "\ud85e\udcae";
         }
         else if (character == 0x2F9CC) {
-            sb.append((char) 0xd85e);
-            sb.append((char) 0xdd66);
+            return "\ud85e\udd66";
         }
         else if (character == 0x2F9CD) {
-            sb.append((char) 0x46BE);
+            return "\u46BE";
         }
         else if (character == 0x2F9CE) {
-            sb.append((char) 0x46C7);
+            return "\u46C7";
         }
         else if (character == 0x2F9CF) {
-            sb.append((char) 0x8AA0);
+            return "\u8AA0";
         }
         else if (character == 0x2F9D0) {
-            sb.append((char) 0x8AED);
+            return "\u8AED";
         }
         else if (character == 0x2F9D1) {
-            sb.append((char) 0x8B8A);
+            return "\u8B8A";
         }
         else if (character == 0x2F9D2) {
-            sb.append((char) 0x8C55);
+            return "\u8C55";
         }
         else if (character == 0x2F9D3) {
-            sb.append((char) 0xd85f);
-            sb.append((char) 0xdca8);
+            return "\ud85f\udca8";
         }
         else if (character == 0x2F9D4) {
-            sb.append((char) 0x8CAB);
+            return "\u8CAB";
         }
         else if (character == 0x2F9D5) {
-            sb.append((char) 0x8CC1);
+            return "\u8CC1";
         }
         else if (character == 0x2F9D6) {
-            sb.append((char) 0x8D1B);
+            return "\u8D1B";
         }
         else if (character == 0x2F9D7) {
-            sb.append((char) 0x8D77);
+            return "\u8D77";
         }
         else if (character == 0x2F9D8) {
-            sb.append((char) 0xd85f);
-            sb.append((char) 0xdf2f);
+            return "\ud85f\udf2f";
         }
         else if (character == 0x2F9D9) {
-            sb.append((char) 0xd842);
-            sb.append((char) 0xdc04);
+            return "\ud842\udc04";
         }
         else if (character == 0x2F9DA) {
-            sb.append((char) 0x8DCB);
+            return "\u8DCB";
         }
         else if (character == 0x2F9DB) {
-            sb.append((char) 0x8DBC);
+            return "\u8DBC";
         }
         else if (character == 0x2F9DC) {
-            sb.append((char) 0x8DF0);
+            return "\u8DF0";
         }
         else if (character == 0x2F9DD) {
-            sb.append((char) 0xd842);
-            sb.append((char) 0xdcde);
+            return "\ud842\udcde";
         }
         else if (character == 0x2F9DE) {
-            sb.append((char) 0x8ED4);
+            return "\u8ED4";
         }
         else if (character == 0x2F9DF) {
-            sb.append((char) 0x8F38);
+            return "\u8F38";
         }
         else if (character == 0x2F9E0) {
-            sb.append((char) 0xd861);
-            sb.append((char) 0xddd2);
+            return "\ud861\uddd2";
         }
         else if (character == 0x2F9E1) {
-            sb.append((char) 0xd861);
-            sb.append((char) 0xdded);
+            return "\ud861\udded";
         }
         else if (character == 0x2F9E2) {
-            sb.append((char) 0x9094);
+            return "\u9094";
         }
         else if (character == 0x2F9E3) {
-            sb.append((char) 0x90F1);
+            return "\u90F1";
         }
         else if (character == 0x2F9E4) {
-            sb.append((char) 0x9111);
+            return "\u9111";
         }
         else if (character == 0x2F9E5) {
-            sb.append((char) 0xd861);
-            sb.append((char) 0xdf2e);
+            return "\ud861\udf2e";
         }
         else if (character == 0x2F9E6) {
-            sb.append((char) 0x911B);
+            return "\u911B";
         }
         else if (character == 0x2F9E7) {
-            sb.append((char) 0x9238);
+            return "\u9238";
         }
         else if (character == 0x2F9E8) {
-            sb.append((char) 0x92D7);
+            return "\u92D7";
         }
         else if (character == 0x2F9E9) {
-            sb.append((char) 0x92D8);
+            return "\u92D8";
         }
         else if (character == 0x2F9EA) {
-            sb.append((char) 0x927C);
+            return "\u927C";
         }
         else if (character == 0x2F9EB) {
-            sb.append((char) 0x93F9);
+            return "\u93F9";
         }
         else if (character == 0x2F9EC) {
-            sb.append((char) 0x9415);
+            return "\u9415";
         }
         else if (character == 0x2F9ED) {
-            sb.append((char) 0xd862);
-            sb.append((char) 0xdffa);
+            return "\ud862\udffa";
         }
         else if (character == 0x2F9EE) {
-            sb.append((char) 0x958B);
+            return "\u958B";
         }
         else if (character == 0x2F9EF) {
-            sb.append((char) 0x4995);
+            return "\u4995";
         }
         else if (character == 0x2F9F0) {
-            sb.append((char) 0x95B7);
+            return "\u95B7";
         }
         else if (character == 0x2F9F1) {
-            sb.append((char) 0xd863);
-            sb.append((char) 0xdd77);
+            return "\ud863\udd77";
         }
         else if (character == 0x2F9F2) {
-            sb.append((char) 0x49E6);
+            return "\u49E6";
         }
         else if (character == 0x2F9F3) {
-            sb.append((char) 0x96C3);
+            return "\u96C3";
         }
         else if (character == 0x2F9F4) {
-            sb.append((char) 0x5DB2);
+            return "\u5DB2";
         }
         else if (character == 0x2F9F5) {
-            sb.append((char) 0x9723);
+            return "\u9723";
         }
         else if (character == 0x2F9F6) {
-            sb.append((char) 0xd864);
-            sb.append((char) 0xdd45);
+            return "\ud864\udd45";
         }
         else if (character == 0x2F9F7) {
-            sb.append((char) 0xd864);
-            sb.append((char) 0xde1a);
+            return "\ud864\ude1a";
         }
         else if (character == 0x2F9F8) {
-            sb.append((char) 0x4A6E);
+            return "\u4A6E";
         }
         else if (character == 0x2F9F9) {
-            sb.append((char) 0x4A76);
+            return "\u4A76";
         }
         else if (character == 0x2F9FA) {
-            sb.append((char) 0x97E0);
+            return "\u97E0";
         }
         else if (character == 0x2F9FB) {
-            sb.append((char) 0xd865);
-            sb.append((char) 0xdc0a);
+            return "\ud865\udc0a";
         }
         else if (character == 0x2F9FC) {
-            sb.append((char) 0x4AB2);
+            return "\u4AB2";
         }
         else if (character == 0x2F9FD) {
-            sb.append((char) 0xd865);
-            sb.append((char) 0xdc96);
+            return "\ud865\udc96";
         }
         else if (character == 0x2F9FE) {
-            sb.append((char) 0x980B);
+            return "\u980B";
         }
         else if (character == 0x2F9FF) {
-            sb.append((char) 0x980B);
+            return "\u980B";
         }
         else if (character == 0x2FA00) {
-            sb.append((char) 0x9829);
+            return "\u9829";
         }
         else if (character == 0x2FA01) {
-            sb.append((char) 0xd865);
-            sb.append((char) 0xddb6);
+            return "\ud865\uddb6";
         }
         else if (character == 0x2FA02) {
-            sb.append((char) 0x98E2);
+            return "\u98E2";
         }
         else if (character == 0x2FA03) {
-            sb.append((char) 0x4B33);
+            return "\u4B33";
         }
         else if (character == 0x2FA04) {
-            sb.append((char) 0x9929);
+            return "\u9929";
         }
         else if (character == 0x2FA05) {
-            sb.append((char) 0x99A7);
+            return "\u99A7";
         }
         else if (character == 0x2FA06) {
-            sb.append((char) 0x99C2);
+            return "\u99C2";
         }
         else if (character == 0x2FA07) {
-            sb.append((char) 0x99FE);
+            return "\u99FE";
         }
         else if (character == 0x2FA08) {
-            sb.append((char) 0x4BCE);
+            return "\u4BCE";
         }
         else if (character == 0x2FA09) {
-            sb.append((char) 0xd866);
-            sb.append((char) 0xdf30);
+            return "\ud866\udf30";
         }
         else if (character == 0x2FA0A) {
-            sb.append((char) 0x9B12);
+            return "\u9B12";
         }
         else if (character == 0x2FA0B) {
-            sb.append((char) 0x9C40);
+            return "\u9C40";
         }
         else if (character == 0x2FA0C) {
-            sb.append((char) 0x9CFD);
+            return "\u9CFD";
         }
         else if (character == 0x2FA0D) {
-            sb.append((char) 0x4CCE);
+            return "\u4CCE";
         }
         else if (character == 0x2FA0E) {
-            sb.append((char) 0x4CED);
+            return "\u4CED";
         }
         else if (character == 0x2FA0F) {
-            sb.append((char) 0x9D67);
+            return "\u9D67";
         }
         else if (character == 0x2FA10) {
-            sb.append((char) 0xd868);
-            sb.append((char) 0xdcce);
+            return "\ud868\udcce";
         }
         else if (character == 0x2FA11) {
-            sb.append((char) 0x4CF8);
+            return "\u4CF8";
         }
         else if (character == 0x2FA12) {
-            sb.append((char) 0xd868);
-            sb.append((char) 0xdd05);
+            return "\ud868\udd05";
         }
         else if (character == 0x2FA13) {
-            sb.append((char) 0xd868);
-            sb.append((char) 0xde0e);
+            return "\ud868\ude0e";
         }
         else if (character == 0x2FA14) {
-            sb.append((char) 0xd868);
-            sb.append((char) 0xde91);
+            return "\ud868\ude91";
         }
         else if (character == 0x2FA15) {
-            sb.append((char) 0x9EBB);
+            return "\u9EBB";
         }
         else if (character == 0x2FA16) {
-            sb.append((char) 0x4D56);
+            return "\u4D56";
         }
         else if (character == 0x2FA17) {
-            sb.append((char) 0x9EF9);
+            return "\u9EF9";
         }
         else if (character == 0x2FA18) {
-            sb.append((char) 0x9EFE);
+            return "\u9EFE";
         }
         else if (character == 0x2FA19) {
-            sb.append((char) 0x9F05);
+            return "\u9F05";
         }
         else if (character == 0x2FA1A) {
-            sb.append((char) 0x9F0F);
+            return "\u9F0F";
         }
         else if (character == 0x2FA1B) {
-            sb.append((char) 0x9F16);
+            return "\u9F16";
         }
         else if (character == 0x2FA1C) {
-            sb.append((char) 0x9F3B);
+            return "\u9F3B";
         }
         else if (character == 0x2FA1D) {
-            sb.append((char) 0xd869);
-            sb.append((char) 0xde00);
+            return "\ud869\ude00";
         }
         else { // not decomposable
             if (character <= 0xFFFF) {
-                sb.append((char) character);
+                return String.valueOf((char) character);
              }
              else {
+                 StringBuffer sb = new StringBuffer(2);
                  sb.append(getHighSurrogate(character));
                  sb.append(getLowSurrogate(character));
+                 return sb.toString();
              }
+            
         }
-        
-        return sb.toString();
         
     }
     ///CLOVER:ON
