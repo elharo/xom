@@ -344,20 +344,19 @@ public class DocTypeTest extends XOMTestCase {
     
     public void testSetInternalDTDSubsetWithRelativeURLAndCrimson() 
       throws ParsingException, IOException {
-        
-        XMLReader crimson;
+            
         try {
-            crimson = XMLReaderFactory.createXMLReader(
+            XMLReader crimson = XMLReaderFactory.createXMLReader(
               "org.apache.crimson.parser.XMLReaderImpl");
+            Builder builder = new Builder(crimson);
+            Document doc = builder.build("data/outer21.xml");
+            String subset = doc.getDocType().getInternalDTDSubset();
+            assertEquals(subset, subset.indexOf("file:/"), -1);
         } 
         catch (SAXException ex) {
             // can't test Crimson if you can't load it
             return;
         }
-        Builder builder = new Builder(crimson);
-        Document doc = builder.build("data/outer21.xml");
-        String subset = doc.getDocType().getInternalDTDSubset();
-        assertEquals(subset, subset.indexOf("file:/"), -1);
 
     }
     
