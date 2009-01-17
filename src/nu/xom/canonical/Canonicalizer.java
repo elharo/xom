@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -62,7 +62,7 @@ import nu.xom.XPathContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2b3
  *
  */
 public class Canonicalizer {
