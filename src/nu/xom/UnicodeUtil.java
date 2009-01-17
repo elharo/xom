@@ -125,6 +125,7 @@ final class UnicodeUtil {
     }
     
     
+    // XXX use a BiMap and make decompose much simpler?
     private static void loadCompositions(ClassLoader loader) {
         
         DataInputStream in = null;

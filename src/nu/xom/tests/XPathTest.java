@@ -52,7 +52,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.2b3
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -2251,9 +2251,11 @@ public class XPathTest extends XOMTestCase {
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
+        // TODO point this, at least optionally, at the jaxen directory in the zip file instead.
+        // However, first you'll have to push a jaxen 1.2.1 that fixes tests.xml.
+        String base = "http://svn.jaxen.codehaus.org/browse/~raw,r=trunk/jaxen/trunk/jaxen/";
         Builder builder = new Builder();
-        Document testDoc = builder.build(
-          "http://svn.jaxen.codehaus.org/browse/~raw,r=trunk/jaxen/trunk/jaxen/xml/test/tests.xml");
+        Document testDoc = builder.build(base + "xml/test/tests.xml");
         Elements documents = testDoc.getRootElement().getChildElements("document");
         for (int i = 0; i < documents.size(); i++) {
             Element documentElement = documents.get(i);
