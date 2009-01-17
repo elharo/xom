@@ -36,10 +36,6 @@ Is there any way of building a XOM document from a stream of SAX events?
 That is, something that implements ContentHandler, is called to receive the
 SAX events, and returns the document node?
 
-
-1.2:
------
-
 Look at some more of Wolfgang's optimizations
 
 could some form of filterlist improve xpath performance?
@@ -199,6 +195,18 @@ lock.c:222: failed assertion `strncmp (repository, current_parsed_root->director
 cvs [rtag aborted]: received abort signal
 cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
+
+
+===============
+Done 1.2b3
+===============
+
+Latest Unicode normalization tables. Shrunk and optimized UnicodeUtil.
+
+Canonicalization bug fix. 
+
+Latest TagSoup
+
 
 ===============
 Done 1.2b1
