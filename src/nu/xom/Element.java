@@ -48,7 +48,7 @@ import java.util.LinkedHashSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.2
  *
  */
 public class Element extends ParentNode {
@@ -1644,7 +1644,7 @@ public class Element extends ParentNode {
                 result.append(additionalPrefix); 
             }
             result.append("=\""); 
-            result.append(uri);   
+            result.append(escape(uri));   
             result.append('"');
         }
         
@@ -1667,6 +1667,21 @@ public class Element extends ParentNode {
     }
 
     
+    private static String escape(String s) {
+        
+        int length = s.length();
+        // Give the string buffer enough room for a couple of escaped characters 
+        StringBuffer result = new StringBuffer(length+12);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (c == '&') result.append("&amp;");
+            else result.append(c);
+        }
+        return result.toString();
+        
+    }
+
+
     private static void writeEndTag(
       Element element, StringBuffer result) {
         

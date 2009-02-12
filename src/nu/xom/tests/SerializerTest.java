@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -54,7 +54,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2
  *
  */
 public class SerializerTest extends XOMTestCase {
@@ -119,6 +119,36 @@ public class SerializerTest extends XOMTestCase {
             
     }
     
+    
+    public void testNamespaceURIContainsAmpersand() 
+      throws ParsingException, IOException {
+
+        String input = "<a xmlns=\"http://www.example.com?foo=bar&amp;g=h\"/>\r\n";
+        String expected = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n" + input;
+        Document doc = parser.build(input, null);
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(expected, result);
+        
+    }
+
+
+    public void testNamespaceURIContainsAmpersandPhilip() 
+      throws ParsingException, IOException {
+
+        Element root = new Element("x", "x:&");
+        Document doc = new Document(root);
+        String expected = "<?xml version=\"1.0\" encoding=\"US-ASCII\"?>\r\n<x xmlns=\"x:&amp;\"/>\r\n";
+        Serializer serializer = new Serializer(out, "US-ASCII");
+        serializer.write(doc);
+        serializer.flush();
+        String result = out.toString("US-ASCII");
+        assertEquals(expected, result);
+        
+    }
+
 
     public void testMultipleCombiningCharactersWithDifferentCombiningClassesNFC() 
       throws ParsingException, IOException {

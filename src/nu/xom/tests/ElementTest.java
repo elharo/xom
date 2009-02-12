@@ -50,7 +50,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -289,6 +289,12 @@ public class ElementTest extends XOMTestCase {
         Element root2 = doc2.getRootElement();
         assertEquals(root, root2);
          
+    }
+    
+    
+    public void testPhilip() {
+        Element element = new Element("x", "x:&");
+        assertEquals("<x xmlns=\"x:&amp;\" />", element.toXML());
     }
     
     
