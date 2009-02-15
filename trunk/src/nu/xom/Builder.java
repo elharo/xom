@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b3
+ * @version 1.2
  * 
  */
 public class Builder {
@@ -173,6 +173,8 @@ public class Builder {
         "nu.xom.XML1_0Parser",
         "nu.xom.JDK15XML1_0Parser",
         "org.apache.xerces.parsers.SAXParser",
+        "org.apache.xerces.jaxp.SAXParserImpl$JAXPSAXParser", // xerces-2.9.x
+        "com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser", // JDK 1.6
         "com.sun.org.apache.xerces.internal.parsers.SAXParser",
         "gnu.xml.aelfred2.XmlReader",
         "org.apache.crimson.parser.XMLReaderImpl",
