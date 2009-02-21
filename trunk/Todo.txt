@@ -196,6 +196,11 @@ cvs [rtag aborted]: received abort signal
 cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
+===============
+Done 1.2 Release
+===============
+
+Fixed bug when escaping namespace URIs that contained ampersands in Element.toXML()
 
 ===============
 Done 1.2b3
