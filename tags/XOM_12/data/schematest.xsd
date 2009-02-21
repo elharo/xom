@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:element name="test" type="xsd:string"/>
+  <xsd:element name="SONG" type="SongType"/>
+
+  <xsd:complexType name="SongType">
+    <xsd:sequence>
+      <xsd:element name="TITLE"     type="xsd:string"/>
+      <xsd:element name="COMPOSER"  type="xsd:string"/>
+      <xsd:element name="PRODUCER"  type="xsd:string"/>
+      <xsd:element name="PUBLISHER" type="xsd:string"/>
+
+      <xsd:element name="LENGTH"    type="xsd:string"/>
+      <xsd:element name="YEAR"      type="xsd:string"/>
+      <xsd:element name="ARTIST"    type="xsd:string"/>
+      <xsd:element name="PRICE"     type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>
+
