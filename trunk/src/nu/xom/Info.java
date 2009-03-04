@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -28,7 +28,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.2
  * 
  */
 class Info {
@@ -36,8 +36,8 @@ class Info {
     
     public static void main(String[] args) {
      
-        System.out.println("This is XOM 1.0, a new XML Object Model.");
-        System.out.println("Copyright 2002-2005 Elliotte Rusty Harold");
+        System.out.println("This is XOM 1.2, a new XML Object Model.");
+        System.out.println("Copyright 2002-2009 Elliotte Rusty Harold");
         System.out.println("http://www.xom.nu/");
         System.out.println();
         System.out.println("XOM is a class library intended to be used with other programs.");
