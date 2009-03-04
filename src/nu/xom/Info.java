@@ -28,7 +28,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2
+ * @version 1.2.1
  * 
  */
 class Info {
@@ -36,7 +36,7 @@ class Info {
     
     public static void main(String[] args) {
      
-        System.out.println("This is XOM 1.2, a new XML Object Model.");
+        System.out.println("This is XOM 1.2.1, a new XML Object Model.");
         System.out.println("Copyright 2002-2009 Elliotte Rusty Harold");
         System.out.println("http://www.xom.nu/");
         System.out.println();
