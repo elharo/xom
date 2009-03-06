@@ -196,6 +196,13 @@ cvs [rtag aborted]: received abort signal
 cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
+
+===============
+Done 1.2.1 Release
+===============
+
+Upgraded Info.java so java -jar xom.jar shows the right version number. 
+
 ===============
 Done 1.2 Release
 ===============
