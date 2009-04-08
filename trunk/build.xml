@@ -31,7 +31,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.2.1"/>
+    <property name="version" value="1.2.2b1"/>
     <property name="year"    value="2009"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -295,16 +295,20 @@ XOM Build file
 
 
   <target name="jar" depends="compile" description="Create xom.jar">
-    <jar jarfile="${build.dir}/${name}-${version}.jar"
+  	<taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
+  	        classpath="${lib.dir}/jarjar-1.0.jar"/>
+    <jarjar jarfile="${build.dir}/${name}-${version}.jar"
          basedir="${build.dest}"
          index="no"
 		 compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*">
 
-    <fileset dir="${jaxen.dir}"
+      <fileset dir="${jaxen.dir}"
          excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/XPathTestBase.class org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/** org/jaxen/**Test.class org/jaxen/saxpath/base/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/pattern/** org/jaxen/saxpath/SAXPathParseException.class org/jaxen/pattern/PriorityTest.class">
-    </fileset> 
+      </fileset>
+    
+      <rule pattern="org.jaxen.**" result="nu.xom.jaxen.@1"/>
 
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
@@ -349,7 +353,7 @@ XOM Build file
           <attribute name="Implementation-Title"  value="nu.xom.canonical"/>
         </section>
       </manifest>
-    </jar>
+    </jarjar>
   </target>
 
   
@@ -557,6 +561,7 @@ XOM Build file
     <junit printsummary="on" fork="no">
        <classpath>
           <pathelement location="${xom.jar}"/>
+          <pathelement location="${junit.jar}"/>
        </classpath>
        <classpath refid="run.class.path" />
        <formatter type="${test.outputFormat}" />
@@ -580,8 +585,8 @@ XOM Build file
       <arg value="nu.xom.tests.XOMTests"/> 
     </java>
   </target>
-  
-    
+	  
+	    
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
     <delete dir="${testoutput.dir}"/>
