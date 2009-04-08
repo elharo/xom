@@ -25,7 +25,7 @@
     <developer>
       <name>Elliotte Rusty Harold</name>
       <id>elharo</id>
-      <email>elharo@metalab.unc.edu</email>
+      <email>elharo@ibiblio.org</email>
       <organization>Cafe au Lait</organization>
     </developer>
 
@@ -53,7 +53,7 @@
   </dependencies>
   
   <build>
-    <nagEmailAddress>elharo@metalab.unc.edu</nagEmailAddress>
+    <nagEmailAddress>elharo@ibiblio.org</nagEmailAddress>
     <sourceDirectory>src</sourceDirectory>
     <unitTestSourceDirectory>src</unitTestSourceDirectory>
     <!-- Unit test classes -->
