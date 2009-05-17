@@ -1,4 +1,4 @@
-/* Copyright 2004 Elliotte Rusty Harold
+/* Copyright 2004, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -30,10 +30,6 @@ import org.apache.xerces.parsers.DTDConfiguration;
  * (<code>org.apache.xerces.parsers.SAXParser</code>) XOM verifies
  * everything. When using this subclass, XOM will rely on Xerces
  * to verify the rules, and skip its own verification checks.
- * If you want to set custom SAX features and properties 
- * on the <code>XMLReader</code> before creating a 
- * <code>Builder</code>, you should use this class in preference
- * to <code>org.apache.xerces.parsers.SAXParser</code>. 
  * </p>
  * 
  * <p>
@@ -44,7 +40,7 @@ import org.apache.xerces.parsers.DTDConfiguration;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.2.2b2
  * 
  */
 class XML1_0Parser extends SAXParser {
