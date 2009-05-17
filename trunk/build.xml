@@ -31,7 +31,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.2.2b1"/>
+    <property name="version" value="1.2.2b2"/>
     <property name="year"    value="2009"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -319,6 +319,21 @@ XOM Build file
         <attribute name="Implementation-Version" value="${version}"/>
         <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
         <attribute name="Main-Class" value="nu.xom.Info"/>
+      	
+      	<!-- OSGI Information -->
+      	<attribute name="Manifest-Version" value="1.0"/>
+      	<attribute name="Bundle-ManifestVersion" value="2"/>
+      	<attribute name="Bundle-Name" value="XOM"/>
+      	<attribute name="Bundle-SymbolicName" value="nu.xom"/>
+      	<attribute name="Bundle-Version" value="${version}"/>
+      	<attribute name="Bundle-Vendor" value="xom.nu"/>
+      	<attribute name="Bundle-RequiredExecutionEnvironment" value="J2SE-1.2"/>
+      	<attribute name="Export-Package" value="nu.xom, nu.xom.canonical, nu.xom.converters, nu.xom.xinclude, nu.xom.xslt"/>
+        <attribute name="Import-Package" value='javax.xml.transform.sax, javax.xml.transform, org.w3c.dom, org.xml.sax, org.xml.sax.helpers, org.xml.sax.ext,
+          org.apache.xerces.parsers;resolution:=optional;version="2.8.0", org.apache.xerces.impl;resolution=optional;version="2.8.0", 
+          org.apache.xerces.jaxp;resolution:=optional;version="2.9.0", junit.framework;version="3.8.1"
+          com.sun.org.apache.xerces.internal.jaxp;resolution:=optional, com.sun.org.apache.xerces.internal.parsers;resolution:=optional'/>
+
         <section name="nu/xom/">
           <attribute name="Sealed" value="true"/>
           <attribute name="Specification-Title"   value="XOM core classes"/>
@@ -326,7 +341,7 @@ XOM Build file
         <attribute name="Implementation-Version"  value="${version}"/>
         <attribute name="Implementation-Vendor"   value="Elliotte Rusty Harold"/>          
        </section>
-        <section name="org/jaxen/">
+        <section name="nu/xom/jaxen/">
           <attribute name="Specification-Title"    value="Jaxen XPath engine"/>
           <attribute name="Implementation-Title"   value="org.jaxen"/>
           <attribute name="Implementation-Version" value="1.1.2"/>
