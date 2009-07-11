@@ -37,6 +37,8 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="versionqualifier" value="b4"/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
   	<!-- OSGI wants a period before the a1/b2/d3 qualifier -->
+  	
+  	<!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? -->
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <property name="year"    value="2009"/>
 
@@ -337,7 +339,7 @@ XOM Build file
       	<attribute name="Export-Package" value="nu.xom, nu.xom.canonical, nu.xom.converters, nu.xom.xinclude, nu.xom.xslt"/>
         <attribute name="Import-Package" value='javax.xml.transform.sax, javax.xml.transform, org.w3c.dom, org.xml.sax, org.xml.sax.helpers, org.xml.sax.ext,
           org.apache.xerces.parsers;resolution:=optional;version="2.8.0", org.apache.xerces.impl;resolution:=optional;version="2.8.0", 
-          org.apache.xerces.jaxp;resolution:=optional;version="2.9.0", junit.framework;version="3.8.1",
+          org.apache.xerces.jaxp;resolution:=optional;version="2.9.0", junit.framework;version="3.8.1";resolution:=optional,
           com.sun.org.apache.xerces.internal.jaxp;resolution:=optional, com.sun.org.apache.xerces.internal.parsers;resolution:=optional'/>
 
         <section name="nu/xom/">
