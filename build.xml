@@ -31,9 +31,13 @@ subject line. The XOM home page is http://www.xom.nu/
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
-    <property name="version" value="1.2.2b4"/>
-  	<!-- OSGI wants a period before the a1/b2/d3 designator -->
-    <property name="bundleversion" value="1.2.2.osgi"/>
+    <property name="majorversion" value="1"/>
+    <property name="minorversion" value="2"/>
+    <property name="microversion" value="2"/>
+    <property name="versionqualifier" value="b4"/>
+    <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
+  	<!-- OSGI wants a period before the a1/b2/d3 qualifier -->
+    <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <property name="year"    value="2009"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
