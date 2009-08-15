@@ -1,0 +1,6 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE test [
+  <!ENTITY extEnt SYSTEM "ent21.xml">
+  ]>
+
+<test>&extEnt;</test>
