@@ -40,7 +40,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.2.3
  *
  */
 public abstract class ParentNode extends Node {
@@ -116,8 +116,12 @@ public abstract class ParentNode extends Node {
 
 
     void fastInsertChild(Node child, int position) {
-        checkCapacity(this.childCount+1);
+        if (position > childCount) {
+            throw new IndexOutOfBoundsException("Inserted node at position " + position + " after children");
+        }
+        checkCapacity(childCount+1);
         if (position < childCount) {
+            // make space in the middle for the new child; otherwise just add it at the end
             System.arraycopy(children, position, children, position+1, childCount-position);
         }
         children[position] = child;
