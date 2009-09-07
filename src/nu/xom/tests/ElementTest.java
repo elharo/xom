@@ -50,7 +50,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2
+ * @version 1.2.3
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -316,6 +316,64 @@ public class ElementTest extends XOMTestCase {
         assertEquals("", e.getNamespaceURI());
         
     }
+    
+    
+   public void testInsertChildAfterEnd() {
+        
+        Element parent = new Element("p");
+        for (int i = 0; i < 3; i++) {
+            Element c = new Element("c");
+            parent.appendChild(c);
+        }
+        assertEquals(3, parent.getChildCount());
+        Element d = new Element("d");
+        
+        try {
+          parent.insertChild(d, 5);
+          fail("Inserted child too far");
+        } 
+        catch (IndexOutOfBoundsException ex) {
+            assertNotNull(ex.getMessage());
+        }
+        
+    }
+
+
+   public void testInsertChildAtEnd() {
+       
+       Element parent = new Element("p");
+       for (int i = 0; i < 3; i++) {
+           Element c = new Element("c");
+           parent.appendChild(c);
+       }
+       assertEquals(3, parent.getChildCount());
+       Element d = new Element("d");
+       
+       parent.insertChild(d, 3);
+       assertEquals(4, parent.getChildCount());
+       
+   }
+
+
+   public void testInsertChildNegative() {
+       
+       Element parent = new Element("p");
+       for (int i = 0; i < 3; i++) {
+           Element c = new Element("c");
+           parent.appendChild(c);
+       }
+       assertEquals(3, parent.getChildCount());
+       Element d = new Element("d");
+       
+       try {
+         parent.insertChild(d, -1);
+         fail("Inserted child with negative index");
+       } 
+       catch (IndexOutOfBoundsException ex) {
+           assertNotNull(ex);
+       }
+       
+   }
 
 
     public void testCantInsertDoctype() {
