@@ -40,7 +40,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2.3
  *
  */
 public class ParentNodeTest extends XOMTestCase {
@@ -85,6 +85,20 @@ public class ParentNodeTest extends XOMTestCase {
         notEmpty.appendChild(child);
         assertFalse(notEmpty.getChild(0).equals(child));
         assertTrue(notEmpty.getChild(1).equals(child));
+        
+    } 
+
+    
+    public void testAppendNull() {   
+        
+        Element child = null;
+        try {
+            empty.appendChild(child);
+            fail("Inserted null");
+        }
+        catch (NullPointerException ex) {
+            assertNotNull(ex.getMessage());
+        }
         
     } 
 
