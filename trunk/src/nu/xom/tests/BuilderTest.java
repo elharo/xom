@@ -3411,15 +3411,15 @@ public class BuilderTest extends XOMTestCase {
         Builder builder = new Builder(reader);
         InputStream in = new FileInputStream("data/quirks.xhtml");
         try {
-        	builder.build(in);
-        	fail("How did it find the DTD");
+            builder.build(in);
+            fail("How did it find the DTD");
         }
         catch (IOException success) {
-        	assertNotNull(success.getMessage());
-        	// Here we expect that because there's no Locator
-        	// there's no base URRL. As a result, the DTD is looked fo rin the
-        	// current working directory, which is the wrong place. 
-        	// Therefore this IOException is thrown. 
+        assertNotNull(success.getMessage());
+            // Here we expect that because there's no Locator
+            // there's no base URL. As a result, the DTD is looked for in the
+            // current working directory, which is the wrong place. 
+            // Therefore this IOException is thrown. 
         }
         
     }

@@ -2080,7 +2080,7 @@ and expect to see
     public void testCanonicalizeElementInDocument() throws IOException {
      
         Element root = new Element("root");
-        Document doc = new Document(root);
+        new Document(root);
         Element element = new Element("pre:foo", "http://www.example.org");
         root.appendChild(element);
         element.appendChild("  value \n value");
