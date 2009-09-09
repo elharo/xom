@@ -225,7 +225,7 @@ public class DocTypeTest extends XOMTestCase {
         // illegal name
         try {
             name = "try MyName";
-            doctype = new DocType(name);
+            new DocType(name);
             fail("allowed root element name to contain spaces");
         } 
         catch (IllegalNameException success) {
