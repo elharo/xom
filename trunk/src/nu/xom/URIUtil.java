@@ -1,4 +1,4 @@
-/* Copyright 2004-2006 Elliotte Rusty Harold
+/* Copyright 2004-2006, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -27,12 +27,12 @@ import java.io.UnsupportedEncodingException;
 /**
  * These methods are not fully general.
  * You would need to uncomment some lines to make this a 
- * public API. Certain preconditons for these methods to 
+ * public API. Certain preconditions for these methods to 
  * operate correctly are true in the context of XOM,
  * but may well not be true in a more general context. 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2.3
  *
  */
 class URIUtil {
