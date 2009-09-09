@@ -622,9 +622,11 @@ public class Builder {
     public Document build(InputStream in, String baseURI) 
       throws ParsingException, ValidityException, IOException {
 
-        baseURI = canonicalizeURL(baseURI);
         InputSource source = new InputSource(in);
-        source.setSystemId(baseURI);
+        if (baseURI != null) {
+            baseURI = canonicalizeURL(baseURI);
+            source.setSystemId(baseURI);
+        }
         return build(source);
         
     }
@@ -1097,7 +1099,6 @@ public class Builder {
     // Also needed to work around a VM bug involving file URLs such as
     // file:///tmp/nosuchdirectory/../foo.xml
     // where "nosuchdirectory" does not exist.
-    // ???? should this move into the URIUtil class?
     private String canonicalizeURL(String uri) {
         
         try {
