@@ -1044,7 +1044,7 @@ public class Builder {
      * 
      * @param in the reader from which the document 
      *     is read
-     * @param baseURI the base URI for this document
+     * @param baseURI the base URI for this document; may be null
      * 
      * @return the parsed <code>Document</code>
      * 
@@ -1057,10 +1057,12 @@ public class Builder {
      */
     public Document build(Reader in, String baseURI) 
       throws ParsingException, ValidityException, IOException {
-          
-        baseURI = canonicalizeURL(baseURI);
+         
         InputSource source = new InputSource(in);
-        source.setSystemId(baseURI);
+        if (baseURI != null) {
+            baseURI = canonicalizeURL(baseURI);
+            source.setSystemId(baseURI);
+        }
         return build(source);
         
     }
@@ -1071,9 +1073,8 @@ public class Builder {
      * Reads the document from the contents of a string.
      * </p>
      * 
-     * @param document the string that contains 
-     *      the XML document. 
-     * @param baseURI the base URI for this document
+     * @param document the string that contains the XML document
+     * @param baseURI the base URI for this document; may be null
      * 
      * @return  the parsed <code>Document</code>
      * 
