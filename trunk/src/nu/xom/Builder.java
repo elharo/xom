@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2
+ * @version 1.2.3
  * 
  */
 public class Builder {
@@ -554,8 +554,7 @@ public class Builder {
      * that takes a <code>java.io.File</code> object as an argument.
      * </p>
      * 
-     * @param systemID the URL (generally absolute) 
-     *     from which the document is read.
+     * @param systemID an absolute URL from which the document is read.
      *     The URL's scheme must be one supported by the Java VM. 
      * 
      * @return the parsed <code>Document</code>
@@ -609,7 +608,7 @@ public class Builder {
      * </p>
      * 
      * @param in the input stream from which the document is read
-     * @param baseURI the base URI for this document
+     * @param baseURI an absolute URI for this document; may be null
      * 
      * @return the parsed <code>Document</code>
      * 
@@ -1141,8 +1140,7 @@ public class Builder {
      * Reads the document from a SAX <code>InputSource</code>.
      * </p>
      * 
-     * @param in the input source from 
-     *     which the document is read. 
+     * @param in the input source from which the document is read
      * 
      * @return the parsed <code>Document</code>
      * 
