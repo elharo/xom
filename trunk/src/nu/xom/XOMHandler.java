@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -32,7 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.2b1
+ * @version 1.2.3
  *
  */
 class XOMHandler 
@@ -524,6 +524,9 @@ class XOMHandler
     }    
     
     
+    // TODO(elharo) an untrusted parser could push in bad names and 
+    // values in declaration in the internal DTD subset.
+    // Possibly declarations should be created in the factory too.
     public void elementDecl(String name, String model) {
         
         if (inInternalSubset() && doctype != null) {
@@ -548,9 +551,12 @@ class XOMHandler
     // It is not intended for use anywhere in the document.
     protected boolean inInternalSubset() {
 
-        if (!usingCrimson && !inExternalSubset) return true;
+        if (!usingCrimson) {
+            return !inExternalSubset;
+        }
         String currentURI = locator.getSystemId();
         if (currentURI == this.documentBaseURI) return true;
+        if (currentURI == null) return false;
         if (currentURI.equals(this.documentBaseURI)) return true;
         return false;
         
