@@ -50,6 +50,7 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.LocatorImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -78,7 +79,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.2.3
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -116,6 +117,91 @@ public class BuilderTest extends XOMTestCase {
         
     }
     
+    private static class NoExternalDTDHandler implements LexicalHandler {
+
+        private LexicalHandler handler;
+        
+        NoExternalDTDHandler(LexicalHandler handler) {
+            this.handler = handler;
+        }
+        
+        public void comment(char[] arg0, int arg1, int arg2)
+                throws SAXException {
+            handler.comment(arg0, arg1, arg2);
+        }
+
+        public void endCDATA() throws SAXException {
+            handler.endCDATA();
+        }
+
+        public void endDTD() throws SAXException {
+            handler.endDTD();
+        }
+
+        public void startEntity(String name) throws SAXException {
+            if (name.startsWith("[dtd]")) name = name.substring(5);
+            handler.startEntity(name);
+        }
+        
+        public void endEntity(String name) throws SAXException {
+            if (name.startsWith("[dtd]")) name = name.substring(5);
+            handler.endEntity(name);
+        }
+
+        public void startCDATA() throws SAXException {
+            handler.startCDATA();
+        }
+
+        public void startDTD(String arg0, String arg1, String arg2)
+                throws SAXException {
+            handler.startDTD(arg0, arg1, arg2);
+        }
+        
+    }
+    
+    
+    // Custom parser to test what happens when encountering a bad Locator
+    // as found in some versions of Xerces bundled with the JDK
+    private static class XercesBugReader extends XMLFilterImpl {
+        
+        public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+            if (name.equals("http://xml.org/sax/properties/lexical-handler")) {
+                value = new NoExternalDTDHandler((LexicalHandler) value);
+            }
+            super.setProperty(name, value);
+        }
+        
+        public void setDocumentLocator(final Locator locator) {
+            super.setDocumentLocator(new Locator() {
+
+                private boolean firstCall = true;
+                
+                public int getColumnNumber() {
+                    return 0;
+                }
+
+                public int getLineNumber() {
+                    return 0;
+                }
+
+                public String getPublicId() {
+                    return null;
+                }
+
+                public String getSystemId() {
+                    if (firstCall) {
+                        firstCall = false;
+                        return locator.getSystemId();
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                
+            });
+        }
+        
+    }
     
     private static class DoNothingReader extends CustomReader {
         
@@ -274,6 +360,15 @@ public class BuilderTest extends XOMTestCase {
         assertNotNull(doc.getRootElement());
         
     }    
+    
+    
+    public void testParseWithXercesBug() throws SAXException, ValidityException, ParsingException, IOException {
+        XercesBugReader reader = new XercesBugReader();
+        reader.setParent(XMLReaderFactory.createXMLReader());
+        Builder builder = new Builder(reader);
+        builder.build("<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>", "http://www.example.com");
+        // fail();
+    }
 
 
     public void testStartOnlyParser() 
@@ -3422,6 +3517,12 @@ public class BuilderTest extends XOMTestCase {
             // Therefore this IOException is thrown. 
         }
         
+    }
+    
+    public void testChemistry() throws ValidityException, ParsingException, IOException {
+      String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
+      StringReader s = new StringReader(doc);
+      builder.build(s);
     }
     
 }
