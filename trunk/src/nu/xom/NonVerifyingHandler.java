@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -24,7 +24,7 @@ package nu.xom;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2.3
  *
  */
 class NonVerifyingHandler extends XOMHandler {
@@ -227,6 +227,17 @@ class NonVerifyingHandler extends XOMHandler {
             internalDTDSubset.append("\n");            
         }            
 
-    }    
+    }
+    
+    
+    public void endDTD() {
+        
+        inDTD = false;
+        if (doctype != null) {
+            doctype.fastSetInternalDTDSubset(internalDTDSubset.toString());
+        }
+        
+    }
+
 
 }

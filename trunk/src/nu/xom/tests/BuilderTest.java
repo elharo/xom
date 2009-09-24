@@ -1,4 +1,4 @@
-/* Copyright 2002-2007 Elliotte Rusty Harold
+/* Copyright 2002-2007, 2009 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -50,7 +50,7 @@ import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.LocatorImpl;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -84,7 +84,6 @@ import nu.xom.XMLException;
  */
 public class BuilderTest extends XOMTestCase {
 
-    
     private File inputDir = new File("data");
 
     // This class tests error conditions, which Xerces
@@ -117,91 +116,6 @@ public class BuilderTest extends XOMTestCase {
         
     }
     
-    private static class NoExternalDTDHandler implements LexicalHandler {
-
-        private LexicalHandler handler;
-        
-        NoExternalDTDHandler(LexicalHandler handler) {
-            this.handler = handler;
-        }
-        
-        public void comment(char[] arg0, int arg1, int arg2)
-                throws SAXException {
-            handler.comment(arg0, arg1, arg2);
-        }
-
-        public void endCDATA() throws SAXException {
-            handler.endCDATA();
-        }
-
-        public void endDTD() throws SAXException {
-            handler.endDTD();
-        }
-
-        public void startEntity(String name) throws SAXException {
-            if (name.startsWith("[dtd]")) name = name.substring(5);
-            handler.startEntity(name);
-        }
-        
-        public void endEntity(String name) throws SAXException {
-            if (name.startsWith("[dtd]")) name = name.substring(5);
-            handler.endEntity(name);
-        }
-
-        public void startCDATA() throws SAXException {
-            handler.startCDATA();
-        }
-
-        public void startDTD(String arg0, String arg1, String arg2)
-                throws SAXException {
-            handler.startDTD(arg0, arg1, arg2);
-        }
-        
-    }
-    
-    
-    // Custom parser to test what happens when encountering a bad Locator
-    // as found in some versions of Xerces bundled with the JDK
-    private static class XercesBugReader extends XMLFilterImpl {
-        
-        public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
-            if (name.equals("http://xml.org/sax/properties/lexical-handler")) {
-                value = new NoExternalDTDHandler((LexicalHandler) value);
-            }
-            super.setProperty(name, value);
-        }
-        
-        public void setDocumentLocator(final Locator locator) {
-            super.setDocumentLocator(new Locator() {
-
-                private boolean firstCall = true;
-                
-                public int getColumnNumber() {
-                    return 0;
-                }
-
-                public int getLineNumber() {
-                    return 0;
-                }
-
-                public String getPublicId() {
-                    return null;
-                }
-
-                public String getSystemId() {
-                    if (firstCall) {
-                        firstCall = false;
-                        return locator.getSystemId();
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                
-            });
-        }
-        
-    }
     
     private static class DoNothingReader extends CustomReader {
         
@@ -361,15 +275,6 @@ public class BuilderTest extends XOMTestCase {
         
     }    
     
-    
-    public void testParseWithXercesBug() throws SAXException, ValidityException, ParsingException, IOException {
-        XercesBugReader reader = new XercesBugReader();
-        reader.setParent(XMLReaderFactory.createXMLReader());
-        Builder builder = new Builder(reader);
-        builder.build("<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>", "http://www.example.com");
-        // fail();
-    }
-
 
     public void testStartOnlyParser() 
       throws ParsingException, IOException {
@@ -3523,6 +3428,65 @@ public class BuilderTest extends XOMTestCase {
       String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
       StringReader s = new StringReader(doc);
       builder.build(s);
+    }
+    
+    public void testMisbehavingParserInternalDTDSubset() throws IOException {
+        XMLReader reader = new SAXParser();
+        reader = new MalformedDTDFilter(reader);
+        Builder builder = new Builder(reader);
+        try {
+            builder.build(validDoc, "http://www.example.com");
+            fail("didn't catch malformed internal DTD subset");
+        } 
+        catch (ParsingException ex) {
+            assertNotNull(ex.getMessage());
+        }
+    }
+    
+    private static class MalformedDTDFilter extends XMLFilterImpl implements
+            XMLReader {
+
+        public MalformedDTDFilter(XMLReader reader) {
+            super.setParent(reader);
+        }
+        
+        public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+            if (name.equals("http://xml.org/sax/properties/declaration-handler")) {
+                value = new BadDeclHandler((DeclHandler) value);
+            }
+            super.setProperty(name, value);      
+        }
+
+    }
+    
+    private static class BadDeclHandler implements DeclHandler {
+
+        private DeclHandler handler;
+
+        public BadDeclHandler(DeclHandler handler) {
+            this.handler = handler;
+        }
+
+        public void attributeDecl(String arg0, String arg1, String arg2,
+                String arg3, String arg4) throws SAXException {
+            handler.attributeDecl(arg0, arg1, arg2, arg3, arg4);
+        }
+
+        // pass some malformed data here
+        public void elementDecl(String name, String model) throws SAXException {
+            handler.elementDecl("***()*" + name, model);
+        }
+
+        public void externalEntityDecl(String arg0, String arg1, String arg2)
+                throws SAXException {
+            handler.externalEntityDecl(arg0, arg1, arg2);
+        }
+
+        public void internalEntityDecl(String arg0, String arg1)
+                throws SAXException {
+            handler.internalEntityDecl(arg0, arg1);
+        }
+
     }
     
 }
