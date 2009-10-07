@@ -1,0 +1,8 @@
+<!DOCTYPE test [
+  <!ATTLIST p id ID #REQUIRED>
+]>
+<test>
+  <p id="p1">Test worked</p>
+  <p id="p2">Test failed!</p>
+</test>
+

@@ -1,0 +1,10 @@
+<!DOCTYPE doc [
+  <!ELEMENT doc (#PCDATA)>
+  <!ATTLIST doc name ID #IMPLIED>
+  <!-- This document is invalid but that's necessary for the test,
+       which involves special characters like & and < in an attribute
+       whose type is not CDATA -->
+]>
+
+<doc name='"&amp;&lt;"'>
+</doc>
