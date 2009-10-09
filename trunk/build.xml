@@ -428,7 +428,7 @@ XOM Build file
              link="http://www.junit.org/junit/javadoc/3.8.1"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
-			 &lt;br /&gt; &lt;a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40metalab%2Eunc%2Eedu?Subject=XOM'&gt;elharo&#64;metalab&#46;unc&#46;edu&lt;/a&gt;">
+			 &lt;br /&gt; &lt;a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
       <classpath refid="test.class.path"/>
       
     <fileset dir="${build.src}" defaultexcludes="yes">
@@ -481,7 +481,7 @@ XOM Build file
              link="http://www.junit.org/junit/javadoc/3.8.1"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
-			 &lt;br/&gt; &lt;a href='mailto:elharo@metalab.unc.edu?Subject=XOM'&gt;elharo@metalab.unc.edu&lt;/a&gt;">
+			 &lt;br/&gt; &lt;a href='mailto:elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
       <classpath refid="test.class.path"/>
       
     <fileset dir="${build.src}" defaultexcludes="yes">
