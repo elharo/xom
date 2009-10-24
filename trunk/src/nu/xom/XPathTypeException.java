@@ -26,7 +26,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.2.4
  * 
  */
 public class XPathTypeException extends XPathException {
@@ -36,15 +36,16 @@ public class XPathTypeException extends XPathException {
     private final Object returnValue;
 
 
-    XPathTypeException(String message, Object returnValue) {
-        super(message);
+    XPathTypeException(Object returnValue) {
+        // Irrelevant empty message because we override getMessage() below
+        super("");
         this.returnValue = returnValue;
     }
 
     
     /**
      * <p>
-     * This method probably returns the actual object returned by the 
+     * This method usually returns the actual object returned by the 
      * query. However, XOM makes no guarantees about the type of this 
      * object. 
      * </p>
@@ -55,5 +56,15 @@ public class XPathTypeException extends XPathException {
         return this.returnValue;
     }
 
+    public String getMessage() {
+        String xpath = getXPath();
+        String type = returnValue.getClass().getName();
+        if (xpath == null) {
+            return "XPath expression returned a " + type + " instead of a node-set.";
+        } else {
+            return "XPath expression " + xpath + " returned a " + type + " instead of a node-set.";
+        }
+    }
+    
     
 }
