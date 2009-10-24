@@ -430,30 +430,6 @@ public abstract class Node {
             }
 
             List queryResults = connector.selectNodes(this);
-            Iterator iterator = queryResults.iterator();
-            while (iterator.hasNext()) {
-                Object o = iterator.next();
-                try {
-                    Node n = (Node) o;
-                    if (n.isDocumentFragment()) {
-                        iterator.remove();
-                        // Want to allow // and //* and so forth
-                        // but not / for rootless documents
-                        if (queryResults.isEmpty()) {
-                            throw new XPathException("Tried to get document "
-                              + "node of disconnected subtree");
-                        }
-                    }
-                }
-                catch (ClassCastException ex) {
-                    XPathTypeException qex = new XPathTypeException(
-                      "XPath expression " + xpath + " did not return a node-set.", 
-                      queryResults.get(0));
-                    qex.setXPath(xpath);
-                    throw qex;
-                }
-            }
-            
             return new Nodes(queryResults);
         }
         catch (XPathException ex) {
