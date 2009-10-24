@@ -33,14 +33,14 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="2"/>
-    <property name="microversion" value="3"/>
+    <property name="microversion" value="4"/>
   	<!-- put a1, b2 etc. here in non-releases -->
-    <property name="versionqualifier" value=""/>
+    <property name="versionqualifier" value="b1"/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
   	<!-- OSGI wants a period before the a1/b2/d3 qualifier -->
   	
   	<!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? -->
-    <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
+    <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/>
     <property name="year"    value="2009"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
