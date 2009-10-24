@@ -44,12 +44,9 @@ class JaxenConnector extends BaseXPath {
     
     private static FunctionContext functionContext = new XPathFunctionContext(false);
 
-    private String xpath;
-
     
     JaxenConnector(String expression) throws JaxenException {
         super(expression, new JaxenNavigator());
-        this.xpath = expression;
         // possible thread-safety issue????
         this.setFunctionContext(functionContext);
     }
@@ -89,9 +86,7 @@ class JaxenConnector extends BaseXPath {
                     }               
                 }
                 catch (ClassCastException ex) {
-                    XPathTypeException qex = new XPathTypeException(
-                      "XPath expression " + xpath + " did not return a node-set.", 
-                      result.get(0));
+                    XPathTypeException qex = new XPathTypeException(result.get(0));
                     throw qex;
                 }
             }
