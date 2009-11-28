@@ -21,6 +21,10 @@
 
 package nu.xom;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 /**
  * <p>
  * A simple class used to make the JAR archive do something sensible
@@ -28,15 +32,24 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.3
+ * @version 1.2.4
  * 
  */
 class Info {
     
     
     public static void main(String[] args) {
-     
-        System.out.println("This is XOM 1.2.3, a new XML Object Model.");
+    
+        String version = "1.2.4 or later";
+        try {
+            InputStream stream = ClassLoader.getSystemResourceAsStream("nu/xom/version.txt");
+            BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+            version = in.readLine();
+        } catch (Exception ex) {
+            version = "1.2.4b1 or later";
+        }
+        
+        System.out.println("This is XOM " + version + ", a new XML Object Model.");
         System.out.println("Copyright 2002-2009 Elliotte Rusty Harold");
         System.out.println("http://www.xom.nu/");
         System.out.println();

@@ -217,6 +217,9 @@ XOM Build file
        <classpath refid="compile.class.path"/>
     </javac>
     <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
+  	
+  	<!-- update version number -->
+  	<echo file="${build.dest}/nu/xom/version.txt">${version}</echo>
 
     <copy file="${build.src}/nu/xom/compositions.dat" tofile="${build.dest}/nu/xom/compositions.dat" />
 
