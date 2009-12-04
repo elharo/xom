@@ -514,9 +514,50 @@ XOM Build file
     </java>
   </target>
 
+  <property name="prefix" value="${name}-${version}" />
   
   <target name="dist" depends="zip, tar.gz, maven" />
- 
+
+  <!-- invoke as
+      ant -Dpassword=secret upload -->
+  <property name="password" value="" />
+	
+  <!-- This task depends on Jsch library not included in the Ant distribution. -->
+  <target name="upload" depends="dist">
+
+    <scp password="${password}" 
+        todir="elharo:${password}@login.ibiblio.org:/export/sunsite/users/elharo/xml/XOM">
+        <fileset file="${dist.dir}/${name}-${version}-src.zip" />
+        <fileset file="${dist.dir}/${name}-${version}.zip" />
+        <fileset file="${dist.dir}/${name}-${version}.tar.gz" />
+        <fileset file="${dist.dir}/${name}-${version}-src.tar.gz" />
+        <fileset file="${dist.dir}/${name}-${version}.jar" />
+        <fileset file="${dist.dir}/xom-maven-${version}.jar" />
+    </scp>
+  </target>
+    
+    <!-- invoke as
+        ant -Dpassword=secret -Dwebpassword=secret upload -->
+  <property name="webpassword" value="" />  
+    
+  <target name="postbeta" depends="upload">
+    <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html/unstable/apidocs">
+       <fileset dir="build/apidocs" />
+    </scp>
+    <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html">
+       <fileset file="website/unstable.html" />
+    </scp>
+  </target>
+    
+  <target name="release" depends="upload">
+     <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html/apidocs">
+       <fileset dir="build/apidocs" />
+    </scp>
+    <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html">
+       <fileset file="website/index.html" />
+    </scp>
+  </target>
+  	
   <target name="zip" depends="jar, betterdoc, samples" 
           description="Build zip file for distro">
 
