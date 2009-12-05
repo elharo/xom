@@ -35,7 +35,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="minorversion" value="2"/>
     <property name="microversion" value="4"/>
   	<!-- put a1, b2 etc. here in non-releases -->
-    <property name="versionqualifier" value="b2"/>
+    <property name="versionqualifier" value="b3"/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
   	<!-- OSGI wants a period before the a1/b2/d3 qualifier -->
   	
@@ -82,7 +82,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="resolver.jar"   value="${lib2.dir}/resolver.jar"/>
     <property name="dom4j.jar"      value="${lib2.dir}/dom4j-1.5.1.jar"/>
 
-    <property name="excludes"       value=".clover, .DS_Store, **/.DS_Store, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb, jester*, trademark*"/>
+    <property name="excludes"       value=".clover, .DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb, jester*, trademark*"/>
 
     <property name="test.outputFormat" value="xml"/>   
     
@@ -540,7 +540,21 @@ XOM Build file
         ant -Dpassword=secret -Dwebpassword=secret upload -->
   <property name="webpassword" value="" />  
     
-  <target name="postbeta" depends="upload">
+  <!-- should only be run once per release --> 
+  <target name="postbeta" depends="upload, uploadbetadocs">
+    <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
+         cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"
+         package="xom"/>
+  </target>
+    
+  <!-- should only be run once per release --> 
+  <target name="release" depends="upload, uploaddocs">
+    <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
+         cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"
+         package="xom"/>
+  </target>
+    
+  <target name="uploadbetadocs" depends="betterdocs">
     <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html/unstable/apidocs">
        <fileset dir="build/apidocs" />
     </scp>
@@ -549,7 +563,13 @@ XOM Build file
     </scp>
   </target>
     
-  <target name="release" depends="upload">
+  <target name="tag" depends="compile" description="tag target in CVS">
+    <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
+         cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"
+         package="xom"/>
+  </target>
+  
+  <target name="uploaddocs" depends="upload">
      <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html/apidocs">
        <fileset dir="build/apidocs" />
     </scp>
@@ -818,12 +838,6 @@ location="${dist.dir}/xom-maven-${version}.jar" />
   
   <target name="website" depends="init" description="Print various Ant properties">
     <ant antfile="build.xml" dir="website"/>
-  </target>
-  
-  <target name="tag" depends="compile" description="tag target in CVS">
-    <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
-         cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"
-         package="xom"/>
   </target>
   
 </project>
