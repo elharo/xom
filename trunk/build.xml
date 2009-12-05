@@ -156,18 +156,23 @@ XOM Build file
     
   available targets are:
     
-    help      --> print this message
-    jar       --> build the xom.jar file
-    samples   --> build the xom-samples.jar file
-    compile   --> compile the source code
-    compile15 --> compile the classes that depend on Java 1.5
-    javadoc   --> generate the API documentation
-    betterdoc --> better formatted API documentation (requires Ant 1.6)
-    test      --> run JUnit test suite
-    testui    --> run Junit test suite in GUI 
-    clean     --> clean up the build directory
-    dist      --> the zip and .tar.gz files
-    
+    help           --> print this message
+    jar            --> build the xom.jar file
+    samples        --> build the xom-samples.jar file
+    compile        --> compile the source code
+    compile15      --> compile the classes that depend on Java 1.5
+    javadoc        --> generate the API documentation
+    betterdoc      --> better formatted API documentation (requires Ant 1.6)
+    test           --> run JUnit test suite
+    testui         --> run Junit test suite in GUI 
+    clean          --> clean up the build directory
+    dist           --> the zip and .tar.gz files
+    uploaddocs     --> upload API documentation and home page
+    uploadbetadocs --> upload unstable API documentation and home page
+    upload         --> upload archive files
+    postbeta       --> tag and upload a beta release
+    release        --> tag and upload a final release
+      
   Use the option -Dfat=true to make Text objects bigger but faster.
 
 -------------------------------------------------------------
@@ -540,6 +545,8 @@ XOM Build file
         ant -Dpassword=secret -Dwebpassword=secret upload -->
   <property name="webpassword" value="" />  
     
+  <!-- We have an antipattern here. This should be deployed from CVS,
+       not from the local hard drive. Worth fixing down the line. -->
   <!-- should only be run once per release --> 
   <target name="postbeta" depends="upload, uploadbetadocs">
     <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
