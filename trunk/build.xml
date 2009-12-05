@@ -542,7 +542,7 @@ XOM Build file
   </target>
     
     <!-- invoke as
-        ant -Dpassword=secret -Dwebpassword=secret upload -->
+        ant -Dpassword=secret -Dwebpassword=secret postbeta -->
   <property name="webpassword" value="" />  
     
   <!-- We have an antipattern here. This should be deployed from CVS,
@@ -550,8 +550,7 @@ XOM Build file
   <!-- should only be run once per release --> 
   <target name="postbeta" depends="upload, uploadbetadocs">
     <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
-         cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"
-         package="xom"/>
+         cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"/>
   </target>
     
   <!-- should only be run once per release --> 
