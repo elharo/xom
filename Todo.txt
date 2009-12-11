@@ -53,9 +53,6 @@ test running in unsigned java web start
 
 add a NodeFactory section to the tutorial for processing big documents
 
-check if we've accidentally sealed in jaxen
-what should the manifest say about that?
-
 Make a build target for non-LGPL, closed source version
 
 Sign up on Kagi or somewhere for software sales
@@ -198,16 +195,45 @@ lock.c:222: failed assertion `strncmp (repository, current_parsed_root->director
 
 
 ===============
+Done 1.2.4 Release
+===============
+
+More automatic deploy process
+
+Fixed maven targets
+
+Slight optimization to XPath by combining two loops. 
+
+
+===============
+Done 1.2.3 Release
+===============
+
+Bug fix for some obscure corner cases
+
+
+===============
+Done 1.2.2 Release
+=============== 
+
+Support OSGI packaging
+
+Repackages the internal copy of org.jaxen into nu.xom.jaxen to avoid accidental conflicts and classloader problems
+
+
+===============
 Done 1.2.1 Release
 ===============
 
 Upgraded Info.java so java -jar xom.jar shows the right version number. 
+
 
 ===============
 Done 1.2 Release
 ===============
 
 Fixed bug when escaping namespace URIs that contained ampersands in Element.toXML()
+
 
 ===============
 Done 1.2b3
