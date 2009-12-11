@@ -40,8 +40,9 @@ subject line. The XOM home page is http://www.xom.nu/
   	<!-- OSGI wants a period before the a1/b2/d3 qualifier -->
   	
   	<!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? 
-  	     or just put the period in the version qualifier? -->
-    <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/>
+  	     Problem is release version doesn't get a version qualifier. -->
+    <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
+    <!-- <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/> -->
     <property name="year"    value="2009"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
