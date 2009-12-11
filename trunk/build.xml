@@ -555,7 +555,7 @@ XOM Build file
     
   <!-- should only be run once per release --> 
   <target name="release" depends="upload, uploaddocs">
-    <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
+    <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}" 
          cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"
          package="xom"/>
   </target>
