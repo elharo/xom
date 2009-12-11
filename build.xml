@@ -35,11 +35,12 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="minorversion" value="2"/>
     <property name="microversion" value="4"/>
   	<!-- put a1, b2 etc. here in non-releases -->
-    <property name="versionqualifier" value="b3"/>
+    <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
   	<!-- OSGI wants a period before the a1/b2/d3 qualifier -->
   	
-  	<!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? -->
+  	<!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? 
+  	     or just put the period in the version qualifier? -->
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/>
     <property name="year"    value="2009"/>
 
