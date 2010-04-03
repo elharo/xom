@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2009 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009, 2010 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.3
+ * @version 1.2.5
  * 
  */
 public class Builder {
@@ -261,6 +261,13 @@ public class Builder {
     private static void setupParser(XMLReader parser, boolean validate)
       throws SAXNotRecognizedException, SAXNotSupportedException {
         
+        // General configuration for all parsers
+        parser.setFeature(
+                "http://xml.org/sax/features/namespace-prefixes", true);
+        parser.setFeature(
+                "http://xml.org/sax/features/namespaces", true);
+        
+        // Parser specific configuration
         XMLReader baseParser = parser;
         while (baseParser instanceof XMLFilter) {
              XMLReader parent = ((XMLFilter) baseParser).getParent();
@@ -269,10 +276,6 @@ public class Builder {
         }
         
         String parserName = baseParser.getClass().getName();
-        parser.setFeature(
-          "http://xml.org/sax/features/namespace-prefixes", true);
-        parser.setFeature(
-          "http://xml.org/sax/features/namespaces", true);
         if (!validate) {
             if (parserName.equals(  // Crimson workaround
               "org.apache.crimson.parser.XMLReaderImpl")) {
@@ -1030,6 +1033,7 @@ public class Builder {
     public Document build(Reader in) 
       throws ParsingException, ValidityException, IOException {
 
+        if (in == null) throw new NullPointerException("Attempted to build from null reader");
         InputSource source = new InputSource(in);
         return build(source);
         
