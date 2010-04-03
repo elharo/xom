@@ -1,4 +1,4 @@
-/* Copyright 2002-2007, 2009 Elliotte Rusty Harold
+/* Copyright 2002-2007, 2009, 2010 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -79,7 +79,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.3
+ * @version 1.2.5
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -490,17 +490,32 @@ public class BuilderTest extends XOMTestCase {
     }
 
     
+    public void testBuildFromNullReader() 
+      throws IOException, ParsingException {
+      
+        Reader reader = null;
+        try {
+            builder.build(reader);
+            fail("Built from null reader");
+        }
+        catch (NullPointerException ex) {
+            assertEquals("Attempted to build from null reader", ex.getMessage());
+        }        
+      
+    }
+
+
     public void testBuildFromReader() 
       throws IOException, ParsingException {
-        
+      
         Reader reader = new StringReader(source);
         Document document = builder.build(reader);
         verify(document);        
         assertEquals("", document.getBaseURI());
-        
+      
     }
-    
-    
+  
+  
     public void testBuildFromReaderWithBase()
       throws IOException, ParsingException {
         
@@ -643,7 +658,7 @@ public class BuilderTest extends XOMTestCase {
             fail("Built from null input stream");
         }
         catch (NullPointerException success) {
-            assertNotNull(success.getMessage());
+            assertEquals("Null InputStream", success.getMessage());
         }
         
     }
