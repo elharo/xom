@@ -194,6 +194,15 @@ cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
 
+
+===============
+Done 1.2.5 Release
+===============
+
+Throw NullPointerException instead of MalformedUriException when a null Reader is passed to Builder.build.
+
+Added a target that builds a maven2 jar archive.
+
 ===============
 Done 1.2.4 Release
 ===============
