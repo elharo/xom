@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 2002-2007, 2009 Elliotte Rusty Harold
+<!-- Copyright 2002-2007, 2009, 2010 Elliotte Rusty Harold
 
 This library is free software; you can redistribute 
 it and/or modify it under the terms of version 2.1 of 
@@ -33,7 +33,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="2"/>
-    <property name="microversion" value="4"/>
+    <property name="microversion" value="5"/>
   	<!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
@@ -43,7 +43,7 @@ subject line. The XOM home page is http://www.xom.nu/
   	     Problem is release version doesn't get a version qualifier. -->
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <!-- <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/> -->
-    <property name="year"    value="2009"/>
+    <property name="year"    value="2010"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
@@ -87,7 +87,9 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="excludes"       value=".clover, .DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb, jester*, trademark*"/>
 
     <property name="test.outputFormat" value="xml"/>   
-    
+    <property name="sources.jar" location="${dist.dir}/maven2/xom-${version}-sources.jar" />
+    <property name="javadoc.jar" location="${dist.dir}/maven2/xom-${version}-javadoc.jar" />
+
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"    value="${lib2.dir}/servlet.jar"/>
     <condition property="servlet.jar.installed">
@@ -185,6 +187,8 @@ XOM Build file
   
   <target name="prepare-dirs" depends="init">
     <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${dist.dir}/maven1"/>
+    <mkdir dir="${dist.dir}/maven2"/>
     <mkdir dir="${testoutput.dir}"/>
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/jaxen"/>
@@ -548,7 +552,11 @@ XOM Build file
   <property name="webpassword" value="" />  
     
   <!-- We have an antipattern here. This should be deployed from CVS,
-       not from the local hard drive. Worth fixing down the line. -->
+       not from the local hard drive. Worth fixing down the line. 
+       The basic idea is that the release and postbeta targets should take
+       a tag as an argument. Then they should download the tagged files from CVS,
+       package them, and release those. Possibly the jar and zip targets 
+       should do similarly, or at least the dist target. -->
   <!-- should only be run once per release --> 
   <target name="postbeta" depends="upload, uploadbetadocs">
     <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
@@ -571,6 +579,7 @@ XOM Build file
     </scp>
   </target>
     
+  <!-- this target does not yet work, so I have to tag manually. Any ideas? -->
   <target name="tag" depends="compile" description="tag target in CVS">
     <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
          cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"
@@ -781,28 +790,70 @@ XOM Build file
     </junit>
   </target> 
 
-<!-- Generate a Maven JAR for uploading to the maven
+  <target name="maven" depends="maven1, maven2" />
+  
+<!-- Generate a Maven 1 JAR for uploading to the maven
     bug repository and hence placement onto ibiblio and mirrors. 
-    See http://maven.apache.org/repository-upload.html -->
-  <target name="maven" depends="jar" >
+    See http://maven.apache.org/maven-1.x/reference/repository-upload.html -->
+  <target name="maven1" depends="jar" >
     <property name="pom.template" location="project.xml" />
     <property name="pom.file" location="${build.dir}/project.xml" />
     <property name="package.jar"
 location="${build.dir}/${name}-${version}.jar"/>
     <property name="license" location="LICENSE.txt" />
-    <property name="xom-maven.jar"
-location="${dist.dir}/xom-maven-${version}.jar" />
+    <property name="xom-maven-1.jar"
+location="${dist.dir}/maven1/xom-maven-${version}.jar" />
     <copy file="${pom.template}" tofile="${pom.file}">
       <filterset>
        <filter token="VERSION" value="${version}"/>
      </filterset>
     </copy>
-    <jar destFile="${xom-maven.jar}">
+    <jar destFile="${xom-maven-1.jar}">
       <fileset file="${pom.file}" />
       <fileset file="${license}" />
       <fileset file="${package.jar}" />
     </jar>
   </target>
+
+  <target name="sources.jar" depends="init, compile">
+    <jar jarfile="${sources.jar}" basedir="${build.dir}/src">
+      <exclude name= "nu/xom/benchmarks/**" />
+      <exclude name= "nu/xom/tools/**" />
+      <exclude name= "nu/xom/tests/**" />
+      <exclude name= "nu/xom/pantry/**" />
+      <exclude name= "nu/xom/samples/**" />
+    </jar>
+  </target>
+  
+  <target name="javadoc.jar" depends="init, compile">
+    <jar jarfile="${javadoc.jar}" basedir="${build.dir}/apidocs">
+    </jar>
+  </target>
+    
+  <!-- Generate a Maven 2 JAR for uploading to the maven
+      bug repository and hence placement onto ibiblio and mirrors. 
+      See http://maven.apache.org/guides/mini/guide-central-repository-upload.html -->
+  <target name="maven2" depends="jar, sources.jar, javadoc.jar" >
+      <property name="pom2.template" location="project2.xml" />
+      <property name="pom2.file" location="${build.dir}/maven2/project.xml" />
+      <property name="package.jar" location="${build.dir}/${name}-${version}.jar"/>
+      <property name="license" location="LICENSE.txt" />
+      <property name="xom-maven-2.jar" location="${dist.dir}/maven2/xom-maven-${version}.jar" />
+      <copy file="${pom2.template}" tofile="${pom2.file}">
+        <filterset>
+         <filter token="VERSION" value="${version}"/>
+       </filterset>
+      </copy>
+    
+      <jar destFile="${xom-maven-2.jar}">
+        <fileset file="${pom2.file}" />
+        <fileset file="${license}" />
+        <fileset file="${package.jar}" />
+        <fileset file="${sources.jar}" />
+        <fileset file="${javadoc.jar}" />
+      </jar>
+  </target>
+
 
   <target name="compile-jaxen" description="Compile Jaxen" depends="get-jaxen">
     <javac srcdir="${build.dir}/jaxen-1.1.2/src/java/main"
