@@ -547,7 +547,7 @@ XOM Build file
         <fileset file="${dist.dir}/${name}-${version}.tar.gz" />
         <fileset file="${dist.dir}/${name}-${version}-src.tar.gz" />
         <fileset file="${dist.dir}/${name}-${version}.jar" />
-        <fileset file="${dist.dir}/xom-maven-${version}.jar" />
+        <fileset file="${dist.dir}/maven2/xom-maven-${version}.jar" />
     </scp>
   </target>
     
@@ -595,7 +595,9 @@ XOM Build file
        <fileset dir="build/apidocs" />
     </scp>
     <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html">
-       <fileset file="website/index.html" />
+      <fileset file="website/index.html" />
+      <fileset file="website/history.html" />
+      <fileset file="website/unstable.html" />
     </scp>
   </target>
   	
