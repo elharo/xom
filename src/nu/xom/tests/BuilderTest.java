@@ -79,7 +79,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.5
+ * @version 1.2.6
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1485,6 +1485,13 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
+    public void testCanonicalizeURLWithQueryString()
+      throws IOException, ParsingException {
+        Document doc = builder.build("http://www.cafeconleche.org/?foo=bar");
+        assertEquals("http://www.cafeconleche.org/?foo=bar", doc.getBaseURI());
+    }
+  
+  
     public void testExternalEntityResolution()
       throws IOException, ParsingException {
         

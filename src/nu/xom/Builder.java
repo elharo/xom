@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.5
+ * @version 1.2.6
  * 
  */
 public class Builder {
@@ -1107,19 +1107,16 @@ public class Builder {
         
         try {
             URL u = new URL(uri);
-            String path = u.getFile();
+            String path = u.getPath();
             String scheme = u.getProtocol();
             String authority = u.getHost();
             String query = u.getQuery();
             int port = u.getPort();
             // fragment ID not needed
-            if (path == null || path.length() == 0 
+            if (path == null || path.length() == 0) {
               // We handle here the case where we have a URL such as 
               // http://www.cafeaulait.org with no trailing slash.
-              // Java's URL class assigns the path "/" to this case
-              // but does not change the URL. 
-              || ("/".equals(path) && !(uri.endsWith("/")))) {
-                path += '/';
+                path = "/";
             }
             // If this proves to be a hot spot we could probably take this path
             // only if the scheme is file; not in the more common case where
