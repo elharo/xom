@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2011 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.2.7
  *
  */
 public class AttributeTest extends XOMTestCase {
@@ -718,7 +718,7 @@ public class AttributeTest extends XOMTestCase {
         f = new File(f, "xtest.xml");   
         Document input = builder.build(f);
         String s = input.toXML();
-        Document output = builder.build(s, f.toURL().toExternalForm());
+        Document output = builder.build(s, f.toURI().toASCIIString());
         assertEquals(input, output);
         
     }
