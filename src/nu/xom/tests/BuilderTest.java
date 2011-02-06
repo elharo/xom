@@ -1,4 +1,4 @@
-/* Copyright 2002-2007, 2009, 2010 Elliotte Rusty Harold
+/* Copyright 2002-2007, 2009, 2010, 2011 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -35,10 +35,12 @@ import java.io.StringReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UTFDataFormatException;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URLEncoder;
 
 import org.apache.xerces.parsers.SAXParser;
 import org.xml.sax.Attributes;
@@ -79,7 +81,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.6
+ * @version 1.2.7
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1508,8 +1510,8 @@ public class BuilderTest extends XOMTestCase {
     public void testExternalEntityRelativeURLResolution()
       throws IOException, ParsingException {
         
-        String url = "file://" + inputDir.getAbsolutePath();
-        String docURL = url + "/base/../sib/content/pe.xml";
+        String url = "file://" + escapePath(inputDir.getAbsolutePath());
+        String docURL = url + "base/../sib/content/pe.xml";
         Builder builder = new Builder(false);
         Document doc = builder.build(docURL);
         String subset = doc.getDocType().getInternalDTDSubset();
@@ -1518,11 +1520,24 @@ public class BuilderTest extends XOMTestCase {
     }
      
     
+    private String escapePath(String path) throws UnsupportedEncodingException {
+        String[] fragments = path.split("/");
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < fragments.length; i++) {
+            String encoded = URLEncoder.encode(fragments[i], "UTF-8");
+            encoded = encoded.replace("+", "%20");
+            result.append(encoded);
+            result.append("/");
+        }
+        return result.toString();
+    }
+
+
     public void testExternalEntityRelativeURLResolution2()
       throws IOException, ParsingException {
         
-        String url = "file://" + inputDir.getAbsolutePath();
-        String docURL = url + "/base/../sib/content/ep.xml";
+        String url = "file://" + escapePath(inputDir.getAbsolutePath());
+        String docURL = url + "base/../sib/content/ep.xml";
         Builder builder = new Builder(false);
         Document doc = builder.build(docURL);
         String subset = doc.getDocType().getInternalDTDSubset();
@@ -1534,8 +1549,8 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromURLThatContainsNonexistentPart()
       throws IOException, ParsingException {
         
-        String url = "file://" + inputDir.getAbsolutePath();
-        String docURL = url + "/nonexistent/../test.xml";
+        String url = "file://" + escapePath(inputDir.getAbsolutePath());
+        String docURL = url + "nonexistent/../test.xml";
         Builder builder = new Builder(false);
         Document doc = builder.build(docURL);
         assertNotNull(doc);
@@ -1546,8 +1561,8 @@ public class BuilderTest extends XOMTestCase {
     public void testBuildFromURLThatContainsNonexistentPart2()
       throws IOException, ParsingException {
         
-        String url = "file://" + inputDir.getAbsolutePath();
-        String docURL = url + "/nonexistent/../sib/content/pe.xml";
+        String url = "file://" + escapePath(inputDir.getAbsolutePath());
+        String docURL = url + "nonexistent/../sib/content/pe.xml";
         Builder builder = new Builder(false);
         Document doc = builder.build(docURL);
         assertNotNull(doc);
@@ -1558,8 +1573,8 @@ public class BuilderTest extends XOMTestCase {
     public void testExternalEntityRelativeURLResolutionIncludingNonexistentDirectoryInBaseURL()
       throws IOException, ParsingException {
         
-        String url = "file://" + inputDir.getAbsolutePath();
-        String docURL = url + "/nonexistent/../sib/content/pe.xml";
+        String url = "file://" + escapePath(inputDir.getAbsolutePath());
+        String docURL = url + "nonexistent/../sib/content/pe.xml";
         Builder builder = new Builder(false);
         Document doc = builder.build(docURL);
         String subset = doc.getDocType().getInternalDTDSubset();
@@ -1571,8 +1586,8 @@ public class BuilderTest extends XOMTestCase {
     public void testExternalEntityRelativeURLResolution3()
       throws IOException, ParsingException {
         
-        String url = "file://" + inputDir.getAbsolutePath();
-        String docURL = url + "/sib/content/ep.xml";
+        String url = "file://" + escapePath(inputDir.getAbsolutePath());
+        String docURL = url + "sib/content/ep.xml";
         Builder builder = new Builder(false);
         Document doc = builder.build(docURL);
         String subset = doc.getDocType().getInternalDTDSubset();
