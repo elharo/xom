@@ -34,7 +34,6 @@ import junit.framework.TestCase;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
-import nu.xom.ValidityException;
 import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
 
@@ -182,7 +181,36 @@ public class Canonicalizer11Test extends TestCase {
         byte[] expectedBytes = readFile(expected);
         assertEquals(expectedBytes, actualBytes);
     }
+    
+       
+    // 3.2.3.1 Test case c14n11/xmlid-1
+    public void testXMLID_1() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlid-1.output");
+        File input = new File(canonical, "xmlid-input.xml");
+        Document xmlIdInput = builder.build(input);
+        
+        String documentSubsetExpression = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e1]";
+        canonicalizer.write(xmlIdInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
 
+    
+    // 3.2.3.2 Test case c14n11/xmlid-2
+    public void testXMLID_2() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlid-2.output");
+        File input = new File(canonical, "xmlid-input.xml");
+        Document xmlIdInput = builder.build(input);
+        
+        String documentSubsetExpression = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e11 or ancestor-or-self::ietf:e12]";
+        canonicalizer.write(xmlIdInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
 
     private byte[] readFile(File expected) throws IOException {
         byte[] expectedBytes = new byte[(int) expected.length()];
