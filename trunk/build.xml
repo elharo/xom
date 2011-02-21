@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 2002-2007, 2009, 2010 Elliotte Rusty Harold
+<!-- Copyright 2002-2007, 2009, 2010, 2011 Elliotte Rusty Harold
 
 This library is free software; you can redistribute 
 it and/or modify it under the terms of version 2.1 of 
@@ -17,7 +17,7 @@ Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 Boston, MA  02111-1307  USA
 
 You can contact Elliotte Rusty Harold by sending e-mail to
-elharo@metalab.unc.edu. Please include the word "XOM" in the
+elharo@ibiblio.org. Please include the word "XOM" in the
 subject line. The XOM home page is http://www.xom.nu/
 -->
 <project name="XOM" default="help" basedir=".">
@@ -33,7 +33,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="2"/>
-    <property name="microversion" value="6"/>
+    <property name="microversion" value="7"/>
   	<!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
