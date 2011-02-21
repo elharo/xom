@@ -1102,6 +1102,9 @@ public class Canonicalizer {
     }
     
     private static String joinURIReferences(String parent, String child) {
+        if ("..".equals(parent)) parent = "../";
+        if ("..".equals(child)) child = "../";
+
         if (child == null) {
             return parent;
         } 
