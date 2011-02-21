@@ -27,7 +27,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
+import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -65,7 +67,7 @@ public class Canonicalizer11Test extends TestCase {
     }
     
     // 3.2.1.1 Test case c14n11/xmllang-1
-    public void testXMLLang() throws ParsingException, IOException {
+    public void testXMLLang_1() throws ParsingException, IOException {
         File input = new File(canonical, "xmllang-input.xml");
         File expected = new File(canonical, "xmllang-1.output");
         
@@ -76,6 +78,63 @@ public class Canonicalizer11Test extends TestCase {
         canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
         
         byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+
+    // 3.2.1.2 Test case c14n11/xmllang-2
+    public void testXMLLang_2() throws ParsingException, IOException {
+        File input = new File(canonical, "xmllang-input.xml");
+        File expected = new File(canonical, "xmllang-2.output");
+        
+        Document doc = builder.build(input);
+        XPathContext namespaces = new XPathContext();
+        namespaces.addNamespace("ietf", "http://www.ietf.org");
+        String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::ietf:e2]";
+        canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.1.3 Test case c14n11/xmllang-3
+    public void testXMLLang_3() throws ParsingException, IOException {
+        File input = new File(canonical, "xmllang-input.xml");
+        File expected = new File(canonical, "xmllang-3.output");
+        
+        Document doc = builder.build(input);
+        XPathContext namespaces = new XPathContext();
+        namespaces.addNamespace("ietf", "http://www.ietf.org");
+        String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::ietf:e11]";
+        canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.1.4 Test case c14n11/xmllang-4
+    public void testXMLLang_4() throws ParsingException, IOException {
+        File input = new File(canonical, "xmllang-input.xml");
+        File expected = new File(canonical, "xmllang-4.output");
+        
+        Document doc = builder.build(input);
+        XPathContext namespaces = new XPathContext();
+        namespaces.addNamespace("ietf", "http://www.ietf.org");
+        String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::ietf:e11 or ancestor-or-self::ietf:e12]";
+        canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+
+
+    private byte[] readFile(File expected) throws IOException {
         byte[] expectedBytes = new byte[(int) expected.length()];
         InputStream fin = new FileInputStream(expected);
         DataInputStream in = new DataInputStream(fin);
@@ -85,9 +144,9 @@ public class Canonicalizer11Test extends TestCase {
         finally {
             in.close();
         }
-        assertEquals(expectedBytes, actualBytes);
+        return expectedBytes;
     }
-       
+    
     
     /**
      * <p>
@@ -107,13 +166,25 @@ public class Canonicalizer11Test extends TestCase {
             return;
         }
         // what if one is null and the other isn't????
-        assertEquals(expected.length, actual.length);
-        for (int i = 0; i < actual.length; i++) {
-            assertEquals(expected[i], actual[i]);
+        try {
+            assertEquals(expected.length, actual.length);
+            for (int i = 0; i < actual.length; i++) {
+                assertEquals(expected[i], actual[i]);
+            }
+        } catch (AssertionFailedError error) {
+            fail(getComparisonMessage(expected, actual)); 
         }
         
+        
+    }
+
+    private String getComparisonMessage(byte[] expected, byte[] actual) {
+        try {
+            return "Expected\n" + new String(expected, "UTF-8") + "\n\n but was \n\n" + new String(actual, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "Broken VM";
+        }
     }
     
-    
-    
+ 
 }
