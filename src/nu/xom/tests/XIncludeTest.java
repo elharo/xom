@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2005, 2011 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -31,6 +31,8 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import junit.framework.AssertionFailedError;
@@ -65,7 +67,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.2.7
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -602,7 +604,7 @@ public class XIncludeTest extends XOMTestCase {
         File input = new File(inputDir, "disclaimer.xml");
         String data = "<document xmlns:xi='http://www.w3.org/2001/XInclude'>"
           + "\n  <p>120 Mz is adequate for an average home user.</p>"
-          + "\n  <xi:include href='" + input.toURL() + "'/>\n</document>";
+          + "\n  <xi:include href='" + input.toURI() + "'/>\n</document>";
         Reader reader = new StringReader(data);
         Document doc = builder.build(reader);
         Document result = XIncluder.resolve(doc);
@@ -1285,7 +1287,7 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (InclusionLoopException success) {
             assertNotNull(success.getMessage());
-            assertEquals(input.toURL().toExternalForm(), success.getURI());           
+            assertEquals(input.toURI().toString(), success.getURI());           
         }
     }
 
@@ -1301,9 +1303,9 @@ public class XIncludeTest extends XOMTestCase {
             fail("allowed circular include, cycle length 1");
         }
         catch (InclusionLoopException success) {
-            assertTrue(success.getMessage().indexOf(errorFile.toURL().toExternalForm()) > 1);           
-            assertTrue(success.getMessage().indexOf(input.toURL().toExternalForm()) > 1);           
-            assertEquals(errorFile.toURL().toExternalForm(), success.getURI());           
+            assertTrue(success.getMessage().indexOf(errorFile.toURI().toString()) > 1);           
+            assertTrue(success.getMessage().indexOf(input.toURI().toString()) > 1);           
+            assertEquals(errorFile.toURI().toString(), success.getURI());           
         }
         
     }
@@ -1327,7 +1329,7 @@ public class XIncludeTest extends XOMTestCase {
     
     
     public void testBadParseAttribute() 
-      throws ParsingException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException, URISyntaxException {
         
         File input = new File(inputDir, "badparseattribute.xml");
         Document doc = builder.build(input);
@@ -1337,8 +1339,8 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (BadParseAttributeException success) {
             assertNotNull(success.getMessage());
-            URL u1 = input.toURL();
-            URL u2 = new URL(success.getURI());
+            URI u1 = input.toURI();
+            URI u2 = new URI(success.getURI());
             assertEquals(u1, u2);
         }
         
@@ -1431,7 +1433,7 @@ public class XIncludeTest extends XOMTestCase {
     
     
     public void testShorthandXPointerMatchesNothing() 
-      throws ParsingException, IOException {
+      throws ParsingException, IOException, URISyntaxException {
       
         File input = new File(inputDir, "xptridtest2.xml");
         Document doc = builder.build(input);
@@ -1444,8 +1446,8 @@ public class XIncludeTest extends XOMTestCase {
             assertNotNull(success.getMessage());
             // Must compare URLs instead of strings here to avoid 
             // issues of whether a file URL begins file:/ or file:///
-            URL u1 = input.toURL();
-            URL u2 = new URL(success.getURI());
+            URI u1 = input.toURI();
+            URI u2 = new URI(success.getURI());
             assertEquals(u1, u2);  
         }
         
@@ -1694,7 +1696,7 @@ public class XIncludeTest extends XOMTestCase {
 
     
     public void testXPointerTumblerMatchesNothing() 
-      throws ParsingException, IOException {
+      throws ParsingException, IOException, URISyntaxException {
       
         File input = new File(
           "data/xinclude/input/xptrtumblertest2.xml"
@@ -1706,16 +1708,16 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (XIncludeException success) {
             assertNotNull(success.getMessage());
-            URL u1 = input.toURL();
-            URL u2 = new URL(success.getURI());
-            assertEquals(u1, u2);            
+            URI u1 = input.toURI();
+            URI u2 = new URI(success.getURI());
+            assertEquals(u1, u2);              
         }
         
     }
     
     
     public void testMalformedXPointer() 
-      throws ParsingException, IOException {   
+      throws ParsingException, IOException, URISyntaxException {   
         
         File input = new File(inputDir, "badxptr.xml");
         Document doc = builder.build(input);
@@ -1725,8 +1727,8 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (XIncludeException success) {
             assertNotNull(success.getMessage());
-            URL u1 = input.toURL();
-            URL u2 = new URL(success.getURI());
+            URI u1 = input.toURI();
+            URI u2 = new URI(success.getURI());
             assertEquals(u1, u2);            
         }
         
@@ -1777,7 +1779,7 @@ public class XIncludeTest extends XOMTestCase {
     
     
     public void testAnotherMalformedXPointer() 
-      throws ParsingException, IOException {
+      throws ParsingException, IOException, URISyntaxException {
         
         // testing use of non NCNAME as ID
         File input = new File(inputDir, "badxptr2.xml");
@@ -1788,9 +1790,9 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (XIncludeException success) {
             assertNotNull(success.getMessage());
-            URL u1 = input.toURL();
-            URL u2 = new URL(success.getURI());
-            assertEquals(u1, u2);            
+            URI u1 = input.toURI();
+            URI u2 = new URI(success.getURI());
+            assertEquals(u1, u2);          
         }
         
     }
@@ -1966,7 +1968,7 @@ public class XIncludeTest extends XOMTestCase {
         File testDescription = new File("data");
         testDescription = new File(testDescription, "XInclude-Test-Suite");
         testDescription = new File(testDescription, "testdescr.xml");
-        URL baseURL = testDescription.toURL();
+        URL baseURL = testDescription.toURI().toURL();
         if (!testDescription.exists()) {
             baseURL = new URL(
               "http://dev.w3.org/cvsweb/~checkout~/2001/" +
@@ -2102,7 +2104,7 @@ public class XIncludeTest extends XOMTestCase {
     // and B encounters the error (e.g. a missing href)
     // to make sure B's URL is in the error message, not A's
     public void testChildDocumentSetsErrorURI() 
-      throws ParsingException, IOException, XIncludeException {
+      throws ParsingException, IOException, XIncludeException, URISyntaxException {
       
         File input = new File(inputDir, "toplevel.xml");
         File error = new File(inputDir, "onedown.xml");
@@ -2113,9 +2115,9 @@ public class XIncludeTest extends XOMTestCase {
         }
         catch (NoIncludeLocationException success) {
             assertNotNull(success.getMessage());
-            URL u1 = error.toURL();
-            URL u2 = new URL(success.getURI());
-            assertEquals(u1, u2);            
+            URI u1 = error.toURI();
+            URI u2 = new URI(success.getURI());
+            assertEquals(u1, u2);           
         }
                 
     } 
