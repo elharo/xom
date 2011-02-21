@@ -641,12 +641,14 @@ public class Canonicalizer {
                             continue;
                         }
                         if (! nearest.containsKey(name)) {
-                            Element parent = (Element) a.getParent();
-                            if (! nodes.contains(parent)) {
-                                nearest.put(name, a);
-                            }
-                            else {
-                                nearest.put(name, null);
+                            if (!v11 || "lang".equals(name) || "space".equals(name)) {
+                                Element parent = (Element) a.getParent();
+                                if (! nodes.contains(parent)) {
+                                    nearest.put(name, a);
+                                }
+                                else {
+                                    nearest.put(name, null);
+                                }
                             }
                         }
                     }

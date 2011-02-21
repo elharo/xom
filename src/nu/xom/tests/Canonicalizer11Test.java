@@ -211,6 +211,20 @@ public class Canonicalizer11Test extends TestCase {
         byte[] expectedBytes = readFile(expected);
         assertEquals(expectedBytes, actualBytes);
     }
+    
+    // 
+    public void testNewXMLAttributesAreNotInherited() throws ParsingException, IOException {
+        String input = "<foo xml:href='http://www.w3.org/TR/2008/PR-xml-c14n11-20080129/#ProcessingModel' " +
+	    "xml:text='Attributes in the XML namespace other than xml:base, xml:id, xml:lang, and xml:space MUST be processed as ordinary attributes.'>" +
+	    "<bar/></foo>";
+        Document doc = builder.build(input, "http://www.w3.org/TR/2008/PR-xml-c14n11-20080129/");
+        
+        String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::bar]";
+        canonicalizer.write(doc.query(documentSubsetExpression));  
+        
+        String actual = new String(out.toByteArray(), "UTF-8");        
+        assertEquals("<bar></bar>", actual);
+    }
 
     private byte[] readFile(File expected) throws IOException {
         byte[] expectedBytes = new byte[(int) expected.length()];
