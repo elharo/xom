@@ -637,6 +637,8 @@ public class Canonicalizer {
                         if (element.getAttribute(name, Namespace.XML_NAMESPACE) != null) {
                             // this element already has that attribute
                             continue;
+                        } else if (v11 && "id".equals(name)) { // Don't inherit xml:id in C14N 1.1
+                            continue;
                         }
                         if (! nearest.containsKey(name)) {
                             Element parent = (Element) a.getParent();
