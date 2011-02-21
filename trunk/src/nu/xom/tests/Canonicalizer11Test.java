@@ -53,13 +53,8 @@ public class Canonicalizer11Test extends TestCase {
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
     private Canonicalizer canonicalizer = new Canonicalizer(out, Canonicalizer.CANONICAL_XML_11);
     private Document xmlSpaceInput;
+    private Document xmlBaseInput;
     private XPathContext namespaces = new XPathContext();
-
-    public Canonicalizer11Test(String name) {
-        super(name);
-    }
-
-    
     private Builder builder = new Builder(); 
     
     
@@ -68,8 +63,11 @@ public class Canonicalizer11Test extends TestCase {
         canonical = new File(data, "c14n11");
         File xmlSpaceFile = new File(canonical, "xmlspace-input.xml");
         xmlSpaceInput = builder.build(xmlSpaceFile);
+        File xmlBaseFile = new File(canonical, "xmlbase-c14n11spec-input.xml");
+        xmlBaseInput = builder.build(xmlBaseFile);
         namespaces.addNamespace("ietf", "http://www.ietf.org");
     }
+    
     
     // 3.2.1.1 Test case c14n11/xmllang-1
     public void testXMLLang_1() throws ParsingException, IOException {
@@ -224,6 +222,20 @@ public class Canonicalizer11Test extends TestCase {
         
         String actual = new String(out.toByteArray(), "UTF-8");        
         assertEquals("<bar></bar>", actual);
+    }
+    
+    
+    // 3.2.4.1 Test case c14n11/xmlbase-1
+    public void testXMLBase_1() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlbase-c14n11spec-102.output");
+        
+        String documentSubsetExpression 
+            = "(//. | //@* | //namespace::*)[self::ietf:e1 or (parent::ietf:e1 and not(self::text() or self::e2)) or count(id(\"E3\")|ancestor-or-self::node()) = count(ancestor-or-self::node())]";
+        canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
     }
 
     private byte[] readFile(File expected) throws IOException {
