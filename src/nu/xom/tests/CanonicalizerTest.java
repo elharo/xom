@@ -1,4 +1,4 @@
-/* Copyright 2002-2005, 2008 Elliotte Rusty Harold
+/* Copyright 2002-2005, 2008, 2011 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -67,6 +67,8 @@ public class CanonicalizerTest extends XOMTestCase {
     private File canonical;
     private File input;
     private File output;
+    private ByteArrayOutputStream out = new ByteArrayOutputStream();
+    private Canonicalizer canonicalizer = new Canonicalizer(out);
     
     public CanonicalizerTest(String name) {
         super(name);
@@ -91,8 +93,6 @@ public class CanonicalizerTest extends XOMTestCase {
         pdu.addAttribute(new Attribute("a2", "v2"));
         
         String expected = " a1=\"v1\" a2=\"v2\"";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("//@*"));  
@@ -114,8 +114,6 @@ public class CanonicalizerTest extends XOMTestCase {
         pdu.addAttribute(a2);
         
         String expected = " a1=\"v1\" a2=\"v2\"";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
         Nodes subset = doc.query("//@*");
@@ -136,8 +134,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Element pdu = new Element("doc", "http://www.example.com");
         
         String expected = " xmlns=\"http://www.example.com\"";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("//namespace::node()"));  
@@ -156,8 +152,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Element pdu = new Element("pre:doc", "http://www.example.com");
         
         String expected = " xmlns:pre=\"http://www.example.com\"";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("//namespace::node()"));  
@@ -173,7 +167,6 @@ public class CanonicalizerTest extends XOMTestCase {
     public void testCanonicalizeWithNullAlgorithm() 
       throws IOException {
         
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             new Canonicalizer(out, null);
             fail("Allowed null algorithm");
@@ -196,8 +189,6 @@ public class CanonicalizerTest extends XOMTestCase {
         doc.appendChild(new Comment("comment 4"));
         
         String expected = "<!--comment 1-->\n<!--comment 2-->\n\n<!--comment 3-->\n<!--comment 4-->";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         
         canonicalizer.write(doc.query("//comment()"));  
         
@@ -213,9 +204,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String input = "<ns1:root xmlns:ns1='http://www.example.org/'><elt1></elt1></ns1:root>";
         Document doc = builder.build(input, null);
-        
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         
         canonicalizer.write(doc);  
         
@@ -238,8 +226,6 @@ public class CanonicalizerTest extends XOMTestCase {
         doc.appendChild(new ProcessingInstruction("target", "value"));
         
         String expected = "<?target value?>\n<!--comment 2-->\n<doc></doc>\n<!--comment 3-->\n<?target value?>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         
         canonicalizer.write(doc);  
         
@@ -261,8 +247,6 @@ public class CanonicalizerTest extends XOMTestCase {
         pdu.appendChild(child);
         
         String expected = " a2=\"v1\" a1=\"v2\"";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("//@*"));  
@@ -281,8 +265,6 @@ public class CanonicalizerTest extends XOMTestCase {
         pdu.addAttribute(new Attribute("a2", "v1&<>\"\t\r\n"));
         
         String expected = " a2=\"v1&amp;&lt;>&quot;&#x9;&#xD;&#xA;\"";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         
         Document doc = new Document(pdu);
         canonicalizer.write(doc.query("//@*"));  
@@ -300,7 +282,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Element pdu = new Element("doc");
    
         String expected = "<doc></doc>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out, 
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -322,7 +303,6 @@ public class CanonicalizerTest extends XOMTestCase {
         pdu.addAttribute(new Attribute("a2", "v2"));
         
         String expected = "<doc a1=\"v1\" a2=\"v2\"></doc>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -342,7 +322,6 @@ public class CanonicalizerTest extends XOMTestCase {
       pdu.addNamespaceDeclaration("pre", "http://www.example.org/");
  
       String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
-      ByteArrayOutputStream out = new ByteArrayOutputStream();
       Canonicalizer canonicalizer = new Canonicalizer(out,
         Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
       
@@ -366,7 +345,6 @@ public class CanonicalizerTest extends XOMTestCase {
         grandchild.addAttribute(new Attribute("Attribute", "something"));
         
         String expected = "<n2:C xmlns:n2=\"http://b.example.com\" Attribute=\"something\"></n2:C>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -390,7 +368,6 @@ public class CanonicalizerTest extends XOMTestCase {
         grandchild.addAttribute(new Attribute("Attribute", "something"));
         
         String expected = "<n2:C xmlns:n2=\"http://b.example.com\" Attribute=\"something\"></n2:C>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -409,7 +386,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Element pdu = new Element("tuck", "http://www.example.org/");
         
         String expected = " xmlns=\"http://www.example.org/\"";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -437,7 +413,6 @@ public class CanonicalizerTest extends XOMTestCase {
         middle.appendChild(child);
         
         String expected = "<tuck xml:lang=\"fr\"><child xml:lang=\"en\"></child></tuck>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -461,7 +436,6 @@ public class CanonicalizerTest extends XOMTestCase {
         pdu.appendChild(child);
         
         String expected = "<tuck xmlns:pre=\"http://www.example.org/\" pre:foo=\"value\"><pre:test></pre:test></tuck>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -485,7 +459,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<tuck xmlns:pre=\"http://www.example.com/\" "
           + "pre:foo=\"value\"><pre:test xmlns:pre=\"http://www.example.org/\"></pre:test></tuck>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -506,7 +479,6 @@ public class CanonicalizerTest extends XOMTestCase {
         pdu.addAttribute(new Attribute("pre:foo", "http://www.example.org/", "test"));
    
         String expected = "<n0:tuck xmlns:n0=\"http://a.example\"></n0:tuck>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out, 
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -707,7 +679,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<child312 xml:id=\"p1\"></child312>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query("/*/child312"));
@@ -735,7 +706,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<child312 xml:id=\"p1\"></child312>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             Nodes result = doc.query("/*/*/child312");
@@ -764,7 +734,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<superroot xml:id=\"p0\"><child312 xml:id=\"p1\"></child312></superroot>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query("/* | //child312 | /*/@* | //child312/@*"));
@@ -791,7 +760,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<superroot xml:id=\"p0\"><child312></child312></superroot>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query("/* | //child312 | /*/@* | //child312/@*"));
@@ -820,7 +788,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<child312 xml:id=\"p2\"></child312>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query("/*/child312 | /*/*/@*"));
@@ -849,7 +816,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<child312></child312>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query("/*/child312 "));
@@ -874,7 +840,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<child312></child312>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, 
               Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
@@ -899,7 +864,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<child312 xmlns=\"http://www.example.org/\"></child312>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out,
               Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
@@ -926,7 +890,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<pre:child312 xmlns:pre=\"http://www.example.org/\"></pre:child312>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             XPathContext context = new XPathContext("pre", "http://www.example.org/");
             Canonicalizer serializer = new Canonicalizer(out,
@@ -952,7 +915,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<root xmlns=\"http://www.ietf.org\"><child xmlns=\"\"></child></root>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc);
@@ -995,7 +957,6 @@ public class CanonicalizerTest extends XOMTestCase {
         String expected = "<e1 xmlns=\"http://www.ietf.org\" "
           + "xmlns:w3c=\"http://www.w3.org\"><e3 xmlns=\"\" id=\"E3\" xml:space=\"preserve\"></e3></e1>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query(xpath, context));
@@ -1028,7 +989,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = builder.build(input, null);
         XPathContext context = new XPathContext("ietf", "http://www.ietf.org");
         String xpath = "//aaa";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query(xpath, context));
@@ -1069,7 +1029,6 @@ public class CanonicalizerTest extends XOMTestCase {
         XPathContext context = new XPathContext("ietf", "http://www.ietf.org");
         String xpath = "//* | //text() | //@* | //namespace::*";
         
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query(xpath, context));
@@ -1112,7 +1071,6 @@ public class CanonicalizerTest extends XOMTestCase {
         String expected = "<e1 xmlns=\"http://www.ietf.org\" "
           + "xmlns:w3c=\"http://www.w3.org\"><e3 xmlns=\"\" id=\"E3\" xml:space=\"preserve\"></e3></e1>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, Canonicalizer.CANONICAL_XML_WITH_COMMENTS);
             serializer.write(doc.query(xpath, context));
@@ -1139,7 +1097,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = input;
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query(xpath));
@@ -1176,7 +1133,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<doc xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\"></doc>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query(xpath, context));
@@ -1200,7 +1156,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<doc></doc>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             Nodes subset = doc.query("//.");
@@ -1221,7 +1176,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         Document doc = new Document(new Element("root"));
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             Nodes subset = doc.query("/");
@@ -1258,7 +1212,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<e1 xmlns=\"http://www.ietf.org\" xmlns:w3c=\"http://www.w3.org\"></e1>";
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc.query(xpath, context));
@@ -1279,9 +1232,7 @@ public class CanonicalizerTest extends XOMTestCase {
         try {
             String data = "<test xmlns=\"relative\">data</test>";
             Document doc = builder.build(data, "http://www.ex.org/");
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Canonicalizer serializer
-              = new Canonicalizer(out, false);
+            Canonicalizer serializer = new Canonicalizer(out, false);
             serializer.write(doc);
             fail("Canonicalized document with relative namespace URI");
         }
@@ -1400,7 +1351,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = builder.build(in);
         
         // make a Unicode normalized version of the same document
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out);
         serializer.setUnicodeNormalizationFormC(true);
         serializer.write(doc);
@@ -1437,7 +1387,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Document doc = builder.build(in);
         
         // make a Unicode normalized version of the same document
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Serializer serializer = new Serializer(out);
         serializer.setUnicodeNormalizationFormC(true);
         serializer.write(doc);
@@ -1456,8 +1405,6 @@ public class CanonicalizerTest extends XOMTestCase {
     public void testNullDocument() 
       throws IOException {
         
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         try {
             canonicalizer.write((Document) null);  
             fail("Wrote null document"); 
@@ -1479,8 +1426,6 @@ public class CanonicalizerTest extends XOMTestCase {
         Element root = new Element("root");
         root.addAttribute(attribute);
         Document doc = new Document(root);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Canonicalizer canonicalizer = new Canonicalizer(out);
         canonicalizer.write(doc);
         out.close();
         String result = new String(out.toByteArray(), "UTF8");
@@ -1582,7 +1527,6 @@ public class CanonicalizerTest extends XOMTestCase {
         pdu.appendChild(elem1);
         
         String expected = "<n1:elem1 xmlns:n1=\"http://b.example\">content</n1:elem1>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -1596,13 +1540,12 @@ public class CanonicalizerTest extends XOMTestCase {
         
     }
     
-    public static void testAustB() throws IOException {
+    public void testAustB() throws IOException {
         
         Element e1 = new Element("a:a", "urn:a");
         Element e2 = new Element("b");
         e1.appendChild(e2);
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer c = new Canonicalizer(out,
         Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
         c.write(e1);
@@ -1612,13 +1555,12 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
-    public static void testAustB2() throws IOException {
+    public void testAustB2() throws IOException {
         
         Element e1 = new Element("a:a", "urn:a");
         Element e2 = new Element("b");
         e1.appendChild(e2);
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer c = new Canonicalizer(out);
         c.write(e1);
         String s = out.toString("UTF8");
@@ -1627,12 +1569,11 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
-    public static void testAust() throws Exception {
+    public void testAust() throws Exception {
         
         Element e1 = new Element("a:a", "urn:a");
         Element e2 = new Element("a:b", "urn:a");
         e1.appendChild(e2);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer c = new Canonicalizer(out,
         Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
         c.write(e2);
@@ -1642,12 +1583,11 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
-    public static void testAust4() throws Exception {
+    public void testAust4() throws Exception {
         
         Element e1 = new Element("a:a", "urn:a");
         Element e2 = new Element("a:b", "urn:a");
         e1.appendChild(e2);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         XPathContext context = new XPathContext("a", "urn:a");
@@ -1660,12 +1600,11 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
-    public static void testAust5() throws Exception {
+    public void testAust5() throws Exception {
         
         Element e1 = new Element("a:a", "urn:a");
         Element e2 = new Element("a:b", "urn:a");
         e1.appendChild(e2);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         new Document(e1);
@@ -1680,27 +1619,25 @@ public class CanonicalizerTest extends XOMTestCase {
     }
     
     
-    public static void testAust3() throws Exception {
+    public void testAust3() throws Exception {
         
         Element e2 = new Element("a:b", "urn:a");
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-            new Canonicalizer(os,
+            new Canonicalizer(out,
         Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION).write(e2);
-        String s = os.toString("UTF8");
+        String s = out.toString("UTF8");
         assertEquals("<a:b xmlns:a=\"urn:a\"></a:b>", s);
         
     }
     
     
-    public static void testAust2() throws Exception {
+    public void testAust2() throws Exception {
         
         Element e1 = new Element("a:a", "urn:a");
         Element e2 = new Element("a:b", "urn:a");
         e1.appendChild(e2);
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-            new Canonicalizer(os,
+            new Canonicalizer(out,
         Canonicalizer.CANONICAL_XML).write(e2);
-        String s = os.toString("UTF8");
+        String s = out.toString("UTF8");
         assertEquals("<a:b xmlns:a=\"urn:a\"></a:b>", s);
         
     }
@@ -1716,7 +1653,6 @@ public class CanonicalizerTest extends XOMTestCase {
         
         String expected = "<n1:elem1 xmlns:n1=\"http://b.example\" "
           + "xmlns:pre=\"http://www.example.org/\" pre:foo=\"value\">content</n1:elem1>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -1749,7 +1685,6 @@ and expect to see
         root.appendChild(a);
         
         String expected = "<a xml:lang=\"en\"><b>test</b></a>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out, Canonicalizer.CANONICAL_XML);
         
         Document doc = new Document(root);
@@ -1772,7 +1707,6 @@ and expect to see
         
         String expected = "<n1:elem1 xmlns:n0=\"http://a.example\""
           + " xmlns:n1=\"http://b.example\">content</n1:elem1>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -1801,7 +1735,6 @@ and expect to see
         
         String expected = "<n1:elem1"
           + " xmlns:n1=\"http://b.example\">content</n1:elem1>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -1831,7 +1764,6 @@ and expect to see
         
         String expected = "<n1:elem2 xmlns:n1=\"http://example.net\" xml:lang=\"en\">" +
                 "<n3:stuff xmlns:n3=\"ftp://example.org\"></n3:stuff></n1:elem2>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -1858,7 +1790,6 @@ and expect to see
         
         String expected = "<n1:elem2 xmlns:n1=\"http://example.net\" xml:lang=\"en\">"
             + "<n3:stuff xmlns:n3=\"ftp://example.org\"></n3:stuff></n1:elem2>";
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Canonicalizer canonicalizer = new Canonicalizer(out,
           Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS);
         
@@ -1960,7 +1891,6 @@ and expect to see
     public void testCanonicalizeAttribute() throws IOException {
      
         Attribute att = new Attribute("pre:foo", "http://www.example.org", "value");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(att);
@@ -1980,7 +1910,6 @@ and expect to see
         Element element = new Element("pre:foo", "http://www.example.org");
         Nodes namespaces = element.query("namespace::pre");
         Namespace ns = (Namespace) namespaces.get(0);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(ns);
@@ -2002,7 +1931,6 @@ and expect to see
         Nodes namespaces = element.query("namespace::*");
         Namespace ns = (Namespace) namespaces.get(0);
         if (ns.getPrefix().equals("xml")) ns = (Namespace) namespaces.get(1);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(ns);
@@ -2022,7 +1950,6 @@ and expect to see
         Element element = new Element("foo");
         Nodes namespaces = element.query("namespace::*");
         Namespace ns = (Namespace) namespaces.get(0);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(ns);
@@ -2042,7 +1969,6 @@ and expect to see
      
         Element element = new Element("pre:foo", "http://www.example.org");
         element.appendChild("  value \n value");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(element);
@@ -2060,11 +1986,9 @@ and expect to see
 
     
     public void testDontPutElementInDocument() throws IOException {
-     
 
         Element element = new Element("pre:foo", "http://www.example.org");
         assertNull(element.getDocument());
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(element);
@@ -2084,7 +2008,6 @@ and expect to see
         Element element = new Element("pre:foo", "http://www.example.org");
         root.appendChild(element);
         element.appendChild("  value \n value");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(element);
@@ -2109,7 +2032,6 @@ and expect to see
         Element b = new Element("b");
         a.appendChild(b);
         
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(b);
@@ -2133,7 +2055,6 @@ and expect to see
         Element element = new Element("pre:foo", "http://www.example.org");
         root.appendChild(element);
         element.appendChild("  value \n value");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out, Canonicalizer.EXCLUSIVE_XML_CANONICALIZATION);
             serializer.write(element);
@@ -2153,7 +2074,6 @@ and expect to see
     public void testCanonicalizeDocumentTypeDeclaration() throws IOException {
      
         DocType doctype = new DocType("root", "http://www.example.org");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(doctype);
@@ -2170,7 +2090,6 @@ and expect to see
     public void testCanonicalizeProcessingInstruction() throws IOException {
      
         ProcessingInstruction pi = new ProcessingInstruction("target", "value \n value");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(pi);
@@ -2188,7 +2107,6 @@ and expect to see
     public void testCanonicalizeText() throws IOException {
      
         Text c = new Text("  pre:foo \n  ");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(c);
@@ -2207,7 +2125,6 @@ and expect to see
     public void testCanonicalizeComment() throws IOException {
      
         Comment c = new Comment("pre:foo");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             Canonicalizer serializer = new Canonicalizer(out);
             serializer.write(c);
@@ -2224,7 +2141,6 @@ and expect to see
     
     public void testUnsupportedAlgorithm() throws IOException {
      
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             new Canonicalizer(out, "http://www.example.org/canonical");
             fail("Allowed unrecognized algorithm");
@@ -2241,7 +2157,6 @@ and expect to see
     
     public void testCanonicalizeDetachedNodes() throws IOException {
      
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Element e = new Element("test");
         Nodes nodes = new Nodes(e);
         Canonicalizer serializer = new Canonicalizer(out);
@@ -2261,7 +2176,6 @@ and expect to see
     
     public void testCanonicalizeNodesFromTwoDocuments() throws IOException {
      
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Element e1 = new Element("test");
         new Document(e1);
         Element e2 = new Element("test");
