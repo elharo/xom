@@ -210,7 +210,7 @@ public class Canonicalizer11Test extends TestCase {
         assertEquals(expectedBytes, actualBytes);
     }
     
-    // 
+ 
     public void testNewXMLAttributesAreNotInherited() throws ParsingException, IOException {
         String input = "<foo xml:href='http://www.w3.org/TR/2008/PR-xml-c14n11-20080129/#ProcessingModel' " +
 	    "xml:text='Attributes in the XML namespace other than xml:base, xml:id, xml:lang, and xml:space MUST be processed as ordinary attributes.'>" +
@@ -225,13 +225,44 @@ public class Canonicalizer11Test extends TestCase {
     }
     
     
-    // 3.2.4.1 Test case c14n11/xmlbase-1
+    // 3.2.4.2.1 Test case c14n11/xmlbase-c14n11spec-102
     public void testXMLBase_1() throws ParsingException, IOException {
         File expected = new File(canonical, "xmlbase-c14n11spec-102.output");
         
         String documentSubsetExpression 
             = "(//. | //@* | //namespace::*)[self::ietf:e1 or (parent::ietf:e1 and not(self::text() or self::e2)) or count(id(\"E3\")|ancestor-or-self::node()) = count(ancestor-or-self::node())]";
         canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.4.2.2 Test case c14n11/xmlbase-c14n11spec2-102
+    public void testXMLBase_2() throws ParsingException, IOException {
+        File input = new File(canonical, "xmlbase-c14n11spec2-input.xml");
+        Document doc = builder.build(input);
+        File expected = new File(canonical, "xmlbase-c14n11spec2-102.output");
+        
+        String documentSubsetExpression 
+            = "(//. | //@* | //namespace::*)[self::ietf:e1 or (parent::ietf:e1 and not(self::text() or self::e2)) or count(id(\"E3\")|ancestor-or-self::node()) = count(ancestor-or-self::node())]";
+        canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.4.2.3 Test case c14n11/xmlbase-c14n11spec3-103
+    public void testXMLBase_3() throws ParsingException, IOException {
+        File input = new File(canonical, "xmlbase-c14n11spec3-input.xml");
+        Document doc = builder.build(input);
+        File expected = new File(canonical, "xmlbase-c14n11spec3-103.output");
+        
+        String documentSubsetExpression = " (//. | //@* | //namespace::*) [self::a or ancestor-or-self::d]";
+        canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
         
         byte[] actualBytes = out.toByteArray();        
         byte[] expectedBytes = readFile(expected);
