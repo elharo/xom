@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2009 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009, 2011 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -58,17 +58,18 @@ import nu.xom.XPathContext;
  *   href="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical
  *   XML Version 1.0</a> or <a target="_top"
  *   href="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/">Exclusive
- *   XML Canonicalization Version 1.0</a>. 
+ *   XML Canonicalization Version 1.0</a>. Canonical XML 1.1 support is in progress. 
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b3
+ * @version 1.2.7
  *
  */
 public class Canonicalizer {
 
     private boolean withComments;
     private boolean exclusive = false;
+    private boolean v11 = false;
     private CanonicalXMLSerializer serializer;
     private List inclusiveNamespacePrefixes = new ArrayList();
     
@@ -83,6 +84,10 @@ public class Canonicalizer {
       "http://www.w3.org/2001/10/xml-exc-c14n#";
     public final static String EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS = 
       "http://www.w3.org/2001/10/xml-exc-c14n#WithComments";
+    public final static String CANONICAL_XML_11 =  
+      "http://www.w3.org/2006/12/xml-c14n11";
+    public final static String CANONICAL_XML_11_WITH_COMMENTS =  
+      "http://www.w3.org/2006/12/xml-c14n11#WithComments"; 
     
     
     private static class AttributeComparator implements Comparator {
@@ -219,6 +224,16 @@ public class Canonicalizer {
         else if (algorithm.equals(EXCLUSIVE_XML_CANONICALIZATION_WITH_COMMENTS)) {
             this.withComments = true;
             this.exclusive = true;            
+        }
+        else if (algorithm.equals(CANONICAL_XML_11)) {
+            this.withComments = false;
+            this.exclusive = false;
+            this.v11 = true;
+        }
+        else if (algorithm.equals(CANONICAL_XML_11_WITH_COMMENTS)) {
+            this.withComments = true;
+            this.exclusive = false;
+            this.v11 = true;
         }
         else {
             throw new CanonicalizationException(
@@ -606,41 +621,42 @@ public class Canonicalizer {
         private Attribute[] sortAttributes(Element element) {
     
             Map nearest = new TreeMap();
-            // add in any inherited xml: attributes
-            if (!exclusive && nodes != null && nodes.contains(element) 
-              && ! nodes.contains(element.getParent())) {
-                // grab all xml: attributes
-                Nodes attributes = element.query("ancestor::*/@xml:*", xmlcontext);
-                if (attributes.size() != 0) {
-                    // It's important to count backwards here because
-                    // XPath returns all nodes in document order, which 
-                    // is top-down. To get the nearest we need to go 
-                    // bottom up instead.
-                    for (int i = attributes.size()-1; i >= 0; i--) {
-                        Attribute a = (Attribute) attributes.get(i);
-                        String name = a.getLocalName();
-                        if (element.getAttribute(name, Namespace.XML_NAMESPACE) != null) {
-                            // this element already has that attribute
-                            continue;
-                        }
-                        if (! nearest.containsKey(name)) {
-                            Element parent = (Element) a.getParent();
-                            if (! nodes.contains(parent)) {
-                                nearest.put(name, a);
+            if (!v11) {// add in any inherited xml: attributes
+                if (!exclusive && nodes != null && nodes.contains(element) 
+                  && !nodes.contains(element.getParent())) {
+                    // grab all xml: attributes
+                    Nodes attributes = element.query("ancestor::*/@xml:*", xmlcontext);
+                    if (attributes.size() != 0) {
+                        // It's important to count backwards here because
+                        // XPath returns all nodes in document order, which 
+                        // is top-down. To get the nearest we need to go 
+                        // bottom up instead.
+                        for (int i = attributes.size()-1; i >= 0; i--) {
+                            Attribute a = (Attribute) attributes.get(i);
+                            String name = a.getLocalName();
+                            if (element.getAttribute(name, Namespace.XML_NAMESPACE) != null) {
+                                // this element already has that attribute
+                                continue;
                             }
-                            else {
-                                nearest.put(name, null);
+                            if (! nearest.containsKey(name)) {
+                                Element parent = (Element) a.getParent();
+                                if (! nodes.contains(parent)) {
+                                    nearest.put(name, a);
+                                }
+                                else {
+                                    nearest.put(name, null);
+                                }
                             }
                         }
                     }
+                    
+                    // remove null values
+                    Iterator iterator = nearest.values().iterator();
+                    while (iterator.hasNext()) {
+                        if (iterator.next() == null) iterator.remove();
+                    }
+                    
                 }
-                
-                // remove null values
-                Iterator iterator = nearest.values().iterator();
-                while (iterator.hasNext()) {
-                    if (iterator.next() == null) iterator.remove();
-                }
-                
             }
             
             int localCount = element.getAttributeCount();
