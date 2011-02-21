@@ -621,42 +621,41 @@ public class Canonicalizer {
         private Attribute[] sortAttributes(Element element) {
     
             Map nearest = new TreeMap();
-            if (!v11) {// add in any inherited xml: attributes
-                if (!exclusive && nodes != null && nodes.contains(element) 
-                  && !nodes.contains(element.getParent())) {
-                    // grab all xml: attributes
-                    Nodes attributes = element.query("ancestor::*/@xml:*", xmlcontext);
-                    if (attributes.size() != 0) {
-                        // It's important to count backwards here because
-                        // XPath returns all nodes in document order, which 
-                        // is top-down. To get the nearest we need to go 
-                        // bottom up instead.
-                        for (int i = attributes.size()-1; i >= 0; i--) {
-                            Attribute a = (Attribute) attributes.get(i);
-                            String name = a.getLocalName();
-                            if (element.getAttribute(name, Namespace.XML_NAMESPACE) != null) {
-                                // this element already has that attribute
-                                continue;
+            // add in any inherited xml: attributes
+            if (!exclusive && nodes != null && nodes.contains(element) 
+              && !nodes.contains(element.getParent())) {
+                // grab all xml: attributes
+                Nodes attributes = element.query("ancestor::*/@xml:*", xmlcontext);
+                if (attributes.size() != 0) {
+                    // It's important to count backwards here because
+                    // XPath returns all nodes in document order, which 
+                    // is top-down. To get the nearest we need to go 
+                    // bottom up instead.
+                    for (int i = attributes.size()-1; i >= 0; i--) {
+                        Attribute a = (Attribute) attributes.get(i);
+                        String name = a.getLocalName();
+                        if (element.getAttribute(name, Namespace.XML_NAMESPACE) != null) {
+                            // this element already has that attribute
+                            continue;
+                        }
+                        if (! nearest.containsKey(name)) {
+                            Element parent = (Element) a.getParent();
+                            if (! nodes.contains(parent)) {
+                                nearest.put(name, a);
                             }
-                            if (! nearest.containsKey(name)) {
-                                Element parent = (Element) a.getParent();
-                                if (! nodes.contains(parent)) {
-                                    nearest.put(name, a);
-                                }
-                                else {
-                                    nearest.put(name, null);
-                                }
+                            else {
+                                nearest.put(name, null);
                             }
                         }
                     }
-                    
-                    // remove null values
-                    Iterator iterator = nearest.values().iterator();
-                    while (iterator.hasNext()) {
-                        if (iterator.next() == null) iterator.remove();
-                    }
-                    
                 }
+                
+                // remove null values
+                Iterator iterator = nearest.values().iterator();
+                while (iterator.hasNext()) {
+                    if (iterator.next() == null) iterator.remove();
+                }
+                
             }
             
             int localCount = element.getAttributeCount();
