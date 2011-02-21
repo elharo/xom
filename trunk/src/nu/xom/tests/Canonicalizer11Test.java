@@ -34,6 +34,7 @@ import junit.framework.TestCase;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 import nu.xom.XPathContext;
 import nu.xom.canonical.Canonicalizer;
 
@@ -52,7 +53,9 @@ public class Canonicalizer11Test extends TestCase {
     private File canonical;
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
     private Canonicalizer canonicalizer = new Canonicalizer(out, Canonicalizer.CANONICAL_XML_11);
-   
+    private Document xmlSpaceInput;
+    private XPathContext namespaces = new XPathContext();
+
     public Canonicalizer11Test(String name) {
         super(name);
     }
@@ -61,9 +64,12 @@ public class Canonicalizer11Test extends TestCase {
     private Builder builder = new Builder(); 
     
     
-    protected void setUp() { 
+    protected void setUp() throws ParsingException, IOException { 
         File data = new File("data");
         canonical = new File(data, "c14n11");
+        File xmlSpaceFile = new File(canonical, "xmlspace-input.xml");
+        xmlSpaceInput = builder.build(xmlSpaceFile);
+        namespaces.addNamespace("ietf", "http://www.ietf.org");
     }
     
     // 3.2.1.1 Test case c14n11/xmllang-1
@@ -72,8 +78,6 @@ public class Canonicalizer11Test extends TestCase {
         File expected = new File(canonical, "xmllang-1.output");
         
         Document doc = builder.build(input);
-        XPathContext namespaces = new XPathContext();
-        namespaces.addNamespace("ietf", "http://www.ietf.org");
         String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::ietf:e1]";
         canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
         
@@ -89,8 +93,6 @@ public class Canonicalizer11Test extends TestCase {
         File expected = new File(canonical, "xmllang-2.output");
         
         Document doc = builder.build(input);
-        XPathContext namespaces = new XPathContext();
-        namespaces.addNamespace("ietf", "http://www.ietf.org");
         String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::ietf:e2]";
         canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
         
@@ -106,8 +108,6 @@ public class Canonicalizer11Test extends TestCase {
         File expected = new File(canonical, "xmllang-3.output");
         
         Document doc = builder.build(input);
-        XPathContext namespaces = new XPathContext();
-        namespaces.addNamespace("ietf", "http://www.ietf.org");
         String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::ietf:e11]";
         canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
         
@@ -123,10 +123,60 @@ public class Canonicalizer11Test extends TestCase {
         File expected = new File(canonical, "xmllang-4.output");
         
         Document doc = builder.build(input);
-        XPathContext namespaces = new XPathContext();
-        namespaces.addNamespace("ietf", "http://www.ietf.org");
         String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::ietf:e11 or ancestor-or-self::ietf:e12]";
         canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.2.1 Test case c14n11/xmlspace-1
+    public void testXMLSpace_1() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlspace-1.output");
+        
+        String documentSubsetExpression = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e1]";
+        canonicalizer.write(xmlSpaceInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+
+
+    // 3.2.2.2 Test case c14n11/xmlspace-2
+    public void testXMLSpace_2() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlspace-2.output");
+        
+        String documentSubsetExpression = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e2]";
+        canonicalizer.write(xmlSpaceInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+
+
+    // 3.2.2.3 Test case c14n11/xmlspace-3
+    public void testXMLSpace_3() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlspace-3.output");
+        
+        String documentSubsetExpression = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e11]";
+        canonicalizer.write(xmlSpaceInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+
+
+    // 3.2.2.4 Test case c14n11/xmlspace-4
+    public void testXMLSpace_4() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlspace-4.output");
+        
+        String documentSubsetExpression = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e11 or ancestor-or-self::ietf:e12]";
+        canonicalizer.write(xmlSpaceInput.query(documentSubsetExpression, namespaces));  
         
         byte[] actualBytes = out.toByteArray();        
         byte[] expectedBytes = readFile(expected);
