@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2011 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@mibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -50,7 +50,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.3
+ * @version 1.2.7
  *
  */
 public class ElementTest extends XOMTestCase {
@@ -285,7 +285,7 @@ public class ElementTest extends XOMTestCase {
         Element root = doc.getRootElement();
         String  form = root.toXML();
         Document doc2 
-          = builder.build(form, f.toURL().toExternalForm());
+          = builder.build(form, f.toURI().toString());
         Element root2 = doc2.getRootElement();
         assertEquals(root, root2);
          
