@@ -487,8 +487,8 @@ public class Canonicalizer {
             Attribute[] sorted = sortAttributes(element);        
             for (int i = 0; i < sorted.length; i++) {
                 if (nodes == null || nodes.contains(sorted[i]) 
-                   || (sorted[i].getNamespaceURI().equals(Namespace.XML_NAMESPACE) 
-                       && sorted[i].getParent() != element)) {
+                   || (sorted[i].getNamespaceURI().equals(Namespace.XML_NAMESPACE) && sorted[i].getParent() != element)
+                   ) {
                     write(sorted[i]);
                 }
             }       
@@ -657,10 +657,29 @@ public class Canonicalizer {
                 // remove null values
                 Iterator iterator = nearest.values().iterator();
                 while (iterator.hasNext()) {
-                    if (iterator.next() == null) iterator.remove();
+                    Attribute a = (Attribute) iterator.next();
+                    if (a == null) iterator.remove();
                 }
                 
+                if (v11) { // fixup xml:base attributes
+                    List bases = getOmittedBases(element);
+                    Attribute baseAttribute = element.getAttribute("base", Namespace.XML_NAMESPACE);
+                    String baseValue = "";
+                    if (baseAttribute != null) {
+                        baseValue = baseAttribute.getValue();
+                        element.removeAttribute(baseAttribute);
+                    }
+                    if (!bases.isEmpty()) {
+                      for (int i = 0; i < bases.size(); i++) {
+                          baseValue = joinURIReferences((String) bases.get(i), baseValue);
+                      }
+                    }
+                    if (baseValue != null && baseValue.length() > 0) {
+                        nearest.put("base", new Attribute("xml:base", Namespace.XML_NAMESPACE, baseValue));
+                    }
+                }
             }
+
             
             int localCount = element.getAttributeCount();
             Attribute[] result 
@@ -679,8 +698,23 @@ public class Canonicalizer {
             return result;        
             
         }
-    
-        
+
+
+        private List getOmittedBases(Element element) {
+            ArrayList bases = new ArrayList();
+            // TODO(elharo): rework this to not need this next variable
+            ParentNode parent = element.getParent();
+            while (parent != null && parent instanceof Element && !nodes.contains(parent)) {
+                Element parentElement = (Element) parent;
+                String base = parentElement.getAttributeValue("base", Namespace.XML_NAMESPACE);
+                if (base != null) bases.add(base);
+                parent = parentElement.getParent();
+            }
+            
+            return bases;
+        }
+
+
         private String prepareAttributeValue(Attribute attribute) {
     
             String value = attribute.getValue();
@@ -1065,6 +1099,15 @@ public class Canonicalizer {
             return new Nodes(in.get(0));
         }
         
+    }
+    
+    private static String joinURIReferences(String parent, String child) {
+        if (child == null) {
+            return parent;
+        } 
+        else { 
+          return parent + child;
+        }
     }
 
 
