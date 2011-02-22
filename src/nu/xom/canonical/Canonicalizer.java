@@ -1108,9 +1108,8 @@ public class Canonicalizer {
         if (child == null) {
             return parent;
         } 
-        else { 
-          return parent + child;
-        }
+        //return parent + child;
+        return URIJoiner.absolutize(parent, child);
     }
 
 
