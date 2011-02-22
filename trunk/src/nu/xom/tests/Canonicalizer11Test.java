@@ -63,7 +63,7 @@ public class Canonicalizer11Test extends TestCase {
         canonical = new File(data, "c14n11");
         File xmlSpaceFile = new File(canonical, "xmlspace-input.xml");
         xmlSpaceInput = builder.build(xmlSpaceFile);
-        File xmlBaseFile = new File(canonical, "xmlbase-c14n11spec-input.xml");
+        File xmlBaseFile = new File(canonical, "xmlbase-prop-input.xml");
         xmlBaseInput = builder.build(xmlBaseFile);
         namespaces.addNamespace("ietf", "http://www.ietf.org");
     }
@@ -225,13 +225,43 @@ public class Canonicalizer11Test extends TestCase {
     }
     
     
+    // 3.2.4.1.1 Test case c14n11/xmlbase-prop-1
+    public void testXMLBase_Prop_1() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlbase-prop-1.output");
+        
+        String documentSubsetExpression 
+            = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:c14n11XmlBaseDoc1 and not(ancestor-or-self::ietf:e2)]";
+        canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.4.1.2 Test case c14n11/xmlbase-prop-2
+    public void testXMLBase_Prop_2() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlbase-prop-2.output");
+        
+        String documentSubsetExpression 
+            = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e1]";
+        canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }  
+    
+
     // 3.2.4.2.1 Test case c14n11/xmlbase-c14n11spec-102
     public void testXMLBase_1() throws ParsingException, IOException {
         File expected = new File(canonical, "xmlbase-c14n11spec-102.output");
+        File xmlBaseFile = new File(canonical, "xmlbase-c14n11spec-input.xml");
+        Document doc = builder.build(xmlBaseFile);
         
         String documentSubsetExpression 
             = "(//. | //@* | //namespace::*)[self::ietf:e1 or (parent::ietf:e1 and not(self::text() or self::e2)) or count(id(\"E3\")|ancestor-or-self::node()) = count(ancestor-or-self::node())]";
-        canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
         
         byte[] actualBytes = out.toByteArray();        
         byte[] expectedBytes = readFile(expected);
