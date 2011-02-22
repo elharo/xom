@@ -252,6 +252,75 @@ public class Canonicalizer11Test extends TestCase {
         assertEquals(expectedBytes, actualBytes);
     }  
     
+    
+    // 3.2.4.1.3 Test case c14n11/xmlbase-prop-3
+    public void testXMLBase_Prop_3() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlbase-prop-3.output");
+        
+        String documentSubsetExpression 
+            = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e11]";
+        canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.4.1.4 Test case c14n11/xmlbase-prop-4
+    public void testXMLBase_Prop_4() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlbase-prop-4.output");
+        
+        String documentSubsetExpression 
+            = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e111]";
+        canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.4.1.5 Test case c14n11/xmlbase-prop-5
+    public void testXMLBase_Prop_5() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlbase-prop-5.output");
+        
+        String documentSubsetExpression 
+            = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e21]";
+        canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.4.1.6 Test case c14n11/xmlbase-prop-6
+    public void testXMLBase_Prop_6() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlbase-prop-6.output");
+        
+        String documentSubsetExpression 
+            = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:e3]";
+        canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
+    
+    
+    // 3.2.4.1.7 Test case c14n11/xmlbase-prop-7
+    public void testXMLBase_Prop_7() throws ParsingException, IOException {
+        File expected = new File(canonical, "xmlbase-prop-7.output");
+        
+        String documentSubsetExpression 
+            = "(//. | //@* | //namespace::*) [ancestor-or-self::ietf:c14n11XmlBaseDoc1 and not(ancestor-or-self::ietf:e1 or ancestor-or-self::ietf:e2)]";
+        canonicalizer.write(xmlBaseInput.query(documentSubsetExpression, namespaces));  
+        
+        byte[] actualBytes = out.toByteArray();        
+        byte[] expectedBytes = readFile(expected);
+        assertEquals(expectedBytes, actualBytes);
+    }
 
     // 3.2.4.2.1 Test case c14n11/xmlbase-c14n11spec-102
     public void testXMLBase_1() throws ParsingException, IOException {
@@ -291,13 +360,14 @@ public class Canonicalizer11Test extends TestCase {
         Document doc = builder.build(input);
         File expected = new File(canonical, "xmlbase-c14n11spec3-103.output");
         
-        String documentSubsetExpression = " (//. | //@* | //namespace::*) [self::a or ancestor-or-self::d]";
+        String documentSubsetExpression = "(//. | //@* | //namespace::*) [self::a or ancestor-or-self::d]";
         canonicalizer.write(doc.query(documentSubsetExpression, namespaces));  
         
         byte[] actualBytes = out.toByteArray();        
         byte[] expectedBytes = readFile(expected);
         assertEquals(expectedBytes, actualBytes);
     }
+
 
     private byte[] readFile(File expected) throws IOException {
         byte[] expectedBytes = new byte[(int) expected.length()];
