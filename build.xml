@@ -44,7 +44,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <property name="jaxenversion" value="1.1.3"/>
     <!-- <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/> -->
-    <property name="year"    value="2010"/>
+    <property name="year"    value="2011"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
