@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<open xmlns="http://dsd.lbl.gov/p2pio-1.0">
+    <transactionID>ec14f115-d97e-4f76-8d0a-40d81de79445</transactionID>
+    <query>
+        <p2pQuery xmlns="http://dsd.lbl.gov/firefish-1.0" mergeOperator="concat">
+            <dataSourceQuery>
+                <xPathQuery>
+                    <expression>/*/*</expression>
+                </xPathQuery>
+            </dataSourceQuery>
+        </p2pQuery>
+    </query>
+    <scope>
+        <timeout>2003-10-03T13:48:36.917-07:00</timeout>
+        <maxHops>3</maxHops>
+        <extension />
+    </scope>
+     <responseMode>
+        <routedResponseMode />
+    </responseMode>
+ </open>

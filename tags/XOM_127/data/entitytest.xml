@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE root [
+  <!ENTITY test SYSTEM "external.xml">
+]>
+<root attribute="&lt;value contains &quot; and &apos; and other nasty chars like &gt;">
+ *&#x365;* 
+  &lt;somedata&gt;
+  <tag>content</tag>
+  &test;
+</root>
