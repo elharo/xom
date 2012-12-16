@@ -194,6 +194,11 @@ cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
 
+===============
+Done 1.2.9 Release
+===============
+
+Exclude UserDataHandler from Jaxen files we copy in to avoid problems with some application servers. 
 
 ===============
 Done 1.2.5 Release
