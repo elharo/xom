@@ -42,9 +42,9 @@ subject line. The XOM home page is http://www.xom.nu/
   	<!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? 
   	     Problem is release version doesn't get a version qualifier. -->
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
-    <property name="jaxenversion" value="1.1.4"/>
+    <property name="jaxenversion" value="1.1.6"/>
     <!-- <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/> -->
-    <property name="year"    value="2012"/>
+    <property name="year"    value="2013"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
