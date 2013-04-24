@@ -2,10 +2,10 @@ XOM is a library. By itself, it doesn't do much of anything. It exists
 only to be used by other programs. It requires Java 1.2 or later. 
 
 To install it you'll need to place the XOM JAR archive somewhere in your
-CLASSPATH. This archive is the file named something like xom-1.2.6.jar. 
+CLASSPATH. This archive is the file named something like xom-1.2.10.jar. 
 (The version number may have changed if I've forgotten
 to update this document.) You can either put it in your jre/lib/ext
-directory, add xom-1.2.6.jar to your CLASSPATH environment variable, or
+directory, add xom-1.2.10.jar to your CLASSPATH environment variable, or
 use the -classpath option when invoking javac and java.
 
 To check your download you can run one of the sample programs found in
