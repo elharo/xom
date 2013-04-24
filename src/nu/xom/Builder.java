@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2009, 2010 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009, 2010, 2013 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.6
+ * @version 1.2.10
  * 
  */
 public class Builder {
@@ -184,7 +184,8 @@ public class Builder {
         "net.sf.saxon.aelfred.SAXDriver",
         "com.icl.saxon.aelfred.SAXDriver",
         "org.dom4j.io.aelfred2.SAXDriver",
-        "org.dom4j.io.aelfred.SAXDriver"
+        "org.dom4j.io.aelfred.SAXDriver",
+        "org.xmlpull.v1.sax2.Driver" // android
     };
 
     
