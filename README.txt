@@ -14,7 +14,7 @@ class formats an XML document by inserting and removing white space
 around element boundaries. In Java 1.4 and later you can run it from the
 command line like this:
 
-$ java -classpath xom-samples.jar:xom-1.2.6.jar nu.xom.samples.PrettyPrinter filename.xml
+$ java -classpath xom-samples.jar:xom-1.2.10.jar nu.xom.samples.PrettyPrinter filename.xml
 
 Java 1.3 and earlier do not have a built-in XML parser so in these environments 
 you'll also need to install XOM's supporting libraries. 
@@ -23,7 +23,7 @@ and are found in the lib directory. The versions shipped with XOM
 are quite a bit faster and less buggy than the ones bundled with the JDK, 
 so you may well want to use them even in Java 1.4 and later. For example,
 
-$ java -classpath xom-samples.jar:xom-1.2.6.jar:lib/xml-apis.jar:lib/xercesImpl.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml
+$ java -classpath xom-samples.jar:xom-1.2.10.jar:lib/xml-apis.jar:lib/xercesImpl.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml
 
 You could leave out xalan.jar if you don't use any of the classes in
 nu.xom.xslt. junit.jar is only used for testing, and is

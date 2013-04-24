@@ -33,7 +33,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="2"/>
-    <property name="microversion" value="9"/>
+    <property name="microversion" value="10"/>
   	<!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
