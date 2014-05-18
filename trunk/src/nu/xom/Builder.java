@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.10
+ * @version 1.2.11
  * 
  */
 public class Builder {
@@ -490,7 +490,6 @@ public class Builder {
 
 
     private void setHandlers() {
-        
         XOMHandler handler;
         if ((factory == null 
           || factory.getClass().getName().equals("nu.xom.NodeFactory"))
@@ -505,6 +504,7 @@ public class Builder {
             if (factory == null) factory = new NodeFactory();
             handler = new XOMHandler(factory);
         }
+        
         parser.setContentHandler(handler);
         parser.setDTDHandler(handler);
         
@@ -1172,6 +1172,14 @@ public class Builder {
                 ex);
             throw pex;
         }
+        catch (BillionLaughsSAXException ex) {
+          // do a bit of early cleanup since we may be running short on memory here
+          handler.freeMemory();
+          System.gc(); 
+          ParsingException pex 
+            = new DocumentSizeException(ex.getMessage(), in.getSystemId(), ex);
+          throw pex;
+        }
         catch (SAXException ex) {
             ParsingException pex 
               = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
@@ -1319,6 +1327,21 @@ public class Builder {
      */
     public NodeFactory getNodeFactory() {  
         return factory;
+    }
+
+
+    /**
+     * Set an approximate maximum size for a document. Attempting to parse 
+     * a document that would outgrow this size will abort processing and
+     * throw an exception.
+     * 
+     * The default value of this quantity is set to half of free memory.
+     * 
+     * @param limit approximate maximum document size in memory in bytes
+     */
+    public void setMemoryLimit(long limit) {
+      XOMHandler handler = (XOMHandler) parser.getContentHandler();
+      handler.setMemoryLimit(limit);
     }
 
     

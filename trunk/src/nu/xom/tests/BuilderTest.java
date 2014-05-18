@@ -1,4 +1,4 @@
-/* Copyright 2002-2007, 2009, 2010, 2011 Elliotte Rusty Harold
+/* Copyright 2002-2007, 2009, 2010, 2011, 2014 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -63,6 +63,7 @@ import nu.xom.Builder;
 import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
+import nu.xom.DocumentSizeException;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.NodeFactory;
@@ -81,7 +82,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.7
+ * @version 1.2.11
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1476,6 +1477,51 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(1, s.length());
         assertEquals(0xE9, s.charAt(0));
         
+    }
+    
+    
+    public void testBillionLaughs()
+      throws IOException, ParsingException {
+        try {
+          builder.build(new File(inputDir, "billionlaughs.xml"));
+          fail("expected exception");
+        } catch (DocumentSizeException ex) {
+          assertNotNull(ex.getCause());
+        }
+    }
+    
+    
+    public void testBillionComments()
+      throws IOException, ParsingException {
+        try {
+          builder.build(new File(inputDir, "billioncomments.xml"));
+          fail("expected exception");
+        } catch (DocumentSizeException ex) {
+          assertNotNull(ex.getCause());
+        }
+    }
+    
+    
+    public void testBillionProcessingInstructions()
+      throws IOException, ParsingException {
+        try {
+          builder.build(new File(inputDir, "billionprocessinginstructions.xml"));
+          fail("expected exception");
+        } catch (DocumentSizeException ex) {
+          assertNotNull(ex.getCause());
+        }
+    }
+    
+    
+    public void testBillionElements()
+      throws IOException, ParsingException {
+        //builder.setMemoryLimit(100000);
+        try {
+          builder.build(new File(inputDir, "billionelements.xml"));
+          fail("expected exception");
+        } catch (DocumentSizeException ex) {
+          assertNotNull(ex.getCause());
+        }
     }
     
     

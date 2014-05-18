@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2009 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009, 2014 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -24,15 +24,17 @@ package nu.xom;
 
 import java.util.ArrayList;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.DTDHandler;
 import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
 import org.xml.sax.ext.DeclHandler;
 import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.2.3
+ * @version 1.2.11
  *
  */
 class XOMHandler 
@@ -109,6 +111,8 @@ class XOMHandler
             document.setBaseURI(documentBaseURI);
         }
         buffer = null;
+        // todo(elharo): magic number
+        memoryUsed = 40;
         
     }
   
@@ -120,7 +124,12 @@ class XOMHandler
   
     
     public void startElement(String namespaceURI, String localName, 
-      String qualifiedName, org.xml.sax.Attributes attributes) {
+      String qualifiedName, org.xml.sax.Attributes attributes) throws SAXException {
+        
+        checkMemoryUsed(attributes);
+        // todo(elharo): is this a performance hit? check only if limit > 0?
+        // todo(elharo): magic numbers
+        checkMemoryUsed(112 + localName.length() * 2 + namespaceURI.length() * 2 + qualifiedName.length() * 2);
         
         flushText();
         Element element;
@@ -224,6 +233,14 @@ class XOMHandler
     }
 
     
+    private void checkMemoryUsed(Attributes attributes) throws SAXException {
+      for (int i = 0; i < attributes.getLength(); i++) {
+        checkMemoryUsed(attributes.getValue(i));
+        checkMemoryUsed(attributes.getQName(i));
+      }
+    }
+
+
     public void endElement(
       String namespaceURI, String localName, String qualifiedName) {
         
@@ -322,8 +339,8 @@ class XOMHandler
     protected String textString = null;
     protected StringBuffer buffer = null;
   
-    public void characters(char[] text, int start, int length) {
-        
+    public void characters(char[] text, int start, int length) throws SAXException {
+        checkMemoryUsed(length * 2); // chars are two bytes long
         if (length <= 0) return;
         if (textString == null) textString = new String(text, start, length);
         else {
@@ -335,6 +352,17 @@ class XOMHandler
     }
  
     
+    void checkMemoryUsed(int length) throws SAXException  {
+      if (this.memoryLimit > 0) {
+        memoryUsed += length;
+        if (memoryUsed > memoryLimit) {
+          // todo(elharo): better error message; better exception
+          throw new BillionLaughsSAXException("Document too big");
+        }
+      }
+    }
+
+
     // accumulate all text that's in the buffer into a text node
     private void flushText() {
         
@@ -369,13 +397,15 @@ class XOMHandler
   
     
     public void ignorableWhitespace(
-      char[] text, int start, int length) {
+      char[] text, int start, int length) throws SAXException {
         characters(text, start, length);
     }
   
     
-    public void processingInstruction(String target, String data) {
+    public void processingInstruction(String target, String data) throws SAXException {
         
+        checkMemoryUsed((target.length() + data.length()) * 2);
+      
         if (!inDTD) flushText();
         if (inDTD && !inInternalSubset()) return;
         Nodes result = factory.makeProcessingInstruction(target, data);
@@ -428,8 +458,13 @@ class XOMHandler
     
     // LexicalHandler events
     public void startDTD(String rootName, String publicID, 
-      String systemID) {
+      String systemID) throws SAXException {
         
+      checkMemoryUsed(80);
+      checkMemoryUsed(rootName);
+      checkMemoryUsed(publicID);
+      checkMemoryUsed(systemID);
+      
         inDTD = true;
         Nodes result = factory.makeDocType(rootName, publicID, systemID);
         for (int i = 0; i < result.size(); i++) {
@@ -446,6 +481,13 @@ class XOMHandler
     }
      
     
+    private void checkMemoryUsed(String s) throws SAXException {
+      if (s != null) {
+        checkMemoryUsed(s.length() * 2);
+      }
+    }
+
+
     public void endDTD() {
         
         inDTD = false;
@@ -474,6 +516,12 @@ class XOMHandler
     
     protected boolean inCDATA = false;
     protected boolean finishedCDATA = false;
+
+    // default to half of available heap memory
+    // todo(elharo): should we reset this with each document parsed?
+    // if so we need to keep a separate field for the user set value.
+    private long memoryLimit = Runtime.getRuntime().freeMemory() / 2;
+    private long memoryUsed = 0;
     
     public void startCDATA() {
         if (textString == null) inCDATA = true;
@@ -486,8 +534,10 @@ class XOMHandler
     }
 
     
-    public void comment(char[] text, int start, int length) {
+    public void comment(char[] text, int start, int length) throws SAXException {
         
+        checkMemoryUsed(length);
+    
         if (!inDTD) flushText();
         if (inDTD && !inInternalSubset()) return;
 
@@ -976,6 +1026,10 @@ class XOMHandler
         
         return result.toString();
         
+    }
+
+    void setMemoryLimit(long sizeLimit) {
+      this.memoryLimit = sizeLimit;
     }
 
     

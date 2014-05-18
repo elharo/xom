@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2009 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009, 2014 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -22,9 +22,11 @@
 
 package nu.xom;
 
+import org.xml.sax.SAXException;
+
 /**
  * @author Elliotte Rusty Harold
- * @version 1.2.3
+ * @version 1.2.11
  *
  */
 class NonVerifyingHandler extends XOMHandler {
@@ -35,7 +37,13 @@ class NonVerifyingHandler extends XOMHandler {
   
     
     public void startElement(String namespaceURI, String localName, 
-      String qualifiedName, org.xml.sax.Attributes attributes) {
+      String qualifiedName, org.xml.sax.Attributes attributes) throws SAXException {
+      
+        // todo(elharo): is this a performance hit? check only if limit > 0?
+      // todo(elharo): duplicate code with superclass
+      // todo(elharo): magic numbers
+        checkMemoryUsed(72 + localName.length() * 2 + namespaceURI.length() * 2 + qualifiedName.length() * 2
+          + 100 * attributes.getLength());
         
         flushText();
         Element element = Element.build(qualifiedName, namespaceURI, localName);
@@ -164,8 +172,10 @@ class NonVerifyingHandler extends XOMHandler {
     }
   
     
-    public void processingInstruction(String target, String data) {
+    public void processingInstruction(String target, String data) throws SAXException {
         
+        checkMemoryUsed((target.length() + data.length()) * 2);
+
         // simplify logic???? into two cases in and not in DTD
         // ditto for comment() method and superclass
         if (!inDTD) flushText();
@@ -205,8 +215,9 @@ class NonVerifyingHandler extends XOMHandler {
     }
     
     
-    public void comment(char[] text, int start, int length) {
-        
+    public void comment(char[] text, int start, int length) throws SAXException {
+        checkMemoryUsed(length * 2);
+
         if (!inDTD) flushText();
         else if (!inInternalSubset()) return;
 
