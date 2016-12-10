@@ -16,6 +16,6 @@ Copyright 2004, 2005, 2009, 2010 Elliotte Rusty Harold
    Boston, MA 02111-1307  USA
    
 You can contact Elliotte Rusty Harold by sending e-mail to
-elharo@metalab.unc.edu. Please include the word "XOM" in the
+elharo@ibiblio.org. Please include the word "XOM" in the
 subject line. For more information see http://www.xom.nu/ 
 or ask a question on the xom-interest mailing list.
