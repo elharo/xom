@@ -1,0 +1,660 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article class="faq" revision="20161210">
+  <title>XOM Sample Code</title>
+
+
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2004, 2005, 2016</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo>
+  
+   <para>
+     The <literal>nu.xom.samples</literal> package contains 
+     several dozen example programs showing you how to 
+     use various features of XOM. This page organizes the 
+     samples by what they demonstrate. 
+     </para>
+     
+     <qandaset>
+       <title>How do I...</title>
+
+<qandaentry>
+<question>
+   <para>Parse an existing document?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/XMLPrinter.java">XMLPrinter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/XOMChecker.java">XOMChecker</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/DocumentMerger.java">DocumentMerger</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Parse an existing document with a specific parser?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/CrimsonPrinter.java">CrimsonPrinter</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Query a document?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/RSSHeadlines.java">RSSHeadlines</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ExampleExtractor.java">ExampleExtractor</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ExampleLister.java">ExampleLister</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Create a new document?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciXML.java">FibonacciXML</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/HelloWorld.java">HelloWorld</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Create a new document that uses attributes?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciAttributes.java">FibonacciAttributes</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Create a new document that has a document type declaration?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ValidFibonacci.java">ValidFibonacci</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Create a new document that uses namespaces?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/HelloNamespaces.java">HelloNamespaces</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/SimpleSVG.java">SimpleSVG</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/MathMLFibonacci.java">MathMLFibonacci</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Store an XML document in a file?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciFile.java">FibonacciFile</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Pretty print an XML document?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/PrettyFibonacci.java">PrettyFibonacci</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/PrettyPrinter.java">PrettyPrinter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/EZSerializer.java">EZSerializer</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Preserve base URI information when serializing?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/HelloXMLBase.java">HelloXMLBase</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Modify an XML document?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/IDTagger.java">IDTagger</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/RDDLStripper.java">RDDLStripper</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ResourceToTable.java">ResourceToTable</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ROT13XML.java">ROT13XML</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/XHTMLPurifier.java">XHTMLPurifier</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/XHTMLQualifier.java">XHTMLQualifier</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Work with attributes?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/XLinkSpider.java">XLinkSpider</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/AttributesToElements.java">AttributesToElements</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/IDFilter.java">IDFilter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/IDTagger.java">IDTagger</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/PropertyPrinter.java">PropertyPrinter</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Move elements from one document to another?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Linkset.java">Linkset</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Move nodes from one place in a document to another place in the same document?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Restructurer.java">Restructurer</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Build a structured XML document from flat, tabular data?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Account.java">Account</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Agency.java">Agency</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Bureau.java">Bureau</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Budget.java">Budget</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/BudgetData.java">BudgetData</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Subfunction.java">Subfunction</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/AttributesXMLBudget.java">AttributesXMLBudget</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FlatXMLBudget.java">FlatXMLBudget</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/HierarchicalXMLBudget.java">HierarchicalXMLBudget</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Build an XML document from a relational database or other JDBC source?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/DatabaseBuilder.java">DatabaseBuilder</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/DatabaseConverter.java">DatabaseConverter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/SQLToXML.java">SQLToXML</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Convert an XML document into a non-XML format?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/SourceCodeGenerator.java">SourceCodeGenerator</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/SourceCodeSerializer.java">SourceCodeSerializer</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Extend <classname>Serializer</classname>?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/SourceCodeSerializer.java">SourceCodeSerializer</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/TextSerializer.java">TextSerializer</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/WrappingSerializer.java">WrappingSerializer</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Use my own subclasses of the standard XOM classes?</para>
+</question>
+<answer>
+<itemizedlist>
+ </itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Perform an XSL transformation?</para>
+</question>
+<answer>
+<itemizedlist>
+   <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Transformer.java">Transformer</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Resolve all entity references in a document?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/DocumentMerger.java">DocumentMerger</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Process a document in streaming mode?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/DTDGenerator.java">DTDGenerator</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Build a DTD from an instance document?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/DTDGenerator.java">DTDGenerator</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Write a document in Canonical XML?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/CanonicalizerDriver.java">CanonicalizerDriver</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Write a document in a particular character set?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/EncodingDemo.java">EncodingDemo</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciEBCDIC.java">FibonacciEBCDIC</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciLatin1.java">FibonacciLatin1</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Generate a servlet response?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciServlet.java">FibonacciServlet</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciXOMSOAPServlet.java">FibonacciXOMSOAPServlet</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciXOMXMLRPCServlet.java">FibonacciXOMXMLRPCServlet</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Talk to a SOAP service?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciSOAPClient.java">FibonacciSOAPClient</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Talk to an XML-RPC service?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciXMLRPCClient.java">FibonacciXMLRPCClient</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Process SOAP requests?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciXOMSOAPServlet.java">FibonacciXOMSOAPServlet</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Process XML-RPC requests?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/FibonacciXOMXMLRPCServlet.java">FibonacciXOMXMLRPCServlet</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Find all the comments in an XML document?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/CommentReader.java">CommentReader</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Read processing instruction data?</para>
+</question>
+<answer>
+<itemizedlist>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ProcessingInstructionLister.java">ProcessingInstructionLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/PseudoAttributes.java">PseudoAttributes</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/PoliteSpider.java">PoliteSpider</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Validate a document?</para>
+</question>
+<answer>
+<itemizedlist>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Validator.java">Validator</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/PureValidator.java">PureValidator</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/XHTMLValidator.java">XHTMLValidator</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+
+<qandaentry>
+<question>
+   <para>Validate a document against a schema?</para>
+</question>
+<answer>
+<itemizedlist>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/SchemaValidator.java">SchemaValidator</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Resolve XIncludes?</para>
+</question>
+<answer>
+<itemizedlist>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/XIncludeDriver.java">XIncludeDriver</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Combine consecutive text nodes?</para>
+</question>
+<answer>
+<itemizedlist>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/TextMerger.java">TextMerger</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Save memory?</para>
+</question>
+<answer>
+<itemizedlist>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/PureValidator.java">PureValidator</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/MinimalNodeFactory.java">MinimalNodeFactory</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/NormalizingFactory.java">NormalizingFactory</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Traverse an XML document in preorder?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/CommentReader.java">CommentReader</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ElementLister.java">ElementLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/NodeLister.java">NodeLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ExampleExtractor.java">ExampleExtractor</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ExampleLister.java">ExampleLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/PropertyPrinter.java">PropertyPrinter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/TreePrinter.java">TreePrinter</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/TreeReporter.java">TreeReporter</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/TreeViewer.java">TreeViewer</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ProcessingInstructionLister.java">ProcessingInstructionLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/IDTagger.java">IDTagger</ulink></classname></para></listitem>
+    <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/Restructurer.java">Restructurer</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/RDDLStripper.java">RDDLStripper</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ROT13XML.java">ROT13XML</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/XHTMLPurifier.java">XHTMLPurifier</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/XHTMLQualifier.java">XHTMLQualifier</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Traverse an XML document in preorder without using recursion?</para>
+</question>
+<answer>
+<itemizedlist>
+ <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/NonRecursiveSerializer.java">NonrecursiveSerializer</ulink></classname></para></listitem>
+ </itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Strip the markup from an element, extracting only its text? content?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/ExampleExtractor.java">ExampleExtractor</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/TextExtractor.java">TextExtractor</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Traverse an XML document in inorder?</para>
+</question>
+<answer>
+<itemizedlist>
+ </itemizedlist>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+   <para>Traverse an XML document in postorder?</para>
+</question>
+<answer>
+<itemizedlist>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Write a custom <classname>NodeFactory</classname>?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/MinimalNodeFactory.java">MinimalNodeFactory</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/RDDLFilter.java">RDDLFilter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/RDDLToTable.java">RDDLToTable</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingXHTMLQualifier.java">StreamingXHTMLQualifier</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingXHTMLPurifier.java">StreamingXHTMLPurifier</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingTypeCounter.java">StreamingTypeCounter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingTreeReporter.java">StreamingTreeReporter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingTextExtractor.java">StreamingTextExtractor</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingROT13.java">StreamingROT13</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingProcessingInstructionLister.java">StreamingProcessingInstructionLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingNodeLister.java">StreamingNodeLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingExampleExtractor.java">StreamingExampleExtractor</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingElementLister.java">StreamingElementLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingCommentReader.java">StreamingCommentReader</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/RSSHeadlines.java">RSSHeadlines</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Process a document in streaming mode?</para>
+</question>
+<answer>
+<itemizedlist>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingXHTMLQualifier.java">StreamingXHTMLQualifier</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingXHTMLPurifier.java">StreamingXHTMLPurifier</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingTypeCounter.java">StreamingTypeCounter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingTreeReporter.java">StreamingTreeReporter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingTextExtractor.java">StreamingTextExtractor</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingROT13.java">StreamingROT13</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingProcessingInstructionLister.java">StreamingProcessingInstructionLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingNodeLister.java">StreamingNodeLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingExampleExtractor.java">StreamingExampleExtractor</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingElementLister.java">StreamingElementLister</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/StreamingCommentReader.java">StreamingCommentReader</ulink></classname></para></listitem>
+<listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/RSSHeadlines.java">RSSHeadlines</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+   <para>Modify/filter a document while parsing?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/AttributesToElements.java">AttributesToElements</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/IDFilter.java">IDFilter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/NormalizingFactory.java">NormalizingFactory</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/RDDLFilter.java">RDDLFilter</ulink></classname></para></listitem>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/RDDLToTable.java">RDDLToTable</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+   <para>Trim whitespace from a document while parsing?</para>
+</question>
+<answer>
+<itemizedlist>
+  <listitem><para><classname><ulink url="https://raw.githubusercontent.com/elharo/xom/master//src/nu/xom/samples/NormalizingFactory.java">NormalizingFactory</ulink></classname></para></listitem>
+</itemizedlist>
+</answer>
+</qandaentry>
+
+ </qandaset>
+     
+</article>

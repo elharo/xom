@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article revision="20161210">
+  <title>XOM Down the Road</title>
+
+  
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2002-2004</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+  
+  
+ <para>
+  Going forward, there are some features I'd like to explore for XOM, post-1.0.
+  In many cases, I'm not sure either how to implement or how to design them
+  (or both). Otherwise, they just don't seem like core functionality.
+  But here's some stuff you may (or may not) see in the future:
+</para>
+
+<itemizedlist>
+    <listitem>
+      <para>
+       At least partial  XPath support.
+       This will probably be limited to location paths and possibly
+       compound location paths, which is what people really need inside Java anyway.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+       Vector functions that operate on every node in a list.
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+       xml:id support 
+      </para>
+    </listitem>
+
+    <listitem>
+      <para>
+       Catalog support
+      </para>
+    </listitem>
+
+   <listitem>
+      <para>
+       Exclusive XML canonicalization
+      </para>
+    </listitem>
+
+   <listitem>
+      <para>
+       Document subset canonicalization
+      </para>
+    </listitem>
+
+   <listitem>
+      <para>
+       XML digital signatures
+      </para>
+    </listitem>
+
+   <listitem>
+      <para>
+       XML encryption
+      </para>
+    </listitem>
+
+</itemizedlist>
+
+</article>

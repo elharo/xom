@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article class="faq" revision="20161210">
+  <title>Open Questions</title>
+
+  
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2002, 2004</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+  
+ <para>
+  Here are some issues with the design of XOM,
+  where I have not yet made up my mind. Feedback on these points 
+  (as well as other things I haven&rsquo;t even thought of) is very much appreciated.
+  Please send all comments to the <ulink url="mailto:xom-interest@lists.ibblio.org">xom-interest</ulink> mailing list.
+</para>
+
+<sect1>
+    <title>What should the XPath API look like?</title>
+     <para>
+       
+      </para>
+      
+    </sect1>
+
+</article>

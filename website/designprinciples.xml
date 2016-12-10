@@ -1,0 +1,1034 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article revision="20161210" status="rough">
+
+  <title>XOM Design Principles</title>
+
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2002-2004, 2006</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+    <date>September 3, 2006</date>
+  </articleinfo> 
+
+
+ <para>
+  I have a very clear vision for XOM
+  based on certain principles for both XML and Java.
+  If you want to request new features or contribute to its development,
+  you should understand these first. They 
+  go a long way toward explaining why XOM takes the path it does.
+</para>
+
+<sect1>
+   <title>Design Goals</title>
+   
+   <para>
+       The ultimate goal of course is an API that&rsquo;s useful for processing 
+       XML with Java.
+       However, there are many different ways to design such a thing, and sometimes you have to make trade-offs.
+       The following are the basic goals for this API:
+   </para>
+   
+    <sect2>
+<title>Absolutely correct</title>
+
+  <para>
+    XOM will model XML completely and correctly.
+    Most other APIs (with the notable exception of SAX)
+    have made significant compromises in their XML support
+    in the name of performance and other false gods.
+    XOM will not. Nothing is more important in the design of XOM
+    than XML correctness.
+  </para>
+
+</sect2>  
+   
+   <sect2>
+<title>Easy to use</title>
+
+  <para>
+    The second goal, that is outweighed only by the first,
+    is that XOM be easy to use. Developers should not need to be either XML or Java 
+    experts in order to use XOM.
+    The API should be intuitive, memorable, and consistent so that frequent reference to the documentation
+    is not necessary. While the hard things should be possible,
+    most developers spend most of their time doing relatively easy things. 
+    Thus it is more important to make the easy tasks easier than to make the hard tasks easier.
+  </para>
+
+</sect2>
+<sect2>
+<title>Easy to learn</title>
+
+  <para>
+    Ease of learning generally goes hand-in-hand with ease-of-use, and XOM is no exception.
+    I've strived for a shallow learning curve. 
+    Among other effects, 
+    this means I've strived for loose coupling between classes and methods.
+    Methods can be used and understood in isolation
+    without reference to other methods.
+    Most classes have the minimum connections they need with other classes.
+    Everything outside the nu.xom package is optional
+    and can be ignored by a first-time user.
+    </para>
+    
+    <para>
+    This also means that
+    simplicity is a virtue, and that I've tried to keep the number of unnecessary 
+    public methods and classes to
+    a minimum, especially in the core API. The API documentation should not contain a lot of
+    clutter that confuses and repels new users.  
+  </para>
+
+</sect2>
+<sect2>
+<title>Fast enough</title>
+
+  <para>
+   As Donald Knuth wrote in 1974,
+   <quote>premature optimization is
+        the root of all
+        evil.</quote><footnote>
+        <para>
+        Donald Knuth, 
+        <citetitle pubwork="article">Structured Programming with 
+        <literal>go to</literal> Statements</citetitle>, 
+        <citetitle pubwork="journal">Computing Surveys 6</citetitle> 
+        (1974): 261-301</para></footnote>
+        
+   XOM tries to be fast enough for most common uses.
+   It certainly won&rsquo;t be as fast as SAX for many uses because 
+   it depends on an underlying SAX parser to read the document. 
+   XOM deliberately trades speed for convenience.
+   it is focused on programmer productivity, not
+   minimum execution time. 
+  </para>
+
+  <para>
+    That said, I will of course look for opportunities to significantly 
+    optimize XOM provided it affects neither the public API nor the fundamental correctness of 
+    XOM&rsquo;s XML handling. 
+  </para>
+  
+</sect2>
+<sect2>
+<title>Small enough</title>
+
+    <para>
+   In a similar vein I am not especially concerned about memory footprint.
+   The footprint is extremely competitive with other tree-based APIs such as 
+   DOM and JDOM. Indeed a XOM <classname>Document</classname> object is likely to be two to three times
+   smaller than the corresponding JDOM or DOM <classname>Document</classname> object.
+   However, memory size is not the major focus. 
+   I did not make even the most basic measurements of memory usage
+   until the API was well underway.
+   First, I made XOM right.
+   Then, I made it small and fast.
+  </para>
+
+</sect2>
+<sect2>
+<title>No gotchas</title>
+
+  <para>
+   XOM should not surprise.
+   Every method should have a clear and precise name that 
+   identifies what it does.
+   Methods should do what&rsquo;s expected of them, and nothing else!
+   </para>
+   
+   <para>
+   If XOM does surprise, it should do so only because XML itself is surprising.
+   For instance, many developers are surprised to discover they can&rsquo;t 
+   create a <classname>Text</classname> object that contains
+   nulls or vertical tabs.
+   However, this is a restriction of XML.
+   XOM cannot violate this and remain faithful to the XML specification.
+   However, when such a surprise is unavoidable, XOM should throw an exception with
+   a detailed error message at the first opportunity to make the problem very obvious.
+   It should not allow developers to persist in their misunderstanding of XML.
+  </para>
+
+</sect2>
+
+</sect1>
+
+<sect1>
+   <title>Design Principles</title>
+<sect2>
+<title>As simple as it can be and no simpler!</title>
+
+  <para>
+    XOM strives to make XML as simple as it can possibly be, but no simpler!
+    XOM cannot and does not paper over the real complexities of XML such as
+    the differences between attributes and namespace declarations,
+    the case and order significance of XML elements, or white space.
+    It presents XML as it really is, warts and all. 
+    It is my goal that whenever you see an ugly part of XOM, it is only because the corresponding part of
+    XML is at least that ugly. 
+  </para>
+
+</sect2>
+<sect2>
+<title>Use Java idioms where they fit</title>
+
+  <para>
+    XOM is a Java native API. It strives to adhere to good Java coding practices including:
+  </para>
+  
+  
+  <itemizedlist>
+<listitem><para>Naming conventions</para></listitem>
+<listitem><para>Proper return types for setters and getters</para></listitem>
+<listitem><para>Utility methods like <methodname>hashCode</methodname>, <methodname>equals</methodname>, 
+and <methodname>toString</methodname>. </para></listitem>
+  </itemizedlist>
+
+  <para>
+    However, I have not carried this to an extreme.
+    In particular, where the Java way of doing things seems fundamentally broken
+    or just not appropriate for an XML API, I have felt free to
+    invent my own solutions. These include:
+  </para>
+  
+  <itemizedlist>
+<listitem><para>Using copy constructors and <methodname>copy</methodname> methods instead of <methodname>clone</methodname></para></listitem>
+<listitem><para>Using XML instead of <interfacename>Serializable</interfacename></para></listitem>
+<listitem><para>Using type-safe lists instead of the Java Collections API. </para></listitem>
+  </itemizedlist>
+ 
+  
+</sect2>
+<sect2>
+<title>There&rsquo;s exactly one way to do it</title>
+
+  <para>
+    Simplicity is a virtue. While convenience methods
+    seem useful in isolation, taken as a whole they often significantly clutter an API.
+    A class with 80+ methods is simply too big to understand.
+    One has to consider the developer&rsquo;s ability to understand the class as a whole,
+    as well as each individual method.
+  </para>
+  
+  <para>
+    In general, I have added convenience methods only when the 
+    need seemed very common and the 
+    standard way of accomplishing the task was very cumbersome.
+  </para>
+
+  
+  <para>
+    If you find a particular need for some convenience method that I have not
+    judged worthy of inclusion, it should be possible to write a subclass of the standard XOM classes
+    that implements that method.
+    In general, this will also require writing your own 
+    <classname>NodeFactory</classname> subclass that instantiates instances of your subclass instead of 
+    instances of the standard classes. 
+  </para>
+
+</sect2>
+<sect2>
+<title>Start small and grow as necessary</title>
+
+  <para>
+   It is easier to add a feature than take one away.
+   The initial release of XOM attempts to be as small as possible.
+   I tried to keep public methods and classes to a minimum,
+   especially in the 
+   core nu.xom package.
+   If I discover I've left anything significant out, I can always add it in later
+   without breaking backwards compatibility.
+  </para>
+
+</sect2>
+
+</sect1>
+
+<sect1>
+   <title>Principles of API Design</title>
+
+<sect2>
+<title>APIs are written by experts for non-experts</title>
+
+  <para>
+  Aside from SAX and DOM, most XML APIs appear to have been written by experienced 
+  programmers as they were learning XML.
+  This may have helped them learn XML, but it didn&rsquo;t produce particularly high-quality APIs.
+  Common problems included mishandling of white space,
+  confusion of the XML declaration with a processing instruction,
+  namespace malformedness, assuming that Unicode is a two-byte character set,
+  and more. Before you begin to write an XML API, you really do need to understand XML at a much
+  deeper and more technical level, than a typical XML user,
+  much as an automotive engineer needs to know a lot more about an internal combustion engine
+  than a casual driver or even an auto mechanic.
+  </para>
+  
+  <para>
+    One of the jobs of the expert or experts who design the API is to know better
+    than the client programmers what they should be doing.
+    It is the API&rsquo;s task to lead the client programmers in the right direction by making
+    the right path easy and the wrong path difficult to impossible.
+    At the extreme, it is the job of the expert  to tell the client programmers
+    that they really don&rsquo;t want to do what they think they want to do,
+    that they should do something else instead. 
+  </para>
+
+   <para>
+    This can appear arrogant, and indeed it is.
+    But this should be an arrogance built out of experience.
+    It should be an arrogance that is earned and that can be respected.
+  </para>
+
+  
+</sect2>
+<sect2>
+<title>It is the class&rsquo;s responsibility to enforce its invariants</title>
+
+  <para>
+   Classes are responsible for enforcing their class invariants,
+   not client programmers. Nobody who uses the public methods of a class should be assumed
+   to understand  what is and is not legal.
+   An object should be created in a correct and legal state,
+   and thereafter it should not be possible to change the object&rsquo;s state 
+   to something illegal, not even temporarily.
+  </para>
+
+  <para>
+   In the context of XML, this means, for example,
+   that an <classname>Element</classname> object must have a legal name,
+   that a <classname>Document</classname> object must have a single root element,
+   that the contents of a <classname>Text</classname> object cannot contain null.
+   All of this must be enforced rigorously at all times. It may perhaps be temporarily violated
+   during the execution of a method; but the public interface of a class
+   must always show objects to be in a legal state, no matter what the client programmer does,
+   up to and including subclassing.
+  </para>
+
+</sect2>
+<sect2>
+<title>Verify preconditions</title>
+
+  <para>
+    In order, to guarantee class invariants,
+    it is necessary to verify all preconditions on a method.
+    For instance, a <methodname>setName</methodname> method must 
+    check that its argument is a legal XML 1.0 name. 
+    If the argument is illegal in any way, it should throw an exception to prevent the
+    name from being changed to the illegal value.
+  </para>
+
+  <para>
+    Such checks must be final. They cannot be overridden in subclasses.
+    They cannot be turned off by a switch at runtime.
+    They need to be built into the code at a very low level
+    that cannot be removed short of forking the code base. 
+  </para>
+  
+  <para>
+    Post conditions do not need to be checked in this rigorous a fashion.
+    Generally speaking, it is enough for the test framework to verify post conditions.
+    Assuming the input satisfies all preconditions,
+    the method should not be able to move the object into an inconsistent state.
+    If it does so, this is a bug in the library and should be fixed.
+  </para>
+  
+</sect2>
+<sect2>
+<title>Do not allow clients to do bad things.</title>
+
+  <para>
+    Clients occasionally request the ability to turn off the checks, either because they feel they don't need them or because they have a special case where they actually need to generate incorrect data. <emphasis>Don't let them!</emphasis>
+  </para>
+
+
+  <para>
+    Clients that think they don't need the checks are almost always wrong. 
+    Everyone (library authors included) makes mistakes. Throwing out the safety net 
+   is not a good idea.</para>
+
+
+<para> The usual reason given for turning off the checks is "performance". Interestingly, such requests rarely come accompanied by any actual measurements demonstrating that the checks are a significant part of the performance issues the client is encountering. As Donald Knuth wrote, "premature optimization is the root of all evil in programming". XOM is quite fast, and has been extensively optimized. While more optimization remains to be done, it is already faster than many competing libraries that do not perform as extensive verification. Speed issues should be addressed by profiling and optimization, not by removing functionality and safety. 
+  </para>
+
+
+
+<para> The second reason given for turning off the checks is that the client wants to process or generate bad data. They may indeed want this, but they shouldn't. Furthermore the library should not let them. The library authors have a responsibility not just to the one client of the library but to all clients of the library. Furthermore, they have a responsibility  to all users of the underlying technology not to break it. The library must not pollute the ecosystem on which the library depends.
+A TCP/IP library should not allow malformed IP packets to be sent to the network. 
+An XML library should not allow malformed XML to be created. The library must encourage correct use of the underlying technology and discourage incorrect use. 
+  </para>
+
+<para>
+Think of it this way: it's like designing a car to run on the public roads. It's not just the driver of the car you have to worry about. You also have a responsibility to other drivers, pedestrians, insurance companies, and indeed everyone who breathes on this planet. Their needs sometimes outweigh the needs or desires of the driver. Now if the driver opens up the hood and manually disables the emission control system and various safety features, there's not much you can do about it, but you're not responsible for it either. But if you ship a car that spews noxious emissions and injures pedestrians as soon as the buyer drives it off the lot, you are responsible for that. If the car only does this when driven 75 mph or faster, you're still responsible for that, even if you put a warning in the owner's manual and the fine print of the sales contract saying, "Don't drive faster than 75 mph." It's much better to design the car so that proper operation doesn't rely on unenforced limits.
+</para>
+
+</sect2>
+<sect2>
+<title>Hide as much of the implementation as possible. </title>
+
+  <para>
+   A general principle of object oriented programming is that the
+   implementation should be hidden. Only the public interface matters.
+   The client should neither know nor care what goes on inside the implementation
+   as long as the interface behaves according to spec.
+   This allows significant flexibility in implementation for performance improvements 
+   in later development. It also keeps the API simpler, and thus easier for the 
+   programmer to learn and use. 
+  </para>
+
+</sect2>
+
+<sect2>
+<title>Design for subclassing or prohibit it</title>
+
+  <para>
+    Unchecked, subclasses can easily violate constraints on the behavior of an object.
+     Subclassing should not be a back door that allows effectively anything to happen.
+     If careful thought has not been given to exactly how a class&rsquo;s subclasses should behave
+     and what they are and are not allowed to change, then the class should be declared final.
+     You can always remove that restriction later when you've had time to consider
+     the issues raised by subclassing further.
+  </para>
+  
+  <para>
+    XOM is designed for subclassing. Most methods are declared final.
+    However, a few selected methods are exposed through a protected API that allows subclasses
+    to interpose themselves at key points in object creation and mutation. 
+    Furthermore, subclasses can provide additional functionality such as convenience methods
+    or non-XML support. However, subclasses cannot override the constraints enforced by the superclass.
+    They can be more strict than their superclass. For instance, an <classname>HTMLTable</classname> class could require that
+    the element name be <markup>table</markup>. However, it could not allow the name to contain spaces. 
+  </para>
+  
+
+</sect2>
+
+<sect2>
+<title>Prefer classes to interfaces</title>
+
+  <para>
+    A direct result of many of the above principles is that a library such as XOM should be developed 
+    using classes rather than interfaces. Interfaces simply cannot fulfill many
+    of the requirements of a useful library. 
+  </para>
+  
+  <para>There are two primary and pretty much unrelated reasons XOM relies on 
+classes rather than interfaces:
+</para>
+
+<itemizedlist>
+<listitem><para>Interfaces (and the corresponding factory methods) are harder to 
+use than classes (and constructors).</para></listitem>
+
+<listitem><para>Interfaces cannot verify constraints on an object.</para></listitem>
+</itemizedlist>
+
+<para>
+Interfaces add an additional layer of indirection in programming. 
+While additional layers of indirection can solve many problems, I've 
+observed that they often lead to much confusion among programmers. A 
+significant chunk of JDOM&rsquo;s ease-of-use relative to DOM comes from 
+using classes and constructors rather than interfaces. Certainly some 
+programmers are comfortable with this level of indirection, but I 
+think they're a minority. They may well be the smartest and most 
+talented programmers, but I still think they're a minority. Most 
+programmers in my experience are much more comfortable with concrete, 
+direct APIs.
+</para>
+
+<para>
+There also interface problems that affect everyone. The biggest is 
+that is difficult for interface-based code to determine which class 
+it is actually using. In the ideal world, this shouldn&rsquo;t matter. Any 
+implementation of the interface should be able to take the place of 
+any other. In practice this simply isn&rsquo;t true. For instance, almost 
+no DOM implementation is willing to accept or operate on nodes 
+created by a different implementation. In my own work, I repeatedly 
+encounter problems because TrAX loads a different XSLT processor than 
+I was expecting. SAX is a little more stable, but I still often need 
+to choose a particular parser rather than accepting any 
+implementation of <interfacename>XMLReader</interfacename>. The claim of implementation independence 
+is simply not reliable in practice. Like Java itself, programs that 
+process XML and are based on interfaces are very much write once, 
+test everywhere.
+</para>
+
+<para>
+The second issue is even more important. Interfaces cannot verify 
+constraints on an object. There is no way to assert in an interface 
+that the name of an element must be a legal XML 1.0 name, or that the 
+text content of an element cannot contain nulls and unmatched halves 
+of surrogate pairs. You must rely on the good faith of implementers 
+not to violate such important preconditions. My experience with DOM 
+has taught me that this is not a sensible bet. In the DOM world, 
+implementations routinely fail to check the constraints DOM requires 
+them to check. Implementations routinely fail to behave as DOM 
+requires them to behave. Sometimes this is out of ignorance. 
+Sometimes it&rsquo;s a deliberate and knowing choice. Neither case is 
+acceptable to me. If you're using XOM, you're guaranteed 
+well-formedness, even with subclasses. I can only make that guarantee 
+by using concrete classes that include final, non-bypassable code to 
+check all constraints. If you can find a way to make XOM generate a 
+malformed document, even by subclassing, then it&rsquo;s a bug and I 
+want to know about it so I can fix it.
+</para>
+
+<para>
+Let me also address a non-issue for XOM: different implementations. 
+The classic use-case for interfaces instead of classes is to support 
+different implementations of the same API, multiple SAX parsers for 
+example. In the context of XOM, this would most likely mean using a 
+different storage backend; for instance, a native XML database 
+instead of strings in memory. This is an interesting use-case but it 
+is one I have chosen not to support precisely because I cannot figure 
+out how to reconcile it with the requirement that XOM guarantee 
+well-formedness. If somebody invented a means of plugging in 
+different storage engines without allowing well-formedness checks to be 
+removed or bypassed, I'd consider it; but well-formedness comes 
+first. If it isn&rsquo;t well-formed it isn&rsquo;t XML, and XOM is an XML API.
+</para>
+
+<para>
+I also think that the proper interchange format between different 
+systems such as a native XML database and a custom application is 
+real XML, not a DOM object, not a XOM object, not an Infoset, but 
+real XML. Different local contexts will have different needs. One API 
+will not suit them all. We can let a thousand incompatible APIs 
+bloom, as long they all talk to each other by sending and receiving 
+well-formed XML. On the other hand, subsetting or supersetting XML is 
+an interoperability disaster. It is precisely this that XOM&rsquo;s 
+draconian focus on well-formedness is designed to avoid.
+</para>
+
+</sect2>
+
+
+</sect1>
+
+<sect1>
+   <title>XML Principles</title>
+
+
+<sect2>
+<title>All objects can be written as well-formed XML text</title>
+
+  <para>
+    If it isn&rsquo;t well-formed, it isn&rsquo;t XML.
+    Some XML APIs let you create objects that cannot possibly be serialized as 
+    well-formed XML. XOM does not.
+    (Or if it does, that&rsquo;s a bug; and please tell me so I can fix it.)
+    Every node object in XOM is potentially either 
+    a well-formed XML document or a piece thereof.
+    In fact, XOM is even a little stricter than this. It actually requires 
+    namespace well-formedness, not simple well-formedness.
+  </para>
+  
+
+</sect2>
+<sect2>
+<title>It is impossible to create malformed documents</title>
+
+  <para>
+      At no time does XOM let you do anything that would make a document
+      namespace malformed. You cannot add two attributes with the same name to the same element.
+      You cannot use a name for an element that contains illegal characters. You cannot remove the 
+      root element from a document. You cannot add control characters like null or vertical tab to a text node.
+      Nothing you do can produce malformed XML.
+  </para>
+
+</sect2>
+<sect2>
+<title>Validity can be enforced by subclasses</title>
+
+  <para>
+    XOM itself does not enforce validity.
+    However, it is possible to subclass the standard XOM node classes
+    such as <classname>Element</classname> to impose additional restrictions.
+    This theoretically allows you to use XOM to create APIs that guarantee validity against some schema,
+    whether that schema is a DTD, a RELAX NG schema,
+    a W3C XML Schema language schema, or just an implicit set of rules.
+  </para>
+
+</sect2>
+<sect2>
+<title>Syntax sugar is not represented</title>
+
+<para>
+  XOM does not provide any information about the syntax sugar in an XML document.
+  None of the following are reported in any way:
+</para>
+
+  <itemizedlist>
+<listitem><para>CDATA sections</para></listitem>
+<listitem><para>Quotes around attribute values</para></listitem>
+<listitem><para>White space inside tags</para></listitem>
+<listitem><para>Character and entity references</para></listitem>
+<listitem><para>Attribute order</para></listitem>
+<listitem><para>Defaulted vs. specified attributes</para></listitem>
+  </itemizedlist>
+
+  <para>
+    You will of course get the content from all of these.
+    You just won&rsquo;t be told, for example, whether the less than character
+    was represented as &amp;lt; or &amp;0x3C; or even
+    &lt;[![&lt;]]&gt;. You should not care about any of this.
+    Code that does care about this is almost always 
+    broken code. 
+  </para>
+  
+  <para>
+    The one notable exception are XML editors.
+    XOM is not suitable for writing a source-level XML editor.
+    However, this is really a very strange use-case.
+    Editors really need their own API, and an API that is 
+    suitable for editors is not really suitable for most other tasks.
+  </para>
+  
+</sect2>
+</sect1>
+
+<sect1>
+   <title>Java Principles</title>
+
+<sect2>
+<title>Not thread safe</title>
+
+  <para>
+    Thread safety is tough, and can have significant performance implications.
+    I chose not to make any classes in XOM thread-safe. 
+    The simplest way to use XOM in a thread-safe fashion is not to allow any XOM object to
+    be referenced from more than one thread.
+  </para>
+  
+  <para>
+    If you have to use a XOM object in more than one thread, try to make it read-only
+    after its initial creation; and do all the initial creation in a single thread.
+  </para>
+  
+  <para>
+    If that&rsquo;s not possible, then you'll just have to synchronize the object yourself.
+    In my experience, though, a very small percentage of actual code really needs to do this.
+    I chose not to slow down XOM (and likely introduce subtle bugs) 
+    for the majority of cases that don&rsquo;t need to concern themselves with this.
+  </para>
+
+</sect2>
+<sect2>
+<title>Classes do not implement <interfacename>Serializable</interfacename>; use XML.</title>
+
+  <para>
+    XML is itself a serialization format. In fact, it is a much cleaner, much more interoperable
+    format than Java&rsquo;s object serialization.
+    Using object serialization limits you to exchanging data only with other Java programs.
+    Without a great deal of care and effort, it limits you to exchanging data only with other programs
+    that use the identical version of XOM.
+  </para>
+  
+  <para>
+    XML, by contrast, can be used to exchange data with Python programs, DOM programs,
+    Perl programs, C++ programs, C# programs, and far more.
+    These programs can use the same or a different version of XOM.
+    They can use other APIs like SAX, DOM, JDOM.
+    Even human beings can easily read and work with the data using a simple text editor.
+  </para>
+  
+  <para>
+    Binary formats are bad in general, and  
+    Java&rsquo;s object serialization is far from the best binary format.
+    Object serialization routinely violates access protection,
+    interferes with class loading, breaks various design patterns,
+    is slow as spit, 
+    and in general causes far more problems than it solves. XML is far cleaner, 
+    more reliable, more robust, and faster.
+    Use XML.
+  </para>
+
+</sect2>
+<sect2>
+<title>Classes do not implement <interfacename>Cloneable</interfacename>; use copy constructors.</title>
+
+  <para>
+    The <interfacename>Cloneable</interfacename> interface
+    is a huge honking mess.
+    It tries to implement the mix-in pattern in Java, but fails.
+    Just because a class implements <interfacename>Cloneable</interfacename>
+    is no guarantee you can actually clone it, 
+    or even that it has a publicly accessible
+    <methodname>clone</methodname> method.
+    (On this point, see 
+    <citation><citetitle pubwork="book"><ulink url="http://www.amazon.com/exec/obidos/ISBN%3D0201310058/ref%3Dnosim/cafeaulaitA/">Effective 
+    Java</ulink></citetitle>, <author>
+      <firstname>Joshua</firstname>
+      <surname>Bloch</surname>
+    </author>,
+Addison-Wesley, 2001, ISBN 0-201-31005-8, pp. 45-52.</citation>)
+  </para>
+  
+  <para>
+    Consequently XOM classes do  not implement <interfacename>Cloneable</interfacename>.
+    Instead each node class provides  a copy constructor 
+    and a <methodname>copy</methodname> method.
+    For example, the following code clones an <classname>Element</classname> object <varname>e</varname>:
+  </para>
+  
+  <informalexample><programlisting>Element copy = new Element(e);</programlisting></informalexample>
+
+  <para>
+    If you have a node whose more specific type is unknown,
+    you can use the <methodname>copy</methodname> method instead:
+  </para>
+ 
+
+  <informalexample><programlisting>Node copy = node.copy();</programlisting></informalexample>
+  
+</sect2>
+<sect2>
+<title>Lack of generics really hurts in the Collections API. Hence, don&rsquo;t use it.</title>
+
+  <para>
+    The Java Collections API is insufficiently type-safe. Although you can design a <classname>List</classname>
+    subclass that only allows particular types of objects, all nodes for example,
+    there&rsquo;s no way to indicate this in the subclass&rsquo;s API.
+    All the <classname>List</classname> methods merely return and take as arguments objects of type
+    <classname>Object</classname>. (Yes, starting in Java 1.5 generics are possible.
+    However, not only am I unwilling to limit XOM to Java 1.5 and later.
+    There are a number of compromises made in Java' 1.5's generics implementation
+    for reasons of backwards compatibility that limit its type safety.)
+
+    <!-- JDJ ref???? approximately dec. 2002-->
+    </para>
+   
+   <para>
+    Consequently, XOM uses its own list classes such as <classname>Nodes</classname>
+    that are typed as strongly as possible. Furthermore, parent nodes such as 
+    <classname>Element</classname> and <classname>Document</classname> do not
+    contain a list. Instead, they are lists. They have their own append and insert and getChild
+    methods. 
+  </para>
+  <note>
+  <para>
+    Internally, XOM actually does make quite heavy use of the Java Collections API.
+    However, the adapter design pattern is used to completely hide this fact from client programmers.
+  </para>
+</note>
+</sect2>
+<sect2>
+<title>Problems detectable in testing throw  runtime exceptions</title>
+
+  <para>
+  I got this idea from Bruce Eckel (<ulink url="http://www.mindview.net/Etc/Discussions/CheckedExceptions">Does
+  Java need Checked Exceptions?</ulink><footnote>
+        <para>
+        Bruce Eckel, 
+        <citetitle pubwork="webpage"><ulink url="http://www.mindview.net/Etc/Discussions/CheckedExceptions">Does
+  Java need Checked Exceptions?</ulink></citetitle></para></footnote>, 
+) and Joshua 
+Bloch  (<citation>Effective Java</citation>, 
+particularly Item 40&mdash;Use checked exceptions 
+for recoverable conditions and runtime exceptions for programming 
+errors<footnote><para><citation>
+<citetitle pubwork="chapter">Use checked exceptions 
+for recoverable conditions and runtime exceptions for programming</citetitle>
+    <citetitle pubwork="book"><ulink url="http://www.amazon.com/exec/obidos/ISBN%3D0201310058/ref%3Dnosim/cafeaulaitA/">Effective 
+    Java</ulink></citetitle>, <author>
+      <firstname>Joshua</firstname>
+      <surname>Bloch</surname>
+    </author>,
+Addison-Wesley, 2001, ISBN 0-201-31005-8, pp. 172-173.</citation></para></footnote>&mdash;and 41&mdash;Avoid unnecessary use of checked exceptions<footnote><para><citation>
+<citetitle pubwork="chapter">Avoid unnecessary use of checked exceptions</citetitle>
+    <citetitle pubwork="book"><ulink url="http://www.amazon.com/exec/obidos/ISBN%3D0201310058/ref%3Dnosim/cafeaulaitA/">Effective 
+    Java</ulink></citetitle>, <author>
+      <firstname>Joshua</firstname>
+      <surname>Bloch</surname>
+    </author>,
+Addison-Wesley, 2001, ISBN 0-201-31005-8, pp. 174-175.</citation></para></footnote>). 
+Bloch 
+is especially clear that precondition violations should cause runtime 
+exceptions. (Think of <exceptionname>IllegalArgumentException</exceptionname>). 
+Most of the time this indicates a programming error. Thus rather than 
+putting in a try-catch block to handle the exception, the programmer 
+should fix the mistake that led to the programming error in the first 
+place. Assuming the programmer has fixed the mistake, there&rsquo;s no 
+reason to catch the exception because it won&rsquo;t be thrown. And if the 
+programmer&rsquo;s wrong, and they haven&rsquo;t fixed their mistake, then they 
+should learn about it as soon as possible rather than having the 
+exception get lost in an empty catch block added just to make the 
+compiler shut up about an uncaught exception.
+</para>
+
+<para>
+Most of the runtime exceptions in XOM occur as a result of 
+precondition violations, for instance passing a string to <methodname>setName</methodname>
+that is not a legal XML name. This will likely happen every time the 
+program is run, or every time the program executes a particular 
+section of code, rather than depending on input or temporary 
+conditions. This isn&rsquo;t always true. For instance, a GUI might ask a 
+user to type in an element name and then pass that string to <methodname>setName</methodname>. 
+Whether or not the exception is thrown would then depend on what the 
+user typed. However, I think far more often than not such a precondition 
+violation is internal to the program, and thus should be caught by 
+testing.
+</para>
+
+<para>
+On the other hand, not all problems are like this. For instance, a 
+<exceptionname>ParsingException</exceptionname> 
+is thrown when an external document is discovered to 
+be malformed. There is no way to predict this in advance because the 
+document is not part of the program itself (unlike the string passed 
+to <methodname>setName</methodname>). Whether or not the exception is thrown depends 
+completely on which document you're parsing, and the document may not 
+even exist at compile time. There&rsquo;s no way to tell if it&rsquo;s 
+well-formed or not until run time. Hence <exceptionname>ParsingException</exceptionname>  
+is a checked exception.
+  </para>
+
+</sect2>
+
+<sect2>
+<title>Assertions that can be turned off are pointless</title>
+
+  <para>
+  In Java 1.4 you can use a command line flag to disable assertion 
+checking. However, if an assertion is violated, it&rsquo;s still an error, 
+just one you no longer notice. Turning off assertions at runtime is 
+like including airbags in a new car model during design and street 
+testing, then removing them before you begin selling the cars to 
+consumers. No matter how rigorously you test, the users of your 
+library will encounter situations and uncover bugs you did not find 
+in testing. As Rolf Howarth wrote on the java-dev mailing list 
+back in February, 2002:
+</para>
+
+ <blockquote>
+   <para>
+programmers love the concept of assertions so much because it's like 
+having your cake and eating it. On the one hand you can kid yourself 
+you're protecting yourself by testing for error conditions that you 
+know you should, but on the other you're absolved from any 
+responsibility if the extra checks have a performance impact because 
+they won't be there in production code. Except of course people 
+usually leave assertions turned on in practice, certainly once 
+they've been through the loop of puzzling over obscure bug reports 
+from the field and muttering <quote>that can't happen, that assertion check 
+should have picked that case up</quote>, just before their face turns white 
+and they realise assertions are compiled out!
+</para>
+ </blockquote>
+
+<para>
+Consequently, I decided not to rely on Java&rsquo;s new assertion mechanism 
+for precondition checking in XOM. Instead, each method that sets or 
+changes some value verifies all preconditions explicitly and throws a 
+runtime exception (normally a subclass of <exceptionname>XMLException</exceptionname>) if it detects 
+a problem.
+</para>
+
+<para>
+Furthermore, many methods are declared final to prevent subclasses 
+from turning off this checking. Subclasses can override the various 
+protected check methods to add assertions of their own, but they 
+cannot remove the assertions in the core classes.
+  </para>
+
+</sect2>
+
+<sect2>
+<title>Setter and mutator methods return void</title>
+
+  <para>
+  Simple, clean, easy-to-use APIs eschew side-effects. Each method call should perform
+  one complete, logically unified operation. It should do as much as the operation requires and no more.
+  This knife cuts in both directions. A public method should not do less than one 
+  operation (which would leave an object in an inconsistent state), 
+  but it should not do more either. Getting, setting, incrementing, and changing an object 
+  are logically distinct operations. In most cases, there is no semantic reason for a setter
+  or mutator method to return a value. These methods should return void. 
+  </para>
+  
+<para>
+ Partially, this is based on my 
+experience with JavaBeans, where returning void is necessary for a 
+method to be recognized as a property setter. However, more 
+importantly, it&rsquo;s semantically the right thing to do. By invoking a 
+setter method (or any adder or mutator method) you are changing an 
+existing object. You are not creating a new object. You are not 
+getting a reference to some value that you did not have before. 
+Nothing has been created that did not exist before. There is no 
+justification for returning anything.
+</para>
+
+  
+  <para>
+    Some APIs such as JDOM have setter methods that return the object 
+    whose property was set. This enables code to use method call chaining.
+    For example,
+  </para>
+  
+  <informalexample><programlisting>Element root = (new Element("html"))
+    .appendChild(new Element("head"))
+    .appendChild(new Element("body"))</programlisting></informalexample>
+
+ <para>
+    However, this is logically unjustified. It complicates the API
+    and muddies the semantics of the method in exchange for syntactic
+    convenience. It confuses the levels. 
+  </para>
+
+  <para>
+    Even syntactically, I  don&rsquo;t like this style of coding.
+    It&rsquo;s often unclear, even with good indentation, which nodes
+    are being added where. Multilevel hierarchies rely too
+    much on parentheses to specify what goes where.
+    When the statement has executed you often don&rsquo;t 
+    have reference variables pointing to the nodes you need.
+    Plus it's harder to debug when single stepping through the code,
+    because each statement does many separate tasks, and return values are
+    not stored in inspectable intermediate variables.
+  </para>
+  
+ <para>
+Dividing this statement up into multiple relatively atomic operations 
+makes the code cleaner, easier to read, easier to understand, and easier to debug. Yes, 
+there are classes in the Java class library that don&rsquo;t operate this 
+way, most notably <classname>StringBuffer</classname>. Perhaps this makes sense for 
+<classname>StringBuffer</classname>, where it&rsquo;s basically the equivalent of the + operator. 
+Honestly though, this is really just a sop thrown to performance to 
+avoid allocating lots of extra strings. Logically, the plus operator 
+should do what it does for numbers: return a new object that is 
+neither of its operands.
+ </para>
+  
+  <para>
+    But even if I liked this style of coding, I'd still think that
+    a setter method that returns the object whose property was set was 
+    semantically wrong.
+There is simply no logical justification for a setter or mutator 
+method returning the object itself. It is a crutch designed to 
+support a particular programming idiom, but that idiom is neither 
+necessary nor helpful. Method call chaining is not an improvement.  
+  </para>
+  
+</sect2>
+
+</sect1>
+
+
+<sect1>
+   <title>Development Style</title>
+
+<sect2>
+<title>This is a cathedral, not a bazaar</title>
+
+  <para>
+    XOM has a single unifying vision, mine.
+    I am absolutely open to criticism of and suggestions about 
+    the API. Indeed the first eight development releases show some major changes 
+    made as a result of user feedback.
+    Suggestions were made, I considered them, and I decided they were valid points
+    that needed to be addressed in the API.
+  </para>
+  
+  <para>
+    However, in all cases, I am the final arbiter.
+    If I don&rsquo;t think something&rsquo;s a good idea, then it isn&rsquo;t going in, no matter 
+    how many people are crying out for it.
+    XOM  is a more-or-less benevolent dictatorship,
+    not a democracy. I am the only committer.
+    This is my API, and it reflects my thoughts and desires.
+    In general, I think that APIs that come out of a single vision
+    work much better than APIs designed by committee.
+    (DOM is an extreme example of an API designed by committee and majority vote.)
+  </para>
+  
+  <para>
+    Of course, XOM is open source, so if you think I'm being a putz in not
+    accepting your changes, you're free to fork and try to convince others than your variant is better
+    than mine. With implementation experience you might even convince me
+    to adopt your changes back into the main tree (which I have permission to do
+    since XOM is released under the LGPL). 
+  </para>
+
+</sect2>
+<sect2>
+<title>Unit testing</title>
+
+  <para>
+    Unit testing is essential for finding bugs.
+    XOM currently includes over several dozen test classes,
+    containing over 700 test methods, which probably test several thousand different things.
+    A few tests really stretch the boundaries of the notion of unit test.
+    For example one test runs the entire XInclude test suite, and two others
+    canonicalize all well-formed documents in the XML 1.0 test
+    suite, both with and without comments.  
+    This has been essential for finding and fixing bugs, as well as for making changes without
+    breaking things. 
+    Tests are present to verify correct behavior, and to make sure the right exceptions are thrown when
+    incorrect behavior is encountered.
+    <ulink url="http://www.junit.org/">JUnit</ulink>
+    is the testing framework of choice.
+  </para>
+  
+  <para>
+    Code coverage tools have been used to verify that the test suite 
+    is indeed exercising the entire code base. Clover and Jester have been particularly helpful
+    in this regard. Both have uncovered numerous bugs in previously untested code.
+    They have also resulted in  elimination of substantial chunks of dead, unreachable code.
+  </para>
+  
+   <para>
+    Unit testing has also been found to make debugging much easier. The most significant contribution
+    is  a convenient place to put a small test that exposes any newly reported bug.
+    This allows one to set a break point and begin single stepping through 
+    the right section of code with the right conditions when the problem is not immediately
+    obvious. 
+  </para>
+
+
+</sect2>
+
+
+<sect2>
+<title>Static  testing</title>
+
+<para>
+Throughout the development of XOM, I've made frequent use of various static code checking tools.
+All of these are imperfect to say the least, but they've all found significant 
+bugs at one time or another. These include:
+</para>
+
+<itemizedlist>
+  <listitem><para><ulink url="http://pmd.sourceforge.net/">PMD</ulink></para></listitem>
+  <listitem><para><ulink url="http://findbugs.sourceforge.net/">FindBugs</ulink></para></listitem>
+  <listitem><para><ulink url="http://www.eclipse.org/">Eclipse 3.0</ulink></para></listitem>
+  <listitem><para><ulink url="http://java.sun.com/j2se/javadoc/doccheck/">doccheck</ulink></para></listitem>
+</itemizedlist>
+
+
+</sect2>
+
+<sect2>
+<title>Massive samples</title>
+
+  <para>
+    As part of the design of the XOM API, I reimplemented almost every example from
+    <ulink url="http://www.cafeconleche.org/books/xmljava/">Processing XML with Java</ulink>
+    in XOM. 
+    (A few utility classes that were very specific to a particular API, and didn&rsquo;t really make sense
+    for XOM, were omitted.)
+    This helped me see what I had left out as well as what I had included that wasn&rsquo;t actually necessary.
+  </para>
+
+</sect2>
+
+</sect1>
+
+</article>

@@ -1,0 +1,2074 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd" [
+ <!-- add XIncludes -->                     
+ <!ENTITY % local.para.char.mix " | xinclude:include">
+ <!ELEMENT xinclude:include EMPTY>
+ <!ATTLIST xinclude:include 
+    xmlns:xinclude CDATA #FIXED "http://www.w3.org/2001/XInclude"
+    href           CDATA #REQUIRED
+    parse          (text | xml) "xml"
+ >        
+]>
+<article revision="20161210">
+  <title>XOM Tutorial</title>
+
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2002-2005, 2016</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+ <para>
+  XOM is designed to be easy to learn and easy to use.
+  It works very straight-forwardly, and has a very shallow learning curve.
+  Assuming you're already familiar with XML, you should be 
+  able to get up and running with XOM very quickly.
+</para>
+
+
+
+<sect1>
+    <title>Creating XML Documents</title>
+    
+<para>
+  Let&rsquo;s begin, as customary, with a Hello World program.
+  In particular, suppose we want to create this XML document:
+</para>
+
+<informalexample><programlisting><![CDATA[<?xml version="1.0?>
+<root>
+  Hello World!
+</root>]]></programlisting></informalexample>
+
+<para>
+First we have to import the <literal>nu.xom</literal> package
+where most of the interesting classes live:
+</para>
+
+<informalexample><programlisting>import nu.xom.*;</programlisting></informalexample>
+
+<para>
+This document 
+contains a single element, named root, so we create
+an <classname>Element</classname> object named
+<quote>root</quote>:
+</para>
+
+<informalexample><programlisting><![CDATA[Element root = new Element("root");]]></programlisting></informalexample>
+
+
+<para>
+Next we append the string <literal>"Hello World!"</literal> to it:
+</para>
+
+<informalexample><programlisting><![CDATA[root.appendChild("Hello World!");]]></programlisting></informalexample>
+
+<para>
+  Now that we have the root element, we can use it to create the 
+  <classname>Document</classname> object:
+</para>
+
+<informalexample><programlisting><![CDATA[Document doc = new Document(root);]]></programlisting></informalexample>
+
+<para>
+  We can create a <classname>String</classname> containing the  XML for this <classname>Document</classname> object using
+  its <methodname>toXML</methodname> method:
+</para>
+
+<informalexample><programlisting>String result = doc.toXML();</programlisting></informalexample>
+
+<para>
+  This string can be written onto  an <classname>OutputStream</classname> or a  <classname>Writer</classname>
+  in the usual way. Here&rsquo;s the complete program:
+</para>
+
+<example id="HelloWorld.java"><title>Hello World with XOM</title>
+<programlisting><xinclude:include parse="text" href="examples/HelloWorld.java"/></programlisting></example>
+
+<para>
+  This is compiled and run in the usual way. When that&rsquo;s done, here&rsquo;s the output:
+</para>
+
+<screen>
+<computeroutput><![CDATA[<?xml version="1.0"?>
+<root>Hello World!</root>]]></computeroutput></screen>
+
+<para>
+You may notice that this isn't quite what the goal was.
+The white space is different. On reflection, this shouldn't be too surprising.
+White space is significant in XML. If you want line breaks and indentation,
+you should include that in the strings you use to construct the 
+data. For example,
+</para>
+
+<informalexample><programlisting><![CDATA[root.appendChild("\n  Hello World!\n");]]></programlisting></informalexample>
+
+<!--
+<para>
+   Alternately, instead of using <methodname>toXML</methodname>,
+   you can use a <classname>Serializer</classname>.
+   This class
+   provides the usual options for setting indenting, maximum line length, character
+   encoding, and so forth. For example,
+ </para>  
+   
+ <informalexample><programlisting>          Serializer serializer = new Serializer(System.out);
+          serializer.setIndent(2);
+          serializer.setMaxLength(64);
+          serializer.write(doc);
+          serializer.flush();
+</programlisting></informalexample>
+
+  
+<para>
+  Using a <classname>Serializer</classname> has the additional advantage of not requiring
+  you to construct an intermediate <classname>String</classname> representation
+  that may occupy a signifiant amount of memory.
+  <classname>Serializer</classname> streams the document onto its <classname>OutputStream</classname>
+  so it may well be noticeably faster for some use cases.
+</para>
+-->
+
+
+<sect2>
+  <title>Appending children</title>
+  
+  <para>
+    Let&rsquo;s write a more complicated document. In particular, let&rsquo;s
+    write a document that encodes the Fibonacci numbers in XML, like this:
+  </para>
+  
+  <informalexample><programlisting><![CDATA[<?xml version="1.0"?>
+<Fibonacci_Numbers>
+  <fibonacci>1</fibonacci>
+  <fibonacci>1</fibonacci>
+  <fibonacci>2</fibonacci>
+  <fibonacci>3</fibonacci>
+  <fibonacci>5</fibonacci>
+  <fibonacci>8</fibonacci>
+  <fibonacci>13</fibonacci>
+  <fibonacci>21</fibonacci>
+  <fibonacci>34</fibonacci>
+  <fibonacci>55</fibonacci>
+</Fibonacci_Numbers>]]></programlisting></informalexample>
+
+<para>
+  Begin by creating the root
+  <markup>Fibonacci_Numbers</markup>
+  element:
+</para>
+  
+ <informalexample><programlisting><![CDATA[Element root = new Element("Fibonacci_Numbers"); ]]></programlisting></informalexample>
+ 
+ <para>
+ Next we need a loop that creates the individual <markup>fibonacci</markup> elements.
+After it&rsquo;s created each of these elements is appended to the root element using the 
+<methodname>appendChild</methodname> method:
+ </para>
+ 
+ <informalexample><programlisting><![CDATA[for (int i = 1; i <= 10; i++) {
+  Element fibonacci = new Element("fibonacci");
+  fibonacci.appendChild(low.toString());
+  root.appendChild(fibonacci);
+		
+  BigInteger temp = high;
+  high = high.add(low);
+  low = temp;
+}]]></programlisting></informalexample>
+
+  <para>
+    Next we create the document from the root element, and
+    print it on <classname>System.out</classname>:
+  </para>
+  
+ <informalexample><programlisting><![CDATA[  Document doc = new Document(root);
+  System.out.println(doc.toXML()); ]]></programlisting></informalexample>
+
+  <para>
+  Here&rsquo;s the completed program:
+  </para>
+  
+<example id="FibonacciXML.java"><title>Generating Fibonacci Numbers in XML</title>
+<programlisting><xinclude:include parse="text" href="examples/FibonacciXML.java"/></programlisting></example>
+
+<para>
+  This is compiled and run in the usual way. When that&rsquo;s done, here&rsquo;s the output:
+</para>
+
+<screen>
+<computeroutput><![CDATA[<?xml version="1.0"?>
+<Fibonacci_Numbers><fibonacci>1</fibonacci><fibonacci>1</fibonacci><fibonacci>2</fibonacci><fibonacci>3</fibonacci><fibonacci>5</fibonacci><fibonacci>8</fibonacci><fibonacci>13</fibonacci><fibonacci>21</fibonacci><fibonacci>34</fibonacci><fibonacci>55</fibonacci></Fibonacci_Numbers>]]></computeroutput></screen>
+
+</sect2>
+
+<sect2>
+  <title>Serializer</title>
+
+<para>
+Once again the white space isn't quite what we wanted.
+This is a good opportunity to introduce the <classname>Serializer</classname>
+class. Instead of using <methodname>toXML</methodname>,
+you can ask a <classname>Serializer</classname> object to 
+write the document onto an <classname>OutputStream</classname>.
+You can also tell the <classname>Serializer</classname> to insert line breaks and indents
+in reasonable places. For instance, 
+<xref linkend="PrettyFibonacci.java"/> requests
+a four space indent,
+the ISO-8859-1 (Latin-1) encoding,
+and a 64 character maximum line length:
+</para>
+  
+  <example id="PrettyFibonacci.java"><title>Using a Serializer to Output XML</title>
+<programlisting><xinclude:include parse="text" href="examples/PrettyFibonacci.java"/></programlisting></example>
+
+<para>
+  Here&rsquo;s the output, much more nicely formatted:
+</para>
+  
+<screen>
+<computeroutput><xinclude:include parse="text" href="examples/prettyfibonacci.xml"/></computeroutput></screen>
+  
+  <para>
+  Besides, line length and indentation,
+  <classname>Serializer</classname> gives you several other options for controlling the output
+  including:
+  </para>
+  
+  <itemizedlist>
+    <listitem><para>The line separator string (\r\n by default)</para></listitem>
+    <listitem><para>The character encoding (UTF-8 by default)</para></listitem>
+   <listitem><para>Whether to insert <markup>xml:base</markup> attributes to retain the base URI property</para></listitem>
+    <listitem><para>Whether to normalize output using Unicode normalization form C</para></listitem>
+  </itemizedlist>
+ 
+  <para>
+    There are a few things you should note about using a <classname>Serializer</classname>:
+  </para>
+  
+  <itemizedlist>
+  <listitem><para>By default, <classname>Serializer</classname>
+  outputs an XML document that precisely represents  a XOM <classname>Document</classname>. 
+  If you parse the serialized output back in to XOM, you'll get an exactly equivalent tree. <footnote><para>There&rsquo;s one minor possible difference. 
+  Depending on where you stored the output, the base URIs of some nodes may not be the same.</para></footnote>
+  All the text content of the document that is part of a document&rsquo;s infoset
+  is precisely preserved. This includes boundary white space. Insignificant white space such as white space inside tags
+  is not included in the XML information set, and generally will not be preserved. 
+  </para></listitem>
+  
+  <listitem><para>If you tell  <classname>Serializer</classname> to change a document&rsquo;s infoset by inserting line breaks 
+  and/or indenting, it may trim, compress, or remove existing white space as well. It does not limit itself merely to adding 
+  white space.
+  </para></listitem>
+  
+  <listitem><para><classname>Serializer</classname> makes reasonable efforts to respect the requested maximum
+  line length and indentation, but it does not guarantee that it will do so. For instance, if an element name
+  is 50 characters long and the maximum line length is 40, then 
+  <classname>Serializer</classname> will generate a line longer than 40 characters. 
+  </para></listitem>
+  
+ <listitem><para>No matter what options are set,  <classname>Serializer</classname> 
+ does not change white space in elements where <markup>xml:space="preserve"</markup>.
+  </para></listitem>
+  
+ <listitem><para>If the <classname>Serializer</classname> cannot output a character in the
+ current encoding, it will try to escape it with a numeric character reference.
+ If it cannot use a numeric character reference (for instance, because the 
+ unavailable character occurs in an element name), it throws an
+ <exceptionname>UnavailableCharacterException</exceptionname>.
+ This is a runtime exception. This should not happen in UTF-8 and UTF-16 encodings. 
+  </para></listitem>
+  
+  </itemizedlist>
+  
+</sect2>
+
+<sect2>
+  <title>Attributes</title>
+  
+  <para>
+     Adding attributes is not hard. In XOM, the 
+     <classname>Attribute</classname> class represents attributes, and it works pretty much as you'd expect.
+     For example, this statement creates an <classname>Attribute</classname> object representing
+     the attribute <markup>id="p1"</markup>:
+  </para>
+  
+  <informalexample><programlisting>Attribute a = new Attribute("id", "p1");</programlisting></informalexample>
+
+  <para>
+    The <methodname>addAttribute</methodname> method in the <classname>Element</classname>
+    class attaches an attribute to an <classname>Element</classname> object.
+    If there&rsquo;s an existing attribute with the same local name
+    and namespace URI, it&rsquo;s removed at the same time.
+    <xref linkend="AttributeFibonacci.java"/> demonstrates with a simple program
+    that adds some <markup>index</markup> attributes to the <markup>fibonacci</markup> elements:
+  </para>
+  
+ 
+  <example id="AttributeFibonacci.java"><title>Adding attributes to elements</title>
+<programlisting><xinclude:include parse="text" href="examples/AttributeFibonacci.java"/></programlisting></example>
+ 
+  <para>
+    When this program is run, it produces the following output
+    (after adding a few line breaks):
+  </para>
+  
+<screen><computeroutput><![CDATA[<?xml version="1.0"?>
+<Fibonacci_Numbers xmlns=""><fibonacci index="1">1</fibonacci><fibonacci index="2">1</fibonacci>
+<fibonacci index="3">2</fibonacci><fibonacci index="4">3</fibonacci>
+<fibonacci index="5">5</fibonacci><fibonacci index="6">8</fibonacci>
+<fibonacci index="7">13</fibonacci><fibonacci index="8">21</fibonacci>
+<fibonacci index="9">34</fibonacci><fibonacci index="10">55</fibonacci></Fibonacci_Numbers>]]></computeroutput></screen> 
+
+</sect2>
+
+<sect2>
+  <title>Document Type Declarations</title>
+  
+  <para>
+      Suppose you have a DTD sitting at the relative URL
+      <uri>fibonacci.dtd</uri>. <xref linkend="ValidFibonacci.java"/>  creates a document type declaration pointing to that DTD,
+      and then attaches it to the document:
+  </para>
+  
+   <example id="ValidFibonacci.java"><title>Including a document type declaration</title>
+<programlisting><xinclude:include parse="text" href="examples/ValidFibonacci.java"/></programlisting></example>
+  
+   <para>
+       One thing XOM does not allow you to do is create an internal DTD subset.
+       You can parse one from an input document, and it will be preserved in the document type declaration
+       as the document is manipulated,
+       but you cannot create a new one.
+       The reason is that XOM is fanatical about maintaining well-formedness,
+       and XOM cannot currently check the well-formedness of DTD declarations.
+       It has to rely on the parser to do that.
+  </para>
+  
+  <note>
+  <para>
+  If you really need the internal DTD subset, you can create a string
+  containing a document with the internal DTD subset you want,
+  parse that string to forma  <classname>Document</classname> object,
+  detach the temporary document&rsquo;s 
+  <classname>DocType</classname> object, and add that to another document.
+  For example,
+  </para>
+  
+  <informalexample><programlisting><![CDATA[Element greeting = new Element("greeting");
+Document doc = new Document(greeting);
+String temp = "<!DOCTYPE element [\n" 
+  + "<!ELEMENT greeting (#PCDATA)\n"
+  + "]>\n"
+  + "<root />";
+Builder builder = new Builder();
+Document tempDoc = builder.build(temp, null);
+DocType doctype = tempDoc.getDocType();
+doctype.detach();
+doc.setDocType(doctype);]]></programlisting></informalexample>
+  
+  </note>
+
+</sect2>
+
+<sect2>
+  <title>Namespaces</title>
+  
+  <para>
+    XOM fully supports namespaces, and enforces all namespace constraints.
+    It does not allow developers to create namespace malformed documents.
+    You can create elements, attributes, and documents that don't use namespaces
+    at all. However, if you do use namespaces you have to follow the rules.
+    In fact, XOM is actually a little more strict than the namespaces 
+    spec technically requires. It insists that all namespace URIs be syntactically correct, absolute
+    URIs according to RFC 2396. The main effect is that you can&rsquo;t use non-ASCII characters
+    such as &gamma; and &Omega; in namespace URIs. These must all be properly percent escaped before
+    passing them to XOM.
+  </para>
+  
+   <para>
+   That said, XOM&rsquo;s namespace model is possibly the cleanest of all the major APIs.
+   It has two basic rules you need to remember:
+  </para>
+  
+  <itemizedlist>
+    <listitem><para>If an element or attribute has a prefix, use the qualified name
+     when constructing the object or changing the name.
+    </para></listitem>
+    <listitem><para>The qualified name is always the first argument
+    and
+    the namespace URI is always the second argument to 
+    any method that takes both. Namespace URIs are just strings,
+    so it is possible to inadvertently 
+    swap the arguments, but don't worry: if you get them backwards, 
+    XOM throws an exception that alerts you to your mistake 
+    very quickly. <footnote><para>This is the advantage of 
+    requiring that namespace names be absolute URIs.
+    Most absolute URIs are not legal element names and vice versa 
+    so XOM notices if the arguments are swapped. 
+    </para></footnote>
+    </para></listitem>
+    
+  </itemizedlist>
+    <para>
+      For example, this code fragment creates a <markup>p</markup> element in no namespace:
+    </para>
+    
+ <informalexample><programlisting>Element paragraph = new Element("p");</programlisting></informalexample>
+      
+<para>
+  To place the element in the XHTML namespace, just add a second argument containing the XHTML namespace URI:
+</para>
+      
+   <informalexample><programlisting>Element paragraph = new Element("p", "http://www.w3.org/TR/2001/xhtml");</programlisting></informalexample>
+
+   <para>
+  To make the element prefixed, just add the prefix to the name:
+</para>
+      
+   <informalexample><programlisting>Element paragraph = new Element("html:p", "http://www.w3.org/TR/2001/xhtml");</programlisting></informalexample>
+    
+    <para>
+      <xref linkend="MathMLFibonacci.java"/>
+      demonstrates with a simple program that outputs the Fibonacci numbers as a MathML document:
+    </para>
+    
+    
+      <example id="MathMLFibonacci.java"><title>Creating elements in namespaces</title>
+<programlisting><xinclude:include parse="text" href="examples/MathMLFibonacci.java"/></programlisting></example>
+
+    <para>
+      Here&rsquo;s the output:
+    </para>
+
+    
+    <screen>
+<computeroutput><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>
+<mathml:math xmlns:mathml="http://www.w3.org/1998/Math/MathML">
+    <mathml:mrow>
+        <mathml:mi>f(1)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>1</mathml:mn>
+    </mathml:mrow>
+    <mathml:mrow>
+        <mathml:mi>f(2)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>1</mathml:mn>
+    </mathml:mrow>
+    <mathml:mrow>
+        <mathml:mi>f(3)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>2</mathml:mn>
+    </mathml:mrow>
+    <mathml:mrow>
+        <mathml:mi>f(4)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>3</mathml:mn>
+    </mathml:mrow>
+    <mathml:mrow>
+        <mathml:mi>f(5)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>5</mathml:mn>
+    </mathml:mrow>
+    <mathml:mrow>
+        <mathml:mi>f(6)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>8</mathml:mn>
+    </mathml:mrow>
+    <mathml:mrow>
+        <mathml:mi>f(7)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>13</mathml:mn>
+    </mathml:mrow>
+    <mathml:mrow>
+        <mathml:mi>f(8)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>21</mathml:mn>
+    </mathml:mrow>
+    <mathml:mrow>
+        <mathml:mi>f(9)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>34</mathml:mn>
+    </mathml:mrow>
+    <mathml:mrow>
+        <mathml:mi>f(10)</mathml:mi>
+        <mathml:mo>=</mathml:mo>
+        <mathml:mn>55</mathml:mn>
+    </mathml:mrow>
+</mathml:math>]]></computeroutput></screen> 
+
+    <para>
+    You never have to worry about adding <markup>xmlns</markup> and <markup>xmlns:<replaceable>prefix</replaceable></markup> attributes.
+      XOM always handles that for you automatically. Indeed if you try to create attributes with these names, 
+      XOM will throw an <exceptionname>IllegalNameException</exceptionname> .
+      Sometimes, however, namespace prefixes are used in element content and attribute values,
+      even though those prefixes aren't used on any names anywhere in the document.
+      This is common in XSLT, for example.
+      In this case, you may have to add extra namespace declarations to certain elements to
+      bind these prefixes to the correct URI.
+      This is done with <classname>Element</classname>&rsquo;s 
+      <methodname>addNamespaceDeclaration</methodname> method. For example, this code
+      fragment binds the prefix <markup>svg</markup> to the namespace URI
+      <markup>http://www.w3.org/TR/2000/svg</markup>:
+    </para>
+    
+ <informalexample><programlisting>element.addNamespaceDeclaration("svg", "http://www.w3.org/TR/2000/svg");</programlisting></informalexample>
+      
+      <para>
+        This technique can also be used to force common namespace declarations onto the root element
+        when serializing. 
+      </para>
+      
+      <!--
+      <para>
+      Attributes are a little trickier because XML only allows prefixed attributes to be in a namespace.
+      Unprefixed attributes are never in a namespace. Therefore,
+      when constructing an attribute in a namespace, you must use a prefixed name.
+      When invoking <methodname>setNamespace</methodname> on an attribute,
+      you must provide both the prefix and the URI. For example,
+      </para>
+      -->
+      
+      
+</sect2>
+</sect1>
+
+<sect1>
+  <title>Parsing XML Documents</title>
+  
+  <para>
+    Much of the time, of course, you don't create the original document in XOM.
+    Instead, you read an existing XML document from a file, a network socket, a URL,
+    a <classname>java.io.Reader</classname>, or some other input source.
+    The  <classname>Builder</classname> class is responsible for reading a document
+    and constructing a XOM <classname>Document</classname>
+    object from it. For example, this attempts to read the document 
+    at http://www.cafeconleche.org/:
+  </para>
+  
+    <informalexample><programlisting>try {
+  Builder parser = new Builder();
+  Document doc = parser.build("http://www.cafeconleche.org/");
+}
+catch (ParsingException ex) {
+  System.err.println("Cafe con Leche is malformed today. How embarrassing!");
+}
+catch (IOException ex) {
+  System.err.println("Could not connect to Cafe con Leche. The site may be down.");
+}</programlisting></informalexample>
+ 
+ <para>
+   You'll notice that the <methodname>build</methodname> method may throw
+   a <exceptionname>ParsingException</exceptionname> if the document is 
+   malformed or namespace malformed.
+   It may also throw a <exceptionname>java.io.IOException</exceptionname>
+   if the document cannot be read. Both of these
+   are checked exceptions that must be declared or caught.
+ </para>
+ 
+ <para>
+   Depending on platform, relative URLs may or may not be interpreted as file names.
+   On Windows they seem to be. On Unix/Linux, they are not.
+   It is much safer to use full, unrelative file URLs such as
+   file:///home/elharo/Projects/data/example.xml which should work 
+   on essentially any platform. Alternately, you can pass
+   a <classname>java.io.File</classname> object to the 
+   <methodname>build</methodname> method instead of a URL.
+   You can also pass an <classname>InputStream</classname> or a <classname>Reader</classname> from which the XML document
+   will be read.
+ </para>
+ 
+ <para>
+   You can also build a <classname>Document</classname> from a 
+   <classname>String</classname> that contains the actual XML document.
+   In this case, you must provide a second argument giving the base URL of the 
+   document, which would otherwise not be available. For example,
+ </para>
+ 
+  
+    <informalexample><programlisting>Document doc = parser.build("&lt;greeting>Hello World!&lt;/greeting>", "http://www.example.org/");</programlisting></informalexample>
+    
+    <para>
+    If there really is no base URL, you can pass null for the second argument.
+    However, this will prevent the resolution of any relative URLs within the document,
+    and may prevent the document from being parsed if the document type declaration uses a relative URL.
+    </para>
+ 
+
+<sect2>
+  <title>Validating</title>
+   <para>
+      By default XOM only checks for well-formedness and
+      namespace well-formedness.
+      If you want it to check for validity too
+      (and throw a <classname>ValidityException</classname> if a violation is detected)
+      you can pass <literal>true</literal> to the <methodname>Builder</methodname> constructor,
+      like this:
+   </para>
+
+     <informalexample><programlisting>try {
+  Builder parser = new Builder(true);
+  Document doc = parser.build("http://www.cafeconleche.org/");
+}
+catch (ValidityException ex) {
+  System.err.println("Cafe con Leche is invalid today. (Somewhat embarrassing.)");
+}
+catch (ParsingException ex) {
+  System.err.println("Cafe con Leche is malformed today. (How embarrassing!)");
+}
+catch (IOException ex) {
+  System.err.println("Could not connect to Cafe con Leche. The site may be down.");
+}</programlisting></informalexample>
+
+<para>
+  A <classname>ValidityException</classname> is not fatal. The entire document is parsed anyway.
+  If you still want to process the invalid document, you can invoke the
+  <methodname>getDocument</methodname> method of <classname>ValidityException</classname> 
+  to return a <classname>Document</classname> object. For example,
+</para>
+
+     <informalexample><programlisting>Document doc;
+try {
+  Builder parser = new Builder(true);
+  doc = parser.build("http://www.cafeconleche.org/");
+}
+catch (ValidityException ex) {
+  doc = ex.getDocument();
+}
+catch (ParsingException ex) {
+  System.err.println("Cafe con Leche is malformed today. (How embarrassing!)");
+  System.exit(1);
+}
+catch (IOException ex) {
+  System.err.println("Could not connect to Cafe con Leche. The site may be down.");
+  System.exit(1);
+}</programlisting></informalexample>
+
+<para>
+<classname>ValidityException</classname> also contains methods you can use to list the 
+validity errors in the document:
+</para>
+
+<methodsynopsis language="java">
+<modifier>public</modifier> 
+<type>int</type> 
+<methodname>getErrorCount</methodname> 
+</methodsynopsis>
+<methodsynopsis language="java">
+<modifier>public</modifier> 
+<type>String</type> 
+<methodname>getValidityError</methodname> 
+<methodparam><type>int</type> <parameter>n</parameter></methodparam> 
+</methodsynopsis>
+
+<para>
+  The exact number of exceptions and the content of the
+  error messages depends on the underlying parser.
+</para>
+
+</sect2>
+
+
+<sect2>
+  <title>Setting SAX Properties</title>
+  
+   <para>
+      If you need to control the specific parser class used, you can create
+      a SAX <interfacename>XMLReader</interfacename> in the usual way, and then pass it to the 
+      <classname>Builder</classname> constructor. For instance, this would allow you to use John Cowan&rsquo;s 
+      <ulink url="http://mercury.ccil.org/~cowan/XML/tagsoup/">TagSoup</ulink> to parse an HTML document into XOM:
+   </para>
+   
+     <informalexample><programlisting>  try {      
+    XMLReader tagsoup = XMLReaderFactory.createXMLReader("org.ccil.cowan.tagsoup.Parser");
+    Builder bob = new Builder(tagsoup);
+    Document yahoo = bob.build("http://www.yahoo.com");
+    // ...
+  }
+  catch (SAXException ex) {
+    System.out.println("Could not load Xerces.");
+    System.out.println(ex.getMessage());
+  }</programlisting></informalexample>
+   
+   <para>
+     You can configure a SAX parser before passing it to XOM. 
+     For example, suppose you want to use Xerces to perform schema validation.
+     You would set up the <classname>Builder</classname> thusly:
+     </para>
+     
+     <informalexample><programlisting>  String url = "http://www.example.com/";
+  try {      
+    XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser"); 
+    xerces.setFeature("http://apache.org/xml/features/validation/schema", true);                         
+
+    Builder parser = new Builder(xerces, true);
+    parser.build(url);
+    System.out.println(url + " is schema valid.");
+  }
+  catch (SAXException ex) {
+    System.out.println("Could not load Xerces.");
+    System.out.println(ex.getMessage());
+  }
+  catch (ParsingException ex) {
+    System.out.println(args[0] + " is not schema valid.");
+    System.out.println(ex.getMessage());
+    System.out.println(" at line " + ex.getLineNumber() 
+      + ", column " + ex.getColumnNumber());
+  }
+  catch (IOException ex) { 
+    System.out.println("Due to an IOException, Xerces could not check " + url);
+  }</programlisting></informalexample>
+     
+     <para>
+     This mechanism is primarily intended for custom SAX properties and features such as schema validation
+     or filters. 
+     XOM requires certain standard SAX properties to be set in certain ways: 
+     In particular, XOM expects to control the following parser properties and features:
+   </para>
+   
+   <itemizedlist>
+   <listitem><para><uri>http://xml.org/sax/features/namespace-prefixes</uri></para></listitem>
+            <listitem><para><uri>http://xml.org/sax/features/external-general-entities</uri></para></listitem>
+            <listitem><para><uri>http://xml.org/sax/features/external-parameter-entities</uri></para></listitem>
+            <listitem><para><uri>http://xml.org/sax/features/namespace-prefixes</uri></para></listitem>
+            <listitem><para><uri>http://xml.org/sax/features/validation</uri></para></listitem>
+            <listitem><para><uri>http://xml.org/sax/features/string-interning</uri></para></listitem>
+            <listitem><para><uri>http://apache.org/xml/features/allow-java-encodings</uri></para></listitem>
+            <listitem><para><uri>http://apache.org/xml/features/standard-uri-conformant</uri></para></listitem>
+            <listitem><para><uri>http://xml.org/sax/properties/lexical-handler</uri></para></listitem>
+        <listitem><para><uri>http://xml.org/sax/properties/declaration-handler</uri></para></listitem>
+   </itemizedlist>
+   
+   <para>
+     Any values you provide for these properties and features will be overridden by XOM
+     when it constructs the <classname>Builder</classname>.
+     Similarly, <classname>Builder</classname> expects to be able to set all handlers:
+     <interfacename>ContentHandler</interfacename>,  <interfacename>DeclHandler</interfacename>, 
+     <interfacename>ErrorHandler</interfacename>, etc.
+     If you hang onto a reference to the <classname>XMLReader</classname>,
+     you could probably change them back later; but don't do that.
+     If you do XOM will get very confused, and probably break sooner rather than later. 
+   </para>
+   
+ </sect2>
+  
+</sect1>
+
+<sect1>
+  <title>Navigation</title>
+  
+  <para>
+    Once you have a document in memory, you're going to want to navigate it.
+    The primary navigation methods are declared in the 
+    <classname>Node</classname> class so they're accessible on
+    everything in the tree. 
+  </para>
+  
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Document</type>
+  <methodname>getDocument</methodname>
+</methodsynopsis>    
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>ParentNode</type>
+  <methodname>getParent</methodname>
+</methodsynopsis>    
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>abstract</modifier> 
+  <type>int</type>
+  <methodname>getChildCount</methodname>
+</methodsynopsis>    
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Node</type>
+  <methodname>getChild</methodname>
+  <methodparam><type>int</type> <parameter>i</parameter></methodparam>
+</methodsynopsis>     
+  
+  <para>
+    The normal strategy in XOM is a <literal>for</literal> 
+    loop that iterates across the children,
+     often  recursing down the tree.
+    The first child is at position 0. The last child is at one less than the number of children of the 
+    node. 
+    For example,
+  </para>
+  
+  <informalexample><programlisting>    public static void process(Node node) {
+    
+        // Do whatever you're going to do with this node&hellip;
+        
+        // recurse the children
+        for (int i = 0; i &lt; node.getChildCount(); i++) {
+            process(node.getChild(i));
+        } 
+    
+    }</programlisting></informalexample>
+  
+  <para>
+  <xref linkend="Navigator"/> shows a simple program that recursively descends through a document,
+  printing out an indented view of the nodes it spots on the way. It uses the 
+  <methodname>getChild</methodname> and <methodname>getChildCount</methodname> methods
+  as well as the <methodname>getRootElement</methodname> from the <classname>Document</classname> class.
+  </para>
+  
+  <example id="Navigator"><title>A program that prints all the nodes in a document</title>
+<programlisting><xinclude:include parse="text" href="examples/NodeLister.java"/></programlisting></example>
+
+ <para>
+  For example, here&rsquo;s the beginning of output when I ran this program against Cafe con Leche:
+  </para>
+  
+  <screen>
+<computeroutput><![CDATA[$ java -classpath .:xom-1.0b3.jar NodeLister http://www.cafeconleche.org
+nu.xom.Element: html
+ nu.xom.Text:
+ nu.xom.Element: head
+  nu.xom.Text:
+  nu.xom.Element: title
+   nu.xom.Text: Cafe con Leche XM...
+  nu.xom.Text:
+  nu.xom.Element: meta
+  nu.xom.Text:
+  nu.xom.Element: meta
+  nu.xom.Text:
+  nu.xom.Element: link
+  nu.xom.Text:
+  nu.xom.Element: link
+  nu.xom.Text:
+  nu.xom.Element: meta
+  nu.xom.Text:
+  nu.xom.Element: script
+   nu.xom.Text:
+   nu.xom.Comment:
+/* Only sunsites...
+]]></computeroutput></screen>
+  
+  <para>
+Top-down descent is the primary navigation path most XOM programs take, and the one for which XOM is most optimized. 
+  </para>
+  
+<sect2>
+   <title>Element Navigation</title>
+
+   <para>
+   In addition, if all you care about are the elements,
+   then the <classname>Element</classname> class 
+   includes several methods that allow you to navigate exclusively by element,
+   while ignoring other nodes.
+   You can filter elements by local name and namespace.
+   Passing null for the name argument returns all elements in the specified namespace. 
+  </para>
+  
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Elements</type>
+  <methodname>getChildElements</methodname>
+</methodsynopsis>    
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Elements</type>
+  <methodname>getChildElements</methodname>
+  <methodparam><type>String</type> <parameter>name</parameter></methodparam>
+</methodsynopsis>    
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Elements</type>
+  <methodname>getChildElements</methodname>
+  <methodparam><type>String</type> <parameter>name</parameter></methodparam>
+  <methodparam><type>String</type> <parameter>namespaceURI</parameter></methodparam>
+</methodsynopsis>  
+
+<para>
+  You'll notice these three methods all return an
+  <classname>Elements</classname> object. This is a type-safe, read-only list
+  that only contains elements. It has two methods, <methodname>get</methodname>
+  and <methodname>size</methodname>:
+</para>
+
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>Element</type>
+  <methodname>get</methodname>
+  <methodparam><type>int</type> <parameter>index</parameter></methodparam>
+</methodsynopsis>
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>int</type>
+  <methodname>size</methodname>
+</methodsynopsis>
+
+<para>
+  Like most lists in Java, the first element is at position 0 and the last is at one less than
+  the length of the list. 
+  For example, this method recursively lists all the elements in an element:
+</para>
+
+<informalexample><programlisting>public static void listChildren(Element current, int depth) {
+  System.out.println(current.getQualifiedName());
+  Elements children = current.getChildElements();
+   for (int i = 0; i &lt; children.size(); i++) {
+    listChildren(children.get(i), depth+1);
+  }
+    
+}</programlisting></informalexample>
+
+<para>
+  Sometimes, of course, you don't want a list of all the child elements.
+  You just want one. For this purpose, XOM has the 
+ <methodname>getFirstChildElement</methodname> methods:
+</para>
+  
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Element</type>
+  <methodname>getFirstChildElement</methodname>
+  <methodparam><type>String</type> <parameter>name</parameter></methodparam>
+</methodsynopsis>    
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Element</type>
+  <methodname>getFirstChildElement</methodname>
+  <methodparam><type>String</type> <parameter>name</parameter></methodparam>
+  <methodparam><type>String</type> <parameter>namespaceURI</parameter></methodparam>
+</methodsynopsis>    
+
+  <para>
+    These are mostly useful when you really expect there won't be
+    more than one such child, and you don't want the extra hassle of list
+    iteration. The name is intended to convey the fact that even if you expect that
+    there is only one such child, there may in fact be more. In any case, the first one
+    is always returned. If there&rsquo;s no child with the necessary name and namespace URI, 
+    then these methods return null.
+  </para>
+
+<para>
+  <xref linkend="TitleFinder"/> uses these methods to find the title 
+  of any well-formed web page, the assumption being that the page has only one of those.
+  First it looks for a <markup>title</markup> element in no namespace. 
+  If that fails it looks for a <markup>title</markup> element in the XHTML namespace.
+</para>
+
+
+ <example id="TitleFinder"><title>A program to find the title of a web page</title>
+<programlisting><xinclude:include parse="text" href="examples/TitleSearch.java"/></programlisting></example>
+
+<para>
+  Here&rsquo;s the output when run on Cafe con Leche:
+</para>
+
+
+<screen>$ java -classpath .:../../build/xom-1.0b3.jar TitleSearch http://www.cafeconleche.org 
+<computeroutput><![CDATA[Cafe con Leche XML News and Resources]]></computeroutput></screen>
+
+</sect2>
+
+<sect2>
+  <title>Siblings</title>
+
+   <para>
+   XOM does not include any methods for direct access to siblings.
+   You can find a node&rsquo;s previous or next sibling by getting the node&rsquo;s 
+   position within its parent node and then adding or subtracting one.
+   This is accomplished with the <methodname>indexOf</methodname> method in the
+   <classname>ParentNode</classname> class. 
+  </para>
+
+  
+  <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>int</type>
+  <methodname>indexOf</methodname>
+  <methodparam><type>Node</type> <parameter>child</parameter></methodparam>
+</methodsynopsis>
+
+
+<para>
+  For example, this method finds the next sibling of any specified node,
+  or returns null, if the node is the last child of its parent or does not have a parent: 
+</para>
+
+
+<informalexample><programlisting>public static Node getNextSibling(Node current) {
+  ParentNode parent = current.getParent();
+  if (parent == null) return null;
+  int index = parent.indexOf(current);
+  if (index+1 == parent.getChildCount()) return null;
+  return parent.getChild(index+1);
+}</programlisting></informalexample>
+
+<para>
+A slight variant of this operation allows you to navigate through an entire document 
+along what XPath would call the following axis:
+</para>
+
+
+<informalexample><programlisting>public static Node getNext(Node current) {
+  ParentNode parent = current.getParent();
+  if (parent == null) return null;
+  int index = parent.indexOf(current);
+  if (index+1 == parent.getChildCount()) return getNext(parent);
+  return parent.getChild(index+1);
+}</programlisting></informalexample>
+
+
+<para>
+ However, <methodname>indexOf</methodname> is a relatively expensive operation, 
+ especially for broad nodes with lots of children. <methodname>getNextSibling</methodname>
+ is a lot faster
+ in many DOM implementations. However, the cost is carrying around an extra pointer inside each node. 
+ At an extra four bytes per object, this adds up fast. In  most cases, you can design your processing so you
+navigate through the tree in order, asking for each child of the parent in turn without using
+<methodname>indexOf</methodname>.
+</para>
+
+  </sect2>
+  
+  
+<sect2>
+  <title>Attributes</title>
+
+   <para>
+   The
+   <classname>Element</classname> class provides six methods to inquire about the 
+   attributes of an element:
+  </para>
+  
+  <itemizedlist>
+  
+  <listitem>
+  <para>
+    You can iterate over all the element&rsquo;s attributes using 
+    <methodname>getAttribute(int i)</methodname> and <methodname>getAttributeCount</methodname>.
+  </para>
+   
+   
+  <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>int</type>
+  <methodname>getAttributeCount</methodname>
+</methodsynopsis>
+  <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Attribute</type>
+  <methodname>getAttribute</methodname>
+  <methodparam><type>int</type> <parameter>index</parameter></methodparam>
+</methodsynopsis>
+    
+    <para>
+    The order of the attributes in this list is unpredictable, not necessarily reproducible, and
+    may not match the order of the attributes in the original document. 
+    Namespace declarations (<markup>xmlns</markup> and <markup>xmlns:<replaceable>foo</replaceable></markup> attributes) 
+    are not included in this list. 
+    </para>
+    
+    
+  </listitem>
+  
+    <listitem>
+  <para>
+    You can ask for a specific attribute by its name or its local name and namespace URI: 
+  </para>
+
+   <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Attribute</type>
+  <methodname>getAttribute</methodname>
+  <methodparam><type>String</type> <parameter>name</parameter></methodparam>
+</methodsynopsis>
+  <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Attribute</type>
+  <methodname>getAttribute</methodname>
+  <methodparam><type>String</type> <parameter>localName</parameter></methodparam>
+  <methodparam><type>String</type> <parameter>namespaceURI</parameter></methodparam>
+</methodsynopsis>
+
+    <para>
+    These two methods return null if no such attribute exists. 
+    </para>
+    
+  </listitem>
+  
+     <listitem>
+  <para>
+    You can also ask for the value of
+    a specific attribute by its name or its local name and namespace URI: 
+  </para>
+
+     <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>String</type>
+  <methodname>getAttributeValue</methodname>
+  <methodparam><type>String</type> <parameter>name</parameter></methodparam>
+</methodsynopsis>
+  <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>String</type>
+  <methodname>getAttributeValue</methodname>
+  <methodparam><type>String</type> <parameter>localName</parameter></methodparam>
+  <methodparam><type>String</type> <parameter>namespaceURI</parameter></methodparam>
+</methodsynopsis>
+    
+    <para>
+    These two methods also return null if no such attribute exists. 
+    </para>
+    
+  </listitem>
+  
+  </itemizedlist>
+
+<para>
+  For example, suppose we wanted to allow <xref linkend="Navigator"/> to also print attributes.
+  We could rewrite the first branch in the  <methodname>listChildren</methodname> method like so:
+</para>
+
+<informalexample><programlisting>    if (current instanceof Element) {
+        Element temp = (Element) current;
+        data = ": " + temp.getQualifiedName();   
+        for (int i = 0; i &lt; temp.getAttributeCount(); i++) {
+          Attribute attribute = temp.getAttribute(i);
+          String attValue = attribute.getValue();
+          attValue = attValue.replace('\n', ' ').trim();
+          if (value.length() >= 20) {
+            attValue = attValue.substring(0, 17) + "..."; 
+          }
+          data += "\r\n    "
+          data += attribute.getQualifiedName();
+          data += "="
+          data += attValue();
+        }
+    }</programlisting></informalexample>
+
+
+
+  </sect2>
+  
+</sect1>
+
+
+<sect1>
+  <title>The Node Superclass</title>
+  
+  <para>
+    In the XOM data model, there are 
+    seven types of object found in an XML document:
+  </para>
+  
+   <itemizedlist>
+     <listitem><para><classname>Document</classname></para></listitem>
+     <listitem><para><classname>Element</classname></para></listitem>
+     <listitem><para><classname>DocType</classname></para></listitem>
+     <listitem><para><classname>Text</classname></para></listitem>
+     <listitem><para><classname>Comment</classname></para></listitem>
+     <listitem><para><classname>ProcessingInstruction</classname></para></listitem>
+     <listitem><para><classname>Attribute</classname></para></listitem>
+   </itemizedlist>
+
+  <para>
+    All of these are direct or indirect subclasses of <classname>Node</classname>. 
+    <classname>Node</classname> defines the basic methods all 
+    XOM node objects support, including methods to:
+  </para>
+  
+  <variablelist>
+  <varlistentry><term>Get the parent of this  node:</term>
+  
+  <listitem>
+  <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>ParentNode</type>
+  <methodname>getParent</methodname>
+</methodsynopsis> 
+
+<para>
+This method returns null if the node does not currently have a parent.
+XOM never allows a node to have more than one parent at a time, though a node can be removed 
+from one parent and added to another. 
+</para>
+  </listitem>
+  
+  </varlistentry>
+  <varlistentry><term>Get the document that contains this node:</term>
+      <listitem>
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Document</type>
+  <methodname>getDocument</methodname>
+</methodsynopsis>    
+ 
+<para>
+This method returns null if the node does not currently belong to a document.
+XOM never allows a node to belong to  more than one document at a time, though nodes
+can be moved from one document to another. 
+</para>
+</listitem>
+  </varlistentry>
+  <varlistentry><term>Calculate the XPath 1.0 string-value of a node:</term>
+  
+   <listitem>
+  <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>abstract</modifier> 
+  <type>String</type>
+  <methodname>getValue</methodname>
+</methodsynopsis> 
+
+ <para>
+ The XPath rules for calculating string-values that XOM follows are:
+ </para>
+
+  <itemizedlist>
+    <listitem>
+    <para>
+      The value of a text node is the text of the node. 
+    </para>
+    </listitem>
+    <listitem>
+    <para>
+      The value of a comment is the text of the comment. 
+    </para>
+    </listitem>
+    <listitem>
+    <para>
+      The value of a processing instruction is the processing instruction data, but does not include the target. 
+    </para>
+    </listitem>
+    <listitem>
+    <para>
+      The value of an element is the concatenation of the values of all the text nodes contained within that element, in document
+      order. 
+    </para>
+    </listitem>
+    <listitem>
+    <para>
+      The value of a document is the value of the root element of the document. 
+    </para>
+    </listitem>
+    <listitem>
+    <para>
+      The value of an attribute is the normalized value of the attribute. (If the attribute is created in memory,
+      the value is the exact text of the attribute as specified. No extra normalization is performed. However, 
+      if the attribute is serialized white space is escaped as necessary to prevent serialization.)
+    </para>
+    </listitem>
+  </itemizedlist>
+
+<para>
+  XPath doesn't define a string-value for document type declarations,
+  so XOM returns the empty string  as the value of all <classname>DocType</classname> nodes.</para>
+
+  <para>
+  This method never returns null, though it may return the empty string.
+ </para>
+  
+  
+  </listitem>
+  
+  </varlistentry>
+  <varlistentry><term>Get the base URI of a node:</term>
+   <listitem>
+  <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>String</type>
+  <methodname>getBaseURI</methodname>
+</methodsynopsis>
+
+<para>
+Base URIs are calculated according to the <ulink url="http://www.w3.org/TR/xmlbase/">XML Base Specification</ulink>
+and RFC 2396, taking account of both <markup>xml:base</markup> attributes and the original URIs of the entities 
+from which the node was parsed.
+In the cases of nodes created in memory with no obvious base URI, this method returns the empty string.
+The base URI is always an absolute URI, or the empty string if an absolute URI cannot be formed 
+from the information in the document and the object.
+</para> 
+  </listitem>
+  
+  </varlistentry>
+  
+  <varlistentry><term>Remove a node from its parent:</term>
+   <listitem>
+    <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>void</type>
+  <methodname>detach</methodname>
+</methodsynopsis>
+
+  <para>
+    After a node has been detached, it may be inserted in another parent,
+    in the same or a different document. 
+  </para>
+
+  </listitem>
+  
+  </varlistentry>
+  <varlistentry><term>
+  
+  Get the children of a node:</term>
+   <listitem>
+    
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>abstract</modifier> 
+  <type>int</type>
+  <methodname>getChildCount</methodname>
+</methodsynopsis>    
+<methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>final</modifier> 
+  <type>Node</type>
+  <methodname>getChild</methodname>
+  <methodparam><type>int</type> <parameter>i</parameter></methodparam>
+</methodsynopsis>     
+ 
+ 
+ <para>
+ Theoretically, these three methods really shouldn't be in this class because not all nodes have children.
+ Logically, they belong to the <classname>ParentNode</classname> class. 
+ However, in practice it turns out to be very useful to ask a node for its children without knowing whether it can have any.
+Therefore for leaf nodes such as text nodes and processing instructions, 
+<methodname>getChildCount</methodname> returns 0, and
+ <methodname>getChild</methodname> throws an <exceptionname>IndexOutOfBoundsException</exceptionname>.
+ </para>
+  </listitem>
+  </varlistentry>
+  </variablelist>
+ 
+ <para>
+ <classname>Node</classname> also defines a couple of general utility methods:
+ </para>
+ 
+ <variablelist>
+  <varlistentry><term>Get the XML representation of a node:</term>
+ <listitem>
+ <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>abstract</modifier> 
+  <type>String</type>
+  <methodname>toXML</methodname>
+</methodsynopsis> 
+
+<para>
+This method returns the actual <classname>String</classname> form of the XML representing this node.
+Invoking <methodname>toXML</methodname> on a <classname>Document</classname>
+is often simpler than setting up a full  <classname>Serializer</classname> 
+if you don't need to set formatting options like
+indenting and maximum white space. 
+However, since this builds the entire document in memory, it can be problematic for large documents and less
+efficient than using a <classname>Serializer</classname>, which can stream the document.
+For small documents, the difference rarely matters.
+</para>
+
+ </listitem>
+ </varlistentry>
+ <varlistentry>
+ <term>Copy a node:</term><listitem>
+ <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <modifier>abstract</modifier> 
+  <type>Node</type>
+  <methodname>copy</methodname>
+</methodsynopsis>     
+
+<para>
+This is a deep copy. However, the return value has no parent and is not part of any document.
+</para>
+  </listitem>
+  </varlistentry>
+  </variablelist>
+ 
+ 
+ <para>
+  The <classname>Node</classname> class also overrides the <methodname>equals</methodname>
+  and <methodname>hashCode</methodname> methods. Equality between nodes is defined as identity.
+  That is, two nodes are equal if and only if they are the same object. 
+  XOM depends on this definition of equality internally, so both 
+  <methodname>equals</methodname>
+  and <methodname>hashCode</methodname> are declared final, and cannot be overridden in subclasses.
+ </para>
+
+</sect1>
+
+
+<sect1>
+  <title>The ParentNode Class</title>
+  
+  <para>
+    A parent node is a node that can contain other nodes.
+    In the XOM data model, there are 
+    two types of parent nodes, <classname>Document</classname>
+    and <classname>Element</classname>. 
+    In XOM, a parent node does not contain a list of children. Rather it <emphasis>is</emphasis>
+    a list. Like most lists in Java, these begin at 0 and continue to one less than the length
+    of the list (the number of children the parent has). 
+    The <classname>ParentNode</classname>
+    class has methods for appending, inserting, removing, finding, and replacing child nodes:
+  </para>
+  
+  <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>void</type>
+  <methodname>insertChild</methodname>
+  <methodparam><type>Node</type> <parameter>child</parameter></methodparam>
+  <methodparam><type>int</type> <parameter>position</parameter></methodparam>
+</methodsynopsis>
+ <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>void</type>
+  <methodname>appendChild</methodname>
+  <methodparam><type>Node</type> <parameter>child</parameter></methodparam>
+</methodsynopsis>
+ <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>int</type>
+  <methodname>indexOf</methodname>
+  <methodparam><type>Node</type> <parameter>child</parameter></methodparam>
+</methodsynopsis>
+ <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>Node</type>
+  <methodname>removeChild</methodname>
+  <methodparam><type>Node</type> <parameter>child</parameter></methodparam>
+</methodsynopsis>
+ <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>void</type>
+  <methodname>replaceChild</methodname>
+  <methodparam><type>Node</type> <parameter>oldChild</parameter></methodparam>
+  <methodparam><type>Node</type> <parameter>newChild</parameter></methodparam>
+</methodsynopsis>
+ <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>Node</type>
+  <methodname>removeChild</methodname>
+  <methodparam><type>int</type> <parameter>position</parameter></methodparam>
+</methodsynopsis>
+
+
+  <para>
+    These methods all enforce the usual well-formedness constraints. For example, if you try to insert 
+    a <classname>Text</classname> into a <classname>Document</classname> or a <classname>DocType</classname> into an <classname>Element</classname>, an 
+    <exceptionname>IllegalAddException</exceptionname> is thrown.
+    If you try to insert a child beyond the bounds of the parent,
+    an <exceptionname>IndexOutOfBoundsException</exceptionname> is thrown.
+    These are all runtime exceptions so you don't need to explicitly catch them unless you expect something to go wrong. 
+  </para>
+
+<para>
+Because XML Base only defines base URIs in terms of elements and documents
+(i.e., the base URI of a non-parent node is the base URI of its parent),
+this class also contains the <methodname>setBaseURI</methodname> method:
+</para>
+
+
+ <methodsynopsis language="java">
+  <modifier>public</modifier> 
+  <type>void</type>
+  <methodname>setBaseURI</methodname>
+  <methodparam><type>String</type> <parameter>URI</parameter></methodparam>
+</methodsynopsis>
+
+  
+</sect1>
+
+
+<sect1>
+  <title>Factories, Filters, Subclassing, and Streaming</title>
+  
+  <para>
+    XOM is designed for subclassing. You can write your own subclasses of the standard XOM node
+    classes that provide special methods or enforce additional constraints. For instance an HTML XOM could include classes for 
+    <classname>P</classname>, <classname>Div</classname>, <classname>Table</classname>, 
+    <classname>Head</classname>, and so forth, all subclasses of 
+    <classname>Element</classname>.  
+  </para>
+  
+  <para>
+    To  support subclasses,
+    the <classname>Builder</classname> does not invoke constructors in the node classes directly.
+    Instead it uses a <classname>NodeFactory</classname>, summarized in <xref linkend="NodeFactory"/>.
+    You can replace the <classname>Builder</classname>&rsquo;s
+    standard <classname>NodeFactory</classname> with a subclass of your own that creates
+    instances of your subclasses instead of the standard XOM classes.
+</para>
+
+
+
+<example id="NodeFactory"><title>The NodeFactory class</title>
+<programlisting format="linespecific">package nu.xom;
+
+public class <emphasis role="bold">NodeFactory</emphasis>  {
+
+  public <emphasis role="bold">NodeFactory</emphasis>();
+
+  public Element  <emphasis role="bold">makeRootElement</emphasis>();
+  public Element  <emphasis role="bold">startMakingElement</emphasis>(String <replaceable>name</replaceable>, String <replaceable>namespace</replaceable>);
+  public Nodes    <emphasis role="bold">finishMakingElement</emphasis>(Element <replaceable>element</replaceable>);
+  public Document <emphasis role="bold">startMakingDocument</emphasis>();
+  public void     <emphasis role="bold">finishMakingDocument</emphasis>(Document <replaceable>document</replaceable>);
+  public Nodes    <emphasis role="bold">makeAttribute</emphasis>(String <replaceable>name</replaceable>, String <replaceable>uri</replaceable>, String <replaceable>value</replaceable>, Attribute.Type <replaceable>type</replaceable>);
+  public Nodes    <emphasis role="bold">makeText</emphasis>(String <replaceable>text</replaceable>);
+  public Nodes    <emphasis role="bold">makeComment</emphasis>(String <replaceable>text</replaceable>);
+  public Nodes    <emphasis role="bold">makeProcessingInstruction</emphasis>(String <replaceable>target</replaceable>, String <replaceable>data</replaceable>);
+  public Nodes    <emphasis role="bold">makeDocType</emphasis>(String <replaceable>rootElementName</replaceable>, String <replaceable>publicID</replaceable>, String <replaceable>systemID</replaceable>, );
+
+}</programlisting>
+</example>
+
+
+<para>
+For example, let's suppose you want to add <methodname>getInnerXML()</methodname> and <methodname>setInnerXML()</methodname> methods to the <classname>Element</classname>
+ class that enable you to encode XML directly in <classname>String</classname> literals like this:
+</para>
+
+<informalexample><programlisting><![CDATA[element.setInnerXML(
+  "<p>Here's some text</p>\r\n<p>Here's some <em>more</em> text</p>");]]></programlisting>
+</informalexample>
+
+
+<para>
+I am undecided about whether such a method is a good idea or not,
+but let's allow it for the moment for the sake of argument, or at least the example. 
+To enable this,
+first you write a subclass of <classname>Element</classname>
+ that adds the extra methods. One such is shown in <xref linkend="InnerElement"/>.
+</para>
+
+
+<example id="InnerElement"><title>The InnerElement class</title>
+<programlisting format="linespecific"><![CDATA[package nu.xom.samples.inner;
+
+import java.io.IOException;
+
+import nu.xom.*;
+
+public class InnerElement extends Element {
+    
+    
+    private static ThreadLocal builders = new ThreadLocal() {
+        
+         protected synchronized Object initialValue() {
+             return new Builder(new InnerFactory());
+         }
+         
+     };
+    
+    
+    public InnerElement(String name) {
+        super(name);
+    }
+
+    
+    public InnerElement(String namespace, String name) {
+        super(namespace, name);
+    }
+
+    
+    public InnerElement(Element element) {
+        super(element);
+    }
+
+    
+    public String getInnerXML() {
+        
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < getChildCount(); i++) {
+            sb.append(getChild(i).toXML());
+        }
+        return sb.toString();
+        
+    }
+
+    
+    public void setInnerXML(String xml) throws ParsingException {
+
+        xml = "<fakeRoot>"
+          + xml + "</fakeRoot>";
+        Document doc;
+        try {
+            doc = ((Builder) builders.get()).build(xml, null);
+        }
+        catch (IOException ex) {
+            throw new ParsingException(ex.getMessage(), ex);
+        }
+        this.removeChildren();
+        Nodes children = doc.getRootElement().removeChildren();
+        for (int i = 0; i < children.size(); i++) {
+            this.appendChild(children.get(i));
+        }
+        
+    }
+   
+    public Node copy() {
+        return new InnerElement(this);
+    }
+ 
+     
+}]]></programlisting>
+</example>
+
+
+
+<para>
+Note that when subclassing <classname>Element</classname> you'll want to override the <methodname>copy()</methodname> as well as any other methods you choose to override.
+</para>
+
+
+<para>
+It's easy enough to create such
+<classname>InnerElement</classname> objects using constructors; but how to make the <classname>Builder</classname> create them when parsing a document? Simple. 
+Create a <classname>NodeFactory</classname> that returns these elements instead of instances of the base 
+<classname>Element</classname> class and then install it with the
+<classname>Builder</classname> before parsing. <xref linkend="InnerFactory"/> shows such a  factory class. It overrides <methodname>startMakingElement()</methodname>. A factory that used custom classes for attributes, comments, processing instructions, and so forth would override additional methods as well. However,
+this factory does not so it can simply inherit all those other methods. 
+</para>
+
+
+
+<example id="InnerFactory"><title>The InnerFactory class that creates InnerElement objects</title>
+<programlisting format="linespecific">package nu.xom.samples.inner;
+
+import nu.xom.*;
+
+public class InnerFactory extends NodeFactory {
+
+    public Element startMakingElement(String namespaceURI, String name) {
+        return new InnerElement(namespaceURI, name);
+    }
+    
+}</programlisting>
+</example>
+
+<para>
+Finally you  create an instance of the factory and 
+pass it to the <classname>Builder</classname> constructor like so:
+</para>
+
+
+<informalexample><programlisting><![CDATA[  private Builder builder = new Builder(new InnerFactory());
+  Document doc = builder.build("<root><a>test</a><b>test2</b></root>", null);
+  InnerElement root = (InnerElement) doc.getRootElement();]]></programlisting>
+</informalexample>
+
+<para>
+The only inconvenience is that you will need to cast the elements to 
+<classname>InnerElement</classname> in order to use its extra methods.
+A class that merely overrode existing methods
+ but did not add any new ones would not need to do this. 
+</para>
+
+<para>
+    Node factories are not limited to returning 
+    a representation of the item that was actually seen in the document.
+   They can change this item in a variety of ways. As well as removing it completely, they
+   can replace it with a different item, or with several items. They can change a name or a namespace.
+   They can add or remove attributes from an element. The only restriction is that well-formedness must be maintained.
+   For instance, the <methodname>makeComment</methodname> method can't return a <classname>Text</classname> object
+   if the comment was in the document prolog. 
+  </para>
+  
+  <para>
+    However, you'll note that most of the <classname>NodeFactory</classname> methods are not declared to return
+    the obvious type. For instance, <methodname>makeComment</methodname> doesn't return a <classname>Comment</classname>,
+    and <methodname>makeProcessingInstruction</methodname> doesn't return a <classname>ProcessingInstruction</classname>.
+    Instead they both return <classname>Nodes</classname> objects. 
+  </para>
+  
+    <para><classname>Nodes</classname> is a type-safe, read-write list that can hold any XOM <classname>Node</classname> object.
+  This class provides the usual list methods for getting, removing, and inserting nodes in the list, as
+  well as querying the size of the list and constructors for creating new <classname>Nodes</classname> lists.
+  <xref linkend="NodesSynopsis"/> summarizes this class.
+  </para>
+  
+<example id="NodesSynopsis"><title>The Nodes class</title>
+<programlisting format="linespecific">package nu.xom;
+
+public class <emphasis role="bold">Nodes</emphasis>  {
+
+  public <emphasis role="bold">Nodes</emphasis>();
+  public <emphasis role="bold">Nodes</emphasis>(Node <replaceable>initialMember</replaceable>);
+
+  public int  <emphasis role="bold">size</emphasis>();
+  public Node <emphasis role="bold">get</emphasis>(int <replaceable>index</replaceable>);
+  public Node <emphasis role="bold">remove</emphasis>(int <replaceable>index</replaceable>);
+  public void <emphasis role="bold">insert</emphasis>(Node <replaceable>node</replaceable>, int <replaceable>index</replaceable>);
+  public void <emphasis role="bold">append</emphasis>(Node <replaceable>node</replaceable>);
+
+}</programlisting>
+</example>
+
+  <para>
+    Because the factory methods return <classname>Nodes</classname> objects instead of the more specific type,
+    factories can play tricks like converting all comments to elements or replacing one element with several different
+    elements. 
+    This flexibility enables a <classname>NodeFactory</classname> to act as a very powerful filter.
+    For instance, one of the simpler filters you can write is one that saves memory
+    by pruning the document tree of the leaves you aren't interested in
+    by returning empty lists. 
+    If you know you're going to ignore all processing instructions,
+    a <methodname>makeProcessingInstruction</methodname> method can simply return an empty <classname>Nodes</classname>.
+    Then <classname>ProcessingInstruction</classname> objects will never even be
+    created. They won't take up any memory, and no time will expended creating them.
+    Similarly you can eliminate all comments by returning an empty <classname>Nodes</classname>
+    from <methodname>makeComment</methodname>.
+    You can eliminate all attributes by returning an empty <classname>Nodes</classname> from <methodname>makeAttribute</methodname>,
+    and so forth. <xref linkend="Stripper"/> demonstrates a simple <classname>NodeFactory</classname> that
+    throws away the document type declaration and
+    all comments and processing instructions, so you're only left with the real information content of the document:
+  </para>
+  
+ <example id="Stripper"><title>A Node Factory that strips out the document type declaration,
+ comments and processing instructions</title>
+<programlisting><xinclude:include parse="text" href="examples/JunkStripper.java"/></programlisting></example>
+
+   <para>
+   Filters can change data as well as removing it. 
+   <xref linkend="ROT13"/> demonstrates a class that encodes all text, comments, processing instructions, and attribute values
+   by ROT13 encoding them. 
+   </para>
+  
+ <example id="ROT13"><title>A Node Factory that ROT13 encodes all text</title>
+<programlisting><xinclude:include parse="text" href="examples/StreamingROT13.java"/></programlisting></example>
+  
+  <para>
+    Elements are more complex. They have both a beginning and an end. 
+    When the <classname>Builder</classname> calls <methodname>startMakingElement</methodname>, the element
+    has not yet been created. You can either create the <classname>Element</classname>
+    object here and return it, or you can return null. If you return null, 
+    then the element&rsquo;s start-tag and end-tag will be omitted from the finished tree,
+    but the element&rsquo;s children will still be included.
+    If you want to replace or remove the element completely, you need to wait for the
+    <classname>Builder</classname> to call the <methodname>finishMakingElement</methodname> method.
+    At this time, the element has been completely constructed and all its children are in place.
+    You can either return a <classname>Nodes</classname> object containing the <classname>Element</classname> itself,
+    or you can return a <classname>Nodes</classname> list
+    containing other nodes. Whichever you return will be added to the finished tree.
+  </para>
+    
+   <para>
+    Overriding <methodname>finishMakingElement</methodname> is an extremely powerful technique that
+    enables XOM to process documents larger than available memory.
+    The trick is to do your processing 
+    inside the <classname>NodeFactory</classname> rather than waiting until the entire document
+    has been built. 
+    This is typically useful in long documents that consist of very many repetitions of 
+    one element; for instance a stock ticker or a data acquisition system.
+    The key element(s) would be processed inside the <methodname>finishMakingElement</methodname>
+    method. Often this is done in isolation without considering anything outside that element.
+    Once you're finished processing the element,
+    return an empty <classname>Nodes</classname> from 
+    <methodname>finishMakingElement</methodname>. The element will 
+    be removed from the tree, and becomes available for garbage collection.
+  </para>
+  
+  <para>
+   <xref linkend="Lister"/> demonstrates this technique with a simple program that prints out all the element names in an XML document.
+  </para>
+ 
+ <example id="Lister"><title>A Node Factory that lists elements names</title>
+<programlisting><xinclude:include parse="text" href="examples/StreamingElementLister.java"/></programlisting></example>
+
+    <para>
+   In general functionality, 
+   this is quite similar to the program we wrote earlier in  <xref linkend="Navigator"/>.
+   However, they're a couple of crucial differences:
+  </para>
+  
+  <orderedlist>
+    <listitem><para>This program begins producing output almost immediately.
+    It does not have to wait for the entire document to be parsed.</para></listitem>
+   <listitem><para>It can process arbitrarily large documents. It is not limited by the 
+   available memory. </para></listitem>
+  </orderedlist>
+ 
+  <para>
+    You don't always need these characteristics in a program; but when you do, 
+    XOM makes them really easy to achieve.
+  </para>
+ 
+  <para>
+    One final note on this subject: so far all the examples have treated all elements equally.
+    However, that&rsquo;s absolutely not required. There&rsquo;s no reason you can't key your processing off 
+    of the element&rsquo;s name, namespace, attributes, child elements, or other characteristics. 
+    For instance, you could remove all XHTML elements from a document or remove all elements except 
+    XHTML elements. To invoke the default processing for an element you don't want to filter or modify, 
+    just call <literal>super.finishMakingElement(element)</literal>.
+    This is an extremely flexible and powerful technique 
+    for processing XML.  </para>
+ 
+</sect1>
+
+
+<sect1>
+  <title>XPath</title>
+  
+  <para>
+    XOM 1.1 and later support XPath queries on 
+    nodes. This is often a more robust reliable, and easier way to 
+    query a document than explicitly navigating its tree. For example, 
+    to find the <markup>title</markup> elements in a Docbook 4 
+    document, you can simply type:
+  </para>
+
+  
+ <informalexample>
+<programlisting>Nodes titles = document.query("//title");</programlisting></informalexample>
+
+ <para>
+The <methodname>query</methodname> method returns a list of nodes, not a single <classname>Node</classname> object. 
+This list may contain zero, one, or more than one <markup>title</markup>
+ elements, the exact number depending solely on what's in the document being queried. 
+Again, this is in keeping with the design of XPath.
+The DTD or schema may require that each document have exactly one <markup>title</markup> element; but that doesn't mean this is in fact the case. XPath queries documents as they are, not as they're supposed to be.
+  </para>
+  
+ <para>
+Next suppose you need to find the <markup>title</markup> elements in an XHTML document. 
+DocBook 4 doesn't have a  namespace, but XHTML does. This requires you to set up an <classname>XPathContext</classname> to bind the prefixes used in the XPath 
+expression to URIs.</para>
+
+ <informalexample>
+<programlisting>XPathContext context = new XPathContext("html", "http://www.w3.org/1999/xhtml");
+Nodes titles = document.query("//html:title", context);</programlisting></informalexample>
+
+
+<para>  The namespace prefixes in the XPath expression  
+are not necessarily the same ones
+ used in the <classname>Document</classname> object or the document itself. 
+In this case, even though the XHTML
+documents uses the default namespace, XPath queries must use prefixed names like <markup>html:title</markup>
+rather than unprefixed names like <markup>title</markup>. 
+This is a basic principle of XPath, and indeed of Namespaces in XML.
+Only the URI matters. The prefix is just a placeholder. 
+  </para>
+  
+</sect1>
+
+
+<sect1>
+  <title>XSLT</title>
+  
+  <para>
+    XOM can load an XSLT stylesheet from a XOM <classname>Document</classname>
+   and apply it to another XOM <classname>Document</classname> object.
+    The class that does this is <classname>nu.xom.xslt.XSLTransform</classname>.
+    Each <classname>XSLTransform</classname> object is configured with a particular stylesheet. 
+    Then you can apply this stylesheet to other XOM <classname>Document</classname> objects
+    using the <methodname>transform</methodname> method. 
+    For example, this code fragment transforms a document
+    and prints the result on <varname>System.out</varname>.
+  </para>
+  
+ <informalexample>
+<programlisting>Builder builder = new Builder();
+try {
+  Document input = builder.build("http://www.example.com/input.xml");
+  Document stylesheet = builder.build("http://www.example.com/stylesheet.xsl");
+  XSLTransform transform = new XSLTransform(stylesheet);           
+  Nodes output = transform.transform(input);
+  for (int i = 0; i &lt; output.size(); i++) {
+    System.out.print(output.get(i).toXML());                
+  } 
+  System.out.println();
+}
+catch (XSLException ex) {
+  System.err.println("XSLT error");
+}
+catch (ParsingException ex) {
+  System.err.println("Well-formedness error in " + ex.getURI());
+}
+catch (IOException ex) {
+  System.err.println("I/O error while reading input document or stylesheet");
+}</programlisting></informalexample>
+  
+  <para>
+  The result of a transformation is a XOM  <classname>Nodes</classname> object.
+  The  <classname>Nodes</classname> list returned by the <methodname>transform</methodname> method
+  may contain zero, one, or more than one node, depending on what the stylesheet
+  produced. After all, there&rsquo;s no guarantee that an XSL transformation produces a well-formed XML document.
+  Sometimes it only produces a well-balanced document fragment, and sometimes it produces nothing at all.
+  However, many stylesheets do produce well-formed XML documents.
+   <classname>XSLTransform</classname> includes a static <methodname>toDocument</methodname>
+   utility method that converts a <classname>Nodes</classname> object into a <classname>Document</classname> object.
+    However, if the <classname>Nodes</classname> passed to this method contains no elements, more than one element, or any <classname>Text</classname>
+  objects, then <methodname>toDocument</methodname> throws an <exceptionname>XMLException</exceptionname>.
+   For example,
+  </para>
+  
+ <informalexample><programlisting>Builder builder = new Builder();
+try {
+  Document input = builder.build("http://www.example.com/input.xml");
+  Document stylesheet = builder.build("http://www.example.com/stylesheet.xsl");
+  XSLTransform transform = new XSLTransform(stylesheet);           
+  Nodes output = transform.transform(input);
+  <emphasis role="bold">Document result = XSLTransform.toDocument(output);</emphasis>
+  System.out.println(result.toXML());
+}
+catch (XMLException ex) {
+  System.err.println("Result did not contain a single root.");
+}
+catch (XSLException ex) {
+  System.err.println("Stylesheet error");
+}
+catch (ParsingException ex) {
+  System.err.println("Well-formedness error in " + ex.getURI());
+}
+catch (IOException ex) {
+  System.err.println("I/O error while reading input document or stylesheet");
+}</programlisting></informalexample>
+  
+   <para>
+  Because the result of a transformation is a XOM  <classname>Nodes</classname> object, not a serialized
+  XML document, any <markup>xsl:output</markup> elements in the stylesheet have no effect
+  on the result of the transformation.
+  </para>
+  
+ <sect2>
+  <title>Custom Node Factories</title>
+  
+  <para>
+    You can provide a <classname>NodeFactory</classname> to be used for
+    building the result tree. This allows you to transform into 
+    instances of particular subclasses of the standard XOM classes, rather
+    than the normal classes such as <classname>nu.xom.Element</classname> and <classname>nu.xom.Text</classname>. For example,
+  </para>
+  
+ <informalexample><programlisting>NodeFactory factory = new CustomNodeFactory();
+Builder builder = new Builder();
+try {
+  Document stylesheet = builder.build("http://www.example.com/stylesheet.xsl");
+  XSLTransform transform = new XSLTransform(stylesheet, factory);           
+  //...
+}
+catch (XSLException ex) {
+  System.err.println("XSLT error");
+}
+catch (ParsingException ex) {
+  System.err.println("Well-formedness error in " + ex.getURI());
+}
+catch (IOException ex) {
+  System.err.println("I/O error while reading input document or stylesheet");
+}</programlisting></informalexample>
+</sect2>
+</sect1>
+
+
+<sect1>
+  <title>Canonicalization</title>
+  
+  <para>
+    The <classname>nu.xom.canonical.Canonicalizer</classname> class can 
+    serialize a XOM document as <ulink url="http://www.w3.org/TR/xml-c14n">canonical XML</ulink>. 
+    It is used much like a <classname>Serializer</classname>.
+    For example, this code fragment 
+    writes the canonical form of Cafe con Leche onto <varname>System.out</varname>:
+  </para>
+  
+  <informalexample>
+<programlisting>Builder builder = new Builder();
+Canonicalizer outputter = new Canonicalizer(System.out);
+Document input = builder.build("http://www.cafeconleche.org/");
+outputter.write(input);</programlisting></informalexample>
+
+<para>When canonicalizing you do not have any options to choose the 
+    line break character, indentation, maximum  line length, encoding,
+    or configure 
+    the output in any other way. The purpose of canonical XML is to serialize the same document
+    in a byte-for-byte predictable and reproducible fashion. 
+    </para>
+  
+</sect1>
+
+
+<sect1>
+  <title>XInclude</title>
+  
+  <para>
+    XOM supports XInclude including
+    the XPointer <markup>element()</markup> scheme and bare name XPointers.
+    It does not support 
+    the XPointer <markup>xpointer()</markup> scheme. While internally
+    the XInclude code is one of the ugliest parts of XOM, externally it is extremely
+    simple. You merely pass a <classname>Document</classname> object to
+    the static <methodname>XIncluder.resolve()</methodname> method, and you get back
+    a new <classname>Document</classname> object in which all <markup>xi:include</markup>
+    elements have been replaced by the content they refer to. The original 
+    <classname>Document</classname> object is not changed. For example,
+  </para>
+  
+<informalexample><programlisting>Document input = builder.build(<replaceable>url</replaceable>);
+Document result = XIncluder.resolve(input);</programlisting></informalexample>
+  
+  <para>
+    If something should go wrong during the inclusion process, either an 
+    <exceptionname>IOException</exceptionname>, an <exceptionname>XIncludeException</exceptionname>, 
+    or one of its subclasses is thrown as appropriate. For example, 
+    if a <markup>xi:include</markup> element were to attempt to include itself,
+    either directly or indirectly, an <exceptionname>InclusionLoopException</exceptionname>
+    would be thrown. 
+  </para>
+  
+  <para>
+    You have the option to specify a <classname>Builder</classname> to be used for
+    including. This would allow you to validate the included documents or 
+    install a custom <classname>NodeFactory</classname> that returned
+    instances of particular subclasses. For example, this code fragment 
+    throws a <exceptionname>ValidityException</exceptionname> if the master document or any of the 
+    documents it includes, directly or indirectly, are invalid:
+  </para>
+  
+  <informalexample>
+<programlisting>try {
+  Builder builder = new Builder(true);
+  Document input = builder.build("http://www.example.org/master.xml");
+  Document result = XIncluder.resolve(input, builder);
+}
+catch (ValidityException ex) {
+  System.err.println("Validity error in " + ex.getURI());
+}</programlisting></informalexample>
+  
+</sect1>
+
+
+<sect1>
+  <title>Summary</title>
+  
+  <para>
+    This has been a fairly quick tour of XOM.
+    If this tutorial didn't show you how to do what you need to do, try
+    looking in the <ulink url="apidocs/">JavaDoc</ulink> or 
+    the <literal>nu.xom.samples</literal> package. If you still can't figure out how to do what 
+    you need to do,  you can ask 
+    the <ulink url="http://lists.ibiblio.org/mailman/listinfo/xom-interest">xom-interest mailing list</ulink>.
+    I monitor it pretty closely, so most questions are responded to quickly. I prefer you to ask question about XOM on the list
+    rather than e-mailing me personally, since if you have a question, chances are others do too.
+    You do not need to subscribe to post. However, non-subscribers posts are moderated, so for the fastest response you may wish to subscribe. 
+  </para>
+  
+</sect1>
+
+
+</article>

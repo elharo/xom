@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article revision="20161210" status="rough">
+  <title>XOM Infoset Mapping</title>
+
+   
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2004</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+ <para>
+     XOM supports the following information items from the 
+     <ulink url="http://www.w3.org/TR/2004/REC-xml-infoset-20040204/">XML Information Set</ulink>,
+     all of which are need to implement the specification:
+   </para>
+   
+     <itemizedlist>
+     <listitem><para>The Document Information Item</para></listitem>
+     <listitem><para>Element Information Items</para></listitem>
+     <listitem><para>Attribute Information Items</para></listitem>
+     <listitem><para>Processing Instruction Information Items</para></listitem>
+     <listitem><para>Character Information Items</para></listitem>
+     <listitem><para>Comment Information Items</para></listitem>
+     <listitem><para>The Document Type Declaration Information Item</para></listitem>
+     <listitem><para>Namespace Information Items</para></listitem>
+     </itemizedlist>
+    
+  <para>
+     Except as noted below, XOM supports and requires 
+     all properties of these information items.
+     The exceptions are:
+   </para>
+   
+   
+   <itemizedlist>
+     <listitem><para>The [notations], [unparsed entities], [character encoding scheme],
+     [standalone], [version], and [all declarations processed] properties of the Document Information Item</para></listitem>
+     <listitem><para>The [specified] and [references] properties of Attribute Information Items</para></listitem>
+     <listitem><para>The [notation] property of Processing Instruction Information Items</para></listitem>
+     <listitem><para>The [element content whitespace] properyt of Character Information Items</para></listitem>
+   
+     <listitem><para>The [children] property of the Document Type Declaration Information Item. However, these will
+                     be passed through XOM unchanged. </para></listitem>
+      </itemizedlist>
+   
+   <para>
+   XOM does not support synthetic infosets that cannot be serialized as namespace
+   well-formed XML documents.
+   </para>
+    
+    <para>
+    XOM does not support:
+    </para>
+    
+     <itemizedlist>
+     <listitem><para>Unexpanded Entity Reference Information Items</para></listitem>
+     <listitem><para>Unparsed Entity Information Items</para></listitem>
+     <listitem><para>Notation Information Items</para></listitem>
+     </itemizedlist>
+     
+     <para>
+     All entity references are expanded. XOM does not allow unexpanded entity references.
+     </para>
+     
+     <para>
+     Unparsed entity and notation information items that are defined in the internal DTD
+     subset are passed through unchanged as long as the document type declaration is not removed.
+     Unparsed entity and notation information items that are defined in the external DTD
+     subset are deleted.
+     </para>
+     
+     <para>
+     XOM requires no information from the XML document that is not specified by the Infoset.
+     </para>
+
+</article>

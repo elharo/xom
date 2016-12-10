@@ -1,0 +1,2138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+	<title>XOM Release Notes</title>
+	<style type="text/css">
+
+body {
+	color: black;
+	background-color:white;
+	}
+
+#Content {
+	margin:0px 10em 50px 10px;
+	padding:10px 100px 10px 10px;
+	}
+
+#Navbar {
+ /*/*/	position:absolute;
+	top:1ex;
+	right:20px;
+	max-width: 30%;
+	min-width: 170px;
+	width:10em;  /*/*/
+	padding:10px;
+	background-color:#eee;
+	color: black;
+	border:1px dashed #999;
+	}
+	
+</style>
+
+</head>
+<body>
+
+<div id="Content">
+
+  <h1>XOM Release Notes</h1>
+  
+  <p>XOM
+  is a new XML object model.
+  It is an open source (LGPL), tree-based API for processing XML with Java 
+  that strives for correctness and simplicity.
+  </p>
+
+
+
+<h2>1.2.10</h2>
+
+<p>Support the built-in Android parser.</p>
+
+
+<h2>1.2.9</h2>
+
+<p>Exclude org.w3c.dom from Jaxen files we copy in to avoid problems with some application servers. </p>
+
+<p>Upgrade Jaxen to 1.1.6 to fix some <a href="https://jira.codehaus.org/browse/JAXEN-227">IEEE-754 bugs involving -0</a>.</p>
+
+
+<h2>1.2.8</h2>
+
+<p>Upgraded to Jaxen 1.1.4 to fix several XPath bugs involving function resolution and Java 7 compatibility.</p>
+
+
+<h2>1.2.7</h2>
+
+<p>Canonical XML 1.1</p>
+
+<h2>1.2.6</h2>
+
+<p>Fixes a bug that doubled query strings in base URLs.</p>
+
+<p>Upgraded to Jaxen 1.1.3 to fix an XPath bug evaluating relational operators when one of the operands was a text, comment,
+or processing instruction node.</p>
+
+
+<h2>1.2.5</h2>
+
+<p>Throws <code>NullPointerException</code> instead of MalformedUriException</code> when a null 
+<code>Reader</code> is passed to <code>Builder.build()</code>.</p>
+
+<p>Maven 2 support</p>
+
+<h2>1.2.4 Release</h2>
+
+<p>More automatic deploy process.</p>
+
+<p>Fixed maven targets.</p>
+
+<p>Slight optimization to XPath by combining two loops. </p>
+
+<h2>1.2.3</h2>
+
+
+<p>Bug fix for some obscure corner cases.</p>
+
+
+<h2>1.2.2</h2>
+
+<p> This release focuses on improved packaging with 
+Maven and OSGI.
+Otherwise, no visible changes. 
+</p>
+
+
+
+<h2>1.2.1</h2>
+
+<p> A very minor release that now prints the correct version number when 
+you execute the JAR archive by typing 
+<samp>java -jar xom.jar</samp>
+</p>
+
+
+<h2>1.2</h2>
+
+<p>
+The 1.2 release fixes a number of bugs, especially in canonicalization and XPath. However there's at least one bug fix in the core so I recommend all users upgrade. XOM 1.2 should be fully backwards compatible with code written to 1.0 and 1.1 APIs. 1.2 should also be somewhat easier to compile and edit due to various changes with UnicodeUtil and Jaxen. Actual new features in this release are fairly minor and include:
+</p>
+
+
+<ul>
+	<li>Latest Unicode normalization tables.</li>
+	<li>Upgraded to Jaxen 1.1.2</li>
+	<li>xml:id attributes no longer checked for NCNames</li>
+	<li>Upgraded to Xerces 2.8.0, DTD-only version</li>
+	<li><code>DOMConverter</code> can accept a <code>NodeFactory</code> to be used in creating the XOM document</li>
+	<li>A lookup method in <code>XPathContext</code> that finds the namespace URI for a prefix.</li>
+</ul>
+
+
+<h2>1.1</h2>
+
+<p> New features implemented since 1.0 include:</p>
+
+<ul>
+	<li>XPath</li>
+	<li>a <code>setInternalDTDSubset</code> method in <code>DocType</code></li>
+	<li>Document subset canonicalization</li>
+	<li>Exclusive XML canonicalization</li>
+	<li><code>xml:id</code> support</li>
+	<li>Parameters can be passed to XSL transforms</li>
+	<li>Entity declarations are preserved in the internal DTD subset.</li>
+</ul>
+
+<p>
+Memory usage has been reduced, 
+and performance improved by up to 2-4 times for some common operations. 
+In addition, some bugs have been fixed in <code>XOMTestCase</code>
+and in the handling of a few edge conditions in the internal DTD subset. 
+Furthermore, 1.1 works around quite a few more bugs in Crimson. 
+</p>
+
+
+<h2>1.0</h2>
+
+<p>
+Essentially the same as Beta 11.
+The README file was improved slightly and 
+all version numbers in the JavaDoc have been upgraded to 1.0.
+A number of small edits have been made to the API documentation.
+The only API-level change is that the deprecated <code>setNodeFactory</code> method in <code>XSLTransform</code> has been removed. 
+</p>
+
+
+<h2>1.0b11/RC5</h2>
+
+<p>
+Beta 11 is the fifth release candidate. 
+It restores the three servlet samples (FibonacciServlet, FibonacciSOAPServlet,
+and FibonacciXMLRPCServlet) but uses 
+Ant conditions to only compile these files if 
+the servlet classes are present. 
+It also adds README, LICENSE, and LGPL files to the core distribution
+rather than simply placing these on the web site.
+Finally, http://www.cafeconleche.org/XOM/ has been replaced by http://www.xom.nu/
+in the source code and documentation.
+The core API has not changed at all. 
+</p>
+
+
+<h2>1.0b10/RC4</h2>
+
+<p>
+Beta 10 is the fourth release candidate. 
+It removes three samples (FibonacciServlet, FibonacciSOAPServlet,
+and FibonacciXMLRPCServlet) to avoid having to distribute servlet.jar 
+with XOM. It also modifies the Ant build file so the tools package
+is not compiled except when generating the betterdoc target.
+This makes the complete distribution more self-contained and
+easier to build. 
+The core API has not changed at all. 
+</p>
+
+
+
+<h2>1.0b9/RC3</h2>
+
+<p>
+Beta 9 is the third release candidate. 
+It adds a few more unit tests and fixes some packaging issues that were bedeviling Windows system. (The zip and tar files no longer contain 
+any test files whose names are legal on Unix but illegal on Windows.)
+Barring discovery of any last-minute bugs, this will be XOM 1.0. No further optimizations or fixes are planned 
+before 1.0. All the changes are restricted to the tests package. The core API has not changed at all. 
+</p>
+
+
+<h2>1.0b8/RC2</h2>
+
+<p>
+Beta 8 is the second release candidate. Barring discovery of any last-minute bugs, this will be XOM 1.0. No further optimizations or fixes are planned 
+before 1.0. 
+Changes in this release include:
+</p>
+
+<ul>
+	<li>The TagSoup and servlet JARs are no longer bundled. They're not needed to run XOM, just for one of the samples and for the JavaDoc</li>
+
+	<li>A few more optimizations to speed up the checking of namespace URIs, and a variety of other operations.</li>
+</ul>
+
+<h2>1.0b7/RC1</h2>
+
+<p>
+Beta 7 is the first release candidate. 
+There are still a few open issues with regard to
+error handling in XInclude that require clarification from the XInclude working group. If they decide  that how XOM currently 
+behaves is correct, then XOM 1.0 is essentially complete. If they decide to
+require different behavior a few changes may yet need to be made. 
+</p>
+
+<p>
+Changes in this release include:
+</p>
+
+
+<ul>
+	<li><code>Builder</code> is considerably more robust against buggy parsers. It converts all runtime exceptions thrown by such a parser (including XOM <code>XMLException</code>s thrown by a <code>NodeFactory</code>) into <code>ParsingExceptions</code>. It uses a verifying factory for Saxon 7's AElfred derivative.</li>
+
+	<li>Comment  data is now allowed to begin with a hyphen.</li>
+
+	<li>XIncluder treats bad encoding attributes as fatal errors</li>
+
+	<li>Various optimizations have sped up a lot of common operations including <code>getValue()</code>, <code>toXML()</code>, DOM and SAX conversion, canonicalization, and XSL transformation by roughly a factor of two.</li>
+
+	<li>The zip archives and CVS no longer contain files with names that are problematic on Windows.</li>
+
+	<li>The manifest file is now versioned.</li>
+
+	<li>In keeping with the recommendation in RFC2396bis that "For consistency, URI producers and normalizers should use uppercase hexadecimal digits for all percent-encodings", XOM now uses uppercase percent encodings for base URIs. There may still be a few places where lower case escapes are used. Holler if you spot any.</li>
+
+	<li>Fixed bug where base URIs were not encoded in UTF-8 on all platforms. Mac OS X 10.3 was the particular offender here. Surprisingly the problem did not manifest on Mac OS X 10.2.</li>
+</ul>
+
+<h2>1.0b6</h2>
+
+<p>
+Beta 6 is primarily a bug fix release. It also polishes off some rough edges 
+in various corners of the API. Changes in this release include:
+</p>
+
+
+<ul>
+	<li><p> The deprecated <code>setNodeFactory()</code> method in <code>XSLTransform</code>  has been removed. This is the only API-level change in this release. </p></li>
+
+	<li><p> The strings returned by <code>toString</code> in <code>Comment</code>, <code>ProcessingInstruction</code>, <code>Attribute</code>, and <code>Text</code> are all now truncated if they get too long. Furthermore any embedded line breaks and tabs are escaped as \n, \r, and \t. This makes the objects easier to inspect in various debuggers and loggers. </p></li>
+
+	<li><p> <code>SAXConverter</code> no longer converts XOM <code>xml:base</code> attributes into SAX attributes. Instead the xml:base attributes are used to determine the URI information the <code>Locator</code> reports. Providing <code>xml:base</code> attributes as well would risk double counting some relative URLs. </p></li>
+
+	<li><p> Fixed bug where carriage returns in internal entity replacement text in the internal DTD subset was not properly escaped on reserialization </p></li>
+
+	<li><p> Fixed bug where carriage returns, less than signs, double quotes, and ampersands in attribute default values in the internal DTD subset were not properly escaped on reserialization. </p></li>
+
+	<li><p> Fixed a number of bugs in converting file names to base URIs </p></li>
+
+	<li><p> Improved compatibility with Turkish locales that do not see I as the upper case form of i or vice versa. </p></li>
+
+	<li><p> Fixed a bug in <code>Serializer</code> that did not always properly trim whitespace </p></li>
+
+	<li><p> Hid the error messages logged by Xerces and Xalan on <code>System.err</code> when deliberately testing error conditions. Therefore, there should be no output from the test cases when all tests pass. </p></li>
+
+	<li><p> Added a junithtml build target to convert JUnit results to HTML. </p></li>
+
+	<li><p> The Ant build file now specifies that the input encoding of all .java files is UTF-8. Most files are pure ASCII, but there are a couple of places where non-ASCII characters are used. </p></li>
+
+	<li><p> Unit test coverage has been improved. </p></li>
+</ul>
+
+
+<h2>1.0b5</h2>
+
+
+<p>
+Beta 5 primarily focuses on fixing bugs in XInclude and improving performance of  builders when reading from files.
+It also deprecates the <code>setNodeFactory()</code> method 
+in <code>XSLTransform</code> which  
+will be removed in the next release. In its place, there's a new constructor:
+</p>
+
+<p><code>public XSLTransform(Document stylesheet, NodeFactory factory)</code></p>
+
+<p>
+Finally, the four <code>XSLTransform</code> constructors deprecated in the 
+last release have been removed. 
+</p>
+
+
+<h2>1.0b4</h2>
+
+
+<p>
+1.0b4 primarily focuses on fixing bugs and improving performance in 
+the converters and XSLT package. XSLT transformation can now work directly from a XOM
+<code>Document</code> without an intermediate step that
+serializes the <code>Document</code> as a string. Consequently,
+these four constructors in <code>XSLTransform</code> have been deprecated and 
+will be removed in the next release:
+</p>
+
+<pre><code>public XSLTransform(InputStream stylesheet)
+public XSLTransform(Reader stylesheet)
+public XSLTransform(String URL)
+public XSLTransform(File stylesheet)</code></pre>
+
+<p>
+Other changes include:
+</p>
+
+<ul>
+<li><code>SAXConverter</code> can now convert <code>Nodes</code> lists as well as <code>Document</code>s.</li>
+<li><code>SAXConverter</code> now sets a <code>Locator</code> that provides system IDs for individual elements.</li>
+<li>The <code>toXML</code> methods now use \n as the line separator, since this is more likely
+to match the contents of text nodes created by parsing an XML document.
+The goal is to minimize the number of documents with mixed line break strings.</li>
+<li>Fixed a bug in <code>DOMConverter</code> that threw a <code>NullPointerException</code>
+when converting XOM documents with only a single element to DOM.</li>
+<li>Line breaks in the internal DTD subset are handled more reliably.</li>
+</ul>
+
+<h2>1.0b3</h2>
+
+<p>
+The primary impetus for beta 3 is fixing a few bugs in the <code>DOMConverter</code>.
+Also, 
+Java encoding names like "8859_1"
+are now recognized when using the repackaged Xerces
+bundled with Java 1.5
+I also spell checked the comments. :-)
+</p>
+
+
+<h2>1.0b2</h2>
+
+<p>
+The primary impetus for beta 2 is fixing some bugs that prevented 
+the XOM-specific parsers from being loaded in Java 1.5 when 
+the standard Xerces (as opposed to the Java 1.5 bundled Xerces) 
+was not in the classpath.
+</p>
+
+<p>
+This release also makes the JavaDoc well-formed (and possibly valid, I haven't checked)
+XHTML.
+</p>
+
+<h2>1.0b1</h2>
+
+
+<p>
+Beta 1 is feature and code complete.
+There are <strong>no</strong> known bugs in XOM.
+All that remains to be done is finishing the documentation
+and doing some minor code clean-ups.
+These include such housekeeping tasks as splitting long lines, spell checking the comments,
+and making sure the Javadoc is all valid XHTML. None of this should have any affect 
+on client code.
+XOM is now believed to be ready for serious, production use. 
+</p>
+
+
+<p>
+Unless new bugs are uncovered, this may be the one and only beta release.
+Possibly I'll do some profiling runs to see if there are any more areas
+where I can save some memory or speed up some operations.
+Barring that, all that's needed before the
+ final 1.0 release is finished documentation.
+</p>
+
+
+<p>
+Beta 1  makes no backwards incompatible 
+changes to the published API. 
+Changes since the final alpha include:
+</p>
+
+<ul>
+<li><p>
+The XInclude test suite is loaded and run from the W3C CVS 
+server if it's not installed locally. Mistakes in the test suite (mostly involving 
+document type declarations) are corrected on the fly.</p></li>
+
+<li><p>Work-arounds for various JDK bugs that prevent round-tripping of 
+some characters in Japanese encodings</p></li>
+
+<li><p>Work-arounds for  bugs in some versions of Xalan,
+      as well for bugs in the OASIS XSLT conformance test suite.</p></li>
+
+<li><p>Improved compatibility with Java 1.5</p></li>
+
+</ul>
+
+<h2>1.0a5</h2>
+
+
+<p>
+1.0a5 makes no backwards incompatible 
+changes to the published API. 
+Changes since the previous release include:
+</p>
+
+
+<ul>
+<li><p>The <code>ParsingException</code> and <code>ValidityException</code>
+classes now have a <code>getURI()</code> method that returns the 
+URI of the document whose error caused the exception.</p></li>
+
+<li><p>Test suite now runs OASIS Microsoft and Xalan XSLT tests</p></li>
+
+<li><p>Improved compatibility with Java 1.2</p></li>
+
+<li><p>Improved compatibility with recent releases of Xalan,
+       including those bundled with JDK 1.4.2_03 and later</p></li>
+
+</ul>
+
+
+<h2>1.0a4</h2>
+
+
+<p>
+1.0a4 makes no backwards incompatible 
+changes to the published API. 
+Changes since the previous release include:
+</p>
+
+<ul>
+<li><p><code>Nodes.remove(int)</code> now returns the node removed.</p></li>
+
+<li><p>The IBM virtual machine 1.4.1 is no longer special cased.</p></li>
+
+<li><p>The API documentation has undergone extensive editing. </p></li>
+
+<li><p>The unpublished <code>nu.xom.xerces</code> package has been removed.</p></li>
+</ul>
+
+<h2>1.0a3</h2>
+
+
+<p>
+1.0a3 makes no backwards incompatible 
+changes to the published API. It adds one new protected method. 
+Changes since the previous release include:
+</p>
+
+<ul>
+<li><p>The <code>Element</code> copy constructor and 
+<code>copy</code> methods are no longer recursive, so they
+shouldn't cause stack overflows in deep documents. This necessitated adding a 
+protected <code>shallowCopy()</code> method that can be used to create an instance of a subclass
+of <code>Element</code>. Overriding this is preferred to overriding <code>copy()</code> when one wishes 
+to maintain the objects' types after a copy.</p></li>
+
+<li><p>The <code>getBaseURI()</code> method is also no longer recursive. </p></li>
+
+<li><p>The W3C XML Schema Language and WML and HTML DOMs have been removed from 
+the bundled version of Xerces to save space. </p></li>
+
+<li><p>XOM now uses character references only when necessary for
+<em>all</em> encodings supported by the local virtual machine.
+However, this may be quite a bit slower than the 
+explicitly supported encodings like UTF-8 and the ISO-8859
+character sets. Measurements remain to be performed.</p></li>
+
+</ul>
+
+
+<h2>1.0a2</h2>
+
+
+<p>
+1.0a2 makes no changes to the published API. Behavioral 
+changes since the previous release include:
+</p>
+
+<ul>
+
+<li>URI verification and base URI resolution are now performed 
+according to the RFC2396bis algorithm, rather than by using the 
+Xerces and <code>java.net</code> URI classes.</li>
+
+<li>The <code>Builder</code> no longer sets any Java 
+system properties for improved compatibility
+with applets and multiclassloader environments.</li>
+
+<li>A bug in <code>DOMConverter</code> was fixed</li>
+</ul>
+
+
+<h2>1.0a1</h2>
+
+
+<p>
+1.0a1 is the first alpha release of XOM. 
+The API is now considered to be reasonably stable and frozen.
+I may add to the API in the future, but the current API will not change without 
+a very good reason. Most features should work pretty much as intended.
+There are no API changes since 1.0d25. Behavioral 
+changes since the previous release include:
+</p>
+
+
+<ul>
+<li><p>XOM now fully supports the  2nd candidate recommendation syntax for XInclude;
+including preservation of <code>xml:lang</code> values.
+</p></li>
+<li><p>The base URI handling has been modified as follows:</p>
+
+<ol>
+<li> <code>getBaseURI()</code> always returns an absolute URI or the empty string if the base URI is not known.
+   Other than the empty string it never returns a relative URI. 
+   It never returns null.</li>
+<li>The base URI of an element does not change when it is detached or copied.</li>
+<li>The <code>setBaseURI()</code> method only accepts 
+ an absolute URI. It throws a <code>MalformedURIException</code> if you attempt
+   to pass it a relative URI, or a URI with a fragment identifier. (Relative URIs are still allowed in 
+   <code>xml:base</code> attributes.)</li>
+   </ol>
+   </li>
+
+
+<li><p>XOM will not double verify when being fed data through Norm Walsh's catalog filter;
+provided that the underlying parser is good.</p>.</li>
+
+
+<li><p>Constraints on parentage are not checked when building with 
+<code>NonVerifyingFactory</code>.</p></li> 
+
+<li><p><code>DOMConverter</code> and several methods have been rewritten 
+with non-recursive algorithms. Some work remains to be done in this area, however.</p></li>
+
+</ul>
+
+<p>
+There appear to be some bugs in Sun's JDK 1.4.2_03 that break about 5 or 6 of the unit tests.
+All tests pass with JDK 1.4.2_02 and JDK 1.5.0a1. Ant 1.5.x is required to build
+XOM. I have been unable to get the tests to run with Ant 1.6, and the Ant developers 
+seem actively hostile to any reports about this issue. 
+</p>
+
+
+<h2>1.0d25</h2>
+
+
+<p>
+1.0d25 is the second last call release of XOM. I had planned for this to be alpha 1 and API freeze. 
+However, enough changes since the last release
+were discovered to be necessary, that I decided to make this 1.0d25 instead.
+Anything that didn't change since the last release is probably pretty stable.
+However, there have been some new changes in this release that are worth reviewing
+and may change again:
+</p>
+
+<ul>
+  <li><p>All 21 protected <code>check<i>Foo</i></code> methods have been removed. 
+      Instead the various mutator methods (setters and other methods that change the
+       state of an object are now non-final so they can be overridden.
+      The getter methods are stil final and the fields are all private.
+      Thus to change the state of an object setter methods will till need to call the
+      constraint-verifying superclass mehtods. 
+       This should give subclasses a lot more flexibility while not 
+       compromising on well-formedness.</p>
+       </li>
+ <li><p>The <code>Serializer</code> now throws  <code>UnavailableCharacterException</code>,
+ a subclass of <code>XMLException</code>, instead of a raw <code>XMLException</code>
+ when it encounters a character it can neither write nor escape in the current encoding.
+  </p>
+       </li>
+       
+       
+<li><p><code>NodeFactory.makeDocument</code> has been renamed <code>startMakingDocument</code>.
+<code>NodeFactory.endDocument</code> has been renamed <code>finishMakingDocument</code>.</p></li>
+
+<li><p>Added a method to <code>DOMConverter</code> 
+that converts a <code>DocumentFragment</code> to a <code>Nodes</code>.</p></li>
+
+<li><p>Added <code>XSLTransform.toDocument()</code> method that converts a <code>Nodes</code> to
+a <code>Document</code>.</p></li>
+
+
+<li><p><code>Element.removeChildren()</code>
+  now returns a <code>Nodes</code> object containing the children removed.</p></li>
+
+
+<li><p>The <code>LeafNode</code> class has been removed. <code>DocType</code>, 
+<code>Text</code>, <code>Comment</code>, and <code>ProcessingInstruction</code>
+now directly extend <code>Node</code>.</p></li>
+
+<li><p>Removed the <code>hasChildren</code> method from <code>Element</code>, 
+<code>Node</code>, <code>ParentNode</code>, <code>Attribute</code> and <code>Document</code>.</p></li>
+
+
+<li><p><code>Element.addAttribute</code> is declared to throw the more specific <code>MultipleParentException</code> instead of 
+<code>IllegalAddException</code></p></li>
+
+</ul>
+
+<p>
+There are also several changes that do not affect the API
+</p>
+
+<ul>
+
+<li><p><code>ParentNode.replaceChild()</code> will not remove the old child unless it can insert 
+the new child. It can no longer do one but not the other.</p></li>
+
+<li><p><code>Document.replaceChild</code> now allows replacing of the 
+<code>DocType</code> by another <code>DocType</code>
+or the root element by another element</p></li>
+
+<li><p>
+Many methods including <code>getValue</code> and <code>toXML</code>
+have been rewritten using non-recursive algorithms so they are no longer 
+limited by Java's stack size. The samples package includes an example
+of a  non-recursive serializer.
+ </p></li>
+
+<li><p>
+Much better testing of canonicalizer. I am now fairly convinced
+it is correct in all or almost all cases. </p></li>
+
+<li><p>Line breaks are now used between declarations in internal DTD subset</p></li>
+
+<li><p>The JAR is compiled without debugging symbols to save space.
+(These can be turned on again easily enough in build.xml
+if anyone needs them.)</p></li>
+
+<li><p>Added a XOMSamples.jar archive that includes all the sample code</p></li>
+
+<li><p>The core JAR archive is sealed.</p></li>
+
+<li><p>The API documentation has been thoroughly proof-read from start to finish.</p></li>
+       
+       
+</ul>
+
+
+<h2>1.0d24</h2>
+
+
+<p>
+1.0d24 is a very fast release to fix a bug that prevented 1.0d23 from being used 
+in multi-classloader environments like Tomcat. 
+A couple of bugs that prevented some of the test cases from successfully completing
+on Windows have also been fixed, a bug in the FibonacciServlet sample
+was corrected, and some of the documentation has been improved. 
+The API has not changed at all. XOM is still in "last call".
+</p>
+
+<h2>1.0d23</h2>
+
+
+<p>
+This is the last call, pre-alpha release of XOM.
+My plan is that the next release will be the official API freeze
+for 1.0. While nothing is written in stone, I do plan to strenuously resist
+any backwards incompatible changes in the API after the next release
+(1.0a1). If you have any concerns about the API, now is the time to get them 
+in. 
+</p>
+
+<p>
+There are several backwards incompatible changes in this release. 
+Most notably, the various <code>make<i>Node</i>()</code> methods in the 
+<code>NodeFactory</code>
+class all return <code>Nodes</code> objects. This means a factory can replace
+one node type with a different node type 
+(e.g. changing elements into attributes and vice versa) or replace a single
+node with several nodes. 
+</p>
+
+<p>
+Oher changes that may require code modifications include:
+</p>
+
+<ul>
+<li><p><code>Attribute.Type.toXML</code> is now <code>Attribute.Type.getName()</code>. This was necessary
+to be consistent with handling attributes of type ENUMERATION, which is not a DTD keyword
+though it is referenced in the Infoset.</p></li>
+
+<li><p>Support for the November 2003 Working Draft syntax of XInclude,
+including the <code>xpointer</code>, <code>accept</code>, <code>accept-charset</code>, and 
+<code>accept-language</code> attributes. 
+Documents will need to be rewritten to use the new syntax. In keeping with the
+terminology in the new working draft, 
+<code>MissingHrefException</code> has been renamed  
+<code>NoIncludeLocationException</code>. <code>CircularIncludeExcepion</code>
+has been renamed <code>InclusionLoopException</code>. 
+The methods that resolve <code>Nodes</code> objects have been marked private.
+</p></li>
+
+
+
+<li><p><code>NamespaceException</code> has been broken up. 
+<code>IllegalNameException</code> is used for problems with a namespace prefix.
+<code>MalformedURIException</code> is used for problems with a namespace URI.
+<code>NamespaceConflictException</code>, a subclass of <code>WellformednessException</code>,
+ is used for cases where attributes, elements, and/or additonal namespace declarations
+have conflicting bindings for the same prefix. </p></li>
+
+<li><p>Removed <code>NodeFactory</code>'s <code>makeWhiteSpaceInElementContent()</code> method</p></li>
+
+
+<li><p>Removed no-args constructors from the various exception classes.</p></li>
+</ul>
+
+<p>
+More or less backwards compatible changes in 1.0d23 include
+</p>
+
+<ul>
+<li><p><code>IllegalDataException</code> and its subclasses have <code>getData</code> and 
+<code>setData</code> methods
+to get and set the exact text that caused the exception.
+Subclasses include <code>IllegalNameException</code>,
+<code>IllegalTargetException</code>, and <code>IllegalCharacterDataException</code>.
+<code>IllegalCharacterDataException</code> is now used where
+<code>IllegalDataException</code> was used previously.
+</p></li>
+
+<li><p><code>XOMTestCase</code> is part of the published API.</p></li>
+
+<li><p>Factory methods are now invoked in document order. Previously this
+wasn't true for text nodes, which weren't flushed until after 
+the next tag, processing instruction, etc. This was necessary to enable text nodes to
+be maximally contiguous, though in fact they might not be if
+the factory returned several text nodes in a row for non-text nodes.
+In any case, with the default factory, or with a custom factory that
+does not remove any nodes or change their base types (e.g. coment to Text)
+text nodes are still hold the maximum possible contiguous 
+run of text after a build.</p></li>
+
+<li><p>Added support for GB18030 (Chinese) and ISO-8859-11/TIS-620 (Thai) 
+encoding on output
+(requires Java 1.4)</p></li>
+
+
+<li><p><code>Verifier</code> is now based on table lookup. </p></li>
+
+<li><p>All JDOM code has been removed.</p></li>
+
+<li><p>Serialization speed-ups for Non-Unicode, non-Latin-1
+encodings</p></li>
+
+<li><p>It is now possible to supply a <code>NodeFactory</code> to 
+<code>XSLTransform</code> to be used for
+constructing nodes in the result tree</p></li>
+
+<li><p>Improved support for IBM JVM 1.4.1</p></li>
+
+
+
+<li><p>The <code>Nodes</code> class now has <code>insert</code> and <code>remove</code> methods,
+in addition to <code>append</code>. </p></li>
+
+
+<li><p>Added <code>NoSuchAttributeException</code> for parallelism with <code>NoSuchChildException</code></p></li>
+
+<li><p>Unit tests have been dramatically expanded. There are now over
+700 separate test methods, many of which perform several tests.</p></li>
+
+<li><p>No longer allow the namespace URI
+http://www.w3.org/XML/1998/namespace
+to have any prefix other than xml, per conformance with
+the namespaces erratum</p></li>
+
+<li><p>Allow the <code>xml:</code> prefix (with the right URI) to be used on elements
+per conformance with the namespaces recommendation</p></li>
+
+<li><p>Better exception messages when name and namespace arguments are swapped</p></li>
+
+<li><p><code>getBaseURI</code> returns null if the base URI can't be determined due
+to a malformed <code>xml:base</code> attribute. </p></li>
+
+<li>Upgraded to Xerces 2.6.1 and Xalan 2.5.2</li>
+</ul>
+
+<p>
+And of course numerous bugs have been fixed, especially in XInclude. 
+</p>
+
+<h2>1.0d22</h2>
+
+
+<p>
+  This release collects numerous small new features, refactorings, renamings, 
+  unit tests, sample programs, and bug fixes. Many programs
+  will need minor modifications and recompilation to work against this release. 
+  Visible changes include:
+</p>
+
+<ul>
+<li><code>NodeList</code> has been renamed <code>Nodes</code>.</li>
+
+<li><code>ParseException</code> has been renamed <code>ParsingException</code>
+    to avoid a conflict with <code>java.text.ParseException</code></li>
+    
+<li>The <code>preserveBaseURI()</code> method in <code>Serializer</code>
+has been renamed <code>setPreserveBaseURI()</code>
+in keeping with JavaBeans naming conventions.</li>
+
+<li>Carriage returns are no longer allowed in comment and processing instruction data
+because they can't be roundtripped. (Character references aren't resolved inside
+comment and processing instruction data, and the parser will normalize literal
+carriage returns into linefeeds.)</li>
+
+<li>Initial white space is no longer allowed in processing instruction 
+data because this cannot be roundtripped.</li>
+
+<li>The <code>translate</code> methods in <code>DOMConverter</code>
+ have been renamed <code>convert()</code></li>
+
+<li><code>DOMConverter</code> can now convert individual DOM nodes into XOM objects.
+It is no longer limited to converting entire documents.</li>
+
+<li><code>ValidityException</code> now has a <code>getDocument()</code> method which returns the
+complete well-formed but invalid document. It also has <code>getValidityError(int n)</code>,
+<code>getLineNumber(int n)</code>, and <code>getColumnNumber(int n)</code> methods which return 
+information about the successive validity errors in the document.</li>
+
+<li>Numeric character references now use upper case.</li>
+
+<li>In <code>Serializer</code>, <code>writeMarkup</code> has been renamed <code>writeRaw</code> and <code>writeText</code>
+has been renamed <code>writeEscaped</code>
+since in subclasses these may not actually be writing markup.</li>
+
+<li>Much more fine-grained control of serialization from subclasses
+using several new methods including <code>writeXMLDeclaration()</code>,
+<code>writeStartTag()</code>, and <code>writeEmptyElementTag()</code>.</li>
+
+<li>Added an option to serialize using Unicode normalization form C.</li>
+
+<li>Added a protected <code>getColumnNumber()</code> method to 
+<code>Serializer</code> to assist subclasses that
+want to implement their own line breaking strategies.</li>
+
+<li>Can now specify a <code>Builder</code> to be used when XIncluding</li>
+
+<li>More XPointer syntax errors are detected when XIncluding</li>
+
+<li>Java encoding names such as ISO8859_1 are now recognized on input
+if Xerces is the parser. </li>
+
+<li><code>XIncludeException</code> (and its subclasses) can now report the URI
+of the document where the problem was detected</li>
+
+<li>Upgraded to Xerces 2.6 nightly build to fix bug
+involving relative URL resolution in documents 
+loaded from redirected URLs</li>
+
+<li>Added unit tests for <code>SAXConverter</code></li>
+
+<li>Added <code>DatabaseBuilder</code> sample based on Example 8-13 from Processing XML with Java</li>
+
+<li>Silently preserve CDATA sections from parse to output when possible.</li>
+
+<li>Added <code>SourceCodeGenerator</code> sample program that converts a well-formed XML
+document into the XOM statements necessary to create the document.</li>
+
+</ul>
+
+<p>
+  This is probably the last version that will support the old, XInclude
+  2002 Candidate Recommendation syntax. The next release will likely support the
+  new 2003 Working Draft syntax.
+</p>
+
+
+<h2>1.0d21</h2>
+
+<p>
+  This release collects a number of small changes, refactorings, and bug fixes. Most programs
+  should continue to work as they did previously without modification or
+  recompilation. Visible changes include:
+</p>
+
+
+<ul>
+<li>
+<p>
+Added protected <code>checkDetach</code> method in <code>Node</code>
+which subclasses can override to prevent or track nodes being detached.
+</p></li>
+
+<li><p>
+The <code>copy</code> method is no longer final in the various
+node classes such as <code>Element</code>. Subclasses should override this
+metod to return an instance of the speciifc subclass.
+</p>
+</li>
+
+<li><p>
+Cycles (an element acting as its own parent or ancestor)
+are no longer allowed. Attempting to create one throws a
+<code>CycleException</code>.</p></li>
+
+<li><p><code>NodeFactory.makeDocument()</code> no longer takes an Element as an argument.
+It is the responsibility of the <code>NodeFactory</code> to construct a suitable root 
+element. However, when parsing this will quickly be replaced by the 
+actual root element.</p>
+</li>
+
+
+<li><p><code>Serializer.setIndent</code> throws an <code>IllegalArgumentException</code>
+for negative values
+</p>
+</li>
+
+<li><p>Fixed bug where line breaks would be added if indenting, even in elements
+for which  <code>xml:space="preserve"</code></p>
+</li>
+
+<li><p>XInclude now consistently treats XPointers that don't match any
+subresource as resource errors, rather than including nothing.</p>
+</li>
+
+<li><p><code>xml:base</code> attributes added to XIncluded elements no longer 
+have fragment IDs</p>
+</li>
+
+<li><p>A couple more XPointer syntax errors are now detected when XIncluding</p>
+</li>
+
+<li><p>In <code>XIncludeException</code> the <code>getRootCause</code> 
+and <code>setRootCause()</code> 
+methods have been replaced by <code>initCause()</code> and <code>getCause()</code>.</p>
+</li>
+
+<li><p>The <code>initCause</code> method in the various exception classes 
+ now behaves much more consistently with its definition in Java 1.4.</p>
+</li>
+
+<li><p><code>XSLException</code> no longer extends <code>XMLException</code>. 
+This means it is now a checked
+exception instead of a runtime exception.</p>
+</li>
+
+<li><p>Xalan 2.5.1 has replaced Saxon 6.5.2 as the bundled XSLT processor
+due to a bug in SAXON that incorrectly reported document fragments 
+resulting from XSL transforms </p>
+</li>
+
+
+<li><p>Minor usability improvements and code cleanups in the build.xml file</p></li>
+
+<li><p>Added an overview page to the API docs</p>
+</li>
+</ul>
+
+
+<h2>1.0d20</h2>
+
+<p>
+  This release adds a workaround for 
+  Java's broken, non-conformant handling of <code>file:</code>
+  URLs on Windows. The problem manifested itself as 
+  an inability to resolve relative URLs in documents built with
+  the 
+  <code>Builder.build(File)</code> method. This caused the
+  failure of a couple of dozen unit tests. Unix users were not affected
+  (which is why I didn't notice the problem sooner).
+  There are no API-level changes in this release.
+</p>
+
+<p>
+  The JAR archive is no longer compressed, which means a larger JAR 
+  archive but faster class loading on initial startup.
+</p>
+
+
+<h2>1.0d19</h2>
+
+<p>
+  The major API level change in XOM 1.0d19 is in <code>NodeFactory</code>.
+  <code>makeElement</code> has been renamed <code>startMakingElement</code>
+  and <code>endElement</code> has been renamed  <code>finishMakingElement</code>.
+  <code>startMakingElement</code> behaves the same as the old 
+   <code>makeElement</code>. However, <code>finishMakingElement</code> now has a slightly
+   different contract. if it returns null, the entire element is deleted from the tree.
+   It is no longer necessary to explicitly call <code>detach</code>.
+   If it returns a different element than the one passed to it, then the old
+   element is deleted from the tree and the new one is inserted in its place.
+   This is more consistent with the other methods in this class.
+   Return the node you want added to the tree,
+   or null for no node at all.
+</p>
+
+<p>
+The second big change has no API-level impact.
+By default, the <code>Serializer</code> and 
+<code>toXML</code> methods now use
+numeric character references to
+to escape all tabs, carriage returns, and line feeds in 
+attribute values and all carriage returns in text nodes. 
+This helps make round tripping more reilable and robust.
+However, if the user indicates that white space is not significant
+by calling either <code>setMaxLength</code> or 
+<code>setIndent</code>, then these characters
+may not be preserved. If the client calls <code>setLineSeparator</code>,
+then tabs will still be preserved but carriage returns and line
+feeds may not be. 
+</p>
+
+<p>
+  There are also several minor improvements and bug fixes:
+</p>
+
+<ul>
+<li>The unit test code is cleaner, but still needs a lot of work.</li>
+<li>The <code>Node.equals()</code> method now executes in about half the time
+    it took in previous releases.</li>
+<li>Characters from Planes 1 to 15 are now escaped correctly 
+by the serializer</li>
+</ul>
+
+<h2>1.0d18</h2>
+
+<p>
+  1.0d18 adds one minor new feature and one major new feature.
+  The minor feature is that <code>nu.xom.tests.XOMTestCase</code>
+  is now public. This class is very useful for comparing two documents
+  or pieces thereof for deep equality. For example, I use it to compare the 
+  actual output of the XInclude test cases to the expected outputs.
+  I'm still working on the API and detailed behavior, but I think it's solid
+  enough to be useful for other people's unit testing.
+</p>
+
+<p>
+  Now the major feature, and this one's way cool:
+  It is now possible to subclass <code>NodeFactory</code>
+  in order to filter and/or stream your processing.
+  XOM can now handle documents of effectively arbitrary size 
+  with only slightly more memory use than the 
+  underlying SAX parser!
+  I really need to write an article about 
+  this style of mixed tree/stream processing, but in the meantime
+  here are the key things you need to know:
+</p>
+
+<ol>
+  <li>To enable filtering or streaming, install your own
+      <code>NodeFactory</code> subclass with the <code>Builder</code>.
+      I've added a couple of constructors to <code>Builder</code> to 
+      make this easier.
+  </li>
+  <li><code>NodeFactory</code> has
+      one <code>make<i>Node</i></code> method for each of XOM's node types.
+      You must return a node of the requested type, but you can change its
+      name, namespace, value, or other characteristics before doing so.
+      </li>
+ <li>You can eliminate a node from the document simply by returning
+      null from the <code>make<i>Node</i></code> method.
+      This saves both the memory needed to store the node and the time
+      required to build it.
+      </li>
+
+  <li>To process one element at a time, override <code>endElement()</code>
+      in <code>NodeFactory</code>. This supports streaming. Before the builder
+      calls this method, it has  completely built the element with all its content.
+      The usual XOM methods
+      all work on it. You do not have process every element in order to process some.
+      You can do a quick check on the name and namespace of the element
+      (or other characteristics) to figure out what you want to do with it.
+      If you don't want to process the element, just return.
+      For example an XHTML spider could easily look at each <code>a</code>
+      element and ignore all the other elements in the document. Indeed
+      it wouldn't even have had to build them or any of their content in the
+      first place.
+      </li>
+    <li>
+      If you only need to process an element once, put your processing in 
+      the <code>endElement()</code> method and 
+      <code>detach()</code>
+      it when you're done. 
+            As long as you haven't stored a reference to it somewhere,
+      the element can then be garbage collected as needed. This is 
+      how XOM processes documents larger than available memory.
+      This is sort of like SAX callbacks, except it's
+      much more convenient because you have the entire element to work with.
+      You do not need to build a custom data structure to hold onto the content
+      until you're ready to work with it. The element is its own data structure.
+    </li>
+     
+  <li>Most importantly, if you don't care about all this, you can ignore it. 
+  It has no impact on 
+      the rest of the API. Adding this functionality just required two new
+      protected methods in <code>NodeFactory</code> and two new constructors
+      in <code>Builder</code>. The rest of the API
+      is unchanged. You can forget about it until you need it.</li>
+</ol>
+
+<p>
+  More details are in the JavaDoc for <code>NodeFactory</code>,
+  and I've written lots of new sample programs that you'll find in the 
+  <code>nu.xom.samples</code>
+  package. Many of them are streaming versions of earlier, less memory efficient 
+  samples.
+</p>
+
+<p>
+  This developed from an idea proposed by John Cowan, based on Simon St. Laurent's
+work with MOE. There have been  things like this before, (DOMBuilderFilter in DOM3,
+MOE, ElementScanner in JDOM, and of course SAX filters) but I don't think any API
+has done quite as neat a job as XOM now does. This is really powerful stuff. 
+Not only does it make programs faster and much, much smaller.
+It makes them much easier to write. For instance, you can easily throw away 
+all white space only nodes on build so you're left with only the real content
+of the document, no more white space nodes getting  in the way of your navigation.
+I urge you 
+to check this out. It will radically change how you think about processing XML. 
+</p>
+
+<p>
+  This release is API compatible with 1.0d17. All programs that
+  compiled in 1.0d17 should still compile in 1.0d18 without any edits.
+</p>
+
+
+
+<h2>1.0d17</h2>
+
+<p>
+  The is primarily a bug fix release.
+  There are only very minor API changes, the most significant
+  of which is that <code>XSLTransform</code> is final.
+  Other fixes and improvements in this release include:
+</p>
+
+
+<ul>
+<li>Added unit tests for <code>toString</code> methods and fixed various bugs 
+thereby uncovered</li>
+
+<li>IPv6 URIs of the form described in RFC 2732 are now allowed</li>
+
+<li>Fixed various bugs in XInclude. It can now process all the test cases that
+do not use the <code>xpointer()</code> scheme or unparsed entities.
+In a couple of cases, it's actually conformant to the as yet 
+unpublished XInclude proposed recommendation rather than the 
+published candidate recommendation.
+</li>
+
+<li>The correct exception is now thrown when validating with Crimson.</li>
+
+<li>You can now build with Crimson in Java 1.4.1 and earlier.</li>
+
+<li>Removed numerous unused local variables thanks to <a href="http://pmd.sourceforge.net/">PMD</a></li>
+
+<li>Removed some duplicate code in <code>Builder</code> and <code>Verifier</code> thanks to 
+   <a href="http://www.oshineye.com/software.html">Same</a></li>
+</ul>
+
+<h2>1.0d16</h2>
+
+<p>
+  The primary focus of this release is adding unit tests for XSLT,
+  and fixing the bugs they uncovered: 
+</p>
+
+<ul>
+
+<li><p>More accurate exception messages from the <code>XSLTransform</code> constructors</p></li>
+
+<li><p>XSLT unit tests</p></li>
+
+<li><p>The distribution now includes the SAXON jar archive so that XSLT works with 
+Java 1.2 and 1.3 VMs.</p></li>
+
+<li><p>Fixed a nasty bug in <code>Element.toXML</code> that was making XSLT transforms
+fail when elements were in the default namespace</p></li>
+
+<li><p>You can now transform a <code>NodeList</code> as well as a complete document</p></li>
+
+</ul>
+
+<p>
+  Other assorted improvements in this release include:
+</p>
+
+<ul>
+<li><p>
+The standard jar file no longer includes the samples, tests, and benchmarks packages.
+You can compile these from source if you need them, but omitting them makes the jar file
+smaller for developers who want to bundle XOM with their own applications.
+</p></li>
+
+<li><p>
+The jar file is indexed to improve class loading speed.
+</p></li>
+
+<li><p>
+I moved <code>SAXConverter</code> and <code>DOMConverter</code> 
+out of the core package into a new 
+<code>nu.xom.converters</code> package. They're fairly special
+purpose.
+</p></li>
+
+<li><p>Improved compatibility with Java 1.2.</p></li>
+
+<li><p>SAX filters can no longer bypass well-formedness checks</p></li>
+
+<li><p>Worked around a Xerces and Crimson bug that inhibits relative URL
+resolution from pathless base URLs such as 
+http://www.cafeconleche.org </p></li>
+
+<li><p>The <code>FibonacciSOAPClient</code> sample program works now</p></li>
+
+<li><p><code>Document.insertChild(DocType, position)</code> now throws an <code>IllegalAddException</code>
+if the <code>Document</code> already has a <code>DocType</code>, rather than silently replacing it.</p>
+</li>
+
+</ul>
+
+<h2>1.0d15</h2>
+
+<p>
+The primary focus of this release is XInclude.
+To my knowledge, XOM is now completely conformant with
+with the XInclude candidate recommendation including:
+</p>
+
+<ul>
+  <li>Fallback support</li>
+  <li>Support for the XPointer bare name and <code>element()</code> schemes</li>
+  <li><code>xml:base</code> attributes are added to included elements as necessary
+      to preserve base URI information</li>
+</ul>
+
+<p>
+I've also written 24 unit tests for XInclude and fixed numerous bugs
+including one in the
+ <code>Document</code> and <code>Element</code>
+ copy constructors that failed to preserve base URI.
+</p>
+
+<p>
+  Other changes in this release include:
+</p>
+
+<ul>
+<li>
+The <code>Element.getChildElements(String name, String namespaceURI method)</code>
+now allows a null or empty string local name to stand for any local name,
+so you can use this method to get all elements in a certain namespace.
+</li>
+
+<li>
+<code>Serializer</code> no longer wraps and indents text when <code>xml:space="preserve"</code>, 
+regardless of the setting of indents and maxlength.
+</li>
+</ul>
+
+<p>
+  This release should be completely compatible with code 
+written against 1.0d14. You should not even need to recompile
+existing programs.
+</p>
+
+<h2>1.0d14</h2>
+
+<p>
+  The primary focus of this release is speed. I've done extensive profiling
+  of the CPU times used by XOM, and 
+  rearchitected classes to run faster by both macro and micro optimizations.
+  One of the things I discovered was that parsing and serialization 
+  are dramatically slower than in-memory manipulations,
+  typically by three orders of magnitude. Right now my belief is that any
+  program that does any parsing or serialization (and it's hard to imagine 
+  what program wouldn't do at least one of those two) is going to
+  spend so much time doing that, that nothing else is worth optimizing.
+  Parsing and serialization are typically three orders of
+  magnitude slower than in-memory manipulations, even when all
+  I/O is performed between byte arrays. There's simply no point to
+  optimizing anything else.
+ </p>
+
+  <p>
+    That said, I have optimized parsing/document building extensively in this release.
+    It is much, much faster than in previous releases. It should now be 
+   competitive with any other tree-based API written in Java, though 
+   naturally it's still slower than a straight forward SAX parse because it
+   sits on top of SAX. The biggest effects on speed now are I/O
+    (don't forget to buffer your streams) and the speed of the underlying
+   parser. I'm still recommending Xerces because it's the only I've found that's
+   almost correct, but you can speed XOM up by a factor of a third by switching to
+   Crimson, and possibly more by switching to Piccolo. However, both of those 
+   have nasty bugs that prevent the XOM unit tests from completing successfully.
+   Xerces has a couple of bugs too, but fortunately nothing I couldn't work around.
+  </p>
+
+  <p>
+    Contrary to popular belief, most of the optimizations improved both speed and memory use.
+    There were few trade-offs between them. However, there was one notable exception.
+    The <code>Text</code> class is now storing its data internally in UTF-8. This cuts memory usage for
+    mostly ASCII text by about 10-20%. However, it has a noticeable 10% speed penalty. 
+    I'm not sure if I'm going to keep this strategy or not. Ideally, I'd like to provide 
+    some sort of runtime switch to select this behavior (or not) but I haven't
+    yet figured out the right design to make this happen. The constraints on the design are:
+  </p>
+
+  <ul>
+    <li>There must be a simple public constructor in the <code>Text</code> class</li>
+    <li>There must be a simple <code>setValue()</code> method in the <code>Text</code> class</li>
+    <li>Subclasses from outside the <code>nu.xom</code> package cannot bypass verification</li>
+    <li>Each Text object should not carry around unnecessary fields (a four byte reference
+        per object adds up fast.)</li>
+   <li>Frequently called methods such as <code>getValue()</code>
+       and <code>setValue()</code> should not use <code>instanceof</code>. 
+(Profiling has shown this is a 
+       performance killer.)
+       </li>
+  </ul>
+
+  <p>
+    There are no public API level changes in this release. However, the unit tests have been expanded
+    dramatically, which resulted in the discovery and elimination of a number of bugs. Internal changes 
+in 1.0d14 include:
+   </p>
+
+<ul>
+  <li>There are the beginnings of a new nu.xom.benchmark package, though it's not even close to stable
+    yet. None of the classes in here are public, but you can run the programs to get some rough timing
+   measurements.</li>
+<li>Verification is not performed on build. Instead XOM relies on the parser
+    to perform well-formedness checks. This is a significant speed-up.</li>
+   <li> Worked around some bugs in Xerces that caused the wrong exception
+to be thrown when validating.</li>
+<li>Improved compatibility with Crimson, the default parser
+in Java 1.4. However, Crimson bugs still prevent the 
+canonicalization unit tests from completing successfully.
+(Specifically, it normalizes numeric character references such as &amp;#x0A;
+in attributes to spaces.). There's no easy way to work around this.
+</li>
+
+<li><code>Element.insertChild(String, int)</code> now throws a <code>NullPointerException</code> if 
+the first argument is null</li>
+
+<li>Fixed a nasty bug in <code>Document</code>'s copy constructor
+    that caused the prolog and epilog of a document not to be copied.</li>
+
+<li>Disallowed fragment identifiers in system literal URI references,
+    per conformance with the XML spec</li>
+
+<li>Fixed several bugs involving the handling of
+ notation and unparsed entity declarations in
+the internal DTD subset</li>
+
+<li>Added unit tests for the internal DTD subset.</li>
+
+<li>Fixed build.xml to point at Xerces properly. Consequently
+"build testui" now works</li>
+
+<li>The API documentation for the <code>nu.xom.samples</code> package is no longer bundled
+    with the main JavaDoc, to indicate that this is not really a
+    part of the public API. For the moment, if you want this you'll have to 
+   build it yourself, though it's not very useful. I have not spent a
+   lot of effort on the comments in the samples package.</li>
+
+</ul>
+
+
+<h2>1.0d13</h2>
+
+<p>
+  The primary focus of this release is memory. I've done extensive profiling
+  of the memory used by XOM, plugged memory leaks, and 
+  rearchitected classes to use less memory. The <code>Element</code> class has fewer fields
+  than before and uses lazy initialization so many complex fields are null
+  until and unless they're actually used. With this release XOM programs should use less than 
+  half the memory they used previously. I now have a <em>rough</em> estimate
+  that for large (a hundred kilobytes or more), primarily ASCII-range XML documents 
+  encoded in UTF-8,
+  the corresponding XOM <code>Document</code> object is five to six times the
+  size of the input XML. 
+  Less complex documents without attributes 
+  or namespaces are likely to be smaller than documents of the same physical size
+  with attributes and namespaces. 
+  If the original document is encoded in UTF-16, the size difference
+  is likely to be more like 2 to 3 times. 
+ </p>
+
+<p>
+  Measurements are currently showing that almost 
+  all the space is taken up by strings and char arrays (mostly inside strings and
+  string buffers). There might be a few places where I can make a nip here 
+  or a tuck there, but further large-scale memory optimization would have to look at 
+  using UTF-8 internally instead of UTF-16. (Possibly I can get away with
+  doing this in just a couple of places like the <code>Text</code> class.)
+  One area I can still explore is whether it might make sense to intern strings.
+  Generally, the parser does this for anything read from a document, and
+  the compiler does it for string literals; but there might still be a few 
+  opportunities here. 
+</p>
+
+<p>
+  I've also done a little work on speed as well, though not nearly as extensive.
+  Mostly I just picked off some low-hanging fruit the profiler made obvious.
+  More serious work remains to be done. My inital measurements focused on document building. 
+  About 25-35% of the time was eaten by the parser. Another 25-35% went into verification, 
+  the biggest chunk of which was text content. The rest was divided up into dribs and drabs
+  of actual document building. The single biggest time waster was this method:
+</p>
+
+
+<pre><code>    private static boolean isXMLCharacter(int c) {
+        
+        if (c &lt;= 0xD7FF)  {
+            if (c >= 0x20) return true;
+            else {
+                 if (c == '\n') return true;
+                 if (c == '\r') return true;
+                 if (c == '\t') return true;
+                 return false;
+            }
+        }
+
+        if (c &lt; 0xE000) return false;  if (c &lt;= 0xFFFD) return true;
+        if (c &lt; 0x10000) return false;  if (c &lt;= 0x10FFFF) return true;
+        
+        return false;
+    }</code></pre>
+
+<p>
+  Even small optimizations here could have a large effect,
+  so let me know if you see any. However,
+  I'm probably going to redesign the <code>XOMHandler</code> class 
+  in 1.0d14 so it bypasses verification.
+  The assumption is the parser will have already checked 
+  all this.  
+</p>
+
+<p>
+  There are a few API level changes in this release:
+</p>
+
+<ul>
+<li>
+The arguments to <code>insertChild</code> (and <code>checkInsertChild</code> and 
+<code>checkRemoveChild</code>) have been reversed.
+These methods are now:
+
+<pre><code>public void insertChild(Node child, int position)
+protected void checkInsertChild(Node child, int position)
+protected void checkRemoveChild(Node child, int position)</code></pre>
+
+<p>
+The previous order just didn't feel natural to me.
+</p>
+
+</li>
+<li>The <code>removeChild</code> methods now return the <code>Node</code>
+ they remove:
+
+<pre><code>public Node removeChild(int position)
+public Node removeChild(Node child)</code></pre>
+
+</li>
+<li>
+The <code>Builder</code> method
+<pre>public Document build(String document, String baseURI)</pre>
+is now declared to throw an <code>IOException</code> like the other <code>build()</code>
+methods because an <code>IOException</code> can occur while
+parsing the external DTD subset.</li>
+
+<li>The <code>equals()</code> and <code>hashCode()</code>
+ methods were removed 
+from the <code>XSLTransform</code> class.
+They're probably not necessary, and their behavior was underspecified. 
+</li>
+
+<li>Several additional methods in <code>Element</code>
+ were marked final: <code>getAttributeCount(</code>),
+<code>getNamespacePrefix(int index)</code>, <code>removeChildren()</code>,
+and <code>getAttribute(int)</code>. Their previous non-finality 
+was an oversight. </li>
+
+</ul>
+
+<p>
+  In addition, they're a number of small changes in behavior that don't change the API:
+</p>
+
+<ul>
+<li>The serializer now recognizes the
+     IBM037 encoding (a.k.a. CP037, EBCDIC-CP-US, EBCDIC-CP-CA, 
+    EBCDIC-CP-WA, EBCDIC-CP-NL, and CSIBM037).
+    Note that EBCDIC is a real pain in the ass, and Java's encoders do
+   not handle it correctly for either input or output.
+    (NEL, 0x85, gets mapped to linefeed on input and vice versa on output.)
+   For output, <code>Serializer</code> transparently uses a custom subclass of 
+  <code>OutputStreamWriter</code> that does handle EBCDIC correctly.
+   EBCDIC input is still broken, at least for parsers that rely on
+   Java to do EBCDIC-Unicode conversions. 
+</li>
+<li>If the serializer's line separator is set, then all line separators are
+changed to that separator on output. If the line separator is not explicitly
+set, then all line breaks in source text are preserved as is.</li>
+<li>Improved unit testing for the <code>Serializer</code> and <code>Builder</code></li>
+<li>The public and system IDs of <code>DocType</code> can now be the empty string,
+in conformance with the XML spec.</li>
+</ul>
+
+<p>
+  Finally, there were a number of small bug fixes, and lots of code cleanups throughout.
+  The most significant bug fix involved setting or changing the namespace URI of XHTML elements
+(and other elements that use the default namespace). 
+</p>
+
+<h2>1.0d12</h2>
+
+<p>
+This release removes the <code>insertBefore</code>
+<code>insertAfter</code> methods  from <code>ParentNode</code>
+because:
+</p>
+
+<ol>
+  <li>They're redundant with other methods</li>
+  <li>They don't really fit into XOM's indexed based access style</li>
+  <li>Experience has shown they're not commonly used</li>
+  <li>I'd rather hit 1.0 with too few methods than too many.
+      It's easier to add a method in the future than to take it away.</li>
+</ol>
+
+<p>
+However, if anyone howls too loudly about this,
+I can probably be convinced to put them back in.
+</p>
+
+<p>
+This release also fixes a bug that arose when removing the 
+namespace from an element that had attributes,
+such as might occur when converting XHTML to plain vanilla HTML.
+</p>
+
+<h2>1.0d11</h2>
+
+<p>
+The new feature in this release is an <a href="http://ant.apache.org/">ANT</a> build file.
+This should make it much easier to compile XOM from source.
+ANT is not included though. You'll have to download and install it separately.
+</p>
+
+<p>
+  There are no API-level changes in this release.
+  All code that ran before should still run.
+  This release does fix three assorted bugs reported by users:
+</p>
+
+<ul>
+  <li>Worked around a bug in later versions of Xerces that don't like 
+null entityresolvers</li>
+<li>Allow base URIs to contain % escapes</li>
+<li>Fixed a bug that throws NullPointerException when serializing documents without a base URI
+with preserveBaseURI set</li>
+</ul>
+
+<p>
+Not surprisingly these all appeared in the <code>Builder</code>
+and <code>Serializer</code> classes, which out of all the classes in XOM
+are the least well-covered by unit tests.
+I've expanded the unit tests to catch these and related bugs.
+The unit tests all pass, assuming you use a non-buggy SAX2 parser. 
+However, if you run the JUnit GUI from the ANT build file,
+some confusing class loader issues cause the more-buggy Crimson
+to be loaded instead of the less-buggy Xerces. This breaks four
+unit tests. Everything should pass if you run
+the tests directly instead of from ANT.
+(That is, type "<samp>java -Xmx96m junit.swingui.TestRunner nu.xom.tests.XOMTests</samp>"
+instead of "<samp>ant testui</samp>".)
+If anyone can explain to me how I might fix this,
+I'd appreciate it.
+</p>
+
+<h2>1.0d10</h2>
+
+<p>
+This release fixes various bugs in namespaces,
+and makes one API change. The 
+<code>declareNamespace</code> method is once again
+<code>addNamespaceDeclaration</code>.
+</p>
+
+<p>
+Under the hood, however, there are much more significant changes in
+namespace handling, and these are likely to break some existing applications.
+In particular,
+</p>
+
+<ul>
+  <li>The namespace prefix of an element in the default namespace
+  (including no namespace at all)
+  is now the empty
+  string, not null. </li>
+  <li><code>getNamespaceDeclarationCount</code> now counts all the local namespaces of the 
+    element; not just additional namespace declarations.
+    It has at least one entry for the namespace of the element
+    (even if the element is in no namespace), one namespace for each
+    attribute in a namespace, and one namespace for each additional namespace declaration.
+    However, namespaces used multiple times are only counted once.
+    Namespaces in-scope from an ancestor but not directly used on the
+    element are not included.
+    <code>getNamespacePrefix(int i)</code> iterates across this
+    list of local namespaces. 
+    Chances are all code that calls either of these two 
+    methods will need to
+    be rewritten.
+    </li>
+    
+    <li>
+      <code>getNamespacePrefix("")</code> should now always return the 
+      default namespace in scope.
+      If no  default namespace is in scope
+      it returns the empty string, not null.
+    </li>
+    
+</ul>
+
+<h2>1.0d9</h2>
+
+<p>
+Removed vestigial <code>getNextSibling()</code> 
+and <code>getPreviousSibling()</code> methods from <code>Document</code>.
+These should have been removed earlier. 
+</p>
+
+<dl>
+<dt>
+In <code>Comment</code>:</dt>
+   <dd>Renamed <code>check</code> to <code>checkValue</code><br />
+   Renamed <code>setData</code> to <code>setValue</code>
+</dd>
+
+<dt>
+In <code>ProcessingInstruction</code> class:</dt>
+   <dd>Renamed <code>checkData</code> to <code>checkValue</code><br />
+   Renamed <code>setData</code> to <code>setValue</code>
+</dd>
+
+<dt>
+In <code>Text</code>:</dt>
+   <dd>Renamed <code>check</code> to <code>checkValue</code><br />
+   Renamed <code>setData</code> to <code>setValue</code>
+</dd>
+
+<dt>
+In <code>ParentNode</code>:</dt>
+   <dd>Renamed <code>checkRemove</code> to <code>checkRemoveChild</code> 
+   for symmetry with <code>checkInsertChild</code><br />
+   Moved these two methods down into <code>Element</code>:
+   
+<pre>public final void appendChild(String text)
+public final void insertChild(String text, int position)</pre>
+</dd>
+</dl>
+
+
+     <p>
+Fixed <code>Builder</code> bug that prevented parsing 
+<code>File</code> objects whose
+filenames contained spaces and other non-URL legal characters 
+</p>
+
+<p>
+Fixed <code>equals()</code> method in <code>Attribute.Type</code> to work in mutliclassloader
+environments 
+</p>
+<p>
+Corrected usage instructions in samples programs to include the package name
+ </p>
+ 
+ <p>
+Added checks on values of <code>xml:base</code> attributes that they are legal IRIs.
+Mainly this involves checking the hex escaping.
+</p>
+
+<h2>1.0d8</h2>
+
+<p>
+XSLT works (modulo some obscure bugs in handling the
+undeclaration of the default namespace. I need to get some 
+clarification on the proper behavior of SAX processors to 
+fix this.) The TrAX <code>XOMSource</code> and <code>XOMResult</code> 
+classes are not yet
+public because I'm still thinking about the proper API for these,
+but you can use the <code>XSLTransform</code> class for most use-cases. 
+You'll need a TrAX compliant XSLT engine such as 
+<a href="http://saxon.sourceforge.net">Saxon</a>
+or <a href="http://xml.apache.org/xalan-j/index.html">Xalan-J 2.4</a> somewhere in your classpath
+to use this.
+</p>
+
+<p>
+It is now possible to undeclare the default namespace on a prefixed element
+by passing the empty string as the prefix and URI to 
+<code>declareNamespace()</code>.
+</p>
+
+<h2>1.0d7</h2>
+
+<p>
+Added constraint that an element cannot have two attributes with the
+same local name and same namespace URI, but different prefixes.
+</p>
+
+<p>
+Changed automatic attribute replacement to depend on local name
+and namespace URI and never on qualified name alone.
+</p>
+
+<p>
+Removed the <code>getFirstChild(</code>), 
+<code>getPreviousSibling(</code>), and <code>getNextSibling()</code>
+methods from Node. These really didn't fit the XOM model of indexed access,
+and were slower than the indexed equivalents.
+</p>
+
+<p>
+Added <code>indexOf()</code> method to ParentNode that returns the position of 
+a given node within its parent, or -1 if the node is not a child of this <code>ParentNode</code>. 
+This is helpful for those few cases where
+you do need to identify a node's sibling.
+</p>
+
+<p><code>public int indexOf(Node child)</code></p>
+
+<p>
+Spell checked the API documentation
+</p>
+
+<p>
+Moved <code>XOMResult</code> into the <code>nu.xom.transform</code> package. 
+XSLT still doesn't work, but it's a little closer to working. 
+</p>
+
+<h2>1.0d6</h2>
+
+<p>
+This release makes very limited backwards incompatible changes to the API.
+(A few formerly public methods in <code>Serializer</code> are now protected.)
+Almost all code that previously compiled and ran with 1.0d4 and 1.0d5, should still compile and run.
+New features in the API in this release include:
+</p>
+
+<ul>
+<li><p>Namespace URIs must now be
+     absolute URI references</p></li>
+
+<li><p><code>Element.toXML</code> now generates empty-element tags for empty elements</p></li>
+   
+<li><p>Added a <code>nu.xom.xincluder</code> package to provide XInclude support
+The samples package includes a driver program that uses this
+to resolve XIncludes in existing documents.</p></li>
+
+<li><p>Added a <code>nu.xom.canonical</code> package to provide Canonical XML serialization.
+The samples package includes a driver program that can canonicalize 
+ documents.</p></li>
+ 
+ <li><p><code>Serializer</code> has four new protected methods
+              to provide subclasses with more access to the underlying <code>OutputStream</code>:</p>
+              
+   <pre><code>protected final void writePCDATA(java.lang.String text) throws IOException
+protected final void writeAttributeValue(java.lang.String value) throws IOException
+protected final void writeMarkup(java.lang.String text) throws IOException
+protected final void breakLine() throws IOException</code></pre>           
+               
+              </li>
+</ul>
+   
+ <p>
+In addition, several bugs were fixed:
+</p>  
+   
+   <ul>
+<li><p>Fixed <code>TextWriter</code> bug that prevented the line separator from being changed</p></li>
+
+<li><p>Fixed a bug that allowed the namespace URI of a prefixed element to
+be changed to the empty string.</p></li>
+
+<li><p>Fixed a bug that allowed the prefix of an element to
+be changed to 
+something that conflicts with one of its attributes
+or additional namespace declarations</p></li>
+
+<li><p>Fixed a bug that prevented the <code>detach()</code> method from working on leaf nodes</p></li>
+
+<li><p>Fixed a bug pointed out by Laurent Bihanic in <code>getNamespaceURI(String prefix)</code>
+that failed to return namespace URIs from more than one level up in the hierarchy</p></li>
+
+<li><p>Fixed a cosmetic bug in the handling of nbsp in ISO-8859-11 Thai</p></li>
+
+<li><p>Relative URLs in system identifiers for DTDs are now resolved against the base URI
+of the document specified in the builder instead of the current working directory.</p></li>
+
+</ul>
+
+
+<h2>1.0d5</h2>
+
+<p>
+This release makes no backwards incompatible changes to the API.
+All code that previously compiled and ran with 1.0d4, should still compile and run.
+New features in the API in this release include:
+</p>
+
+<ul>
+  <li><p>I've added 
+       <code>getName()</code>, <code>equals()</code>, <code>hashCode()</code>, and 
+       <code>toString()</code> methods to the <code>Attribute.Type</code> inner class.
+       Environments with multiple class loaders should use 
+       the <code>equals()</code> method instead of direct equality comparison.
+       </p></li>
+       
+      <li><p>
+        I added a new <code>build</code> method to <code>Builder</code>
+        that builds a XOM <code>Document</code> from a <code>java.io.File</code>.</p>
+      </li>
+      
+      <li><p>
+        I added two more <code>build</code> methods to <code>Builder</code>
+        that allow the base URI to be specified when
+  building from a <code>Reader</code> or an <code>InputStream</code>.</p>
+      </li>
+      
+      <li><p>
+        I added an experimental <code>build</code> method 
+        to <code>Builder</code> that builds a XOM <code>Document</code> directly
+        from a <code>String </code>
+containing well-formed XML. </p>
+      </li>
+      
+     <li>
+       <p>I cleaned up the internal code in <code>Builder</code> substantially by
+             refactoring duplicate code into private methods.</p>
+     </li>
+
+     <li>
+       <p>I fixed a bug that was preventing the default <code>XMLReader</code> from being loaded
+in some circumstances
+</p>
+     </li>
+
+<li><p>
+<code>Serializer</code> now supports all defined ISO-8859 character sets,
+including:</p>
+
+<ul>
+    <li>ISO-8859-1</li>
+    <li>ISO-8859-2</li>
+    <li>ISO-8859-3</li>
+    <li>ISO-8859-4</li>
+    <li>ISO-8859-5</li>
+    <li>ISO-8859-6</li>
+    <li>ISO-8859-7</li>
+    <li>ISO-8859-8</li>
+    <li>ISO-8859-9</li>
+    <li>ISO-8859-10</li>
+    <li>ISO-8859-11</li>
+    <li>ISO-8859-13</li>
+    <li>ISO-8859-14</li>
+    <li>ISO-8859-15</li>
+    <li>ISO-8859-16</li>
+</ul>
+<p>Note that although XOM supports them, not all Java virtual machines do.</p>
+</li>
+
+<li><p><code>Serializer</code> now
+ matches character set names case-insensitively as suggested by the
+XML specification.</p></li>
+
+<li><p>
+Fixed a bug in <code>UnicodeWriter</code> that was preventing reserved characters 
+such as &amp; and &lt; from being 
+escaped when the encoding was some variant of Unicode. (This is more evidence 
+that premature optimization is the root of all evil. I just couldn't resist an <i>obvious</i> optimization
+in the UnicodeWriter class, and it came back to bite me in the ass.)</p></li>
+
+<li><p>
+Fixed a cosmetic bug that added  unnecessary <code>xmlns=""</code>
+ declarations on root elements by <code>Serializer</code>
+and <code>toXML</code> in <code>Element</code></p>.</li>
+
+<li><p>Fixed incorrect hexadecimal escape sequences generated by <code>TextWriter</code></p></li>
+</ul>
+
+<h2>1.0d4</h2>
+
+<p>
+  The major addition  in 1.0d4 are methods to get and set the base URI
+  of a node. You can invoke <code>getBaseURI</code> from any <code>Node</code>
+  object to retrieve the URL against which relative URLs in that <code>Node</code> should
+be resolved.  This is calculated in keeping with XML Base. That is,
+if an <code>xml:base</code> attribute is in scope its value is used.
+Otherwise, the URI of the entity in which the <code>Node</code> appears
+ is loaded. You can change the underlying URI of the entity using
+ the <code>setBaseURI</code> method in <code>ParentNode</code>.
+ When a document is built, the parser fills in the base URI for each node.
+ This is stored separately from <code>xml:base</code> attributes, which are not treated
+ differently than any other attribute. 
+ When a document is serialized, you may request that the serializer fill
+ in  extra <code>xml:base</code> attributes not present in the infoset
+ to preserve the underlying base URIs. However, since this is a structural change to the document,
+ this feature is turned off by default. 
+</p>
+
+<p>
+Other API level changes include:
+</p>
+
+<ul>
+    <li><p>The <code>Attributes</code> and <code>Namespaces</code> classes are no longer
+          part of the public API. Instead the <code>Element</code> class has these four public methods:</p>
+          
+          <p><code>public Attribute getAttribute(int index)<br />
+public int getAttributeCount()<br />
+public int getNamespaceDeclarationCount()<br />
+public void getNamespacePrefix(int i)</code></p>
+          
+          </li>
+  <li><p><code>getStringForm</code> has been renamed  <code>toXML</code></p></li>
+  <li><p><code>readAttribute</code> has been renamed  <code>getAttributeValue</code></p></li>
+ <li><p><code>addAdditionalNamespace</code> has been renamed  <code>declareNamespace</code></p></li>
+ 
+ <li><p>The <code>removeChildren</code> method
+ has been moved from <code>ParentNode</code>
+ into <code>Element</code>  because it's impossible to remove all the children of a  
+ <code>Document</code>. </p></li>
+ 
+ <li><p>The following protected methods allow subclasses to
+       monitor insertions and deletions
+from subclasses of <code>Element</code> and <code>Document</code>:</p>
+
+ <p><code>public void checkInsertChild()</code><br />
+ <code>public void checkRemoveChild()</code><br /></p>
+
+</li>
+ <li><p>The following protected methods allow subclasses of <code>Element</code> to monitor
+ namespace declarations:</p>
+ 
+ 
+ <p><code>public void checkAddNamespaceDeclaration()</code><br />
+ <code>public void checkRemoveNamespaceDeclaration()</code><br /></p>
+ 
+</li>
+<li><p>The following protected methods allow subclasses of <code>Element</code> to monitor
+ changes of local name, namespace prefix, and namespace URI:</p>
+ 
+ <p><code>public void checkLocalName()</code><br />
+ <code>public void checkNamespacePrefix()</code><br />
+  <code>public void checkNamespaceURI()</code></p>
+ 
+</li>
+  <li><p>The missing <code>write(DocType)</code> method has been added
+  to <code>Serializer</code>. This fixes a nasty infinite recursion when serializing documents
+  with document type declarations.</p></li>
+</ul>
+
+
+<p>
+In addition several bugs were fixed, the JavaDoc was further cleaned up and improved, and 
+more than a dozen new unit tests were added.
+</p>
+
+<h2 >1.0d3</h2>
+
+<p>
+ The major change in 1.0d3 is that the <code>TreeNode</code> class has been replaced by the
+ <code>ParentNode</code> class. The only immediate subclasses of 
+  <code>ParentNode</code>   are <code>Element</code>
+  and <code>Document</code>.
+  <code>Attribute</code>
+  is the only immediate subclass of <code>Node</code>
+  The other four node types are subclasses
+  of <code>LeafNode</code>
+  which  is a subclass of <code>Node</code>.
+  All navigation methods&mdash;<code>getChild</code>,
+  <code>getNextSibling</code>, <code>getParent</code>, etc.&mdash;are now in <code>Node</code>.
+ All insertion and deletion methods&mdash;<code>appendChild</code>,
+ <code>insertChild</code>,
+ <code>removeChild</code>,  etc.&mdash;are only available in 
+ <code>ParentNode</code>, that is,
+ <code>Document</code> and <code>Element</code>.
+ Other  API-level changes since 1.0d2 include:
+</p>
+
+<ul>
+  <li><code>add</code> is now <code>addAttribute</code></li>
+  <li><code>LeafNode</code> is public</li>
+ </ul>
+
+<p>
+I also spent a lot of time improving the JavaDoc. 
+</p>
+
+
+<h2 >1.0d2</h2>
+<p>
+  I've posted 1.0d2 to fix the first bugs discovered, clean up the source code,
+  and make a few changes to method names that seemed wise.
+  API-level changes since Tuesday night include:
+</p>
+
+<ul>
+  <li><code>readAttribute</code> is now <code>getAttributeValue</code></li>
+  <li><code>howManyChildren</code> is now <code>getChildCount</code></li>
+</ul>
+
+ <hr />
+<div align="center">[ <a href="http://www.cafeconleche.org">Cafe con Leche</a> | 
+<a href="http://www.cafeaulait.org">Cafe au Lait</a> ]</div>
+<hr />
+<p>Copyright 2002-2005, 2009, 2013 <a href="http://www.elharo.com/">Elliotte Rusty Harold</a><br />
+<a href="mailto:elharo@metalab.unc.edu">elharo@metalab.unc.edu</a><br />
+Last Modified January 13, 2012
+</p>
+</div>
+<div id="Navbar">
+  <h3>About XOM</h3>
+     <ul>
+	<li><a href="designprinciples.xhtml">Design Principles</a></li>
+	<li><a href="history.html">Release Notes</a></li>
+	<li><a href="faq.xhtml">FAQ</a></li>
+	<li><a href="install.xhtml">Installation Instructions</a></li>
+    <li><a href="infoset.xhtml">Infoset Mapping</a></li>
+    <li><a href="xpath.xhtml">XPath Mapping</a></li>
+	<li><a href="futuredirections.xhtml">Future Directions</a></li>
+	<li><a href="license.xhtml">License and Copyright</a></li>
+	<li><a href="http://lists.ibiblio.org/mailman/listinfo/xom-interest">Mailing Lists</a></li>
+	</ul>
+
+	<h3>Java API</h3>
+	<ul>
+	<li><a href="tutorial.xhtml">Tutorial</a></li>
+	<li><a href="apidocs/">JavaDoc</a></li>
+	<li><a href="samples.xhtml">Sample Code</a></li>
+ </ul>
+
+
+	<h3>Downloads</h3>
+
+	<ul>
+	<li><a href="https://xom.dev.java.net/source/browse/xom/">CVS Tree</a></li>
+	<li><a href="http://www.cafeconleche.org/XOM/xom-1.2.8.jar">Minimal JAR file</a></li>
+	 <li><a href="http://www.cafeconleche.org/XOM/xom-1.2.8.zip">Complete distribution, zip format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
+	 <li><a href="http://www.cafeconleche.org/XOM/xom-1.2.8.tar.gz">Complete distribution, tar.gz format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
+	 </ul>
+ 
+ 
+	<h3>For Contributors</h3>
+
+	<ul>
+	<li><a href="unstable.html">Unstable Version</a></li>
+	<li><a href="openquestions.xhtml">Open Questions</a></li>
+    <li><a href="contributor_license.txt">Contributor Agreement</a></li>
+	<li><a href="building.xhtml">Building XOM</a></li>
+	<li><a href="testsuite.xhtml">Test Suite</a></li>
+	<li><a href="clover_html/">Test Coverage</a></li>
+	 </ul>
+	 
+	 
+	<h3>Third Party Articles</h3>
+
+	<ul>
+	<li><a href="http://www.artima.com/intv/xmlapis.html">What's Wrong with XML APIs</a></li>
+    <li><a href="http://www.artima.com/intv/dom.html">The Good, the Bad, and the DOM</a></li>
+    <li><a href="http://www.artima.com/intv/jdom.html">A Design Review of JDOM</a></li>
+    <li><a href="http://www.artima.com/intv/learn.html">Lessons Learned from JDOM</a></li>
+    <li><a href="http://www.artima.com/intv/xomdesign.html">Design Principles and XOM</a></li>
+    <li><a href="http://www.artima.com/intv/airbags.html">Air Bags and Other Design Principles</a></li>
+    <li><a href="http://www.artima.com/intv/desbyuse.html">Designing by Dictatorship, Examples, and Tests</a></li>
+    <li><a href="http://www.artima.com/intv/readxml.html">The Human Side of XML</a></li>
+    <li><a href="http://www.artima.com/intv/schema.html">Organic Schemas and Outlier Data</a></li>
+    <li><a href="http://www.xml.com/pub/a/2002/11/27/xom.html">Getting Started with XOM</a></li>
+    <li><a href="http://www-106.ibm.com/developerworks/library/x-matters32.html">The XOM Java XML API</a></li>
+    <li> <a href="http://www.linux-mag.com/archive/2003-03/java_xom_01.html">Java XOM: XML Made Simpler</a></li>
+    <li><a href="http://www.mycgiserver.com/~gpiancastelli/archives.jsp?post=0031">Working on RSS fragments with XOM</a></li>
+    </ul>
+    
+         
+	<h3>Projects using XOM</h3>
+
+    <ul>
+      <li><a href='http://www.concordion.org/'>Concordion</a></li>
+      <li><a href='http://altsol.gr/sleepxomxml/'>Sleep</a></li>
+      <li><a href='http://code.google.com/p/openinfocard/'>openinfocard</a></li>
+      <li><a href='http://rubyforge.org/projects/excemel/'>Excemel</a></li>
+      <li><a href="http://json-lib.sourceforge.net/">json-lib</a></li>
+      <li><a href="http://memoranda.sourceforge.net/">Memoranda</a></li>
+      <li><a href="http://www.spamino.com">Spamino</a></li>
+      <li><a href="http://carrierwave.sourceforge.net/">Carrierwave</a></li>
+      <li><a href="http://wurfl.sourceforge.net/">WURFL</a></li>
+      <li><a href="http://aspectsecurity.com/stinger/">Stinger</a></li>
+      <li><a href="http://dsd.lbl.gov/~hoschek/firefish">FireFish</a></li>
+      <li><a href="http://www.cadenhead.org/workbench/code/opmlLinkPublisher/">OPML Link Publisher</a></li>
+      <li><a href="http://www.mycgiserver.com/~gpiancastelli/archives.jsp?post=0031">Restlog Client</a></li>
+      <li><a href="http://cafeconleche.org/SAXTest/">SAX Conformance Testing</a></li>
+      <li><a href="http://dsd.lbl.gov/nux/">Nux</a></li>
+      <li><a href="http://sourceforge.net/projects/smartfrog/">SmartFrog</a></li>
+      <li><a href="http://www.cenqua.com/fisheye/">FishEye</a></li>
+    </ul>
+    
+    <h3>Ports and Forks</h3>
+    <ul>
+	 <li><a href="http://casse.hugues.free.fr/projects/xelf.html">XElf</a> (Python)</li>
+	 </ul>
+   
+<h3>Third Party Licenses</h3>
+
+<ul>
+  <li><a href="lib/XercesLicense.txt">Xerces License</a></li>
+  <li><a href="lib/XalanLicense.txt">Xalan License</a></li>
+  <li><a href="lib/LICENSE-SAX.html">SAX License</a></li>
+  <li><a href="lib/LICENSE-DOM.html">DOM License</a></li>
+  <li><a href="lib/normalizer_license.html">ICU4J License</a></li>
+  <li><a href="lib/junit_license.html">JUnit</a></li>
+</ul>
+</div>
+</body>
+</html>

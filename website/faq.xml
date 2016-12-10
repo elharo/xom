@@ -1,0 +1,616 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article class="faq" revision="20161210">
+  <title>XOM FAQ</title>
+
+  <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2002-2005, 2009, 2016</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+  
+  
+  <qandaset>
+<qandaentry>
+<question>
+<para>
+   What's the difference between XOM and JDOM?
+</para>
+</question>
+<answer>
+<para>
+  XOM and JDOM are completely separate products.
+  Originally, I had thought I could build XOM by forking JDOM,
+  but it quickly became apparent that it would be simpler to start over from scratch.
+  Some early versions of XOM did use one class 
+  from JDOM (<classname>Verifier</classname>) in its internal, non-public parts.
+  This class has been rewritten substantially; and in the current version 
+  there's no JDOM code left.
+  The rest of the API is completely free of JDOM code.
+</para>
+
+  <para>
+    Conceptually, XOM definitely did adopt a number of ideas from JDOM, including: 
+  </para>
+  
+  <itemizedlist>
+    <listitem>
+      <para>
+        Using a SAX parser to build the object model.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Using a factory to enable the parser to build subclasses
+        of the core classes.
+      </para>
+    </listitem>
+   <listitem>
+      <para>
+        Subclassing <classname>SAXSource</classname> and <classname>SAXResult</classname> to support TrAX.
+      </para>
+    </listitem>
+   <listitem>
+      <para>
+        Array lists are faster than linked lists.
+      </para>
+    </listitem>
+  </itemizedlist>
+  
+  <para>
+    However, XOM also freely borrowed good ideas from DOM, XPath,
+    and other systems, and invented not a few new ones of its own.
+   Features in XOM that have no real equivalent in JDOM include:
+  </para>
+  
+   <itemizedlist>
+    <listitem>
+      <para>
+        A common <classname>Node</classname> superclass
+      </para>
+    </listitem>
+   <listitem>
+      <para>
+        The <methodname>getValue</methodname> method that returns 
+        the XPath value of any node.
+      </para>
+    </listitem>
+   <listitem>
+      <para>
+        The <methodname>toXML</methodname> method that returns 
+        a string containing the XML serialization of that node. 
+        (JDOM actually did use the <methodname>toString</methodname> method for
+        this in the first few betas. However, when JDOM decided to use the 
+        <methodname>toString</methodname> method for debugging info instead,
+        they never replaced it with another method.)
+      </para>
+    </listitem>
+   <listitem>
+      <para>
+        Canonical XML support
+      </para>
+    </listitem>
+   <listitem>
+      <para>
+        XInclude support
+      </para>
+    </listitem>
+   <listitem>
+      <para>
+        Streaming processing of documents larger than available memory
+      </para>
+    </listitem>
+   <listitem>
+      <para>
+       Well-formedness safe subclassing
+      </para>
+    </listitem>
+  <listitem>
+      <para>
+      Better support for invalid documents, including
+        validating without rejecting invalid documents
+        and reporting more than one validity error per document
+      </para>
+    </listitem>
+
+    
+    </itemizedlist>
+ 
+  <para>
+    There are also many features that JDOM and XOM share, but that are
+    implemented very differently in the two APIs:
+  </para>
+  
+   <itemizedlist>
+    <listitem>
+      <para>
+        In XOM namespaces are just strings.
+        In
+        JDOM namespaces are instances of the <classname>Namespace</classname> class.
+      </para>
+    </listitem>
+   <listitem>
+      <para>
+        In JDOM, an <classname>Element</classname> <emphasis>contains</emphasis> a list.
+        In XOM, an <classname>Element</classname> <emphasis>is</emphasis> a list.
+        This makes for very different styles of navigation.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+         JDOM exposes lists using the <classname>java.util.List</classname>
+         class to expose live lists of attributes and content. 
+         XOM uses comatose, read-only lists implemented with custom classes.
+         Unlike standard lists, XOM lists expose the types of the nodes they contain.
+         That is, there are separate lists for attributes, elements, namespaces, and so forth.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+         Internally, JDOM uses a very sophisticated filter list that knows a great deal
+         about the types of nodes it contains. However, this information
+         is not exposed in the public API.
+         XOM is almost exactly backwards from this.
+         Internally, it uses very simple lists that know nothing about the types of the 
+         things they contain.
+         Externally, however, it exposes lists that contain nodes of very specific types.
+      </para>
+    </listitem>
+     <listitem>
+      <para>
+        JDOM passes prefixes and local parts separately to setter methods.
+        XOM expects them to be passed as a single qualified name.
+      </para>
+    </listitem>
+     <listitem>
+      <para>
+        JDOM supports skipped entity references.
+        XOM requires all entity references to be resolved.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        JDOM reports CDATA sections.
+        XOM automatically merges them with their surrounding text.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        JDOM classes implement <interfacename>Cloneable</interfacename>
+        and provide <methodname>clone</methodname> methods.
+        XOM classes use a 
+        <methodname>copy</methodname> method instead.
+      </para>
+     </listitem>
+    <listitem>
+      <para>
+        JDOM classes implement <interfacename>Serializable</interfacename>.
+        XOM classes use XML as a persistence format.
+      </para>
+    </listitem>
+
+    </itemizedlist>
+  
+  <para>
+     Finally, XOM hews closely to the motto that <quote>Less is more.</quote> 
+     It deliberately eschews  the many convenience methods that make the JDOM
+     API so cluttered such as 
+     <methodname>getChildText</methodname>/<methodname>getChildTextTrim</methodname>/<methodname>getChildTextNormalize</methodname>/<methodname>getText</methodname>/<methodname>getTextTrim</methodname>/<methodname>getTextNormalize</methodname>.
+     If overloaded variants are included, there are nine separate methods for reading the text of an element.
+     XOM has one, <methodname>getValue</methodname>. If you need to trim or normalize the value, you can 
+     use the methods of the <classname>String</classname> class. 
+  </para>
+  
+
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+<para>
+   Does XOM support XML 1.1?
+</para>
+</question>
+<answer>
+<para>
+No. XML 1.1 is an abomination. You don't need it and you shouldn't use it.
+In general, XOM focuses on giving developers what they need instead of 
+what they think they want.
+</para>
+
+<para>
+XOM 1.0 through 1.2 will not support XML 1.1. Possible future versions might,
+provided someone can demonstrate an actual need for  it. 
+The following are <emphasis>not</emphasis> legitimate needs:
+</para>
+
+<orderedlist>
+  <listitem><para>Your pointy-haired boss wants to use the latest version of XML. </para></listitem>
+  <listitem><para>You have documents that use <markup>version="1.1"</markup>
+              for no good reason. Fix the documents instead. </para></listitem>
+  <listitem><para>Your documents contain NEL characters that are incompatible with almost every
+              installed system (XML and non-XML) on the planet.
+              Throw away your IBM dinosaur, and join the 21st century.</para></listitem>
+</orderedlist>
+
+<para>
+  You just might convince me you have a legitimate need for C0 control characters,
+  but I doubt it. That still leaves a couple of possible uses for XML 1.1,
+  but they're very obscure. (Do you speak Burmese?) Note that a hypothetical use-case
+  is not going to do it. You're going to have to show me that you actually need to do this,
+  and that you are going to use XOM. 
+</para>
+
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+<para>
+   Can I make XOM smaller?
+</para>
+</question>
+<answer>
+<para>
+Yes. All you really need is the xom.jar file.
+This contains all the core packages, but not the samples or unit tests.
+If you're using a Java virtual machine earlier than 1.4, 
+you will probably also want to carry along the xml-apis.jar
+and xercesImpl.jar files from the lib directory.
+To use XSLT, you'll also need the xalan.jar archive.
+However, in Java 1.4 and later, you can get by 
+without these. If you want to use normalization in the serializer, you'll
+need the normalizer.jar file. If you don't use normalization you can leave 
+this out to. Even in Java 1.3 or 1.2 you can replace Xerces with a smaller
+parser. However, most parsers are buggier than Xerces, and no parsers prior to
+Xerces 2.6.1 can pass all XOM's unit tests.
+</para>
+
+<para>
+If you want to trim  XOM down even further, you can remove some of the non-core packages.
+All you really must have is in the nu.xom package. 
+nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, and nu.xom.converters
+are only needed if you want their functionality.
+Nothing in the core nu.xom package depends on them. 
+</para>
+
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>
+   Can I make XOM faster?
+</para>
+</question>
+<answer>
+<para>
+There are a number of techniques you can use to speed up your XOM programs. Among them:
+</para>
+
+<itemizedlist>
+  <listitem><para>If you're making many instances of the same thing (<classname>Element</classname>, <classname>DocType</classname>, <classname>Text</classname>, whatever), make a prototype object and copy it using the copy constructor or the <methodname>copy</methodname> method instead of constructing it directly from strings. This avoids the overhead of reverifying element names, PCDATA, etc. for each object created.</para></listitem>
+
+ <listitem><para>Don't use XPath. XPath is currently implemented for convenience, simplicity, and robustness; not performance. It has not yet been profiled or optimized. (This may change in the future.) If you do use XPath, you might want to consider using <ulink url="http://saxon.sourceforge.net/">SAXON</ulink>, both of which provide some options to speed up XPath, instead of XOM 1.1's built-in XPath support. </para></listitem>
+
+ <listitem><para>Consider doing more work in the <classname>NodeFactory</classname> as the document is constructed. </para></listitem>
+
+ <listitem><para>If you don't need pretty printed output
+ or a document type declaration, experiment
+ with using a 
+ <classname>Canonicalizer</classname> instead of a <classname>Serializer</classname>.
+All the options for setting the indenting, maximum line length,
+and the like in <classname>Serializer</classname> exact about a 30-40% performance penalty compared to just slamming the document onto an 
+<classname>OutputStream</classname> without any options like 
+<classname>Canonicalizer</classname> does.
+</para></listitem>
+
+</itemizedlist>
+
+<para>As a last resort, the <classname>Text</classname> class is optimized for size, not speed. If size is not a major concern, you can 
+fork this class to make <classname>Text</classname> objects faster but larger. 
+Making this a build-time option is on the TODO list, but has not yet been implemented. 
+</para>
+
+
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>
+   Can I make XOM use less memory?
+</para>
+</question>
+<answer>
+<para>
+Yes. If your documents are so large that you're running out of memory, 
+you can use a custom <classname>NodeFactory</classname> to strip them down before processing. <classname>nu.xom.samples.NormalizingFactory</classname>
+demonstrates how to strip boundary whitespace from record-like XML while building the document. If you only want some of the content in the input document you can go even further, simply not building any of the parts of the document that correspond to things you aren't interested in. You can drop out elements, attributes, comments, processing instructions, and so on. 
+</para>
+
+<para>
+If the document you've built is still too large to handle, then you can try processing in streaming mode inside the <classname>NodeFactory</classname> as the document is being read. This doesn't permit random access to the entire document at the same time, but it does allow you to process arbitrarily large documents in a reasonable amount of memory. There are several examples of this in the <literal>nu.xom.samples</literal> package: <classname>StreamingElementLister</classname>, <classname>StreamingXHTMLPurifier</classname>, <classname>StreamingTreePrinter</classname>,
+<classname>StreamingROT13</classname>, etc.
+</para>
+
+
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>
+   Will XOM run with Java 1.1? 1.2? 1.3? 1.4? 1.5? 1.6? 1.7? 1.8?
+</para>
+</question>
+<answer>
+<para>
+XOM requires Java 1.2 or later.
+It has been tested with Java 1.2.2_17, IBM's Java VM 1.3.1,
+Sun's JDK 1.4.2, IBM's JVM 1.4.1, and various betas of Java 1.5. 
+A few of the unit tests fail in Java 1.2, but mostly these reflect encodings such
+as ISO-8859-6 that are not supported in that VM. All the core functionality is
+present.
+</para>
+
+<para>
+It would probably not be hard to back port XOM to Java 1.1.
+The primary 1.2 dependence is the collections API, and 
+this can be added to 1.1 as an extension. 
+Alternately, collection classes such as <classname>ArrayList</classname> 
+could be replaced with 1.1 classes
+such as <classname>Vector</classname> or implemented 
+from scratch. However so far no one has expressed interest in running
+XOM in Java 1.1. 
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+<para>
+  Isn't the LGPL incompatible with Java?
+  Can I have a different license? 
+</para>
+</question>
+<answer>
+<para>
+You should learn better than to believe everything you read on Slashdot. 
+The LGPL is completely compatible with Java. Claims that it is not are based on severe misunderstandings of either Java, the LGPL, or both. The <ulink url="http://www.gnu.org/licenses/lgpl-java.html">official word</ulink> from the FSF's David Turner is,
+</para>
+
+<blockquote>
+<para>
+If you distribute a Java application that imports LGPL libraries, it's easy to comply with the LGPL. Your application's license needs to allow users to modify the library, and reverse engineer your code to debug these modifications. This doesn't mean you need to provide source code or any details about the internals of your application. Of course, some changes the users may make to the library may break the interface, rendering the library unable to work with your application. You don't need to worry about that -- people who modify the library are responsible for making it work.
+</para>
+
+<para>
+When you distribute the library with your application (or on its own), you need to include source code for the library. But if your application instead requires users to obtain the library on their own, you don't need to provide source code for the library.
+</para>
+
+<para>
+The only difference between Java and C from the LGPL's perspective is that Java is an object-oriented language, supporting inheritance. The LGPL contains no special provisions for inheritance, because none are needed. Inheritance creates derivative works in the same way as traditional linking, and the LGPL permits this type of derivative work in the same way as it permits ordinary function calls.
+</para>
+
+</blockquote>
+
+
+<para>
+If you would like a license to use XOM under other conditions,
+feel free to make me an offer. Non-LGPL, closed source licenses are available for a reasonable fee. 
+</para>
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+<para>
+   How is nu.xom pronounced?
+</para>
+</question>
+<answer>
+<para>
+Like <quote>new dot zom</quote>.
+</para>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+<para>
+   Does this have anything to do with Omnimark?
+</para>
+</question>
+<answer>
+<para>
+No.  I had no idea that the three letter extension for Omnimark files
+was <filename>.xom</filename> until someone brought it up in Q&amp;A
+at my presentation at the New York XML SIG.
+</para>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+<para>
+  Why doesn't XOM implement the Visitor pattern?
+</para>
+</question>
+<answer>
+<para>
+I'm somewhat familiar with the visitor pattern. I did explore it when 
+I was first designing XOM.  I'm still not convinced it really fits 
+the XML problem space well. I don't like adding the extra method to 
+<classname>Node</classname> just to support this. I may be wrong here. 
+So far nobody's shown 
+me convincingly how Visitor would make their life easier than using 
+the more traditional navigation techniques. I'm inclined to agree 
+with the DOM FAQ here:
+</para>
+
+<blockquote>
+<para>
+Visitor was considered for inclusion in the Traversal module of the 
+Level 2 DOM. There are negative as well as positive consequences to 
+implementing the Visitor pattern. One of Visitor's advantages over 
+Iterator is that Visitor can handle structures where the objects 
+don't share a common ancestor class, which is not an issue when 
+everything you're looking at is derived from Node. Since most of the 
+things a Visitor could do can be emulated with a switch statement 
+driven by an iterator, we decided to defer this issue.
+</para>
+</blockquote>
+
+<para>
+Or at least I agree until someone shows me how much easier visitor 
+would make important operations.
+</para>
+
+<para>
+It's also a question of programmer familiarity. I think Visitor is 
+one of those issues like interfaces vs. classes, push vs. pull, and 
+pointers vs. stack variables, where the more advanced solution may be 
+marginally better and more extensible for some uses, but really 
+exceeds a lot of working programmers' comfort level. The level of 
+abstraction and indirection can just get too high. Putting the client 
+more in control is a lot more comfortable for most programmers since 
+they can more easily see and visualize how the code flows. I am 
+willing to trade some level of extensibility and generality in 
+exchange for simplicity.
+</para>
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+
+<para>
+  How can I validate against a schema in XOM?
+</para>
+</question>
+<answer>
+<para>
+XOM does not have built-in support for schema validation.
+However, you can use a schema-validating SAX
+<classname>XMLReader</classname>
+which XOM will treat the same as a DTD-validating <classname>XMLReader</classname>.
+For example, suppose you want to use Xerces to perform schema validation. You would set up the <classname>Builder</classname> thusly:
+</para>
+
+<informalexample><programlisting><![CDATA[  String url = "http://www.example.com/";
+  try {      
+    XMLReader xerces = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser"); 
+    xerces.setFeature("http://apache.org/xml/features/validation/schema", true);                         
+
+    Builder parser = new Builder(xerces, true);
+    parser.build(url);
+    System.out.println(url + " is schema valid.");
+  }
+  catch (SAXException ex) {
+    System.out.println("Could not load Xerces.");
+    System.out.println(ex.getMessage());
+  }
+  catch (ParsingException ex) {
+    System.out.println(args[0] + " is not schema valid.");
+    System.out.println(ex.getMessage());
+    System.out.println(" at line " + ex.getLineNumber() 
+      + ", column " + ex.getColumnNumber());
+  }
+  catch (IOException ex) { 
+    System.out.println("Due to an IOException, Xerces could not check " + url);
+  }]]></programlisting></informalexample>
+
+
+</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+<question>
+
+<para>
+  Why do some of the unit tests fail when building XOM?
+</para>
+</question>
+<answer>
+<para>
+There are two known failures that arise in some environments and not others.
+<methodname>testBuildFromFileWithPlane1CharactersInTheName</methodname> in <classname>BuilderTest</classname> fails on the Mac.
+This test exposes a bug in the Mac OS X Java VM. The test passes on other platforms.
+</para>
+
+<para>
+Several of the  tests in <classname>XSLTransformTest</classname> including 
+<methodname>testOASISXalanConformanceSuite</methodname>, 
+<methodname>testOASISMicrosoftConformanceSuite</methodname>, and 
+<methodname>testKeysPerfRepro3</methodname>
+fail in Java 1.4 due to bugs in the version of Xalan bundled with Sun's JDK. These tests  pass in Java 1.5. 
+They will also pass in 
+Java 1.4 if you put the version of Xalan found in the lib directory in
+your jre/lib/endorsed directory so it will override the one bundled with the JDK. 
+You can find out which version of Xalan you have by running "ant version" in the main XOM directory.  You'll need 2.6.1 or later for all the test to pass. 
+</para>
+
+</answer>
+</qandaentry>
+
+
+<qandaentry>
+<question>
+
+<para>
+  Why does <markup>xsl:output</markup> have no effect when transforming with XOM?
+</para>
+</question>
+<answer>
+<para>
+<markup>xsl:output</markup> has no relevance to tree construction, only to the serialization of the result tree as text. Since XOM's XSLT constructs a result tree, but does not serialize it, <markup>xsl:output</markup> has no effect.
+You can set any necessary serialization options directly on the <classname>Serializer</classname>.
+</para>
+
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+
+<para>
+  How do I find all the namespaces in scope on an element?
+</para>
+</question>
+<answer>
+<para>
+Use XPath. Specifically use the query
+</para>
+
+<informalexample><programlisting><![CDATA[Nodes namespaces = element.query("namespace::node()");]]></programlisting></informalexample>
+
+
+</answer>
+</qandaentry>
+
+
+  </qandaset>
+
+
+</article>

@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article revision="20161210" status="rough">
+  <title>XOM XPath Mapping</title>
+
+
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2005, 2007</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+
+ <para>
+     XOM 1.1 supports 
+     <ulink url="http://www.w3.org/TR/xpath">XPath 1.0</ulink>
+     reasonably faithfully. However
+     there are some differences between the XPath data model and the XOM data
+     model you need to be aware of when using XPath. 
+     The main conceptual shift required to grok how XPath operates in XOM is to understand that an XPath data model is built <emphasis>from</emphasis> a XOM object, rather <emphasis>being</emphasis> a XOM object. 
+     If you're not getting the results you expect when using XPath to query XOM objects,
+this may help explain why. Specific areas you need to worry about are:
+   </para>
+   
+   
+   <itemizedlist>
+<listitem><para>Document type declarations</para></listitem>
+<listitem><para>Adjacent text nodes</para></listitem>
+<listitem><para>Empty text nodes</para></listitem>
+<listitem><para>Namespace nodes and the <literal>namespace</literal> axis</para></listitem>
+<listitem><para>Nodes that do not belong to a document</para></listitem>
+<listitem><para>Node-set order</para></listitem>
+<listitem><para>Queries that return non node-sets</para></listitem>
+
+   </itemizedlist>
+   
+     <variablelist>
+     <varlistentry>
+     <term>Document Type Declaration</term>
+<listitem><para>The XPath data model does not include any representation of the document type declaration. Therefore no XPath expression will select a <code>DocType</code> object. Furthermore, the <code>DocType</code> object is not considered when counting the number or position of a document's children using <function>position()</function>, <function>last()</function>, <function>count()</function>, or similar functions in XPath.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+     <term>Contiguous Text Nodes</term>
+<listitem><para>The XPath data model does not allow contiguous text nodes or empty text nodes. XOM does allow one <code>Text</code> object to immediately follow another. 
+When XPath queries are made on XOM documents, all contiguous <code>Text</code> objects are treated as a single XPath text node. For example, consider this
+code fragment: 
+</para>
+
+<informalexample>  <programlisting>  Element parent = new Element("parent");
+  Text t1 = new Text("1");
+  Text t2 = new Text("2");
+  Text t3 = new Text("3");
+  Text t4 = new Text("4");
+  parent.appendChild(t1);
+  parent.appendChild(t2);
+  parent.appendChild(t3);
+  parent.appendChild(t4);
+  Element child = new Element("child");
+  parent.appendChild(child);
+  Nodes result = parent.query("child::node()[2]");</programlisting>
+</informalexample>
+
+<para>
+<varname>result</varname> contains the <varname>child</varname> element
+because all four <classname>Text</classname> objects only count as one XPath text 
+node. The function call <literal>parent.query("child::text()[1]")</literal> returns 
+a <classname>Nodes</classname> object containing all four <classname>Text</classname> objects in order. It is not possible to use XPath to select a single <classname>Text</classname> object without selecting all adjacent 
+<classname>Text</classname> objects.
+</para>
+
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+     <term>Empty Text Nodes</term>
+<listitem><para>
+Empty text nodes are a related issue. They do not exist in the XPath data model,
+and they cannot be individually 
+selected by XPath expressions. For example, consider this: 
+</para>
+
+<informalexample>  <programlisting>  Element parent = new Element("parent");
+  Element child1 = new Element("child1");
+  parent.appendChild(child1);
+  Text t1 = new Text("");
+  parent.appendChild(t1);
+  Element child2 = new Element("child2");
+  parent.appendChild(child2);
+  Nodes result = parent.query("child::node()");</programlisting>
+</informalexample>
+
+<para>
+<varname>result</varname> contains the <varname>child1</varname> 
+and <varname>child2</varname> but not <varname>t1</varname> 
+because the empty  <classname>Text</classname> object is invisible to
+XPath. On the other hand consider this:
+</para>
+
+<informalexample>  <programlisting>  Element parent = new Element("parent");
+  Element child1 = new Element("child1");
+  parent.appendChild(child1);
+  Text t1 = new Text("");
+  Text t2 = new Text("2");
+  Text t3 = new Text("3");
+  parent.appendChild(t1);
+  parent.appendChild(t2);
+  parent.appendChild(t3);
+  Element child2 = new Element("child2");
+  parent.appendChild(child2);
+  Nodes result = parent.query("child::node()");</programlisting>
+</informalexample>
+
+<para>
+In this case, <varname>result</varname> contains the <varname>child1</varname>,
+<varname>t1</varname>,
+<varname>t2</varname>,
+<varname>t3</varname>,
+and <varname>child2</varname> even though <varname>t1</varname>
+is empty because it is adjacent to non-empty <classname>Text</classname> objects.
+</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+     <term>Namespace Nodes</term>
+<listitem><para>XPath defines a <ulink url="http://www.w3.org/TR/xpath#namespace-nodes">namespace node</ulink> as a namespace in scope on an element. XOM mostly works with namespace declarations instead. When evaluating XPath expressions that use the <literal>namespace</literal> axis, XOM uses the XPath definition. However, 
+there is now a <classname>Namespace</classname> subclass of <classname>Node</classname> which is used solely in XPath results.
+These objects are created on the fly as necessary, and are not accessible from the rest of XOM. 
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+     <term>Documentless Trees</term>
+     <listitem><para>
+     XPath implicitly assumes that all nodes belong to a document. In XOM this is not necessarily true. Nonetheless it is still useful to be able to execute queries on nodes (and particularly trees of nodes) that don't belong to any document. When an absolute XPath expression such as <literal>/root/child</literal> or <literal>//</literal> is evaluated, XOM supplies a fictitious root node. The effect is the same as if the actual top-level  node in the tree were contained in a document. For example,
+consider this query:
+    </para>
+    
+<informalexample>  <programlisting>  Element test = new Element("test");
+  Nodes result = element.query("/*[1]");</programlisting>
+</informalexample>
+
+<para>
+  <varname>result</varname> contains the <varname>test</varname> because it is the first child of this fictitious root. However, the query 
+<literal>/</literal> throws an <exceptionname>XPathException</exceptionname>
+because it is attempting to return this fictitious root.
+</para>
+
+
+    </listitem>
+</varlistentry>
+
+<varlistentry>
+     <term>Document Order</term>
+     <listitem><para>XPath node-sets are unordered (like any set) and do not contain duplicates. The <classname>Nodes</classname> object returned 
+by the <methodname>query</methodname> method also does not contain duplicates.
+However, it orders all nodes in <ulink url="http://www.w3.org/TR/xpath#dt-document-order">document order</ulink>. Generally this is the order in which nodes would be encountered in a depth first traversal of the tree. Attributes and namespaces 
+appear after their parent element in this order and before any child elements. However, otherwise their order is not guaranteed.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+     <term>Expressions that return non node-sets</term>
+     <listitem><para>XOM only supports expressions that return node-sets as queries. Expressions that return numbers, booleans, or strings throw an <exceptionname>XPathException</exceptionname>. Examples of such expressions include <literal>count(//)</literal>, <literal>1 + 2 + 3</literal>,
+<literal>name(/*)</literal>, and <literal>@id='p12'</literal>. Note that all of these expressions can be used in location path predicates. They just can't be the final result of evaluating an XPath expression.
+</para></listitem>
+</varlistentry>
+    
+    
+       </variablelist>
+
+   
+
+</article>

@@ -1,0 +1,291 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article revision="20161210" status="rough">
+  <title>XOM Test Suite</title>
+
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2004</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+  
+   <para>
+     The <literal>nu.xom.tests</literal> package contains an ample set of 
+     unit tests covering almost every line of code in the core API.
+     The test suite is based on <ulink url="http://www.junit.org">JUnit 3.8.1</ulink>.  You'll find the 
+     junit.jar file in XOM's lib directory. Although JUnit is officially a framework for unit testing, some of XOM's tests definitely cross the boundary into acceptance testing. For example, one "unit test" runs the entire W3C XInclude test suite.  Two more unit tests run the entire OASIS XSLT conformance test suite. 
+     </para>
+     
+   <para>
+     <ulink url="http://www.cenqua.com/clover/">Clover</ulink> <ulink url="http://www.xom.nu/clover_html/">reports</ulink>
+    over 90% test coverage, and almost all 
+     the code that isn't tested is either specific to particular platforms 
+     or configurations or is believed to be unreachable in a properly functioning virtual machine. 
+   </para>
+  
+  
+   <para>
+     Normally, the easiest way to run the test suite is with <ulink url="http://ant.apache.org/">Apache  Ant</ulink>. Ant is not included. You'll need to download it and install it yourself if you don't already have it. 
+     You can test XOM with Ant 1.5, but some 
+     other targets require Ant 1.6. 
+ Be sure to add the ant/bin directory to your path and point the
+    ANT_HOME environment variable to wherever you've installed Ant, as explained in the 
+    <ulink url="http://ant.apache.org/manual/index.html">Ant 
+    documentation</ulink>. Also set the JAVA_HOME environment variable to the location of your JDK, 
+  </para>
+  
+  <para>
+    Once you've done this, just type "ant test" in the XOM directory to run the complete test suite:
+  </para>
+  
+  <screen>[XOM]$ ant test
+<computeroutput>~/projects/xom$ ant test
+Buildfile: build.xml
+
+init:
+     [echo] ----------- XOM 1.0b7 ------------
+
+prepare:
+
+compile:
+
+test:
+    [junit] Running nu.xom.tests.AttributesTest
+    [junit] Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 0.261 sec
+    [junit] Running nu.xom.tests.AttributeTest
+    [junit] Tests run: 34, Failures: 0, Errors: 0, Time elapsed: 0.266 sec
+    [junit] Running nu.xom.tests.AttributeTypeTest
+    [junit] Tests run: 3, Failures: 0, Errors: 0, Time elapsed: 0.247 sec
+    [junit] Running nu.xom.tests.BaseURITest
+    [junit] Tests run: 62, Failures: 0, Errors: 0, Time elapsed: 1.773 sec
+    [junit] Running nu.xom.tests.BuilderTest
+    [junit] Tests run: 101, Failures: 0, Errors: 1, Time elapsed: 5.66 sec
+    [junit] TEST nu.xom.tests.BuilderTest FAILED
+    [junit] Running nu.xom.tests.CanonicalizerTest
+    [junit] Tests run: 18, Failures: 0, Errors: 0, Time elapsed: 5.93 sec
+    [junit] Running nu.xom.tests.CDATASectionTest
+    [junit] Tests run: 9, Failures: 0, Errors: 0, Time elapsed: 0.331 sec
+    [junit] Running nu.xom.tests.CommentTest
+    [junit] Tests run: 16, Failures: 0, Errors: 0, Time elapsed: 0.255 sec
+    [junit] Running nu.xom.tests.DocTypeTest
+    [junit] Tests run: 36, Failures: 0, Errors: 0, Time elapsed: 0.39 sec
+    [junit] Running nu.xom.tests.DocumentTest
+    [junit] Tests run: 23, Failures: 0, Errors: 0, Time elapsed: 0.346 sec
+    [junit] Running nu.xom.tests.DOMConverterTest
+    [junit] Tests run: 29, Failures: 0, Errors: 0, Time elapsed: 0.668 sec
+    [junit] Running nu.xom.tests.ElementTest
+    [junit] Tests run: 61, Failures: 0, Errors: 0, Time elapsed: 0.377 sec
+    [junit] Running nu.xom.tests.EncodingTest
+    [junit] Tests run: 30, Failures: 0, Errors: 0, Time elapsed: 66.72 sec
+    [junit] Running nu.xom.tests.InfoTest
+    [junit] Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.235 sec
+    [junit] Running nu.xom.tests.LeafNodeTest
+    [junit] Tests run: 3, Failures: 0, Errors: 0, Time elapsed: 0.245 sec
+    [junit] Running nu.xom.tests.NamespacesTest
+    [junit] Tests run: 49, Failures: 0, Errors: 0, Time elapsed: 0.297 sec
+    [junit] Running nu.xom.tests.NodeFactoryTest
+    [junit] Tests run: 38, Failures: 0, Errors: 0, Time elapsed: 0.397 sec
+    [junit] Running nu.xom.tests.NodesTest
+    [junit] Tests run: 7, Failures: 0, Errors: 0, Time elapsed: 0.257 sec
+    [junit] Running nu.xom.tests.ParentNodeTest
+    [junit] Tests run: 15, Failures: 0, Errors: 0, Time elapsed: 0.253 sec
+    [junit] Running nu.xom.tests.ParsingExceptionTest
+    [junit] Tests run: 9, Failures: 0, Errors: 0, Time elapsed: 0.238 sec
+    [junit] Running nu.xom.tests.ProcessingInstructionTest
+    [junit] Tests run: 19, Failures: 0, Errors: 0, Time elapsed: 0.255 sec
+    [junit] Running nu.xom.tests.RoundTripTest
+    [junit] Tests run: 5, Failures: 0, Errors: 0, Time elapsed: 0.322 sec
+    [junit] Running nu.xom.tests.SAXConverterTest
+    [junit] Tests run: 21, Failures: 0, Errors: 14, Time elapsed: 2.796 sec
+    [junit] TEST nu.xom.tests.SAXConverterTest FAILED
+    [junit] Running nu.xom.tests.SerializerTest
+    [junit] Tests run: 102, Failures: 0, Errors: 0, Time elapsed: 0.79 sec
+    [junit] Running nu.xom.tests.SubclassTest
+    [junit] Tests run: 9, Failures: 0, Errors: 0, Time elapsed: 0.258 sec
+    [junit] Running nu.xom.tests.TextTest
+    [junit] Tests run: 17, Failures: 0, Errors: 0, Time elapsed: 2.723 sec
+    [junit] Running nu.xom.tests.ValidityExceptionTest
+    [junit] Tests run: 8, Failures: 0, Errors: 0, Time elapsed: 0.234 sec
+    [junit] Running nu.xom.tests.VerifierTest
+    [junit] Tests run: 55, Failures: 0, Errors: 0, Time elapsed: 0.932 sec
+    [junit] Running nu.xom.tests.XIncludeExceptionTest
+    [junit] Tests run: 8, Failures: 0, Errors: 0, Time elapsed: 0.241 sec
+    [junit] Running nu.xom.tests.XIncludeTest
+    [junit] Tests run: 123, Failures: 0, Errors: 0, Time elapsed: 20.422 sec
+    [junit] Running nu.xom.tests.XMLExceptionTest
+    [junit] Tests run: 16, Failures: 0, Errors: 0, Time elapsed: 0.267 sec
+    [junit] Running nu.xom.tests.XSLExceptionTest
+    [junit] Tests run: 5, Failures: 0, Errors: 0, Time elapsed: 0.243 sec
+    [junit] Running nu.xom.tests.XSLTransformTest
+    [junit] Tests run: 42, Failures: 0, Errors: 0, Time elapsed: 1.222 sec
+[junitreport] Using Xalan version: Xalan Java 2.4.1
+[junitreport] Transform time: 3734ms
+
+BUILD SUCCESSFUL
+Total time: 2 minutes 13 seconds</computeroutput></screen>
+
+    <para>
+    If you prefer you can run the test suit in a GUI by typing "ant testui" instead.
+  </para>
+  
+  <para>
+    The time to run the complete test suite varies mostly depending on hardware. On my dual 2.5 GHz PowerMac, the complete test suite executes in about two and half minutes. On my 1.5 GHz Linux box, it takes about twice that. 
+  </para>
+  
+  <para>
+    A few of the tests make network connections to http://www.cafeconleche.org/ to check XOM's interaction with various HTTP features. For instance, the page http://www.cafeconleche.org/tests/data.txt 
+is loaded to test whether the XInclude engine handles language negotiation correctly. The URL http://www.cafeconleche.org/tests/content is loaded to test whether XInclude performs content negotiation properly. The URL
+http://www.ibiblio.org/xml/redirecttest.xml is used to 
+test whether XOM correctly handles HTTP redirection.
+A few tests load the page "http://www.cafeconleche.org/" just to test if they
+can handle a moderately complex, real-world page. This page is edited by hand and is therefore occasionally malformed. If so, those tests will fail. Try again in a few hours, and the problem will probably be fixed. 
+  </para>
+  
+  <para>
+    The XInclude test suite loads the <ulink url="http://www.w3.org/XML/Test/XInclude/">W3C XInclude test suite</ulink> over the Internet from  their <ulink url="http://dev.w3.org/cvsweb/2001/XInclude-Test-Suite/">public CVS server</ulink>. You can avoid this by installing it locally in 
+data/XInclude-Test-Suite. However, I don't have permission to distribute it with XOM.  
+  </para>
+  
+
+  <para>
+    There is no official Canonical XML  test suite  (a serious oversight)
+    so I've hacked one together by comparing the output of a number 
+    of different canonical XML implementations when processing the 
+    <ulink url="http://www.w3.org/XML/Test/">W3C XML test suite</ulink>.
+    However, I do not have permission to redistribute the
+    modified version of this test suite that's necessary, so for the moment you
+    won't be able to run this particular test. You'll just have to take my work that it passes. Sorry. :-(
+  </para>
+  
+  <para>
+    Similarly, I cannot redistribute the 
+    <ulink url="http://www.oasis-open.org/committees/documents.php?wg_abbrev=xslt">OASIS XSLT conformance test suite</ulink>. However, you can download this one yourself and install it in data/oasis-xslt-testsuite; and the test cases will find it.
+  </para>
+  
+
+ <para>
+   You can run any of the test cases manually using the usual JUnit techniques. For example, if you just want to run the BuilderTest, you could type the following:
+  </para>
+  
+ <screen>% java -classpath build/classes:lib/junit.jar:lib/xercesImpl.jar junit.textui.TestRunner nu.xom.tests.BuilderTest
+.........................................
+...............................E..........
+...................
+Time: 6.218
+There was 1 error:
+1) testBuildFromFileThatContainsPlane1CharacterInName(nu.xom.tests.BuilderTest)java.io.FileNotFoundException: data/music?.xml (Invalid argument)
+        at java.io.FileOutputStream.open(Native Method)
+        at java.io.FileOutputStream.&lt;init>(FileOutputStream.java:179)
+        at java.io.FileOutputStream.&lt;init>(FileOutputStream.java:131)
+        at nu.xom.tests.BuilderTest.testBuildFromFileThatContainsPlane1CharacterInName(Unknown Source)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+
+FAILURES!!!
+Tests run: 101,  Failures: 0,  Errors: 1</screen>
+  
+ <para>
+   Note the necessity of adding the right files to your classpath. The Ant build.xml file handles this for you automatically.
+  </para>
+  
+ <para>
+  The <code>nu.xom.tests.XOMTests</code> class collects most of the unit tests in XOM:
+  </para>
+  
+<screen>% java -classpath build/classes:lib/junit.jar:lib/xercesImpl.jar:lib/xalan.jar:lib/normalizer.jar:lib/xmlParserAPIs.jar junit.textui.TestRunner nu.xom.tests.XOMTests
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................</screen>
+  
+ <para>
+  The <code>nu.xom.tests.FastTests</code> class collects the tests that run relatively quickly. It executes much faster than the full test suite, generally in roughly 12% of the time the full batch of tests requires. 
+  </para>
+  
+ <screen>% ~/Projects/XOM$ java -classpath build/classes:lib/junit.jar:lib/xercesImpl.jar:lib/xalan.jar:lib/normalizer.jar:lib/xmlParserAPIs.jar junit.textui.TestRunner nu.xom.tests.FastTests
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.........................................
+.....E.............................
+Time: 14.231
+There was 1 error:
+1) testBuildFromFileThatContainsPlane1CharacterInName(nu.xom.tests.BuilderTest)java.io.FileNotFoundException: data/music?.xml (Invalid argument)
+        at java.io.FileOutputStream.open(Native Method)
+        at java.io.FileOutputStream.&lt;init>(FileOutputStream.java:179)
+        at java.io.FileOutputStream.&lt;init>(FileOutputStream.java:131)
+        at nu.xom.tests.BuilderTest.testBuildFromFileThatContainsPlane1CharacterInName(Unknown Source)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+
+FAILURES!!!
+Tests run: 731,  Failures: 0,  Errors: 1</screen>  
+   <para>
+  This can be useful for quick edit-compile-test cycles, especially on slower hardware. The full suite should still be run periodically, however. 
+  </para>
+  
+  
+   <para>
+  The <code>nu.xom.tests.MegaTest</code> class is excluded from all the normal test suites because it takes an excessive amount of time to complete. This class tests that XOM can process documents larger than available memory by generating, parsing, and counting a document with 200,000,000 elements.
+To run it, you'll need to ask for it explicitly. It increments a counter
+every 10,000 elements 
+while running since otherwise the test might seem to be hung:
+  </para>
+  
+<screen>% java -classpath build/classes:lib/junit.jar:lib/xercesImpl.jar:lib/xalan.jar:lib/normalizer.jar:lib/xmlParserAPIs.jar junit.textui.TestRunner nu.xom.tests.MegaTest
+.0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+...</screen>
+
+<para>
+ I've actually tested this with up to two billion elements. You can go higher but you'd have to change the counter to a long instead of an int to avoid overflow. 
+</para>
+
+  <para>
+    All of the XOM unit test classes inherit from <code><ulink url="http://www.cafeconleche.org/XOM/apidocs/nu/xom/tests/XOMTestCase.html">nu.xom.tests.XOMTestCase</ulink></code>. This is a subclass of <code>junit.framework.TestCase</code> that provides several
+additional <code>assertEquals() </code>methods for comparing XOM nodes:
+<code>Text</code> objects, <code>Document</code> objects, <code>Attribute</code> objects, <code>Element</code> objects, and so forth. Mostly these behave as you'd expect with a few notable exceptions.
+You can use this class in your own test cases. 
+</para>
+
+
+
+</article>

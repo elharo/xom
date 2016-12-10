@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article revision="20110618" status="rough">
+  <title>Building XOM</title>
+
+   <para>
+     First you'll need to download the source distribution from the XOM web site.
+     This unpacks into a directory named "XOM".
+   </para>
+  
+  
+   <para>
+     XOM includes an Ant build file. You can build XOM with Ant 1.5 or 1.6.
+     However, some targets require Ant 1.5 and some require Ant 1.6. 
+     Most targets can be built with Java 1.3 or later, but
+     one target requires Java 1.5.
+  </para>
+
+  <para>
+    Building XOM requires Apache Ant. If you don't already have it installed,
+    download it from <ulink url="http://ant.apache.org/">http://ant.apache.org/</ulink>.
+    Be sure to add the ant/bin directory to your path and point the
+    ANT_HOME environment variable to wherever you've installed Ant, as explained in the 
+    <ulink url="http://ant.apache.org/manual/index.html">Ant 
+    documentation</ulink>. Also set the JAVA_HOME environment variable to the location of your JDK, 
+  </para>
+  
+  <para>
+    Once you've done this, just type "ant" in the XOM directory to see the list of available targets:
+  </para>
+  
+  <screen>[XOM]$ ant
+<computeroutput>Buildfile: build.xml
+
+help:
+     [echo]
+     [echo] XOM Build file
+     [echo] -------------------------------------------------------------
+     [echo]
+     [echo]   available targets are:
+     [echo]
+     [echo]     help      --> print this message
+     [echo]     jar       --> build the xom.jar file
+     [echo]     samples   --> build the xom-samples.jar file
+     [echo]     compile   --> compile the source code
+     [echo]     compile15 --> compile the classes that depend on Java 1.5
+     [echo]     javadoc   --> generate the API documentation
+     [echo]     betterdoc --> better formatted API documentation (requires Ant 1.6)
+     [echo]     test      --> run JUnit test suite
+     [echo]     testui    --> run Junit test suite in GUI
+     [echo]     clean     --> clean up the build directory
+     [echo]     dist      --> the zip and .tar.gz files
+     [echo]
+     [echo] -------------------------------------------------------------
+     [echo]
+
+BUILD SUCCESSFUL
+Total time: 3 seconds</computeroutput></screen>
+  
+ <para>
+    Most of these are self-explanatory. 
+    Typing "ant compile" compiles the source base into the directory build/classes.
+    Typing ant jar compiles the files and stuffs them into a JAR archive. Typeing "ant javadoc"
+    compiles the API documentation, etc. However, there are a couple of special cases to note:
+  </para>
+  
+ <para>
+    XOM includes one class (<classname>nu.xom.JDK15XML1_0Parser</classname>) which can only be compiled by Java 1.5.
+    This class is compiled by running the "ant compile15" target.
+    Since not everyone has Java 1.5, 
+    the compiled version of this class is included with the source distribution and
+    copied into the build/classes/nu/xom directory when the compile target is activated.
+  </para>
+  
+  
+ <para>
+    The XML parser used by Ant 1.6 sometimes gets in the way of XOM,
+    due to obscure class loading issues. The unit tests ("ant test" and "ant testui")
+    will probably only pass when using Ant 1.5. If anyone knows how to make 
+    the tests pass when run from Ant 1.6, I'd love to hear about it. 
+  </para>
+
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2004</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+  
+
+
+</article>

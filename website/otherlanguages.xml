@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article class="faq" revision="20161210">
+  <title>XOM in Other Languages</title>
+
+  <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2002, 2003</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+  
+  <!-- is this a design principle???? -->
+  
+<para>
+   XOM is designed and implemented exclusively in Java.
+   No efforts have been made to make it compatible with any other languages, nor are any likely to be.
+   As Ben Trafford wrote on xml-dev, September 27, 2002:
+</para>
+
+<blockquote>
+<para>
+
+</para>
+</blockquote>
+
+<para>
+  Perhaps in the future someone inspired by XOM may take the ideas and
+  design principles to other languages such as C++, C#, Python, or Perl.
+  However, I probably won't do it myself;
+  and I suspect that anyone who does will pretty much need to start over from scratch,
+  and adapt the principles to their language of choice as appropriate.
+</para>
+
+</article>

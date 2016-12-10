@@ -1,0 +1,59 @@
+Contributor License Agreement
+
+Thank you for your interest in XOM. In order to clarify the intellectual property 
+license granted with contributions of software from any person or entity (the "Contributor"),
+Elliotte Rusty Harold would like to have a Contributor License Agreement on file that 
+has been signed by the Contributor, indicating agreement to the license terms below. 
+This license is for your protection as a Contributor of software to XOM
+and does not change your right to use your own contributions for any other purpose.
+
+Before contributing code to XOM, please complete this Agreement and send it 
+by facsimile to Elliotte Rusty Harold, or send a photocopy by regular mail.
+Please read this document carefully before signing and keep the 
+original for your records.
+
+Full name: 
+E-Mail:
+Mailing Address: 
+Telephone:
+Facsimile:
+Country:
+
+You and Elliotte Rusty Harold hereby accept and agree to the following terms and conditions:
+
+1. Your "Contributions" means all of your past, present and future contributions of 
+object code, source code and documentation to Elliotte Rusty Harold, however submitted 
+to Elliotte Rusty Harold, excluding any submissions that are conspicuously marked 
+or otherwise designated in writing by You as "Not a Contribution."
+
+2. You hereby grant to Elliotte Rusty Harold a non-exclusive, irrevocable, worldwide, 
+no-charge, transferable copyright license to use, execute, prepare derivative works of, 
+and distribute (internally and externally, in object code and, if included in your 
+Contributions, source code form) your Contributions. Except for the rights granted 
+to Elliotte Rusty Harold in this paragraph, You reserve all right, title and interest 
+in and to your Contributions.
+
+3. You represent that you are legally entitled to grant the above license. 
+If your employer(s) have rights to intellectual property that you create, 
+you represent that you have received permission to make the Contributions 
+on behalf of that employer, or that your employer has waived such rights 
+for your Contributions to Elliotte Rusty Harold.
+
+4. You represent that, except as disclosed in your Contribution submission(s), 
+each of your Contributions is your original creation. You represent that your 
+Contribution submission(s) include complete details of any license or other 
+restriction (including, but not limited to, related patents and trademarks) 
+associated with any part of your Contribution(s) (including a copy of any 
+applicable license agreement). You agree to notify Elliotte Rusty Harold
+of any facts or circumstances of which you become aware that would make 
+Your representations in this Agreement inaccurate in any respect.
+
+5. You are not expected to provide support for your Contributions, 
+except to the extent you desire to provide support. You may provide 
+support for free, for a fee, or not at all. Your Contributions are 
+provided as-is, with all faults defects and errors, and without 
+warranty of any kind (either express or implied) including, without 
+limitation, any implied warranty of merchantability and fitness for 
+a particular purpose and any warranty of non-infringement.
+
+Please sign: _____________________________ Date: __________ 

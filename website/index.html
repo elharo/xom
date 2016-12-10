@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.cafeconleche.org/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+	<title>XOM</title>
+	<style type="text/css">
+
+body {
+	color: black;
+	background-color:white;
+	}
+
+#Content {
+	margin:0px 10em 50px 10px;
+	padding:10px 100px 10px 10px;
+	}
+
+#Navbar {
+ /*/*/	position:absolute;
+	top:1ex;
+	right:20px;
+	max-width: 30%;
+	min-width: 170px;
+	width:10em;  /*/*/
+	padding:10px;
+	background-color:#eee;
+	color: black;
+	border:1px dashed #999;
+	}
+	
+</style>
+
+</head>
+<body>
+
+<div id="Content">
+
+  <h1>XOM</h1>
+  
+  <p>XOM&trade;
+  is a new XML object model.
+  It is an open source (LGPL), tree-based API for processing XML with Java 
+  that strives for correctness, simplicity, and performance, <em>in that order</em>.
+  </p>
+  
+  <ul>
+	<li><a href="apidocs/">JavaDoc</a></li>
+	<li><a href="whatswrong/whatswrong.html">What's Wrong with XML APIs (and how to fix them)</a></li>
+	<li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10.jar">Jar file</a> (Core packages only)</li>
+	<li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10.zip">Complete zip</a> (includes source code, prebuilt jars, API documentation, unit tests, sample programs, third party jars)</li>
+	<li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10.tar.gz">Complete tar.gz</a> (includes source code, prebuilt jars, API documentation, unit tests, sample programs, third party jars)</li>
+	<li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10-src.zip">Source code zip</a> (includes source code, unit tests, sample programs, third party jars)</li>
+	<li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10-src.tar.gz">Source code tar.gz</a> (includes source code, API documentation, unit tests, sample programs, third party jars)</li>
+    <li><a href="http://lists.ibiblio.org/mailman/listinfo/xom-interest">xom-interest mailing list</a></li>
+    <li><a href="http://java.net/projects/xom/sources">Source Repository</a></li>
+    <li><a href="http://fisheye5.cenqua.com/browse/xom">Fisheye</a></li>
+    <li><a href="unstable.html">Unstable Version</a></li>
+</ul>
+
+<p> XOM is designed to be easy to learn and easy to use. It works very straight-forwardly, and has a very shallow learning curve. Assuming you're already familiar with XML, you should be able to get up and running with XOM very quickly.</p>
+
+<p> 
+XOM is the only XML API that makes no compromises on correctness. 
+XOM only accepts namespace well-formed XML documents, and only allows you to create namespace well-formed XML documents. (In fact, it's a little stricter than that: it actually guarantees that all documents are round-trippable and 
+have well-defined XML infosets.) XOM manages your XML so you don't have to. 
+With XOM, you can focus on the unique value of your application, and trust XOM to get the XML right. 
+</p>
+
+<p> 
+XOM is fairly unique in that it is a dual streaming/tree-based API. Individual nodes in the tree can be processed while the document is still being built. The enables XOM programs to operate almost as fast as the underlying parser can supply data. You don't need to wait for the document to be completely parsed before you can start working with it.
+</p>
+
+<p> 
+XOM is very memory efficient. If you read an entire document into memory, XOM uses as little memory as possible. More importantly, XOM allows you to filter documents as they're built so you don't have to build the parts of the tree you aren't interested in. For instance, you can skip building text nodes that only represent boundary white space, if such white space is not significant in your application. You can even process a document piece by piece and throw away each piece when you're done with it. XOM has been used to process documents that are gigabytes in size. 
+</p>
+
+<p> 
+XOM includes built-in support for a number of XML technologies including 
+Namespaces in XML, XPath 1.0, XSLT 1.0, 
+XInclude, xml:id, xml:base, Canonical XML, and Exclusive Canonical XML. 
+XOM documents can be converted to and from SAX and DOM. 
+</p>
+
+<p>
+	XOM is not complete unto itself. It depends on an underlying SAX
+	parser to read documents and feed the data into a tree structure.
+	While theoretically any SAX2 compliant parser should work, <a
+	href="http://xml.apache.org/xerces2-j/">Xerces 2.6.1</a> and later
+	is the only one that  I am fairly confident does work. Xerces 2.8.0
+	is  included with the full distribution. This product includes
+	software developed by the Apache Software Foundation
+	(http://www.apache.org/). Piccolo 1.0.3, Crimson, GNU JAXP 1.0b1,
+	the Oracle XML Parser for Java 9.2.0.2.0D and 9.2.0.5.0, and Xerces
+	versions prior to 2.6.1 all have bugs that prevent them from doing
+	what XOM needs them to do. (Note to XML parser vendors: XOM's test
+	suite gives parsers a very thorough workout, and delves into many of
+	the more obscure parts of the XML spec that many parsers get wrong.
+	You could do a lot worse for testing than making sure all the XOM
+	unit tests pass when using your parser.)
+</p>
+
+
+<p>
+  Similarly XSLT support depends on a TrAX processor
+  (Xalan-J 2.6.0 is bundled). XInclude and
+  XML canonicalization, however, are native.
+</p>
+
+<p>
+The current version of XOM is 1.2.10 and is backwards compatible with 1.2, 1.1 and 1.0.
+You should not need to recompile any code to upgrade to 1.2.10.
+XOM is believed to be quite stable and robust.
+Future releases should be backwards compatible with the 1.0 API for the foreseeable future.
+</p>
+
+<p>
+  If you'd like to know more about XOM, I suggest starting with the <a href="tutorial.xhtml">tutorial</a>. 
+XOM also includes a large collection of small <a href="samples.xhtml">sample programs</a> that demonstrate various parts of the library. 
+If you're curious about why XOM is the way it is, or if you would like to suggest future directions for XOM,
+you should read the <a href="designprinciples.xhtml">design principles</a> on which XOM is based. 
+If you have a question about XOM that is not answered in the <a href="apidocs/">API documentation</a> 
+or the <a href="faq.xhtml">FAQ</a>, you can ask it on the <a href="http://lists.ibiblio.org/mailman/listinfo/xom-interest">xom-interest 
+mailing list</a>.
+You do not need to be subscribed to post, but non-subscriber questions are moderated.
+(Due to increasing amounts of non-subscriber spam, it is possible non-subscriber questions are missed. 
+If you don't get an answer, please subscribe and try again.)
+</p>
+
+<p>
+Commercial licenses are available for companies that wish to bundle XOM with their products without subscribing to the LGPL. Contact <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg?Commercial%20license%20for%20XOM">Elliotte Rusty Harold</a> if you're interested. 
+</p>
+
+ <hr />
+<div align="center">[ <a href="http://cafe.elharo.com/">The Cafes</a> | <a href="http://www.cafeconleche.org">Cafe con Leche</a> | 
+<a href="http://www.cafeaulait.org">Cafe au Lait</a> ]</div>
+<hr />
+<p>Copyright 2002-2016 <a href="http://www.elharo.com/">Elliotte Rusty Harold</a><br />
+<a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg">E-mail Elliotte Rusty Harold</a><br />
+Last Modified December 10, 2016
+</p>
+</div>
+<div id="Navbar">
+    <h3>About XOM</h3>
+     <ul>
+	<li><a href="designprinciples.xhtml">Design Principles</a></li>
+	<li><a href="history.html">Release Notes</a></li>
+	<li><a href="faq.xhtml">FAQ</a></li>
+	<li><a href="install.xhtml">Installation Instructions</a></li>
+    <li><a href="infoset.xhtml">Infoset Mapping</a></li>
+    <li><a href="xpath.xhtml">XPath Mapping</a></li>
+	<li><a href="futuredirections.xhtml">Future Directions</a></li>
+	<li><a href="license.xhtml">License and Copyright</a></li>
+	<li><a href="http://lists.ibiblio.org/mailman/listinfo/xom-interest">Mailing Lists</a></li>
+	</ul>
+
+	<h3>Java API</h3>
+	<ul>
+	<li><a href="tutorial.xhtml">Tutorial</a></li>
+	<li><a href="apidocs/">JavaDoc</a></li>
+	<li><a href="samples.xhtml">Sample Code</a></li>
+ </ul>
+
+
+	<h3>Downloads</h3>
+
+	<ul>
+	<li><a href="http://java.net/projects/xom/sources">Source Repository</a></li>
+	<li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10.jar">Minimal JAR file</a></li>
+	 <li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10.zip">Complete distribution, zip format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
+	 <li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10.tar.gz">Complete distribution, tar.gz format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
+	 </ul>
+ 
+ 
+	<h3>For Contributors</h3>
+
+	<ul>
+	<li><a href="unstable.html">Unstable Version</a></li>
+	<li><a href="openquestions.xhtml">Open Questions</a></li>
+    <li><a href="contributor_license.txt">Contributor Agreement</a></li>
+	<li><a href="building.xhtml">Building XOM</a></li>
+	<li><a href="testsuite.xhtml">Test Suite</a></li>
+	<li><a href="clover_html/">Test Coverage</a></li>
+	 </ul>
+	 
+	 
+	<h3>Third Party Articles</h3>
+
+	<ul>
+	<li><a href="http://www.artima.com/intv/xmlapis.html">What's Wrong with XML APIs</a></li>
+    <li><a href="http://www.artima.com/intv/dom.html">The Good, the Bad, and the DOM</a></li>
+    <li><a href="http://www.artima.com/intv/jdom.html">A Design Review of JDOM</a></li>
+    <li><a href="http://www.artima.com/intv/learn.html">Lessons Learned from JDOM</a></li>
+    <li><a href="http://www.artima.com/intv/xomdesign.html">Design Principles and XOM</a></li>
+    <li><a href="http://www.artima.com/intv/airbags.html">Air Bags and Other Design Principles</a></li>
+    <li><a href="http://www.artima.com/intv/desbyuse.html">Designing by Dictatorship, Examples, and Tests</a></li>
+    <li><a href="http://www.artima.com/intv/readxml.html">The Human Side of XML</a></li>
+    <li><a href="http://www.artima.com/intv/schema.html">Organic Schemas and Outlier Data</a></li>
+    <li><a href="http://www.xml.com/pub/a/2002/11/27/xom.html">Getting Started with XOM</a></li>
+    <li><a href="http://www-106.ibm.com/developerworks/library/x-matters32.html">The XOM Java XML API</a></li>
+    <li> <a href="http://www.linux-mag.com/archive/2003-03/java_xom_01.html">Java XOM: XML Made Simpler</a></li>
+    <li><a href="http://www.mycgiserver.com/~gpiancastelli/archives.jsp?post=0031">Working on RSS fragments with XOM</a></li>
+    </ul>
+    
+         
+	<h3>Projects using XOM</h3>
+
+    <ul>
+      <li><a href='http://www.concordion.org/'>Concordion</a></li>
+      <li><a href='http://altsol.gr/sleepxomxml/'>Sleep</a></li>
+      <li><a href='http://code.google.com/p/openinfocard/'>openinfocard</a></li>
+      <li><a href='http://rubyforge.org/projects/excemel/'>Excemel</a></li>
+      <li><a href="http://json-lib.sourceforge.net/">json-lib</a></li>
+      <li><a href="http://memoranda.sourceforge.net/">Memoranda</a></li>
+      <li><a href="http://www.spamino.com">Spamino</a></li>
+      <li><a href="http://carrierwave.sourceforge.net/">Carrierwave</a></li>
+      <li><a href="http://wurfl.sourceforge.net/">WURFL</a></li>
+      <li><a href="http://aspectsecurity.com/stinger/">Stinger</a></li>
+      <li><a href="http://dsd.lbl.gov/~hoschek/firefish">FireFish</a></li>
+      <li><a href="http://www.cadenhead.org/workbench/code/opmlLinkPublisher/">OPML Link Publisher</a></li>
+      <li><a href="http://www.mycgiserver.com/~gpiancastelli/archives.jsp?post=0031">Restlog Client</a></li>
+      <li><a href="http://cafeconleche.org/SAXTest/">SAX Conformance Testing</a></li>
+      <li><a href="http://sourceforge.net/projects/smartfrog/">SmartFrog</a></li>
+      <li><a href="http://www.cenqua.com/fisheye/">FishEye</a></li>
+    </ul>
+    
+    <h3>Ports and Forks</h3>
+    <ul>
+	 <li><a href="http://casse.hugues.free.fr/projects/xelf.html">XElf</a> (Python)</li>
+	 </ul>
+   
+<h3>Third Party Licenses</h3>
+
+<ul>
+  <li><a href="lib/XercesLicense.txt">Xerces License</a></li>
+  <li><a href="lib/XalanLicense.txt">Xalan License</a></li>
+  <li><a href="lib/LICENSE-SAX.html">SAX License</a></li>
+  <li><a href="lib/LICENSE-DOM.html">DOM License</a></li>
+  <li><a href="lib/normalizer_license.html">ICU4J License</a></li>
+  <li><a href="lib/junit_license.html">JUnit</a></li>
+</ul>
+ 
+</div>
+</body>
+</html>
