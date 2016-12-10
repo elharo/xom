@@ -1,0 +1,82 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <name>XOM</name>
+
+  <groupId>nu.xom</groupId>
+  <artifactId>website</artifactId>
+  <version>1.2.10</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.agilejava.docbkx</groupId>
+      <artifactId>docbkx-maven-plugin</artifactId>
+      <version>2.0.17</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.agilejava.docbkx</groupId>
+        <artifactId>docbkx-maven-plugin</artifactId>
+        <version>2.0.17</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.docbook</groupId>
+            <artifactId>docbook-xml</artifactId>
+            <version>4.4</version>
+            <scope>runtime</scope>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <xincludeSupported>true</xincludeSupported>
+          <sourceDirectory>website</sourceDirectory>
+          <targetDirectory>${project.build.directory}/website</targetDirectory>
+          <includes>*.xml</includes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate-xhtml</goal>
+            </goals>
+            <phase>compile</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.2</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/website</outputDirectory>
+              <resources>          
+                <resource>
+                  <directory>website</directory>
+        <includes>
+          <include>**/*.html</include>
+          <include>**/*.txt</include>
+        </includes>
+                  <excludes>
+                    <exclude>**/*.xml</exclude>
+                  </excludes>
+                </resource>
+              </resources>              
+            </configuration>            
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

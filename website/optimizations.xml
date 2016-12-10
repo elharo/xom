@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
+<article class="faq" revision="20161210">
+  <title>XOM Optimizations</title>
+
+  
+ <articleinfo>
+     <author>
+      <firstname>Elliotte</firstname>
+      <othername>Rusty</othername>
+      <surname>Harold</surname>
+    </author>
+    <authorinitials>ERH</authorinitials>
+    <copyright>
+      <year>2003</year>
+      <holder>Elliotte Rusty Harold</holder>
+    </copyright>
+  </articleinfo> 
+  
+  
+ <para>
+ Some lessons I learned by optimizing XOM.
+</para>
+
+  <para>
+    Lazy initializaiton is a good idea. XOM saves megabytes of memory
+    by only allocating data structures when and if necessary.
+   This is particularly true in the <classname>Element</classname> class where
+    each <classname>Element</classname> has references to 
+   a list of attributes and a lits of additional namespaces.
+  </para>
+
+  <para>
+    Don't accept the default capacity for ArrayList. This wastes a lot of space,
+    for no significant savings in time.
+  </para>
+
+  <para>
+    ArrayLists are faster than almost any other list data structure, including linked lists.
+    (To be honest, JDOM had already proven this.) Don't believe what your data structures
+    text books tell you about the O(n) insertion cost of arrays.
+    They don't know about System.arraycopy.
+  </para>
+
+
+  <para>
+    instanceof is ungodly expensive. I cut the time of one hot spot in half
+   by replacing an instanceof test with a length test on my data structure. 
+  </para>
+
+  <para>
+    String.equals is expensive. When testing for the empty string 
+    test whether the string has length 0 rather than using 
+    equals().  
+  </para>
+
+  <para>
+    As yet unknown: is it worth interning strings everywhere?
+    What would that save? What would it cost? How fast is String.intern()?  
+  </para>
+
+  <para>
+    Allegedly charAt() is expensive so I replaced it
+    with toCharArray() and direct array access.  
+    However,  it turns out toCharArray is almost equally expensive.
+  </para>
+
+  <para>
+    As yet unknown: would it make sense to use char arrays directly
+    to accumulate text into the text node instead of StringBuffers and strings?
+    Should I begin a new text node in characters and 
+    append char[]s directly to that Text node repeatedly   
+    without ever using a StringBuffer?
+    Perhaps storing a StringBuffer internally in Text instead of a String????
+Bu then I have to convert to the string on getValue, expensive????
+or cacheable????
+  </para>
+
+  <para>
+    Strings waste space (and char arrays are no better). 
+    If most of your text data is ASCII , then up to half the data 
+    in each String is empty. For XML documents, this is a <strong>big</strong>
+    problem. You can improve this by storing data in UTF-8 encoded byte arrays
+    instead. However, there's a performance trade-off here.
+    Right now in XOM, the conversion from Strings to UTF-8 bytes and back is the
+    second biggest hot spot, occupying 10-15% of execution time. I need to 
+    implement some form of strategy pattern so users can choose whether they need
+    to optimize time or space. 
+  </para>
+
+
+  <para>
+    So far, almost all the time is spent in building 
+    (including parsing and I/O). This is three orders of magnitude 
+    larger than the time spent manipulating documents in memory.
+    I am not sure if there are any use-cases which really suggest
+    further optimizing in-memory manipulation and navigation.
+    I have not yet explored the time issues with serialization.
+    That may be dur for otpimization as well, but I suspect it can't
+    be as bad as building. 
+  </para>
+
+
+</article>
