@@ -1073,8 +1073,8 @@ public class BaseURITest extends XOMTestCase {
           Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/test.xml");
         root.addAttribute(baseAttribute);
         Element child = new Element ("child");
-        child.addAttribute(new Attribute("xml:base", 
-          Namespace.XML_NAMESPACE, ".."));
+        child.addAttribute(new Attribute("xml:base",
+                                         Namespace.XML_NAMESPACE, "src/test"));
         root.appendChild(child);
         assertEquals("http://www.example.com/data/", child.getBaseURI());
         
@@ -1163,7 +1163,7 @@ public class BaseURITest extends XOMTestCase {
            "", "http://a/b/c/d;p?q",
            ".", "http://a/b/c/",
            "./", "http://a/b/c/",
-           "..", "http://a/b/",
+          "src/test", "http://a/b/",
            "../", "http://a/b/",
            "../g", "http://a/b/g",
            "../..", "http://a/",
@@ -1227,7 +1227,7 @@ public class BaseURITest extends XOMTestCase {
         doc.setBaseURI("http://www.example.com/");
         Attribute base = new Attribute("xml:base", Namespace.XML_NAMESPACE, "g");
         root.addAttribute(base);
-        base.setValue("..");
+        base.setValue("src/test");
         assertEquals("http://www.example.com/", root.getBaseURI());
         
     }
@@ -1239,7 +1239,7 @@ public class BaseURITest extends XOMTestCase {
         doc.setBaseURI("http://www.example.com/");
         Attribute base = new Attribute("xml:base", Namespace.XML_NAMESPACE, "g");
         root.addAttribute(base);
-        base.setValue("../..");
+        base.setValue("src");
         assertEquals("http://www.example.com/", root.getBaseURI());
         
     }

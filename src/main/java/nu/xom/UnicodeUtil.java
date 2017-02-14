@@ -130,7 +130,8 @@ final class UnicodeUtil {
         
         DataInputStream in = null;
         try {
-            InputStream source = loader.getResourceAsStream("nu/xom/compositions.dat");
+            InputStream source = loader.getResourceAsStream(
+              "nu/xom/compositions.dat");
             in = new DataInputStream(source);
             // ???? would it make sense to store a serialized HashMap instead????
             compositions = new HashMap();

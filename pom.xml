@@ -1,25 +1,360 @@
-<project>
-  <modelVersion>4.0.0</modelVersion>
-  <name>XOM</name>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+  <modelVersion>4.0.0</modelVersion>
   <groupId>nu.xom</groupId>
-  <artifactId>website</artifactId>
+  <artifactId>xom</artifactId>
   <version>1.2.10</version>
+  <packaging>bundle</packaging>
+
+  <name>XOM</name>
+  <description>The XOM Dual Streaming/Tree API for Processing XML</description>
+  <url>http://xom.nu</url>
+
+  <licenses>
+    <license>
+      <name>The GNU Lesser General Public License, Version 2.1</name>
+      <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>https://github.com/elharo/xom</url>
+    <connection>scm:git:https://github.com/elharo/xom</connection>
+    <developerConnection>scm:git:https://github.com/elharo/xom</developerConnection>
+  </scm>
+
+  <inceptionYear>2002</inceptionYear>
+
+  <mailingLists>
+    <mailingList>
+      <name>XOM Interest Mailing List</name>
+      <archive>http://lists.ibiblio.org/pipermail/xom-interest/</archive>
+    </mailingList>
+  </mailingLists>
+
+  <distributionManagement>
+    <site>
+      <id>xom.nu</id>
+      <name>xom.nu</name>
+      <url>http://xom.nu/</url>
+    </site>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <developers>
+    <developer>
+      <name>Elliotte Rusty Harold</name>
+      <id>elharo</id>
+      <email>elharo@ibiblio.org</email>
+      <organization>Cafe au Lait</organization>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.agilejava.docbkx</groupId>
-      <artifactId>docbkx-maven-plugin</artifactId>
-      <version>2.0.17</version>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>1.3.03</version>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.8.0</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.0</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.1.6</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.ccil.cowan.tagsoup</groupId>
+      <artifactId>tagsoup</artifactId>
+      <version>1.2.1</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>6.0.48</version>
+      <optional>true</optional>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
+  <issueManagement>
+    <url>https://github.com/elharo/xom/issues</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
+
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>2.9</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.3</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
+      <!-- Use a separate source directory for the sample code -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-sample-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/samples/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Require JDK >= 1.2 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.2</source>
+          <target>1.2</target>
+        </configuration>
+      </plugin>
+
+      <!-- Produce Javadoc -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.3</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <!-- XOM's javadoc isn't entirely valid, disable linting for now -->
+              <additionalparam>-Xdoclint:none</additionalparam>
+              <failOnError>false</failOnError>
+              <bottom><![CDATA[Copyright &#169; {currentYear} &lt;elharo@ibiblio.org&gt; http://xom.nu]]></bottom>
+              <archive>
+                <manifestEntries>
+                  <Specification-Title>XOM</Specification-Title>
+                  <Specification-Version>${project.version}</Specification-Version>
+                  <Specification-Vendor>Elliotte Rusty Harold</Specification-Vendor>
+                  <Implementation-Title>XOM</Implementation-Title>
+                  <Implementation-Version>${project.version}</Implementation-Version>
+                  <Implementation-Vendor>Elliotte Rusty Harold</Implementation-Vendor>
+                  <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Create source jars -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+              <goal>test-jar-no-fork</goal>
+            </goals>
+            <configuration>
+              <archive>
+                <manifestEntries>
+                  <Specification-Title>XOM</Specification-Title>
+                  <Specification-Version>${project.version}</Specification-Version>
+                  <Specification-Vendor>Elliotte Rusty Harold</Specification-Vendor>
+                  <Implementation-Title>XOM</Implementation-Title>
+                  <Implementation-Version>${project.version}</Implementation-Version>
+                  <Implementation-Vendor>Elliotte Rusty Harold</Implementation-Vendor>
+                  <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Produce OSGi bundle -->
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>3.2.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>nu.xom.Info</mainClass>
+            </manifest>
+
+            <manifestEntries>
+              <Specification-Title>XOM</Specification-Title>
+              <Specification-Version>${project.version}</Specification-Version>
+              <Specification-Vendor>Elliotte Rusty Harold</Specification-Vendor>
+              <Implementation-Title>XOM</Implementation-Title>
+              <Implementation-Version>${project.version}</Implementation-Version>
+              <Implementation-Vendor>Elliotte Rusty Harold</Implementation-Vendor>
+              <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+            </manifestEntries>
+
+            <manifestSections>
+              <manifestSection>
+                <name>nu/xom/</name>
+                <manifestEntries>
+                  <Sealed>true</Sealed>
+                  <Specification-Title>XOM</Specification-Title>
+                  <Implementation-Title>nu.xom</Implementation-Title>
+                  <Implementation-Version>${project.version}</Implementation-Version>
+                  <Implementation-Vendor>Elliotte Rusty Harold</Implementation-Vendor>
+                </manifestEntries>
+              </manifestSection>
+
+              <manifestSection>
+                <name>nu/xom/xslt</name>
+                <manifestEntries>
+                  <Sealed>true</Sealed>
+                  <Specification-Title>XOM XSLT interface</Specification-Title>
+                  <Implementation-Title>nu.xom.xslt</Implementation-Title>
+                </manifestEntries>
+              </manifestSection>
+
+              <manifestSection>
+                <name>nu/xom/xinclude</name>
+                <manifestEntries>
+                  <Sealed>true</Sealed>
+                  <Specification-Title>XOM XInclude engine</Specification-Title>
+                  <Implementation-Title>nu.xom.xinclude</Implementation-Title>
+                </manifestEntries>
+              </manifestSection>
+
+              <manifestSection>
+                <name>nu/xom/converters</name>
+                <manifestEntries>
+                  <Sealed>true</Sealed>
+                  <Specification-Title>XOM converters to other object models</Specification-Title>
+                  <Implementation-Title>nu.xom.converters</Implementation-Title>
+                </manifestEntries>
+              </manifestSection>
+
+              <manifestSection>
+                <name>nu/xom/canonical</name>
+                <manifestEntries>
+                  <Sealed>true</Sealed>
+                  <Specification-Title>XOM Canonical XML support</Specification-Title>
+                  <Implementation-Title>nu.xom.canonical</Implementation-Title>
+                </manifestEntries>
+              </manifestSection>
+            </manifestSections>
+          </archive>
+
+          <instructions>
+            <Bundle-Vendor>xom.nu</Bundle-Vendor>
+            <Bundle-RequiredExecutionEnvironment>J2SE-1.2</Bundle-RequiredExecutionEnvironment>
+
+            <Import-Package>
+              com.sun.org.apache.xerces.internal.jaxp;    resolution:="optional",
+              com.sun.org.apache.xerces.internal.parsers; resolution:="optional",
+
+              javax.swing;      resolution:="optional",
+              javax.swing.tree; resolution:="optional",
+              *
+            </Import-Package>
+
+            <Export-Package>
+              nu.xom,
+              nu.xom.canonical,
+              nu.xom.converters,
+              nu.xom.xinclude,
+              nu.xom.xslt
+            </Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+
+      <!-- Copy resources needed to produce the web site -->
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.2</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/website</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>website</directory>
+                  <includes>
+                    <include>**/*.html</include>
+                    <include>**/*.txt</include>
+                  </includes>
+                  <excludes>
+                    <exclude>**/*.xml</exclude>
+                  </excludes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Produce the website -->
       <plugin>
         <groupId>com.agilejava.docbkx</groupId>
         <artifactId>docbkx-maven-plugin</artifactId>
@@ -43,40 +378,149 @@
             <goals>
               <goal>generate-xhtml</goal>
             </goals>
-            <phase>compile</phase>
+            <phase>pre-site</phase>
           </execution>
         </executions>
       </plugin>
 
+      <!-- Plugin for Sonatype OSSRH deployment -->
       <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.2</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/website</outputDirectory>
-              <resources>          
-                <resource>
-                  <directory>website</directory>
-        <includes>
-          <include>**/*.html</include>
-          <include>**/*.txt</include>
-        </includes>
-                  <excludes>
-                    <exclude>**/*.xml</exclude>
-                  </excludes>
-                </resource>
-              </resources>              
-            </configuration>            
-          </execution>
-        </executions>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.7</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>sonatype-nexus-staging</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
       </plugin>
     </plugins>
   </build>
 
+  <profiles>
+    <!-- Use a "low fat" byte[] based Text class by default  -->
+    <profile>
+      <id>nu.xom.lowfat</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <!-- Add an extra source directory for "low-fat" Text objects -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <id>add-fat-sources</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>add-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>src/main/java-lowfat</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Use the option -Pnu.xom.fat to make Text objects bigger but faster. -->
+    <profile>
+      <id>nu.xom.fat</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <!-- Add an extra source directory for "fat" Text objects -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>add-fat-sources</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>add-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>src/main/java-fat</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Include JDK <= 1.5 sources on old JDK releases. -->
+    <profile>
+      <id>nu.xom.jdk15</id>
+      <activation>
+        <jdk>[1.0, 1.6)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <!-- Add an extra source directory for JDK 1.5 -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>add-jdk15-sources</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>add-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>src/main/java-jdk15</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Sign artifacts when deploying to Central -->
+    <profile>
+      <id>nu.xom.deployment</id>
+      <activation>
+        <property>
+          <name>nu.xom.deployment</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>
+

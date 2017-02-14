@@ -1158,7 +1158,7 @@ public class CanonicalizerTest extends XOMTestCase {
 
         try {
             Canonicalizer serializer = new Canonicalizer(out, false);
-            Nodes subset = doc.query("//.");
+            Nodes subset = doc.query("/nu/xom/tests/CanonicalizerTest.java");
             serializer.write(subset);
         }
         finally {

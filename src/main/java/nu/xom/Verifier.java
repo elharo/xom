@@ -72,7 +72,8 @@ final class Verifier {
         
         DataInputStream in = null;
         try {
-            InputStream raw = loader.getResourceAsStream("nu/xom/characters.dat");
+            InputStream raw = loader.getResourceAsStream(
+              "nu/xom/characters.dat");
             if (raw == null) {
                 throw new RuntimeException("Broken XOM installation: "
                   + "could not load nu/xom/characters.dat");
