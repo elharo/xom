@@ -1,3 +1,8 @@
 .DS_Store
 build/
 target/
+.classpath
+.project
+bin/
+dist/
+testresults/
