@@ -401,13 +401,11 @@ public class XOMTestCase extends TestCase {
 
         int count = expectedCopy.getChildCount();
         assertEquals(message, count, actualCopy.getChildCount());
-        int nonTextNodes = count;
         for (int i = 0; i < count; i++) {
             Node child1 = expectedCopy.getChild(i);
             // could remove this instanceof Test by having combineTextNodes
             // set a list of text indices
             if (child1 instanceof Text) {
-                nonTextNodes--;
                 Node child2 = actualCopy.getChild(i);
                 assertEquals(message, child1, child2);
             }
