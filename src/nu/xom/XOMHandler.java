@@ -87,6 +87,7 @@ class XOMHandler
         locator = null;
         doctype = null;
         internalDTDSubset = null;
+        System.gc();
     }
 
     
@@ -357,7 +358,7 @@ class XOMHandler
         memoryUsed += length;
         if (memoryUsed > memoryLimit) {
           // todo(elharo): better error message; better exception
-          throw new BillionLaughsSAXException("Document too big");
+          throw new BillionLaughsSAXException("Document too big: " + memoryUsed);
         }
       }
     }
