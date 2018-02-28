@@ -72,7 +72,7 @@ class XOMHandler
 
     
     Document getDocument() {
-    	return document;
+        return document;
     }
 
 
