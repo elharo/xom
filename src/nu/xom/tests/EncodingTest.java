@@ -114,7 +114,7 @@ public class EncodingTest extends XOMTestCase {
 
 
     public void testISO2022JP() throws ParsingException, IOException {
-        checkAll("ISO-2022-JP");
+    	 if (charsetAvailable("ISO-2022-JP")) checkAll("ISO-2022-JP");
     } 
 
 
@@ -270,7 +270,6 @@ public class EncodingTest extends XOMTestCase {
         Builder builder = new Builder();
         System.gc();
         builder.setMemoryLimit(20745630); // large enough for EUCJP
-        byte[] data = null;
         ByteArrayOutputStream out = new ByteArrayOutputStream(100000);    
         // Write data into a byte array using encoding
         Serializer serializer = new Serializer(out, encoding);
@@ -278,7 +277,7 @@ public class EncodingTest extends XOMTestCase {
         serializer.flush();
         out.flush();
         out.close();
-        data = out.toByteArray();
+        byte[] data = out.toByteArray();
         InputStream in = new ByteArrayInputStream(data);
         Document reparsed = builder.build(in);
         in.close();

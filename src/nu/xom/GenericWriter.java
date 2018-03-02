@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -34,13 +34,13 @@ import java.util.Locale;
  * character is or is not available in a particular encoding by writing
  * it onto an OutputStream and seeing whether or not the character 
  * written is a question mark (Java's substitution character). 
- * There's a more staright-forward way to do this using 
+ * There's a more straight-forward way to do this using 
  * <code>java.nio.Charset</code> in Java 1.4, but I'm not willing to 
  * assume Java 1.4. 
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.2.11
  * 
  */
 class GenericWriter extends TextWriter {
@@ -80,7 +80,7 @@ class GenericWriter extends TextWriter {
         if (isJapanese) {
             if (c == 0xA5) return true; // Yen symbol 
             if (c == 0x203E) return true; // Sun bugs in EUC-JP and SJIS
-        } 
+        }
         
         boolean result = false;
         try {

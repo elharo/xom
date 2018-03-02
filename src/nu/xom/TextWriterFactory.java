@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -27,7 +27,7 @@ import java.util.Locale;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.2.11
  */
 class TextWriterFactory {
 
@@ -103,6 +103,11 @@ class TextWriterFactory {
             return new Latin10Writer(out, encoding); 
         }
         else if (encodingUpperCase.endsWith("ASCII")) {
+            return new ASCIIWriter(out, encodingUpperCase); 
+        }
+        else if (encodingUpperCase.startsWith("ISO-2022-JP")) {
+            // "ISO-2022-JP is a really weird family that doesn't seem to work in Java
+            // Might be able to improve this
             return new ASCIIWriter(out, encodingUpperCase); 
         }
         else if (encodingUpperCase.equals("IBM037")
