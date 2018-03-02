@@ -1,4 +1,4 @@
-/* Copyright 2002-2007, 2009, 2010, 2011, 2014 Elliotte Rusty Harold
+/* Copyright 2002-2007, 2009, 2010, 2011, 2014, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -88,7 +88,8 @@ import nu.xom.XMLException;
 public class BuilderTest extends XOMTestCase {
 
     private File inputDir = new File("data");
-
+    private long memoryLimit = Runtime.getRuntime().freeMemory() / 2;
+    
     // This class tests error conditions, which Xerces
     // annoyingly logs to System.err. So we hide System.err 
     // before each test and restore it after each test.
@@ -101,6 +102,7 @@ public class BuilderTest extends XOMTestCase {
     
     protected void tearDown() {
         System.setErr(systemErr);
+        System.gc();
     }
     
        
@@ -747,7 +749,7 @@ public class BuilderTest extends XOMTestCase {
         String data = "<root />";
         
         Document document = builder.build(data, null);
-        WeakReference ref = new WeakReference(document);
+        WeakReference<Document> ref = new WeakReference<Document>(document);
         document = null;
         System.gc();
         System.gc();
@@ -1482,6 +1484,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testBillionLaughs()
       throws IOException, ParsingException {
+        builder.setMemoryLimit(memoryLimit);
         try {
           builder.build(new File(inputDir, "billionlaughs.xml"));
           fail("expected exception");
@@ -1493,6 +1496,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testBillionComments()
       throws IOException, ParsingException {
+        builder.setMemoryLimit(memoryLimit);
         try {
           builder.build(new File(inputDir, "billioncomments.xml"));
           fail("expected exception");
@@ -1504,6 +1508,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testBillionProcessingInstructions()
       throws IOException, ParsingException {
+        builder.setMemoryLimit(memoryLimit);
         try {
           builder.build(new File(inputDir, "billionprocessinginstructions.xml"));
           fail("expected exception");
@@ -1515,7 +1520,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testBillionElements()
       throws IOException, ParsingException {
-        //builder.setMemoryLimit(100000);
+        builder.setMemoryLimit(memoryLimit);
         try {
           builder.build(new File(inputDir, "billionelements.xml"));
           fail("expected exception");
@@ -3295,9 +3300,9 @@ public class BuilderTest extends XOMTestCase {
               "org.apache.crimson.parser.XMLReaderImpl"
             );
         
-            Class filter = Class.forName("org.apache.xml.resolver.tools.ResolvingXMLFilter");
-            Class[] types = {XMLReader.class};
-            Constructor constructor = filter.getConstructor(types);
+            Class<?> filter = Class.forName("org.apache.xml.resolver.tools.ResolvingXMLFilter");
+            Class<?>[] types = {XMLReader.class};
+            Constructor<?> constructor = filter.getConstructor(types);
             Object[] args = {parser};
             XMLReader reader = (XMLReader) constructor.newInstance(args);
             Builder builder = new Builder(reader);

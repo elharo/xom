@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2009, 2014 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009, 2014, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -341,7 +341,7 @@ class XOMHandler
     protected StringBuffer buffer = null;
   
     public void characters(char[] text, int start, int length) throws SAXException {
-        checkMemoryUsed(length * 2); // chars are two bytes long
+        checkMemoryUsed(length * 2); // chars are two bytes long prior to Java 9
         if (length <= 0) return;
         if (textString == null) textString = new String(text, start, length);
         else {
@@ -518,10 +518,12 @@ class XOMHandler
     protected boolean inCDATA = false;
     protected boolean finishedCDATA = false;
 
-    // default to half of available heap memory
     // todo(elharo): should we reset this with each document parsed?
     // if so we need to keep a separate field for the user set value.
-    private long memoryLimit = Runtime.getRuntime().freeMemory() / 2;
+    // default to half of available heap memory; disabled for now
+    // private long memoryLimit = Runtime.getRuntime().freeMemory() / 2;
+
+    private long memoryLimit = 0;
     private long memoryUsed = 0;
     
     public void startCDATA() {

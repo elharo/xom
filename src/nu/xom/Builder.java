@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2009, 2010, 2013 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009, 2010, 2013, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -1331,11 +1331,13 @@ public class Builder {
 
 
     /**
+     * <strong>Experimental. May not work, especially for security sensitive applications!</strong>
+     * 
      * Set an approximate maximum size for a document. Attempting to parse 
      * a document that would outgrow this size will abort processing and
-     * throw an exception.
+     * throw an exception. Setting this to zero or less disables size checking.
      * 
-     * The default value of this quantity is set to half of free memory.
+     * By default, there is no memory limit
      * 
      * @param limit approximate maximum document size in memory in bytes
      */
