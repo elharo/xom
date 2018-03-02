@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -40,7 +40,7 @@ import org.xml.sax.XMLReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.2.11
  * 
  */
 final class Verifier {
@@ -467,7 +467,7 @@ final class Verifier {
                 throw new MalformedURIException("Missing closing ]");
             }
                             // trim [ and ] from ends of host
-            checkIP6Address(host.substring(1, length-1));
+            checkIPv6Address(host.substring(1, length-1));
         }
         else {
             if (length > 255) {
@@ -667,13 +667,15 @@ final class Verifier {
     }
 
 
-    private static void checkIP6Address(String ip6Address) {
+    // http://www.faqs.org/rfcs/rfc2373.html
+    // http://www.faqs.org/rfcs/rfc2732.html
+    private static void checkIPv6Address(String ip6Address) {
 
         StringTokenizer st = new StringTokenizer(ip6Address, ":", true);
         int numTokens = st.countTokens();
         if (numTokens > 15 || numTokens < 2) {
             throw new MalformedURIException(
-              "Illegal IP6 host address: " + ip6Address
+              "Illegal IPv6 host address: " + ip6Address
             );                                              
         }
         for (int i = 0; i < numTokens; i++) {
@@ -683,7 +685,7 @@ final class Verifier {
                 int part = Integer.parseInt(hexPart, 16);
                 if (part < 0) {
                       throw new MalformedURIException( 
-                      "Illegal IP6 host address: " + ip6Address
+                      "Illegal IPv6 host address: " + ip6Address
                     );                                                            
                 }
             }
@@ -693,7 +695,7 @@ final class Verifier {
                 }
                 else {
                     throwMalformedURIException(ip6Address,
-                      "Illegal IP6 host address: " + ip6Address
+                      "Illegal IPv6 host address: " + ip6Address
                     );                                                            
                 }
             }
@@ -701,7 +703,7 @@ final class Verifier {
         
         if (ip6Address.indexOf("::") != ip6Address.lastIndexOf("::")) {
             throw new MalformedURIException(
-              "Illegal IP6 host address: " + ip6Address
+              "Illegal IPv6 host address: " + ip6Address
             );                                                          
         }
         
@@ -714,23 +716,29 @@ final class Verifier {
         int numTokens = st.countTokens();
         if (numTokens != 4) {
             throw new MalformedURIException(
-              "Illegal IP6 host address: " + ip6Address
+              "Illegal IPv6 host address: " + ip6Address
             );                                              
         }
         for (int i = 0; i < 4; i++) {
             String decPart = st.nextToken();
+            // https://github.com/elharo/xom/issues/12
+            if (decPart.startsWith("+")) {
+                throw new MalformedURIException(
+                        "Illegal IPv6 host address: " + ip6Address
+                      );   
+            }
             try {
                 int dec = Integer.parseInt(decPart);
                 if (dec > 255 || dec < 0) {
                     throw new MalformedURIException(
-                      "Illegal IP6 host address: " + ip6Address
+                      "Illegal IPv6 host address: " + ip6Address
                     );                                                                                
                 }
             }
             catch (NumberFormatException ex) {
                 throw new MalformedURIException(
-                  "Illegal IP6 host address: " + ip6Address
-                );                                                            
+                  "Illegal IPv6 host address: " + ip6Address
+                );
             }
         }
         
