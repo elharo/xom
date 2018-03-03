@@ -934,7 +934,7 @@ public class XPathTest extends XOMTestCase {
         
         Element element = new Element("test");
         File f = new File(inputDir, "prettyxml.xml");
-        String url = f.toURL().toExternalForm();
+        String url = f.toURI().toString();
         try {
             element.query("document('" + url + "')/*");
             fail("allowed document() function");
@@ -951,7 +951,7 @@ public class XPathTest extends XOMTestCase {
         
         Element element = new Element("test");
         File f = new File(inputDir, "prettyxml.xml");
-        String url = f.toURL().toExternalForm();
+        String url = f.toURI().toString();
         try {
             element.query("document('" + url + "')//*");
             fail("allowed document() function");
@@ -967,9 +967,9 @@ public class XPathTest extends XOMTestCase {
         
         Element element = new Element("test");
         File f1 = new File(inputDir, "prettyxml.xml");
-        String url1 = f1.toURL().toExternalForm();
+        String url1 = f1.toURI().toString();
         File f2 = new File(inputDir, "test.xml");
-        String url2 = f2.toURL().toExternalForm();
+        String url2 = f2.toURI().toString();
         try {
             element.query("document('" + url1 + "')/* | " 
               + "document('" + url2 + "')/*");
