@@ -18,7 +18,7 @@
    elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
-package nu.xom.tests;
+package nu.xom.integrationtests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,6 +41,7 @@ import nu.xom.ParsingException;
 import nu.xom.Text;
 import nu.xom.ValidityException;
 import nu.xom.XMLException;
+import nu.xom.tests.XOMTestCase;
 import nu.xom.xslt.XSLException;
 import nu.xom.xslt.XSLTransform;
 

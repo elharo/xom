@@ -169,6 +169,7 @@ XOM Build file
     javadoc        --> generate the API documentation
     betterdoc      --> better formatted API documentation (requires Ant 1.6)
     test           --> run JUnit test suite
+    integration    --> run JUnit integration test suite (broken)
     testui         --> run JUnit test suite in GUI 
     clean          --> clean up the build directory
     dist           --> the zip and .tar.gz files
@@ -285,7 +286,7 @@ XOM Build file
          index="no"
 		 compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
-         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*">
+         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/* nu/xom/integrationtests/*">
       <manifest>
         <attribute name="Sealed" value="true"/>
         <attribute name="Built-By" value="${user.name}"/>
@@ -329,7 +330,7 @@ XOM Build file
          index="no"
 		 compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
-         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*">
+         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*  nu/xom/integrationtests/*">
 
       <fileset dir="${jaxen.dir}"
          excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/XPathTestBase.class org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/** org/jaxen/**Test.class org/jaxen/saxpath/base/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/pattern/** org/jaxen/saxpath/SAXPathParseException.class org/w3c/dom/UserDataHandler.class org/jaxen/pattern/PriorityTest.class">
@@ -409,7 +410,7 @@ XOM Build file
          index="yes"
 		 compress="yes"
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
-         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/pantry/*">
+         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/pantry/* nu/xom/integrationtests/*">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Specification-Title"    value="XOM Samples"/>
@@ -657,7 +658,8 @@ XOM Build file
            <include name="**/*Test.java" />
            <exclude name="**/pantry/*" />
            <exclude name="**/MegaTest.java" />
-           <exclude name="**/benchmarks/*.java" />
+            <exclude name="**/benchmarks/*.java" />
+            <exclude name="**/integrationtests/*.java" />
            <exclude name="**/EBCDICTest.java" />
          </fileset>
       </batchtest>
@@ -905,6 +907,13 @@ location="${dist.dir}/maven1/xom-maven-${version}.jar" />
   
   <target name="website" depends="init" description="Print various Ant properties">
     <ant antfile="build.xml" dir="website"/>
+  </target>
+	
+
+  <target name="integration">
+    <echo>
+      Placeholder for a target to run various conformance test suites.
+    </echo>
   </target>
   
 </project>

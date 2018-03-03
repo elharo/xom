@@ -19,7 +19,7 @@
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
-package nu.xom.tests;
+package nu.xom.integrationtests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,22 +36,23 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
+import nu.xom.tests.XOMTestCase;
 import nu.xom.xinclude.XIncludeException;
 import nu.xom.xinclude.XIncluder;
 
 /**
  * <p>
- * Unit tests for the XInclude and XPointer engines.
+ * Integration tests for the XInclude and XPointer engines.
  * </p>
  * 
  * @author Elliotte Rusty Harold
  * @version 1.2.11
  *
  */
-public class XIncludeIntegrationTest extends XOMTestCase {
+public class W3CXIncludeTest extends XOMTestCase {
 
     
-    public XIncludeIntegrationTest(String name) {
+    public W3CXIncludeTest(String name) {
         super(name);
     }
 
