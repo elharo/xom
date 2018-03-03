@@ -2265,7 +2265,7 @@ public class XPathTest extends XOMTestCase {
         
         // TODO point this, at least optionally, at the jaxen directory in the zip file instead.
         // However, first you'll have to push a jaxen 1.2.1 that fixes tests.xml.
-        String base = "http://svn.jaxen.codehaus.org/browse/~raw,r=trunk/jaxen/trunk/jaxen/";
+        String base = "https://raw.githubusercontent.com/jaxen-xpath/jaxen/0405c6aeea1955ca92012d2934cf18e80b367963/";
         Builder builder = new Builder();
         Document testDoc = builder.build(base + "xml/test/tests.xml");
         Elements documents = testDoc.getRootElement().getChildElements("document");
@@ -2273,8 +2273,7 @@ public class XPathTest extends XOMTestCase {
             Element documentElement = documents.get(i);
             String url = documentElement.getAttributeValue("url");
             Document source = builder.build(
-              "http://svn.jaxen.codehaus.org/browse/~raw,r=trunk/jaxen/trunk/jaxen/" 
-              + url);
+              base + url);
             Elements contextElements = documentElement.getChildElements("context");
             for (int j = 0; j < contextElements.size(); j++) {
                 Element contextElement = contextElements.get(j);
