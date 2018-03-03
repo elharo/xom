@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -800,8 +800,8 @@ public class NamespacesTest extends XOMTestCase {
         
         String[] urls = {
           "ftp://example.com", "FTP://example.com/pub/",
-          "MAILTO:elharo@metalab.unc.edu?Subject=XOM%20Namespace",
-          "mailto:elharo@metalab.unc.edu?Subject=XOM%20Namespace",
+          "MAILTO:elharo@ibiblio.org?Subject=XOM%20Namespace",
+          "mailto:elharo@ibiblio.org?Subject=XOM%20Namespace",
           "telnet:namespaces.ibiblio.org", "TELNET:namespaces.ibiblio.org",
           "gopher://gopher.uminn.edu/", "GOPHER://gopher.uminn.edu/",
           "uri:urn:nwalsh:namespaces", "URI:urn:nwalsh:namespaces",

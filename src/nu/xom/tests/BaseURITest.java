@@ -15,7 +15,7 @@
    Boston, MA 02111-1307  USA
    
    You can contact Elliotte Rusty Harold by sending e-mail to
-   elharo@metalab.unc.edu. Please include the word "XOM" in the
+   elharo@ibiblio.org. Please include the word "XOM" in the
    subject line. The XOM home page is located at http://www.xom.nu/
 */
 
@@ -780,8 +780,8 @@ public class BaseURITest extends XOMTestCase {
     public void testOpaqueURIs() {   
         
         String[] urls = {
-          "MAILTO:elharo@metalab.unc.edu?Subject=XOM%20Namespace",
-          "mailto:elharo@metalab.unc.edu?Subject=XOM%20Namespace",
+          "MAILTO:elharo@ibiblio.org?Subject=XOM%20Namespace",
+          "mailto:elharo@ibiblio.org?Subject=XOM%20Namespace",
           "telnet:namespaces.ibiblio.org", "TELNET:namespaces.ibiblio.org",
           "uri:urn:nwalsh:namespaces", "URI:urn:nwalsh:namespaces",
           "news:comp.lang.xml", "NEWS:comp.lang.xml",
@@ -815,7 +815,7 @@ public class BaseURITest extends XOMTestCase {
     
     public void testURIStartsWithColon() {   
         
-        String url = ":elharo@metalab.unc.edu?Subject=XOM%20Namespace";
+        String url = ":elharo@ibiblio.org?Subject=XOM%20Namespace";
         Element e = new Element("test");
         e.addAttribute(new Attribute("xml:base", 
           Namespace.XML_NAMESPACE, url));
@@ -832,7 +832,7 @@ public class BaseURITest extends XOMTestCase {
     
     public void testURIStartsWithNumber() {   
         
-        String url = "7aelharo@metalab.unc.edu?Subject=XOM%20Namespace";
+        String url = "7aelharo@ibiblio.org?Subject=XOM%20Namespace";
         Element e = new Element("test");
         e.addAttribute(new Attribute("xml:base", 
           Namespace.XML_NAMESPACE, url));
@@ -849,7 +849,7 @@ public class BaseURITest extends XOMTestCase {
     
     public void testURISchemeContainsComma() {   
         
-        String url = "foo,foo:elharo@metalab.unc.edu?Subject=XOM%20Namespace";
+        String url = "foo,foo:elharo@ibiblio.org?Subject=XOM%20Namespace";
         Element e = new Element("test");
         e.addAttribute(new Attribute("xml:base", 
           Namespace.XML_NAMESPACE, url));
