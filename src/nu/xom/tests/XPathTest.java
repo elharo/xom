@@ -1,4 +1,4 @@
-/* Copyright 2005, 2006, 2012 Elliotte Rusty Harold
+/* Copyright 2005, 2006, 2012, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -52,7 +52,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.8
+ * @version 1.2.11
  *
  */
 public class XPathTest extends XOMTestCase {
