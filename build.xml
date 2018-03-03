@@ -355,7 +355,7 @@ XOM Build file
       	<attribute name="Bundle-SymbolicName" value="nu.xom"/>
       	<attribute name="Bundle-Version" value="${bundleversion}"/>
       	<attribute name="Bundle-Vendor" value="xom.nu"/>
-      	<attribute name="Bundle-RequiredExecutionEnvironment" value="J2SE-1.2"/>
+      	<attribute name="Bundle-RequiredExecutionEnvironment" value="J2SE-1.6"/>
       	<attribute name="Export-Package" value="nu.xom, nu.xom.canonical, nu.xom.converters, nu.xom.xinclude, nu.xom.xslt"/>
         <attribute name="Import-Package" value='javax.xml.transform.sax, javax.xml.transform, org.w3c.dom, org.xml.sax, org.xml.sax.helpers, org.xml.sax.ext,
           org.apache.xerces.parsers;resolution:=optional;version="2.8.0", org.apache.xerces.impl;resolution:=optional;version="2.8.0", 
@@ -905,11 +905,11 @@ location="${dist.dir}/maven1/xom-maven-${version}.jar" />
     </java>
   </target>
   
-  <target name="website" depends="init" description="Print various Ant properties">
+  <target name="website" depends="init" description="Compile the website">
     <ant antfile="build.xml" dir="website"/>
   </target>
 
-  <target name="integration">
+  <target name="integration" description="Run conformance test suites">
     <echo>
       Placeholder for a target to run various conformance test suites.
     </echo>
