@@ -105,11 +105,6 @@ class TextWriterFactory {
         else if (encodingUpperCase.endsWith("ASCII")) {
             return new ASCIIWriter(out, encodingUpperCase); 
         }
-        else if (encodingUpperCase.startsWith("ISO-2022-JP")) {
-            // "ISO-2022-JP is a really weird family that doesn't seem to work in Java
-            // Might be able to improve this
-            return new ASCIIWriter(out, encodingUpperCase); 
-        }
         else if (encodingUpperCase.equals("IBM037")
               || encodingUpperCase.equals("CP037")
               || encodingUpperCase.equals("EBCDIC-CP-US")

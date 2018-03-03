@@ -25,7 +25,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -252,15 +253,12 @@ public class EncodingTest extends XOMTestCase {
     
 
     private static boolean charsetAvailable(String name) {
-        // hack to avoid using 1.4 classes
         try {
-            "d".getBytes(name);
-            return true;
-        }
-        catch (UnsupportedEncodingException ex) {
-            return false;   
-        }        
-        
+          Charset.forName(name);
+          return true;
+        } catch (UnsupportedCharsetException ex) {
+          return false;
+        }      
     }
 
        
