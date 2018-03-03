@@ -1,0 +1,16 @@
+version: 2
+machine:
+  java:
+    version: openjdk6
+jobs:
+  build:
+    docker:
+      - image: debian:stretch
+    steps:
+      - checkout
+      - run:
+          name: Tests
+          command: ant test
+      - run:
+          name: Integration tests
+          command: date
