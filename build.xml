@@ -908,7 +908,6 @@ location="${dist.dir}/maven1/xom-maven-${version}.jar" />
   <target name="website" depends="init" description="Print various Ant properties">
     <ant antfile="build.xml" dir="website"/>
   </target>
-	
 
   <target name="integration">
     <echo>
