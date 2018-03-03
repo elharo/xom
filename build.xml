@@ -54,13 +54,11 @@ subject line. The XOM home page is http://www.xom.nu/
 
     <property name="src.dir"    value="./src"/>
     <property name="fat.src"    value="./fatsrc"/>
-    <property name="src15.dir"  value="./src15"/>
     <property name="lib.dir"    value="./lib"/>
     <property name="lib2.dir"   value="./lib2"/>
     <property name="packages"   value="nu.xom.*"/>
 
     <property name="build.dir"       value="./build"/>
-    <property name="build15.dir"     value="./classes15"/>
     <property name="build.src"       value="./build/src"/>
     <property name="build.dest"      value="./build/classes"/>
     <property name="build.javadocs"  value="./build/apidocs"/>
@@ -165,7 +163,6 @@ XOM Build file
     jar            --> build the xom.jar file
     samples        --> build the xom-samples.jar file
     compile        --> compile the source code
-    compile15      --> compile the classes that depend on Java 1.6
     javadoc        --> generate the API documentation
     betterdoc      --> better formatted API documentation (requires Ant 1.6)
     test           --> run JUnit test suite
@@ -195,7 +192,6 @@ XOM Build file
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/jaxen"/>
     <mkdir dir="${build.dir}/jaxen-classes"/>
-    <mkdir dir="${build15.dir}"/>
     <mkdir dir="${build.src}"/>
     <mkdir dir="${build.dest}"/>
 
@@ -236,10 +232,6 @@ XOM Build file
   	<echo file="${build.dest}/nu/xom/version.txt">${version}</echo>
 
     <copy file="${build.src}/nu/xom/compositions.dat" tofile="${build.dest}/nu/xom/compositions.dat" />
-
-    <!-- This file requires Java 1.6 to generate so we compile it with a 
-         different target and copy it over here. -->
-    <copy file="classes15/nu/xom/JDK15XML1_0Parser.class" tofile="${build.dest}/nu/xom/JDK15XML1_0Parser.class"/>
   </target>
 
 
@@ -260,23 +252,6 @@ XOM Build file
            includeAntRuntime="false">
        <classpath refid="compile.class.path"/>
        <include name="nu/xom/samples/*Servlet.java" />
-    </javac>
-  </target>
-
-  
-  <!-- This task requires Java 1.6 to complete successfully -->
-  <target name="compile15" depends="prepare" description="Compile the JDK15XML1_0Parser" >
-    <javac srcdir="${src15.dir}"
-           destdir="${build15.dir}"
-           debug="${debug}"
-           optimize="${optimize}"
-           deprecation="${deprecation}"
-           target="1.6"
-           source="1.6"
-           encoding="UTF-8"
-           failonerror="false"
-           includeAntRuntime="false">
-       <classpath refid="compile.class.path"/>
     </javac>
   </target>
 

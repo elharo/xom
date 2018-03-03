@@ -1,4 +1,4 @@
-// Copyright 2004 Elliotte Rusty Harold
+// Copyright 2004, 2018 Elliotte Rusty Harold
 // 
 // This library is free software; you can redistribute 
 // it and/or modify it under the terms of version 2.1 of 
@@ -16,10 +16,11 @@
 // Boston, MA  02111-1307  USA
 // 
 // You can contact Elliotte Rusty Harold by sending e-mail to
-// elharo@metalab.unc.edu. Please include the word "XOM" in the
+// elharo@ibiblio.org. Please include the word "XOM" in the
 // subject line. The XOM home page is temporarily located at
 // http://www.cafeconleche.org/XOM/  but will eventually move
 // to http://www.xom.nu/
+
 package nu.xom;
 
 import org.xml.sax.SAXException;
@@ -32,13 +33,11 @@ import com.sun.org.apache.xerces.internal.impl.Constants
  * <p>
  * This class is used by the <code>Builder</code> to prevent the
  * repackaged Xerces shipped with Java 1.5 and some of the JAXP
- * reference implementations from accepting XML 1.1 documents. 
- * This is packaged and built separately from the normal classes to 
- * enable Java 1.4 and earlier compilers to handle this.  
+ * reference implementations from accepting XML 1.1 documents.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0b2
+ * @version 1.2.11
  * 
  */
 class JDK15XML1_0Parser extends SAXParser {
