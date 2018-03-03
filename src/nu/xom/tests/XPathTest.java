@@ -1,4 +1,4 @@
-/* Copyright 2005, 2006, 2012 Elliotte Rusty Harold
+/* Copyright 2005, 2006, 2012, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -52,7 +52,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.8
+ * @version 1.2.11
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -934,7 +934,7 @@ public class XPathTest extends XOMTestCase {
         
         Element element = new Element("test");
         File f = new File(inputDir, "prettyxml.xml");
-        String url = f.toURL().toExternalForm();
+        String url = f.toURI().toString();
         try {
             element.query("document('" + url + "')/*");
             fail("allowed document() function");
@@ -951,7 +951,7 @@ public class XPathTest extends XOMTestCase {
         
         Element element = new Element("test");
         File f = new File(inputDir, "prettyxml.xml");
-        String url = f.toURL().toExternalForm();
+        String url = f.toURI().toString();
         try {
             element.query("document('" + url + "')//*");
             fail("allowed document() function");
@@ -967,9 +967,9 @@ public class XPathTest extends XOMTestCase {
         
         Element element = new Element("test");
         File f1 = new File(inputDir, "prettyxml.xml");
-        String url1 = f1.toURL().toExternalForm();
+        String url1 = f1.toURI().toString();
         File f2 = new File(inputDir, "test.xml");
-        String url2 = f2.toURL().toExternalForm();
+        String url2 = f2.toURI().toString();
         try {
             element.query("document('" + url1 + "')/* | " 
               + "document('" + url2 + "')/*");
@@ -2265,7 +2265,7 @@ public class XPathTest extends XOMTestCase {
         
         // TODO point this, at least optionally, at the jaxen directory in the zip file instead.
         // However, first you'll have to push a jaxen 1.2.1 that fixes tests.xml.
-        String base = "http://svn.jaxen.codehaus.org/browse/~raw,r=trunk/jaxen/trunk/jaxen/";
+        String base = "https://raw.githubusercontent.com/jaxen-xpath/jaxen/0405c6aeea1955ca92012d2934cf18e80b367963/";
         Builder builder = new Builder();
         Document testDoc = builder.build(base + "xml/test/tests.xml");
         Elements documents = testDoc.getRootElement().getChildElements("document");
@@ -2273,8 +2273,7 @@ public class XPathTest extends XOMTestCase {
             Element documentElement = documents.get(i);
             String url = documentElement.getAttributeValue("url");
             Document source = builder.build(
-              "http://svn.jaxen.codehaus.org/browse/~raw,r=trunk/jaxen/trunk/jaxen/" 
-              + url);
+              base + url);
             Elements contextElements = documentElement.getChildElements("context");
             for (int j = 0; j < contextElements.size(); j++) {
                 Element contextElement = contextElements.get(j);
