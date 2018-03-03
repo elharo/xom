@@ -17,7 +17,7 @@
     </license>
   </licenses>
   <scm>
-    <url>https://xom.dev.java.net/source/browse/xom/</url>
+    <url>https://github.com/elharo/xom</url>
   </scm>
   
   <artifactId>xom</artifactId>
