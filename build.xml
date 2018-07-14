@@ -72,7 +72,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="parser.jar"     value="${lib.dir}/dtd-xercesImpl.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
     <property name="serializer.jar" value="${lib.dir}/serializer.jar"/>
-    <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.2.jar"/>
+    <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.2.1.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
@@ -443,7 +443,7 @@ XOM Build file
     <echo>
     Better documentation requires TagSoup to be installed 
     in the lib2 directory. You can download it from
-    http://mercury.ccil.org/~cowan/XML/tagsoup/
+    https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.ccil.cowan.tagsoup%22%20AND%20a%3A%22tagsoup%22
     </echo>
   </target>
 
