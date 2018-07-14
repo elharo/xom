@@ -443,7 +443,7 @@ XOM Build file
     <echo>
     Better documentation requires TagSoup to be installed 
     in the lib2 directory. You can download it from
-    http://mercury.ccil.org/~cowan/XML/tagsoup/
+    https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.ccil.cowan.tagsoup%22%20AND%20a%3A%22tagsoup%22
     </echo>
   </target>
 
