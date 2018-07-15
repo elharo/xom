@@ -94,11 +94,11 @@ import nu.xom.XMLException;
  *   <ol>
  *   <li>The most recent value specified by invoking 
  *   <code>System.setProperty("javax.xml.transform.TransformerFactory", 
- *   "<i><code>classname</code></i>")</code></li>
+ *   "<i>classname</i>")</code></li>
  *   <li>The value specified at the command line using the 
  * <samp>-Djavax.xml.transform.TransformerFactory=<i>classname</i></samp>
  *      option to the <b>java</b> interpreter</li>
- *    <li>The class named in the  <code>lib/jaxp.properties</code> 
+ *    <li>The class named in the <code>lib/jaxp.properties</code> 
  *       properties file in the JRE directory, in a line like this one:
  * <pre>javax.xml.transform.TransformerFactory=<i>classname</i></pre>
  *    </li>
@@ -116,7 +116,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.2.11
  */
 public final class XSLTransform {
 
