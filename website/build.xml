@@ -5,7 +5,7 @@
     
   <!-- set global properties for this build -->
   <property name="src"  location="."/>
-  <property name="dist" location="."/>
+  <property name="dist" location="../dist/website"/>
 
   <path id="xslt.class.path">
     <pathelement path="/opt/xml/saxon/saxon.jar"/>
@@ -14,7 +14,6 @@
 
   <path id="xerces.class.path">
      <pathelement path="../lib/dtd-xercesImpl.jar"/> 
-     <pathelement path="/opt/xml/xerces/xercesSamples.jar"/> 
      <pathelement path="../lib/xmlParserAPIs.jar"/> 
   </path>
   
@@ -30,37 +29,17 @@
         <classpath refid="xerces.class.path"/>
         <classpath location="../build/classes"/>
         <classpath location="../build/jaxen-classes"/>
-        <!-- <classpath location="../dist/xom-1.2.10.jar"/> -->
      </java>
-  </target>	
-  
-  <target name="wellformed" 
-          description="Check well-formedness of input documents">
-    <java classname="sax.Counter">
-      <arg value="tutorial.xml"/>
-      <arg value="building.xml"/>
-      <arg value="faq.xml"/>
-      <arg value="install.xml"/>
-      <arg value="license.xml"/>
-      <arg value="infoset.xml"/>
-      <arg value="xpath.xml"/>
-      <arg value="openquestions.xml"/>
-      <arg value="futuredirections.xml"/>
-      <arg value="faq.xml"/>
-      <arg value="testsuite.xml"/>
-      <arg value="designprinciples.xml"/>
-	
-      <classpath refid="xerces.class.path"/>
+  </target>
 
-     </java>
-  </target>	
   
   <target name="valid" 
-          description="Check validity of input documents">
-    <java classname="sax.Counter">
-     <arg value="-v"/>
-     <arg value="tutorial.xml"/>
+          description="Check validity of input documents"
+          depends="finished_tutorial.xml">
+    <java classname="nu.xom.samples.Validator">
+     <arg value="index.html"/>
      <arg value="faq.xml"/>
+     <arg value="finished_tutorial.xml"/>
      <arg value="infoset.xml"/>
      <arg value="xpath.xml"/>
      <arg value="license.xml"/>
@@ -71,14 +50,15 @@
      <arg value="designprinciples.xml"/>
 	
      <classpath refid="xerces.class.path"/>
-
+     <classpath location="../build/classes"/>
+     <classpath location="../build/jaxen-classes"/>
     </java>
   </target>	
   
 
 
   <target name="tutorial" description="Generate a single XHTML document" depends="finished_tutorial.xml">
-    <java classname="com.icl.saxon.StyleSheet" output="tutorial.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="tutorial.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="finished_tutorial.xml"/>
         <arg line="tutorial.xsl"/>
         <!-- <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/> -->
@@ -88,7 +68,7 @@
   </target>	 
 
   <target name="design" description="">
-    <java classname="com.icl.saxon.StyleSheet" output="designprinciples.xhtml"  fork="yes" error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="designprinciples.xhtml"  fork="yes" error="error.txt" failonerror="true">
         <arg line="designprinciples.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -97,7 +77,7 @@
   </target>	 
 
   <target name="license" description="License for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="license.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="license.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="license.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -106,7 +86,7 @@
   </target>	 
 
  <target name="infoset" description="Infoset Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="infoset.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="infoset.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="infoset.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -115,7 +95,7 @@
   </target>	 
 
  <target name="xpath" description="XPath Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="xpath.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="xpath.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="xpath.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -124,7 +104,7 @@
   </target>	 
 
   <target name="faq" description="FAQ list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="faq.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="faq.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="faq.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -133,7 +113,7 @@
   </target>	 
 
   <target name="open" description="Open Questions list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="openquestions.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="openquestions.xhtml"  fork="yes" error="error.txt" failonerror="true">
         <arg line="openquestions.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -142,7 +122,7 @@
   </target>	 
 
   <target name="future" description="Future Directions for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="futuredirections.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="futuredirections.xhtml"  fork="yes" error="error.txt" failonerror="true">
         <arg line="futuredirections.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -151,7 +131,7 @@
   </target>	 
 
   <target name="building" description="How to build XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="building.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="building.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="building.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -160,7 +140,7 @@
   </target>	 
 
   <target name="install" description="How to install XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="install.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="install.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="install.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -170,7 +150,7 @@
 
 
   <target name="testsuite" description="How to test XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="testsuite.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="testsuite.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="testsuite.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -181,7 +161,7 @@
 
 
   <target name="samples" description="Example code">
-    <java classname="com.icl.saxon.StyleSheet" output="samples.xhtml"  fork="yes"  error="error.txt">
+    <java classname="com.icl.saxon.StyleSheet" output="samples.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="samples.xml"/>
         <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>

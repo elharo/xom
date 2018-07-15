@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
-                      "http://www.docbook.org/xml/4.3/docbookx.dtd" [
+                      "https://docbook.org/xml/4.3/docbookx.dtd" [
  <!-- add XIncludes -->                     
  <!ENTITY % local.para.char.mix " | xinclude:include">
  <!ELEMENT xinclude:include EMPTY>
@@ -10,7 +10,7 @@
     parse          (text | xml) "xml"
  >        
 ]>
-<article revision="20161210">
+<article revision="20180715">
   <title>XOM Tutorial</title>
 
  <articleinfo>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
-                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
-<article revision="20161210">
+                      "https://docbook.org/xml/4.3/docbookx.dtd">
+<article revision="20180715">
   <title>XOM Down the Road</title>
 
   
@@ -13,7 +13,7 @@
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2002-2004</year>
+      <year>2002-2004, 2018</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo> 
@@ -27,13 +27,6 @@
 </para>
 
 <itemizedlist>
-    <listitem>
-      <para>
-       At least partial  XPath support.
-       This will probably be limited to location paths and possibly
-       compound location paths, which is what people really need inside Java anyway.
-      </para>
-    </listitem>
 
     <listitem>
       <para>
