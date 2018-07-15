@@ -92,14 +92,8 @@ subject line. The XOM home page is http://www.xom.nu/
     <!-- only needed for servlet samples -->
     <property name="servlet.jar"    value="${lib2.dir}/servlet.jar"/>
     <condition property="servlet.jar.installed">
-      <and>
-        <available classname="javax.servlet.ServletException" classpath="${servlet.jar}" />
-        <available classname="javax.servlet.SingleThreadModel" classpath="${servlet.jar}" />
-        <available classname="javax.servlet.http.HttpServletRequest" classpath="${servlet.jar}" />
-        <available classname="javax.servlet.http.HttpServletResponse" classpath="${servlet.jar}"/> 
-        <available classname="javax.servlet.http.HttpServlet" classpath="${servlet.jar}" />
-      </and>
-    </condition> 
+      <available file="servlet.jar" filepath="${lib2.dir}/servlet.jar" />
+    </condition>
     
     <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
@@ -689,6 +683,7 @@ XOM Build file
     <delete>
       <fileset dir="." includes="junit*properties"/>
     </delete>
+    <ant antfile="build.xml" dir="website" target="clean"/>
   </target>
 
   
@@ -880,8 +875,8 @@ location="${dist.dir}/maven1/xom-maven-${version}.jar" />
     </java>
   </target>
   
-  <target name="website" depends="init" description="Compile the website">
-    <ant antfile="build.xml" dir="website"/>
+  <target name="website" depends="samples" description="Compile the website">
+    <ant antfile="build.xml" dir="website" target="all"/>
   </target>
 
   <target name="integration" description="Run conformance test suites">

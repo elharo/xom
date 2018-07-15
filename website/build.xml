@@ -6,7 +6,7 @@
   <!-- set global properties for this build -->
   <property name="build.dir"  value="./build"/>
   <property name="build.dest" value="${build.dir}/website"/>
-  <property name="dist.dir"   value="../dist/website"/>
+  <property name="parentdist.dir"   value="../dist/website"/>
 
   <path id="xslt.class.path">
     <pathelement path="/opt/xml/saxon/saxon.jar"/>
@@ -23,7 +23,7 @@
     <tstamp/>
 
     <mkdir dir="${build.dest}"/>
-    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${parentdist.dir}"/>
   </target>
 
   <target name="finished_tutorial.xml" depends="init"
@@ -134,6 +134,7 @@
      </java>
   </target>	 
 
+
   <target name="building" depends="init" description="How to build XOM">
     <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/building.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="building.xml"/>
@@ -142,6 +143,7 @@
         <classpath refid="xslt.class.path"/>
      </java>
   </target>	 
+
 
   <target name="install" depends="init" description="How to install XOM">
     <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/install.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
@@ -172,6 +174,7 @@
      </java>
   </target>
 
+
   <target name="html" depends="init" description="Raw HTML files that don't need to be transformed">
     <copy todir="${build.dest}">
       <fileset dir=".">
@@ -181,10 +184,12 @@
     </copy>
   </target>	
 
-  <target name="all" depends="html, tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building">
-  </target>	 
-  
 
+  <target name="all" depends="html, tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building">
+    <copy todir="${parentdist.dir}" >  
+      <fileset dir="${build.dest}" includes="**"/>  
+    </copy> 
+  </target>
 
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>

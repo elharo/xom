@@ -63,18 +63,6 @@ Total time: 3 seconds</computeroutput></screen>
     Typing ant jar compiles the files and stuffs them into a JAR archive. Typeing "ant javadoc"
     compiles the API documentation, etc. However, there are a couple of special cases to note:
   </para>
-  
- <para>
-    XOM includes one class (<classname>nu.xom.JDK15XML1_0Parser</classname>) which can only be compiled by Java 1.5 or later.
-    This class is compiled by running the "ant compile15" target.
-  </para>
-  
- <para>
-    The XML parser used by Ant 1.6 sometimes gets in the way of XOM,
-    due to obscure class loading issues. The unit tests ("ant test" and "ant testui")
-    will probably only pass when using Ant 1.5. If anyone knows how to make 
-    the tests pass when run from Ant 1.6, I'd love to hear about it. 
-  </para>
 
  <articleinfo>
      <author>
@@ -87,8 +75,6 @@ Total time: 3 seconds</computeroutput></screen>
       <year>2004</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
-  </articleinfo> 
-  
-
+  </articleinfo>
 
 </article>
