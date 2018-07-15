@@ -48,12 +48,6 @@
 
    <listitem>
       <para>
-       Exclusive XML canonicalization
-      </para>
-    </listitem>
-
-   <listitem>
-      <para>
        Document subset canonicalization
       </para>
     </listitem>
