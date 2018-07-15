@@ -32,29 +32,8 @@
         <classpath location="../build/jaxen-classes"/>
         <!-- <classpath location="../dist/xom-1.2.10.jar"/> -->
      </java>
-  </target>	
-  
-  <target name="wellformed" 
-          description="Check well-formedness of input documents">
-    <java classname="sax.Counter">
-      <arg value="index.html"/>
-      <arg value="tutorial.xml"/>
-      <arg value="building.xml"/>
-      <arg value="faq.xml"/>
-      <arg value="install.xml"/>
-      <arg value="license.xml"/>
-      <arg value="infoset.xml"/>
-      <arg value="xpath.xml"/>
-      <arg value="openquestions.xml"/>
-      <arg value="futuredirections.xml"/>
-      <arg value="faq.xml"/>
-      <arg value="testsuite.xml"/>
-      <arg value="designprinciples.xml"/>
-	
-      <classpath refid="xerces.class.path"/>
+  </target>
 
-     </java>
-  </target>	
   
   <target name="valid" 
           description="Check validity of input documents">
