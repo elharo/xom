@@ -88,12 +88,6 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="test.outputFormat" value="xml"/>   
     <property name="sources.jar" location="${dist.dir}/maven2/xom-${version}-sources.jar" />
     <property name="javadoc.jar" location="${dist.dir}/maven2/xom-${version}-javadoc.jar" />
-
-    <!-- only needed for servlet samples -->
-    <property name="servlet.jar"    value="${lib2.dir}/servlet.jar"/>
-    <condition property="servlet.jar.installed">
-      <available file="servlet.jar" filepath="${lib2.dir}/servlet.jar" />
-    </condition>
     
     <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
@@ -433,14 +427,6 @@ XOM Build file
   <target name="apidoc"     depends="javadoc"/>
   <target name="betterdocs" depends="betterdoc"/>
 
-  <target name="-checkForTagSoup" unless="tagsoup.installed">
-    <echo>
-    Better documentation requires TagSoup to be installed 
-    in the lib2 directory. You can download it from
-    https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.ccil.cowan.tagsoup%22%20AND%20a%3A%22tagsoup%22
-    </echo>
-  </target>
-
   <target name="-checkForClover" unless="clover.installed">
     <echo>
     The task you are trying to run requires Clover to be installed 
@@ -450,7 +436,7 @@ XOM Build file
   </target>
 
   <!-- This task requires Ant 1.6 and TagSoup -->
-  <target name="betterdoc" depends="compile, -checkForTagSoup" if="tagsoup.installed"
+  <target name="betterdoc" depends="compile"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
@@ -526,7 +512,7 @@ XOM Build file
         ant -Dpassword=secret -Dwebpassword=secret postbeta -->
   <property name="webpassword" value="" />  
     
-  <!-- We have an antipattern here. This should be deployed from CVS,
+  <!-- We have an antipattern here. This should be deployed from version control,
        not from the local hard drive. Worth fixing down the line. 
        The basic idea is that the release and postbeta targets should take
        a tag as an argument. Then they should download the tagged files from CVS,
@@ -875,8 +861,11 @@ location="${dist.dir}/maven1/xom-maven-${version}.jar" />
     </java>
   </target>
   
-  <target name="website" depends="samples" description="Compile the website">
+  <target name="website" depends="samples, betterdoc" description="Generate the website">
     <ant antfile="build.xml" dir="website" target="all"/>
+    <copy todir="${dist.dir}/website/apidocs">  
+      <fileset dir="${build.javadocs}" includes="**"/>  
+    </copy> 
   </target>
 
   <target name="integration" description="Run conformance test suites">
