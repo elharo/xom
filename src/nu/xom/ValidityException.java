@@ -112,6 +112,7 @@ public class ValidityException extends ParsingException {
      * </p>
      * 
      * @param message a string indicating the specific problem
+     * @param uri URL of the document with a validity error
      * @param lineNumber the approximate line number 
      *     where the problem occurs
      * @param columnNumber the approximate column number
@@ -132,6 +133,7 @@ public class ValidityException extends ParsingException {
      * </p>
      * 
      * @param message a string indicating the specific problem
+     * @param uri URL of the document with a validity error
      * @param lineNumber the approximate line number 
      *     where the problem occurs
      * @param columnNumber the approximate column number 

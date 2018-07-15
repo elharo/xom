@@ -866,9 +866,6 @@ location="${dist.dir}/maven1/xom-maven-${version}.jar" />
     <copy todir="${dist.dir}/website/apidocs">  
       <fileset dir="${build.javadocs}" includes="**"/>  
     </copy>
-    <copy todir="${dist.dir}/website/WEB-INF">  
-      <fileset dir="WEB-INF" includes="**"/>  
-    </copy>  
   </target>
 
   <target name="integration" description="Run conformance test suites">

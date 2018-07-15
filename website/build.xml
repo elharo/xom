@@ -189,6 +189,12 @@
     <copy todir="${parentdist.dir}" >  
       <fileset dir="${build.dest}" includes="**"/>  
     </copy> 
+    <copy todir="${parentdist.dir}/WEB-INF" >  
+      <fileset dir="WEB-INF" includes="**"/>  
+    </copy>
+    <copy todir="${parentdist.dir}/whatswrong" >  
+      <fileset dir="whatswrong" includes="**"/>  
+    </copy>
   </target>
 
   <target name="clean" depends="init" description="Remove build files">
