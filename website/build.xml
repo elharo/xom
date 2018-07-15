@@ -30,7 +30,7 @@
         <classpath refid="xerces.class.path"/>
         <classpath location="../build/classes"/>
         <classpath location="../build/jaxen-classes"/>
-        <classpath location="../dist/xom-1.2.10.jar"/>
+        <!-- <classpath location="../dist/xom-1.2.10.jar"/> -->
      </java>
   </target>	
   
