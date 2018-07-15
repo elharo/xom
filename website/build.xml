@@ -57,10 +57,9 @@
   
   <target name="valid" 
           description="Check validity of input documents">
-    <java classname="sax.Counter">
-     <arg value="-v"/>
-     <arg value="tutorial.xml"/>
+    <java classname="nu.xom.samples.Validator">
      <arg value="faq.xml"/>
+     <arg value="tutorial.xml"/>
      <arg value="infoset.xml"/>
      <arg value="xpath.xml"/>
      <arg value="license.xml"/>
@@ -71,7 +70,8 @@
      <arg value="designprinciples.xml"/>
 	
      <classpath refid="xerces.class.path"/>
-
+     <classpath location="../build/classes"/>
+     <classpath location="../build/jaxen-classes"/>
     </java>
   </target>	
   

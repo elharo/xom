@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
-                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
-<article class="faq" revision="20161210">
+                      "https://docbook.org/xml/4.3/docbookx.dtd">
+<article class="faq" revision="20180715">
   <title>Open Questions</title>
 
   
@@ -13,7 +13,7 @@
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2002, 2004</year>
+      <year>2002, 2004, 2018</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo> 
@@ -24,13 +24,5 @@
   (as well as other things I haven&rsquo;t even thought of) is very much appreciated.
   Please send all comments to the <ulink url="mailto:xom-interest@lists.ibblio.org">xom-interest</ulink> mailing list.
 </para>
-
-<sect1>
-    <title>What should the XPath API look like?</title>
-     <para>
-       
-      </para>
-      
-    </sect1>
 
 </article>
