@@ -37,6 +37,7 @@
   <target name="wellformed" 
           description="Check well-formedness of input documents">
     <java classname="sax.Counter">
+      <arg value="index.html"/>
       <arg value="tutorial.xml"/>
       <arg value="building.xml"/>
       <arg value="faq.xml"/>
@@ -58,6 +59,7 @@
   <target name="valid" 
           description="Check validity of input documents">
     <java classname="nu.xom.samples.Validator">
+     <arg value="index.html"/>
      <arg value="faq.xml"/>
      <arg value="tutorial.xml"/>
      <arg value="infoset.xml"/>
