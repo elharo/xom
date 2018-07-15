@@ -12,10 +12,6 @@
     <pathelement path="../lib/xalan.jar"/>
   </path>
 
-  <path id="xinclude.class.path">
-    <pathelement path="~/Projects/workspace/xincluder"/>
-  </path>
-
   <path id="xerces.class.path">
      <pathelement path="../lib/dtd-xercesImpl.jar"/> 
      <pathelement path="/opt/xml/xerces/xercesSamples.jar"/> 
@@ -27,8 +23,6 @@
     <tstamp/>
   </target>
 
-  <!-- finished_tutorial.xml: source
-	java com.elharo.xml.xinclude.SAXXIncluder tutorial.xml>finished_tutorial.xml -->
   <target name="finished_tutorial.xml"
           description="Merge original chapters and examples into a single file">
     <java classname="nu.xom.samples.XIncludeDriver" output="finished_tutorial.xml"  fork="yes" failonerror="true">
@@ -36,7 +30,7 @@
         <classpath refid="xerces.class.path"/>
         <classpath location="../build/classes"/>
         <classpath location="../build/jaxen-classes"/>
-        <classpath location="../build/xom-1.1.jar"/>
+        <classpath location="../dist/xom-1.2.10.jar"/>
      </java>
   </target>	
   
@@ -198,7 +192,6 @@
   <target name="all" description="" depends="tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building">
   </target>	 
 
-  
-  
+
 </project>
 
