@@ -1,20 +1,19 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
-                      "http://www.docbook.org/xml/4.3/docbookx.dtd">
-<article revision="20110618" status="rough">
+                      "https://docbook.org/xml/4.3/docbookx.dtd">
+<article revision="20180715" status="rough">
   <title>Building XOM</title>
 
    <para>
-     First you'll need to download the source distribution from the XOM web site.
-     This unpacks into a directory named "XOM".
+     First you'll need to clone the source from Github.
+     This unpacks into a directory named "xom".
    </para>
   
-  
    <para>
-     XOM includes an Ant build file. You can build XOM with Ant 1.5 or 1.6.
-     However, some targets require Ant 1.5 and some require Ant 1.6. 
-     Most targets can be built with Java 1.3 or later, but
-     one target requires Java 1.5.
+     XOM includes an Ant build file. You can build XOM with Ant 1.6 or later.
+     Although almost all the code compiles back to Java 1.3 or even earlier,
+     the build is targeted at Java 1.6 because it's hard to find a compiler
+     that supports older versions these days..
   </para>
 
   <para>
@@ -66,13 +65,12 @@ Total time: 3 seconds</computeroutput></screen>
   </para>
   
  <para>
-    XOM includes one class (<classname>nu.xom.JDK15XML1_0Parser</classname>) which can only be compiled by Java 1.5.
+    XOM includes one class (<classname>nu.xom.JDK15XML1_0Parser</classname>) which can only be compiled by Java 1.5 or later.
     This class is compiled by running the "ant compile15" target.
     Since not everyone has Java 1.5, 
     the compiled version of this class is included with the source distribution and
     copied into the build/classes/nu/xom directory when the compile target is activated.
   </para>
-  
   
  <para>
     The XML parser used by Ant 1.6 sometimes gets in the way of XOM,
