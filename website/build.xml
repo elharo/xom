@@ -14,7 +14,6 @@
 
   <path id="xerces.class.path">
      <pathelement path="../lib/dtd-xercesImpl.jar"/> 
-     <pathelement path="/opt/xml/xerces/xercesSamples.jar"/> 
      <pathelement path="../lib/xmlParserAPIs.jar"/> 
   </path>
   
@@ -30,17 +29,17 @@
         <classpath refid="xerces.class.path"/>
         <classpath location="../build/classes"/>
         <classpath location="../build/jaxen-classes"/>
-        <!-- <classpath location="../dist/xom-1.2.10.jar"/> -->
      </java>
   </target>
 
   
   <target name="valid" 
-          description="Check validity of input documents">
+          description="Check validity of input documents"
+          depends="finished_tutorial.xml">
     <java classname="nu.xom.samples.Validator">
      <arg value="index.html"/>
      <arg value="faq.xml"/>
-     <arg value="tutorial.xml"/>
+     <arg value="finished_tutorial.xml"/>
      <arg value="infoset.xml"/>
      <arg value="xpath.xml"/>
      <arg value="license.xml"/>
