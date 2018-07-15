@@ -159,7 +159,6 @@
   </target>	 
 
 
-
   <target name="samples" description="Example code">
     <java classname="com.icl.saxon.StyleSheet" output="samples.xhtml"  fork="yes"  error="error.txt" failonerror="true">
         <arg line="samples.xml"/>
@@ -169,7 +168,7 @@
      </java>
   </target>	 
 
-  <target name="all" description="" depends="tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building">
+  <target name="all" depends="tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building">
   </target>	 
 
 
