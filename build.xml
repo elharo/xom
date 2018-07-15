@@ -662,6 +662,7 @@ XOM Build file
 	    
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
     <delete dir="${testoutput.dir}"/>
     <delete dir=".clover"/>
     <delete dir="clover"/>
@@ -669,7 +670,6 @@ XOM Build file
     <delete>
       <fileset dir="." includes="junit*properties"/>
     </delete>
-    <ant antfile="build.xml" dir="website" target="clean"/>
   </target>
 
   
