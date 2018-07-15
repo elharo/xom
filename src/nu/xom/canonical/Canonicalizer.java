@@ -1050,8 +1050,7 @@ public class Canonicalizer {
      *     of namespace prefixes that will always be included in the 
      *     output, even in exclusive canonicalization
      */
-    public final void setInclusiveNamespacePrefixList(String inclusiveNamespacePrefixes) 
-      throws IOException {  
+    public final void setInclusiveNamespacePrefixList(String inclusiveNamespacePrefixes) {  
         
         this.inclusiveNamespacePrefixes.clear();
         if (this.exclusive && inclusiveNamespacePrefixes != null) {
