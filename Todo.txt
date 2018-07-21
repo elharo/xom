@@ -150,8 +150,6 @@ Wolfgang's ant build file for smaller vs. faster jars (Text class)
 
 Add tools page to web site (Ant, TagSoup, Clover, etc.)
 
-cvs -d :pserver:elharo@cvs.dev.java.net:/cvs rtag XOM_11a3 xom
-
 
 Backport Fixes to make in 1.0.1
 -------
@@ -193,6 +191,13 @@ cvs [rtag aborted]: received abort signal
 cvs [rtag aborted]: received abort signal
 lock.c:222: failed assertion `strncmp (repository, current_parsed_root->directory, strlen (current_parsed_root->directory)) == 0'
 
+
+
+===============
+Done 1.2.11 Release
+===============
+
+Minor updates
 
 
 ===============
