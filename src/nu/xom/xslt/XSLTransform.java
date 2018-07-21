@@ -69,7 +69,7 @@ import nu.xom.XMLException;
  *   <li>Saxon 6.x: 
  *    <code>com.icl.saxon.TransformerFactoryImpl</code>
  *   </li>
- *   <li>Saxon 7.x and 8.x: 
+ *   <li>Saxon 7.x through 9.x: 
  *    <code>net.sf.saxon.TransformerFactoryImpl</code>
  *   </li>
  *   <li>Xalan interpretive: 
@@ -84,7 +84,7 @@ import nu.xom.XMLException;
  *   <li>Oracle: 
  *    <code>oracle.xml.jaxp.JXSAXTransformerFactory</code>
  *   </li>
- *   <li>Java 1.5 bundled Xalan: 
+ *   <li>Java bundled Xalan: 
  *    <code>com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl</code>
  *   </li>
  *  </ul>
@@ -106,12 +106,8 @@ import nu.xom.XMLException;
  * <code>META-INF/services/javax.xml.transform.TransformerFactory</code>
  *   file in the JAR archives available to the runtime</li>
  *   <li>Finally, if all of the above options fail,
- *    a default implementation is chosen. In Sun's JDK 1.4.0 and 1.4.1,
- *    this is Xalan 2.2d10. In JDK 1.4.2, this is Xalan 2.4. 
- *    In JDK 1.4.2_02, this is Xalan 2.4.1.
- *    In JDK 1.4.2_03, 1.5 beta 2, and 1.5 RC1 this is Xalan 2.5.2. 
- *    In JDK 1.4.2_05, this is Xalan 2.4.1. (Yes, Sun appears to have
- *    reverted to 2.4.1 in 1.4.2_05.)
+ *    a default implementation is chosen. In Sun's JDK this is 
+ *    usually com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl.
  *    </li>
  *    </ol>
  *
