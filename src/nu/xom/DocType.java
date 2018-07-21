@@ -455,7 +455,7 @@ public class DocType extends Node {
      * @return a deep copy of this <code>DocType</code> 
      *     that is not part of a document
      */
-    public Node copy() {      
+    public DocType copy() {
         return new DocType(this);
     }
     

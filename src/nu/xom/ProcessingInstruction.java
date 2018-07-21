@@ -270,7 +270,7 @@ public class ProcessingInstruction extends Node {
      * @return a copy of this <code>ProcessingInstruction</code> 
      *         with no parent
      */
-    public Node copy() {
+    public ProcessingInstruction copy() {
         return new ProcessingInstruction(target, data);
     }
 

@@ -185,7 +185,7 @@ public final class Namespace extends Node {
      * @return a copy of this <code>Namespace</code> 
      *     that is not part of a document
      */
-    public Node copy() {
+    public Namespace copy() {
         return new Namespace(prefix, uri, null);
     }
 

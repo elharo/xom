@@ -188,7 +188,7 @@ public class Comment extends Node {
      *     that is not part of a document
      * 
      */
-    public Node copy()  {
+    public Comment copy()  {
         return new Comment(data);
     }
 

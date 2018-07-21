@@ -571,7 +571,7 @@ public class Attribute extends Node {
      * @return a copy of this attribute
      * 
      */ 
-    public Node copy() {
+    public Attribute copy() {
         return new Attribute(this);
     }
 

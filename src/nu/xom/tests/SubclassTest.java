@@ -72,7 +72,7 @@ public class SubclassTest extends XOMTestCase {
             super(name, value);   
         }
         
-        public Node copy() {
+        public AttributeSubclass copy() {
             return new AttributeSubclass(this.getQualifiedName(), this.getValue());   
         }
         
@@ -93,7 +93,7 @@ public class SubclassTest extends XOMTestCase {
             super(value);   
         }
         
-        public Node copy() {
+        public TextSubclass copy() {
             return new TextSubclass(this.getValue());   
         }        
     } 
@@ -134,7 +134,7 @@ public class SubclassTest extends XOMTestCase {
             super(value);   
         }
         
-        public Node copy() {
+        public CommentSubclass copy() {
             return new CommentSubclass(this.getValue());   
         }
         
@@ -147,7 +147,7 @@ public class SubclassTest extends XOMTestCase {
             super(name);   
         }
 
-        public Node copy() {
+        public DocTypeSubclass copy() {
             return new DocTypeSubclass(this.getRootElementName());   
         }        
     } 
@@ -167,7 +167,7 @@ public class SubclassTest extends XOMTestCase {
             super(target, data);   
         }
         
-        public Node copy() {
+        public ProcessingInstructionSubclass copy() {
             return new ProcessingInstructionSubclass(this.getTarget(), this.getValue());   
         }
         
