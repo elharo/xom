@@ -1172,14 +1172,6 @@ public class Builder {
                 ex);
             throw pex;
         }
-        catch (BillionLaughsSAXException ex) {
-          // do a bit of early cleanup since we may be running short on memory here
-          handler.freeMemory();
-          System.gc(); 
-          ParsingException pex 
-            = new DocumentSizeException(ex.getMessage(), in.getSystemId(), ex);
-          throw pex;
-        }
         catch (SAXException ex) {
             ParsingException pex 
               = new ParsingException(ex.getMessage(), in.getSystemId(), ex);

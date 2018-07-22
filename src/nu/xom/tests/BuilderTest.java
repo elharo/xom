@@ -63,7 +63,6 @@ import nu.xom.Builder;
 import nu.xom.Comment;
 import nu.xom.DocType;
 import nu.xom.Document;
-import nu.xom.DocumentSizeException;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.NodeFactory;
@@ -88,7 +87,6 @@ import nu.xom.XMLException;
 public class BuilderTest extends XOMTestCase {
 
     private File inputDir = new File("data");
-    private long memoryLimit = Runtime.getRuntime().freeMemory() / 2;
     
     // This class tests error conditions, which Xerces
     // annoyingly logs to System.err. So we hide System.err 
@@ -1480,54 +1478,7 @@ public class BuilderTest extends XOMTestCase {
         assertEquals(0xE9, s.charAt(0));
         
     }
-    
-    
-    public void testBillionLaughs()
-      throws IOException, ParsingException {
-        builder.setMemoryLimit(memoryLimit);
-        try {
-          builder.build(new File(inputDir, "billionlaughs.xml"));
-          fail("expected exception");
-        } catch (DocumentSizeException ex) {
-          assertNotNull(ex.getCause());
-        }
-    }
-    
-    
-    public void testBillionComments()
-      throws IOException, ParsingException {
-        builder.setMemoryLimit(memoryLimit);
-        try {
-          builder.build(new File(inputDir, "billioncomments.xml"));
-          fail("expected exception");
-        } catch (DocumentSizeException ex) {
-          assertNotNull(ex.getCause());
-        }
-    }
-    
-    
-    public void testBillionProcessingInstructions()
-      throws IOException, ParsingException {
-        builder.setMemoryLimit(memoryLimit);
-        try {
-          builder.build(new File(inputDir, "billionprocessinginstructions.xml"));
-          fail("expected exception");
-        } catch (DocumentSizeException ex) {
-          assertNotNull(ex.getCause());
-        }
-    }
-    
-    
-    public void testBillionElements()
-      throws IOException, ParsingException {
-        builder.setMemoryLimit(memoryLimit);
-        try {
-          builder.build(new File(inputDir, "billionelements.xml"));
-          fail("expected exception");
-        } catch (DocumentSizeException ex) {
-          assertNotNull(ex.getCause());
-        }
-    }
+
     
     
     // This tests XOM's workaround for a bug in Crimson, Xerces,
