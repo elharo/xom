@@ -38,12 +38,6 @@ class NonVerifyingHandler extends XOMHandler {
     
     public void startElement(String namespaceURI, String localName, 
       String qualifiedName, org.xml.sax.Attributes attributes) throws SAXException {
-      
-        // todo(elharo): is this a performance hit? check only if limit > 0?
-      // todo(elharo): duplicate code with superclass
-      // todo(elharo): magic numbers
-        checkMemoryUsed(72 + localName.length() * 2 + namespaceURI.length() * 2 + qualifiedName.length() * 2
-          + 100 * attributes.getLength());
         
         flushText();
         Element element = Element.build(qualifiedName, namespaceURI, localName);
@@ -173,8 +167,6 @@ class NonVerifyingHandler extends XOMHandler {
   
     
     public void processingInstruction(String target, String data) throws SAXException {
-        
-        checkMemoryUsed((target.length() + data.length()) * 2);
 
         // simplify logic???? into two cases in and not in DTD
         // ditto for comment() method and superclass
@@ -216,7 +208,6 @@ class NonVerifyingHandler extends XOMHandler {
     
     
     public void comment(char[] text, int start, int length) throws SAXException {
-        checkMemoryUsed(length * 2);
 
         if (!inDTD) flushText();
         else if (!inInternalSubset()) return;

@@ -1321,22 +1321,5 @@ public class Builder {
         return factory;
     }
 
-
-    /**
-     * <strong>Experimental. May not work, especially for security sensitive applications!</strong>
-     * 
-     * Set an approximate maximum size for a document. Attempting to parse 
-     * a document that would outgrow this size will abort processing and
-     * throw an exception. Setting this to zero or less disables size checking.
-     * 
-     * By default, there is no memory limit
-     * 
-     * @param limit approximate maximum document size in memory in bytes
-     */
-    public void setMemoryLimit(long limit) {
-      XOMHandler handler = (XOMHandler) parser.getContentHandler();
-      handler.setMemoryLimit(limit);
-    }
-
     
 }
