@@ -267,7 +267,6 @@ public class EncodingTest extends XOMTestCase {
         
         Builder builder = new Builder();
         System.gc();
-        builder.setMemoryLimit(20745630); // large enough for EUCJP
         ByteArrayOutputStream out = new ByteArrayOutputStream(100000);    
         // Write data into a byte array using encoding
         Serializer serializer = new Serializer(out, encoding);

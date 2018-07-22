@@ -1172,14 +1172,6 @@ public class Builder {
                 ex);
             throw pex;
         }
-        catch (BillionLaughsSAXException ex) {
-          // do a bit of early cleanup since we may be running short on memory here
-          handler.freeMemory();
-          System.gc(); 
-          ParsingException pex 
-            = new DocumentSizeException(ex.getMessage(), in.getSystemId(), ex);
-          throw pex;
-        }
         catch (SAXException ex) {
             ParsingException pex 
               = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
@@ -1327,23 +1319,6 @@ public class Builder {
      */
     public NodeFactory getNodeFactory() {  
         return factory;
-    }
-
-
-    /**
-     * <strong>Experimental. May not work, especially for security sensitive applications!</strong>
-     * 
-     * Set an approximate maximum size for a document. Attempting to parse 
-     * a document that would outgrow this size will abort processing and
-     * throw an exception. Setting this to zero or less disables size checking.
-     * 
-     * By default, there is no memory limit
-     * 
-     * @param limit approximate maximum document size in memory in bytes
-     */
-    public void setMemoryLimit(long limit) {
-      XOMHandler handler = (XOMHandler) parser.getContentHandler();
-      handler.setMemoryLimit(limit);
     }
 
     

@@ -24,7 +24,6 @@ package nu.xom;
 
 import java.util.ArrayList;
 
-import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.DTDHandler;
 import org.xml.sax.Locator;
@@ -112,8 +111,6 @@ class XOMHandler
             document.setBaseURI(documentBaseURI);
         }
         buffer = null;
-        // todo(elharo): magic number
-        memoryUsed = 40;
         
     }
   
@@ -126,12 +123,7 @@ class XOMHandler
     
     public void startElement(String namespaceURI, String localName, 
       String qualifiedName, org.xml.sax.Attributes attributes) throws SAXException {
-        
-        checkMemoryUsed(attributes);
-        // todo(elharo): is this a performance hit? check only if limit > 0?
-        // todo(elharo): magic numbers
-        checkMemoryUsed(112 + localName.length() * 2 + namespaceURI.length() * 2 + qualifiedName.length() * 2);
-        
+
         flushText();
         Element element;
         if (parent != document) {
@@ -231,14 +223,6 @@ class XOMHandler
             parent = element;
         }
         
-    }
-
-    
-    private void checkMemoryUsed(Attributes attributes) throws SAXException {
-      for (int i = 0; i < attributes.getLength(); i++) {
-        checkMemoryUsed(attributes.getValue(i));
-        checkMemoryUsed(attributes.getQName(i));
-      }
     }
 
 
@@ -341,7 +325,6 @@ class XOMHandler
     protected StringBuffer buffer = null;
   
     public void characters(char[] text, int start, int length) throws SAXException {
-        checkMemoryUsed(length * 2); // chars are two bytes long prior to Java 9
         if (length <= 0) return;
         if (textString == null) textString = new String(text, start, length);
         else {
@@ -350,17 +333,6 @@ class XOMHandler
         }
         if (finishedCDATA) inCDATA = false;
         
-    }
- 
-    
-    void checkMemoryUsed(int length) throws SAXException  {
-      if (this.memoryLimit > 0) {
-        memoryUsed += length;
-        if (memoryUsed > memoryLimit) {
-          // todo(elharo): better error message; better exception
-          throw new BillionLaughsSAXException("Document too big: " + memoryUsed);
-        }
-      }
     }
 
 
@@ -404,9 +376,7 @@ class XOMHandler
   
     
     public void processingInstruction(String target, String data) throws SAXException {
-        
-        checkMemoryUsed((target.length() + data.length()) * 2);
-      
+              
         if (!inDTD) flushText();
         if (inDTD && !inInternalSubset()) return;
         Nodes result = factory.makeProcessingInstruction(target, data);
@@ -460,11 +430,6 @@ class XOMHandler
     // LexicalHandler events
     public void startDTD(String rootName, String publicID, 
       String systemID) throws SAXException {
-        
-      checkMemoryUsed(80);
-      checkMemoryUsed(rootName);
-      checkMemoryUsed(publicID);
-      checkMemoryUsed(systemID);
       
         inDTD = true;
         Nodes result = factory.makeDocType(rootName, publicID, systemID);
@@ -479,13 +444,6 @@ class XOMHandler
             }
         }
         
-    }
-     
-    
-    private void checkMemoryUsed(String s) throws SAXException {
-      if (s != null) {
-        checkMemoryUsed(s.length() * 2);
-      }
     }
 
 
@@ -518,13 +476,6 @@ class XOMHandler
     protected boolean inCDATA = false;
     protected boolean finishedCDATA = false;
 
-    // todo(elharo): should we reset this with each document parsed?
-    // if so we need to keep a separate field for the user set value.
-    // default to half of available heap memory; disabled for now
-    // private long memoryLimit = Runtime.getRuntime().freeMemory() / 2;
-
-    private long memoryLimit = 0;
-    private long memoryUsed = 0;
     
     public void startCDATA() {
         if (textString == null) inCDATA = true;
@@ -538,8 +489,6 @@ class XOMHandler
 
     
     public void comment(char[] text, int start, int length) throws SAXException {
-        
-        checkMemoryUsed(length);
     
         if (!inDTD) flushText();
         if (inDTD && !inInternalSubset()) return;
@@ -1029,10 +978,6 @@ class XOMHandler
         
         return result.toString();
         
-    }
-
-    void setMemoryLimit(long sizeLimit) {
-      this.memoryLimit = sizeLimit;
     }
 
     
