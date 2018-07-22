@@ -5,7 +5,7 @@ machine:
 jobs:
   build:
     docker:
-      - image: debian:stretch
+      - image: circleci/openjdk
     steps:
       - checkout
       - run:
