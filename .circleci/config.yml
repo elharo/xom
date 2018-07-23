@@ -11,6 +11,7 @@ jobs:
       - run:
           name: Tests
           command: ant test
+          no_output_timeout: 40m
       - run:
           name: Integration tests
           command: date
