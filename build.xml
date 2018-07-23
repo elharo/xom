@@ -608,6 +608,7 @@ XOM Build file
     <junit fork="yes">
        <classpath refid="test.class.path" />
        <formatter type="${test.outputFormat}" />
+       <formatter type="brief" usefile="false"/>
        <batchtest fork="yes" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
