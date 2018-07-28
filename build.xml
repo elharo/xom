@@ -488,7 +488,7 @@ XOM Build file
 
   <property name="prefix" value="${name}-${version}" />
   
-  <target name="dist" depends="zip, tar.gz, maven" />
+  <target name="dist" depends="zip, tar.gz, maven, website" />
 
   <!-- invoke as
       ant -Dpassword=secret upload -->
@@ -862,7 +862,7 @@ location="${dist.dir}/maven1/xom-maven-${version}.jar" />
   </target>
   
   <target name="website" depends="samples, betterdoc" description="Generate the website">
-    <ant antfile="build.xml" dir="website" target="all"/>
+    <ant antfile="build.xml" dir="website" target="dist"/>
     <copy todir="${dist.dir}/website/apidocs">  
       <fileset dir="${build.javadocs}" includes="**"/>  
     </copy>
