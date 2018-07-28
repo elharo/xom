@@ -49,9 +49,14 @@ body {
 
 <p>Update and improve build system and website generation.</p>
 
-<p>Requires Java 1.5 or later.</p>
+<p>The binary is now compiled against Java 1.6 or later by default.
+It should still be source compatible with Java 1.4 but this has
+not been extensively tested.
+</p>
 
-<p>Remove java.net links.</p>
+<p>Removes unthrown IOException from the <code>Canonicalizer.setInclusiveNamespacePrefixList()</code> method.</p>
+
+<p>Fixes one bug in the verification of a leading plus sign in the IPv4 parts of IPv6 addresses.</p>
 
 <h2>1.2.10</h2>
 
@@ -2038,11 +2043,11 @@ I also spent a lot of time improving the JavaDoc.
 <hr />
 <p>Copyright 2002-2005, 2009, 2013, 2018 <a href="http://www.elharo.com/">Elliotte Rusty Harold</a><br />
 <a href="mailto:elharo@ibiblio.org">elharo@ibiblio.org</a><br />
-Last Modified March 3, 2018
+Last Modified July 28, 2018
 </p>
 </div>
 <div id="Navbar">
-  <h3>About XOM</h3>
+    <h3>About XOM</h3>
      <ul>
 	<li><a href="designprinciples.xhtml">Design Principles</a></li>
 	<li><a href="history.html">Release Notes</a></li>
@@ -2052,7 +2057,7 @@ Last Modified March 3, 2018
     <li><a href="xpath.xhtml">XPath Mapping</a></li>
 	<li><a href="futuredirections.xhtml">Future Directions</a></li>
 	<li><a href="license.xhtml">License and Copyright</a></li>
-	<li><a href="http://lists.ibiblio.org/mailman/listinfo/xom-interest">Mailing Lists</a></li>
+	<li><a href="https://lists.ibiblio.org/mailman/listinfo/xom-interest">Mailing Lists</a></li>
 	</ul>
 
 	<h3>Java API</h3>
@@ -2066,22 +2071,19 @@ Last Modified March 3, 2018
 	<h3>Downloads</h3>
 
 	<ul>
-	<li><a href="https://github.com/elharo/xom">CVS Tree</a></li>
-	<li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10.jar">Minimal JAR file</a></li>
-	 <li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10.zip">Complete distribution, zip format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
-	 <li><a href="http://www.cafeconleche.org/XOM/xom-1.2.10.tar.gz">Complete distribution, tar.gz format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
+	<li><a href="https://github.com/elharo/xom/">Source Repository</a></li>
+	<li><a href="https://www.cafeconleche.org/XOM/xom-1.2.11.jar">Minimal JAR file</a></li>
+	 <li><a href="https://www.cafeconleche.org/XOM/xom-1.2.11.zip">Complete distribution, zip format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
+	 <li><a href="https://www.cafeconleche.org/XOM/xom-1.2.11.tar.gz">Complete distribution, tar.gz format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
 	 </ul>
  
  
 	<h3>For Contributors</h3>
 
 	<ul>
-	<li><a href="unstable.html">Unstable Version</a></li>
-	<li><a href="openquestions.xhtml">Open Questions</a></li>
     <li><a href="contributor_license.txt">Contributor Agreement</a></li>
 	<li><a href="building.xhtml">Building XOM</a></li>
 	<li><a href="testsuite.xhtml">Test Suite</a></li>
-	<li><a href="clover_html/">Test Coverage</a></li>
 	 </ul>
 	 
 	 
@@ -2113,15 +2115,11 @@ Last Modified March 3, 2018
       <li><a href='http://rubyforge.org/projects/excemel/'>Excemel</a></li>
       <li><a href="http://json-lib.sourceforge.net/">json-lib</a></li>
       <li><a href="http://memoranda.sourceforge.net/">Memoranda</a></li>
-      <li><a href="http://www.spamino.com">Spamino</a></li>
       <li><a href="http://carrierwave.sourceforge.net/">Carrierwave</a></li>
       <li><a href="http://wurfl.sourceforge.net/">WURFL</a></li>
-      <li><a href="http://aspectsecurity.com/stinger/">Stinger</a></li>
       <li><a href="http://dsd.lbl.gov/~hoschek/firefish">FireFish</a></li>
       <li><a href="http://www.cadenhead.org/workbench/code/opmlLinkPublisher/">OPML Link Publisher</a></li>
-      <li><a href="http://www.mycgiserver.com/~gpiancastelli/archives.jsp?post=0031">Restlog Client</a></li>
       <li><a href="http://cafeconleche.org/SAXTest/">SAX Conformance Testing</a></li>
-      <li><a href="http://dsd.lbl.gov/nux/">Nux</a></li>
       <li><a href="http://sourceforge.net/projects/smartfrog/">SmartFrog</a></li>
       <li><a href="https://confluence.atlassian.com/fisheye/">FishEye</a></li>
     </ul>
@@ -2141,6 +2139,7 @@ Last Modified March 3, 2018
   <li><a href="lib/normalizer_license.html">ICU4J License</a></li>
   <li><a href="lib/junit_license.html">JUnit</a></li>
 </ul>
+
 </div>
 </body>
 </html>
