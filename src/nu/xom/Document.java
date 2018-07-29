@@ -29,7 +29,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b5
+ * @version 1.3.0
  * 
  */
 public class Document extends ParentNode {

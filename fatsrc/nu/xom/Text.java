@@ -30,7 +30,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.1b4 fat
+ * @version 1.3.0 fat
  *
  */
 public class Text extends Node {
@@ -175,7 +175,7 @@ public class Text extends Node {
      *
      * @return a deep copy of this text node with no parent
      */
-    public Node copy() {
+    public Text copy() {
         
         if (isCDATASection()) {
             return new CDATASection(this);
