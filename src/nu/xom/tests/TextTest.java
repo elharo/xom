@@ -147,7 +147,7 @@ public class TextTest extends XOMTestCase {
     public void testCopy() {
         
         Text c1 = new Text("test");
-        Text c2 = (Text) c1.copy();
+        Text c2 = c1.copy();
 
         assertEquals(c1.getValue(), c2.getValue());
         assertEquals(c1, c2);
@@ -160,7 +160,7 @@ public class TextTest extends XOMTestCase {
     public void testCopyisNotACDATASection() {
         
         Text c1 = new Text("test");
-        Node c2 = c1.copy();
+        Text c2 = c1.copy();
         assertEquals(Text.class, c2.getClass());
 
     }

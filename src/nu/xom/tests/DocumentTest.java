@@ -44,7 +44,7 @@ import nu.xom.WellformednessException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class DocumentTest extends XOMTestCase {
@@ -456,7 +456,7 @@ public class DocumentTest extends XOMTestCase {
         doc.appendChild(new Comment("after"));
         doc.appendChild(new ProcessingInstruction("text", "after"));
         
-        Document doc2 = (Document) doc.copy();
+        Document doc2 = doc.copy();
         assertEquals(doc, doc2);
         
     }

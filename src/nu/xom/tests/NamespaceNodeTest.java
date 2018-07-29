@@ -34,7 +34,7 @@ import nu.xom.Nodes;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.3.0
  *
  */
 public class NamespaceNodeTest extends XOMTestCase {
@@ -65,7 +65,7 @@ public class NamespaceNodeTest extends XOMTestCase {
         assertEquals(1, result.size());
         Namespace namespace = (Namespace) result.get(0);
         
-        Namespace copy = (Namespace) namespace.copy();
+        Namespace copy = namespace.copy();
         assertEquals(namespace, copy);
         assertEquals("pre", copy.getPrefix());
         assertEquals("http://www.example.org/", copy.getValue());

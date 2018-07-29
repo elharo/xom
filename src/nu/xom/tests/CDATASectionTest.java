@@ -63,9 +63,8 @@ public class CDATASectionTest extends XOMTestCase {
     
     public void testCopy() {
         Element child1 = doc.getRootElement().getFirstChildElement("child1");
-        Node cdata = child1.getChild(0);
-        Node copy = cdata.copy();
-        assertTrue(cdata instanceof Text);  
+        Text cdata = (Text) child1.getChild(0);
+        Text copy = cdata.copy();
         assertEquals("nu.xom.CDATASection", copy.getClass().getName());  
         assertEquals("<&>", copy.getValue());  
     }

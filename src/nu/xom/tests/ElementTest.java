@@ -1364,8 +1364,8 @@ public class ElementTest extends XOMTestCase {
         String data = "<b><c1 /><c2 /></b>";
         Builder builder = new Builder();
         Document doc = builder.build(data, "http://www.example.org/");
-        Node root = doc.getRootElement();
-        Node rootcopy = root.copy();
+        Element root = doc.getRootElement();
+        Element rootcopy = root.copy();
         assertEquals(data, rootcopy.toXML());      
     }    
     
@@ -1451,7 +1451,7 @@ public class ElementTest extends XOMTestCase {
         e3.insertChild(e4, 0);
         e.setBaseURI(baseURI);
         
-        Element copy = (Element) e.copy();
+        Element copy = e.copy();
         
         assertEquals(
           e.getNamespaceURI("red"), 

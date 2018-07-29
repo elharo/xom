@@ -1768,7 +1768,7 @@ public class Element extends ParentNode {
      * 
      * @return a deep copy of this element with no parent
      */
-    public Node copy() {
+    public Element copy() {
         Element result = copyTag(this);
         copyChildren(this, result);
         return result;
