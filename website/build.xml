@@ -185,7 +185,7 @@
   </target>	
 
 
-  <target name="all" depends="html, tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building">
+  <target name="dist" depends="html, tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building">
     <copy todir="${parentdist.dir}" >  
       <fileset dir="${build.dest}" includes="**"/>  
     </copy> 
