@@ -174,7 +174,6 @@ XOM Build file
   
   <target name="prepare-dirs" depends="init">
     <mkdir dir="${dist.dir}"/>
-    <mkdir dir="${dist.dir}/maven1"/>
     <mkdir dir="${dist.dir}/maven2"/>
     <mkdir dir="${testoutput.dir}"/>
     <mkdir dir="${build.dir}"/>
@@ -755,30 +754,7 @@ XOM Build file
     </junit>
   </target> 
 
-  <target name="maven" depends="maven1, maven2" />
-  
-<!-- Generate a Maven 1 JAR for uploading to the maven
-    bug repository and hence placement onto ibiblio and mirrors. 
-    See http://maven.apache.org/maven-1.x/reference/repository-upload.html -->
-  <target name="maven1" depends="jar" >
-    <property name="pom.template" location="project.xml" />
-    <property name="pom.file" location="${build.dir}/project.xml" />
-    <property name="package.jar"
-location="${build.dir}/${name}-${version}.jar"/>
-    <property name="license" location="LICENSE.txt" />
-    <property name="xom-maven-1.jar"
-location="${dist.dir}/maven1/xom-maven-${version}.jar" />
-    <copy file="${pom.template}" tofile="${pom.file}">
-      <filterset>
-       <filter token="VERSION" value="${version}"/>
-     </filterset>
-    </copy>
-    <jar destFile="${xom-maven-1.jar}">
-      <fileset file="${pom.file}" />
-      <fileset file="${license}" />
-      <fileset file="${package.jar}" />
-    </jar>
-  </target>
+  <target name="maven" depends="maven2" />
 
   <target name="sources.jar" depends="init, compile">
     <jar jarfile="${sources.jar}" basedir="${build.dir}/src">
