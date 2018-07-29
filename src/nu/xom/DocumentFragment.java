@@ -50,7 +50,7 @@ class DocumentFragment extends ParentNode {
     }
 
     
-    public Node copy() {
+    public DocumentFragment copy() {
         throw new UnsupportedOperationException("XOM bug");
     }
 

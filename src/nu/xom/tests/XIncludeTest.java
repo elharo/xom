@@ -1047,7 +1047,7 @@ public class XIncludeTest extends XOMTestCase {
             super(data);
         }
         
-        public Node copy() {
+        public TextSubclass copy() {
             return new TextSubclass(this.getValue());
         }
         

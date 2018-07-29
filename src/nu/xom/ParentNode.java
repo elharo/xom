@@ -72,7 +72,8 @@ public abstract class ParentNode extends Node {
         return childCount; 
     }
 
-    
+    public abstract ParentNode copy();
+
     /**
      * <p>
      * Inserts a child node at the specified position.

@@ -83,7 +83,7 @@ public class InnerElement extends Element {
     }
 
     
-    public Node copy() {
+    public InnerElement copy() {
         return new InnerElement(this);
     }
     
