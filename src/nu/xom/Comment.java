@@ -32,7 +32,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  * 
  */
 public class Comment extends Node {
@@ -46,7 +46,7 @@ public class Comment extends Node {
      * The data is checked for legality according to XML 1.0 rules. 
      * Illegal characters such as the form feed and null are not
      * allowed. Furthermore, the two hyphen string "--" is not allowed;
-     * and the last character of the comment may not be a hyphen.
+     * and the last character of the comment must not be a hyphen.
      * </p>
      * 
      * @param data the initial text of the comment
@@ -188,7 +188,7 @@ public class Comment extends Node {
      *     that is not part of a document
      * 
      */
-    public Node copy()  {
+    public Comment copy()  {
         return new Comment(data);
     }
 

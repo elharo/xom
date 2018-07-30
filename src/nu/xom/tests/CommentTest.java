@@ -34,7 +34,7 @@ import nu.xom.IllegalCharacterDataException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class CommentTest extends XOMTestCase {
@@ -170,7 +170,7 @@ public class CommentTest extends XOMTestCase {
     public void testCopy() {
         
         Comment c1 = new Comment("test");
-        Comment c2 = (Comment) c1.copy();
+        Comment c2 = c1.copy();
 
         assertEquals(c1.getValue(), c2.getValue());
         assertTrue(!c1.equals(c2));

@@ -61,7 +61,7 @@ import nu.xom.xinclude.XIncluder;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.11
+ * @version 1.3.0
  *
  */
 public class XIncludeTest extends XOMTestCase {
@@ -1047,7 +1047,7 @@ public class XIncludeTest extends XOMTestCase {
             super(data);
         }
         
-        public Node copy() {
+        public Text copy() {
             return new TextSubclass(this.getValue());
         }
         

@@ -34,7 +34,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.3.0
  *
  */
 public final class Namespace extends Node {
@@ -185,7 +185,7 @@ public final class Namespace extends Node {
      * @return a copy of this <code>Namespace</code> 
      *     that is not part of a document
      */
-    public Node copy() {
+    public Namespace copy() {
         return new Namespace(prefix, uri, null);
     }
 

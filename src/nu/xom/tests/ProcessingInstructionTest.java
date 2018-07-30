@@ -32,7 +32,7 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class ProcessingInstructionTest extends XOMTestCase {
@@ -275,7 +275,7 @@ public class ProcessingInstructionTest extends XOMTestCase {
         
         Element test = new Element("test");
         test.appendChild(pi);
-        ProcessingInstruction c2 = (ProcessingInstruction) pi.copy();
+        ProcessingInstruction c2 = pi.copy();
 
         assertEquals(pi, c2);
         assertEquals(pi.getValue(), c2.getValue());

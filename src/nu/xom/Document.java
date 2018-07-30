@@ -29,7 +29,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b5
+ * @version 1.3.0
  * 
  */
 public class Document extends ParentNode {
@@ -433,7 +433,7 @@ public class Document extends ParentNode {
      * 
      * @return a deep copy of this <code>Document</code> object
      */
-    public Node copy() {
+    public Document copy() {
         return new Document(this);
     }
 

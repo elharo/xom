@@ -38,7 +38,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class SubclassTest extends XOMTestCase {
@@ -72,7 +72,7 @@ public class SubclassTest extends XOMTestCase {
             super(name, value);   
         }
         
-        public Node copy() {
+        public Attribute copy() {
             return new AttributeSubclass(this.getQualifiedName(), this.getValue());   
         }
         
@@ -93,7 +93,7 @@ public class SubclassTest extends XOMTestCase {
             super(value);   
         }
         
-        public Node copy() {
+        public Text copy() {
             return new TextSubclass(this.getValue());   
         }        
     } 
@@ -134,7 +134,7 @@ public class SubclassTest extends XOMTestCase {
             super(value);   
         }
         
-        public Node copy() {
+        public Comment copy() {
             return new CommentSubclass(this.getValue());   
         }
         
@@ -147,7 +147,7 @@ public class SubclassTest extends XOMTestCase {
             super(name);   
         }
 
-        public Node copy() {
+        public DocType copy() {
             return new DocTypeSubclass(this.getRootElementName());   
         }        
     } 
@@ -167,7 +167,7 @@ public class SubclassTest extends XOMTestCase {
             super(target, data);   
         }
         
-        public Node copy() {
+        public ProcessingInstructionSubclass copy() {
             return new ProcessingInstructionSubclass(this.getTarget(), this.getValue());   
         }
         

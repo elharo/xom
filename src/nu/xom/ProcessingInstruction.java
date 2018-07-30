@@ -39,7 +39,7 @@ package nu.xom;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class ProcessingInstruction extends Node {
@@ -270,7 +270,7 @@ public class ProcessingInstruction extends Node {
      * @return a copy of this <code>ProcessingInstruction</code> 
      *         with no parent
      */
-    public Node copy() {
+    public ProcessingInstruction copy() {
         return new ProcessingInstruction(target, data);
     }
 

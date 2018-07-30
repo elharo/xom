@@ -46,7 +46,7 @@ import java.util.LinkedHashSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.10
+ * @version 1.3.0
  *
  */
 public class Element extends ParentNode {
@@ -1768,7 +1768,7 @@ public class Element extends ParentNode {
      * 
      * @return a deep copy of this element with no parent
      */
-    public Node copy() {
+    public Element copy() {
         Element result = copyTag(this);
         copyChildren(this, result);
         return result;
