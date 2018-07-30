@@ -213,8 +213,8 @@ public class Canonicalizer11Test extends TestCase {
  
     public void testNewXMLAttributesAreNotInherited() throws ParsingException, IOException {
         String input = "<foo xml:href='http://www.w3.org/TR/2008/PR-xml-c14n11-20080129/#ProcessingModel' " +
-	    "xml:text='Attributes in the XML namespace other than xml:base, xml:id, xml:lang, and xml:space MUST be processed as ordinary attributes.'>" +
-	    "<bar/></foo>";
+        "xml:text='Attributes in the XML namespace other than xml:base, xml:id, xml:lang, and xml:space MUST be processed as ordinary attributes.'>" +
+        "<bar/></foo>";
         Document doc = builder.build(input, "http://www.w3.org/TR/2008/PR-xml-c14n11-20080129/");
         
         String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::bar]";

@@ -84,9 +84,9 @@ public final class Elements implements Iterable<Element> {
         elements.add(element);
     }
 
-	@Override
-	public Iterator<Element> iterator() {
-		return Collections.unmodifiableList(elements).iterator();
-	}
+    @Override
+    public Iterator<Element> iterator() {
+        return Collections.unmodifiableList(elements).iterator();
+    }
 
 }

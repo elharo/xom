@@ -463,11 +463,11 @@ public abstract class ParentNode extends Node implements Iterable<Node> {
     }
 
 
-	@Override
-	public Iterator<Node> iterator() {
-		List<Node> list = Arrays.asList(children);
-		return list.iterator();
-	}
+    @Override
+    public Iterator<Node> iterator() {
+        List<Node> list = Arrays.asList(children);
+        return list.iterator();
+    }
 
 
 }
