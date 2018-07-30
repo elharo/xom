@@ -24,6 +24,7 @@ package nu.xom.tests;
 import java.io.File;
 import java.io.IOException;
 
+import junit.framework.Assert;
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Comment;
@@ -1226,6 +1227,27 @@ public class ElementTest extends XOMTestCase {
         assertEquals(child4, children.get(0));
         assertEquals(child5, children.get(1));
         
+    }
+    
+    
+    public void testForEach() {
+        
+        Elements children = element.getChildElements();
+        for (Element element : children) {
+            Assert.assertNotNull(element);
+        }
+        
+    }
+    
+    public void testIteratorIsReadOnly() {
+        
+        Elements children = element.getChildElements();
+        try {
+          children.iterator().remove();
+          Assert.fail("removed element");
+        }
+        catch (UnsupportedOperationException ex) {
+        }
     }
 
     

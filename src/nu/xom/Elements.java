@@ -22,6 +22,8 @@
 package nu.xom;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -34,14 +36,14 @@ import java.util.List;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  * 
  *
  */
-public final class Elements {
+public final class Elements implements Iterable<Element> {
 
     
-    private List elements = new ArrayList(1);
+    private List<Element> elements = new ArrayList<Element>(1);
     
     // non-public constructor to prevent instantiation
     Elements() {}
@@ -81,5 +83,10 @@ public final class Elements {
     void add(Element element) {
         elements.add(element);
     }
+
+	@Override
+	public Iterator<Element> iterator() {
+		return Collections.unmodifiableList(elements).iterator();
+	}
 
 }

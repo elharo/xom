@@ -21,12 +21,17 @@
 
 package nu.xom;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * 
  * <p>
  * The generic superclass for nodes that have children. 
- * Not counting subclasses, there are exactly two such classes in XOM:
+ * Not counting subclasses, there are exactly two such public 
+ * classes in XOM:
  * </p>
  * 
  * <ul>
@@ -40,10 +45,10 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.3
+ * @version 1.3.0
  *
  */
-public abstract class ParentNode extends Node {
+public abstract class ParentNode extends Node implements Iterable<Node> {
 
     Node[] children; 
     int    childCount = 0;
@@ -456,6 +461,13 @@ public abstract class ParentNode extends Node {
         }
         
     }
+
+
+	@Override
+	public Iterator<Node> iterator() {
+		List<Node> list = Arrays.asList(children);
+		return list.iterator();
+	}
 
 
 }
