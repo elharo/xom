@@ -115,7 +115,7 @@ public class EncodingTest extends XOMTestCase {
 
 
     public void testISO2022JP() throws ParsingException, IOException {
-    	 if (charsetAvailable("ISO-2022-JP")) checkAll("ISO-2022-JP");
+         if (charsetAvailable("ISO-2022-JP")) checkAll("ISO-2022-JP");
     } 
 
 

@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -27,7 +27,6 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 import nu.xom.ParsingException;
 
 
@@ -39,7 +38,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class TreePrinter {
@@ -112,9 +111,8 @@ public class TreePrinter {
   public static void listChildren(Element current) {
    
     inspect(current);
-    Elements children = current.getChildElements();
-    for (int i = 0; i < children.size(); i++) {
-      listChildren(children.get(i));
+    for (Element child : current.getChildElements()) {
+      listChildren(child);
     }
     
   }

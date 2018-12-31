@@ -1,4 +1,4 @@
-/* Copyright 2002-2004 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -31,7 +31,6 @@ import java.io.Writer;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 import nu.xom.ParsingException;
 
 /**
@@ -43,7 +42,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class ExampleExtractor {
@@ -53,9 +52,7 @@ public class ExampleExtractor {
     public static void extract(Element element) 
       throws IOException {        
 
-        Elements elements = element.getChildElements();
-        for (int i = 0; i < elements.size(); i++) {
-            Element child = elements.get(i);
+        for (Element child : element.getChildElements()) {
             if (child.getQualifiedName().equals("chapter")) {
                 chapter++;
             }       

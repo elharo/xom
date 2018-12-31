@@ -1,4 +1,4 @@
-/* Copyright 2011 Elliotte Rusty Harold
+/* Copyright 2011, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -43,7 +43,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.7
+ * @version 1.3.0
  *
  */
 public class Canonicalizer11Test extends TestCase {
@@ -213,8 +213,8 @@ public class Canonicalizer11Test extends TestCase {
  
     public void testNewXMLAttributesAreNotInherited() throws ParsingException, IOException {
         String input = "<foo xml:href='http://www.w3.org/TR/2008/PR-xml-c14n11-20080129/#ProcessingModel' " +
-	    "xml:text='Attributes in the XML namespace other than xml:base, xml:id, xml:lang, and xml:space MUST be processed as ordinary attributes.'>" +
-	    "<bar/></foo>";
+        "xml:text='Attributes in the XML namespace other than xml:base, xml:id, xml:lang, and xml:space MUST be processed as ordinary attributes.'>" +
+        "<bar/></foo>";
         Document doc = builder.build(input, "http://www.w3.org/TR/2008/PR-xml-c14n11-20080129/");
         
         String documentSubsetExpression = "(//. | //@* | //namespace::*)[ancestor-or-self::bar]";

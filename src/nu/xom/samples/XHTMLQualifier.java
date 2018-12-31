@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -26,7 +26,6 @@ import java.io.IOException;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 import nu.xom.ParsingException;
 
 /**
@@ -35,7 +34,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class XHTMLQualifier {
@@ -71,9 +70,8 @@ public class XHTMLQualifier {
     if (current.getNamespaceURI().equals("")) {
         current.setNamespaceURI("http://www.w3.org/1999/xhtml");
     }
-    Elements children = current.getChildElements();
-    for (int i = 0; i < children.size(); i++) {
-      qualify(children.get(i));
+    for (Element child : current.getChildElements()) {
+      qualify(child);
     }
     
   }

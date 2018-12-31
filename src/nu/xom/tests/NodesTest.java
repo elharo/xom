@@ -1,4 +1,4 @@
-/* Copyright 2003-2005 Elliotte Rusty Harold
+/* Copyright 2003-2005, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,7 +33,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b2
+ * @version 1.3.0
  *
  */
 public class NodesTest extends XOMTestCase {
@@ -139,6 +139,22 @@ public class NodesTest extends XOMTestCase {
         assertEquals(length, nodes.size());
         for (int i = 0; i < length; i++) {
             assertEquals(String.valueOf(i), nodes.get(i).getValue());   
+        }     
+        
+    }
+    
+    
+    public void testForEach() {
+        Nodes nodes = new Nodes();
+        int length = 10;
+        for (int i = 0; i < length; i++) {
+            nodes.append(new Text(String.valueOf(i)));   
+        }
+        assertEquals(length, nodes.size());
+        int i = 0;
+        for (Node node : nodes) {
+            assertEquals(String.valueOf(i), node.getValue());
+            i++;
         }     
         
     }

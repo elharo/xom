@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -25,14 +25,14 @@ import java.io.IOException;
 
 import nu.xom.Builder;
 import nu.xom.Document;
-import nu.xom.Nodes;
+import nu.xom.Node;
 import nu.xom.ParsingException;
 import nu.xom.XPathException;
 import nu.xom.XPathTypeException;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.1a2
+ * @version 1.3.0
  *
  */
 public class XPathDriver {
@@ -59,11 +59,10 @@ public class XPathDriver {
         
         try {
             Document input = builder.build(args[0]);
-            Nodes result = input.query(args[1]);
-            for (int i = 0; i < result.size(); i++) {
+            for (Node result : input.query(args[1])) {
                 // ???? add a wrap option like Saxon
                 // or based on the XQuery serialization format?
-                System.out.println(result.get(i).toXML());
+                System.out.println(result.toXML());
             }
         }
         catch (XPathTypeException ex) {

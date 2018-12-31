@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2005, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -26,7 +26,8 @@ package nu.xom;
  * 
  * <p>
  * The generic superclass for nodes that have children. 
- * Not counting subclasses, there are exactly two such classes in XOM:
+ * Not counting subclasses, there are exactly two such public 
+ * classes in XOM:
  * </p>
  * 
  * <ul>
@@ -40,7 +41,7 @@ package nu.xom;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.3
+ * @version 1.3.0
  *
  */
 public abstract class ParentNode extends Node {
