@@ -1,4 +1,4 @@
-/* Copyright 2011 Elliotte Rusty Harold
+/* Copyright 2011, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -43,7 +43,7 @@ import nu.xom.canonical.Canonicalizer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.7
+ * @version 1.3.0
  *
  */
 public class Canonicalizer11Test extends TestCase {
