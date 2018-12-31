@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
                       "https://docbook.org/xml/4.3/docbookx.dtd">
-<article class="faq" revision="20161210">
+<article class="faq" revision="20181231">
   <title>XOM FAQ</title>
 
   <articleinfo>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2002-2005, 2009, 2016</year>
+      <year>2002-2005, 2009, 2016, 2018</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo> 
@@ -228,15 +228,15 @@ what they think they want.
 </para>
 
 <para>
-XOM 1.0 through 1.2 will not support XML 1.1. Possible future versions might,
+XOM 1.0 through 1.3 will not support XML 1.1. Possible future versions might,
 provided someone can demonstrate an actual need for  it. 
 The following are <emphasis>not</emphasis> legitimate needs:
 </para>
 
 <orderedlist>
-  <listitem><para>Your pointy-haired boss wants to use the latest version of XML. </para></listitem>
+  <listitem><para>Your pointy-haired boss wants to use the latest version of XML.</para></listitem>
   <listitem><para>You have documents that use <markup>version="1.1"</markup>
-              for no good reason. Fix the documents instead. </para></listitem>
+              for no good reason. Fix the documents instead.</para></listitem>
   <listitem><para>Your documents contain NEL characters that are incompatible with almost every
               installed system (XML and non-XML) on the planet.
               Throw away your IBM dinosaur, and join the 21st century.</para></listitem>
@@ -269,11 +269,7 @@ you will probably also want to carry along the xml-apis.jar
 and xercesImpl.jar files from the lib directory.
 To use XSLT, you'll also need the xalan.jar archive.
 However, in Java 1.4 and later, you can get by 
-without these. If you want to use normalization in the serializer, you'll
-need the normalizer.jar file. If you don't use normalization you can leave 
-this out to. Even in Java 1.3 or 1.2 you can replace Xerces with a smaller
-parser. However, most parsers are buggier than Xerces, and no parsers prior to
-Xerces 2.6.1 can pass all XOM's unit tests.
+without these.
 </para>
 
 <para>
@@ -356,23 +352,12 @@ If the document you've built is still too large to handle, then you can try proc
 </question>
 <answer>
 <para>
-XOM requires Java 1.2 or later.
+XOM 1.3.0 requires Java 1.5 or later. Earlier versions require 1.2 or later.
 It has been tested with Java 1.2.2_17, IBM's Java VM 1.3.1,
 Sun's JDK 1.4.2, IBM's JVM 1.4.1, and various betas of Java 1.5. 
 A few of the unit tests fail in Java 1.2, but mostly these reflect encodings such
 as ISO-8859-6 that are not supported in that VM. All the core functionality is
-present.
-</para>
-
-<para>
-It would probably not be hard to back port XOM to Java 1.1.
-The primary 1.2 dependence is the collections API, and 
-this can be added to 1.1 as an extension. 
-Alternately, collection classes such as <classname>ArrayList</classname> 
-could be replaced with 1.1 classes
-such as <classname>Vector</classname> or implemented 
-from scratch. However so far no one has expressed interest in running
-XOM in Java 1.1. 
+present. It has not yet been tested with anything past Java 1.8. 
 </para>
 </answer>
 </qandaentry>
@@ -456,7 +441,7 @@ at my presentation at the New York XML SIG.
 <answer>
 <para>
 I'm somewhat familiar with the visitor pattern. I did explore it when 
-I was first designing XOM.  I'm still not convinced it really fits 
+I was first designing XOM. I'm still not convinced it really fits 
 the XML problem space well. I don't like adding the extra method to 
 <classname>Node</classname> just to support this. I may be wrong here. 
 So far nobody's shown 
@@ -604,7 +589,6 @@ Use XPath. Specifically use the query
 </para>
 
 <informalexample><programlisting><![CDATA[Nodes namespaces = element.query("namespace::node()");]]></programlisting></informalexample>
-
 
 </answer>
 </qandaentry>
