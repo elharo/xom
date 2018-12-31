@@ -1,4 +1,4 @@
-/* Copyright 2003 Elliotte Rusty Harold
+/* Copyright 2003, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -41,7 +41,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class SourceCodeGenerator {
@@ -116,8 +116,8 @@ public class SourceCodeGenerator {
             }
             
             elementCount++;
-            for (int i = 0; i < element.getChildCount(); i++) {
-                generateSource(element.getChild(i), name);
+            for (Element child : element.getChildElements()) {
+                generateSource(child, name);
             }
               
              

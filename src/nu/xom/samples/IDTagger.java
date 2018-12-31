@@ -28,7 +28,6 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 import nu.xom.ParsingException;
 
 
@@ -40,7 +39,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class IDTagger {
@@ -55,9 +54,8 @@ public class IDTagger {
     }
     
     // recursion
-    Elements children = element.getChildElements();
-    for (int i = 0; i < children.size(); i++) {
-      processElement(children.get(i));   
+    for (Element child : element.getChildElements()) {
+      processElement(child);   
     }
     
   }

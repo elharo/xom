@@ -56,8 +56,7 @@ public class Linkset {
       Element oldRoot = document.getRootElement();
       Element newRoot = new Element("linkset");
       Elements toplevel = oldRoot.getChildElements();
-      for (int i = 0; i < toplevel.size(); i++) {
-        Element element = toplevel.get(i); 
+      for (Element element : toplevel) {
         Element link = element.getFirstChildElement("link", 
           "http://my.netscape.com/rdf/simple/0.9/");
         link.detach();

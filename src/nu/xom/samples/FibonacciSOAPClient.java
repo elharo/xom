@@ -130,8 +130,8 @@ public class FibonacciSOAPClient {
                  "Fibonacci_Numbers", "http://namespaces.cafeconleche.org/xmljava/ch3/");
                 Elements results = responseNumbers.getChildElements("fibonacci", 
                  "http://namespaces.cafeconleche.org/xmljava/ch3/");
-                for (int i = 0; i < results.size(); i++) {
-                    System.out.println(results.get(i).getValue());    
+                for (Element result : results) {
+                    System.out.println(result.getValue());    
                 }
             }
             else { 

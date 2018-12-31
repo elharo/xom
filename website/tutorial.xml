@@ -21,7 +21,7 @@
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2002-2005, 2016</year>
+      <year>2002-2005, 2016, 2018</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo> 
@@ -85,7 +85,7 @@ Next we append the string <literal>"Hello World!"</literal> to it:
 <informalexample><programlisting>String result = doc.toXML();</programlisting></informalexample>
 
 <para>
-  This string can be written onto  an <classname>OutputStream</classname> or a  <classname>Writer</classname>
+  This string can be written onto an <classname>OutputStream</classname> or a <classname>Writer</classname>
   in the usual way. Here&rsquo;s the complete program:
 </para>
 
@@ -798,7 +798,7 @@ validity errors in the document:
   <para>
     The normal strategy in XOM is a <literal>for</literal> 
     loop that iterates across the children,
-     often  recursing down the tree.
+     often recursing down the tree.
     The first child is at position 0. The last child is at one less than the number of children of the 
     node. 
     For example,
@@ -894,7 +894,7 @@ Top-down descent is the primary navigation path most XOM programs take, and the 
 
 <para>
   You'll notice these three methods all return an
-  <classname>Elements</classname> object. This is a type-safe, read-only list
+  <classname>Elements</classname> object. This is a type-safe, read-only iterable
   that only contains elements. It has two methods, <methodname>get</methodname>
   and <methodname>size</methodname>:
 </para>
@@ -926,6 +926,20 @@ Top-down descent is the primary navigation path most XOM programs take, and the 
     
 }</programlisting></informalexample>
 
+
+<para>
+  In XOM 1.3.0 and later you can use an enhanced for loop instead:
+</para>
+
+<informalexample><programlisting>public static void listChildren(Element current, int depth) {
+  System.out.println(current.getQualifiedName());
+   for (Element child : current.getChildElements()) {
+    listChildren(child, depth+1);
+  }
+    
+}</programlisting></informalexample>
+
+
 <para>
   Sometimes, of course, you don't want a list of all the child elements.
   You just want one. For this purpose, XOM has the 
@@ -949,11 +963,11 @@ Top-down descent is the primary navigation path most XOM programs take, and the 
 </methodsynopsis>    
 
   <para>
-    These are mostly useful when you really expect there won't be
+    These are useful when you really expect there won't be
     more than one such child, and you don't want the extra hassle of list
     iteration. The name is intended to convey the fact that even if you expect that
     there is only one such child, there may in fact be more. In any case, the first one
-    is always returned. If there&rsquo;s no child with the necessary name and namespace URI, 
+    is always returned. If there&rsquo;s no child with the specified name and namespace URI, 
     then these methods return null.
   </para>
 
@@ -1889,8 +1903,8 @@ try {
   Document stylesheet = builder.build("http://www.example.com/stylesheet.xsl");
   XSLTransform transform = new XSLTransform(stylesheet);           
   Nodes output = transform.transform(input);
-  for (int i = 0; i &lt; output.size(); i++) {
-    System.out.print(output.get(i).toXML());                
+  for (Node node : output) {
+    System.out.print(node.toXML());                
   } 
   System.out.println();
 }
@@ -1905,8 +1919,8 @@ catch (IOException ex) {
 }</programlisting></informalexample>
   
   <para>
-  The result of a transformation is a XOM  <classname>Nodes</classname> object.
-  The  <classname>Nodes</classname> list returned by the <methodname>transform</methodname> method
+  The result of a transformation is a XOM <classname>Nodes</classname> object.
+  The <classname>Nodes</classname> list returned by the <methodname>transform</methodname> method
   may contain zero, one, or more than one node, depending on what the stylesheet
   produced. After all, there&rsquo;s no guarantee that an XSL transformation produces a well-formed XML document.
   Sometimes it only produces a well-balanced document fragment, and sometimes it produces nothing at all.

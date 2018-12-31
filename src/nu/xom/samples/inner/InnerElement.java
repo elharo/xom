@@ -76,8 +76,8 @@ public class InnerElement extends Element {
         }
         this.removeChildren();
         Nodes children = doc.getRootElement().removeChildren();
-        for (int i = 0; i < children.size(); i++) {
-            this.appendChild(children.get(i));
+        for (Node child : children) {
+            this.appendChild(child);
         }
         
     }

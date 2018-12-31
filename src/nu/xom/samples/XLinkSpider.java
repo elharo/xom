@@ -1,4 +1,4 @@
-/* Copyright 2002-2004, 2006 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2006, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -23,8 +23,8 @@ package nu.xom.samples;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +32,6 @@ import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
-import nu.xom.Elements;
 
 
 /**
@@ -43,14 +42,14 @@ import nu.xom.Elements;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.3.0
  *
  */
 public class XLinkSpider {
 
-    private Set spidered = new HashSet();
+    private Set<URL> spidered = new HashSet<URL>();
     private Builder parser = new Builder();
-    private List queue = new LinkedList();
+    private List<URL> queue = new ArrayList<URL>();
     
     public static final String XLINK_NS 
       = "http://www.w3.org/1999/xlink";
@@ -109,9 +108,8 @@ public class XLinkSpider {
                 // skip this one   
             }
         }
-        Elements children = element.getChildElements();
-        for (int i = 0; i < children.size(); i++) {
-            search(children.get(i));
+        for (Element child : element.getChildElements()) {
+            search(child);
         }
         
     }

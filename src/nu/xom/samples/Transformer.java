@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -23,12 +23,13 @@ package nu.xom.samples;
 
 import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.xslt.XSLTransform;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.0
  *
  */
 public class Transformer {
@@ -67,8 +68,8 @@ public class Transformer {
             
             Nodes output = transform.transform(doc);
             
-            for (int i = 0; i < output.size(); i++) {
-                System.out.print(output.get(i).toXML());                
+            for (Node node : output) {
+                System.out.print(node.toXML());                
             } 
             System.out.println();
         }

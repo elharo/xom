@@ -95,9 +95,8 @@ public class RDDLStripper {
             
         }
         else {
-            Elements elements = element.getChildElements();      
-            for (int i = 0; i < elements.size(); i++) {
-                strip(elements.get(i));
+            for (Element child : element.getChildElements()) {
+                strip(child);
             }     
         }       
         
