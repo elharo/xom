@@ -721,8 +721,7 @@ XOM Build file
     </jar>
   </target>
     
-  <!-- Generate a Maven 2 JAR for uploading to the maven
-      bug repository and hence placement onto ibiblio and mirrors. 
+  <!-- Generate a Maven 2 JAR for uploading to OSRRH and hence placement onto ibiblio and mirrors. 
       See http://maven.apache.org/guides/mini/guide-central-repository-upload.html -->
   <target name="maven2" depends="jar, sources.jar, javadoc.jar" >
       <property name="pom2.template" location="project2.xml" />
