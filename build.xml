@@ -33,9 +33,9 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="3"/>
-    <property name="microversion" value="0"/>
+    <property name="microversion" value="1"/>
   	<!-- put a1, b2 etc. here in non-releases -->
-    <property name="versionqualifier" value=""/>
+    <property name="versionqualifier" value="-SNAPSHOT"/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
   	<!-- OSGI wants a period before the a1/b2/d3 qualifier -->
   	
@@ -766,7 +766,7 @@ XOM Build file
     </jar>
   </target>
   
-  <target name="javadoc.jar" depends="init, compile">
+  <target name="javadoc.jar" depends="init, compile, betterdoc">
     <jar jarfile="${javadoc.jar}" basedir="${build.dir}/apidocs">
     </jar>
   </target>
@@ -781,6 +781,16 @@ XOM Build file
       <property name="license" location="LICENSE.txt" />
       <property name="xom-maven-2.jar" location="${dist.dir}/maven2/xom-maven-${version}.jar" />
       <copy file="${pom2.template}" tofile="${pom2.file}">
+        <filterset>
+         <filter token="VERSION" value="${version}"/>
+       </filterset>
+      </copy>
+      <copy file="${pom2.file}" tofile="${dist.dir}/maven2/xom-maven-${version}.pom">
+        <filterset>
+         <filter token="VERSION" value="${version}"/>
+       </filterset>
+      </copy>
+      <copy file="${package.jar}" tofile="${dist.dir}/maven2/xom-maven-${version}.jar">
         <filterset>
          <filter token="VERSION" value="${version}"/>
        </filterset>
