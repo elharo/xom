@@ -4,11 +4,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <packaging>jar</packaging>
+
   <name>XOM</name>
-  <version>@VERSION@</version>
   <description>The XOM Dual Streaming/Tree API for Processing XML</description>
-  <url>http://xom.nu</url>
+  <url>https://xom.nu</url>
   <licenses>
     <license>
       <name>The GNU Lesser General Public License, Version 2.1</name>
@@ -18,11 +17,14 @@
   </licenses>
   <scm>
     <url>https://github.com/elharo/xom</url>
+    <connection>scm:git:git://github.com/elharo/xom.git</connection>
+    <developerConnection>scm:git:ssh://github.com:elharo/xom.git</developerConnection>    
   </scm>
   
+  <groupId>nu.xom</groupId>
   <artifactId>xom</artifactId>
-  <!--  previously used group ID -->
-  <groupId>xom</groupId>
+  <version>@VERSION@</version>
+  <packaging>jar</packaging>
 
   <inceptionYear>2002</inceptionYear>
 
