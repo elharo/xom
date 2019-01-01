@@ -49,7 +49,7 @@ class XOMHandler
     // current should be the same node.
     protected ParentNode   parent;
     protected ParentNode   current;
-    protected ArrayList    parents;
+    protected ArrayList<ParentNode> parents;
     protected boolean      inProlog;
     protected boolean      inDTD;
     protected int          position; // current number of items in prolog
@@ -96,7 +96,7 @@ class XOMHandler
         document = factory.startMakingDocument();
         parent = document;
         current = document;
-        parents = new ArrayList();
+        parents = new ArrayList<ParentNode>();
         parents.add(document);
         inProlog = true;
         position = 0;

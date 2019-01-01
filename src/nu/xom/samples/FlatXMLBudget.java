@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -26,9 +26,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import nu.xom.Document;
@@ -48,32 +48,29 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.1
  *
  */
 public class FlatXMLBudget {
 
-  public static void convert(List data, OutputStream out) 
+  public static void convert(List<Map<String, String>> data, OutputStream out) 
    throws IOException {
       
     Element budget = new Element("Budget");
     Document doc = new Document(budget);
     
-    Iterator records = data.iterator();
-    while (records.hasNext()) {
+    for (Map<String, String> record : data) {
       Element lineItem = new Element("LineItem");
-      Map record = (Map) records.next();
-      Set fields = record.entrySet();
-      Iterator entries = fields.iterator();
-      while (entries.hasNext()) {
-        Map.Entry entry = (Map.Entry) entries.next();
-        String name = (String) entry.getKey();
-        String value = (String) entry.getValue();
+      
+      Set<Entry<String, String>> fields = record.entrySet();
+      for (Entry<String, String> entry : fields) {
+        String name = entry.getKey();
+        String value = entry.getValue();
         // some of the values contain ampersands and less than
         // signs that must be escaped
         Element field = new Element(name);
         field.appendChild(value); 
-         lineItem.appendChild(field);
+        lineItem.appendChild(field);
        }
        budget.appendChild(lineItem);
     }
@@ -102,7 +99,7 @@ public class FlatXMLBudget {
         out = new FileOutputStream(args[1]); 
       }
 
-      List results = BudgetData.parse(in);
+      List<Map<String, String>> results = BudgetData.parse(in);
       convert(results, out);
     }
     catch (IOException ex) {

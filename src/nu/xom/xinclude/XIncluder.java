@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.3.1
  *
  */
 public class XIncluder {
@@ -283,14 +283,14 @@ public class XIncluder {
              IOException, NoIncludeLocationException, ParsingException, 
              UnsupportedEncodingException, XIncludeException {
         
-        ArrayList stack = new ArrayList();
+        ArrayList<String> stack = new ArrayList<String>();
         resolveInPlace(in, builder, stack);
         
     }
 
     
     private static void resolveInPlace(
-      Document in, Builder builder, ArrayList baseURLs) 
+      Document in, Builder builder, ArrayList<String> baseURLs) 
       throws IOException, ParsingException, XIncludeException {
         
         String base = in.getBaseURI();
@@ -308,7 +308,7 @@ public class XIncluder {
 
     
     private static void resolve(
-      Element element, Builder builder, ArrayList baseURLs)
+      Element element, Builder builder, ArrayList<String> baseURLs)
       throws IOException, ParsingException, XIncludeException {
         
         resolve(element, builder, baseURLs, null);
@@ -317,7 +317,7 @@ public class XIncluder {
     
     
     private static void resolve(
-      Element element, Builder builder, ArrayList baseURLs, Document originalDoc)
+      Element element, Builder builder, ArrayList<String> baseURLs, Document originalDoc)
       throws IOException, ParsingException, XIncludeException {
         
         if (isIncludeElement(element)) {
@@ -669,7 +669,7 @@ public class XIncluder {
     // This assumes current implementation of XPointer that
     // always selects exactly one element or throws an exception.
     private static Nodes resolveXPointerSelection(Nodes in, 
-      Builder builder, ArrayList baseURLs, Document original) 
+      Builder builder, ArrayList<String> baseURLs, Document original) 
       throws IOException, ParsingException, XIncludeException {
 
         Element preinclude = (Element) in.get(0);
@@ -692,7 +692,7 @@ public class XIncluder {
 
     
     private static Nodes resolveSilently(
-      Element element, Builder builder, ArrayList baseURLs, Document originalDoc)
+      Element element, Builder builder, ArrayList<String> baseURLs, Document originalDoc)
       throws IOException, ParsingException, XIncludeException {
         
         // There is no possibility the element passed to this method 
@@ -740,7 +740,7 @@ public class XIncluder {
 
     
     private static void processFallback(Element includeElement, 
-      Builder builder, ArrayList baseURLs, ParentNode parent, Exception ex)
+      Builder builder, ArrayList<String> baseURLs, ParentNode parent, Exception ex)
         throws XIncludeException, IOException, ParsingException {
         
            Element fallback 
@@ -769,7 +769,7 @@ public class XIncluder {
     
     // I could probably move the xpointer out of this method
     private static Nodes downloadXMLDocument(
-      URL source, String xpointer, Builder builder, ArrayList baseURLs,
+      URL source, String xpointer, Builder builder, ArrayList<String> baseURLs,
       String accept, String acceptLanguage, String parentLanguage) 
       throws IOException, ParsingException, XIncludeException, 
         XPointerSyntaxException, XPointerResourceException {

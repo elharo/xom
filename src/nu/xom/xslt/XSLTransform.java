@@ -126,7 +126,7 @@ public final class XSLTransform {
      */
     private Templates   templates;  
     private NodeFactory factory;
-    private Map         parameters = new HashMap();
+    private Map<String, Object> parameters = new HashMap<String, Object>();
     private static ErrorListener errorsAreFatal = new FatalListener();
     
     
@@ -355,9 +355,9 @@ public final class XSLTransform {
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
             // work around a Xalan 2.7.0 bug
             transformer.setErrorListener(errorsAreFatal);
-            Iterator iterator = parameters.keySet().iterator();
+            Iterator<String> iterator = parameters.keySet().iterator();
             while (iterator.hasNext()) {
-                String key = (String) iterator.next();
+                String key = iterator.next();
                 Object value = parameters.get(key);
                 transformer.setParameter(key, value);
             }

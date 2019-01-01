@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -34,12 +34,12 @@ import java.util.HashMap;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.3.1
  */
 class Namespaces {
     
-    private HashMap   namespaces = new HashMap(1);
-    private ArrayList prefixes   = new ArrayList(1);
+    private HashMap<String, String> namespaces = new HashMap<String, String>(1);
+    private ArrayList<String> prefixes = new ArrayList<String>(1);
     
 
     void put(String prefix, String URI) {
@@ -76,7 +76,7 @@ class Namespaces {
     
     // This violates encapsulation. Don't change the 
     // array returned.
-    ArrayList getPrefixes() {
+    ArrayList<String> getPrefixes() {
         return this.prefixes;
     }
     
@@ -86,8 +86,8 @@ class Namespaces {
         Namespaces result = new Namespaces();
         // shallow copies work here because these collections only
         // contain immutable strings
-        result.namespaces = (HashMap)   this.namespaces.clone();
-        result.prefixes   = (ArrayList) this.prefixes.clone();
+        result.namespaces = (HashMap<String, String>) this.namespaces.clone();
+        result.prefixes   = (ArrayList<String>) this.prefixes.clone();
         return result;
         
     }

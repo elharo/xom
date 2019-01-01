@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2011, 2013 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2011, 2013, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -46,7 +46,7 @@ import java.util.LinkedHashSet;
  * </ul>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.0
+ * @version 1.3.1
  *
  */
 public class Element extends ParentNode {
@@ -1252,12 +1252,12 @@ public class Element extends ParentNode {
         // additional namespace declarations. In this case, the 
         // namespace count is exactly one, which is here indicated
         // by a null prefix set.
-        Set allPrefixes = null;
+        Set<String> allPrefixes = null;
         if (namespaces != null) {
-            allPrefixes = new HashSet(namespaces.getPrefixes());
+            allPrefixes = new HashSet<String>(namespaces.getPrefixes());
             allPrefixes.add(prefix);
         } 
-        if ("xml".equals(prefix)) allPrefixes = new HashSet();
+        if ("xml".equals(prefix)) allPrefixes = new HashSet<String>();
         // add attribute prefixes
         int count = getAttributeCount();
         for (int i = 0; i < count; i++) {
@@ -1265,7 +1265,7 @@ public class Element extends ParentNode {
             String attPrefix = att.getNamespacePrefix();
             if (attPrefix.length() != 0 && !"xml".equals(attPrefix)) {
                 if (allPrefixes == null) {
-                    allPrefixes = new HashSet();
+                    allPrefixes = new HashSet<String>();
                     allPrefixes.add(prefix);
                 }
                 allPrefixes.add(attPrefix);    
@@ -1279,9 +1279,9 @@ public class Element extends ParentNode {
     
     
     // Used for XPath and serialization
-    Map getNamespacePrefixesInScope() {
+    Map<String, String> getNamespacePrefixesInScope() {
         
-        HashMap namespaces = new HashMap();
+        HashMap<String, String> namespaces = new HashMap<String, String>();
         
         Element current = this;
         while (true) {
@@ -1324,7 +1324,7 @@ public class Element extends ParentNode {
     }
 
 
-    private void addPrefixIfNotAlreadyPresent(HashMap namespaces, Element current, String prefix) {
+    private void addPrefixIfNotAlreadyPresent(HashMap<String, String> namespaces, Element current, String prefix) {
         if (!namespaces.containsKey(prefix)) {
             namespaces.put(prefix, current.getLocalNamespaceURI(prefix));
         }
@@ -1380,13 +1380,13 @@ public class Element extends ParentNode {
         }
         
         
-        Set allPrefixes = getNamespacePrefixes();
-        Iterator iterator = allPrefixes.iterator();
+        Set<String> allPrefixes = getNamespacePrefixes();
+        Iterator<String> iterator = allPrefixes.iterator();
         try {
             for (int i = 0; i < index; i++) {
                 iterator.next();   
             }
-            return (String) iterator.next();
+            return iterator.next();
         }
         catch (NoSuchElementException ex) {
             throw new IndexOutOfBoundsException(
@@ -1397,9 +1397,9 @@ public class Element extends ParentNode {
     }
 
 
-    private Set getNamespacePrefixes() {
+    private Set<String> getNamespacePrefixes() {
 
-        Set allPrefixes = new LinkedHashSet();
+        Set<String> allPrefixes = new LinkedHashSet<String>();
         if (!("xml".equals(prefix))) allPrefixes.add(prefix);
         if (namespaces != null) {
             allPrefixes.addAll(namespaces.getPrefixes());
@@ -1840,7 +1840,7 @@ public class Element extends ParentNode {
     }
 
 
-    private class AttributeIterator implements Iterator {
+    private class AttributeIterator implements Iterator<Attribute> {
       
       private int next = 0;
       
@@ -1848,7 +1848,7 @@ public class Element extends ParentNode {
           return next < numAttributes;
       }
 
-      public Object next() throws NoSuchElementException {
+      public Attribute next() throws NoSuchElementException {
           
           if (hasNext()) {
               Attribute a = attributes[next];
@@ -1864,7 +1864,7 @@ public class Element extends ParentNode {
       }
     }
     
-    Iterator attributeIterator() {
+    Iterator<Attribute> attributeIterator() {
 
         return new AttributeIterator();
     }

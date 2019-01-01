@@ -1,4 +1,4 @@
-/* Copyright 2004 Elliotte Rusty Harold
+/* Copyright 2004, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -45,7 +45,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.1
  *
  */
 public class SourceCodeSerializer extends Serializer {
@@ -60,7 +60,7 @@ public class SourceCodeSerializer extends Serializer {
     }
     
     
-    private Stack parents = new Stack();
+    private Stack<String> parents = new Stack<String>();
 
     
     public void write(Document doc) throws IOException {

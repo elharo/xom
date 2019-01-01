@@ -1,4 +1,4 @@
-/* Copyright 2002-2006 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -44,7 +44,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.3.1
  *
  */
 class XPointer {
@@ -71,7 +71,7 @@ class XPointer {
         }
         catch (IllegalNameException ex) {
             // not a bare name; try element() scheme
-            List elementSchemeData = findElementSchemeData(xptr);
+            List<String> elementSchemeData = findElementSchemeData(xptr);
             if (elementSchemeData.isEmpty()) {
                 // This may be a legal XPointer, but it doesn't 
                 // have an element() scheme so we can't handle it. 
@@ -80,8 +80,7 @@ class XPointer {
                 );    
             }
         
-            for (int i = 0; i < elementSchemeData.size(); i++) {
-                String currentData = (String) (elementSchemeData.get(i));
+            for (String currentData : elementSchemeData) {
                 int[] keys = new int[0];
                 ParentNode current = doc;
                 if (currentData.indexOf('/') == -1) {
@@ -211,10 +210,10 @@ class XPointer {
         return result;
     }
     
-    private static List findElementSchemeData(String xpointer) 
+    private static List<String> findElementSchemeData(String xpointer) 
       throws XPointerSyntaxException {
         
-        List result = new ArrayList(1);
+        List<String> result = new ArrayList<String>(1);
         
         StringBuffer xptr = new StringBuffer(xpointer.trim());
         StringBuffer scheme = new StringBuffer();

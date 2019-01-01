@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2005, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -50,14 +50,14 @@ import org.xml.sax.helpers.AttributesImpl;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b1
+ * @version 1.3.1
  *
  */
 class XSLTHandler 
   implements ContentHandler, LexicalHandler {
 
     private final Nodes       result;
-    private final ArrayList   parents;
+    private final ArrayList<Element>   parents;
     private final NodeFactory factory;
     private StringBuffer buffer;
     
@@ -65,7 +65,7 @@ class XSLTHandler
     XSLTHandler(NodeFactory factory) {
         this.factory = factory; 
         result   = new Nodes();
-        parents  = new ArrayList();
+        parents  = new ArrayList<Element>();
         buffer   = new StringBuffer();
     }   
     

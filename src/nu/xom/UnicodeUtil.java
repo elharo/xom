@@ -1,4 +1,4 @@
-/* Copyright 2005, 2009 Elliotte Rusty Harold
+/* Copyright 2005, 2009, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -28,12 +28,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * <p>
- *   
- * </p>
- * 
  * @author Elliotte Rusty Harold
- * @version 1.2b3
+ * @version 1.3.1
  *
  */
 final class UnicodeUtil {
@@ -106,7 +102,7 @@ final class UnicodeUtil {
     private static int LOW_SURROGATE_START = 0xDC00;
     
     
-    private static Map compositions;
+    private static Map<String, String> compositions;
     
     private static void loadCompositions() {
     
@@ -133,7 +129,7 @@ final class UnicodeUtil {
             InputStream source = loader.getResourceAsStream("nu/xom/compositions.dat");
             in = new DataInputStream(source);
             // ???? would it make sense to store a serialized HashMap instead????
-            compositions = new HashMap();
+            compositions = new HashMap<String, String>();
             try {
                 while (true) {
                     String composed = in.readUTF();

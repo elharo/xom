@@ -1,4 +1,4 @@
-/* Copyright 2002-2004, 2006 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2006, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -45,14 +45,14 @@ import nu.xom.ProcessingInstruction;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2d1
+ * @version 1.3.1
  *
  */
 public class PoliteSpider {
 
-    private Set spidered = new HashSet();
+    private Set<URL> spidered = new HashSet<URL>();
     private Builder parser = new Builder();
-    private List queue = new LinkedList();
+    private List<URL> queue = new LinkedList<URL>();
     
     public static final String XLINK_NS 
      = "http://www.w3.org/1999/xlink";

@@ -1,4 +1,4 @@
-/* Copyright 2005, 2006, 2012 Elliotte Rusty Harold
+/* Copyright 2005, 2006, 2012, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,13 +33,13 @@ import org.jaxen.NamespaceContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.8
+ * @version 1.3.1
  *
  */
 public final class XPathContext {
 
     
-    private Map namespaces = new HashMap();
+    private Map<String, String> namespaces = new HashMap<String, String>();
     
     
     /**
@@ -168,7 +168,7 @@ public final class XPathContext {
      */
     public String lookup(String prefix) {
         if ("".equals(prefix)) return null;
-        return (String) namespaces.get(prefix);
+        return namespaces.get(prefix);
     }
 
     
