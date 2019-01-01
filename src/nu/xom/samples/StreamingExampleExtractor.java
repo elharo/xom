@@ -150,8 +150,9 @@ public class StreamingExampleExtractor extends NodeFactory {
         File file = new File(dir, fileName);
         System.out.println(file);
         FileOutputStream fout = new FileOutputStream(file);
+        Writer out = null;
         try {
-            Writer out = new OutputStreamWriter(fout, "UTF-8");
+            out = new OutputStreamWriter(fout, "UTF-8");
             // Buffering almost always helps performance a lot
             out = new BufferedWriter(out);
             out.write(code);
@@ -160,6 +161,9 @@ public class StreamingExampleExtractor extends NodeFactory {
         }
         finally {
             fout.close();
+            if (out != null) {
+            	out.close();
+            }
         }
     
     }

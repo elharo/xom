@@ -28,9 +28,9 @@ import nu.xom.*;
 public class InnerElement extends Element {
     
     
-    private static ThreadLocal builders = new ThreadLocal() {
+    private static ThreadLocal<Builder> builders = new ThreadLocal<Builder>() {
         
-         protected synchronized Object initialValue() {
+         protected synchronized Builder initialValue() {
              return new Builder(new InnerFactory());
          }
          
@@ -69,7 +69,7 @@ public class InnerElement extends Element {
           + xml + "</fakeRoot>";
         Document doc;
         try {
-            doc = ((Builder) builders.get()).build(xml, null);
+            doc = builders.get().build(xml, null);
         }
         catch (IOException ex) {
             throw new ParsingException(ex.getMessage(), ex);
