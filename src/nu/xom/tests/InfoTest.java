@@ -1,4 +1,4 @@
-/* Copyright 2004 Elliotte Rusty Harold
+/* Copyright 2004, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.1
  *
  */
 public class InfoTest extends XOMTestCase {
@@ -51,7 +51,7 @@ public class InfoTest extends XOMTestCase {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
 
-        Class info = Class.forName("nu.xom.Info");
+        Class<?> info = Class.forName("nu.xom.Info");
         Class[] args = {String[].class};
         Method main = info.getMethod("main", args);
         main.setAccessible(true);

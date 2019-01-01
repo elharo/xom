@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -23,7 +23,6 @@ package nu.xom.samples;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +41,7 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.1
  *
  */
 public class Agency {
@@ -52,9 +51,9 @@ public class Agency {
   private String treasuryCode;
   private String year;
   
-  private List   bureaus = new ArrayList();
+  private List<Bureau> bureaus = new ArrayList<Bureau>();
   
-  private static Map instances = new HashMap();
+  private static Map<String, Agency> instances = new HashMap<String, Agency>();
 
   // A private constructor so instantiators 
   // have to use the factory method
@@ -102,9 +101,7 @@ public class Agency {
     agency.appendChild(code);
     agency.appendChild(treasuryAgencyCode);
     
-    Iterator iterator = bureaus.iterator();
-    while (iterator.hasNext()) {
-      Bureau bureau = (Bureau) iterator.next();
+    for (Bureau bureau : bureaus) {
       agency.appendChild(bureau.getXML());
     }
     return agency;

@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2018 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -42,12 +42,12 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.1
  *
  */
 public class Budget {
 
-  private List   agencies = new ArrayList();
+  private List<Agency> agencies = new ArrayList<Agency>();
   private String year;
   
   public Budget(String year) {
@@ -59,10 +59,10 @@ public class Budget {
     if (!agencies.contains(agency)) agencies.add(agency);     
   }
 
-  public void add(Map lineItem) { 
+  public void add(Map<String, String> lineItem) { 
            
-    String agencyName = (String) lineItem.get("AgencyName");
-    String agencyCode = (String) lineItem.get("AgencyCode");
+    String agencyName = lineItem.get("AgencyName");
+    String agencyCode = lineItem.get("AgencyCode");
     String treasuryAgencyCode 
      = (String) lineItem.get("TreasuryAgencyCode");
     Agency agency = Agency.getInstance(agencyName, agencyCode, 
@@ -77,24 +77,23 @@ public class Budget {
     
     // Names and codes of two accounts in different bureaus 
     // can be the same
-    String accountName = (String) lineItem.get("AccountName");
-    String accountCode = (String) lineItem.get("AccountCode");
-    String category    = (String) lineItem.get("BEACategory");
+    String accountName = lineItem.get("AccountName");
+    String accountCode = lineItem.get("AccountCode");
+    String category    = lineItem.get("BEACategory");
     Account account = Account.getInstance(accountName,  
      accountCode, category, bureauCode, agencyCode, year);
     bureau.add(account);
     
     // Names and codes of two subfunctions in different accounts 
     // can be the same
-    String subfunctionTitle = (String) lineItem.get("SubfunctionTitle");
+    String subfunctionTitle = lineItem.get("SubfunctionTitle");
     String subfunctionCode
      = (String) lineItem.get("SubfunctionCode");
     String yearKey = year;
     if (!yearKey.equals("TransitionalQuarter")) {
       yearKey = "Y" + year;
     }
-    long amount
-     = 1000L * Long.parseLong((String) lineItem.get(yearKey));
+    long amount = 1000L * Long.parseLong(lineItem.get(yearKey));
     Subfunction subfunction = new Subfunction(subfunctionTitle,
      subfunctionCode, amount);
     account.add(subfunction);
@@ -105,9 +104,9 @@ public class Budget {
         
     Element budget = new Element("Budget");
     budget.addAttribute(new Attribute("year", String.valueOf(year)));
-    Iterator iterator = agencies.iterator();
+    Iterator<Agency> iterator = agencies.iterator();
     while (iterator.hasNext()) {
-      Agency agency = (Agency) iterator.next();
+      Agency agency = iterator.next();
       budget.appendChild(agency.getXML());
     }
      return budget;

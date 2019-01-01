@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -42,7 +42,7 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.1
  *
  */
 public class Account {
@@ -56,9 +56,9 @@ public class Account {
   private String agencyCode;
   private String year;
   
-  private List   subfunctions = new ArrayList();
+  private List<Subfunction> subfunctions = new ArrayList<Subfunction>();
   
-  private static Map instances = new HashMap();
+  private static Map<String, Account> instances = new HashMap<String, Account>();
 
   // Use a private constructor so clients 
   // have to use the factory method
@@ -108,9 +108,9 @@ public class Account {
     account.appendChild(code);
     account.appendChild(BEACategory);
 
-    Iterator iterator = subfunctions.iterator();
+    Iterator<Subfunction> iterator = subfunctions.iterator();
     while (iterator.hasNext()) {
-      Subfunction subfunction = (Subfunction) iterator.next();
+      Subfunction subfunction = iterator.next();
       account.appendChild(subfunction.getXML());
     }
     return account;

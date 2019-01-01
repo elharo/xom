@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -26,7 +26,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,18 +45,16 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.1
  *
  */
 public class HierarchicalXMLBudget {
 
-  public static void convert(List budgetData, String year, 
+  public static void convert(List<Map<String, String>> budgetData, String year, 
    OutputStream out) throws IOException { 
      
     Budget budget = new Budget(year);
-    Iterator records = budgetData.iterator();
-    while (records.hasNext()) {
-      Map lineItem = (Map) records.next();
+    for (Map<String, String> lineItem : budgetData) {
       budget.add(lineItem);
     }
 
@@ -99,7 +96,7 @@ public class HierarchicalXMLBudget {
         out = new FileOutputStream(args[2]); 
       }
 
-      List results = BudgetData.parse(in);
+      List<Map<String, String>> results = BudgetData.parse(in);
       convert(results, args[0], out);
     }
     catch (IOException e) {

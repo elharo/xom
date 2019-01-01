@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2009, 2011 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009, 2011, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -62,7 +62,7 @@ import nu.xom.XPathContext;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.7
+ * @version 1.3.1
  *
  */
 public class Canonicalizer {
@@ -71,9 +71,9 @@ public class Canonicalizer {
     private boolean exclusive = false;
     private boolean v11 = false;
     private CanonicalXMLSerializer serializer;
-    private List inclusiveNamespacePrefixes = new ArrayList();
+    private List<String> inclusiveNamespacePrefixes = new ArrayList<String>();
     
-    private static Comparator comparator = new AttributeComparator();
+    private static Comparator<Attribute> comparator = new AttributeComparator();
     
     
     public final static String CANONICAL_XML =  
@@ -90,11 +90,10 @@ public class Canonicalizer {
       "http://www.w3.org/2006/12/xml-c14n11#WithComments"; 
     
     
-    private static class AttributeComparator implements Comparator {
+    private static class AttributeComparator implements Comparator<Attribute> {
         
-        public int compare(Object o1, Object o2) {
-            Attribute a1 = (Attribute) o1;   
-            Attribute a2 = (Attribute) o2;   
+    	@Override
+        public int compare(Attribute a1, Attribute a2) {   
             
             String namespace1 = a1.getNamespaceURI();
             String namespace2 = a2.getNamespaceURI();
@@ -400,7 +399,7 @@ public class Canonicalizer {
                 writeRaw(element.getQualifiedName());
             }
             
-            SortedMap map = new TreeMap();
+            SortedMap<String, String> map = new TreeMap<String, String>();
             if (nodes == null) {
                 ParentNode parent = element.getParent();
                 Element parentElement = null;
@@ -500,11 +499,11 @@ public class Canonicalizer {
         }
 
 
-        private void writeNamespaceDeclarations(SortedMap map) throws IOException {
+        private void writeNamespaceDeclarations(SortedMap<String, String> map) throws IOException {
 
-            Iterator prefixes = map.entrySet().iterator();
+            Iterator<Entry<String, String>> prefixes = map.entrySet().iterator();
             while (prefixes.hasNext()) {
-                Map.Entry entry = (Entry) prefixes.next();
+                Entry<String, String> entry = (Entry<String, String>) prefixes.next();
                 String prefix = (String) entry.getKey();
                 String uri = (String) entry.getValue();
                 writeRaw(" ");
@@ -620,7 +619,7 @@ public class Canonicalizer {
         
         private Attribute[] sortAttributes(Element element) {
     
-            Map nearest = new TreeMap();
+            Map<String, Attribute> nearest = new TreeMap<String, Attribute>();
             // add in any inherited xml: attributes
             if (!exclusive && nodes != null && nodes.contains(element) 
               && !nodes.contains(element.getParent())) {
@@ -655,14 +654,14 @@ public class Canonicalizer {
                 }
                 
                 // remove null values
-                Iterator iterator = nearest.values().iterator();
+                Iterator<Attribute> iterator = nearest.values().iterator();
                 while (iterator.hasNext()) {
-                    Attribute a = (Attribute) iterator.next();
+                    Attribute a = iterator.next();
                     if (a == null) iterator.remove();
                 }
                 
                 if (v11) { // fixup xml:base attributes
-                    List bases = getOmittedBases(element);
+                    List<String> bases = getOmittedBases(element);
                     Attribute baseAttribute = element.getAttribute("base", Namespace.XML_NAMESPACE);
                     String baseValue = "";
                     if (baseAttribute != null) {
@@ -671,7 +670,7 @@ public class Canonicalizer {
                     }
                     if (!bases.isEmpty()) {
                       for (int i = 0; i < bases.size(); i++) {
-                          baseValue = joinURIReferences((String) bases.get(i), baseValue);
+                          baseValue = joinURIReferences(bases.get(i), baseValue);
                       }
                     }
                     if (baseValue != null && baseValue.length() > 0) {
@@ -688,9 +687,9 @@ public class Canonicalizer {
                 result[i] = element.getAttribute(i); 
             }
             
-            Iterator iterator = nearest.values().iterator();
+            Iterator<Attribute> iterator = nearest.values().iterator();
             for (int j = localCount; j < result.length; j++) {
-                result[j] = (Attribute) iterator.next();
+                result[j] = iterator.next();
             }
             
             Arrays.sort(result, comparator);       
@@ -700,8 +699,8 @@ public class Canonicalizer {
         }
 
 
-        private List getOmittedBases(Element element) {
-            ArrayList bases = new ArrayList();
+        private List<String> getOmittedBases(Element element) {
+            ArrayList<String> bases = new ArrayList<String>();
             // TODO(elharo): rework this to not need this next variable
             ParentNode parent = element.getParent();
             while (parent != null && parent instanceof Element && !nodes.contains(parent)) {
@@ -947,7 +946,7 @@ public class Canonicalizer {
                 // XXX Consider if it's faster to do this without XPath
                 Nodes nodes = node.query(".//. | .//@* | .//namespace::*");
                 if (exclusive) { // only include namespace nodes in scope
-                    Set prefixes = new HashSet(nodes.size());
+                    Set<String> prefixes = new HashSet<String>(nodes.size());
                     for (int i = 0; i < nodes.size(); i++) {
                         Node n = nodes.get(i);
                         if (n instanceof Element) {
@@ -1072,8 +1071,8 @@ public class Canonicalizer {
         Node root = in.get(0).getDocument();
         if (in.size() > 1) {
             Nodes out = new Nodes();
-            List list = new ArrayList(in.size());
-            List namespaces = new ArrayList();
+            List<Node> list = new ArrayList<Node>(in.size());
+            List<Node> namespaces = new ArrayList<Node>();
             for (int i = 0; i < in.size(); i++) {
                 Node node = in.get(i);
                 list.add(node);
@@ -1083,9 +1082,9 @@ public class Canonicalizer {
             if (! list.isEmpty() ) {
                 // Are these just duplicates; or is there really a node
                 // from a different document?
-                Iterator iterator = list.iterator();
+                Iterator<Node> iterator = list.iterator();
                 while (iterator.hasNext()) {
-                    Node next = (Node) iterator.next();
+                    Node next = iterator.next();
                     if (root != next.getDocument()) {
                         throw new CanonicalizationException(
                           "Cannot canonicalize subsets that contain nodes from more than one document");
@@ -1112,7 +1111,7 @@ public class Canonicalizer {
     }
 
 
-    private static void sort(List in, List namespaces, Nodes out, ParentNode parent) {
+    private static void sort(List<Node> in, List<Node> namespaces, Nodes out, ParentNode parent) {
 
         if (in.isEmpty()) return;
         if (in.contains(parent)) {
@@ -1134,7 +1133,7 @@ public class Canonicalizer {
                 }
                 // attach namespaces
                 if (!namespaces.isEmpty()) {
-                    Iterator iterator = in.iterator();
+                    Iterator<Node> iterator = in.iterator();
                     while (iterator.hasNext()) {
                         Object o = iterator.next();
                         if (o instanceof Namespace) {

@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -47,21 +47,21 @@ import nu.xom.Serializer;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.1
  *
  */
 public class AttributesXMLBudget {
 
-  public static void convert(List data, OutputStream out) 
+  public static void convert(List<Map<String, String>> data, OutputStream out) 
    throws IOException {
       
     Element budget = new Element("Budget");
     Document doc = new Document(budget);
           
-    Iterator records = data.iterator();
+    Iterator<Map<String, String>> records = data.iterator();
     while (records.hasNext()) {
       Element lineItem = new Element("LineItem");
-      Map record = (Map) records.next();
+      Map<String, String> record = records.next();
 
       // write the attributes
       setYear(lineItem, "AgencyCode", record);
@@ -92,15 +92,15 @@ public class AttributesXMLBudget {
 
   // Just a couple of private methods to factor out repeated code 
   private static void setYear(Element element, String name, 
-   Map record) {
-    element.addAttribute(new Attribute(name, (String) record.get(name)));       
+   Map<String, String> record) {
+    element.addAttribute(new Attribute(name, record.get(name)));       
   }
 
   private static void setAmount(Element element, String year, 
-   Map record) {
+   Map<String, String> record) {
     Element amount = new Element("Amount");
     amount.addAttribute(new Attribute("year", String.valueOf(year)));    
-    amount.appendChild((String) record.get("Y" + year));
+    amount.appendChild(record.get("Y" + year));
     element.appendChild(amount);
   }
 
@@ -124,7 +124,7 @@ public class AttributesXMLBudget {
         out = new FileOutputStream(args[1]); 
       }
 
-      List results = BudgetData.parse(in);
+      List<Map<String, String>> results = BudgetData.parse(in);
       convert(results, out);
     }
     catch (IOException ex) {

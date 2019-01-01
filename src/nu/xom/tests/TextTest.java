@@ -23,7 +23,6 @@ package nu.xom.tests;
 
 import nu.xom.Element;
 import nu.xom.IllegalCharacterDataException;
-import nu.xom.Node;
 import nu.xom.Text;
 
 /**
@@ -33,7 +32,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.0
+ * @version 1.3.1
  *
  */
 public class TextTest extends XOMTestCase {
