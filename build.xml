@@ -44,7 +44,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <property name="jaxenversion" value="1.1.6"/>
     <!-- <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/> -->
-    <property name="year"    value="2018"/>
+    <property name="year"    value="2019"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
@@ -88,6 +88,10 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="test.outputFormat" value="xml"/>   
     <property name="sources.jar" location="${dist.dir}/maven2/xom-${version}-sources.jar" />
     <property name="javadoc.jar" location="${dist.dir}/maven2/xom-${version}-javadoc.jar" />
+  	
+    <property name="ossrh-snapshots-repository-url" value="https://oss.sonatype.org/content/repositories/snapshots/" />
+    <property name="ossrh-staging-repository-url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
+    <property name="ossrh-server-id" value="ossrh" /> <!-- the server ID in the Maven settings.xml -->
     
     <path id="compile.class.path">
       <pathelement location="${xml-apis.jar}"/>
