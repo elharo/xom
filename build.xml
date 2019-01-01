@@ -162,11 +162,7 @@ XOM Build file
     testui         --> run JUnit test suite in GUI 
     clean          --> clean up the build directory
     dist           --> the zip and .tar.gz files
-    uploaddocs     --> upload API documentation and home page
-    uploadbetadocs --> upload unstable API documentation and home page
     upload         --> upload archive files
-    postbeta       --> tag and upload a beta release
-    release        --> tag and upload a final release
       
   Use the option -Dfat=true to make Text objects bigger but faster.
 
@@ -508,56 +504,6 @@ XOM Build file
         <fileset file="${dist.dir}/${name}-${version}-src.tar.gz" />
         <fileset file="${dist.dir}/${name}-${version}.jar" />
         <fileset file="${dist.dir}/maven2/xom-maven-${version}.jar" />
-    </scp>
-  </target>
-    
-    <!-- invoke as
-        ant -Dpassword=secret -Dwebpassword=secret postbeta -->
-  <property name="webpassword" value="" />  
-    
-  <!-- We have an antipattern here. This should be deployed from version control,
-       not from the local hard drive. Worth fixing down the line. 
-       The basic idea is that the release and postbeta targets should take
-       a tag as an argument. Then they should download the tagged files from CVS,
-       package them, and release those. Possibly the jar and zip targets 
-       should do similarly, or at least the dist target. -->
-  <!-- should only be run once per release --> 
-  <target name="postbeta" depends="upload, uploadbetadocs">
-    <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
-         cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"/>
-  </target>
-    
-  <!-- should only be run once per release --> 
-  <target name="release" depends="upload, uploaddocs">
-    <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}" 
-         cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"
-         package="xom"/>
-  </target>
-    
-  <target name="uploadbetadocs" depends="betterdocs">
-    <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html/unstable/apidocs">
-       <fileset dir="build/apidocs" />
-    </scp>
-    <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html">
-       <fileset file="website/unstable.html" />
-    </scp>
-  </target>
-    
-  <!-- this target does not yet work, so I have to tag manually. Any ideas? -->
-  <target name="tag" depends="compile" description="tag target in CVS">
-    <cvs command="tag -R XOM_${majorversion}${minorversion}${microversion}${versionqualifier}" 
-         cvsRoot=":pserver:elharo@cvs.dev.java.net:/cvs"
-         package="xom"/>
-  </target>
-  
-  <target name="uploaddocs" depends="upload">
-     <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html/apidocs">
-       <fileset dir="build/apidocs" />
-    </scp>
-    <scp todir="elharo:${webpassword}@humph.pair.com:/usr/home/elharo/public_html">
-      <fileset file="website/index.html" />
-      <fileset file="website/history.html" />
-      <fileset file="website/unstable.html" />
     </scp>
   </target>
   	
