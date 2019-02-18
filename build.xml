@@ -86,6 +86,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="excludes"       value=".clover, .DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb, jester*, trademark*"/>
 
     <property name="test.outputFormat" value="xml"/>   
+    <property name="binary.jar" location="${dist.dir}/maven2/xom-${version}.jar" />
     <property name="sources.jar" location="${dist.dir}/maven2/xom-${version}-sources.jar" />
     <property name="javadoc.jar" location="${dist.dir}/maven2/xom-${version}-javadoc.jar" />
   	
@@ -728,30 +729,21 @@ XOM Build file
       <property name="pom2.file" location="${build.dir}/maven2/project.xml" />
       <property name="package.jar" location="${build.dir}/${name}-${version}.jar"/>
       <property name="license" location="LICENSE.txt" />
-      <property name="xom-maven-2.jar" location="${dist.dir}/maven2/xom-maven-${version}.jar" />
       <copy file="${pom2.template}" tofile="${pom2.file}">
         <filterset>
          <filter token="VERSION" value="${version}"/>
        </filterset>
       </copy>
-      <copy file="${pom2.file}" tofile="${dist.dir}/maven2/xom-maven-${version}.pom">
+      <copy file="${pom2.file}" tofile="${dist.dir}/maven2/xom-${version}.pom">
         <filterset>
          <filter token="VERSION" value="${version}"/>
        </filterset>
       </copy>
-      <copy file="${package.jar}" tofile="${dist.dir}/maven2/xom-maven-${version}.jar">
+      <copy file="${package.jar}" tofile="${dist.dir}/maven2/${name}-${version}.jar">
         <filterset>
          <filter token="VERSION" value="${version}"/>
        </filterset>
       </copy>
-    
-      <jar destFile="${xom-maven-2.jar}">
-        <fileset file="${pom2.file}" />
-        <fileset file="${license}" />
-        <fileset file="${package.jar}" />
-        <fileset file="${sources.jar}" />
-        <fileset file="${javadoc.jar}" />
-      </jar>
   </target>
 
 
