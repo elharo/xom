@@ -1,4 +1,4 @@
-/* Copyright 2002-2005 Elliotte Rusty Harold
+/* Copyright 2002-2005, 2019 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -57,7 +57,7 @@ package nu.xom;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1d5
+ * @version 1.3.1
  * 
  */
 public class NodeFactory {
@@ -181,7 +181,7 @@ public class NodeFactory {
      * <p>
      * Creates a new <code>Document</code> object. 
      * The root element of this document is initially set to 
-     * <code>&lt;root xmlns=http://www.xom.nu/fakeRoot""/></code>.
+     * <code>&lt;root xmlns="http://www.xom.nu/fakeRoot"/></code>.
      * This is only temporary. As soon as the real root element's
      * start-tag is read, this element is replaced by the real root.
      * This fake root should never be exposed.
