@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 2002-2007, 2009, 2010, 2011, 2012, 2013, 2018 Elliotte Rusty Harold
+<!-- Copyright 2002-2007, 2009, 2010, 2011, 2012, 2013, 2018, 2019 Elliotte Rusty Harold
 
 This library is free software; you can redistribute 
 it and/or modify it under the terms of version 2.1 of 
@@ -35,7 +35,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="minorversion" value="3"/>
     <property name="microversion" value="1"/>
   	<!-- put a1, b2 etc. here in non-releases -->
-    <property name="versionqualifier" value="-SNAPSHOT"/>
+    <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
   	<!-- OSGI wants a period before the a1/b2/d3 qualifier -->
   	
