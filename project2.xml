@@ -21,7 +21,7 @@
     <developerConnection>scm:git:ssh://github.com:elharo/xom.git</developerConnection>    
   </scm>
   
-  <groupId>nu.xom</groupId>
+  <groupId>xom</groupId>
   <artifactId>xom</artifactId>
   <version>@VERSION@</version>
   <packaging>jar</packaging>
