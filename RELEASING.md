@@ -2,35 +2,39 @@
 
 To push a new release to Maven Central:
 
-0. ant clean
-1. ant maven2
-2. cd dist/maven2
-3. Sign the files:
+1. git checkout master
+2. git pull
+3. ant clean
+5. ant maven2
+6. cd dist/maven2
+7. Sign the files:
 
   ```
-  $ gpg -ab xom-1.3.1.pom
-  $ gpg -ab xom-1.3.1.jar
-  $ gpg -ab xom-1.3.1-javadoc.jar
-  $ gpg -ab xom-1.3.1-sources.jar
+  $ gpg -ab xom-1.3.2.pom
+  $ gpg -ab xom-1.3.2.jar
+  $ gpg -ab xom-1.3.2-javadoc.jar
+  $ gpg -ab xom-1.3.2-sources.jar
   ```
 
-4. `$ jar -cvf bundle.jar xom-1.3.1.pom xom-1.3.1.pom.asc xom-1.3.1.jar xom-1.3.1.jar.asc xom-1.3.1-javadoc.jar xom-1.3.1-javadoc.jar.asc xom-1.3.1-sources.jar xom-1.3.1-sources.jar.asc`
+8. `$ jar -cvf bundle.jar xom-1.3.2.pom xom-1.3.2.pom.asc xom-1.3.2.jar xom-1.3.2.jar.asc xom-1.3.2-javadoc.jar xom-1.3.2-javadoc.jar.asc xom-1.3.2-sources.jar xom-1.3.2-sources.jar.asc`
 
-5. Login to [oss.sonatype.org](https://oss.sonatype.org/#welcome).
+9. Login to [oss.sonatype.org](https://oss.sonatype.org/#welcome).
 
-6. Select staging upload in the left hand column.
+10. Select staging upload in the left hand column.
 
-7. Upload Mode: Artifact Bundle
+11. Upload Mode: Artifact Bundle
 
-8. Select the bundle.jar and press **Upload Bundle**.
+12. Select the bundle.jar and press **Upload Bundle**. If bundle.jar doesn't work, try individual artifacts instead. 
 
-9. Select staging repositories in the left hand side.
+13. Select staging repositories in the left hand side.
 
-10. Scroll to the bottom and find the bundle you just uploaded. Select it.
+14. Scroll to the bottom and find the bundle you just uploaded. Select it.
 
-11. Close the repository. Wait.
+15. Close the repository. Wait.
 
-12. Release the repository.
+16. Release the repository.
 
-If bundle.jar doesn't work, try individual artifacts instead. 
+17. Tag the release on github.
+
+
  
