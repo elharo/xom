@@ -33,7 +33,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="3"/>
-    <property name="microversion" value="1"/>
+    <property name="microversion" value="2"/>
   	<!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
@@ -740,9 +740,6 @@ XOM Build file
        </filterset>
       </copy>
       <copy file="${package.jar}" tofile="${dist.dir}/maven2/${name}-${version}.jar">
-        <filterset>
-         <filter token="VERSION" value="${version}"/>
-       </filterset>
       </copy>
   </target>
 
