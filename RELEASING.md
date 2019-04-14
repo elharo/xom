@@ -47,5 +47,7 @@
 
     `~/xom/dist/website$ gcloud app deploy --no-promote --project=xom-website`
 
-4. sftp the files to IBiblio including the assorted jar and zip files
+4. Check that the staging site—URL found in the output of `gcloud app deploy`—looks OK. If it is, promote it from the cloud console.
+
+5. sftp the files to IBiblio including the assorted jar and zip files
 
