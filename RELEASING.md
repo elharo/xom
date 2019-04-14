@@ -1,6 +1,7 @@
-[Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
 
-To push a new release to Maven Central:
+## To push a new release to Maven Central:
+
+[Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
 
 1. git checkout master
 2. git pull
@@ -36,5 +37,17 @@ To push a new release to Maven Central:
 
 17. Tag the release on github.
 
+## To update the website:
 
- 
+1. ant website
+
+2. cd dist/website
+
+3. Use gcloud to push to xom.nu with the elharodotcom credentials:
+
+    `~/xom/dist/website$ gcloud app deploy --no-promote --project=xom-website`
+
+4. Check that the staging site—URL found in the output of `gcloud app deploy`—looks OK. If it is, promote it from the [cloud console](https://console.cloud.google.com) using *Versions > Migrate Traffic*.
+
+5. sftp the files to IBiblio including the assorted jar and zip files
+
