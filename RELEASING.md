@@ -1,6 +1,7 @@
-[Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
 
-To push a new release to Maven Central:
+## To push a new release to Maven Central:
+
+[Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
 
 1. git checkout master
 2. git pull
@@ -35,6 +36,17 @@ To push a new release to Maven Central:
 16. Release the repository.
 
 17. Tag the release on github.
+
+## To update the website:
+
+1. ant website
+
+2. cd dist/website
+
+3. Use gcloud to push to xom.nu.
+
+4. sftp to IBiblio
+
 
 
  
