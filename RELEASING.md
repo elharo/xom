@@ -43,10 +43,9 @@
 
 2. cd dist/website
 
-3. Use gcloud to push to xom.nu.
+3. Use gcloud to push to xom.nu with the elharodotcom credentials:
 
-4. sftp to IBiblio
+    `~/xom/dist/website$ gcloud app deploy --no-promote --project=xom-website`
 
+4. sftp the files to IBiblio including the assorted jar and zip files
 
-
- 
