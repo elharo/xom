@@ -1,4 +1,4 @@
-/* Copyright 2002-2006, 2009, 2014, 2018 Elliotte Rusty Harold
+/* Copyright 2002-2006, 2009, 2014, 2018, 2020 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -33,7 +33,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.2.11
+ * @version 1.3.3
  *
  */
 class XOMHandler 
@@ -86,7 +86,6 @@ class XOMHandler
         locator = null;
         doctype = null;
         internalDTDSubset = null;
-        System.gc();
     }
 
     
