@@ -16,7 +16,7 @@
    
    You can contact Elliotte Rusty Harold by sending e-mail to
    elharo@ibiblio.org. Please include the word "XOM" in the
-   subject line. The XOM home page is located at http://www.xom.nu/
+   subject line. The XOM home page is located at https://xom.nu/
 */
 package nu.xom.tests;
 
@@ -278,11 +278,11 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setParameter("test", "http://www.xom.nu/", new Double(2));
+        xform.setParameter("test", "https://xom.nu/", new Double(2));
         Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Element result = (Element) output.get(0);
-        assertEquals("<root xmlns:pre=\"http://www.xom.nu/\">2</root>", 
+        assertEquals("<root xmlns:pre=\"https://xom.nu/\">2</root>", 
             result.toXML());
         
     }
@@ -296,12 +296,12 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setParameter("test", "http://www.xom.nu/", new Double(2));
-        xform.setParameter("test", "http://www.xom.nu/", null);
+        xform.setParameter("test", "https://xom.nu/", new Double(2));
+        xform.setParameter("test", "https://xom.nu/", null);
         Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Element result = (Element) output.get(0);
-        assertEquals("<root xmlns:pre=\"http://www.xom.nu/\">1</root>", 
+        assertEquals("<root xmlns:pre=\"https://xom.nu/\">1</root>", 
             result.toXML());
         
     }

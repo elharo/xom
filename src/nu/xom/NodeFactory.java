@@ -16,7 +16,7 @@
    
    You can contact Elliotte Rusty Harold by sending e-mail to
    elharo@ibiblio.org. Please include the word "XOM" in the
-   subject line. The XOM home page is located at http://www.xom.nu/
+   subject line. The XOM home page is located at https://xom.nu/
 */
 
 package nu.xom;
@@ -181,7 +181,7 @@ public class NodeFactory {
      * <p>
      * Creates a new <code>Document</code> object. 
      * The root element of this document is initially set to 
-     * <code>&lt;root xmlns="http://www.xom.nu/fakeRoot"/></code>.
+     * <code>&lt;root xmlns="https://xom.nu/fakeRoot"/></code>.
      * This is only temporary. As soon as the real root element's
      * start-tag is read, this element is replaced by the real root.
      * This fake root should never be exposed.
@@ -205,7 +205,7 @@ public class NodeFactory {
      */
     public Document startMakingDocument() {
         return new Document(
-          Element.build("root", "http://www.xom.nu/fakeRoot", "root")
+          Element.build("root", "https://xom.nu/fakeRoot", "root")
         );  
     }
     
