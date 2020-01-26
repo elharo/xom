@@ -37,6 +37,8 @@
 
 17. Tag the release on github.
 
+18. Update README.md with the new version number.
+
 ## To update the website:
 
 1. ant website
