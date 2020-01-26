@@ -19,7 +19,7 @@
 // elharo@ibiblio.org. Please include the word "XOM" in the
 // subject line. The XOM home page is temporarily located at
 // http://www.cafeconleche.org/XOM/  but will eventually move
-// to http://www.xom.nu/
+// to https://xom.nu/
 
 package nu.xom;
 

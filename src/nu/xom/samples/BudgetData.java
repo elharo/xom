@@ -16,7 +16,7 @@
    
    You can contact Elliotte Rusty Harold by sending e-mail to
    elharo@ibiblio.org. Please include the word "XOM" in the
-   subject line. The XOM home page is located at http://www.xom.nu/
+   subject line. The XOM home page is located at https://xom.nu/
 */
 
 package nu.xom.samples;

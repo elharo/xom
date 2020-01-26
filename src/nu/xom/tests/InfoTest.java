@@ -16,7 +16,7 @@
    
    You can contact Elliotte Rusty Harold by sending e-mail to
    elharo@ibiblio.org. Please include the word "XOM" in the
-   subject line. The XOM home page is located at http://www.xom.nu/
+   subject line. The XOM home page is located at https://xom.nu/
 */
 
 package nu.xom.tests;
@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.1
+ * @version 1.3.3
  *
  */
 public class InfoTest extends XOMTestCase {
@@ -63,7 +63,7 @@ public class InfoTest extends XOMTestCase {
         String output = new String(out.toByteArray());
         assertTrue(output.indexOf("Copyright 2002") > 0);
         assertEquals(19, output.indexOf(" Elliotte Rusty Harold") - output.indexOf("Copyright 2002"));
-        assertTrue(output.indexOf("http://www.xom.nu") > 0);
+        assertTrue(output.indexOf("https://xom.nu") > 0);
         assertTrue(output.indexOf("General Public License") > 0);
         assertTrue(output.indexOf("GNU") > 0);
         assertTrue(output.indexOf("WITHOUT ANY WARRANTY") > 0);

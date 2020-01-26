@@ -16,7 +16,7 @@
    
    You can contact Elliotte Rusty Harold by sending e-mail to
    elharo@ibiblio.org. Please include the word "XOM" in the
-   subject line. The XOM home page is located at http://www.xom.nu/
+   subject line. The XOM home page is located at https://xom.nu/
 */
 package nu.xom.tests;
 
@@ -93,14 +93,13 @@ public class XSLTransformTest extends XOMTestCase {
     
     private File inputDir;
     
-    protected void setUp() {
+    protected void setUp() throws IOException {
         
         System.setErr(new PrintStream(new ByteArrayOutputStream()));
         
         inputDir = new File("data");
         inputDir = new File(inputDir, "xslt");
         inputDir = new File(inputDir, "input");
-        
     } 
     
     

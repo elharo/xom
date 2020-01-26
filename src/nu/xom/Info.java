@@ -16,7 +16,7 @@
    
    You can contact Elliotte Rusty Harold by sending e-mail to
    elharo@ibiblio.org. Please include the word "XOM" in the
-   subject line. The XOM home page is located at http://www.xom.nu/
+   subject line. The XOM home page is located at https://xom.nu/
 */
 
 package nu.xom;
@@ -51,11 +51,11 @@ class Info {
         
         System.out.println("This is XOM " + version + ", a new XML Object Model.");
         System.out.println("Copyright 2002-2009 Elliotte Rusty Harold");
-        System.out.println("http://www.xom.nu/");
+        System.out.println("https://xom.nu/");
         System.out.println();
         System.out.println("XOM is a class library intended to be used with other programs.");
         System.out.println("By itself, it doesn't really do anything.");
-        System.out.println("For more information see http://www.xom.nu/");
+        System.out.println("For more information see https://xom.nu/");
         System.out.println();
         System.out.println("This library is free software; you can redistribute it and/or modify it");
         System.out.println("under the terms of version 2.1 of the GNU Lesser General Public License");
