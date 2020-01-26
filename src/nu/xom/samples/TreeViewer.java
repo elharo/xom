@@ -40,7 +40,7 @@ import nu.xom.Elements;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.3.3
  *
  */
 public class TreeViewer {
@@ -82,13 +82,11 @@ public class TreeViewer {
             f.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE); 
         }
         else {
-            // JFrame.EXIT_ON_CLOSE == 3 but this named constant is not
-            // available in Java 1.2
-            f.setDefaultCloseOperation(3);
+            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
         f.getContentPane().add(treeView);
         f.pack();
-        f.show();
+        f.setVisible(true);
 
     }
 
