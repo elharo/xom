@@ -11,13 +11,13 @@
 7. Sign the files:
 
   ```
-  $ gpg -ab xom-1.3.2.pom
-  $ gpg -ab xom-1.3.2.jar
-  $ gpg -ab xom-1.3.2-javadoc.jar
-  $ gpg -ab xom-1.3.2-sources.jar
+  $ gpg -ab xom-1.3.3.pom
+  $ gpg -ab xom-1.3.3.jar
+  $ gpg -ab xom-1.3.3-javadoc.jar
+  $ gpg -ab xom-1.3.3-sources.jar
   ```
 
-8. `$ jar -cvf bundle.jar xom-1.3.2.pom xom-1.3.2.pom.asc xom-1.3.2.jar xom-1.3.2.jar.asc xom-1.3.2-javadoc.jar xom-1.3.2-javadoc.jar.asc xom-1.3.2-sources.jar xom-1.3.2-sources.jar.asc`
+8. `$ jar -cvf bundle.jar xom-1.3.3.pom xom-1.3.3.pom.asc xom-1.3.3.jar xom-1.3.3.jar.asc xom-1.3.3-javadoc.jar xom-1.3.3-javadoc.jar.asc xom-1.3.3-sources.jar xom-1.3.3-sources.jar.asc`
 
 9. Login to [oss.sonatype.org](https://oss.sonatype.org/#welcome).
 
