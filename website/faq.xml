@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
                       "https://docbook.org/xml/4.3/docbookx.dtd">
-<article class="faq" revision="20181231">
+<article class="faq" revision="20200126">
   <title>XOM FAQ</title>
 
   <articleinfo>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2002-2005, 2009, 2016, 2018</year>
+      <year>2002-2005, 2009, 2016, 2018, 2020</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo> 
@@ -264,12 +264,7 @@ The following are <emphasis>not</emphasis> legitimate needs:
 <para>
 Yes. All you really need is the xom.jar file.
 This contains all the core packages, but not the samples or unit tests.
-If you're using a Java virtual machine earlier than 1.4, 
-you will probably also want to carry along the xml-apis.jar
-and xercesImpl.jar files from the lib directory.
-To use XSLT, you'll also need the xalan.jar archive.
-However, in Java 1.4 and later, you can get by 
-without these.
+It has no dependencies besides the JDK 1.5 or later.
 </para>
 
 <para>
@@ -352,7 +347,7 @@ If the document you've built is still too large to handle, then you can try proc
 </question>
 <answer>
 <para>
-XOM 1.3.0 requires Java 1.5 or later. Earlier versions require 1.2 or later.
+XOM 1.3.x requires Java 1.5 or later. Earlier versions require 1.2 or later.
 It has been tested with Java 1.2.2_17, IBM's Java VM 1.3.1,
 Sun's JDK 1.4.2, IBM's JVM 1.4.1, and various betas of Java 1.5. 
 A few of the unit tests fail in Java 1.2, but mostly these reflect encodings such
@@ -423,7 +418,7 @@ Like <quote>new dot zom</quote>.
 </question>
 <answer>
 <para>
-No.  I had no idea that the three letter extension for Omnimark files
+No. I had no idea that the three letter extension for Omnimark files
 was <filename>.xom</filename> until someone brought it up in Q&amp;A
 at my presentation at the New York XML SIG.
 </para>
@@ -554,6 +549,16 @@ They will also pass in
 Java 1.4 if you put the version of Xalan found in the lib directory in
 your jre/lib/endorsed directory so it will override the one bundled with the JDK. 
 You can find out which version of Xalan you have by running "ant version" in the main XOM directory.  You'll need 2.6.1 or later for all the test to pass. 
+</para>
+
+<para>
+Roughly seven integration tests including <code>nu.xom.tests.BaseURITest</code>
+and <code>nu.xom.tests.SAXConverterTest</code> make connections to www.ibiblio.org.
+These fail if that site is not reachable. At least some of the time ibiblio.org
+has been blocked by the Great Firewall of China because it hosts various
+Tibet-related content. IBiblio itself has been known to block access through VPNs.
+If any of these tests fail, check whether you can access www.ibiblio.org in a regular 
+web browser. 
 </para>
 
 </answer>
