@@ -93,14 +93,13 @@ public class XSLTransformTest extends XOMTestCase {
     
     private File inputDir;
     
-    protected void setUp() {
+    protected void setUp() throws IOException {
         
         System.setErr(new PrintStream(new ByteArrayOutputStream()));
         
         inputDir = new File("data");
         inputDir = new File(inputDir, "xslt");
         inputDir = new File(inputDir, "input");
-        
     } 
     
     
@@ -278,11 +277,11 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setParameter("test", "https://xom.nu/", new Double(2));
+        xform.setParameter("test", "http://www.xom.nu/", new Double(2));
         Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Element result = (Element) output.get(0);
-        assertEquals("<root xmlns:pre=\"https://xom.nu/\">2</root>", 
+        assertEquals("<root xmlns:pre=\"http://www.xom.nu/\">2</root>", 
             result.toXML());
         
     }
@@ -296,12 +295,12 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         XSLTransform xform = new XSLTransform(stylesheetDoc);
-        xform.setParameter("test", "https://xom.nu/", new Double(2));
-        xform.setParameter("test", "https://xom.nu/", null);
+        xform.setParameter("test", "http://www.xom.nu/", new Double(2));
+        xform.setParameter("test", "http://www.xom.nu/", null);
         Nodes output = xform.transform(builder.build(doc));
         assertEquals(1, output.size());
         Element result = (Element) output.get(0);
-        assertEquals("<root xmlns:pre=\"https://xom.nu/\">1</root>", 
+        assertEquals("<root xmlns:pre=\"http://www.xom.nu/\">1</root>", 
             result.toXML());
         
     }
