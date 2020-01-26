@@ -555,7 +555,7 @@ You can find out which version of Xalan you have by running "ant version" in the
 Roughly seven integration tests including <code>nu.xom.tests.BaseURITest</code>
 and <code>nu.xom.tests.SAXConverterTest</code> make connections to www.ibiblio.org.
 These fail if that site is not reachable. At least some of the time ibiblio.org
-has been blocked by the Great Firewall of China because it hosts various
+has been blocked by the Great Firewall of China, likely because it hosts various
 Tibet-related content. IBiblio itself has been known to block access through VPNs.
 If any of these tests fail, check whether you can access www.ibiblio.org in a regular 
 web browser. 
