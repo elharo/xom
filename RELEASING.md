@@ -25,7 +25,7 @@
 
 11. Upload Mode: Artifact Bundle
 
-12. Select the bundle.jar and press **Upload Bundle**. If bundle.jar doesn't work, try individual artifacts instead. 
+12. Select xom/dist/maven2/bundle.jar and press **Upload Bundle**. If bundle.jar doesn't work, try individual artifacts instead. 
 
 13. Select staging repositories in the left hand side.
 
