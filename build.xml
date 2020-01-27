@@ -286,12 +286,12 @@ XOM Build file
 
 
   <target name="jar" depends="compile" description="Create xom.jar">
-  	<taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
-  	        classpath="${lib.dir}/jarjar-1.0.jar"/>
+     <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
+              classpath="${lib.dir}/jarjar-1.0.jar"/>
     <jarjar jarfile="${build.dir}/${name}-${version}.jar"
          basedir="${build.dest}"
          index="no"
-		 compress="yes"
+         compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*  nu/xom/integrationtests/*">
 
