@@ -4,7 +4,7 @@
 
   <groupId>nu.xom</groupId>
   <artifactId>website</artifactId>
-  <version>1.3.3-SNAPSHOT</version>
+  <version>1.3.4-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -63,10 +63,10 @@
               <resources>          
                 <resource>
                   <directory>website</directory>
-        <includes>
-          <include>**/*.html</include>
-          <include>**/*.txt</include>
-        </includes>
+                  <includes>
+                    <include>**/*.html</include>
+                    <include>**/*.txt</include>
+                  </includes
                   <excludes>
                     <exclude>**/*.xml</exclude>
                   </excludes>
