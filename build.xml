@@ -33,7 +33,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="3"/>
-    <property name="microversion" value="3"/>
+    <property name="microversion" value="4"/>
   	<!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
@@ -260,6 +260,7 @@ XOM Build file
         <attribute name="Implementation-Version" value="${version}"/>
         <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
         <attribute name="Main-Class" value="nu.xom.Info"/>
+        <attribute name="Automatic-Module-Name" value="nu.xom"/>
         <section name="nu/xom/">
           <attribute name="Specification-Title"   value="XOM core classes"/>
           <attribute name="Implementation-Title"  value="nu.xom"/>
