@@ -199,6 +199,7 @@
 
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
   </target>
 </project>
 
