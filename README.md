@@ -20,7 +20,7 @@ XOM's Maven group ID is `xom` and its artifact ID is `xom`. To add a dependency 
 <dependency>
   <groupId>xom</groupId>
   <artifactId>xom</artifactId>
-  <version>1.3.2</version>
+  <version>1.3.3</version>
 </dependency>
 ```
 
@@ -28,7 +28,7 @@ To add a dependency using Gradle:
 
 ```gradle
 dependencies {
-  compile 'xom:xom:1.3.2'
+  compile 'xom:xom:1.3.3'
 }
 ```
 
