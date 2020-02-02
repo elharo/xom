@@ -1,4 +1,4 @@
-/* Copyright 2004, 2018 Elliotte Rusty Harold
+/* Copyright 2004, 2018, 2020 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -47,6 +47,7 @@ public class InfoTest extends XOMTestCase {
     public void testInfo() throws ClassNotFoundException, NoSuchMethodException,
       IllegalAccessException, InvocationTargetException {
         
+    	fail();
         PrintStream systemOut = System.out;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));

@@ -556,7 +556,7 @@ XOM Build file
   <!-- This task requires the ANT optional.jar -->
   <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
 
-    <junit fork="yes">
+    <junit fork="yes" failureproperty="testsfailed">
        <classpath refid="test.class.path" />
        <formatter type="${test.outputFormat}" />
        <batchtest fork="yes" todir="${testoutput.dir}">
@@ -577,6 +577,15 @@ XOM Build file
       </fileset>
       <report todir="${testoutput.dir}" />
     </junitreport>
+
+    <fail message="tests failed">
+      <condition>
+      <and>
+          <isset property="testsfailed"/>
+          <isset property="test.haltonfailure"/>
+      </and>
+</condition>
+    </fail>
 
   </target>
  
@@ -684,7 +693,7 @@ XOM Build file
 
   <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
   <target name="fastclover" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
-    <junit printsummary="on" fork="no">
+    <junit printsummary="on" fork="no" failureproperty="testsfailed">
        <classpath refid="test.class.path" />
         <classpath>
           <pathelement path="${ant-home}/lib/clover.jar"/>
@@ -705,6 +714,7 @@ XOM Build file
          </fileset>
       </batchtest>
     </junit>
+
   </target> 
 
   <target name="maven" depends="maven2" />

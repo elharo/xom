@@ -10,8 +10,8 @@ jobs:
       - checkout
       - run:
           name: Tests
-          command: ant test
-          no_output_timeout: 40m
+          command: ant -Dtest.haltonfailure=true test
+          no_output_timeout: 10m
       - run:
           name: Integration tests
           command: date
