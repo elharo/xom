@@ -47,7 +47,6 @@ public class InfoTest extends XOMTestCase {
     public void testInfo() throws ClassNotFoundException, NoSuchMethodException,
       IllegalAccessException, InvocationTargetException {
         
-    	fail();
         PrintStream systemOut = System.out;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
