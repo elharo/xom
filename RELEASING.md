@@ -41,14 +41,14 @@
 
 ## To update the website:
 
-0. sftp the files to IBiblio including the assorted jar and zip files
+1. sftp the files to IBiblio including the assorted jar and zip files
 
-1. ant website
+2. ant website
 
-2. cd dist/website
+3. cd dist/website
 
-3. Use gcloud to push to xom.nu with the elharodotcom credentials:
+4. Use gcloud to push to xom.nu with the elharodotcom credentials:
 
     `~/xom/dist/website$ gcloud app deploy --no-promote --project=xom-website`
 
-4. Check that the staging site—URL found in the output of `gcloud app deploy`—looks OK. If it is, promote it from the [cloud console](https://console.cloud.google.com) using *Versions > Migrate Traffic*.
+5. Check that the staging site—URL found in the output of `gcloud app deploy`—looks OK. If it is, promote it from the [cloud console](https://console.cloud.google.com) using *Versions > Migrate Traffic*.
