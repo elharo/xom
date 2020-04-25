@@ -209,7 +209,7 @@ XOM Build file
            target="1.6"
            source="1.6"
            encoding="UTF-8"
-         fork="true"
+           fork="true"
            includeAntRuntime="false"
            excludes="nu/xom/pantry/* nu/xom/tools/* nu/xom/samples/*Servlet.java">
        <classpath refid="compile.class.path"/>
@@ -247,7 +247,7 @@ XOM Build file
     <jar jarfile="${build.dir}/${name}-${version}-minimal.jar"
          basedir="${build.dest}"
          index="no"
-     compress="yes"
+         compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/* nu/xom/integrationtests/*">
       <manifest>
@@ -695,24 +695,24 @@ XOM Build file
   <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
   <target name="fastclover" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
     <junit printsummary="on" fork="no" failureproperty="testsfailed">
-       <classpath refid="test.class.path" />
-        <classpath>
-          <pathelement path="${ant-home}/lib/clover.jar"/>
-        </classpath>
-        <formatter type="${test.outputFormat}" />
-       <batchtest fork="yes" todir="${testoutput.dir}">
-         <fileset dir="${build.src}">
-           <include name="**/*Test.java" />
-           <exclude name="**/pantry/*.java" />
-           <exclude name="**/EncodingTest.java" />
-           <exclude name="**/XIncludeTest.java" />
-           <exclude name="**/MegaTest.java" />
-           <exclude name="**/benchmarks/*.java" />
-           <exclude name="**/tools/*.java" />
-           <exclude name="**/EBCDICTest.java" />
-         <exclude name="nu/xom/tests/FastTests.java"/>
-         <exclude name="nu/xom/tests/XOMTests.java"/>
-         </fileset>
+      <classpath refid="test.class.path" />
+      <classpath>
+        <pathelement path="${ant-home}/lib/clover.jar"/>
+      </classpath>
+      <formatter type="${test.outputFormat}" />
+      <batchtest fork="yes" todir="${testoutput.dir}">
+        <fileset dir="${build.src}">
+          <include name="**/*Test.java" />
+          <exclude name="**/pantry/*.java" />
+          <exclude name="**/EncodingTest.java" />
+          <exclude name="**/XIncludeTest.java" />
+          <exclude name="**/MegaTest.java" />
+          <exclude name="**/benchmarks/*.java" />
+          <exclude name="**/tools/*.java" />
+          <exclude name="**/EBCDICTest.java" />
+          <exclude name="nu/xom/tests/FastTests.java"/>
+          <exclude name="nu/xom/tests/XOMTests.java"/>
+        </fileset>
       </batchtest>
     </junit>
 
@@ -735,7 +735,7 @@ XOM Build file
     </jar>
   </target>
     
-  <!-- Generate a Maven 2 JAR for uploading to OSRRH and hence placement onto ibiblio and mirrors. 
+  <!-- Generate a Maven JAR for uploading to OSRRH and hence placement onto ibiblio and mirrors. 
       See http://maven.apache.org/guides/mini/guide-central-repository-upload.html -->
   <target name="maven2" depends="jar, sources.jar, javadoc.jar" >
       <property name="pom2.template" location="project2.xml" />
