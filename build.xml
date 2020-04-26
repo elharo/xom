@@ -33,14 +33,14 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="3"/>
-    <property name="microversion" value="4"/>
-  	<!-- put a1, b2 etc. here in non-releases -->
+    <property name="microversion" value="5"/>
+    <!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
-  	<!-- OSGI wants a period before the a1/b2/d3 qualifier -->
-  	
-  	<!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? 
-  	     Problem is release version doesn't get a version qualifier. -->
+    <!-- OSGI wants a period before the a1/b2/d3 qualifier -->
+    
+    <!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? 
+         Problem is release version doesn't get a version qualifier. -->
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <property name="jaxenversion" value="1.1.6"/>
     <!-- <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/> -->
@@ -89,7 +89,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="binary.jar" location="${dist.dir}/maven2/xom-${version}.jar" />
     <property name="sources.jar" location="${dist.dir}/maven2/xom-${version}-sources.jar" />
     <property name="javadoc.jar" location="${dist.dir}/maven2/xom-${version}-javadoc.jar" />
-  	
+    
     <property name="ossrh-snapshots-repository-url" value="https://oss.sonatype.org/content/repositories/snapshots/" />
     <property name="ossrh-staging-repository-url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
     <property name="ossrh-server-id" value="ossrh" /> <!-- the server ID in the Maven settings.xml -->
@@ -193,9 +193,9 @@ XOM Build file
 
   <!-- use Text.java that stores contents in String -->
   <target name="prepare-fat" depends="init" if="fat">
-	 <copy todir="${build.src}" overwrite="true">
-	    <fileset dir="${fat.src}"/>
-	 </copy>
+   <copy todir="${build.src}" overwrite="true">
+      <fileset dir="${fat.src}"/>
+   </copy>
   </target>
 
 
@@ -209,15 +209,15 @@ XOM Build file
            target="1.6"
            source="1.6"
            encoding="UTF-8"
-    	   fork="true"
+           fork="true"
            includeAntRuntime="false"
            excludes="nu/xom/pantry/* nu/xom/tools/* nu/xom/samples/*Servlet.java">
        <classpath refid="compile.class.path"/>
     </javac>
     <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
-  	
-  	<!-- update version number -->
-  	<echo file="${build.dest}/nu/xom/version.txt">${version}</echo>
+    
+    <!-- update version number -->
+    <echo file="${build.dest}/nu/xom/version.txt">${version}</echo>
 
     <copy file="${build.src}/nu/xom/compositions.dat" tofile="${build.dest}/nu/xom/compositions.dat" />
   </target>
@@ -247,7 +247,7 @@ XOM Build file
     <jar jarfile="${build.dir}/${name}-${version}-minimal.jar"
          basedir="${build.dest}"
          index="no"
-		 compress="yes"
+         compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/* nu/xom/integrationtests/*">
       <manifest>
@@ -311,16 +311,17 @@ XOM Build file
         <attribute name="Implementation-Version" value="${version}"/>
         <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
         <attribute name="Main-Class" value="nu.xom.Info"/>
-      	
-      	<!-- OSGI Information -->
-      	<attribute name="Manifest-Version" value="1.0"/>
-      	<attribute name="Bundle-ManifestVersion" value="2"/>
-      	<attribute name="Bundle-Name" value="${Name}"/>
-      	<attribute name="Bundle-SymbolicName" value="nu.xom"/>
-      	<attribute name="Bundle-Version" value="${bundleversion}"/>
-      	<attribute name="Bundle-Vendor" value="xom.nu"/>
-      	<attribute name="Bundle-RequiredExecutionEnvironment" value="JavaSE-1.6"/>
-      	<attribute name="Export-Package" value="nu.xom, nu.xom.canonical, nu.xom.converters, nu.xom.xinclude, nu.xom.xslt"/>
+        <attribute name="Automatic-Module-Name" value="nu.xom"/>
+        
+        <!-- OSGI Information -->
+        <attribute name="Manifest-Version" value="1.0"/>
+        <attribute name="Bundle-ManifestVersion" value="2"/>
+        <attribute name="Bundle-Name" value="${Name}"/>
+        <attribute name="Bundle-SymbolicName" value="nu.xom"/>
+        <attribute name="Bundle-Version" value="${bundleversion}"/>
+        <attribute name="Bundle-Vendor" value="xom.nu"/>
+        <attribute name="Bundle-RequiredExecutionEnvironment" value="JavaSE-1.6"/>
+        <attribute name="Export-Package" value="nu.xom, nu.xom.canonical, nu.xom.converters, nu.xom.xinclude, nu.xom.xslt"/>
         <attribute name="Import-Package" value='javax.xml.transform.sax, javax.xml.transform, org.w3c.dom, org.xml.sax, org.xml.sax.helpers, org.xml.sax.ext,
           org.apache.xerces.parsers;resolution:=optional;version="2.8.0", org.apache.xerces.impl;resolution:=optional;version="2.8.0", 
           org.apache.xerces.jaxp;resolution:=optional;version="2.9.0", junit.framework;resolution:=optional;version="3.8.1",
@@ -361,9 +362,9 @@ XOM Build file
         </section>
       </manifest>
     </jarjar>
-  	
-  	<!-- Put a copy in the dist dir too, because I never remember to upload 
-  	     the jar from the build directory. -->
+    
+    <!-- Put a copy in the dist dir too, because I never remember to upload 
+         the jar from the build directory. -->
     <copy file="${build.dir}/${name}-${version}.jar" todir="${dist.dir}"/>
   </target>
 
@@ -372,7 +373,7 @@ XOM Build file
     <jar jarfile="${build.dir}/${name}-samples.jar"
          basedir="${build.dest}"
          index="yes"
-		 compress="yes"
+     compress="yes"
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
          excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/pantry/* nu/xom/integrationtests/*">
       <manifest>
@@ -411,7 +412,7 @@ XOM Build file
              link="http://www.junit.org/junit/javadoc/3.8.1"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
-			 &lt;br /&gt; &lt;a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
+       &lt;br /&gt; &lt;a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
       <classpath refid="test.class.path"/>
       
     <fileset dir="${build.src}" defaultexcludes="yes">
@@ -456,7 +457,7 @@ XOM Build file
              link="http://www.junit.org/junit/javadoc/3.8.1"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='http://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
-			 &lt;br/&gt; &lt;a href='mailto:elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
+       &lt;br/&gt; &lt;a href='mailto:elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
       <classpath refid="test.class.path"/>
       
     <fileset dir="${build.src}" defaultexcludes="yes">
@@ -494,7 +495,7 @@ XOM Build file
   <!-- invoke as
       ant -Dpassword=secret upload -->
   <property name="password" value="" />
-	
+  
   <!-- This task depends on Jsch library not included in the Ant distribution. -->
   <target name="upload" depends="dist">
 
@@ -508,7 +509,7 @@ XOM Build file
         <fileset file="${dist.dir}/maven2/xom-maven-${version}.jar" />
     </scp>
   </target>
-  	
+    
   <target name="zip" depends="jar, betterdoc, samples" 
           description="Build zip file for distro">
 
@@ -580,11 +581,11 @@ XOM Build file
 
     <fail message="tests failed">
       <condition>
-      <and>
+        <and>
           <isset property="testsfailed"/>
           <isset property="test.haltonfailure"/>
-      </and>
-</condition>
+        </and>
+      </condition>
     </fail>
 
   </target>
@@ -618,8 +619,8 @@ XOM Build file
       <arg value="nu.xom.tests.XOMTests"/> 
     </java>
   </target>
-	  
-	    
+    
+      
   <target name="clean" depends="init" description="Remove build files">
     <delete dir="${build.dir}"/>
     <delete dir="${dist.dir}"/>
@@ -640,19 +641,19 @@ XOM Build file
   <target name="with.clover" depends="init, -checkForClover">
     <mkdir dir="${clover.dir}"/>
     <clover-setup initString="${clover.dir}/xom_coverage.db">
-       <files>
-           <include name="nu/xom/**"/> <!-- work around Ant 1.6.3 bug  #34722 -->
-	       <exclude name="nu/xom/UnicodeUtil.java"/>
-	       <exclude name="nu/xom/Latin6Writer.java"/>
-	       <exclude name="nu/xom/Latin8Writer.java"/>
-	       <exclude name="nu/xom/Latin10Writer.java"/>
-	       <exclude name="nu/xom/tests/FastTests.java"/>
-	       <exclude name="nu/xom/tests/XOMTests.java"/>
-	       <exclude name="nu/xom/samples/**"/>
-	       <exclude name="nu/xom/pantry/**"/>
-	       <exclude name="nu/xom/benchmarks/**"/>
-           <exclude name="nu/xom/tools/**" />
-       </files>
+      <files>
+        <include name="nu/xom/**"/> <!-- work around Ant 1.6.3 bug  #34722 -->
+        <exclude name="nu/xom/UnicodeUtil.java"/>
+        <exclude name="nu/xom/Latin6Writer.java"/>
+        <exclude name="nu/xom/Latin8Writer.java"/>
+        <exclude name="nu/xom/Latin10Writer.java"/>
+        <exclude name="nu/xom/tests/FastTests.java"/>
+        <exclude name="nu/xom/tests/XOMTests.java"/>
+        <exclude name="nu/xom/samples/**"/>
+        <exclude name="nu/xom/pantry/**"/>
+        <exclude name="nu/xom/benchmarks/**"/>
+        <exclude name="nu/xom/tools/**" />
+      </files>
     </clover-setup>
   </target>
 
@@ -662,8 +663,8 @@ XOM Build file
   <target name="clover.html" depends="with.clover">
     <clover-report>
        <current outfile="clover_html" title="Clover results for ${Name} ${version}">
-	     <format type="html"/>
-       </current>	 
+       <format type="html"/>
+       </current>   
     </clover-report>
   </target>
   
@@ -671,22 +672,22 @@ XOM Build file
   <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
   <target name="clovertest" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
     <junit printsummary="on" fork="no">
-       <classpath refid="test.class.path" />
-        <classpath>
-          <pathelement path="${ant-home}/lib/clover.jar"/>
-        </classpath>
-        <formatter type="${test.outputFormat}" />
-       <batchtest fork="yes" todir="${testoutput.dir}">
-         <fileset dir="${build.src}">
-           <include name="**/*Test.java" />
-           <exclude name="**/pantry/*.java" />
-           <exclude name="**/MegaTest.java" />
-           <exclude name="**/benchmarks/*.java" />
-           <exclude name="**/tools/*.java" />
-           <exclude name="**/EBCDICTest.java" />
-	       <exclude name="nu/xom/tests/FastTests.java"/>
-	       <exclude name="nu/xom/tests/XOMTests.java"/>
-         </fileset>
+      <classpath refid="test.class.path" />
+      <classpath>
+        <pathelement path="${ant-home}/lib/clover.jar"/>
+      </classpath>
+      <formatter type="${test.outputFormat}" />
+      <batchtest fork="yes" todir="${testoutput.dir}">
+        <fileset dir="${build.src}">
+          <include name="**/*Test.java" />
+          <exclude name="**/pantry/*.java" />
+          <exclude name="**/MegaTest.java" />
+          <exclude name="**/benchmarks/*.java" />
+          <exclude name="**/tools/*.java" />
+          <exclude name="**/EBCDICTest.java" />
+          <exclude name="nu/xom/tests/FastTests.java"/>
+          <exclude name="nu/xom/tests/XOMTests.java"/>
+        </fileset>
       </batchtest>
     </junit>
   </target> 
@@ -694,24 +695,24 @@ XOM Build file
   <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
   <target name="fastclover" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
     <junit printsummary="on" fork="no" failureproperty="testsfailed">
-       <classpath refid="test.class.path" />
-        <classpath>
-          <pathelement path="${ant-home}/lib/clover.jar"/>
-        </classpath>
-        <formatter type="${test.outputFormat}" />
-       <batchtest fork="yes" todir="${testoutput.dir}">
-         <fileset dir="${build.src}">
-           <include name="**/*Test.java" />
-           <exclude name="**/pantry/*.java" />
-           <exclude name="**/EncodingTest.java" />
-           <exclude name="**/XIncludeTest.java" />
-           <exclude name="**/MegaTest.java" />
-           <exclude name="**/benchmarks/*.java" />
-           <exclude name="**/tools/*.java" />
-           <exclude name="**/EBCDICTest.java" />
-	       <exclude name="nu/xom/tests/FastTests.java"/>
-	       <exclude name="nu/xom/tests/XOMTests.java"/>
-         </fileset>
+      <classpath refid="test.class.path" />
+      <classpath>
+        <pathelement path="${ant-home}/lib/clover.jar"/>
+      </classpath>
+      <formatter type="${test.outputFormat}" />
+      <batchtest fork="yes" todir="${testoutput.dir}">
+        <fileset dir="${build.src}">
+          <include name="**/*Test.java" />
+          <exclude name="**/pantry/*.java" />
+          <exclude name="**/EncodingTest.java" />
+          <exclude name="**/XIncludeTest.java" />
+          <exclude name="**/MegaTest.java" />
+          <exclude name="**/benchmarks/*.java" />
+          <exclude name="**/tools/*.java" />
+          <exclude name="**/EBCDICTest.java" />
+          <exclude name="nu/xom/tests/FastTests.java"/>
+          <exclude name="nu/xom/tests/XOMTests.java"/>
+        </fileset>
       </batchtest>
     </junit>
 
@@ -734,7 +735,7 @@ XOM Build file
     </jar>
   </target>
     
-  <!-- Generate a Maven 2 JAR for uploading to OSRRH and hence placement onto ibiblio and mirrors. 
+  <!-- Generate a Maven JAR for uploading to OSRRH and hence placement onto ibiblio and mirrors. 
       See http://maven.apache.org/guides/mini/guide-central-repository-upload.html -->
   <target name="maven2" depends="jar, sources.jar, javadoc.jar" >
       <property name="pom2.template" location="project2.xml" />
