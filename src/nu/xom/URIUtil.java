@@ -152,7 +152,7 @@ class URIUtil {
     
     static String removeDotSegments(String path) {
     
-        StringBuffer output = new StringBuffer();
+    	StringBuilder output = new StringBuilder();
 
         while (path.length() > 0) {
             if (path.startsWith("/./")) {
@@ -285,7 +285,7 @@ class URIUtil {
         
         public String toString() {
         
-            StringBuffer result = new StringBuffer(30);
+        	StringBuilder result = new StringBuilder(30);
             
             if (scheme != null) {
                 result.append(scheme);
@@ -321,7 +321,7 @@ class URIUtil {
     static String toURI(String iri) {
     
         int length = iri.length();
-        StringBuffer uri = new StringBuffer(length);
+        StringBuilder uri = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
             char c = iri.charAt(i);
             switch(c) {
@@ -621,7 +621,7 @@ class URIUtil {
     
     static String percentEscape(char c) {
         
-        StringBuffer result = new StringBuffer(3);
+    	StringBuilder result = new StringBuilder(3);
         String s = String.valueOf(c);
         try {
             byte[] data = s.getBytes("UTF8");

@@ -240,8 +240,8 @@ public class Text extends Node {
         
         String s = getValue();
         int length = s.length();
-        // Give the string buffer enough room for a couple of escaped characters 
-        StringBuffer result = new StringBuffer(length+12);
+        // Give the string builder enough room for a couple of escaped characters 
+        StringBuilder result = new StringBuilder(length+12);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
             switch (c) {
@@ -437,7 +437,7 @@ public class Text extends Node {
             s = s.substring(0, 35);
         }
         
-        StringBuffer result = new StringBuffer(length);
+        StringBuilder result = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
             switch (c) {

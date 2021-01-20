@@ -60,7 +60,7 @@ public class ROT13XML {
   
     public static String rot13(String s) {
     
-        StringBuffer out = new StringBuffer(s.length());
+    	StringBuilder out = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {
           int c = s.charAt(i);
           if (c >= 'A' && c <= 'M') out.append((char) (c+13));

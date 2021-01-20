@@ -280,7 +280,7 @@ public class ParsingException extends Exception {
      * @return an exception message suitable for display to a developer
      */
     public String toString() {
-        StringBuffer result = new StringBuffer(super.toString());
+    	StringBuilder result = new StringBuilder(super.toString());
         if (lineNumber >= 0) {
             result.append(" at line ");
             result.append(lineNumber);

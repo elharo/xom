@@ -473,7 +473,7 @@ public class DocType extends Node {
      */
     public final String toXML() { 
           
-        StringBuffer result = new StringBuffer();
+    	StringBuilder result = new StringBuilder();
         result.append("<!DOCTYPE ");
         result.append(rootName);
         if (publicID != null) {

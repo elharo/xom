@@ -54,7 +54,7 @@ public class InnerElement extends Element {
     
     public String getInnerXML() {
         
-        StringBuffer sb = new StringBuffer();
+    	StringBuilder sb = new StringBuilder();
         for (int i = 0; i < getChildCount(); i++) {
             sb.append(getChild(i).toXML());
         }

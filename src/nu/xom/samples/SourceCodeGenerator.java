@@ -162,7 +162,7 @@ public class SourceCodeGenerator {
     }
     
     private static String javaEscape(String text) {
-        StringBuffer result = new StringBuffer();
+    	StringBuilder result = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
             switch (c) {

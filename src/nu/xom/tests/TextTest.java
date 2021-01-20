@@ -228,7 +228,7 @@ public class TextTest extends XOMTestCase {
     
     public void testNonBMPText() {
         
-        StringBuffer sb = new StringBuffer(2);
+    	StringBuilder sb = new StringBuilder(2);
         for (char high = '\uD800'; high <= '\uDB7F'; high++) {
             for (char low = '\uDC00'; low <= '\uDFFF'; low++) {
                 sb.setLength(0);

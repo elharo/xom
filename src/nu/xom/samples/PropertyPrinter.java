@@ -98,7 +98,7 @@ public class PropertyPrinter {
         }
 
       
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         result.append("Node " + nodeCount + ":\r\n");
         result.append("  Type: " + type + "\r\n");
         if (name != null) {

@@ -232,7 +232,7 @@ public class Attribute extends Node {
         s = s.substring(0, end+1);
         
         length = s.length();
-        StringBuffer sb = new StringBuffer(length);
+        StringBuilder sb = new StringBuilder(length);
         boolean wasSpace = false;
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
@@ -618,7 +618,7 @@ public class Attribute extends Node {
         
         int length = s.length();
         // Give the string buffer enough room for a couple of escaped characters 
-        StringBuffer result = new StringBuffer(length+12);
+        StringBuilder result = new StringBuilder(length+12);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
             switch (c) {
@@ -1064,8 +1064,8 @@ public class Attribute extends Node {
          */
          public String toString() {    
              
-            StringBuffer result 
-              = new StringBuffer("[Attribute.Type: ");
+        	StringBuilder result 
+              = new StringBuilder("[Attribute.Type: ");
             result.append(getName()); 
             result.append(']');
             return result.toString();    

@@ -204,7 +204,7 @@ public class Comment extends Node {
      *     XML comment
      */
     public final String toXML() {
-        StringBuffer result = new StringBuffer("<!--");
+    	StringBuilder result = new StringBuilder("<!--");
         result.append(data);
         result.append("-->");
         return result.toString();

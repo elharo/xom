@@ -727,7 +727,7 @@ class XOMHandler
     private static String escapeReservedCharactersInDeclarations(String s) {
         
         int length = s.length();
-        StringBuffer result = new StringBuffer(length);
+        StringBuilder result = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
             switch (c) {
@@ -822,7 +822,7 @@ class XOMHandler
     private static String escapeReservedCharactersInDefaultAttributeValues(String s) {
         
         int length = s.length();
-        StringBuffer result = new StringBuffer(length);
+        StringBuilder result = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
             switch (c) {

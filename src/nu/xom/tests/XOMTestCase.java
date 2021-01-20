@@ -439,7 +439,7 @@ public class XOMTestCase extends TestCase {
 
         Element stub = new Element("a");
         Comment stubc = new Comment("c");
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int count = element.getChildCount();
         for (int i = 0; i < count; i++) {
             Node child = element.getChild(i);

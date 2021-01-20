@@ -139,7 +139,7 @@ public class DatabaseConverter {
             Reader r = clob.getCharacterStream();
             char[] text = new char[1024];
             int numRead;
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
             while ((numRead = r.read(text, 0, 1024)) != -1) {
               result.append(text, 0, numRead); 
             }
@@ -158,7 +158,7 @@ public class DatabaseConverter {
     private Text hexEncode(InputStream in) 
       throws IOException {
     
-        StringBuffer result = new StringBuffer();
+    	StringBuilder result = new StringBuilder();
 
         int octet;
         while ((octet = in.read()) != -1) {

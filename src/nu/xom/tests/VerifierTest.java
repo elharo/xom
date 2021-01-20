@@ -699,7 +699,7 @@ public class VerifierTest extends XOMTestCase {
     
     public void testHostNameTooLong() {
      
-        StringBuffer uri = new StringBuffer("http://");
+    	StringBuilder uri = new StringBuilder("http://");
         for (int i = 0; i < 255; i++) uri.append('c');
         uri.append(".com/");
         Element e = new Element("e");
@@ -975,7 +975,7 @@ public class VerifierTest extends XOMTestCase {
         if (c <= 0xFFFF) return String.valueOf((char) c);
         char high = (char) (LEAD_OFFSET + (c >> 10));
         char low = (char) (0xDC00 + (c & 0x3FF));
-        StringBuffer sb = new StringBuffer(2);
+        StringBuilder sb = new StringBuilder(2);
         sb.append(high);
         sb.append(low);
         return sb.toString().toLowerCase();

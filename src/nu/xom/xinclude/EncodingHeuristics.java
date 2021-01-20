@@ -218,7 +218,7 @@ class EncodingHeuristics {
               return "UTF-8";
           }
           // now positioned to read encoding name
-          StringBuffer encodingName = new StringBuffer();
+          StringBuilder encodingName = new StringBuilder();
           while (true) {
               c = declaration.charAt(position++);
               if (c == delimiter) break;
