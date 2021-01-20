@@ -10,7 +10,7 @@ XOM is fairly unique in that it is a dual streaming/tree-based API. Individual n
 
 XOM is very memory efficient. If you read an entire document into memory, XOM uses as little memory as possible. More importantly, XOM allows you to filter documents as they're built so you don't have to build the parts of the tree you aren't interested in. For instance, you can skip building text nodes that only represent boundary white space, if such white space is not significant in your application. You can even process a document piece by piece and throw away each piece when you're done with it. XOM has been used to process documents that are gigabytes in size.
 
-The current version of XOM is 1.3.4 and is backwards compatible with 1.2, 1.1 and 1.0. You should not need to recompile any code to upgrade to 1.3.0. XOM is believed to be quite stable and robust. Future releases should be backwards compatible with the 1.0 API for the foreseeable future.
+The current version of XOM is 1.3.5 and is backwards compatible with 1.2, 1.1 and 1.0. You should not need to recompile any code to upgrade to 1.3.5. XOM is believed to be quite stable and robust. Future releases should be backwards compatible with the 1.0 API for the foreseeable future.
 
 ## Adding XOM to your build
 
@@ -20,7 +20,7 @@ XOM's Maven group ID is `xom` and its artifact ID is `xom`. To add a dependency 
 <dependency>
   <groupId>xom</groupId>
   <artifactId>xom</artifactId>
-  <version>1.3.4</version>
+  <version>1.3.5</version>
 </dependency>
 ```
 
@@ -28,7 +28,7 @@ To add a dependency using Gradle:
 
 ```gradle
 dependencies {
-  compile 'xom:xom:1.3.4'
+  compile 'xom:xom:1.3.5'
 }
 ```
 
