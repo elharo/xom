@@ -512,7 +512,7 @@ final class UnicodeUtil {
 
     private static String makeSurrogatePair(int codePoint) {
 
-        StringBuffer s = new StringBuffer(2);
+    	StringBuilder s = new StringBuilder(2);
         if (codePoint <= 0xFFFF) s.append((char) codePoint);
         else {
             char high = (char) (0xD800 - (0x10000 >> 10) + (codePoint >> 10));
@@ -576,7 +576,7 @@ final class UnicodeUtil {
     private static String decomposeHangul(String s) {
 
         int length = s.length();
-        StringBuffer sb = new StringBuffer(s.length());
+        StringBuilder sb = new StringBuilder(s.length());
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
             if (c >= FIRST_HANGUL_SYLLABLE && c <= LAST_HANGUL_SYLLABLE) {
@@ -595,7 +595,7 @@ final class UnicodeUtil {
     // otherwise return the composed character
     private static int composeCharacter(int starter, int c) {
         
-        StringBuffer decomposed = new StringBuffer(4);
+    	StringBuilder decomposed = new StringBuilder(4);
         
         if (starter > 0xFFFF) {
             decomposed.append(getHighSurrogate(starter));
@@ -4721,7 +4721,7 @@ final class UnicodeUtil {
                 return String.valueOf((char) character);
              }
              else {
-                 StringBuffer sb = new StringBuffer(2);
+            	 StringBuilder sb = new StringBuilder(2);
                  sb.append(getHighSurrogate(character));
                  sb.append(getLowSurrogate(character));
                  return sb.toString();
@@ -4760,7 +4760,7 @@ final class UnicodeUtil {
         int trailingConsonant = firstTrailingConsonant 
           + syllable % numberOfTrailingConsonants;
         
-        StringBuffer result = new StringBuffer(3);        
+        StringBuilder result = new StringBuilder(3);        
         result.append((char) leadingConsonant);
         result.append((char) medialVowel);
         if (trailingConsonant != firstTrailingConsonant) {
@@ -4789,7 +4789,7 @@ final class UnicodeUtil {
         
         final int length = source.length();
         if (length == 0) return "";
-        StringBuffer result = new StringBuffer(length);
+        StringBuilder result = new StringBuilder(length);
         char previous = source.charAt(0); 
         result.append(previous);
 
@@ -4967,7 +4967,7 @@ final class UnicodeUtil {
         
         public String toString() {
          
-            StringBuffer sb = new StringBuffer();
+        	StringBuilder sb = new StringBuilder();
             for (int i = 0; i < size; i++) {
                 int c = data[i];
                 if (c <= 0xFFFF) sb.append((char) c);

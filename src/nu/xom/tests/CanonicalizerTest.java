@@ -1377,7 +1377,7 @@ public class CanonicalizerTest extends XOMTestCase {
         System.arraycopy(prologData, 0, data, 0, prologData.length);
         System.arraycopy(epilogData, 0, data, 
           data.length - epilogData.length, epilogData.length);
-        StringBuffer buffer = new StringBuffer(255 - 160 + 1);
+        StringBuilder buffer = new StringBuilder(255 - 160 + 1);
         for (int i = 160; i <= 255; i++) {
             buffer.append((char) i);   
         }

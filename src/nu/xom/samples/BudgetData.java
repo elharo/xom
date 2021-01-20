@@ -91,7 +91,7 @@ public class BudgetData {
     Map<String, String> result = new HashMap<String, String>();
     for (int i = 0; i < keys.length; i++) {
       //find the next comma    
-      StringBuffer sb = new StringBuffer();
+    	StringBuilder sb = new StringBuilder();
       char c;
       boolean inString = false;
       while (true) {

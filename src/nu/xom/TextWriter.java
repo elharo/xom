@@ -715,7 +715,7 @@ abstract class TextWriter {
             newIndent = _128_SPACES.substring(0, length);
         }
         else {
-            StringBuffer sb = new StringBuffer(length);
+        	StringBuilder sb = new StringBuilder(length);
             sb.append(_128_SPACES);
             for (int i = _128; i < length; i++) {
                 sb.append(' ');

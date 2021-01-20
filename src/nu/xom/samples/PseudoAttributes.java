@@ -47,7 +47,7 @@ public class PseudoAttributes {
     public static Element getAttributes(ProcessingInstruction pi)
       throws ParsingException  {
   
-        StringBuffer sb = new StringBuffer("<");
+    	StringBuilder sb = new StringBuilder("<");
         sb.append(pi.getTarget());
         sb.append(" ");
         sb.append(pi.getValue());

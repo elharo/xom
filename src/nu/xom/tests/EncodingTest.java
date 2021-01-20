@@ -81,7 +81,7 @@ public class EncodingTest extends XOMTestCase {
         // Test Plane-1 characters. These are tricky because Java 
         // strings encode them as surrogate pairs. We'll test with
         // the characters from 1D100 to 1D1FF (the musical symbols)
-        StringBuffer sb = new StringBuffer(2);
+        StringBuilder sb = new StringBuilder(2);
         char high = 0xD834;
         sb.append(high);
         for (int i = 0; i < 256; i++) {

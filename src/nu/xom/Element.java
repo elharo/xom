@@ -1561,7 +1561,7 @@ public class Element extends ParentNode {
      */
     public final String toXML() {
         
-        StringBuffer result = new StringBuffer(1024);
+    	StringBuilder result = new StringBuilder(1024);
         Node current = this;
         boolean endTag = false;
         int index = -1;
@@ -1616,7 +1616,7 @@ public class Element extends ParentNode {
     }
     
     
-    private static void writeStartTag(Element element, StringBuffer result) {
+    private static void writeStartTag(Element element, StringBuilder result) {
         
         result.append('<');
         result.append(element.getQualifiedName());
@@ -1669,7 +1669,7 @@ public class Element extends ParentNode {
         
         int length = s.length();
         // Give the string buffer enough room for a couple of escaped characters 
-        StringBuffer result = new StringBuffer(length+12);
+        StringBuilder result = new StringBuilder(length+12);
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
             if (c == '&') result.append("&amp;");
@@ -1681,7 +1681,7 @@ public class Element extends ParentNode {
 
 
     private static void writeEndTag(
-      Element element, StringBuffer result) {
+      Element element, StringBuilder result) {
         
         result.append("</");
         result.append(element.getQualifiedName());
@@ -1714,7 +1714,7 @@ public class Element extends ParentNode {
             return current.getValue();
         }   
         
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         int index = 0;
         int[] indexes = new int[10];
         int top = 0;

@@ -186,13 +186,13 @@ class XPointer {
         
         int[] result = new int[numberOfParts];
         int index = 0;
-        StringBuffer part = new StringBuffer(3);
+        StringBuilder part = new StringBuilder(3);
         try {
             for (int i = 1; i < tumbler.length(); i++) {
                 if (tumbler.charAt(i) == '/') {
                     result[index] = Integer.parseInt(part.toString()); 
                     index++;
-                    part = new StringBuffer(3);
+                    part = new StringBuilder(3);
                 }   
                 else {
                     part.append(tumbler.charAt(i));   
@@ -215,8 +215,8 @@ class XPointer {
         
         List<String> result = new ArrayList<String>(1);
         
-        StringBuffer xptr = new StringBuffer(xpointer.trim());
-        StringBuffer scheme = new StringBuffer();
+        StringBuilder xptr = new StringBuilder(xpointer.trim());
+        StringBuilder scheme = new StringBuilder();
         int i = 0;
         while (i < xptr.length()) {
             char c = xptr.charAt(i);

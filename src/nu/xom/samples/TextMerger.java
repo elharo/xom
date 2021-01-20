@@ -43,7 +43,7 @@ public class TextMerger {
         for (int i = 0; i < parent.getChildCount(); i++) {
             Node child = parent.getChild(i);
             if (child instanceof Text) {
-                StringBuffer sb = new StringBuffer(child.getValue());
+            	StringBuilder sb = new StringBuilder(child.getValue());
                 Node nextChild;
                 while ((nextChild = parent.getChild(i+1)) instanceof Text) {
                     sb.append(nextChild.getValue());

@@ -77,7 +77,7 @@ public class NormalizingFactory extends NodeFactory {
         data = data.replace('\r', ' ');
         data = data.trim();
         
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < data.length(); i++) {
             if (i == 0 || data.charAt(i-1) != ' ' 
               || data.charAt(i) != ' ') {

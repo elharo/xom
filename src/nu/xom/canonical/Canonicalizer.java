@@ -717,7 +717,7 @@ public class Canonicalizer {
         private String prepareAttributeValue(Attribute attribute) {
     
             String value = attribute.getValue();
-            StringBuffer result = new StringBuffer(value.length());
+            StringBuilder result = new StringBuilder(value.length());
     
             if (attribute.getType().equals(Attribute.Type.CDATA)
               || attribute.getType().equals(Attribute.Type.UNDECLARED)) {
@@ -813,7 +813,7 @@ public class Canonicalizer {
             
             if (nodes == null || nodes.contains(text)) {
                 String input = text.getValue();
-                StringBuffer result = new StringBuffer(input.length());
+                StringBuilder result = new StringBuilder(input.length());
                 for (int i = 0; i < input.length(); i++) {
                     char c = input.charAt(i);
                     if (c == '\r') {

@@ -284,7 +284,7 @@ class JaxenNavigator extends DefaultNavigator implements NamedAccessNavigator {
             return ((Text) texts.get(0)).getValue();
         }
         else {
-            StringBuffer result = new StringBuffer();
+        	StringBuilder result = new StringBuilder();
             Iterator iterator = texts.iterator();
             while (iterator.hasNext()) {
                 Text text = (Text) iterator.next();

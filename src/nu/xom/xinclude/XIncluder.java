@@ -914,7 +914,7 @@ public class XIncluder {
             Reader reader = new BufferedReader(
               new InputStreamReader(in, encoding)
             );
-            StringBuffer sb = new StringBuffer(contentLength);
+            StringBuilder sb = new StringBuilder(contentLength);
             for (int c = reader.read(); c != -1; c = reader.read()) {
               sb.append((char) c);
             }

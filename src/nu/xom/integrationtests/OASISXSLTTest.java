@@ -161,7 +161,7 @@ public class OASISXSLTTest extends XOMTestCase {
         
         private String stripSpace(String s) {
             
-            StringBuffer sb = new StringBuffer();
+        	StringBuilder sb = new StringBuilder();
             for (int i = 0; i < s.length(); i++) {
                 if (!Character.isWhitespace(s.charAt(i))) {
                     sb.append(s.charAt(i));

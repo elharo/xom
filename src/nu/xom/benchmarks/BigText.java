@@ -46,7 +46,7 @@ class BigText {
         Element root = new Element("root");
         Document doc = new Document(root);           
 
-        StringBuffer sb = new StringBuffer(65536);
+        StringBuilder sb = new StringBuilder(65536);
         for (int i = 0x20; i <= 0xD7FF; i++) {
             sb.append((char) i);
         }

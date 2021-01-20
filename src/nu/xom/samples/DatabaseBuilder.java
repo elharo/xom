@@ -117,7 +117,7 @@ public class DatabaseBuilder  {
             char[] text = new char[1024];
             int numRead;
             try {
-              StringBuffer result = new StringBuffer();
+              StringBuilder result = new StringBuilder();
               while ((numRead = r.read(text, 0, 1024)) != -1) {
                 result.append(escapeText(text, 0, numRead)); 
               }
@@ -142,7 +142,7 @@ public class DatabaseBuilder  {
     
     private Text hexEncode(InputStream in) {
     
-        StringBuffer result = new StringBuffer();
+    	StringBuilder result = new StringBuilder();
         try {
             int octet;
             while ((octet = in.read()) != -1) {
@@ -164,7 +164,7 @@ public class DatabaseBuilder  {
   // not legal in XML. I convert these to the Unicode replacement
   // character 0xFFFD
     private Text escapeText(char[] text, int start, int length) {
-        StringBuffer result = new StringBuffer(length);
+    	StringBuilder result = new StringBuilder(length);
         for (int i = start; i < length; i++) {
             result.append(escapeChar(text[i]));
         }

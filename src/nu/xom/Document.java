@@ -410,7 +410,7 @@ public class Document extends ParentNode {
      */
     public final String toXML() {
     
-        StringBuffer result = new StringBuffer(64);
+    	StringBuilder result = new StringBuilder(64);
 
         // XML declaration
         result.append("<?xml version=\"1.0\"?>\n");

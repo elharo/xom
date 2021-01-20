@@ -114,7 +114,7 @@ class URIJoiner {
     
     static String removeDotSegments(String path) {
     
-        StringBuffer output = new StringBuffer();
+    	StringBuilder output = new StringBuilder();
 
         while (path.length() > 0) {
             if (path.startsWith("/./")) {
@@ -243,7 +243,7 @@ class URIJoiner {
         
         public String toString() {
         
-            StringBuffer result = new StringBuffer(30);
+        	StringBuilder result = new StringBuilder(30);
             
             if (scheme != null) {
                 result.append(scheme);

@@ -1524,7 +1524,7 @@ public class BuilderTest extends XOMTestCase {
     
     private String escapePath(String path) throws UnsupportedEncodingException {
         String[] fragments = path.split("/");
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < fragments.length; i++) {
             String encoded = URLEncoder.encode(fragments[i], "UTF-8");
             encoded = encoded.replace("+", "%20");

@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.11
+ * @version 1.3.6
  * 
  */
 public class Builder {
@@ -674,7 +674,7 @@ public class Builder {
         // Java's toURL method doesn't properly escape file
         // names so we have to do it manually
         String absolute = in.getAbsolutePath();
-        StringBuffer url = new StringBuffer(fileURLPrefix);
+        StringBuilder url = new StringBuilder(fileURLPrefix);
         int length = absolute.length();
         char separatorChar = File.separatorChar;
         for (int i = 0; i < length; i++) {
@@ -990,14 +990,14 @@ public class Builder {
                             }
                             catch (IndexOutOfBoundsException ex) {
                                 // file name contains a high half and not a low half
-                                url = new StringBuffer(0);
+                                url = new StringBuilder(0);
                                 break;
                             }
                         }
                         else {
                             // low half not preceded by high half
                             // Can't create a base URI
-                            url = new StringBuffer(0);
+                            url = new StringBuilder(0);
                             break;
                         }
                 }
@@ -1123,7 +1123,7 @@ public class Builder {
             // only if the scheme is file; not in the more common case where
             // it's http
             path = URIUtil.removeDotSegments(path);
-            StringBuffer canonicalForm = new StringBuffer(uri.length()); 
+            StringBuilder canonicalForm = new StringBuilder(uri.length()); 
             canonicalForm.append(scheme);
             canonicalForm.append("://");
             if (authority != null) canonicalForm.append(authority); 

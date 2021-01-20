@@ -138,7 +138,7 @@ public class SourceCodeSerializer extends Serializer {
     }
     
     private static String escapeText(String s) {
-        StringBuffer sb = new StringBuffer(s.length());
+    	StringBuilder sb = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             switch (c) {
