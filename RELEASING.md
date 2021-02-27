@@ -1,4 +1,16 @@
 
+## To preparte the release:
+
+Add release notes to 
+
+* website/history.html
+
+Update the version number in
+
+* build.xml
+* website/index.html
+* website/history.html
+
 ## To push a new release to Maven Central:
 
 [Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
