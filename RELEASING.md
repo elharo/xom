@@ -1,5 +1,5 @@
 
-## To preparte the release:
+## To prepare the release:
 
 Add release notes to 
 
@@ -7,6 +7,8 @@ Add release notes to
 
 Update the version number in
 
+* README.md
+* README.txt
 * build.xml
 * website/index.html
 * website/history.html
