@@ -248,7 +248,7 @@ public class ProcessingInstruction extends Node {
      */
     public final String toXML() {
         
-        StringBuffer result = new StringBuffer("<?");
+        StringBuilder result = new StringBuilder("<?");
         result.append(target);
         if (data.length() > 0) {
             result.append(' ');

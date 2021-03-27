@@ -236,7 +236,7 @@ class XPointer {
         
         int open = 1; // parentheses count
         i++;
-        StringBuffer schemeData = new StringBuffer();
+        StringBuilder schemeData = new StringBuilder();
         try {
             while (open > 0) {
                 char c = xptr.charAt(i);   

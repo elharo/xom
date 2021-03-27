@@ -59,14 +59,14 @@ class XSLTHandler
     private final Nodes       result;
     private final ArrayList<Element>   parents;
     private final NodeFactory factory;
-    private StringBuffer buffer;
+    private StringBuilder buffer;
     
     
     XSLTHandler(NodeFactory factory) {
         this.factory = factory; 
         result   = new Nodes();
         parents  = new ArrayList<Element>();
-        buffer   = new StringBuffer();
+        buffer   = new StringBuilder();
     }   
     
     
@@ -256,7 +256,7 @@ class XSLTHandler
         if (buffer.length() > 0) {
             Nodes text = factory.makeText(buffer.toString());
             addToResultTree(text);
-            buffer = new StringBuffer();
+            buffer = new StringBuilder();
         } 
     }
   

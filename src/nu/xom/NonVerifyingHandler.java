@@ -201,7 +201,7 @@ class NonVerifyingHandler extends XOMHandler {
         DocType doctype = DocType.build(rootName, publicID, systemID);
         document.fastInsertChild(doctype, position);
         position++;
-        internalDTDSubset = new StringBuffer(); 
+        internalDTDSubset = new StringBuilder(); 
         this.doctype = doctype;
         
     }
