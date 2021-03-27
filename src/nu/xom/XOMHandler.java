@@ -47,17 +47,17 @@ class XOMHandler
     // method and may be null if we've skipped it (makeElement
     // returned null.) If we didn't skip it, then parent and
     // current should be the same node.
-    protected ParentNode   parent;
-    protected ParentNode   current;
+    protected ParentNode    parent;
+    protected ParentNode    current;
     protected ArrayList<ParentNode> parents;
-    protected boolean      inProlog;
-    protected boolean      inDTD;
-    protected int          position; // current number of items in prolog
-    protected Locator      locator; 
-    protected DocType      doctype;
-    protected StringBuffer internalDTDSubset;
-    protected NodeFactory  factory;
-              boolean      usingCrimson = false;
+    protected boolean       inProlog;
+    protected boolean       inDTD;
+    protected int           position; // current number of items in prolog
+    protected Locator       locator; 
+    protected DocType       doctype;
+    protected StringBuilder internalDTDSubset;
+    protected NodeFactory   factory;
+              boolean       usingCrimson = false;
     
     
     XOMHandler(NodeFactory factory) {
@@ -321,13 +321,13 @@ class XOMHandler
   
     
     protected String textString = null;
-    protected StringBuffer buffer = null;
+    protected StringBuilder buffer = null;
   
     public void characters(char[] text, int start, int length) throws SAXException {
         if (length <= 0) return;
         if (textString == null) textString = new String(text, start, length);
         else {
-            if (buffer == null) buffer = new StringBuffer(textString);
+            if (buffer == null) buffer = new StringBuilder(textString);
             buffer.append(text, start, length);
         }
         if (finishedCDATA) inCDATA = false;
@@ -438,7 +438,7 @@ class XOMHandler
             position++;
             if (node.isDocType()) {
                 DocType doctype = (DocType) node;
-                internalDTDSubset = new StringBuffer(); 
+                internalDTDSubset = new StringBuilder(); 
                 this.doctype = doctype;
             }
         }

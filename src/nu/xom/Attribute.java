@@ -586,11 +586,11 @@ public class Attribute extends Node {
      */
     public final String toXML() {
         // It's a common belief that methods like this one should be
-        // implemented using StringBuffers rather than String 
+        // implemented using StringBuilders rather than String 
         // concatenation for maximum performance. However, 
         // disassembling the code shows that today's compilers are 
         // smart enough to figure this out for themselves. The compiled
-        // version of this class only uses a single StringBuffer. No 
+        // version of this class only uses a single StringBuilder. No 
         // benefit would be gained by making the code more opaque here. 
         return getQualifiedName() + "=\"" + escapeText(value) + "\"";    
     }
