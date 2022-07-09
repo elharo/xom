@@ -659,7 +659,7 @@ public class Element extends ParentNode {
      * 
      * @return the index<sup>th</sup> attribute of this element
      * 
-     * @throws IndexOutofBoundsException if the index is negative 
+     * @throws IndexOutOfBoundsException if the index is negative 
      *   or greater than or equal to the number of attributes 
      *   of this element
      * 
