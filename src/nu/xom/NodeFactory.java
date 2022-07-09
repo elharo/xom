@@ -181,7 +181,7 @@ public class NodeFactory {
      * <p>
      * Creates a new <code>Document</code> object. 
      * The root element of this document is initially set to 
-     * <code>&lt;root xmlns="https://xom.nu/fakeRoot"/></code>.
+     * <code>&lt;root xmlns="https://xom.nu/fakeRoot"/&gt;</code>.
      * This is only temporary. As soon as the real root element's
      * start-tag is read, this element is replaced by the real root.
      * This fake root should never be exposed.

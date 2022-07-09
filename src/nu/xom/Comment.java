@@ -24,7 +24,7 @@ package nu.xom;
 /**
  * <p>
  *   This class represents an XML comment such as 
- *   <code>&lt;-- This is a comment--></code>. 
+ *   <code>&lt;-- This is a comment--&gt;</code>.
  *   A comment node cannot have any child nodes.
  *   It can be a child of an <code>Element</code> 
  *   or a <code>Document</code>.
