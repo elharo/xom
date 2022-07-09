@@ -96,7 +96,7 @@ import nu.xom.XMLException;
  *   <code>System.setProperty("javax.xml.transform.TransformerFactory", 
  *   "<i>classname</i>")</code></li>
  *   <li>The value specified at the command line using the 
- * <samp>-Djavax.xml.transform.TransformerFactory=<i>classname</i></samp>
+ * <code>-Djavax.xml.transform.TransformerFactory=<i>classname</i></code>
  *      option to the <b>java</b> interpreter</li>
  *    <li>The class named in the <code>lib/jaxp.properties</code> 
  *       properties file in the JRE directory, in a line like this one:
