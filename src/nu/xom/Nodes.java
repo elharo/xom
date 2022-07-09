@@ -128,7 +128,7 @@ public final class Nodes implements Iterable<Node> {
      * 
      * @return the node at the specified position
      * 
-     * @throws <code>IndexOutOfBoundsException</code> if index is  
+     * @throws IndexOutOfBoundsException if index is  
      *     negative or greater than or equal to the size of the list
      */
     public Node remove(int index) {
