@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.6
+ * @version 1.3.8
  * 
  */
 public class Builder {
@@ -171,7 +171,6 @@ public class Builder {
     // These are stored in the order of preference.
     private static String[] parsers = {
         "nu.xom.XML1_0Parser",
-        "nu.xom.JDK15XML1_0Parser",
         "org.apache.xerces.parsers.SAXParser",
         "org.apache.xerces.jaxp.SAXParserImpl$JAXPSAXParser", // xerces-2.9.x
         "com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser", // JDK 1.6
@@ -201,28 +200,6 @@ public class Builder {
             return parser;
         } 
         catch (SAXException ex) {
-            // look for next one
-        }
-        catch (NoClassDefFoundError err) {
-            // Xerces is not available; look for next one
-        } 
-
-        try {
-            parser = (XMLReader) Class.forName(
-              "nu.xom.JDK15XML1_0Parser").newInstance();
-            setupParser(parser, validate);
-            return parser;
-        } 
-        catch (SAXException ex) {
-            // look for next one
-        }
-        catch (InstantiationException ex) {
-            // look for next one
-        } 
-        catch (ClassNotFoundException ex) {
-            // look for next one
-        }
-        catch (IllegalAccessException ex) {
             // look for next one
         }
         catch (NoClassDefFoundError err) {
@@ -312,7 +289,6 @@ public class Builder {
         
         // A couple of Xerces specific properties
         if (parserName.equals("nu.xom.XML1_0Parser") 
-         || parserName.equals("nu.xom.JDK15XML1_0Parser")
          || parserName.equals("org.apache.xerces.parsers.SAXParser")
          || parserName.equals("com.sun.org.apache.xerces.internal.parsers.SAXParser")
          || parserName.equals("org.apache.xerces.jaxp.SAXParserImpl$JAXPSAXParser") // xerces-2.9.x
