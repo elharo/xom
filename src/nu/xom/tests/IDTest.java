@@ -1,4 +1,4 @@
-/* Copyright 2005, 2006 Elliotte Rusty Harold
+/* Copyright 2005, 2006, 2022 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.3.8
  *
  */
 public class IDTest extends XOMTestCase {
