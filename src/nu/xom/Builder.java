@@ -53,7 +53,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.6
+ * @version 1.3.8
  * 
  */
 public class Builder {
