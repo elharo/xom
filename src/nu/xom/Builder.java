@@ -171,7 +171,6 @@ public class Builder {
     // These are stored in the order of preference.
     private static String[] parsers = {
         "nu.xom.XML1_0Parser",
-        "nu.xom.JDK15XML1_0Parser",
         "org.apache.xerces.parsers.SAXParser",
         "org.apache.xerces.jaxp.SAXParserImpl$JAXPSAXParser", // xerces-2.9.x
         "com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser", // JDK 1.6
