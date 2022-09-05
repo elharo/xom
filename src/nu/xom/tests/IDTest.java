@@ -1,4 +1,4 @@
-/* Copyright 2005, 2006 Elliotte Rusty Harold
+/* Copyright 2005, 2006, 2022 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -40,7 +40,7 @@ import nu.xom.ParsingException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2b2
+ * @version 1.3.8
  *
  */
 public class IDTest extends XOMTestCase {
@@ -239,7 +239,7 @@ public class IDTest extends XOMTestCase {
     public void testXMLIDTestSuiteFromW3CServer() 
       throws ParsingException, IOException {
         
-        URL base = new URL("http://www.w3.org/XML/2005/01/xml-id/test-suite.xml");
+        URL base = new URL("https://www.w3.org/XML/2005/01/xml-id/test-suite.xml");
         Builder builder = new Builder();
         Document catalog = builder.build(base.openStream());
         Element testsuite = catalog.getRootElement();
