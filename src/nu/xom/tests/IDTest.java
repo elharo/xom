@@ -239,7 +239,7 @@ public class IDTest extends XOMTestCase {
     public void testXMLIDTestSuiteFromW3CServer() 
       throws ParsingException, IOException {
         
-        URL base = new URL("http://www.w3.org/XML/2005/01/xml-id/test-suite.xml");
+        URL base = new URL("https://www.w3.org/XML/2005/01/xml-id/test-suite.xml");
         Builder builder = new Builder();
         Document catalog = builder.build(base.openStream());
         Element testsuite = catalog.getRootElement();
