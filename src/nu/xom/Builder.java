@@ -205,28 +205,6 @@ public class Builder {
         catch (NoClassDefFoundError err) {
             // Xerces is not available; look for next one
         } 
-
-        try {
-            parser = (XMLReader) Class.forName(
-              "nu.xom.JDK15XML1_0Parser").newInstance();
-            setupParser(parser, validate);
-            return parser;
-        } 
-        catch (SAXException ex) {
-            // look for next one
-        }
-        catch (InstantiationException ex) {
-            // look for next one
-        } 
-        catch (ClassNotFoundException ex) {
-            // look for next one
-        }
-        catch (IllegalAccessException ex) {
-            // look for next one
-        }
-        catch (NoClassDefFoundError err) {
-            // Xerces is not available; look for next one
-        } 
         
         // XMLReaderFactory.createXMLReader never returns
         // null. If it can't locate the parser, it throws
@@ -311,7 +289,6 @@ public class Builder {
         
         // A couple of Xerces specific properties
         if (parserName.equals("nu.xom.XML1_0Parser") 
-         || parserName.equals("nu.xom.JDK15XML1_0Parser")
          || parserName.equals("org.apache.xerces.parsers.SAXParser")
          || parserName.equals("com.sun.org.apache.xerces.internal.parsers.SAXParser")
          || parserName.equals("org.apache.xerces.jaxp.SAXParserImpl$JAXPSAXParser") // xerces-2.9.x
