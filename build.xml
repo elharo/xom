@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 2002-2007, 2009, 2010, 2011, 2012, 2013, 2018, 2019, 2020, 2021 Elliotte Rusty Harold
+<!-- Copyright 2002-2007, 2009-2013, 2018-2022 Elliotte Rusty Harold
 
 This library is free software; you can redistribute 
 it and/or modify it under the terms of version 2.1 of 
@@ -33,7 +33,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="3"/>
-    <property name="microversion" value="7"/>
+    <property name="microversion" value="8"/>
     <!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
@@ -44,7 +44,7 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <property name="jaxenversion" value="1.1.6"/>
     <!-- <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/> -->
-    <property name="year"    value="2020"/>
+    <property name="year"    value="2022"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
