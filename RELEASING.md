@@ -58,12 +58,14 @@ Update the version number in
 
 1. sftp the files to IBiblio including the assorted jar and zip files
 
-2. ant website
+2. Upload the various binary archives to Github as release assets by editing the latest release on https://github.com/elharo/xom/releases/
 
-3. cd dist/website
+3. ant website
 
-4. Use gcloud to push to xom.nu with the elharodotcom credentials:
+4. cd dist/website
+
+5. Use gcloud to push to xom.nu with the elharodotcom credentials:
 
     `~/xom/dist/website$ gcloud app deploy --no-promote --project=xom-website`
 
-5. Check that the staging site—URL found in the output of `gcloud app deploy`—looks OK. If it is, promote it from the [cloud console](https://console.cloud.google.com) using *Versions > Migrate Traffic*.
+6. Check that the staging site—URL found in the output of `gcloud app deploy`—looks OK. If it is, promote it from the [cloud console](https://console.cloud.google.com) using *Versions > Migrate Traffic*.
