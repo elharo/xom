@@ -14,7 +14,7 @@ To install it you'll need to place the XOM JAR archive somewhere in your
 <envar>CLASSPATH</envar>. This archive is the file named something like <filename>xom-1.3.9.jar</filename>. 
 (The version number may have changed if I've forgotten
 to update this document.) You can either put it in your <filename class="directory">jre/lib/ext</filename>
-directory, add <filename>xom-1.3.3.jar</filename> to your <envar>CLASSPATH</envar> environment variable, or
+directory, add <filename>xom-1.3.9.jar</filename> to your <envar>CLASSPATH</envar> environment variable, or
 use the <option>-classpath</option> option when invoking <command>javac</command> and 
 <command>java</command>.
 </para>
