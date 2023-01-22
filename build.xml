@@ -70,7 +70,7 @@ subject line. The XOM home page is http://www.xom.nu/
 
     <property name="parser.jar"     value="${lib.dir}/dtd-xercesImpl.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
-    <property name="serializer.jar" value="${lib.dir}/serializer.jar"/>
+    <property name="serializer.jar" value="${lib.dir}/serializer-2.7.2.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.2.1.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
