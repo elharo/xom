@@ -26,12 +26,12 @@ package nu.xom;
  *  Indicates that a string
  *  intended for use as a URI or URI reference (typically a namespace
  *  name or a base URI) is not syntactically correct  according to 
- *  <a href="http://www.ietf.org/rfc/rfc3986.txt" 
+ *  <a href="https://www.ietf.org/rfc/rfc3986.txt" 
  *     target="_top">RFC 3986</a>.
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.3.9
  *
  */
 public class MalformedURIException extends IllegalDataException {
