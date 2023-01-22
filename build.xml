@@ -430,7 +430,7 @@ XOM Build file
     <echo>
     The task you are trying to run requires Clover to be installed 
     in the $ANT_HOME/lib directory. You can purchase Clover from
-    http://www.cenqua.com/clover/
+    https://cenqua.com/
     </echo>
   </target>
 
