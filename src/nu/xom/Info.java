@@ -31,7 +31,7 @@ import java.io.InputStreamReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.4
+ * @version 1.3.9
  * 
  */
 class Info {
@@ -39,13 +39,13 @@ class Info {
     
     public static void main(String[] args) {
     
-        String version = "1.2.4 or later";
+        String version = "1.3.9 or later";
         try {
             InputStream stream = ClassLoader.getSystemResourceAsStream("nu/xom/version.txt");
             BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
             version = in.readLine();
         } catch (Exception ex) {
-            version = "1.2.4b1 or later";
+            version = "1.3.9 or later";
         }
         
         System.out.println("This is XOM " + version + ", a new XML Object Model.");
@@ -66,13 +66,8 @@ class Info {
         System.out.println("See the GNU Lesser General Public License for more details.");
         System.out.println();
         System.out.println("You should have received a copy of the GNU Lesser General"); 
-        System.out.println("Public License along with this library; if not, write to the");
-        System.out.println(); 
-        System.out.println("Free Software Foundation, Inc."); 
-        System.out.println("59 Temple Place"); 
-        System.out.println("Suite 330,"); 
-        System.out.println("Boston, MA  02111-1307");
-        System.out.println("USA");
+        System.out.println("Public License along with this library. If not, see");
+        System.out.println("<https://www.gnu.org/licenses/>");
         
     }
 
