@@ -68,8 +68,14 @@ import nu.xom.XMLException;
  *   <li>Saxon 6.x: 
  *    <code>com.icl.saxon.TransformerFactoryImpl</code>
  *   </li>
- *   <li>Saxon 7.x through 9.x: 
+ *   <li>Saxon 7.x through 9.x and Saxon-HE: 
  *    <code>net.sf.saxon.TransformerFactoryImpl</code>
+ *   </li>
+ *   <li>Saxon-PE: 
+ *    <code>net.sf.saxon.ProfessionalTransformerFactory</code>
+ *   </li>
+ *   <li>Saxon-EE: 
+ *    <code>net.sf.saxon.EnterpriseTransformerFactory</code>
  *   </li>
  *   <li>Xalan interpretive: 
  *    <code>org.apache.xalan.processor.TransformerFactoryImpl</code>
@@ -111,7 +117,7 @@ import nu.xom.XMLException;
  *    </ol>
  *
  * @author Elliotte Rusty Harold
- * @version 1.2.11
+ * @version 1.3.9
  */
 public final class XSLTransform {
 
