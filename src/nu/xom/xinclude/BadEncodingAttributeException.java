@@ -25,12 +25,12 @@ package nu.xom.xinclude;
  * <p>
  * Indicates that the <code>encoding</code> attribute 
  * is not an EncName as defined in the 
- * <a href="http://www.w3.org/TR/REC-xml/#charencoding" 
+ * <a href="https://www.w3.org/TR/REC-xml/#charencoding" 
  * target="_top">XML specification, section 4.3.3, rule 81</a>.
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.3.9
  */
 public class BadEncodingAttributeException extends XIncludeException {
 

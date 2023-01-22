@@ -25,13 +25,13 @@ package nu.xom.xinclude;
  * <p>
  * Thrown when no XPointer part identifies a subresource. This  
  * corresponds to <a target="_top" 
- * href="http://www.w3.org/TR/xptr-framework/#scheme">section 3.3 
+ * href="https://www.w3.org/TR/xptr-framework/#scheme">section 3.3 
  * of the XPointer Framework</a> which states, 
  * "If no pointer part identifies subresources, it is an error."
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.1b3
+ * @version 1.3.9
  */
 class XPointerResourceException extends XPointerException {
 

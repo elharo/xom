@@ -51,7 +51,7 @@ import nu.xom.Text;
 /**
  * <p>
  * Implements XInclude resolution as specified in 
- * <a href="http://www.w3.org/TR/2004/REC-xinclude-20041220/"
+ * <a href="https://www.w3.org/TR/2004/REC-xinclude-20041220/"
  * target="_top"><cite>XML Inclusions (XInclude) Version 
  * 1.0</cite></a>. Fallbacks are supported. 
  * The XPointer <code>element()</code> scheme and 
@@ -62,7 +62,7 @@ import nu.xom.Text;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.1
+ * @version 1.3.9
  *
  */
 public class XIncluder {

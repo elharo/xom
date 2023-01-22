@@ -52,7 +52,7 @@ import org.jaxen.NamespaceContext;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.1
+ * @version 1.3.9
  *
  */
 public abstract class Node {
@@ -128,7 +128,7 @@ public abstract class Node {
      * 
      * <p>
      * Returns the base URI of this node as specified by 
-     * <a href="http://www.w3.org/TR/xmlbase/" target="_top">XML 
+     * <a href="https://www.w3.org/TR/xmlbase/" target="_top">XML 
      * Base</a>, or the empty string if this is not known. In most  
      * cases, this is the URL against which relative URLs in this node 
      * should be resolved.
@@ -185,7 +185,7 @@ public abstract class Node {
      * 
      * <p>
      *  Absolutization takes place as specified by the 
-     *  <a target="_top" href="http://www.w3.org/TR/xmlbase/">XML 
+     *  <a target="_top" href="https://www.w3.org/TR/xmlbase/">XML 
      *  Base specification</a>. However, it is not always possible to
      *  absolutize a relative URI, in which case the empty string will 
      *  be returned. 

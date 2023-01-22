@@ -46,12 +46,12 @@ import nu.xom.Text;
  *  attribute may contain an unescaped URI; i.e. an IRI. However,
  *  the base URI is determined after this is converted to a 
  *  real URI with all percent escapes in place. See the <a 
- *  href="http://www.w3.org/TR/2001/REC-xmlbase-20010627/">XML
+ *  href="https://www.w3.org/TR/2001/REC-xmlbase-20010627/">XML
  *  Base specification</a> for elucidation of this point.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.1b4
+ * @version 1.3.9
  *
  */
 public class BaseURITest extends XOMTestCase {
