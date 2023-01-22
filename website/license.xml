@@ -26,7 +26,7 @@
 
  <para>
      The XOM source code is published under version 2.1 of the 
-     <ulink url="http://www.gnu.org/copyleft/lesser.html">GNU Lesser General Public License</ulink> (LGPL).
+     <ulink url="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">GNU Lesser General Public License</ulink> (LGPL).
      In brief, this means there&rsquo;s no warranty and 
      you can do anything you  like with it.
      However, if you make changes to XOM and redistribute those
