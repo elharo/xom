@@ -67,7 +67,8 @@ subject line. The XOM home page is https://xom.nu/
     <property name="testreports.dir" value="./testreports" />
     <property name="jaxen.dir"       value="${build.dir}/jaxen-classes"/>
 
-    <property name="parser.jar"     value="${lib.dir}/dtd-xercesImpl.jar"/>
+    <property name="xmlapis.jar"     value="${lib.dir}/xml-apis-1.4.01.jar"/>
+    <property name="parser.jar"     value="${lib.dir}/xercesImpl-2.12.2.jar"/>
     <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
     <property name="serializer.jar" value="${lib.dir}/serializer-2.7.2.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.2.1.jar"/>
@@ -88,12 +89,14 @@ subject line. The XOM home page is https://xom.nu/
     
     <path id="compile.class.path">
       <pathelement location="${parser.jar}"/>
+      <pathelement location="${xmlapis.jar}"/>
       <pathelement location="${junit.jar}"/>
       <pathelement location="${jaxen.dir}"/>
       <pathelement location="${servlet.jar}"/>
     </path>
 
     <path id="run.class.path">
+      <pathelement location="${xmlapis.jar}"/>
       <pathelement location="${parser.jar}"/>
       <pathelement location="${xom-core}"/>
       <pathelement location="${jaxen.dir}"/>
