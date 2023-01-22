@@ -273,7 +273,7 @@ XOM Build file
 
   <target name="jar" depends="compile" description="Create xom.jar">
      <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
-              classpath="${lib.dir}/jarjar-1.0.jar"/>
+              classpath="${lib2.dir}/jarjar-1.0.jar"/>
     <jarjar jarfile="${build.dir}/${name}-${version}.jar"
          basedir="${build.dest}"
          index="no"
