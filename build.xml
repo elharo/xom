@@ -76,12 +76,6 @@ subject line. The XOM home page is http://www.xom.nu/
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
     
-    <property name="saxon6.jar"     value="${lib2.dir}/saxon.jar"/>
-    <property name="saxon7.jar"     value="${lib2.dir}/saxon-aelfred.jar"/>
-    <property name="gnujaxp.jar"    value="${lib2.dir}/gnujaxp.jar"/>
-    <property name="resolver.jar"   value="${lib2.dir}/resolver.jar"/>
-    <property name="dom4j.jar"      value="${lib2.dir}/dom4j-1.6.1.jar"/>
-
     <property name="excludes"       value=".clover, .DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb, jester*, trademark*"/>
 
     <property name="test.outputFormat" value="xml"/>   
@@ -111,11 +105,6 @@ subject line. The XOM home page is http://www.xom.nu/
     <path id="test.class.path">
       <path refid="run.class.path"/>
       <pathelement location="${junit.jar}"/>
-      <pathelement location="${saxon6.jar}"/>
-      <pathelement location="${saxon7.jar}"/>
-      <pathelement location="${gnujaxp.jar}"/>
-      <pathelement location="${resolver.jar}"/>
-      <pathelement location="${dom4j.jar}"/>
     </path>
     
     <path id="doc.class.path">
