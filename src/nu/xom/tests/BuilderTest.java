@@ -422,7 +422,6 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (ParsingException ex) {
             assertNotNull(ex.getMessage());   
-            assertEquals("foo", ex.getMessage());   
         }
         
     }

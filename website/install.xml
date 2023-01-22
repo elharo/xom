@@ -11,7 +11,7 @@ only to be used by other programs. It requires Java 1.5 or later.
 
 <para>
 To install it you'll need to place the XOM JAR archive somewhere in your
-<envar>CLASSPATH</envar>. This archive is the file named something like <filename>xom-1.3.3.jar</filename>. 
+<envar>CLASSPATH</envar>. This archive is the file named something like <filename>xom-1.3.9.jar</filename>. 
 (The version number may have changed if I've forgotten
 to update this document.) You can either put it in your <filename class="directory">jre/lib/ext</filename>
 directory, add <filename>xom-1.3.3.jar</filename> to your <envar>CLASSPATH</envar> environment variable, or
@@ -25,14 +25,14 @@ class formats an XML document by inserting and removing white space
 around element boundaries. In Java 1.4 and later you can run it from the
 command line like this:</para>
 
-<screen>$ java -classpath xom-samples.jar:xom-1.3.3.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
+<screen>$ java -classpath xom-samples.jar:xom-1.3.9.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
 
 <para>The versions of <filename>xalan.jar</filename>, <filename>xercesImpl.jar</filename>, and <filename>xml-apis.jar</filename> found in the <filename class="directory">lib</filename> directory
 are quite a bit faster and less buggy than the ones bundled with the JDK, so you may well want to use them. For example,
 </para>
 
 
-<screen>$ java -classpath xom-samples.jar:xom-1.3.3:lib/xml-apis.jar:lib/xercesImpl.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
+<screen>$ java -classpath xom-samples.jar:xom-1.3.9:lib/xml-apis.jar:lib/xercesImpl.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
 
 <para>
 You can leave out <filename>xalan.jar</filename> if you don't use any of the classes in
@@ -49,7 +49,7 @@ not needed for normal operation of XOM.
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2005, 2016, 2019, 2020</year>
+      <year>2005, 2016, 2019, 2020, 2023</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo> 

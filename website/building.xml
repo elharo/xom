@@ -11,7 +11,7 @@
   
    <para>
      XOM includes an Ant build file. You can build XOM with Ant 1.6 or later.
-     Although all the code compiles back to Java 1.5 and most to Java 1.2,
+     Although all the code compiles back to Java 1.5,
      the build is targeted at Java 1.6 because it's hard to find a compiler
      that supports older versions these days.
   </para>
@@ -72,7 +72,7 @@ Total time: 3 seconds</computeroutput></screen>
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2004</year>
+      <year>2004, 2023</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo>
