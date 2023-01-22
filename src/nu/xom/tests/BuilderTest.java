@@ -407,6 +407,25 @@ public class BuilderTest extends XOMTestCase {
         
     }
     
+
+    // verify that we use true XML 1.0 name rules; not the retcon
+    // rules from the fifth edition
+    public void testFifthEdition() throws IOException {
+        
+    	// \u1200/ is an Ethiopic character added in Unicode 3.0.
+    	// It is allowed in XML names by the fifth edition but not 
+    	// by earlier editions.
+        String data = "<root\u1200/>";
+        try {
+            builder.build(data, "http://www.example.com");
+            fail("XML Fifth Edition allowed");
+        }
+        catch (ParsingException ex) {
+            assertNotNull(ex.getMessage());   
+        }
+        
+    }
+    
     
     // verify that XML 1.1 is not supported
     public void testXML11() throws IOException {
