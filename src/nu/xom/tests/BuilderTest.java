@@ -427,7 +427,6 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
-    // verify that XML 1.1 is not supported
     public void testXML11() throws IOException {
         
         String data = "<?xml version='1.1'?><root/>";
