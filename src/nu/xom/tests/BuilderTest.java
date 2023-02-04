@@ -523,6 +523,22 @@ public class BuilderTest extends XOMTestCase {
         }        
       
     }
+    
+    
+    // https://issues.apache.org/jira/browse/XERCESJ-1755
+    public void testXML11InAttributeName() 
+      throws IOException, ParsingException {
+    	
+    	try {
+          Reader reader = new StringReader("<?xml version=\"1.0\"?>\n"
+        		+ "<abc xmlns:＋=\"https://iso20022.plus\"></abc>");
+          builder.build(reader);
+          fail("Allowed full-width plus in attribute name");
+    	}
+    	catch (ParsingException expected) {
+    	}
+    	      
+    }
 
 
     public void testBuildFromReader() 
