@@ -772,8 +772,8 @@ public class XSLTransformTest extends XOMTestCase {
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
         try {
-        	// some stylesheets fail on parsing the sheet while others
-        	// wait till it's used to transform a document
+        	// Some stylesheets processors fail when parsing the sheet while others
+        	// don't fail until it's used to transform a document.
 	        XSLTransform xform = new XSLTransform(stylesheetDoc);
 	        Element root = new Element("root", "http://www.example.org");
 	        Document input = new Document(root);
