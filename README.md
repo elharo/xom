@@ -10,7 +10,7 @@ XOM is fairly unique in that it is a dual streaming/tree-based API. Individual n
 
 XOM is very memory efficient. If you read an entire document into memory, XOM uses as little memory as possible. More importantly, XOM allows you to filter documents as they're built so you don't have to build the parts of the tree you aren't interested in. For instance, you can skip building text nodes that only represent boundary white space, if such white space is not significant in your application. You can even process a document piece by piece and throw away each piece when you're done with it. XOM has been used to process documents that are gigabytes in size.
 
-The current version of XOM is 1.3.8 and is backwards compatible with 1.2, 1.1 and 1.0. You should not need to recompile any code to upgrade to 1.3.8. XOM is believed to be quite stable and robust. Future releases should be backwards compatible with the 1.0 API for the foreseeable future.
+The current version of XOM is 1.3.9 and is backwards compatible with 1.2, 1.1 and 1.0. You should not need to recompile any code to upgrade to 1.3.9. XOM is believed to be quite stable and robust. Future releases should be backwards compatible with the 1.0 API for the foreseeable future.
 
 ## Adding XOM to your build
 
@@ -20,7 +20,7 @@ XOM's Maven group ID is `xom` and its artifact ID is `xom`. To add a dependency 
 <dependency>
   <groupId>xom</groupId>
   <artifactId>xom</artifactId>
-  <version>1.3.8</version>
+  <version>1.3.9</version>
 </dependency>
 ```
 
@@ -28,7 +28,7 @@ To add a dependency using Gradle:
 
 ```gradle
 dependencies {
-  compile 'xom:xom:1.3.8'
+  compile 'xom:xom:1.3.9'
 }
 ```
 
@@ -37,7 +37,7 @@ dependencies {
 
 XOM is not complete unto itself. It depends on an underlying SAX parser to read documents and feed the data into a tree structure. While theoretically any SAX2 compliant parser should work, Xerces 2.6.1 and later is the only one that I am fairly confident does work. Xerces 2.8.0 is included with the full distribution. This product includes software developed by the Apache Software Foundation (http://www.apache.org/). Piccolo 1.0.3, Crimson, GNU JAXP 1.0b1, the Oracle XML Parser for Java 9.2.0.2.0D and 9.2.0.5.0, and Xerces versions prior to 2.6.1 all have bugs that prevent them from doing what XOM needs them to do. (Note to XML parser vendors: XOM's test suite gives parsers a very thorough workout, and delves into some of the more obscure parts of the XML spec that many parsers get wrong. You could do a lot worse for testing than making sure all the XOM unit tests pass when using your parser.)
 
-Similarly XSLT support depends on a TrAX processor (Xalan-J 2.6.0 is bundled). XInclude and XML canonicalization, however, are native.
+Similarly XSLT support depends on a TrAX processor. XInclude and XML canonicalization, however, are native.
 
 
 ## Learning More
