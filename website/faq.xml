@@ -12,7 +12,7 @@
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2002-2005, 2009, 2016, 2018, 2020</year>
+      <year>2002-2005, 2009, 2016, 2018, 2020, 2023</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo> 
@@ -544,11 +544,10 @@ Several of the  tests in <classname>XSLTransformTest</classname> including
 <methodname>testOASISXalanConformanceSuite</methodname>, 
 <methodname>testOASISMicrosoftConformanceSuite</methodname>, and 
 <methodname>testKeysPerfRepro3</methodname>
-fail in Java 1.4 due to bugs in the version of Xalan bundled with Sun's JDK. These tests  pass in Java 1.5. 
-They will also pass in 
+fail in Java 1.4 due to bugs in the version of Xalan bundled with Sun's JDK.
+These tests  pass in Java 1.5. or later. They will also pass in 
 Java 1.4 if you put the version of Xalan found in the lib directory in
 your jre/lib/endorsed directory so it will override the one bundled with the JDK. 
-You can find out which version of Xalan you have by running "ant version" in the main XOM directory.  You'll need 2.6.1 or later for all the test to pass. 
 </para>
 
 <para>
