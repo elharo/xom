@@ -69,8 +69,6 @@ subject line. The XOM home page is https://xom.nu/
 
     <property name="xmlapis.jar"     value="${lib.dir}/xml-apis-1.4.01.jar"/>
     <property name="parser.jar"     value="${lib.dir}/xercesImpl-2.12.2.jar"/>
-    <property name="xslt.jar"       value="${lib.dir}/xalan.jar"/>
-    <property name="serializer.jar" value="${lib.dir}/serializer-2.7.2.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.2.1.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
@@ -100,8 +98,6 @@ subject line. The XOM home page is https://xom.nu/
       <pathelement location="${parser.jar}"/>
       <pathelement location="${xom-core}"/>
       <pathelement location="${jaxen.dir}"/>
-      <pathelement location="${xslt.jar}"/>
-      <pathelement location="${serializer.jar}"/>
     </path>
     
     <path id="test.class.path">
@@ -470,7 +466,6 @@ XOM Build file
     </javac>
     
     <java classname="nu.xom.tools.XHTMLJavaDoc" fork="yes"> 
-      <jvmarg value="-Xbootclasspath/p:lib/xercesImpl-2.12.2.jar:lib/xalan.jar:lib/xml-apis-1.4.01.jar"/> 
       <classpath refid="doc.class.path" />
       <arg value="build/apidocs"/> 
     </java>
@@ -781,9 +776,6 @@ XOM Build file
 
   <target name="debug" depends="init" description="Print various Ant properties">
     <echoproperties/>
-    <java classname="org.apache.xalan.Version" fork="yes">
-      <classpath refid="test.class.path" />
-    </java>
   </target>
   
   <target name="website" depends="samples, betterdoc" description="Generate the website">

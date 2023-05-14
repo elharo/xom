@@ -771,12 +771,14 @@ public class XSLTransformTest extends XOMTestCase {
         File stylesheet = new File(inputDir, "illegaltransform.xsl");
         Builder builder = new Builder();
         Document stylesheetDoc = builder.build(stylesheet);
-        XSLTransform xform = new XSLTransform(stylesheetDoc);
-        Element root = new Element("root", "http://www.example.org");
-        Document input = new Document(root);
         try {
-            xform.transform(input);
-            fail("Allowed illegal transform");
+        	// Some stylesheets processors fail when parsing the sheet while others
+        	// don't fail until it's used to transform a document.
+	        XSLTransform xform = new XSLTransform(stylesheetDoc);
+	        Element root = new Element("root", "http://www.example.org");
+	        Document input = new Document(root);
+	        xform.transform(input);
+	        fail("Allowed illegal transform");
         }
         catch (XSLException ex) {
             assertNotNull(ex.getMessage());
