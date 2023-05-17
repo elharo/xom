@@ -10,7 +10,6 @@
 
   <path id="xslt.class.path">
     <pathelement path="/opt/xml/saxon/saxon.jar"/>
-    <pathelement path="../lib/xalan.jar"/>
   </path>
 
   <path id="xerces.class.path">
