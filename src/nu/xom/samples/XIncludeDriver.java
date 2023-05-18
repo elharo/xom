@@ -20,9 +20,19 @@
 
 package nu.xom.samples;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
 import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.ParsingException;
 import nu.xom.Serializer;
+import nu.xom.ValidityException;
+import nu.xom.xinclude.BadParseAttributeException;
+import nu.xom.xinclude.InclusionLoopException;
+import nu.xom.xinclude.NoIncludeLocationException;
+import nu.xom.xinclude.XIncludeException;
 import nu.xom.xinclude.XIncluder;
 
 /**
@@ -45,15 +55,30 @@ public class XIncludeDriver {
   
         Builder builder = new Builder();
         try {
-            Serializer outputter = new Serializer(System.out, "ISO-8859-1");
-            Document input = builder.build(args[0]);
+            Document input = null;
+            // Is args[0] a file or an absolute URL?
+            if (args[0].indexOf("://") >= 0) {
+                input = builder.build(args[0]);
+            }
+            else {
+                input = builder.build(new File(args[0]));
+            }
+            
             XIncluder.resolveInPlace(input);
+            
+            Serializer outputter = new Serializer(System.out, "ISO-8859-1");
             outputter.write(input);
         }
-        catch (Exception ex) {
-            System.err.println(ex);
-            ex.printStackTrace();
-        }
+        catch (IOException e) {
+			System.err.println("I/O error reading " + args[0] + " " + e.getMessage());
+			e.printStackTrace();
+		}
+        catch (ParsingException e) {
+			System.err.println("Malformed XML while processing " + args[0] + " " + e.getMessage());
+		}
+        catch (XIncludeException e) {
+			System.err.println("XInclude error while processing " + args[0] + " " + e.getMessage());
+		} 
   
     }
 }
