@@ -56,8 +56,7 @@ public class XIncludeDriver {
         Builder builder = new Builder();
         try {
             Document input = null;
-            // Is args[0] a file or an asbsolute URL?
-            
+            // Is args[0] a file or an absolute URL?
             if (args[0].indexOf("://") >= 0) {
                 input = builder.build(args[0]);
             }
