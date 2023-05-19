@@ -56,7 +56,8 @@ public class VerifierTest extends XOMTestCase {
     }
 
 
-    public void testElementNamesRaw() throws ParsingException, IOException {
+    public void testElementNames() throws ParsingException, IOException {
+
         File testDataDirectory = new File("data");
         File namemap = new File(testDataDirectory, "namemap.xml");
         Builder builder = new Builder();
