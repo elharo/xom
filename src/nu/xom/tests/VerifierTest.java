@@ -1,4 +1,4 @@
-/* Copyright 2002-2005, 2018 Elliotte Rusty Harold
+/* Copyright 2002-2005, 2018, 2023 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -21,28 +21,27 @@
 package nu.xom.tests;
 
 import nu.xom.Attribute;
+import nu.xom.Builder;
 import nu.xom.DocType;
+import nu.xom.Document;
 import nu.xom.Element;
+import nu.xom.Elements;
 import nu.xom.IllegalDataException;
 import nu.xom.IllegalNameException;
 import nu.xom.MalformedURIException;
+import nu.xom.ParsingException;
 import nu.xom.Text;
 
-import org.apache.xerces.util.XMLChar;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * <p>
  *  Tests to make sure name and character rules are enforced.
- *  The rules are tested by comparison with the rules in
- *  the org.apache.xerces.util.XMLChar class.
- *  This is an undocumented class so this is potentially dangerous
- *  in the long run. it also means the tests depend on Xerces 2
- *  specifically. However, this dependence does not extend into the 
- *  core API.
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.11
+ * @version 1.4.0
  *
  */
 public class VerifierTest extends XOMTestCase {
@@ -56,47 +55,46 @@ public class VerifierTest extends XOMTestCase {
         super(name);
     }
 
-    
-    public void testElementNames() {
-        
-        for (char c = 0; c < 65535; c++) {
 
-            // XXX remove dependence on this class by providing 
-            // your own table of name characters as a config file for
-            // the tests
-            if (XMLChar.isNCNameStart(c)) {
-               String name = String.valueOf(c);
-               Element e = new Element(name);   
-               assertEquals(name, e.getLocalName());                               
+    public void testElementNamesRaw() throws ParsingException, IOException {
+        File testDataDirectory = new File("data");
+        File namemap = new File(testDataDirectory, "namemap.xml");
+        Builder builder = new Builder();
+        Document doc = builder.build(namemap);
+        Elements characters = doc.getRootElement().getChildElements("char");
+        for (Element character : characters) {
+        	char c = (char) Integer.parseInt(character.getAttributeValue("code"));
+        	if (Boolean.parseBoolean(character.getAttributeValue("ncnamestart"))) {
+                String name = String.valueOf(c);
+                Element e = new Element(name);   
+                assertEquals(name, e.getLocalName());         		
+        	}
+        	else {
+                try {
+                    new Element(String.valueOf(c));  
+                    fail("Allowed illegal name start character " 
+                      + Integer.toHexString(c) + " in element name"); 
+                } 
+                catch (IllegalNameException success) {
+                    assertNotNull(success.getMessage());
+                }                
+            }
+        	if (Boolean.parseBoolean(character.getAttributeValue("ncname"))) {
+                String name = "a" + c;
+                Element e = new Element(name);   
+                assertEquals(name, e.getLocalName());               
             }
             else {
-               try {
-                   new Element(String.valueOf(c));  
-                   fail("Allowed illegal name start character " 
-                     + Integer.toHexString(c) + " in element name"); 
-               } 
-               catch (IllegalNameException success) {
-                   assertNotNull(success.getMessage());
-               }                
+                try {
+                    new Element(String.valueOf(c));  
+                    fail("Allowed illegal character " 
+                      + Integer.toHexString(c) + " in element name"); 
+                } 
+                catch (IllegalNameException success) {
+                    assertNotNull(success.getMessage());
+                    assertEquals(String.valueOf(c), success.getData());
+                }
             }
-            
-            if (XMLChar.isNCName(c)) {
-               String name = "a" + c;
-               Element e = new Element(name);   
-               assertEquals(name, e.getLocalName());               
-            }
-            else {
-               try {
-                   new Element(String.valueOf(c));  
-                   fail("Allowed illegal character " 
-                     + Integer.toHexString(c) + " in element name"); 
-               } 
-               catch (IllegalNameException success) {
-                   assertNotNull(success.getMessage());
-                   assertEquals(String.valueOf(c), success.getData());
-               }
-            }
-            
         }
         
     }
