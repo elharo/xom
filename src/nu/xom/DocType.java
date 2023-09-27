@@ -24,7 +24,7 @@ package nu.xom;
 /**
  * <p>
  * Represents an XML document type declaration such as 
- * <code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"></code>.
+ * <code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"&gt;</code>.
  * Note that this is not the same thing as a document
  * type <em>definition</em> (DTD). XOM does not currently model 
  * the DTD. The document type declaration contains or points to 
@@ -464,7 +464,7 @@ public class DocType extends Node {
      *  Returns a string containing the actual XML
      *  form of the document type declaration represented
      *   by this object. For example, 
-     *  <code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"></code>. 
+     *  <code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"&gt;</code>. 
      * </p>
      * 
      * @return a <code>String</code> containing 

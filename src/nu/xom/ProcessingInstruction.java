@@ -57,7 +57,7 @@ public class ProcessingInstruction extends Node {
      * 
      * @throws IllegalTargetException if the target is not a 
      *    non-colonized name or is the string "xml" in any case
-     * @throws IllegalDataException if data contains "?>" or any 
+     * @throws IllegalDataException if data contains "?&gt;" or any 
      *    other illegal characters
      */
     public ProcessingInstruction(String target, String data) {
