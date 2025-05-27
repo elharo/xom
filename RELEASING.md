@@ -16,6 +16,8 @@ Update the version number in
 
 ## To push a new release to Maven Central:
 
+*Likely now out of date. See https://central.sonatype.org/publish/publish-portal-upload/ for new instructions.*
+
 [Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
 
 1. git checkout master
