@@ -5,7 +5,7 @@ machine:
 jobs:
   build:
     docker:
-      - image: cimg/openjdk
+      - image: cimg/openjdk:8.0
     steps:
       - checkout
       - run:
