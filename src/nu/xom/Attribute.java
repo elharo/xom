@@ -906,8 +906,8 @@ public class Attribute extends Node {
         /**
          * <p>
          *   The type of attributes declared to have type ENTITY
-         *   in the DTD. In order to be valid, a  ENTITY type attribute
-         *   must contain the name of an unparsed entity declared in  
+         *   in the DTD. In order to be valid, an ENTITY type attribute
+         *   must contain the name of an unparsed entity declared in
          *   the DTD. However, XOM does not enforce such 
          *   validity constraints.
          * </p>
@@ -930,7 +930,7 @@ public class Attribute extends Node {
         /**
          * <p>
          *   The type of attributes declared by an enumeration
-         *   in the DTD. In order to be valid, a enumeration type 
+         *   in the DTD. In order to be valid, an enumeration type 
          *   attribute must contain exactly one of the names given  
          *   in the enumeration in the DTD. However, XOM does not 
          *   enforce such validity constraints.
