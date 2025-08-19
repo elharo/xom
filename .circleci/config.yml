@@ -1,17 +1,12 @@
 version: 2
-machine:
-  java:
-    version: openjdk6
 jobs:
   build:
     docker:
       - image: cimg/openjdk:8.0
     steps:
       - checkout
+      - run: java --version
       - run:
           name: Tests
           command: ant -Dtest.haltonfailure=true test
           no_output_timeout: 10m
-      - run:
-          name: Integration tests
-          command: date
