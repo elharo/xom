@@ -12,6 +12,11 @@ jobs:
             chmod 600 ~/.ssh/id_rsa
             ssh-keyscan github.com >> ~/.ssh/known_hosts
             git clone git@github.com:elharo/xom.git cloned-repo
+      - run:
+          name: Verify SSH Key
+          command: |
+          echo "Key length:"
+          ssh-keygen -lf ~/.ssh/id_rsa
       - checkout
       - run: java --version
       - run:
