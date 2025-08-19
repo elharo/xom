@@ -15,8 +15,8 @@ jobs:
       - run:
           name: Verify SSH Key
           command: |
-          echo "Key length:"
-          ssh-keygen -lf ~/.ssh/id_rsa
+            echo "Key length:"
+            ssh-keygen -lf ~/.ssh/id_rsa
       - checkout
       - run: java --version
       - run:
