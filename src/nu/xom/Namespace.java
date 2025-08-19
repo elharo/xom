@@ -22,16 +22,16 @@ package nu.xom;
 
 /**
  * <p>
- * Represents a namespace in scope. It is used by XOM's 
- * XPath implementation for the namespace axis. However, it is not 
+ * Represents a namespace in scope. It is used by XOM's
+ * XPath implementation for the namespace axis. However, it is not
  * really part of the XOM data model. Namespace objects are only
  * created as needed when evaluating XPath. While a namespace node has
- * a parent element (which may be null), that element does not know 
+ * a parent element (which may be null), that element does not know
  * about these namespace nodes and cannot remove them. (This is an
  * inconsistency in the XPath data model, and is shared with attributes
- * which also have parents but are not children.) 
+ * which also have parents but are not children.)
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
  *
@@ -42,7 +42,7 @@ public final class Namespace extends Node {
     private final String uri;
     
     /**
-     * Namespace URI specified for <code>xml</code> prefix
+     * Namespace URI specified for <code>xml</code> prefix.
      */
     public final static String XML_NAMESPACE 
       = "http://www.w3.org/XML/1998/namespace";
@@ -52,20 +52,19 @@ public final class Namespace extends Node {
      * <p>
      * Create a new namespace node.
      * </p>
-     * 
-     * @param prefix the prefix for the namespace; may be the empty 
+     *
+     * @param prefix the prefix for the namespace; may be the empty
      *     string or a non-colonized name
      * @param URI the namespace URI
      * @param parent the element that possesses this namespace node
-     * 
-     * @throws MalformedURIException if <code>URI</code> is 
-     *     not an RFC 3986 URI reference
      * @throws IllegalNameException if
      *  <ul>
      *      <li>The prefix is <code>xmlns</code>.</li>
      *      <li>The prefix is not the empty string, and the URI is 
      *          null or the empty string.</li>
      * </ul>
+     * @throws MalformedURIException if <code>URI</code> is
+     *     not an RFC 3986 URI reference
      * @throws NamespaceConflictException if
      *  <ul>
      *      <li>The prefix is the empty string, and the URI is 
@@ -122,7 +121,7 @@ public final class Namespace extends Node {
      * Returns the namespace prefix, or the empty string if this node
      * is the default namespace.
      * </p>
-     * 
+     *
      * @return the namespace prefix
      */
     public String getPrefix() {
@@ -134,7 +133,7 @@ public final class Namespace extends Node {
      * <p>
      * Returns the namespace URI.
      * </p>
-     * 
+     *
      * @return the namespace URI
      */
     public String getValue() {
@@ -143,19 +142,17 @@ public final class Namespace extends Node {
 
 
      /**
-     * <p>
-     * Throws <code>IndexOutOfBoundsException</code> because 
-     * namespaces do not have children.
-     * </p>
-     * 
-     * @return never returns because document type declarations do not 
+      * <p>
+      * Throws <code>IndexOutOfBoundsException</code> because
+      * namespaces do not have children.
+      * </p>
+      *
+      * @param position the index of the child node to return
+      * @return never returns because document type declarations do not
      *     have children. Always throws an exception.
-     * 
-     * @param position the index of the child node to return
-     * 
-     * @throws IndexOutOfBoundsException because document type declarations
+      * @throws IndexOutOfBoundsException because document type declarations
      *     do not have children
-     */
+      */
     public Node getChild(int position) {
         throw new IndexOutOfBoundsException(
           "Namespaces do not have children");
@@ -164,10 +161,10 @@ public final class Namespace extends Node {
 
     /**
      * <p>
-     * Returns 0 because namespaces do not have 
+     * Returns 0 because namespaces do not have
      * children.
      * </p>
-     * 
+     *
      * @return zero
      */
     public int getChildCount() {
@@ -177,11 +174,11 @@ public final class Namespace extends Node {
 
     /**
      * <p>
-     *   Returns a copy of this namespace which has 
-     *   the same prefix and URI, but no parent.
+     * Returns a copy of this namespace which has
+     * the same prefix and URI, but no parent.
      * </p>
-     * 
-     * @return a copy of this <code>Namespace</code> 
+     *
+     * @return a copy of this <code>Namespace</code>
      *     that is not part of a document
      */
     public Namespace copy() {
@@ -189,11 +186,11 @@ public final class Namespace extends Node {
     }
 
 
-    /** 
+    /**
      * <p>
-     * Removes this namespace node from its parent.  
+     * Removes this namespace node from its parent.
      * </p>
-     * 
+     *
      * @see nu.xom.Node#detach()
      */
     public void detach() {
@@ -203,13 +200,13 @@ public final class Namespace extends Node {
     
     /**
      * <p>
-     *  Returns a string containing the actual XML
-     *  form of the namespace declaration represented
-     *  by this object. For example, 
-     *  <code>xmlns:pre="http://www.example.org/"</code>. 
+     * Returns a string containing the actual XML
+     * form of the namespace declaration represented
+     * by this object. For example,
+     * <code>xmlns:pre="http://www.example.org/"</code>.
      * </p>
-     * 
-     * @return a <code>String</code> containing 
+     *
+     * @return a <code>String</code> containing
      *      an XML namespace declaration
      */
     public String toXML() {
@@ -220,12 +217,12 @@ public final class Namespace extends Node {
     
     /**
      * <p>
-     * Returns a string form of the 
+     * Returns a string form of the
      * <code>Namespace</code> suitable for debugging
-     * and diagnosis. It deliberately does not return 
-     * an actual XML namespace declaration. 
+     * and diagnosis. It deliberately does not return
+     * an actual XML namespace declaration.
      * </p>
-     * 
+     *
      * @return a string representation of this object
      */
     public String toString() {

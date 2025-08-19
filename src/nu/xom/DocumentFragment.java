@@ -21,13 +21,12 @@
 package nu.xom;
 
 /**
- * 
  * <p>
- * Used in XPath when querying a subtree that is not part of a 
- * document. This class is purely internal. Instances should never 
+ * Used in XPath when querying a subtree that is not part of a
+ * document. This class is purely internal. Instances should never
  * be visible in the public API.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.2d1
  *

@@ -22,10 +22,10 @@ package nu.xom;
 
 /**
  * <p>
- *  Indicates an attempt to
- *  insert an ancestor element as one of its own descendants.
+ * Indicates an attempt to
+ * insert an ancestor element as one of its own descendants.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
  *
@@ -38,10 +38,10 @@ public class CycleException extends IllegalAddException {
 
     /**
      * <p>
-     *  Creates a new <code>CycleException</code>
-     *  with a detail message.
+     * Creates a new <code>CycleException</code>
+     * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public CycleException(String message) {
@@ -54,7 +54,7 @@ public class CycleException extends IllegalAddException {
      * Creates a new <code>CycleException</code> with a detail message
      * and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

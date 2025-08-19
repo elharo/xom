@@ -28,13 +28,13 @@ import java.util.Locale;
 
 /**
  * <p>
- * <code>GenericWriter</code> figures out whether a 
+ * <code>GenericWriter</code> figures out whether a
  * character is or is not available in a particular encoding.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.2.11
- * 
+ *
  */
 class GenericWriter extends TextWriter {
     

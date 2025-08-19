@@ -31,7 +31,6 @@ import org.jaxen.XPathFunctionContext;
 
 
 /**
- * 
  * @author Elliotte Rusty Harold
  * @version 1.2.4
  *

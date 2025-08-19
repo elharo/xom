@@ -25,11 +25,11 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * These methods are not fully general.
- * You would need to uncomment some lines to make this a 
- * public API. Certain preconditions for these methods to 
+ * You would need to uncomment some lines to make this a
+ * public API. Certain preconditions for these methods to
  * operate correctly are true in the context of XOM,
- * but may well not be true in a more general context. 
- * 
+ * but may well not be true in a more general context.
+ *
  * @author Elliotte Rusty Harold
  * @version 1.2.3
  *

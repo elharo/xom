@@ -22,12 +22,12 @@ package nu.xom;
 
 /**
  * <p>
- * Signals an attempt to set a namespace in a way that conflicts with  
+ * Signals an attempt to set a namespace in a way that conflicts with
  * an existing namespace; for instance, adding an attribute to
  * an element that has the same prefix as the element but maps it
- * to a different URI. 
+ * to a different URI.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
  *
@@ -41,10 +41,10 @@ public class NamespaceConflictException
 
     /**
      * <p>
-     * Creates a new <code>NamespaceConflictException</code> 
+     * Creates a new <code>NamespaceConflictException</code>
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public NamespaceConflictException(String message) {
@@ -54,10 +54,10 @@ public class NamespaceConflictException
     
     /**
      * <p>
-     * Creates a new <code>NamespaceConflictException</code> 
+     * Creates a new <code>NamespaceConflictException</code>
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

@@ -23,20 +23,20 @@ package nu.xom;
 
 /**
  * <p>
- *  This class represents an XML processing instruction.
- *  Each processing instruction has two key properties:
+ * This class represents an XML processing instruction.
+ * Each processing instruction has two key properties:
  * </p>
- * 
+ *
  * <ul>
- *   <li>The target, a non-colonized name</li>
- *   <li>The data, a string which does not contain the two character
- *       sequence <code>?&gt;</code>. The syntax of the data
- *       depends completely on the processing instruction. 
- *       Other than forbidding <code>?&gt;</code>, XML defines
- *       no rules for processing instruction data.
- *   </li>
+ * <li>The target, a non-colonized name</li>
+ * <li>The data, a string which does not contain the two character
+ * sequence <code>?&gt;</code>. The syntax of the data
+ * depends completely on the processing instruction.
+ * Other than forbidding <code>?&gt;</code>, XML defines
+ * no rules for processing instruction data.
+ * </li>
  * </ul>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
  *
@@ -51,14 +51,13 @@ public class ProcessingInstruction extends Node {
      * <p>
      * Create a processing instruction with a certain target and data.
      * </p>
-     * 
+     *
      * @param target the target of the processing instruction
      * @param data the processing instruction data
-     * 
-     * @throws IllegalTargetException if the target is not a 
-     *    non-colonized name or is the string "xml" in any case
-     * @throws IllegalDataException if data contains "?>" or any 
+     * @throws IllegalDataException if data contains "?>" or any
      *    other illegal characters
+     * @throws IllegalTargetException if the target is not a
+     *    non-colonized name or is the string "xml" in any case
      */
     public ProcessingInstruction(String target, String data) {
         _setTarget(target);  
@@ -70,9 +69,9 @@ public class ProcessingInstruction extends Node {
      * <p>
      * Create a copy of a processing instruction.
      * </p>
-     * 
+     *
      * @param instruction the processing instruction to copy
-     * 
+     *
      */
     public ProcessingInstruction(ProcessingInstruction instruction) {
         this.target = instruction.target;
@@ -94,7 +93,7 @@ public class ProcessingInstruction extends Node {
      * <p>
      * Returns the processing instruction target.
      * </p>
-     * 
+     *
      * @return the target
      */
     public final String getTarget() {
@@ -106,10 +105,9 @@ public class ProcessingInstruction extends Node {
      * <p>
      * Sets the target.
      * </p>
-     * 
+     *
      * @param target the new target
-     * 
-     * @throws IllegalTargetException if the proposed target 
+     * @throws IllegalTargetException if the proposed target
      *     is not an XML 1.0 non-colonized name or is the string 
      *     "xml" in any case
      */
@@ -146,9 +144,8 @@ public class ProcessingInstruction extends Node {
      * <p>
      * Sets the data.
      * </p>
-     * 
+     *
      * @param data the data to set
-     * 
      * @throws IllegalDataException if <code>data</code> is null
      *      or otherwise not legal XML processing instruction data
      */
@@ -195,7 +192,7 @@ public class ProcessingInstruction extends Node {
      * <p>
      * Returns the processing instruction data.
      * </p>
-     * 
+     *
      * @return the data of the processing instruction
      *
      */
@@ -206,16 +203,14 @@ public class ProcessingInstruction extends Node {
     
     /**
      * <p>
-     * Throws <code>IndexOutOfBoundsException</code> because 
+     * Throws <code>IndexOutOfBoundsException</code> because
      * processing instructions do not have children.
      * </p>
-     * 
-     * @return never returns because processing instructions do not 
-     *     have children; always throws an exception.
-     * 
+     *
      * @param position the index of the child node to return
-     * 
-     * @throws IndexOutOfBoundsException because processing  
+     * @return never returns because processing instructions do not
+     *     have children; always throws an exception
+     * @throws IndexOutOfBoundsException because processing
      *     instructions do not have children
      */
     public final Node getChild(int position) {
@@ -228,7 +223,7 @@ public class ProcessingInstruction extends Node {
      * <p>
      * Returns 0 because processing instructions do not have children.
      * </p>
-     * 
+     *
      * @return zero
      */
     public final int getChildCount() {
@@ -238,11 +233,11 @@ public class ProcessingInstruction extends Node {
     
     /**
      * <p>
-     * Returns the actual XML form of this processing instruction, 
+     * Returns the actual XML form of this processing instruction,
      * such as might be copied and pasted from the original document.
      * </p>
-     * 
-     * @return an XML representation of this processing instruction 
+     *
+     * @return an XML representation of this processing instruction
      *         as a <code>String</code>
      */
     public final String toXML() {
@@ -262,11 +257,11 @@ public class ProcessingInstruction extends Node {
     /**
      * <p>
      * Returns a deep copy of this processing instruction with no
-     * parent, that can be added to this document or a different 
+     * parent, that can be added to this document or a different
      * one.
      * </p>
-     * 
-     * @return a copy of this <code>ProcessingInstruction</code> 
+     *
+     * @return a copy of this <code>ProcessingInstruction</code>
      *         with no parent
      */
     public ProcessingInstruction copy() {
@@ -281,13 +276,13 @@ public class ProcessingInstruction extends Node {
     
     /**
      * <p>
-     * Returns a <code>String</code> representation 
+     * Returns a <code>String</code> representation
      * of this processing instruction suitable for
      * debugging and diagnosis. This is <em>not</em>
      * the XML representation of this processing instruction.
      * </p>
-     * 
-     * @return a non-XML string representation of this 
+     *
+     * @return a non-XML string representation of this
      *      <code>ProcessingInstruction</code>
      */
     public final String toString() {

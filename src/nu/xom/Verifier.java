@@ -34,13 +34,13 @@ import org.xml.sax.XMLReader;
 
 /**
  * <p>
- * <code>Verifier</code> checks names and data for 
+ * <code>Verifier</code> checks names and data for
  * compliance with XML 1.0 and Namespaces in XML rules.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.2.11
- * 
+ *
  */
 final class Verifier {
     
@@ -99,14 +99,13 @@ final class Verifier {
 
     /**
      * <p>
-     * Check whether <code>name</code> is 
-     * a non-colonized name as defined in 
+     * Check whether <code>name</code> is
+     * a non-colonized name as defined in
      * <cite>Namespaces in XML</cite>.
      * </p>
-     * 
+     *
      * @param name <code>String</code> name to check
-     * 
-     * @throws IllegalNameException if <code>name</code> is not a 
+     * @throws IllegalNameException if <code>name</code> is not a
      *     non-colonized name
      */
     static void checkNCName(String name) {
@@ -166,12 +165,11 @@ final class Verifier {
     /**
      * <p>
      * This methods checks whether a string contains only
-     * characters allowed by the XML 1.0 specification. 
+     * characters allowed by the XML 1.0 specification.
      * </p>
      *
      * @param text <code>String</code> value to verify
-     * 
-     * @throws IllegalCharacterDataException if <code>text</code> is  
+     * @throws IllegalCharacterDataException if <code>text</code> is
      *     not legal PCDATA
      */
     static void checkPCDATA(String text) {
@@ -213,14 +211,13 @@ final class Verifier {
     
     /**
      * <p>
-     * Checks a string to see if it is a syntactically correct 
-     * RFC 3986 URI reference. Both absolute and relative  
+     * Checks a string to see if it is a syntactically correct
+     * RFC 3986 URI reference. Both absolute and relative
      * URIs are supported, as are URIs with fragment identifiers.
      * </p>
-     * 
+     *
      * @param uri <code>String</code> containing the potential URI
-     * 
-     * @throws MalformedURIException if this is not a 
+     * @throws MalformedURIException if this is not a
      *     legal URI reference
      */
     static void checkURIReference(String uri) {
@@ -888,14 +885,13 @@ final class Verifier {
     
     /**
      * <p>
-     * Checks a string to see if it is an RFC 3986 absolute 
+     * Checks a string to see if it is an RFC 3986 absolute
      * URI reference. URI references can contain fragment identifiers.
      * Absolute URI references must have a scheme.
      * </p>
-     * 
+     *
      * @param uri <code>String</code> to check
-     * 
-     * @throws MalformedURIException if this is not a legal 
+     * @throws MalformedURIException if this is not a legal
      *     URI reference
      */
     static void checkAbsoluteURIReference(String uri) {
@@ -1298,7 +1294,6 @@ final class Verifier {
     /**
      * Check to see that this string is an absolute URI,
      * neither a relative URI nor a URI reference.
-     * 
      */
     static void checkAbsoluteURI(String uri) {
         

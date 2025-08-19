@@ -23,10 +23,10 @@ package nu.xom;
  * <p>
  * Indicates problems with XPath syntax or evaluation.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- * 
+ *
  */
 public class XPathException extends RuntimeException {
     
@@ -39,10 +39,10 @@ public class XPathException extends RuntimeException {
     
     /**
      * <p>
-     * Creates a new <code>XPathException</code> 
+     * Creates a new <code>XPathException</code>
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public XPathException(String message) {
@@ -52,10 +52,10 @@ public class XPathException extends RuntimeException {
 
     /**
      * <p>
-     * Creates a new <code>IllegalNameException</code> 
+     * Creates a new <code>IllegalNameException</code>
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
@@ -67,8 +67,8 @@ public class XPathException extends RuntimeException {
 
     /**
      * <p>
-     *  Return the original cause that led to this exception,
-     *  or null if there was no original exception.
+     * Return the original cause that led to this exception,
+     * or null if there was no original exception.
      * </p>
      *
      * @return the root cause of this exception
@@ -85,11 +85,11 @@ public class XPathException extends RuntimeException {
     
     /**
      * <p>
-     * Sets the root cause of this exception. This may 
-     * only be called once. Subsequent calls throw an 
+     * Sets the root cause of this exception. This may
+     * only be called once. Subsequent calls throw an
      * <code>IllegalStateException</code>.
      * </p>
-     * 
+     *
      * <p>
      * This method is unnecessary in Java 1.4 where it could easily be
      * inherited from the superclass. However, including it here
@@ -97,9 +97,7 @@ public class XPathException extends RuntimeException {
      * </p>
      *
      * @param cause the root cause of this exception
-     * 
      * @return this <code>XMLException</code>
-     * 
      * @throws IllegalArgumentException if the cause is this exception
      *   (An exception cannot be its own cause.)
      * @throws IllegalStateException if this method is called twice
@@ -123,7 +121,7 @@ public class XPathException extends RuntimeException {
      * <p>
      * Sets the specific XPath expression that caused this exception.
      * </p>
-     * 
+     *
      * @param expression the XPath expression that caused the exception
      */
     void setXPath(String expression) {
@@ -136,7 +134,7 @@ public class XPathException extends RuntimeException {
      * Returns the specific XPath expression being evaluated when this
      * excepiton was thrown.
      * </p>
-     * 
+     *
      * @return the XPath expression that caused the exception
      */
     public String getXPath() {

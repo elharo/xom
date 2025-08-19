@@ -24,10 +24,10 @@ import java.io.Writer;
 
 /**
  * <p>
- *   ISO 8859-4, Latin plus the characters needed for Greenlandic, 
- *   Icelandic, and Lappish.
+ * ISO 8859-4, Latin plus the characters needed for Greenlandic,
+ * Icelandic, and Lappish.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
  *

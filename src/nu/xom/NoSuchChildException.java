@@ -24,9 +24,9 @@ package nu.xom;
  * <p>
  * Indicates that a child with a certain name and/or namespace does
  * not exist. This is thrown when you attempt to remove a node from
- * a parent that does not actually have that node as a child.  
+ * a parent that does not actually have that node as a child.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
  * @see ParentNode#removeChild(Node)
@@ -40,10 +40,10 @@ public class NoSuchChildException extends XMLException {
 
     /**
      * <p>
-     * Creates a new <code>NoSuchChildException</code> 
+     * Creates a new <code>NoSuchChildException</code>
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message explains the reason for the exception
      */
     public NoSuchChildException(String message) {
@@ -53,11 +53,11 @@ public class NoSuchChildException extends XMLException {
     
     /**
      * <p>
-     * Creates a new <code>NoSuchChildException</code> 
+     * Creates a new <code>NoSuchChildException</code>
      * with the specified detail message
      * and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message explains the reason for the exception
      * @param cause the nested exception that caused this exception
      */

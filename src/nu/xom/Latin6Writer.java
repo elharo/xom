@@ -24,8 +24,8 @@ import java.io.Writer;
 
 /**
  * <p>
- *   ISO-8859-10, for Lithuanian, Estonian, Greenlandic, Icelandic,
- *   Inuit, Lappish, and other Northern European languages.
+ * ISO-8859-10, for Lithuanian, Estonian, Greenlandic, Icelandic,
+ * Inuit, Lappish, and other Northern European languages.
  * </p>
  *
  * @author Elliotte Rusty Harold

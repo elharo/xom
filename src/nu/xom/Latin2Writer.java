@@ -24,9 +24,9 @@ import java.io.Writer;
 
 /**
  * <p>
- *   ISO 8859-2, a.k.a. Latin-2
+ * ISO 8859-2, a.k.a. Latin-2
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
  *

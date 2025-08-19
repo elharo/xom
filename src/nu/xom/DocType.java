@@ -23,37 +23,37 @@ package nu.xom;
 
 /**
  * <p>
- * Represents an XML document type declaration such as 
+ * Represents an XML document type declaration such as
  * <code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"></code>.
  * Note that this is not the same thing as a document
- * type <em>definition</em> (DTD). XOM does not currently model 
- * the DTD. The document type declaration contains or points to 
+ * type <em>definition</em> (DTD). XOM does not currently model
+ * the DTD. The document type declaration contains or points to
  * the DTD, but it is not the DTD.
  * </p>
- * 
+ *
  * <p>
- * A <code>DocType</code> object does not have any child 
+ * A <code>DocType</code> object does not have any child
  * nodes. It can be a child of a <code>Document</code>.
  * </p>
- * 
+ *
  * <p>
- * Each <code>DocType</code> object has four <Code>String</code> 
+ * Each <code>DocType</code> object has four <Code>String</code>
  * properties, some of which may be null:
  * </p>
- * 
+ *
  * <ul>
- *   <li>The declared name of the root element (which 
+ * <li>The declared name of the root element (which
  * does not necessarily match the actual root element name
- *  in an invalid document)</li>
- *   <li>The public identifier (which may be null)</li>
- *   <li>The system identifier (which may be null)</li>
- *   <li>The internal DTD subset (which may be null)</li>
- * 
+ * in an invalid document)</li>
+ * <li>The public identifier (which may be null)</li>
+ * <li>The system identifier (which may be null)</li>
+ * <li>The internal DTD subset (which may be null)</li>
+ *
  * </ul>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1d1
- * 
+ *
  */
 public class DocType extends Node {
 
@@ -67,22 +67,21 @@ public class DocType extends Node {
     /**
      * <p>
      * Creates a new document type declaration with a public ID
-     * and a system ID. It has the general form 
-     * <code>&lt;!DOCTYPE rootElementName PUBLIC 
+     * and a system ID. It has the general form
+     * <code>&lt;!DOCTYPE rootElementName PUBLIC
      * "publicID" "systemID"&gt;</code>.
      * </p>
-     * 
+     *
      * @param rootElementName the name specified for the root element
      * @param publicID the public ID of the external DTD subset
      * @param systemID the URL of the external DTD subset
-     * 
-     * @throws IllegalNameException  if <code>rootElementName</code> 
-     *     is not a legal XML 1.0 name
-     * @throws IllegalDataException if <code>publicID</code> is not a  
+     * @throws IllegalDataException if <code>publicID</code> is not a
      *     legal XML 1.0 public identifier
-     * @throws MalformedURIException if the system ID is not a 
+     * @throws IllegalNameException  if <code>rootElementName</code>
+     *     is not a legal XML 1.0 name
+     * @throws MalformedURIException if the system ID is not a
      *     syntactically correct URI, or if it contains a fragment
-     *     identifier 
+     *     identifier
      */
     public DocType(
       String rootElementName, String publicID, String systemID) {
@@ -95,18 +94,17 @@ public class DocType extends Node {
     /**
      * <p>
      * Creates a new document type declaration with a system ID
-     * but no public ID. It has the general form 
+     * but no public ID. It has the general form
      * <code>&lt;!DOCTYPE rootElementName SYSTEM "systemID"&gt;</code>.
      * </p>
-     * 
+     *
      * @param rootElementName the name specified for the root element
      * @param systemID the URL of the external DTD subset
-     * 
-     * @throws IllegalNameException if the rootElementName is not 
+     * @throws IllegalNameException if the rootElementName is not
      *     a legal XML 1.0 name
-     * @throws MalformedURIException if the system ID is not a 
+     * @throws MalformedURIException if the system ID is not a
      *     syntactically correct URI, or if it contains a fragment
-     *     identifier 
+     *     identifier
      */
     public DocType(String rootElementName, String systemID) {
         this(rootElementName, null, systemID);  
@@ -115,14 +113,13 @@ public class DocType extends Node {
     
     /**
      * <p>
-     * Creates a new document type declaration with 
-     * no public or system ID. It has the general form 
+     * Creates a new document type declaration with
+     * no public or system ID. It has the general form
      * <code>&lt;!DOCTYPE rootElementName&gt;</code>.
      * </p>
-     * 
+     *
      * @param rootElementName the name specified for the root element
-     * 
-     * @throws IllegalNameException if the rootElementName is not 
+     * @throws IllegalNameException if the rootElementName is not
      *      a legal XML 1.0 name
      */
     public DocType(String rootElementName) {
@@ -132,10 +129,10 @@ public class DocType extends Node {
     
     /**
      * <p>
-     * Creates a new <code>DocType</code> that's a copy of its 
+     * Creates a new <code>DocType</code> that's a copy of its
      * argument. The copy has the same data but no parent document.
      * </p>
-     * 
+     *
      * @param doctype the <code>DocType</code> to copy
      */
     public DocType(DocType doctype) {
@@ -160,11 +157,11 @@ public class DocType extends Node {
 
     /**
      * <p>
-     * Returns the name the document type declaration specifies 
-     * for the root element. In an invalid document, this may 
+     * Returns the name the document type declaration specifies
+     * for the root element. In an invalid document, this may
      * not be the same as the actual root element name.
      * </p>
-     * 
+     *
      * @return the declared name of the root element
      */
     public final String getRootElementName() {
@@ -174,15 +171,14 @@ public class DocType extends Node {
     
     /**
      * <p>
-     * Sets the name the document type declaration specifies 
-     * for the root element. In an invalid document, this may 
+     * Sets the name the document type declaration specifies
+     * for the root element. In an invalid document, this may
      * not be the same as the actual root element name.
      * </p>
-     * 
+     *
      * @param name the root element name given by
      *     the document type declaration
-     * 
-     * @throws IllegalNameException if the root element name is not 
+     * @throws IllegalNameException if the root element name is not
      *     a legal XML 1.0 name
      */
     public void setRootElementName(String name) {
@@ -200,9 +196,9 @@ public class DocType extends Node {
      * <p>
      * Returns the complete internal DTD subset.
      * White space may not be preserved completely accurately,
-     * but all declarations should be in place. 
+     * but all declarations should be in place.
      * </p>
-     * 
+     *
      * @return the internal DTD subset
      */
     public final String getInternalDTDSubset() {
@@ -212,22 +208,20 @@ public class DocType extends Node {
     
     /**
      * <p>
-     * Sets the internal DTD subset; that is the part of the DTD 
-     * between <code>[</code> and <code>]</code>. Changing the 
-     * internal DTD subset does not affect the instance document. 
-     * That is, default attribute values and attribute types 
+     * Sets the internal DTD subset; that is the part of the DTD
+     * between <code>[</code> and <code>]</code>. Changing the
+     * internal DTD subset does not affect the instance document.
+     * That is, default attribute values and attribute types
      * specified in the new internal DTD subset are not applied to the
      * corresponding elements in the instance document. Furthermore,
      * there's no guarantee that the instance document is or is not
-     * valid with respect to the declarations in the new internal 
+     * valid with respect to the declarations in the new internal
      * DTD subset.
      * </p>
-     * 
+     *
      * @param subset the internal DTD subset
-     * 
-     * @throws IllegalDataException if subset is not 
+     * @throws IllegalDataException if subset is not
      *     a legal XML 1.0 internal DTD subset
-     * 
      * @since 1.1
      */
     public final void setInternalDTDSubset(String subset) {
@@ -250,12 +244,12 @@ public class DocType extends Node {
     
     /**
      * <p>
-     * Returns the public ID of the external DTD subset. 
+     * Returns the public ID of the external DTD subset.
      * This is null if there is no external DTD subset
      * or if it does not have a public identifier.
      * </p>
-     * 
-     * @return the public ID of the external DTD subset.
+     *
+     * @return the public ID of the external DTD subset
      */
     public final String getPublicID() { 
         return publicID;
@@ -265,14 +259,13 @@ public class DocType extends Node {
     /**
      * <p>
      * Sets the public ID for the external DTD subset.
-     * This can only be set after a system ID has been set, 
-     * because XML requires that all document type declarations 
-     * with public IDs have system IDs. Passing null removes 
-     * the public ID. 
+     * This can only be set after a system ID has been set,
+     * because XML requires that all document type declarations
+     * with public IDs have system IDs. Passing null removes
+     * the public ID.
      * </p>
-     * 
+     *
      * @param id the public identifier of the external DTD subset
-     * 
      * @throws IllegalDataException if the public ID does not satisfy
      *      the rules for public IDs in XML 1.0
      * @throws WellformednessException if no system ID has been set
@@ -323,11 +316,11 @@ public class DocType extends Node {
 
     /**
      * <p>
-     * Returns the system ID of the external DTD subset. 
+     * Returns the system ID of the external DTD subset.
      * This is a URL. It is null if there is no external DTD subset.
      * </p>
-     * 
-     * @return the URL for the external DTD subset.
+     *
+     * @return the URL for the external DTD subset
      */
     public final String getSystemID() { 
         return systemID;
@@ -338,17 +331,16 @@ public class DocType extends Node {
      * <p>
      * Sets the system ID for the external DTD subset.
      * This must be a a relative or absolute  URI with no fragment
-     * identifier. Passing null removes the system ID, but only if  
+     * identifier. Passing null removes the system ID, but only if
      * the public ID has been removed first. Otherwise,
      * passing null causes a <code>WellformednessException</code>.
      * </p>
-     * 
+     *
      * @param id the URL of the external DTD subset
-     * 
-     * @throws MalformedURIException if the system ID is not a 
+     * @throws MalformedURIException if the system ID is not a
      *     syntactically correct URI, or if it contains a fragment
-     *     identifier 
-     * @throws WellformednessException if the public ID is non-null 
+     *     identifier
+     * @throws WellformednessException if the public ID is non-null
      *     and you attempt to remove the system ID
      */
     public void setSystemID(String id) {
@@ -384,10 +376,10 @@ public class DocType extends Node {
 
     /**
      * <p>
-     * Returns the empty string. XPath 1.0 does not define a value 
+     * Returns the empty string. XPath 1.0 does not define a value
      * for document type declarations.
      * </p>
-     * 
+     *
      * @return an empty string
      */
     public final String getValue() {
@@ -397,15 +389,13 @@ public class DocType extends Node {
 
     /**
      * <p>
-     * Throws <code>IndexOutOfBoundsException</code> because 
+     * Throws <code>IndexOutOfBoundsException</code> because
      * document type declarations do not have children.
      * </p>
-     * 
-     * @return never returns because document type declarations do not 
-     *     have children. Always throws an exception.
-     * 
+     *
      * @param position the index of the child node to return
-     * 
+     * @return never returns because document type declarations do not
+     *     have children. Always throws an exception.
      * @throws IndexOutOfBoundsException because document type declarations
      *     do not have children
      */
@@ -417,10 +407,10 @@ public class DocType extends Node {
     
     /**
      * <p>
-     * Returns 0 because document type declarations do not have 
+     * Returns 0 because document type declarations do not have
      * children.
      * </p>
-     * 
+     *
      * @return zero
      */
     public final int getChildCount() {
@@ -430,12 +420,12 @@ public class DocType extends Node {
     
     /**
      * <p>
-     * Returns a string form of the 
+     * Returns a string form of the
      * <code>DocType</code> suitable for debugging
-     * and diagnosis. It deliberately does not return 
-     * an actual XML document type declaration. 
+     * and diagnosis. It deliberately does not return
+     * an actual XML document type declaration.
      * </p>
-     * 
+     *
      * @return a string representation of this object
      */
     public final String toString() {
@@ -445,13 +435,13 @@ public class DocType extends Node {
     
     /**
      * <p>
-     *   Returns a copy of this <code>DocType</code> 
-     *   which has the same system ID, public ID, root element name,
-     *   and internal DTD subset, but does not belong to a document.
-     *   Thus, it can be inserted into a different document.
+     * Returns a copy of this <code>DocType</code>
+     * which has the same system ID, public ID, root element name,
+     * and internal DTD subset, but does not belong to a document.
+     * Thus, it can be inserted into a different document.
      * </p>
-     * 
-     * @return a deep copy of this <code>DocType</code> 
+     *
+     * @return a deep copy of this <code>DocType</code>
      *     that is not part of a document
      */
     public Node copy() {      
@@ -461,13 +451,13 @@ public class DocType extends Node {
 
     /**
      * <p>
-     *  Returns a string containing the actual XML
-     *  form of the document type declaration represented
-     *   by this object. For example, 
-     *  <code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"></code>. 
+     * Returns a string containing the actual XML
+     * form of the document type declaration represented
+     * by this object. For example,
+     * <code>&lt;!DOCTYPE book SYSTEM "docbookx.dtd"></code>.
      * </p>
-     * 
-     * @return a <code>String</code> containing 
+     *
+     * @return a <code>String</code> containing
      *      an XML document type declaration
      */
     public final String toXML() { 

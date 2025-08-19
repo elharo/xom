@@ -24,7 +24,7 @@ package nu.xom;
  * <p>
  * Interface between Jaxen and XOM.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1.1b1
  *
