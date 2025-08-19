@@ -805,12 +805,12 @@ public class Attribute extends Node {
      * </p>
      * 
      * <p>
-     *   XOM enforces well-formedness, but it does not enforce 
-     *   validity. Thus it is possible for a single element to have 
-     *   multiple ID type attributes, or ID type attributes 
-     *   on different elements to have the same value, 
-     *   or NMTOKEN type attributes that don't contain legal 
-     *   XML name tokens, and so forth.
+     * XOM enforces well-formedness, but it does not enforce
+     * validity. Thus it is possible for a single element to have
+     * multiple ID type attributes, for ID type attributes
+     * on different elements to have the same value,
+     * for NMTOKEN type attributes to not contain legal
+     * XML name tokens, and so forth.
      * </p>
      * 
      * @author Elliotte Rusty Harold
