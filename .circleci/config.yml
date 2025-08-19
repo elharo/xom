@@ -4,7 +4,6 @@ jobs:
     docker:
       - image: cimg/openjdk:8.0
     steps:
-      - checkout
       - run:
           name: Set up SSH
           command: |
@@ -13,6 +12,7 @@ jobs:
             chmod 600 ~/.ssh/id_rsa
             ssh-keyscan github.com >> ~/.ssh/known_hosts
             git clone git@github.com:elharo/xom.git cloned-repo
+      - checkout
       - run: java --version
       - run:
           name: Tests
