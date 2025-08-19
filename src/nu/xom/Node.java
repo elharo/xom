@@ -25,34 +25,31 @@ import java.util.List;
 import org.jaxen.NamespaceContext;
 
 /**
+ * <p>
+ * The generic superclass for all the contents
+ * of an XML document. There are exactly eight kinds of
+ * nodes in XOM:
+ * </p>
+ *
+ * <ul>
+ * <li><code>Element</code></li>
+ * <li><code>Document</code></li>
+ * <li><code>Text</code></li>
+ * <li><code>Comment</code></li>
+ * <li><code>Attribute</code></li>
+ * <li><code>ProcessingInstruction</code></li>
+ * <li><code>DocType</code></li>
+ * <li><code>Namespace</code></li>
+ * </ul>
  *
  * <p>
- *  The generic superclass for all the contents 
- *  of an XML document. There are exactly eight kinds of 
- *  nodes in XOM:
+ * Every instance of <code>Node</code> is an
+ * instance of one of these eight classes
+ * (including, possibly, one of their subclasses).
  * </p>
- * 
- * <ul>
- *   <li><code>Element</code></li>
- *   <li><code>Document</code></li>
- *   <li><code>Text</code></li>
- *   <li><code>Comment</code></li>
- *   <li><code>Attribute</code></li>
- *   <li><code>ProcessingInstruction</code></li>
- *   <li><code>DocType</code></li>
- *   <li><code>Namespace</code></li>
- * </ul>
- * 
- * <p>
- *   Every instance of <code>Node</code> is an  
- *   instance of one of these eight classes
- *   (including, possibly, one of their subclasses).
- * </p>
- * 
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.9
- *
  */
 public abstract class Node {
     
@@ -73,22 +70,21 @@ public abstract class Node {
      * <p>
      * Returns the XPath 1.0 string-value of this node.
      * </p>
-     * 
+     *
      * @return the XPath 1.0 string-value of this node
      */
     public abstract String getValue();
     
     
     /**
-     * 
      * <p>
      * Returns the document that contains this node,
      * or null if this node is not currently part of a document.
      * Each node belongs to no more than one document at a time.
-     * If this node is a <code>Document</code>, then it returns 
+     * If this node is a <code>Document</code>, then it returns
      * this node.
      * </p>
-     * 
+     *
      * @return the document this node is a part of
      */
     public final Document getDocument() {
@@ -101,12 +97,11 @@ public abstract class Node {
     
     
     /**
-     * 
      * <p>
      * Returns the root of the subtree in which this node is found,
      * whether that's a document or an element.
      * </p>
-     * 
+     *
      * @return the document this node is a part of
      */
     final Node getRoot() {
@@ -124,73 +119,72 @@ public abstract class Node {
     
     
     /**
-     * 
      * <p>
-     * Returns the base URI of this node as specified by 
-     * <a href="https://www.w3.org/TR/xmlbase/" target="_top">XML 
-     * Base</a>, or the empty string if this is not known. In most  
-     * cases, this is the URL against which relative URLs in this node 
+     * Returns the base URI of this node as specified by
+     * <a href="https://www.w3.org/TR/xmlbase/" target="_top">XML
+     * Base</a>, or the empty string if this is not known. In most
+     * cases, this is the URL against which relative URLs in this node
      * should be resolved.
      * </p>
-     * 
+     *
      * <p>
-     *  The base URI of a non-parent node is the base URI of the 
-     *  element containing the node. The base URI of a document
-     *  node is the URI from which the document was parsed,
-     *  or which was set by calling <code>setBaseURI</code> on
-     *  on the document. 
+     * The base URI of a non-parent node is the base URI of the
+     * element containing the node. The base URI of a document
+     * node is the URI from which the document was parsed,
+     * or which was set by calling <code>setBaseURI</code> on
+     * on the document.
      * </p>
      *
      * <p>
      * The base URI of an element is determined as follows:
      * </p>
-     * 
+     *
      * <ul>
-     *   <li>
-     *     If the element has an <code>xml:base</code> attribute,
-     *     then the value of that attribute is 
-     *     converted from an IRI to a URI, absolutized if possible,
-     *     and returned.
-     *   </li>
-     *   <li>
-     *      Otherwise, if any ancestor element of the element loaded
-     *      from the same entity has an <code>xml:base</code> 
-     *      attribute, then the value of that attribute from the
-     *      nearest such ancestor is converted from an IRI to a URI, 
-     *      absolutized if possible, and returned. 
-     *      <em><code>xml:base</code> attributes from other entities are
-     *      not considered.</em>
-     *    </li>
-     *    <li>
-     *      Otherwise, if <code>setBaseURI()</code> has been invoked on 
-     *      this element, then the URI most recently passed to that method 
-     *      is absolutized if possible and returned.
-     *    </li>
-     *    <li>
-     *      Otherwise, if the element comes from an externally
-     *      parsed entity or the document entity, and the 
-     *      original base URI has not been changed by invoking 
-     *      <code>setBaseURI()</code>, then the URI of that entity is
-     *      returned.
-     *    </li>
-     *    <li>
-     *      Otherwise, (the element was created by a constructor
-     *      rather then being parsed from an existing document), the
-     *      base URI of the nearest ancestor that does have a base URI
-     *      is returned. If no ancestors have a base URI, then the
-     *      empty string is returned.
-     *    </li>
+     * <li>
+     * If the element has an <code>xml:base</code> attribute,
+     * then the value of that attribute is
+     * converted from an IRI to a URI, absolutized if possible,
+     * and returned.
+     * </li>
+     * <li>
+     * Otherwise, if any ancestor element of the element loaded
+     * from the same entity has an <code>xml:base</code>
+     * attribute, then the value of that attribute from the
+     * nearest such ancestor is converted from an IRI to a URI,
+     * absolutized if possible, and returned.
+     * <em><code>xml:base</code> attributes from other entities are
+     * not considered.</em>
+     * </li>
+     * <li>
+     * Otherwise, if <code>setBaseURI()</code> has been invoked on
+     * this element, then the URI most recently passed to that method
+     * is absolutized if possible and returned.
+     * </li>
+     * <li>
+     * Otherwise, if the element comes from an externally
+     * parsed entity or the document entity, and the
+     * original base URI has not been changed by invoking
+     * <code>setBaseURI()</code>, then the URI of that entity is
+     * returned.
+     * </li>
+     * <li>
+     * Otherwise, (the element was created by a constructor
+     * rather then being parsed from an existing document), the
+     * base URI of the nearest ancestor that does have a base URI
+     * is returned. If no ancestors have a base URI, then the
+     * empty string is returned.
+     * </li>
      * </ul>
-     * 
+     *
      * <p>
-     *  Absolutization takes place as specified by the 
-     *  <a target="_top" href="https://www.w3.org/TR/xmlbase/">XML 
-     *  Base specification</a>. However, it is not always possible to
-     *  absolutize a relative URI, in which case the empty string will 
-     *  be returned. 
-     * </p> 
-     * 
-     * @return the base URI of this node 
+     * Absolutization takes place as specified by the
+     * <a target="_top" href="https://www.w3.org/TR/xmlbase/">XML
+     * Base specification</a>. However, it is not always possible to
+     * absolutize a relative URI, in which case the empty string will
+     * be returned.
+     * </p>
+     *
+     * @return the base URI of this node
      */
     public String getBaseURI() {
         if (parent == null) return "";
@@ -199,12 +193,11 @@ public abstract class Node {
 
 
     /**
-     * 
      * <p>
      * Returns the node that contains this node,
      * or null if this node does not have a parent.
      * </p>
-     * 
+     *
      * @return the element or document that most immediately
      *     contains this node
      */
@@ -220,11 +213,11 @@ public abstract class Node {
     
     /**
      * <p>
-     * Removes this node from its parent so that it can be added 
+     * Removes this node from its parent so that it can be added
      * to a different parent node or document. This method does nothing
      * if the node does not have a parent.
      * </p>
-     * 
+     *
      * @throws XMLException if the parent refuses to detach this node
      */
     public void detach() {
@@ -243,13 +236,11 @@ public abstract class Node {
 
     /**
      * <p>
-     *  Returns the child of this node at the specified position.
+     * Returns the child of this node at the specified position.
      * </p>
-     * 
+     *
      * @param position the index of the child node to return
-     * 
      * @return the position<sup>th</sup> child node of this node
-     * 
      * @throws IndexOutOfBoundsException if this node does not have children
      */
     public abstract Node getChild(int position);
@@ -260,7 +251,7 @@ public abstract class Node {
      * Returns the number of children of this node.
      * This is always non-negative (greater than or equal to zero).
      * </p>
-     * 
+     *
      * @return the number of children of this node
      */
     public abstract int getChildCount();
@@ -271,17 +262,17 @@ public abstract class Node {
      * Returns a deep copy of this node with no parent,
      * that can be added to the current document or a different one.
      * </p>
-     * 
+     *
      * <p>
      * Per Bloch, the <code>Cloneable</code>
-     * interface is just a mess and should 
+     * interface is just a mess and should
      * be avoided. However, I do not follow his suggestion of a copy
      * constructor exclusively because it is useful to be able to
      * copy a node without knowing its more specific type.
-     * Ken Arnold agrees with this. It's more effective for 
+     * Ken Arnold agrees with this. It's more effective for
      * subclasses that can return an instance of the subclass.
-     * </p> 
-     * 
+     * </p>
+     *
      * @return a copy of this node without a parent
      */
     public abstract Node copy();        
@@ -290,12 +281,12 @@ public abstract class Node {
     /**
      * <p>
      * Returns the actual XML form of this node, such as might be
-     * copied and pasted from the original document. However, this 
+     * copied and pasted from the original document. However, this
      * does not preserve semantically insignificant details such as
      * white space inside tags or the use of empty-element tags vs.
      * start-tag end-tag pairs.
      * </p>
-     * 
+     *
      * @return an XML representation of this node
      */
     public abstract String toXML(); 
@@ -303,15 +294,13 @@ public abstract class Node {
     
     /**
      * <p>
-     * Tests for node identity. That is, two 
+     * Tests for node identity. That is, two
      * <code>Node</code> objects are equal
      * if and only if they are the same object.
      * </p>
-     * 
+     *
      * @param o the object compared for equality to this node
-     * 
      * @return true if <code>o</code> is this node; false otherwise
-     * 
      * @see java.lang.Object#equals(Object)
      */
     public final boolean equals(Object o) {
@@ -322,13 +311,12 @@ public abstract class Node {
     /**
      * <p>
      * Returns a unique identifier for this node.
-     * The value returned is the same as returned by 
+     * The value returned is the same as returned by
      * <code>super.hashCode()</code>
-     * because nodes use identity semantics. 
+     * because nodes use identity semantics.
      * </p>
-     * 
+     *
      * @return a probably unique identifier for this node
-     * 
      * @see java.lang.Object#hashCode()
      */
     public final int hashCode() {
@@ -338,72 +326,69 @@ public abstract class Node {
     
     /**
      * <p>
-     * Returns the nodes selected by the XPath expression in the 
-     * context of this node in document order as defined in XSLT. 
-     * All namespace prefixes used in the 
-     * expression should be bound to namespace URIs by the 
-     * second argument. 
+     * Returns the nodes selected by the XPath expression in the
+     * context of this node in document order as defined in XSLT.
+     * All namespace prefixes used in the
+     * expression should be bound to namespace URIs by the
+     * second argument.
      * </p>
-     * 
+     *
      * <p>
      * Note that XPath expressions operate on the XPath data model,
-     * not the XOM data model. XPath counts all adjacent 
+     * not the XOM data model. XPath counts all adjacent
      * <code>Text</code> objects as a single text node, and does not
-     * consider empty <code>Text</code> objects. For instance, an 
+     * consider empty <code>Text</code> objects. For instance, an
      * element that has exactly three text children in XOM, will
-     * have exactly one text child in XPath, whose value is the 
-     * concatenation of all three XOM <code>Text</code> objects. 
+     * have exactly one text child in XPath, whose value is the
+     * concatenation of all three XOM <code>Text</code> objects.
      * </p>
-     * 
+     *
      * <p>
      * You can use XPath expressions that use the namespace axis.
-     * However, namespace nodes are never returned. If an XPath 
+     * However, namespace nodes are never returned. If an XPath
      * expression only selects namespace nodes, then this method will
      * return an empty list.
      * </p>
-     * 
+     *
      * <p>
-     * No variables are bound. 
+     * No variables are bound.
      * </p>
-     * 
+     *
      * <p>
      * The context position is the index of this node among its parents
-     * children, counting adjacent text nodes as one. The context size 
+     * children, counting adjacent text nodes as one. The context size
      * is the number of children this node's parent has, again counting
-     * adjacent text nodes as one node. If the parent is a 
-     * <code>Document</code>, then the <code>DocType</code> (if any) is 
+     * adjacent text nodes as one node. If the parent is a
+     * <code>Document</code>, then the <code>DocType</code> (if any) is
      * not counted. If the node has no parent, then the context position
-     * is 1, and the context size is 1. 
+     * is 1, and the context size is 1.
      * </p>
-     * 
+     *
      * <p>
-     * Queries such as /&#x2A;, //, and /&#x2A;//p that refer to the 
-     * root node do work when operating with a context node that is not 
+     * Queries such as /&#x2A;, //, and /&#x2A;//p that refer to the
+     * root node do work when operating with a context node that is not
      * part of a document. However, the query / (return the root node)
      * throws an <code>XPathException</code> when applied to a node
-     * that is not part of the document. Furthermore the top-level 
-     * node in the tree is treated as the first and only child of the 
+     * that is not part of the document. Furthermore the top-level
+     * node in the tree is treated as the first and only child of the
      * root node, not as the root node itself. For instance, this
      * query stores <code>parent</code> in the <code>result</code>
      * variable, not <code>child</code>:
      * </p>
-     * 
+     *
      * <pre><code>  Element parent = new Element("parent");
-     *   Element child = new Element("child");
-     *   parent.appendChild(child);
-     *   Nodes results = child.query("/*");
-     *   Node result = result.get(0);</code></pre>
-     * 
+     * Element child = new Element("child");
+     * parent.appendChild(child);
+     * Nodes results = child.query("/*");
+     * Node result = result.get(0);</code></pre>
+     *
      * @param xpath the XPath expression to evaluate
-     * @param namespaces a collection of namespace prefix bindings  
+     * @param namespaces a collection of namespace prefix bindings
      *     used in the XPath expression
-     * 
      * @return a list of all matched nodes; possibly empty
-     * 
-     * @throws XPathException if there's a syntax error in the 
+     * @throws XPathException if there's a syntax error in the
      *     expression, the query returns something other than
      *     a node-set
-     * 
      */
     public final Nodes query(String xpath, XPathContext namespaces) {
         
@@ -466,21 +451,19 @@ public abstract class Node {
 
     /**
      * <p>
-     * Returns the nodes selected by the XPath expression in the 
-     * context of this node in document order as defined by XSLT. 
+     * Returns the nodes selected by the XPath expression in the
+     * context of this node in document order as defined by XSLT.
      * This XPath expression must not contain
      * any namespace prefixes.
      * </p>
-     * 
+     *
      * <p>
      * No variables are bound. No namespace prefixes are bound.
      * </p>
-     * 
+     *
      * @param xpath the XPath expression to evaluate
-     * 
      * @return a list of all matched nodes; possibly empty
-     * 
-     * @throws XPathException if there's a syntax error in the 
+     * @throws XPathException if there's a syntax error in the
      *     expression; or the query returns something other than
      *     a node-set
      */

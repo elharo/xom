@@ -29,7 +29,6 @@ import java.util.HashMap;
 /**
  * @author Elliotte Rusty Harold
  * @version 1.3.1
- *
  */
 final class UnicodeUtil {
     

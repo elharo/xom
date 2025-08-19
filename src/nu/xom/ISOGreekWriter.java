@@ -24,12 +24,11 @@ import java.io.Writer;
 
 /**
  * <p>
- *   ISO 8859-7, ASCII plus Greek
+ * ISO 8859-7, ASCII plus Greek
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b2
- *
  */
 class ISOGreekWriter extends TextWriter {
 

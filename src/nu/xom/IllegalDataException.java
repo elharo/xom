@@ -22,32 +22,29 @@ package nu.xom;
 
 /**
  * <p>
- *  Indicates an attempt to
- *  set some value to malformed content; for instance
- *  by adding a string containing a null or a vertical tab
- *  to a text node, or using white space in an element name.
+ * Indicates an attempt to
+ * set some value to malformed content; for instance
+ * by adding a string containing a null or a vertical tab
+ * to a text node, or using white space in an element name.
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 public class IllegalDataException extends WellformednessException {
 
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = 5116683358318890040L;
     private String data;
     
     
     /**
      * <p>
-     * Creates a new <code>IllegalDataException</code> 
+     * Creates a new <code>IllegalDataException</code>
      * with a detail message.
      * </p>
-     * 
-      * @param message a string indicating the specific problem
+     *
+     * @param message a string indicating the specific problem
      */
     public IllegalDataException(String message) {
         super(message);
@@ -56,10 +53,10 @@ public class IllegalDataException extends WellformednessException {
     
     /**
      * <p>
-     * Creates a new <code>IllegalDataException</code> 
+     * Creates a new <code>IllegalDataException</code>
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
@@ -70,9 +67,9 @@ public class IllegalDataException extends WellformednessException {
     
     /**
      * <p>
-     *   Stores the illegal text that caused this exception.
+     * Stores the illegal text that caused this exception.
      * </p>
-     * 
+     *
      * @param data the illegal data that caused this exception
      */
     public void setData(String data) {
@@ -82,10 +79,10 @@ public class IllegalDataException extends WellformednessException {
     
     /**
      * <p>
-     *   Returns a string containing the actual illegal text that 
-     *   caused this exception.
+     * Returns a string containing the actual illegal text that
+     * caused this exception.
      * </p>
-     * 
+     *
      * @return the syntactically incorrect data that caused
      *     this exception
      */

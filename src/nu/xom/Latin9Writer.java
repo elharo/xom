@@ -24,23 +24,22 @@ import java.io.Writer;
 
 /**
  * <p>
- *  ISO 8859-9 for Western Europe. Includes the Euro sign and
- *  several uncommon French letters. otherwise the same as 
- *  Latin-1. 
+ * ISO 8859-9 for Western Europe. Includes the Euro sign and
+ * several uncommon French letters. otherwise the same as
+ * Latin-1.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- *
  */
 class Latin9Writer extends TextWriter {
 
     /**
      * <p>
-     *   Creates a new <code>TextWriter</code> for the
-     *   ISO-8859-15 (Latin-9) character encoding.
+     * Creates a new <code>TextWriter</code> for the
+     * ISO-8859-15 (Latin-9) character encoding.
      * </p>
-    *
+     *
      * @param out the <code>Writer</code> on which the text will be written
      * @param encoding the character set used by the <code>Writer</code>
      */
@@ -50,12 +49,11 @@ class Latin9Writer extends TextWriter {
 
     /**
      * <p>
-     *   Returns true if and only if this character 
-     *   needs to be replaced by a character reference when
-     *   output in this encoding.
+     * Returns true if and only if this character
+     * needs to be replaced by a character reference when
+     * output in this encoding.
      * </p>
-     * 
-     * 
+     *
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
     boolean needsEscaping(char c) {

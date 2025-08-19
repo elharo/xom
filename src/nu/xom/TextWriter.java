@@ -25,13 +25,12 @@ import java.io.Writer;
 
 /**
  * <p>
- *   This class is responsible for writing strings with the 
- *   necessary escaping for their context.
+ * This class is responsible for writing strings with the
+ * necessary escaping for their context.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.2d1
- *
  */
 abstract class TextWriter {
 
@@ -754,7 +753,7 @@ abstract class TextWriter {
      * Returns the String used as a line separator.
      * This is always "\n", "\r", or "\r\n".
      * </p>
-     * 
+     *
      * @return the line separator
      */
     String getLineSeparator() {
@@ -764,17 +763,15 @@ abstract class TextWriter {
     
     /**
      * <p>
-     * Sets the lineSeparator. This  
+     * Sets the lineSeparator. This
      * can only be one of the three
      * strings "\n", "\r", or "\r\n".
      * All other values are forbidden.
      * </p>
-     * 
+     *
      * @param lineSeparator the lineSeparator to set
-     * 
-     * @throws IllegalArgumentException if you attempt to use 
-     *      any line separator other than "\n", "\r", or "\r\n".
-     * 
+     * @throws IllegalArgumentException if you attempt to use
+     *      any line separator other than "\n", "\r", or "\r\n"
      */
     void setLineSeparator(String lineSeparator) {
         
@@ -801,7 +798,7 @@ abstract class TextWriter {
      * <p>
      * Returns the number of spaces this serializer indents.
      * </p>
-     * 
+     *
      * @return the number of spaces this serializer indents
      */
     int getIndent() {
@@ -813,8 +810,8 @@ abstract class TextWriter {
      * <p>
      * Returns the maximum line length.
      * </p>
-     * 
-     * @return the maximum line length.
+     *
+     * @return the maximum line length
      */
     int getMaxLength() {
         return maxLength;
@@ -825,7 +822,7 @@ abstract class TextWriter {
      * Sets the suggested maximum line length for this serializer.
      * In some circumstances this may not be respected.
      * </p>
-     * 
+     *
      * @param maxLength the maxLength to set
      */
     void setMaxLength(int maxLength) {
@@ -835,13 +832,13 @@ abstract class TextWriter {
 
     
    /**
-     * <p>
-     * Sets the number of spaces to indent each successive level in the
-     *  hierarchy. Use 0 for no extra indenting.
-     * </p>
-     * 
-     * @param indent the indent to set
-     */
+    * <p>
+    * Sets the number of spaces to indent each successive level in the
+    * hierarchy. Use 0 for no extra indenting.
+    * </p>
+    *
+    * @param indent the indent to set
+    */
     void setIndent(int indent) {
         this.indent = indent;
     }
@@ -857,15 +854,14 @@ abstract class TextWriter {
     
     /**
      * <p>
-     *  Used to track the current status of xml:space.
-     *  This is false by default, unless an xml:space="preserve"
-     *  attribute is in-scope. When such an attribute is in-scope,
-     *  white space is not adjusted even if indenting and/or
-     *  a maximum line length has been requested.
+     * Used to track the current status of xml:space.
+     * This is false by default, unless an xml:space="preserve"
+     * attribute is in-scope. When such an attribute is in-scope,
+     * white space is not adjusted even if indenting and/or
+     * a maximum line length has been requested.
      * </p>
      *
-     * 
-     * @return true if an <code>xml:space="true"</code> attribute 
+     * @return true if an <code>xml:space="true"</code> attribute
      *      is in-scope
      */
     boolean isPreserveSpace() {
@@ -891,20 +887,20 @@ abstract class TextWriter {
     
     /**
      * <p>
-     *   If true, this property indicates serialization will
-     *   perform Unicode normalization on all data using normalization
-     *   form C (NFC). Performing Unicode normalization
-     *   does change the document's infoset. 
-     *   The default is false; do not normalize.
+     * If true, this property indicates serialization will
+     * perform Unicode normalization on all data using normalization
+     * form C (NFC). Performing Unicode normalization
+     * does change the document's infoset.
+     * The default is false; do not normalize.
      * </p>
-     * 
+     *
      * <p>
-     *   This feature has not yet been benchmarked or optimized.
-     *   It may result in substantially slower code. 
+     * This feature has not yet been benchmarked or optimized.
+     * It may result in substantially slower code.
      * </p>
-     * 
-     * @param normalize true if normalization is performed; 
-     *     false if it isn't.
+     *
+     * @param normalize true if normalization is performed;
+     *     false if it isn't
      */
     void setNFC(boolean normalize) {
         this.normalize = normalize;   
@@ -913,13 +909,13 @@ abstract class TextWriter {
     
     /**
      * <p>
-     *   If true, this property indicates serialization will
-     *   perform Unicode normalization on all data using normalization
-     *   form C (NFC). The default is false; do not normalize.
+     * If true, this property indicates serialization will
+     * perform Unicode normalization on all data using normalization
+     * form C (NFC). The default is false; do not normalize.
      * </p>
-     * 
-     * @return true if this serialization performs Unicode 
-     *     normalization; false if it doesn't.
+     *
+     * @return true if this serialization performs Unicode
+     *     normalization; false if it doesn't
      */
     boolean getNFC() {
         return this.normalize;   

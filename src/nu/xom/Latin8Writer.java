@@ -24,14 +24,13 @@ import java.io.Writer;
 
 /**
  * <p>
- *   ISO-8859-14, for Gaelic, Welsh, and other Celtic languages.
- *   Not yet supported by Sun's JDK as of 1.5 alpha. IBM's 1.4.1 
- *   JDK does support it.
+ * ISO-8859-14, for Gaelic, Welsh, and other Celtic languages.
+ * Not yet supported by Sun's JDK as of 1.5 alpha. IBM's 1.4.1
+ * JDK does support it.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- *
  */
 class Latin8Writer extends TextWriter {
 

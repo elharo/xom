@@ -24,15 +24,14 @@ import java.io.Writer;
 
 /**
  * <p>
- *   Theoretically, I should be able to use a UnicodeWriter
- *   for UCS4. However, there's an apparent bug in handling non-BMP
- *   characters that I haven't been able to track down, so this class 
- *   works around it buy escaping all non-BMP characters. 
+ * Theoretically, I should be able to use a UnicodeWriter
+ * for UCS4. However, there's an apparent bug in handling non-BMP
+ * characters that I haven't been able to track down, so this class
+ * works around it buy escaping all non-BMP characters.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- *
  */
 class UCSWriter extends TextWriter {
 
