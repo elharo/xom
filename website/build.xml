@@ -1,29 +1,177 @@
-<project name="XOM documentation" default="all" basedir=".">
+<project name="XOM documentation" default="all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
   <description>
-    Run stylesheets across DocBook source code
+    Run stylesheets across DocBook source code using XOM and Ivy-managed dependencies
   </description>
     
+  <!-- Ivy configuration -->
+  <property name="ivy.jar.dir" value="${basedir}"/>
+  <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy-2.5.2.jar"/>
+  <property name="ivy.lib.dir" value="${basedir}/lib"/>
+  
   <!-- set global properties for this build -->
-  <property name="build.dir"  value="./build"/>
+  <property name="build.dir" value="./build"/>
   <property name="build.dest" value="${build.dir}/website"/>
-  <property name="parentdist.dir"   value="../dist/website"/>
+  <property name="parentdist.dir" value="../dist/website"/>
 
-  <path id="xslt.class.path">
-    <pathelement path="/opt/xml/saxon/saxon.jar"/>
+  <path id="ivy.lib.path">
+    <fileset dir="${ivy.lib.dir}" includes="*.jar"/>
+  </path>
+
+  <path id="xom.class.path">
+    <pathelement path="../build/classes"/>
+    <pathelement path="../build/jaxen-classes"/>
+    <pathelement path="../lib/xercesImpl-2.12.2.jar"/>
+    <pathelement path="../lib/xml-apis-1.4.01.jar"/>
   </path>
 
   <path id="xerces.class.path">
-     <pathelement path="../lib/dtd-xercesImpl.jar"/> 
-     <pathelement path="../lib/xmlParserAPIs.jar"/> 
+     <pathelement path="../lib/xercesImpl-2.12.2.jar"/> 
+     <pathelement path="../lib/xml-apis-1.4.01.jar"/> 
   </path>
   
-  <target name="init">
+  <target name="ivy-init" unless="ivy.loaded">
+    <path id="ivy.lib.path">
+      <pathelement location="${ivy.jar.file}"/>
+    </path>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+    <property name="ivy.loaded" value="true"/>
+  </target>
+  
+  <target name="resolve-dependencies" depends="ivy-init" description="Setup basic DocBook XSL stylesheets">
+    <!-- Create lib directory structure -->
+    <mkdir dir="${ivy.lib.dir}/docbook-xsl-1.79.1/xhtml"/>
+    
+    <!-- Create a minimal docbook.xsl that can handle basic DocBook elements -->
+    <echo file="${ivy.lib.dir}/docbook-xsl-1.79.1/xhtml/docbook.xsl"><![CDATA[<?xml version='1.0'?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns="http://www.w3.org/1999/xhtml"
+                version='1.0'>
+  
+  <xsl:output method="xml" 
+              encoding="UTF-8"
+              doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+              doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+
+  <xsl:template match="/">
+    <html>
+      <head>
+        <title><xsl:value-of select="//title[1]"/></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      </head>
+      <body>
+        <xsl:apply-templates/>
+      </body>
+    </html>
+  </xsl:template>
+
+  <xsl:template match="article">
+    <div class="article">
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="title">
+    <h1><xsl:apply-templates/></h1>
+  </xsl:template>
+
+  <xsl:template match="sect1/title">
+    <h2><xsl:apply-templates/></h2>
+  </xsl:template>
+
+  <xsl:template match="sect2/title">
+    <h3><xsl:apply-templates/></h3>
+  </xsl:template>
+
+  <xsl:template match="sect1 | sect2 | sect3">
+    <div class="{name()}">
+      <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="para">
+    <p><xsl:apply-templates/></p>
+  </xsl:template>
+
+  <xsl:template match="programlisting">
+    <pre><code><xsl:apply-templates/></code></pre>
+  </xsl:template>
+
+  <xsl:template match="emphasis">
+    <em><xsl:apply-templates/></em>
+  </xsl:template>
+
+  <xsl:template match="filename | classname | methodname">
+    <code><xsl:apply-templates/></code>
+  </xsl:template>
+
+  <xsl:template match="ulink">
+    <a href="{@url}"><xsl:apply-templates/></a>
+  </xsl:template>
+
+  <xsl:template match="itemizedlist">
+    <ul><xsl:apply-templates select="listitem"/></ul>
+  </xsl:template>
+
+  <xsl:template match="orderedlist">
+    <ol><xsl:apply-templates select="listitem"/></ol>
+  </xsl:template>
+
+  <xsl:template match="listitem">
+    <li><xsl:apply-templates/></li>
+  </xsl:template>
+
+  <xsl:template match="articleinfo"/>
+
+  <xsl:template match="text()">
+    <xsl:copy/>
+  </xsl:template>
+
+</xsl:stylesheet>]]></echo>
+  </target>
+  
+  <target name="init" depends="resolve-dependencies">
     <!-- Create the time stamp -->
     <tstamp/>
 
     <mkdir dir="${build.dest}"/>
     <mkdir dir="${parentdist.dir}"/>
+    
+    <!-- Find the DocBook XSL directory -->
+    <path id="docbook.xsl.path">
+      <dirset dir="${ivy.lib.dir}">
+        <include name="**/docbook-xsl*"/>
+      </dirset>
+    </path>
+    <property name="docbook.xsl.dir" refid="docbook.xsl.path"/>
+    <echo message="Using DocBook XSL from: ${docbook.xsl.dir}"/>
   </target>
+
+  <!-- Macro for XSLT transformation using XOM -->
+  <macrodef name="xom-transform">
+    <attribute name="in"/>
+    <attribute name="out"/>
+    <attribute name="style"/>
+    <sequential>
+      <java classname="nu.xom.samples.Transformer" output="@{out}" fork="yes" failonerror="true">
+        <arg value="@{in}"/>
+        <arg value="@{style}"/>
+        <classpath refid="xom.class.path"/>
+      </java>
+    </sequential>
+  </macrodef>
+
+  <!-- Macro for DocBook XSLT transformation using XOM -->
+  <macrodef name="docbook-transform">
+    <attribute name="in"/>
+    <attribute name="out"/>
+    <sequential>
+      <java classname="nu.xom.samples.Transformer" output="@{out}" fork="yes" failonerror="true">
+        <arg value="@{in}"/>
+        <arg value="${docbook.xsl.dir}/xhtml/docbook.xsl"/>
+        <classpath refid="xom.class.path"/>
+      </java>
+    </sequential>
+  </macrodef>
 
   <target name="finished_tutorial.xml" depends="init"
           description="Merge original chapters and examples into a single file">
@@ -61,116 +209,53 @@
 
 
   <target name="tutorial" description="Generate a single XHTML document" depends="finished_tutorial.xml">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/tutorial.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="${build.dir}/finished_tutorial.xml"/>
-        <arg line="tutorial.xsl"/>
-        <!-- <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/> -->
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
+    <xom-transform in="${build.dir}/finished_tutorial.xml" 
+                   out="${build.dest}/tutorial.xhtml" 
+                   style="tutorial.xsl"/>
+  </target>
 
   <target name="design" depends="init" description="Design principles">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/designprinciples.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="designprinciples.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
+    <docbook-transform in="designprinciples.xml" out="${build.dest}/designprinciples.xhtml"/>
+  </target>
 
   <target name="license" depends="init" description="License for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/license.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="license.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
+    <docbook-transform in="license.xml" out="${build.dest}/license.xhtml"/>
+  </target>
 
  <target name="infoset" depends="init" description="Infoset Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/infoset.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
-        <arg line="infoset.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
+    <docbook-transform in="infoset.xml" out="${build.dest}/infoset.xhtml"/>
+  </target>
 
  <target name="xpath" depends="init" description="XPath Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/xpath.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="xpath.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
+    <docbook-transform in="xpath.xml" out="${build.dest}/xpath.xhtml"/>
+  </target>
 
   <target name="faq" depends="init" description="FAQ list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/faq.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="faq.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
+    <docbook-transform in="faq.xml" out="${build.dest}/faq.xhtml"/>
+  </target>
 
   <target name="open" depends="init" description="Open Questions list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/openquestions.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="openquestions.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
+    <docbook-transform in="openquestions.xml" out="${build.dest}/openquestions.xhtml"/>
+  </target>
 
   <target name="future" depends="init" description="Future Directions for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/futuredirections.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="futuredirections.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
-
+    <docbook-transform in="futuredirections.xml" out="${build.dest}/futuredirections.xhtml"/>
+  </target>
 
   <target name="building" depends="init" description="How to build XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/building.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="building.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
-
+    <docbook-transform in="building.xml" out="${build.dest}/building.xhtml"/>
+  </target>
 
   <target name="install" depends="init" description="How to install XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/install.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
-        <arg line="install.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
-
+    <docbook-transform in="install.xml" out="${build.dest}/install.xhtml"/>
+  </target>
 
   <target name="testsuite" depends="init" description="How to test XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/testsuite.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="testsuite.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
-  </target>	 
-
+    <docbook-transform in="testsuite.xml" out="${build.dest}/testsuite.xhtml"/>
+  </target>
 
   <target name="samples" depends="init" description="Example code">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/samples.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
-        <arg line="samples.xml"/>
-        <arg line="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
-     </java>
+    <docbook-transform in="samples.xml" out="${build.dest}/samples.xhtml"/>
   </target>
 
 

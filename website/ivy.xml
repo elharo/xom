@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info organisation="nu.xom" module="xom-website" revision="1.0"/>
+    
+    <dependencies>
+        <!-- DocBook XSL stylesheets - using a different repository -->
+        <dependency org="org.docbook" name="docbook-xsl" rev="1.79.1">
+            <artifact name="docbook-xsl" type="zip" url="https://github.com/docbook/xslt10-stylesheets/releases/download/release/1.79.1/docbook-xsl-1.79.1.zip"/>
+        </dependency>
+    </dependencies>
+</ivy-module>
