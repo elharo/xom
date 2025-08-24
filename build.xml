@@ -190,8 +190,8 @@ XOM Build file
            debug="${debug}"
            optimize="${optimize}"
            deprecation="${deprecation}"
-           target="1.8"
-           source="1.8"
+           target="1.6"
+           source="1.6"
            encoding="UTF-8"
            fork="true"
            includeAntRuntime="false"
@@ -218,8 +218,8 @@ XOM Build file
            debug="${debug}"
            optimize="${optimize}"
            deprecation="${deprecation}"
-           target="1.8"
-           source="1.8"
+           target="1.6"
+           source="1.6"
            encoding="UTF-8"
            includeAntRuntime="false">
        <classpath refid="compile.class.path"/>
@@ -304,7 +304,7 @@ XOM Build file
         <attribute name="Bundle-SymbolicName" value="nu.xom"/>
         <attribute name="Bundle-Version" value="${bundleversion}"/>
         <attribute name="Bundle-Vendor" value="xom.nu"/>
-        <attribute name="Bundle-RequiredExecutionEnvironment" value="JavaSE-1.8"/>
+        <attribute name="Bundle-RequiredExecutionEnvironment" value="JavaSE-1.6"/>
         <attribute name="Export-Package" value="nu.xom, nu.xom.canonical, nu.xom.converters, nu.xom.xinclude, nu.xom.xslt"/>
         <attribute name="Import-Package" value='javax.xml.transform.sax, javax.xml.transform, org.w3c.dom, org.xml.sax, org.xml.sax.helpers, org.xml.sax.ext,
           org.apache.xerces.parsers;resolution:=optional;version="2.8.0", org.apache.xerces.impl;resolution:=optional;version="2.8.0", 
@@ -454,8 +454,8 @@ XOM Build file
            debug="${debug}"
            optimize="${optimize}"
            deprecation="${deprecation}"
-           target="1.8"
-           source="1.8"
+           target="1.6"
+           source="1.6"
            encoding="UTF-8"
            includeAntRuntime="false"
            includes="nu/xom/tools/*">
@@ -746,8 +746,8 @@ XOM Build file
            debug="${debug}"
            optimize="${optimize}"
            deprecation="${deprecation}"
-           target="1.8"
-           source="1.8"
+           target="1.6"
+           source="1.6"
            encoding="UTF-8"
            includeAntRuntime="false"
            excludes="org/jaxen/dom/** 
