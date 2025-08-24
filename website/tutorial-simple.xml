@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<article>
+  <title>XOM Tutorial</title>
+  <para>This is a simple test of XOM-based XSLT transformation.</para>
+  <sect1>
+    <title>Getting Started</title>
+    <para>XOM now powers the website build instead of Saxon.</para>
+  </sect1>
+</article>
