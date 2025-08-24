@@ -1,4 +1,3 @@
-<?xml version="1.0"?>
 <project name="XOM documentation" default="all" basedir=".">
   <description>
     Run stylesheets across DocBook source code using XOM
@@ -9,7 +8,7 @@
   <property name="build.dest" value="${build.dir}/website"/>
   <property name="parentdist.dir" value="../dist/website"/>
 
-  <path id="xom.class.path">
+  <path id="xslt.class.path">
     <pathelement path="../build/classes"/>
     <pathelement path="../build/jaxen-classes"/>
     <pathelement path="../lib/xercesImpl-2.12.2.jar"/>
@@ -30,38 +29,17 @@
   </target>
 
   <target name="finished_tutorial.xml" depends="init">
-    <!-- First, create a version of tutorial.xml without external DTD reference -->
-    <copy file="tutorial.xml" tofile="${build.dir}/tutorial-local.xml"/>
-    <replace file="${build.dir}/tutorial-local.xml">
-      <replacetoken>DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"</replacetoken>
-      <replacevalue>DOCTYPE article</replacevalue>
-    </replace>
-    <replace file="${build.dir}/tutorial-local.xml">
-      <replacetoken>"https://docbook.org/xml/4.3/docbookx.dtd" [</replacetoken>
-      <replacevalue>[</replacevalue>
-    </replace>
-    
     <java classname="nu.xom.samples.XIncludeDriver" output="${build.dir}/finished_tutorial.xml" fork="yes" failonerror="true">
-        <arg line="${build.dir}/tutorial-local.xml"/>
-        <classpath refid="xom.class.path"/>
+        <arg line="tutorial.xml"/>
+        <classpath refid="xslt.class.path"/>
      </java>
   </target>
 
   <target name="tutorial-direct" depends="init">
-    <copy file="tutorial.xml" tofile="${build.dir}/tutorial-local.xml"/>
-    <replace file="${build.dir}/tutorial-local.xml">
-      <replacetoken>DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"</replacetoken>
-      <replacevalue>DOCTYPE article</replacevalue>
-    </replace>
-    <replace file="${build.dir}/tutorial-local.xml">
-      <replacetoken>"https://docbook.org/xml/4.3/docbookx.dtd" [</replacetoken>
-      <replacevalue>[</replacevalue>
-    </replace>
-    
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/tutorial.xhtml" fork="yes" failonerror="true">
-      <arg value="${build.dir}/tutorial-local.xml"/>
+      <arg value="tutorial.xml"/>
       <arg value="tutorial.xsl"/>
-      <classpath refid="xom.class.path"/>
+      <classpath refid="xslt.class.path"/>
     </java>
   </target>
 
@@ -69,7 +47,7 @@
     <java classname="nu.xom.samples.SimpleTransformer" output="${build.dest}/tutorial.xhtml" fork="yes" failonerror="true">
       <arg value="tutorial-simple.xml"/>
       <arg value="lib/docbook-xsl-1.79.1/xhtml/docbook.xsl"/>
-      <classpath refid="xom.class.path"/>
+      <classpath refid="xslt.class.path"/>
     </java>
   </target>
 
