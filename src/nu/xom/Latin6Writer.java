@@ -30,7 +30,6 @@ import java.io.Writer;
  *
  * @author Elliotte Rusty Harold
  * @version 1.0
- *
  */
 class Latin6Writer extends TextWriter {
 
