@@ -22,13 +22,12 @@ package nu.xom;
 
 /**
  * <p>
- * Indicates an attempt to do or create something that could not  
+ * Indicates an attempt to do or create something that could not
  * possibly be serialized in a namespace well-formed XML 1.0 document.
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 public class WellformednessException extends XMLException {
 
@@ -38,10 +37,10 @@ public class WellformednessException extends XMLException {
 
     /**
      * <p>
-     * Creates a new <code>WellformednessException</code> 
+     * Creates a new <code>WellformednessException</code>
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public WellformednessException(String message) {
@@ -51,10 +50,10 @@ public class WellformednessException extends XMLException {
     
     /**
      * <p>
-     * Creates a new <code>WellformednessException</code> 
+     * Creates a new <code>WellformednessException</code>
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

@@ -24,14 +24,13 @@ package nu.xom;
  * <p>
  *  Indicates that a string
  *  intended for use as a URI or URI reference (typically a namespace
- *  name or a base URI) is not syntactically correct  according to 
- *  <a href="https://www.ietf.org/rfc/rfc3986.txt" 
+ *  name or a base URI) is not syntactically correct  according to
+ *  <a href="https://www.ietf.org/rfc/rfc3986.txt"
  *     target="_top">RFC 3986</a>.
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.9
- *
  */
 public class MalformedURIException extends IllegalDataException {
 
@@ -41,10 +40,10 @@ public class MalformedURIException extends IllegalDataException {
 
     /**
      * <p>
-     * Creates a new <code>MalformedURIException</code> 
+     * Creates a new <code>MalformedURIException</code>
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public MalformedURIException(String message) {
@@ -54,10 +53,10 @@ public class MalformedURIException extends IllegalDataException {
     
     /**
      * <p>
-     * Creates a new <code>MalformedURIException</code> 
+     * Creates a new <code>MalformedURIException</code>
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

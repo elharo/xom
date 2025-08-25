@@ -24,23 +24,22 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * <p>
- *   This class represents a run of text. 
- *   CDATA sections are not treated differently than 
- *   normal text. <code>Text</code> objects may be adjacent to other 
+ *   This class represents a run of text.
+ *   CDATA sections are not treated differently than
+ *   normal text. <code>Text</code> objects may be adjacent to other
  *   <code>Text</code> objects.
  * </p>
- * 
+ *
  * <p>
  *   The maximum size of a String or an array in Java limits the maximum
- *   size of a text node to about 2 gigabytes. If you're stuffing Base-64 
- *   encoded movies inside one node, you will have problems. Try breaking 
+ *   size of a text node to about 2 gigabytes. If you're stuffing Base-64
+ *   encoded movies inside one node, you will have problems. Try breaking
  *   up the text into smaller, contiguous chunks. Even then you will
- *   probably not be able to use XPath on the result. 
+ *   probably not be able to use XPath on the result.
  * </p>
  *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
- *
  */
 public class Text extends Node {
 
@@ -50,18 +49,17 @@ public class Text extends Node {
     
     /**
      * <p>
-     * This constructor creates a new <code>Text</code> object. 
-     * The data is checked for  legality according to XML 1.0 rules. 
-     * Characters that can be serialized by escaping them 
-     * such as &lt; and &amp; are allowed. However, characters  
+     * This constructor creates a new <code>Text</code> object.
+     * The data is checked for  legality according to XML 1.0 rules.
+     * Characters that can be serialized by escaping them
+     * such as &lt; and &amp; are allowed. However, characters
      * such as the form feed, null, vertical tab,
      * unmatched halves of surrogate pairs,
      * and 0xFFFE and 0xFFFF are not allowed.
      * </p>
-     * 
-     * @param data the initial text of the object
      *
-     * @throws IllegalCharacterDataException if data contains any 
+     * @param data the initial text of the object
+     * @throws IllegalCharacterDataException if data contains any
      *     characters which are illegal in well-formed XML 1.0 such as 
      *     null, vertical tab, or unmatched halves of surrogate pairs
      */
@@ -74,7 +72,7 @@ public class Text extends Node {
      * <p>
      * Creates a copy of the specified <code>Text</code> object.
      * </p>
-     * 
+     *
      * @param text the <code>Text</code> object to copy
      */
     public Text(Text text) {
@@ -106,19 +104,18 @@ public class Text extends Node {
     
     /**
      * <p>
-     * Sets the content of the <code>Text</code> object 
-     * to the specified data. The data is checked for 
-     * legality according to XML 1.0 rules. Characters that 
-     * can be serialized such as &lt; and &amp; are allowed.   
-     * However, characters such as the form feed, null, 
+     * Sets the content of the <code>Text</code> object
+     * to the specified data. The data is checked for
+     * legality according to XML 1.0 rules. Characters that
+     * can be serialized such as &lt; and &amp; are allowed.
+     * However, characters such as the form feed, null,
      * vertical tab, unmatched halves of surrogate pairs,
-     * and 0xFFFE and 0xFFFF are not allowed. Passing null is the same 
+     * and 0xFFFE and 0xFFFF are not allowed. Passing null is the same
      * as passing the empty string.
      * </p>
-     * 
+     *
      * @param data the text to install in the object
-     * 
-     * @throws IllegalCharacterDataException if data contains any 
+     * @throws IllegalCharacterDataException if data contains any
      *     characters which are illegal in well-formed XML 1.0 such as 
      *     null, vertical tab, or unmatched halves of surrogate pairs
      */
@@ -144,11 +141,11 @@ public class Text extends Node {
 
     /**
      * <p>
-     * Returns the XPath 1.0 string-value of this <code>Text</code> 
-     * node. The XPath string-value of a text node is the same as 
+     * Returns the XPath 1.0 string-value of this <code>Text</code>
+     * node. The XPath string-value of a text node is the same as
      * the text of the node.
      * </p>
-     *  
+     *
      * @return the content of the node
      */
     public final String getValue() {
@@ -167,16 +164,14 @@ public class Text extends Node {
     
     /**
      * <p>
-     * Throws <code>IndexOutOfBoundsException</code> because 
+     * Throws <code>IndexOutOfBoundsException</code> because
      * texts do not have children.
      * </p>
-     * 
-     * @return never returns because texts do not have children;
-     *     always throws an exception.
-     * 
+     *
      * @param position the index of the child node to return
-     * 
-     * @throws IndexOutOfBoundsException because texts 
+     * @return never returns because texts do not have children;
+     *     always throws an exception
+     * @throws IndexOutOfBoundsException because texts
      *     do not have children
      */
     public final Node getChild(int position) {
@@ -189,7 +184,7 @@ public class Text extends Node {
      * <p>
      * Returns 0 because texts do not have children.
      * </p>
-     * 
+     *
      * @return zero
      */
     public final int getChildCount() {
@@ -219,15 +214,15 @@ public class Text extends Node {
     
     /**
      * <p>
-     * Returns a string containing the XML serialization of this text 
-     * node.  Unlike <code>getValue</code>, this method escapes 
+     * Returns a string containing the XML serialization of this text
+     * node.  Unlike <code>getValue</code>, this method escapes
      * characters such as &amp; and &lt; using entity references such
      * as <code>&amp;amp;</code> and <code>&amp;lt;</code>.
      * It escapes the carriage return (\r) as <code>&amp;#x0D;</code>.
-     * If this text node is a CDATA section, then it may wrap the value 
+     * If this text node is a CDATA section, then it may wrap the value
      * in CDATA section delimiters instead of escaping.
      * </p>
-     * 
+     *
      * @return the string form of this text node
      */
     public final String toXML() {
@@ -411,12 +406,12 @@ public class Text extends Node {
 
     /**
      * <p>
-     * Returns a <code>String</code> 
+     * Returns a <code>String</code>
      * representation of this <code>Text</code> suitable for
      * debugging and diagnosis. This is <em>not</em>
      * the XML representation of this <code>Text</code> node.
      * </p>
-     * 
+     *
      * @return a non-XML string representation of this node
      */
     public final String toString() {

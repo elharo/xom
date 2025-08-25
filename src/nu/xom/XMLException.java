@@ -23,19 +23,18 @@ package nu.xom;
 
 /**
  * <p>
- *  The generic superclass for most runtime exceptions thrown in 
- *  <code>nu.xom</code>. The general principle followed is that 
- *  anything that can normally be detected by testing such as 
+ *  The generic superclass for most runtime exceptions thrown in
+ *  <code>nu.xom</code>. The general principle followed is that
+ *  anything that can normally be detected by testing such as
  *  using spaces in an element name is a runtime exception.
  *  Exceptions that depend on environmental conditions,
  *  such as might occur when parsing an external file,
  *  are checked exceptions, because these depend on variable input,
  *  and thus all problems may not be detected during testing.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 public class XMLException extends RuntimeException {
 
@@ -47,7 +46,7 @@ public class XMLException extends RuntimeException {
     
     /**
      * <p>
-     * Creates a new <code>XMLException</code> 
+     * Creates a new <code>XMLException</code>
      * with the specified detail message
      * and an underlying root cause.
      * </p>
@@ -63,7 +62,7 @@ public class XMLException extends RuntimeException {
     
     /**
      * <p>
-     *   Creates a new <code>XMLException</code> with 
+     *   Creates a new <code>XMLException</code> with
      *   the specified detail message.
      *  </p>
      *
@@ -94,11 +93,11 @@ public class XMLException extends RuntimeException {
     
     /**
      * <p>
-     * Sets the root cause of this exception. This may 
-     * only be called once. Subsequent calls throw an 
+     * Sets the root cause of this exception. This may
+     * only be called once. Subsequent calls throw an
      * <code>IllegalStateException</code>.
      * </p>
-     * 
+     *
      * <p>
      * This method is unnecessary in Java 1.4 where it could easily be
      * inherited from the superclass. However, including it here
@@ -106,9 +105,7 @@ public class XMLException extends RuntimeException {
      * </p>
      *
      * @param cause the root cause of this exception
-     * 
      * @return this <code>XMLException</code>
-     * 
      * @throws IllegalArgumentException if the cause is this exception
      *   (An exception cannot be its own cause.)
      * @throws IllegalStateException if this method is called twice

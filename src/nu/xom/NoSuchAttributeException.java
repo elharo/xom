@@ -22,15 +22,14 @@ package nu.xom;
 
 /**
  * <p>
- * Indicates that an attribute with a certain name and/or namespace 
+ * Indicates that an attribute with a certain name and/or namespace
  * does not exist. This is normally thrown after an attempt to remove
  * such a non-existent attribute.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
  * @see Element#removeAttribute(Attribute)
- *
  */
 public class NoSuchAttributeException extends XMLException {
 
@@ -40,10 +39,10 @@ public class NoSuchAttributeException extends XMLException {
 
     /**
      * <p>
-     * Creates a new <code>NoSuchAttributeException</code> 
+     * Creates a new <code>NoSuchAttributeException</code>
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message explains the reason for the exception
      */
     public NoSuchAttributeException(String message) {
@@ -53,11 +52,11 @@ public class NoSuchAttributeException extends XMLException {
     
     /**
      * <p>
-     * Creates a new <code>NoSuchAttributeException</code> 
+     * Creates a new <code>NoSuchAttributeException</code>
      * with the specified detail message
      * and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message explains the reason for the exception
      * @param cause the nested exception that caused this exception
      */

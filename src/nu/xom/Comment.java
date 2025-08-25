@@ -22,17 +22,16 @@ package nu.xom;
 
 /**
  * <p>
- *   This class represents an XML comment such as 
- *   <code>&lt;-- This is a comment--></code>. 
+ *   This class represents an XML comment such as
+ *   <code>&lt;-- This is a comment--></code>.
  *   A comment node cannot have any child nodes.
- *   It can be a child of an <code>Element</code> 
+ *   It can be a child of an <code>Element</code>
  *   or a <code>Document</code>.
  *   It has essentially no internal substructure.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
- * 
  */
 public class Comment extends Node {
 
@@ -41,13 +40,13 @@ public class Comment extends Node {
 
     /**
      * <p>
-     * Creates a new <code>Comment</code> object from string data. 
-     * The data is checked for legality according to XML 1.0 rules. 
+     * Creates a new <code>Comment</code> object from string data.
+     * The data is checked for legality according to XML 1.0 rules.
      * Illegal characters such as the form feed and null are not
      * allowed. Furthermore, the two hyphen string "--" is not allowed;
      * and the last character of the comment must not be a hyphen.
      * </p>
-     * 
+     *
      * @param data the initial text of the comment
      */
     public Comment(String data) {
@@ -60,7 +59,7 @@ public class Comment extends Node {
      * Creates a new comment that's a copy of its argument.
      * The copy has the same data but no parent node.
      * </p>
-     * 
+     *
      * @param comment the comment to copy
      */
     public Comment(Comment comment) {
@@ -79,12 +78,12 @@ public class Comment extends Node {
     
     /**
      * <p>
-     * Returns the value of this comment as defined by XPath 1.0. 
-     * The XPath string-value of a comment node is the string 
-     * content of the node, not including the initial  
+     * Returns the value of this comment as defined by XPath 1.0.
+     * The XPath string-value of a comment node is the string
+     * content of the node, not including the initial
      * <code>&lt;--</code> and closing <code>--&gt;</code>.
      * </p>
-     * 
+     *
      * @return the content of the comment
      */
     public final String getValue() {
@@ -94,16 +93,16 @@ public class Comment extends Node {
     
     /**
      * <p>
-     * Sets the content of this <code>Comment</code> object 
+     * Sets the content of this <code>Comment</code> object
      * to the specified string.
-     * This string is checked for legality according to XML 1.0 rules. 
-     * Characters that can be serialized such as &lt; and &amp;  
-     * are allowed. However, illegal characters such as the form feed  
+     * This string is checked for legality according to XML 1.0 rules.
+     * Characters that can be serialized such as &lt; and &amp;
+     * are allowed. However, illegal characters such as the form feed
      * and unmatched halves of surrogate pairs are not allowed.
-     * Furthermore, the string may not contain a double hyphen 
+     * Furthermore, the string may not contain a double hyphen
      * (<code>--</code>) and may not end with a hyphen.
      * </p>
-     * 
+     *
      * @param data the text to install in the comment
      */
     public void setValue(String data) {
@@ -146,16 +145,14 @@ public class Comment extends Node {
 
     /**
      * <p>
-     * Throws <code>IndexOutOfBoundsException</code> because 
+     * Throws <code>IndexOutOfBoundsException</code> because
      * comments do not have children.
      * </p>
-     * 
-     * @return never returns because comments do not have children;
-     *     Always throws an exception.
-     * 
+     *
      * @param position the index of the child node to return
-     * 
-     * @throws IndexOutOfBoundsException because comments 
+     * @return never returns because comments do not have children;
+     *     Always throws an exception
+     * @throws IndexOutOfBoundsException because comments
      *     do not have children
      */
     public final Node getChild(int position) {
@@ -168,7 +165,7 @@ public class Comment extends Node {
      * <p>
      * Returns 0 because comments do not have children.
      * </p>
-     * 
+     *
      * @return zero
      */
     public final int getChildCount() {
@@ -178,14 +175,13 @@ public class Comment extends Node {
     
     /**
      * <p>
-     *   Returns a deep copy of this <code>Comment</code> object 
+     *   Returns a deep copy of this <code>Comment</code> object
      *   which contains the same text, but does not have any parent.
      *   Thus, it can be inserted into a different document.
      * </p>
      *
-     * @return a deep copy of this <code>Comment</code> 
+     * @return a deep copy of this <code>Comment</code>
      *     that is not part of a document
-     * 
      */
     public Comment copy()  {
         return new Comment(data);
@@ -196,10 +192,10 @@ public class Comment extends Node {
      * <p>
      *   Returns a <code>String</code> containing the actual XML
      *  form of the comment;
-     *   for example, <code>&lt;--This is a comment--&gt;</code>. 
+     *   for example, <code>&lt;--This is a comment--&gt;</code>.
      * </p>
-     * 
-     * @return a <code>String</code> containing a well-formed 
+     *
+     * @return a <code>String</code> containing a well-formed
      *     XML comment
      */
     public final String toXML() {
@@ -213,11 +209,11 @@ public class Comment extends Node {
     /**
      * <p>
      *   Returns a string form of the comment suitable for debugging
-     *   and diagnosis. It deliberately does not return an actual 
-     *   XML comment. 
+     *   and diagnosis. It deliberately does not return an actual
+     *   XML comment.
      * </p>
-     * 
-     * @return a representation of the <code>Comment</code> 
+     *
+     * @return a representation of the <code>Comment</code>
      *     as a <code>String</code>
      */
     public final String toString() {

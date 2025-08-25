@@ -22,11 +22,11 @@ package nu.xom;
 
 /**
  * <p>
- * This class represents an attribute such as 
- * <code>type="empty"</code> or 
+ * This class represents an attribute such as
+ * <code>type="empty"</code> or
  * <code>xlink:href="http://www.example.com"</code>.
  * </p>
- * 
+ *
  * <p>
  * Attributes that declare namespaces such as
  * <code>xmlns="http://www.w3.org/TR/1999/xhtml"</code>
@@ -35,10 +35,9 @@ package nu.xom;
  * appear. They are never represented as <code>Attribute</code>
  * objects.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
- * 
  */
 public class Attribute extends Node {
     
@@ -54,16 +53,15 @@ public class Attribute extends Node {
      * Creates a new attribute in no namespace with the
      * specified name and value and undeclared type.
      * </p>
-     * 
+     *
      * @param localName the unprefixed attribute name
      * @param value the attribute value
-     * 
-     * @throws IllegalNameException if the local name is not 
-     *     a namespace well-formed, non-colonized name
-     * @throws IllegalDataException if the value contains characters  
+     * @throws IllegalDataException if the value contains characters
      *     which are not legal in XML such as vertical tab or a null.
      *     Characters such as " and &amp; are legal, but will be  
-     *     automatically escaped when the attribute is serialized.
+     *     automatically escaped when the attribute is serialized
+     * @throws IllegalNameException if the local name is not
+     *     a namespace well-formed, non-colonized name
      */
     public Attribute(String localName, String value) {
         this(localName, "", value, Type.UNDECLARED);
@@ -75,19 +73,18 @@ public class Attribute extends Node {
      * Creates a new attribute in no namespace with the
      * specified name, value, and type.
      * </p>
-     * 
+     *
      * @param localName the unprefixed attribute name
      * @param value the attribute value
      * @param type the attribute type
-     * 
-     * @throws IllegalNameException if the local name is 
-     *     not a namespace well-formed non-colonized name
-     * @throws IllegalDataException if the value contains 
+     * @throws IllegalDataException if the value contains
      *     characters which are not legal in
      *     XML such as vertical tab or a null. Note that 
      *     characters such as " and &amp; are legal,
      *     but will be automatically escaped when the 
      *     attribute is serialized.
+     * @throws IllegalNameException if the local name is
+     *     not a namespace well-formed non-colonized name
      */
     public Attribute(String localName, String value, Type type) {
         this(localName, "", value, type);
@@ -99,18 +96,17 @@ public class Attribute extends Node {
      * Creates a new attribute in the specified namespace with the
      * specified name and value and undeclared type.
      * </p>
-     * 
+     *
      * @param name the prefixed attribute name
      * @param URI the namespace URI
      * @param value the attribute value
-     * 
-     * @throws IllegalNameException  if the name is not a namespace 
-     *     well-formed name
-     * @throws IllegalDataException if the value contains characters 
+     * @throws IllegalDataException if the value contains characters
      *     which are not legal in XML such as vertical tab or a null. 
      *     Note that characters such as " and &amp; are legal, but will
      *     be automatically escaped when the attribute is serialized.
-     * @throws MalformedURIException if <code>URI</code> is not 
+     * @throws IllegalNameException  if the name is not a namespace
+     *     well-formed name
+     * @throws MalformedURIException if <code>URI</code> is not
      *     an RFC 3986 URI reference
      * @throws NamespaceConflictException if there's no prefix,
      *     but the URI is not the empty string, or the prefix is 
@@ -127,20 +123,19 @@ public class Attribute extends Node {
      * Creates a new attribute in the specified namespace with the
      * specified name, value, and type.
      * </p>
-     * 
+     *
      * @param name  the prefixed attribute name
      * @param URI the namespace URI
      * @param value the attribute value
      * @param type the attribute type
-     * 
-     * @throws IllegalNameException if the name is not a namespace 
-     *     well-formed prefixed name
-     * @throws IllegalDataException if the value contains 
+     * @throws IllegalDataException if the value contains
      *     characters which are not legal in XML such as 
      *     vertical tab or a null. Note that characters such as 
      *     " and &amp; are legal, but will be automatically escaped 
      *     when the attribute is serialized.
-     * @throws MalformedURIException if <code>URI</code> is not 
+     * @throws IllegalNameException if the name is not a namespace
+     *     well-formed prefixed name
+     * @throws MalformedURIException if <code>URI</code> is not
      *     an RFC 3986 absolute URI reference
      */
     public Attribute(
@@ -177,9 +172,8 @@ public class Attribute extends Node {
      * <p>
      * Creates a copy of the specified attribute.
      * </p>
-     * 
+     *
      * @param attribute the attribute to copy
-     * 
      */
     public Attribute(Attribute attribute) {
         
@@ -252,11 +246,11 @@ public class Attribute extends Node {
 
     /**
      * <p>
-     * Returns the DTD type of this attribute. 
+     * Returns the DTD type of this attribute.
      * If this attribute does not have a type, then
      * <code>Type.UNDECLARED</code> is returned.
      * </p>
-     * 
+     *
      * @return the DTD type of this attribute
      */
     public final Type getType() {
@@ -267,13 +261,13 @@ public class Attribute extends Node {
     /**
      * <p>
      * Sets the type of this attribute to one of the ten
-     * DTD types or <code>Type.UNDECLARED</code>. 
+     * DTD types or <code>Type.UNDECLARED</code>.
      * </p>
-     * 
+     *
      * @param type the DTD type of this attribute
-     * @throws NullPointerException if <code>type</code> is null
      * @throws IllegalDataException if this is an <code>xml:id</code>
      *     attribute and the <code>type</code> is not ID
+     * @throws NullPointerException if <code>type</code> is null
      */
     public void setType(Type type) {
         
@@ -306,9 +300,8 @@ public class Attribute extends Node {
      * normalized according to its type.
      * However, attributes created in memory are not normalized.
      * </p>
-     * 
+     *
      * @return the value of the attribute
-     * 
      */
     public final String getValue() {
         return value;
@@ -321,10 +314,9 @@ public class Attribute extends Node {
      * replacing any previous value. The value is not normalized
      * automatically.
      * </p>
-     * 
+     *
      * @param value the value assigned to the attribute
-     * 
-     * @throws IllegalDataException if the value contains characters 
+     * @throws IllegalDataException if the value contains characters
      *     which are not legal in XML such as vertical tab or a null. 
      *     Characters such as " and &amp; are legal, but will be 
      *     automatically escaped when the attribute is serialized.
@@ -348,7 +340,7 @@ public class Attribute extends Node {
      * Returns the local name of this attribute,
      * not including the prefix.
      * </p>
-     * 
+     *
      * @return the attribute's local name
      */
     public final String getLocalName() {
@@ -360,12 +352,10 @@ public class Attribute extends Node {
      * <p>
      * Sets the local name of the attribute.
      * </p>
-     * 
+     *
      * @param localName the new local name
-     * 
      * @throws IllegalNameException if <code>localName</code>
      *      is not a namespace well-formed, non-colonized name
-     * 
      */
     public void setLocalName(String localName) {
         
@@ -396,7 +386,7 @@ public class Attribute extends Node {
      * Returns the qualified name of this attribute,
      * including the prefix if this attribute is in a namespace.
      * </p>
-     * 
+     *
      * @return the attribute's qualified name
      */
     public final String getQualifiedName() {
@@ -410,9 +400,9 @@ public class Attribute extends Node {
      * Returns the namespace URI of this attribute, or the empty string
      * if this attribute is not in a namespace.
      * </p>
-     * 
+     *
      * @return the attribute's namespace URI
-     */ 
+     */
     public final String getNamespaceURI() {
         return URI;
     }
@@ -421,10 +411,10 @@ public class Attribute extends Node {
     /**
      * <p>
      * Returns the prefix of this attribute,
-     * or the empty string if this attribute 
+     * or the empty string if this attribute
      * is not in a namespace.
      * </p>
-     * 
+     *
      * @return the attribute's prefix
      */
     public final String getNamespacePrefix() {
@@ -435,22 +425,21 @@ public class Attribute extends Node {
     /**
      * <p>
      * Sets the attribute's namespace prefix and URI.
-     * Because attributes must be prefixed in order to have a  
-     * namespace URI (and vice versa) this must be done 
+     * Because attributes must be prefixed in order to have a
+     * namespace URI (and vice versa) this must be done
      * simultaneously.
      * </p>
-     * 
+     *
      * @param prefix the new namespace prefix
      * @param URI the new namespace URI
-     * 
-     * @throws MalformedURIException if <code>URI</code> is 
-     *     not an RFC 3986 URI reference
      * @throws IllegalNameException if
      *  <ul>
      *      <li>The prefix is <code>xmlns</code>.</li>
      *      <li>The prefix is null or the empty string.</li>
      *      <li>The URI is null or the empty string.</li>
      * </ul>
+     * @throws MalformedURIException if <code>URI</code> is
+     *     not an RFC 3986 URI reference
      * @throws NamespaceConflictException if
      *  <ul>
      *      <li>The prefix is <code>xml</code> and the namespace URI is
@@ -536,10 +525,8 @@ public class Attribute extends Node {
      * </p>
      *
      * @param position the child to return
-     *
      * @return nothing. This method always throws an exception.
-     *
-     * @throws IndexOutOfBoundsException because attributes do 
+     * @throws IndexOutOfBoundsException because attributes do
      *     not have children
      */
     public final Node getChild(int position) {
@@ -553,7 +540,7 @@ public class Attribute extends Node {
      * <p>
      * Returns 0 because attributes do not have children.
      * </p>
-     * 
+     *
      * @return zero
      */
     public final int getChildCount() {
@@ -563,13 +550,12 @@ public class Attribute extends Node {
     
     /**
      * <p>
-     * Creates a deep copy of this attribute that   
+     * Creates a deep copy of this attribute that
      * is not attached to an element.
      * </p>
-     * 
+     *
      * @return a copy of this attribute
-     * 
-     */ 
+     */
     public Attribute copy() {
         return new Attribute(this);
     }
@@ -577,10 +563,10 @@ public class Attribute extends Node {
     
     /**
      * <p>
-     * Returns a string representation of the attribute 
-     * that is a well-formed XML attribute. 
+     * Returns a string representation of the attribute
+     * that is a well-formed XML attribute.
      * </p>
-     * 
+     *
      * @return a string containing the XML form of this attribute
      */
     public final String toXML() {
@@ -597,13 +583,12 @@ public class Attribute extends Node {
     
     /**
      * <p>
-     * Returns a string representation of the attribute suitable for 
-     * debugging and diagnosis. However, this is not necessarily 
+     * Returns a string representation of the attribute suitable for
+     * debugging and diagnosis. However, this is not necessarily
      * a well-formed XML attribute.
      * </p>
-     * 
-     *  @return a non-XML string representation of this attribute
      *
+     * @return a non-XML string representation of this attribute
      * @see java.lang.Object#toString()
      */
     public final String toString() {
@@ -799,11 +784,11 @@ public class Attribute extends Node {
     
     /**
      * <p>
-     * Uses the type-safe enumeration 
+     * Uses the type-safe enumeration
      * design pattern to represent attribute types,
-     * as specified by XML DTDs. 
+     * as specified by XML DTDs.
      * </p>
-     * 
+     *
      * <p>
      * XOM enforces well-formedness, but it does not enforce
      * validity. Thus it is possible for a single element to have
@@ -812,10 +797,9 @@ public class Attribute extends Node {
      * for NMTOKEN type attributes to not contain legal
      * XML name tokens, and so forth.
      * </p>
-     * 
+     *
      * @author Elliotte Rusty Harold
      * @version 1.0
-     *
      */
     public static final class Type {
 
@@ -823,7 +807,7 @@ public class Attribute extends Node {
          * <p>
          *   The type of attributes declared to have type CDATA
          *   in the DTD. The most general attribute type.
-         *   All well-formed attribute values are valid for 
+         *   All well-formed attribute values are valid for
          *   attributes of type CDATA.
          * </p>
          */
@@ -833,7 +817,7 @@ public class Attribute extends Node {
          * <p>
          *   The type of attributes declared to have type ID
          *   in the DTD. In order to be valid, an ID type attribute
-         *   must contain an XML name which is unique among other 
+         *   must contain an XML name which is unique among other
          *   ID type attributes in the document.
          *   Furthermore, each element may contain no more than one
          *   ID type attribute. However, XOM does not enforce
@@ -846,11 +830,10 @@ public class Attribute extends Node {
          * <p>
          *   The type of attributes declared to have type IDREF
          *   in the DTD. In order to be valid, an IDREF type attribute
-         *   must contain an XML name which is also the value of  
-         *   ID type attribute of some element in the document. 
+         *   must contain an XML name which is also the value of
+         *   ID type attribute of some element in the document.
          *   However, XOM does not enforce such validity constraints.
          * </p>
-         *
          */
         public static final Type IDREF = new Type(3);
 
@@ -859,22 +842,20 @@ public class Attribute extends Node {
          *   The type of attributes declared to have type IDREFS
          *   in the DTD. In order to be valid, an IDREFS type attribute
          *   must contain a white space separated list of
-         *   XML names, each of which is also the value of  
-         *   ID type attribute of some element in the document. 
+         *   XML names, each of which is also the value of
+         *   ID type attribute of some element in the document.
          *   However, XOM does not enforce such validity constraints.
          * </p>
-         *
          */
         public static final Type IDREFS = new Type(4);
 
         /**
          * <p>
          *   The type of attributes declared to have type NMTOKEN
-         *   in the DTD. In order to be valid, a NMTOKEN type 
-         *   attribute must contain a single XML name token. However, 
+         *   in the DTD. In order to be valid, a NMTOKEN type
+         *   attribute must contain a single XML name token. However,
          *   XOM does not enforce such validity constraints.
          * </p>
-         *
          */
         public static final Type NMTOKEN = new Type(5);
 
@@ -882,11 +863,10 @@ public class Attribute extends Node {
          * <p>
          *   The type of attributes declared to have type NMTOKENS
          *   in the DTD. In order to be valid, a NMTOKENS type attribute
-         *   must contain a white space separated list of XML name  
-         *   tokens. However, XOM does not enforce such validity 
+         *   must contain a white space separated list of XML name
+         *   tokens. However, XOM does not enforce such validity
          *   constraints.
          * </p>
-         *
          */
         public static final Type NMTOKENS = new Type(6);
 
@@ -894,12 +874,11 @@ public class Attribute extends Node {
         /**
          * <p>
          *   The type of attributes declared to have type NOTATION
-         *   in the DTD. In order to be valid, a NOTATION type 
-         *   attribute must contain the name of a notation declared  
-         *   in the DTD. However, XOM does not enforce such 
+         *   in the DTD. In order to be valid, a NOTATION type
+         *   attribute must contain the name of a notation declared
+         *   in the DTD. However, XOM does not enforce such
          *   validity constraints.
          * </p>
-          *
          */
         public static final Type NOTATION = new Type(7);
 
@@ -908,40 +887,37 @@ public class Attribute extends Node {
          *   The type of attributes declared to have type ENTITY
          *   in the DTD. In order to be valid, an ENTITY type attribute
          *   must contain the name of an unparsed entity declared in
-         *   the DTD. However, XOM does not enforce such 
+         *   the DTD. However, XOM does not enforce such
          *   validity constraints.
          * </p>
-         *
          */
         public static final Type ENTITY = new Type(8);
 
         /**
          * <p>
          *   The type of attributes declared to have type ENTITIES
-         *   in the DTD. In order to be valid, an ENTITIES type 
-         *   attribute must contain a white space separated list of 
-         *   names of unparsed entities declared in the DTD.  
+         *   in the DTD. In order to be valid, an ENTITIES type
+         *   attribute must contain a white space separated list of
+         *   names of unparsed entities declared in the DTD.
          *   However, XOM does not enforce such validity constraints.
          * </p>
-         *
          */
         public static final Type ENTITIES = new Type(9);
 
         /**
          * <p>
          *   The type of attributes declared by an enumeration
-         *   in the DTD. In order to be valid, an enumeration type 
-         *   attribute must contain exactly one of the names given  
-         *   in the enumeration in the DTD. However, XOM does not 
+         *   in the DTD. In order to be valid, an enumeration type
+         *   attribute must contain exactly one of the names given
+         *   in the enumeration in the DTD. However, XOM does not
          *   enforce such validity constraints.
          * </p>
-         * 
+         *
          * <p>
-         *   Most parsers report attributes of type enumeration as 
-         *   having type NMTOKEN. In this case, XOM will not  
+         *   Most parsers report attributes of type enumeration as
+         *   having type NMTOKEN. In this case, XOM will not
          *   distinguish NMTOKEN and enumerated attributes.
          * </p>
-         *
          */
         public static final Type ENUMERATION = new Type(10);
         
@@ -952,10 +928,10 @@ public class Attribute extends Node {
          *   This is the default type for all attributes in
          *   documents without DTDs.
          * </p>
-         * 
+         *
          * <p>
-         *   Most parsers report attributes of undeclared 
-         *   type as having type CDATA. In this case, XOM 
+         *   Most parsers report attributes of undeclared
+         *   type as having type CDATA. In this case, XOM
          *   will not distinguish CDATA and undeclared attributes.
          * </p>
          */
@@ -964,11 +940,11 @@ public class Attribute extends Node {
         
         /**
          * <p>
-         * Returns the string name of this type as might 
-         * be used in a DTD; for example, "ID", "CDATA", etc. 
+         * Returns the string name of this type as might
+         * be used in a DTD; for example, "ID", "CDATA", etc.
          * </p>
-         * 
-         *  @return an XML string representation of this type
+         *
+         * @return an XML string representation of this type
          */
         public String getName() {  
             
@@ -1014,9 +990,8 @@ public class Attribute extends Node {
          * <p>
          * Returns a unique identifier for this type.
          * </p>
-         * 
+         *
          * @return a unique identifier for this type
-         * 
          * @see java.lang.Object#hashCode()
          */
         public int hashCode() {
@@ -1028,14 +1003,12 @@ public class Attribute extends Node {
          * <p>
          * Tests for type equality. This is only necessary,
          * to handle the case where two <code>Type</code> objects
-         * are loaded by different class loaders. 
+         * are loaded by different class loaders.
          * </p>
-         * 
+         *
          * @param o the object compared for equality to this type
-         * 
-         * @return true if and only if <code>o</code> represents 
+         * @return true if and only if <code>o</code> represents
          *      the same type
-         * 
          * @see java.lang.Object#equals(Object)
          */
         public boolean equals(Object o) {
@@ -1053,12 +1026,11 @@ public class Attribute extends Node {
         
         /**
          * <p>
-         * Returns a string representation of the type  
-         * suitable for debugging and diagnosis. 
+         * Returns a string representation of the type
+         * suitable for debugging and diagnosis.
          * </p>
-         * 
-         * @return a non-XML string representation of this type
          *
+         * @return a non-XML string representation of this type
          * @see java.lang.Object#toString()
          */
          public String toString() {    

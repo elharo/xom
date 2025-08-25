@@ -26,7 +26,6 @@ import java.io.Writer;
 /**
  * @author Elliotte Rusty Harold
  * @version 1.2d1
- *
  */
 final class UnicodeWriter extends TextWriter {
 

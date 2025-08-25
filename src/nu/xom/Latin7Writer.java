@@ -26,10 +26,9 @@ import java.io.Writer;
  * <p>
  *   ISO-8859-13, for Latvian and other Baltic languages.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- *
  */
 class Latin7Writer extends TextWriter {
 

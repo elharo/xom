@@ -25,13 +25,13 @@ import java.util.HashMap;
 
 /**
  * <p>
- * The <code>Namespaces</code> container is a read-only list 
- * used to hold the additional namespace declarations of an 
+ * The <code>Namespaces</code> container is a read-only list
+ * used to hold the additional namespace declarations of an
  * element. It provides indexed access for convenience,
  * but the order is neither predictable nor reproducible,
- * and has no meaning. 
+ * and has no meaning.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.1
  */
@@ -58,13 +58,12 @@ class Namespaces {
     /**
      * <p>
      * Return the URI associated with a prefix, as determined
-     * by the namespaces stored in this list.  This method 
+     * by the namespaces stored in this list.  This method
      * returns null if the prefix is not found in the list.
      * </p>
-     * 
+     *
      * @param prefix the prefix whose URI is desired
-     * 
-     * @return the namespace URI for this prefix, or null if this 
+     * @return the namespace URI for this prefix, or null if this
      *      prefix is not not mapped to a URI by these namespace 
      *      declarations
      */

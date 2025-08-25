@@ -27,16 +27,15 @@ import java.io.Writer;
  *   ISO-8859-1; a.k.a. Latin-1; most Western European letters
  *   except for Greek.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- * 
- *
  */
 class Latin1Writer extends TextWriter {
 
     /**
      * Constructor for Latin1Writer.
+     *
      * @param out
      * @param encoding
      */

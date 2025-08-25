@@ -26,7 +26,6 @@ import org.xml.sax.SAXException;
 /**
  * @author Elliotte Rusty Harold
  * @version 1.2.11
- *
  */
 class NonVerifyingHandler extends XOMHandler {
 

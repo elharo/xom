@@ -29,10 +29,9 @@ import java.io.InputStreamReader;
  * A simple class used to make the JAR archive do something sensible
  * when a user tries <samp>java -jar xom.jar</samp>.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.9
- * 
  */
 class Info {
     

@@ -27,10 +27,9 @@ import java.io.Writer;
  *   TIS-620, not quite the same as ISO 8859-11.
  *   TIS-620 does not have the non-breaking space or the C1 controls.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- *
  */
 class ISOThaiWriter extends TextWriter {
 

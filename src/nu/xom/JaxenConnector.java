@@ -31,10 +31,8 @@ import org.jaxen.XPathFunctionContext;
 
 
 /**
- * 
  * @author Elliotte Rusty Harold
  * @version 1.2.4
- *
  */
 class JaxenConnector extends BaseXPath {
 
@@ -97,4 +95,3 @@ class JaxenConnector extends BaseXPath {
 
     
 } 
-

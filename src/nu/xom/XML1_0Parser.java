@@ -30,17 +30,16 @@ import org.apache.xerces.parsers.DTDConfiguration;
  * everything. When using this subclass, XOM will rely on Xerces
  * to verify the rules, and skip its own verification checks.
  * </p>
- * 
+ *
  * <p>
  * This class does not support schema validation. If you want to use
- * the W3C XML Schema Language, download and install 
+ * the W3C XML Schema Language, download and install
  * the full version of Xerces from <a target="_top"
  * href="https://xerces.apache.org/xerces2-j/">https://xerces.apache.org/xerces2-j/</a>.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.2.2b2
- * 
  */
 class XML1_0Parser extends SAXParser {
 
