@@ -23,14 +23,13 @@ package nu.xom;
 /**
  * <p>
  *  Indicates an attempt to create text content that is not allowed in
- *  XML 1.0. For example, this could be a text node that contains a 
- *  vertical tab or an attribute value that contains an unmatched 
+ *  XML 1.0. For example, this could be a text node that contains a
+ *  vertical tab or an attribute value that contains an unmatched
  *  surrogate character.
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 public class IllegalCharacterDataException extends IllegalDataException {
     
@@ -40,10 +39,10 @@ public class IllegalCharacterDataException extends IllegalDataException {
 
     /**
      * <p>
-     * Creates a new <code>IllegalCharacterDataException</code> 
+     * Creates a new <code>IllegalCharacterDataException</code>
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public IllegalCharacterDataException(String message) {
@@ -53,10 +52,10 @@ public class IllegalCharacterDataException extends IllegalDataException {
     
     /**
      * <p>
-     * Creates a new <code>IllegalCharacterDataException</code> 
+     * Creates a new <code>IllegalCharacterDataException</code>
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

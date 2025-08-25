@@ -26,10 +26,9 @@ import java.io.Writer;
  * <p>
  *   ISO 8859-3
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- *
  */
 class Latin3Writer extends TextWriter {
 

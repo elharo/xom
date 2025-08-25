@@ -22,26 +22,23 @@ package nu.xom;
 
 
 /**
- * 
  * <p>
- * The generic superclass for nodes that have children. 
- * Not counting subclasses, there are exactly two such public 
+ * The generic superclass for nodes that have children.
+ * Not counting subclasses, there are exactly two such public
  * classes in XOM:
  * </p>
- * 
+ *
  * <ul>
  *   <li><code>Document</code></li>
  *   <li><code>Element</code></li>
  * </ul>
- * 
+ *
  * <p>
  * This class provides methods to add and remove child nodes.
  * </p>
- * 
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
- *
  */
 public abstract class ParentNode extends Node {
 
@@ -55,7 +52,6 @@ public abstract class ParentNode extends Node {
      * Can only be invoked by other members of
      * the <code>nu.xom</code> package.
      * </p>
-     * 
      */
     ParentNode() {}
 
@@ -65,7 +61,7 @@ public abstract class ParentNode extends Node {
      * Returns the number of child nodes this node contains.
      * This is always greater than or equal to 0.
      * </p>
-     * 
+     *
      * @return the number of children of this node
      */
     public int getChildCount() {
@@ -76,31 +72,30 @@ public abstract class ParentNode extends Node {
     /**
      * <p>
      * Inserts a child node at the specified position.
-     * The child node previously at that position (if any) 
+     * The child node previously at that position (if any)
      * and all subsequent child nodes are moved up by one.
      * That is, when inserting a node at 2, the old node at 2
-     * is moved to 3, the old child at 3 is moved to 4, and so 
-     * forth. Inserting at position 0 makes the child the first 
-     * child of this node. Inserting at the position 
-     * <code>getChildCount()</code> makes the child the 
+     * is moved to 3, the old child at 3 is moved to 4, and so
+     * forth. Inserting at position 0 makes the child the first
+     * child of this node. Inserting at the position
+     * <code>getChildCount()</code> makes the child the
      * last child of the node.
      * </p>
-     * 
+     *
      * <p>
      * All the other methods that add a node to the tree ultimately
      * invoke this method.
      * </p>
-     * 
+     *
      * @param position where to insert the child
      * @param child the node to insert
-     * 
      * @throws IllegalAddException if this node cannot have a child of
      *     the argument's type
-     * @throws MultipleParentException if <code>child</code> already 
+     * @throws IndexOutOfBoundsException if the position is negative or
+     *     greater than the number of children of this node
+     * @throws MultipleParentException if <code>child</code> already
      *     has a parent
      * @throws NullPointerException if <code>child</code> is null
-     * @throws IndexOutOfBoundsException if the position is negative or 
-     *     greater than the number of children of this node
      */
     public void insertChild(Node child, int position) {
         _insertChild(child, position);
@@ -151,14 +146,12 @@ public abstract class ParentNode extends Node {
      * <p>
      * Appends a node to the children of this node.
      * </p>
-     * 
+     *
      * @param child node to append to this node
-     * 
-     * @throws IllegalAddException if this node cannot have children 
+     * @throws IllegalAddException if this node cannot have children
      *     of this type
      * @throws MultipleParentException if child already has a parent
      * @throws NullPointerException if <code>child</code> is null
-     * 
      */
     public void appendChild(Node child) {
         insertChild(child, childCount);
@@ -166,16 +159,14 @@ public abstract class ParentNode extends Node {
 
     
     /**
-     *<p>
+     * <p>
      * Returns the child of this node at the specified position.
      * Indexes begin at 0 and count up to one less than the number
      * of children in this node.
      * </p>
-     * 
+     *
      * @param position index of the node to return
-     * 
      * @return the node at the requested position
-     * 
      * @throws IndexOutOfBoundsException if the index is negative or
      *     greater than or equal to the number of children of this node
      */
@@ -194,22 +185,21 @@ public abstract class ParentNode extends Node {
     // private int lastPosition = -1;
     
     /**
-     *<p>
+     * <p>
      * Returns the position of a node within the children of this
      * node. This is a number between 0 and one less than the number of
      * children of this node. It returns -1 if <code>child</code>
      * does not have this node as a parent.
      * </p>
-     * 
+     *
      * <p>
-     * This method does a linear search through the node's children. 
-     * On average, it executes in O(N) where N is the number of 
+     * This method does a linear search through the node's children.
+     * On average, it executes in O(N) where N is the number of
      * children of the node.
      * </p>
-     * 
+     *
      * @param child the node whose position is desired
-     * 
-     * @return the position of the argument node among 
+     * @return the position of the argument node among
      *     the children of this node
      */
     public int indexOf(Node child) {
@@ -242,11 +232,9 @@ public abstract class ParentNode extends Node {
      * Indexes begin at 0 and count up to one less than the number
      * of children in this node.
      * </p>
-     * 
-     * @param position index of the node to remove
      *
+     * @param position index of the node to remove
      * @return the node which was removed
-     * 
      * @throws IndexOutOfBoundsException if the index is negative or
      *     greater than or equal to the number of children of this node
      */
@@ -293,12 +281,10 @@ public abstract class ParentNode extends Node {
      * <p>
      * Removes the specified child of this node.
      * </p>
-     * 
-     * @param child child node to remove
      *
+     * @param child child node to remove
      * @return the node which was removed
-     * 
-     * @throws NoSuchChildException if <code>child</code> is 
+     * @throws NoSuchChildException if <code>child</code> is
      *     not in fact a child of this node
      */
     public Node removeChild(Node child) {
@@ -328,20 +314,19 @@ public abstract class ParentNode extends Node {
     /**
      * <p>
      * Replaces an existing child with a new child node.
-     * If <code>oldChild</code> is not a child of this node, 
-     * then a <code>NoSuchChildException</code> is thrown. 
+     * If <code>oldChild</code> is not a child of this node,
+     * then a <code>NoSuchChildException</code> is thrown.
      * </p>
-     * 
+     *
      * @param oldChild the node removed from the tree
      * @param newChild the node inserted into the tree
-     * 
+     * @throws IllegalAddException if this node cannot have children
+     *     of the type of <code>newChild</code>
      * @throws MultipleParentException if <code>newChild</code> already
      *     has a parent
-     * @throws NoSuchChildException if <code>oldChild</code> 
+     * @throws NoSuchChildException if <code>oldChild</code>
      *     is not a child of this node
      * @throws NullPointerException if either argument is null
-     * @throws IllegalAddException if this node cannot have children 
-     *     of the type of <code>newChild</code>
      */
     public void replaceChild(Node oldChild, Node newChild) {
         
@@ -377,47 +362,45 @@ public abstract class ParentNode extends Node {
 
     
     /**
-     * 
      * <p>
-     * Sets the URI against which relative URIs in this node will be 
+     * Sets the URI against which relative URIs in this node will be
      * resolved. Generally, it's only necessary to set this property if
      * it's different from a node's parent's base URI, as it may
      * be in a document assembled from multiple entities
      * or by XInclude.
      * </p>
-     * 
+     *
      * <p>
      * Relative URIs are not allowed here. Base URIs must be absolute.
      * However, the base URI may be set to null or the empty string
-     * to indicate that the node has no explicit base URI. In this 
+     * to indicate that the node has no explicit base URI. In this
      * case, it inherits the base URI of its parent node, if any.
      * </p>
-     * 
+     *
      * <p>
-     * URIs with fragment identifiers are also not allowed. The value 
+     * URIs with fragment identifiers are also not allowed. The value
      * passed to this method must be a pure URI, not a URI reference.
      * </p>
-     * 
+     *
      * <p>
-     * You can also add an <code>xml:base</code> attribute to 
+     * You can also add an <code>xml:base</code> attribute to
      * an element in the same way you'd add any other namespaced
-     * attribute to an element. If an element's base URI 
+     * attribute to an element. If an element's base URI
      * conflicts with its <code>xml:base</code> attribute,
      * then the value found in the <code>xml:base</code> attribute
-     * is used. 
+     * is used.
      * </p>
-     * 
+     *
      * <p>
-     * If the base URI is null or the empty string and there is 
-     * no <code>xml:base</code> attribute, then the base URI is 
-     * determined by the nearest ancestor node which does have a  
-     * base URI. Moving such a node from one location to another 
+     * If the base URI is null or the empty string and there is
+     * no <code>xml:base</code> attribute, then the base URI is
+     * determined by the nearest ancestor node which does have a
+     * base URI. Moving such a node from one location to another
      * can change its base URI.
      * </p>
-     * 
-     * @param URI the new base URI for this node
      *
-     * @throws MalformedURIException if <code>URI</code> is 
+     * @param URI the new base URI for this node
+     * @throws MalformedURIException if <code>URI</code> is
      *     not a legal RFC 3986 absolute URI
      */
     public abstract void setBaseURI(String URI);

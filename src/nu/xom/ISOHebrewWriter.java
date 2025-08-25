@@ -26,10 +26,9 @@ import java.io.Writer;
  * <p>
  *   ISO 8859-8, ASCII plus Hebrew
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- *
  */
 class ISOHebrewWriter extends TextWriter {
 

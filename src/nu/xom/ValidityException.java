@@ -28,13 +28,12 @@ import org.xml.sax.SAXParseException;
 /**
  * <p>
  *  Signals a validity error in a document being parsed.
- *  These are not thrown by default, unless you specifically 
+ *  These are not thrown by default, unless you specifically
  *  request that the builder validate.
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.1
- *
  */
 public class ValidityException extends ParsingException {
     
@@ -47,10 +46,10 @@ public class ValidityException extends ParsingException {
 
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> 
+     * Creates a new <code>ValidityException</code>
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
@@ -61,12 +60,12 @@ public class ValidityException extends ParsingException {
     
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> 
+     * Creates a new <code>ValidityException</code>
      * with a detail message and line and column numbers.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
-     * @param lineNumber the approximate line number 
+     * @param lineNumber the approximate line number
      *     where the problem occurs
      * @param columnNumber the approximate column number
      *     where the problem occurs
@@ -81,15 +80,15 @@ public class ValidityException extends ParsingException {
     
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> 
-     * with a detail message, line and column numbers, 
+     * Creates a new <code>ValidityException</code>
+     * with a detail message, line and column numbers,
      * and an underlying exception.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
-     * @param lineNumber the approximate line number 
+     * @param lineNumber the approximate line number
      *     where the problem occurs
-     * @param columnNumber the approximate column number 
+     * @param columnNumber the approximate column number
      *     where the problem occurs
      * @param cause the original cause of this exception
      */
@@ -104,15 +103,15 @@ public class ValidityException extends ParsingException {
     
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> 
+     * Creates a new <code>ValidityException</code>
      * with a detail message, the URI of the document that contained
      * the error, and approximate line and column numbers of the
      * first validity error.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param uri URL of the document with a validity error
-     * @param lineNumber the approximate line number 
+     * @param lineNumber the approximate line number
      *     where the problem occurs
      * @param columnNumber the approximate column number
      *     where the problem occurs
@@ -125,17 +124,17 @@ public class ValidityException extends ParsingException {
     
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> 
+     * Creates a new <code>ValidityException</code>
      * with a detail message, URI of the document containing the
-     * validity error, line and column numbers of the error, 
+     * validity error, line and column numbers of the error,
      * and an underlying exception.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param uri URL of the document with a validity error
-     * @param lineNumber the approximate line number 
+     * @param lineNumber the approximate line number
      *     where the problem occurs
-     * @param columnNumber the approximate column number 
+     * @param columnNumber the approximate column number
      *     where the problem occurs
      * @param cause the original cause of this exception
      */
@@ -151,10 +150,10 @@ public class ValidityException extends ParsingException {
     
     /**
      * <p>
-     * Creates a new <code>ValidityException</code> 
+     * Creates a new <code>ValidityException</code>
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public ValidityException(String message) {
@@ -166,10 +165,10 @@ public class ValidityException extends ParsingException {
      * <p>
      * Returns a <code>Document</code> object for the document that
      * caused this exception. This is useful if you want notification
-     * of validity errors, but nonetheless wish to further process 
+     * of validity errors, but nonetheless wish to further process
      * the invalid document.
      * </p>
-     * 
+     *
      * @return the invalid document
      */
     public Document getDocument() {
@@ -193,7 +192,7 @@ public class ValidityException extends ParsingException {
      *   in the document. This is likely to not be consistent from one
      *   parser to another.
      * </p>
-     * 
+     *
      * @return the number of validity errors the parser detected
      */
     public int getErrorCount() {
@@ -210,11 +209,9 @@ public class ValidityException extends ParsingException {
      *   to appear before an error in a child element. However, this
      *   depends on the underlying parser and is not guaranteed.
      * </p>
-     * 
+     *
      * @param n the index of the validity error to report
-     * 
      * @return a string describing the n<i>th</i> validity error
-     * 
      * @throws IndexOutOfBoundsException if <code>n</code> is greater
      *     than or equal to the number of errors detected
      */
@@ -229,16 +226,15 @@ public class ValidityException extends ParsingException {
      *   Returns the line number of the <i>n</i>th validity
      *   error. It returns -1 if this is not known. This number
      *   may be helpful for debugging, but should not be relied on.
-     *   Different parsers may set it differently. For instance 
-     *   a problem with an element might be reported using the 
-     *   line number of the start-tag or the line number of the 
-     *   end-tag. 
+     *   Different parsers may set it differently. For instance
+     *   a problem with an element might be reported using the
+     *   line number of the start-tag or the line number of the
+     *   end-tag.
      * </p>
-     * 
+     *
      * @param n the index of the validity error to report
-     * @return the approximate line number where the n<i>th</i> 
+     * @return the approximate line number where the n<i>th</i>
      *     validity error was detected
-     * 
      * @throws IndexOutOfBoundsException if <code>n</code> is greater
      *     than or equal to the number of errors detected
      */
@@ -253,17 +249,15 @@ public class ValidityException extends ParsingException {
      *   Returns the column number of the <i>n</i>th validity
      *   error. It returns -1 if this is not known. This number
      *   may be helpful for debugging, but should not be relied on.
-     *   Different parsers may set it differently. For instance 
-     *   a problem with an element might be reported using the 
+     *   Different parsers may set it differently. For instance
+     *   a problem with an element might be reported using the
      *   column of the <code>&lt;</code> or the <code>&gt;</code>
-     *   of the start-tag 
+     *   of the start-tag
      * </p>
-     * 
+     *
      * @param n the index of the validity error to report
-     * 
-     * @return the approximate column where the n<i>th</i> 
+     * @return the approximate column where the n<i>th</i>
      *     validity error was detected
-     * 
      * @throws IndexOutOfBoundsException if <code>n</code> is greater
      *     than or equal to the number of errors detected
      */

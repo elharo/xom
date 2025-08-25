@@ -22,16 +22,15 @@ package nu.xom;
 
 /**
  * <p>
- *   This class represents a CDATA section. 
+ *   This class represents a CDATA section.
  *   Builders will sometimes use this class to represent
  *   a CDATA section. However, they are not required to do so.
  *   This class is used solely for preservation of CDATA sections
- *   from input to output. 
+ *   from input to output.
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b4
- *
  */
 class CDATASection extends Text {
 

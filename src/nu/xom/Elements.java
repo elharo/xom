@@ -26,18 +26,15 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 
  * <p>
  * A read-only list of elements for traversal purposes.
  * Changes to the document from which this list was generated
- * are not reflected in this list. Changes to the individual 
+ * are not reflected in this list. Changes to the individual
  * <code>Element</code> objects in the list are reflected.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
- * 
- *
  */
 public final class Elements implements Iterable<Element> {
 
@@ -50,9 +47,9 @@ public final class Elements implements Iterable<Element> {
     /**
      * <p>
      * Returns the number of elements in the list.
-     * This is guaranteed non-negative. 
+     * This is guaranteed non-negative.
      * </p>
-     * 
+     *
      * @return the number of elements in the list
      */
     public int size() {
@@ -65,12 +62,10 @@ public final class Elements implements Iterable<Element> {
      * The first element has index 0. The last element
      * has index <code>size()-1</code>.
      * </p>
-     * 
+     *
      * @param index the element to return
-     * 
      * @return the element at the specified position
-     * 
-     * @throws IndexOutOfBoundsException if index is negative 
+     * @throws IndexOutOfBoundsException if index is negative
      *     or greater than or equal to the size of the list
      */
     public Element get(int index) {
