@@ -28,10 +28,9 @@ package nu.xom;
  *   This class is used solely for preservation of CDATA sections
  *   from input to output. 
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b4
- *
  */
 class CDATASection extends Text {
 

@@ -25,13 +25,12 @@ import java.util.List;
 import org.jaxen.NamespaceContext;
 
 /**
- *
  * <p>
  *  The generic superclass for all the contents 
  *  of an XML document. There are exactly eight kinds of 
  *  nodes in XOM:
  * </p>
- * 
+ *
  * <ul>
  *   <li><code>Element</code></li>
  *   <li><code>Document</code></li>
@@ -42,17 +41,15 @@ import org.jaxen.NamespaceContext;
  *   <li><code>DocType</code></li>
  *   <li><code>Namespace</code></li>
  * </ul>
- * 
+ *
  * <p>
  *   Every instance of <code>Node</code> is an  
  *   instance of one of these eight classes
  *   (including, possibly, one of their subclasses).
  * </p>
- * 
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.9
- *
  */
 public abstract class Node {
     
@@ -73,14 +70,13 @@ public abstract class Node {
      * <p>
      * Returns the XPath 1.0 string-value of this node.
      * </p>
-     * 
+     *
      * @return the XPath 1.0 string-value of this node
      */
     public abstract String getValue();
     
     
     /**
-     * 
      * <p>
      * Returns the document that contains this node,
      * or null if this node is not currently part of a document.
@@ -88,7 +84,7 @@ public abstract class Node {
      * If this node is a <code>Document</code>, then it returns 
      * this node.
      * </p>
-     * 
+     *
      * @return the document this node is a part of
      */
     public final Document getDocument() {
@@ -101,12 +97,11 @@ public abstract class Node {
     
     
     /**
-     * 
      * <p>
      * Returns the root of the subtree in which this node is found,
      * whether that's a document or an element.
      * </p>
-     * 
+     *
      * @return the document this node is a part of
      */
     final Node getRoot() {
@@ -124,7 +119,6 @@ public abstract class Node {
     
     
     /**
-     * 
      * <p>
      * Returns the base URI of this node as specified by 
      * <a href="https://www.w3.org/TR/xmlbase/" target="_top">XML 
@@ -132,7 +126,7 @@ public abstract class Node {
      * cases, this is the URL against which relative URLs in this node 
      * should be resolved.
      * </p>
-     * 
+     *
      * <p>
      *  The base URI of a non-parent node is the base URI of the 
      *  element containing the node. The base URI of a document
@@ -144,7 +138,7 @@ public abstract class Node {
      * <p>
      * The base URI of an element is determined as follows:
      * </p>
-     * 
+     *
      * <ul>
      *   <li>
      *     If the element has an <code>xml:base</code> attribute,
@@ -181,16 +175,16 @@ public abstract class Node {
      *      empty string is returned.
      *    </li>
      * </ul>
-     * 
+     *
      * <p>
      *  Absolutization takes place as specified by the 
      *  <a target="_top" href="https://www.w3.org/TR/xmlbase/">XML 
      *  Base specification</a>. However, it is not always possible to
      *  absolutize a relative URI, in which case the empty string will 
      *  be returned. 
-     * </p> 
-     * 
-     * @return the base URI of this node 
+     * </p>
+     *
+     * @return the base URI of this node
      */
     public String getBaseURI() {
         if (parent == null) return "";
@@ -199,12 +193,11 @@ public abstract class Node {
 
 
     /**
-     * 
      * <p>
      * Returns the node that contains this node,
      * or null if this node does not have a parent.
      * </p>
-     * 
+     *
      * @return the element or document that most immediately
      *     contains this node
      */
@@ -224,7 +217,7 @@ public abstract class Node {
      * to a different parent node or document. This method does nothing
      * if the node does not have a parent.
      * </p>
-     * 
+     *
      * @throws XMLException if the parent refuses to detach this node
      */
     public void detach() {
@@ -245,11 +238,9 @@ public abstract class Node {
      * <p>
      *  Returns the child of this node at the specified position.
      * </p>
-     * 
+     *
      * @param position the index of the child node to return
-     * 
      * @return the position<sup>th</sup> child node of this node
-     * 
      * @throws IndexOutOfBoundsException if this node does not have children
      */
     public abstract Node getChild(int position);
@@ -260,7 +251,7 @@ public abstract class Node {
      * Returns the number of children of this node.
      * This is always non-negative (greater than or equal to zero).
      * </p>
-     * 
+     *
      * @return the number of children of this node
      */
     public abstract int getChildCount();
@@ -271,7 +262,7 @@ public abstract class Node {
      * Returns a deep copy of this node with no parent,
      * that can be added to the current document or a different one.
      * </p>
-     * 
+     *
      * <p>
      * Per Bloch, the <code>Cloneable</code>
      * interface is just a mess and should 
@@ -280,8 +271,8 @@ public abstract class Node {
      * copy a node without knowing its more specific type.
      * Ken Arnold agrees with this. It's more effective for 
      * subclasses that can return an instance of the subclass.
-     * </p> 
-     * 
+     * </p>
+     *
      * @return a copy of this node without a parent
      */
     public abstract Node copy();        
@@ -295,7 +286,7 @@ public abstract class Node {
      * white space inside tags or the use of empty-element tags vs.
      * start-tag end-tag pairs.
      * </p>
-     * 
+     *
      * @return an XML representation of this node
      */
     public abstract String toXML(); 
@@ -307,11 +298,9 @@ public abstract class Node {
      * <code>Node</code> objects are equal
      * if and only if they are the same object.
      * </p>
-     * 
+     *
      * @param o the object compared for equality to this node
-     * 
      * @return true if <code>o</code> is this node; false otherwise
-     * 
      * @see java.lang.Object#equals(Object)
      */
     public final boolean equals(Object o) {
@@ -326,9 +315,8 @@ public abstract class Node {
      * <code>super.hashCode()</code>
      * because nodes use identity semantics. 
      * </p>
-     * 
+     *
      * @return a probably unique identifier for this node
-     * 
      * @see java.lang.Object#hashCode()
      */
     public final int hashCode() {
@@ -344,7 +332,7 @@ public abstract class Node {
      * expression should be bound to namespace URIs by the 
      * second argument. 
      * </p>
-     * 
+     *
      * <p>
      * Note that XPath expressions operate on the XPath data model,
      * not the XOM data model. XPath counts all adjacent 
@@ -354,18 +342,18 @@ public abstract class Node {
      * have exactly one text child in XPath, whose value is the 
      * concatenation of all three XOM <code>Text</code> objects. 
      * </p>
-     * 
+     *
      * <p>
      * You can use XPath expressions that use the namespace axis.
      * However, namespace nodes are never returned. If an XPath 
      * expression only selects namespace nodes, then this method will
      * return an empty list.
      * </p>
-     * 
+     *
      * <p>
      * No variables are bound. 
      * </p>
-     * 
+     *
      * <p>
      * The context position is the index of this node among its parents
      * children, counting adjacent text nodes as one. The context size 
@@ -375,7 +363,7 @@ public abstract class Node {
      * not counted. If the node has no parent, then the context position
      * is 1, and the context size is 1. 
      * </p>
-     * 
+     *
      * <p>
      * Queries such as /&#x2A;, //, and /&#x2A;//p that refer to the 
      * root node do work when operating with a context node that is not 
@@ -387,23 +375,20 @@ public abstract class Node {
      * query stores <code>parent</code> in the <code>result</code>
      * variable, not <code>child</code>:
      * </p>
-     * 
+     *
      * <pre><code>  Element parent = new Element("parent");
      *   Element child = new Element("child");
      *   parent.appendChild(child);
      *   Nodes results = child.query("/*");
      *   Node result = result.get(0);</code></pre>
-     * 
+     *
      * @param xpath the XPath expression to evaluate
      * @param namespaces a collection of namespace prefix bindings  
      *     used in the XPath expression
-     * 
      * @return a list of all matched nodes; possibly empty
-     * 
      * @throws XPathException if there's a syntax error in the 
      *     expression, the query returns something other than
      *     a node-set
-     * 
      */
     public final Nodes query(String xpath, XPathContext namespaces) {
         
@@ -471,15 +456,13 @@ public abstract class Node {
      * This XPath expression must not contain
      * any namespace prefixes.
      * </p>
-     * 
+     *
      * <p>
      * No variables are bound. No namespace prefixes are bound.
      * </p>
-     * 
+     *
      * @param xpath the XPath expression to evaluate
-     * 
      * @return a list of all matched nodes; possibly empty
-     * 
      * @throws XPathException if there's a syntax error in the 
      *     expression; or the query returns something other than
      *     a node-set

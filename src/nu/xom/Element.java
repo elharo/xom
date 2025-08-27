@@ -33,7 +33,7 @@ import java.util.LinkedHashSet;
  * This class represents an XML element. Each 
  * element has the following properties:
  * </p>
- * 
+ *
  * <ul>
  *   <li>Local name</li>
  *   <li>Prefix (which may be null or the empty string) </li>
@@ -43,10 +43,9 @@ import java.util.LinkedHashSet;
  *       (not including those inherited from its parent)</li>
  *   <li>A list of child nodes</li>
  * </ul>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.1
- *
  */
 public class Element extends ParentNode {
 
@@ -62,9 +61,8 @@ public class Element extends ParentNode {
      * <p>
      * Creates a new element in no namespace.
      * </p>
-     * 
+     *
      * @param name the name of the element
-     * 
      * @throws IllegalNameException if <code>name</code>
      *     is not a legal XML 1.0 non-colonized name
      */
@@ -77,16 +75,15 @@ public class Element extends ParentNode {
      * <p>
      * Creates a new element in a namespace.
      * </p>
-     * 
+     *
      * @param name the qualified name of the element
      * @param uri the namespace URI of the element
-     * 
      * @throws IllegalNameException if <code>name</code>  
      *     is not a legal XML 1.0 name
-     * @throws NamespaceConflictException if <code>name</code>'s prefix  
-     *     cannot be used with <code>uri</code>
      * @throws MalformedURIException if <code>uri</code>  
      *     is not an RFC 3986 absolute URI reference
+     * @throws NamespaceConflictException if <code>name</code>'s prefix  
+     *     cannot be used with <code>uri</code>
      */
     public Element(String name, String uri) {
         
@@ -146,9 +143,8 @@ public class Element extends ParentNode {
      * The copy is disconnected from the tree, and does not
      * have a parent.
      * </p>
-     * 
+     *
      * @param element the element to copy
-     * 
      */
     public Element(Element element) {
         
@@ -285,9 +281,8 @@ public class Element extends ParentNode {
      * this element with the specified name in no namespace.
      * The elements returned are in document order.
      * </p>
-     * 
+     *
      * @param name the name of the elements included in the list
-     * 
      * @return a comatose list containing the child elements of this 
      *     element with the specified name
      */
@@ -306,11 +301,10 @@ public class Element extends ParentNode {
      * returns elements with the specified name in no namespace.
      * The elements returned are in document order.
      * </p>
-     * 
+     *
      * @param localName the name of the elements included in the list
      * @param namespaceURI the namespace URI of the elements included
      *     in the list
-     * 
      * @return a comatose list containing the child  
      *    elements of this element with the specified
      *    name in the specified namespace
@@ -343,7 +337,7 @@ public class Element extends ParentNode {
      * Returns a list of all the child elements 
      * of this element in document order.
      * </p>
-     * 
+     *
      * @return a comatose list containing all  
      *    child elements of this element
      */
@@ -368,9 +362,8 @@ public class Element extends ParentNode {
      * element with the specified name in no namespace.
      * If there is no such element, it returns null.
      * </p>
-     * 
+     *
      * @param name the name of the element to return
-     * 
      * @return the first child element with the specified local name 
      *    in no namespace or null if there is no such element
      */
@@ -385,10 +378,9 @@ public class Element extends ParentNode {
      * element with the specified local name and namespace URI.
      * If there is no such element, it returns null.
      * </p>
-     * 
+     *
      * @param localName the local name of the element to return
      * @param namespaceURI the namespace URI of the element to return
-     * 
      * @return the first child with the specified local name in the
      *      specified namespace, or null if there is no such element
      */
@@ -415,9 +407,8 @@ public class Element extends ParentNode {
      * Adds an attribute to this element, replacing any existing 
      * attribute with the same local name and namespace URI.
      * </p>
-     * 
+     *
      * @param attribute the attribute to add
-     * 
      * @throws MultipleParentException if the attribute is already
      *      attached to an element
      * @throws NamespaceConflictException if the attribute's prefix   
@@ -519,14 +510,11 @@ public class Element extends ParentNode {
      * <p>
      * Removes an attribute from this element.
      * </p>
-     * 
+     *
      * @param attribute the attribute to remove
-     * 
      * @return the attribute that was removed
-     * 
      * @throws NoSuchAttributeException if this element is not the  
      *     parent of attribute
-     * 
      */
     public Attribute removeAttribute(Attribute attribute) {
         
@@ -560,9 +548,8 @@ public class Element extends ParentNode {
      * or null if this element does not have an attribute 
      * with that name in no namespace.
      * </p>
-     * 
+     *
      * @param name the name of the attribute
-     * 
      * @return the attribute of this element with the specified name
      */
     public final Attribute getAttribute(String name) {
@@ -576,10 +563,9 @@ public class Element extends ParentNode {
      * or null if this element does not have an attribute 
      * with that name in that namespace.
      * </p>
-     * 
+     *
      * @param localName the local name of the attribute
      * @param namespaceURI the namespace of the attribute
-     * 
      * @return the attribute of this element 
      *     with the specified name and namespace
      */
@@ -607,9 +593,8 @@ public class Element extends ParentNode {
      * or null if this element does not have an attribute 
      * with that name.
      * </p>
-     * 
+     *
      * @param name the name of the attribute
-     * 
      * @return the value of the attribute of this element 
      *     with the specified name
      */
@@ -619,13 +604,12 @@ public class Element extends ParentNode {
 
     
     /**
-     * 
      * <p>
      * Returns the number of attributes of this <code>Element</code>,
      * not counting namespace declarations.
      * This is always a non-negative number.
      * </p>
-     * 
+     *
      * @return the number of attributes in the container
      */
     public final int getAttributeCount() {
@@ -634,7 +618,6 @@ public class Element extends ParentNode {
     
     
     /**
-     * 
      * <p>
      * Selects an attribute by index.
      * The index is purely for convenience and has no particular 
@@ -644,7 +627,7 @@ public class Element extends ParentNode {
      * As with most lists in Java, attributes are numbered  
      * from 0 to one less than the length of the list.
      * </p>
-     * 
+     *
      * <p>
      * In general, you should not add attributes to or remove 
      * attributes from the list while iterating across it. 
@@ -653,15 +636,12 @@ public class Element extends ParentNode {
      * either end of the list (0 or <code>getAttributeCount()-1</code>)
      * until there are no attributes left. 
      * </p>
-     * 
+     *
      * @param index the attribute to return
-     * 
      * @return the index<sup>th</sup> attribute of this element
-     * 
      * @throws IndexOutofBoundsException if the index is negative 
      *   or greater than or equal to the number of attributes 
      *   of this element
-     * 
      */
     public final Attribute getAttribute(int index) {
         
@@ -681,10 +661,9 @@ public class Element extends ParentNode {
      * specified name and namespace URI,
      * or null if this element does not have such an attribute.
      * </p>
-     * 
+     *
      * @param localName the name of the attribute
      * @param namespaceURI the namespace of the attribute
-     * 
      * @return the value of the attribute of this element 
      *     with the specified name and namespace
      */
@@ -703,7 +682,7 @@ public class Element extends ParentNode {
      * Returns the local name of this element, not including the 
      * namespace prefix or colon.
      * </p>
-     * 
+     *
      * @return the local name of this element
      */
     public final String getLocalName() {
@@ -716,7 +695,7 @@ public class Element extends ParentNode {
      * Returns the complete name of this element, including the 
      * namespace prefix if this element has one.
      * </p>
-     * 
+     *
      * @return the qualified name of this element
      */
     public final String getQualifiedName() {
@@ -730,7 +709,7 @@ public class Element extends ParentNode {
      * Returns the prefix of this element, or the empty string
      * if this element does not have a prefix.
      * </p>
-     * 
+     *
      * @return the prefix of this element
      */
     public final String getNamespacePrefix() {
@@ -744,7 +723,7 @@ public class Element extends ParentNode {
      * or the empty string if this element is not
      * in a namespace.
      * </p>
-     * 
+     *
      * @return  the namespace URI of this element
      */
     public final String getNamespaceURI() {
@@ -758,9 +737,8 @@ public class Element extends ParentNode {
      * prefix within this element. Returns null if this prefix
      * is not associated with a URI.
      * </p>
-     * 
-     * @param prefix the namespace prefix whose URI is desired
      *
+     * @param prefix the namespace prefix whose URI is desired
      * @return the namespace URI mapped to <code>prefix</code>
      */
     public final String getNamespaceURI(String prefix) {
@@ -814,9 +792,8 @@ public class Element extends ParentNode {
      * <p>
      * Sets the local name of this element.
      * </p>
-     * 
+     *
      * @param localName the new local name
-     * 
      * @throws IllegalNameException if <code>localName</code> is not
      *     a legal, non-colonized name
      */
@@ -835,9 +812,8 @@ public class Element extends ParentNode {
      * <p>
      * Sets the namespace URI of this element.
      * </p>
-     * 
+     *
      * @param uri the new namespace URI
-     * 
      * @throws MalformedURIException if <code>uri</code>  
      *     is not an absolute RFC 3986 URI reference
      * @throws NamespaceException if this element has a prefix 
@@ -918,9 +894,8 @@ public class Element extends ParentNode {
      * Sets the namespace prefix of this element.
      * You can pass null or the empty string to remove the prefix.
      * </p>
-     * 
+     *
      * @param prefix the new namespace prefix
-     * 
      * @throws IllegalNameException if <code>prefix</code> is 
      *     not a legal XML non-colonized name
      * @throws NamespaceConflictException if <code>prefix</code> is 
@@ -967,22 +942,21 @@ public class Element extends ParentNode {
      * <code>getChildCount()</code>
      * makes the child the last child of the node.
      * </p>
-     * 
+     *
      * <p>
      * All the other methods that add a node to the tree,
      * invoke this method ultimately.
      * </p>
-     * 
+     *
      * @param position where to insert the child
      * @param child the node to insert
-     * 
      * @throws IllegalAddException if <code>child</code> 
      *   is a <code>Document</code>
+     * @throws IndexOutOfBoundsException if the position is negative 
+     *     or greater than the number of children of this element
      * @throws MultipleParentException if <code>child</code> 
      *   already has a parent
      * @throws NullPointerException if <code>child</code> is null
-     * @throws IndexOutOfBoundsException if the position is negative 
-     *     or greater than the number of children of this element.
      */
     void insertionAllowed(Node child, int position) {
         
@@ -1032,13 +1006,12 @@ public class Element extends ParentNode {
      * Converts a string to a text node and inserts that
      * node at the specified position.
      * </p>
-     * 
+     *
      * @param position where to insert the child
      * @param text the string to convert to a text node and insert
-     * 
-     * @throws NullPointerException if text is null
      * @throws IndexOutOfBoundsException if the position is negative
      *     or greater than the number of children of the node
+     * @throws NullPointerException if text is null
      */
     public void insertChild(String text, int position) {
         
@@ -1055,9 +1028,8 @@ public class Element extends ParentNode {
      * Converts a string to a text node
      * and appends that node to the children of this node.
      * </p>
-     * 
-     * @param text String to add to this node
-     * 
+     *
+     * @param text string to add to this node
      * @throws IllegalAddException if this node cannot 
      *     have children of this type
      * @throws NullPointerException if <code>text</code> is null
@@ -1071,7 +1043,7 @@ public class Element extends ParentNode {
      * <p>
      * Detaches all children from this node. 
      * </p>
-     * 
+     *
      * <p>
      * Subclassers should note that the default implementation of this
      * method does <strong>not</strong> call <code>removeChild</code>
@@ -1079,7 +1051,7 @@ public class Element extends ParentNode {
      * <code>removeChild</code>, you'll probably need to override this
      * method as well.
      * </p>
-     * 
+     *
      * @return a list of all the children removed in the order they
      *     appeared in the element
      */
@@ -1109,26 +1081,25 @@ public class Element extends ParentNode {
      * this method to declare prefixes for element and attribute 
      * names.
      * </p>
-     * 
+     *
      * <p>
      * You can supply an empty string for the prefix to declare a 
      * default namespace, provided the element itself has a prefix.
      * </p>
-     * 
+     *
      * <p>
      * If you do redeclare a prefix that is already used
      * by an element or attribute name, the additional 
      * namespace is added if and only if the URI is the same.
      * Conflicting namespace declarations will throw an exception.
      * </p>
-     * 
+     *
      * @param prefix the prefix to declare
      * @param uri the absolute URI reference to map the prefix to
-     * 
-     * @throws MalformedURIException if <code>URI</code> 
-     *      is not an RFC 3986 URI reference
      * @throws IllegalNameException  if <code>prefix</code> is not 
      *      a legal XML non-colonized name or the empty string
+     * @throws MalformedURIException if <code>URI</code> 
+     *      is not an RFC 3986 URI reference
      * @throws NamespaceConflictException if the mapping conflicts 
      *     with an existing element, attribute,
      *     or additional namespace declaration
@@ -1204,7 +1175,7 @@ public class Element extends ParentNode {
      * If the prefix is not used on this element, this method
      * does nothing.
      * </p>
-     * 
+     *
      * @param prefix the prefix whose declaration should be removed
      */
     public void removeNamespaceDeclaration(String prefix) {
@@ -1229,7 +1200,7 @@ public class Element extends ParentNode {
      * <code>xml:space</code> is not counted even if one of these 
      * attributes is present on the element.
      * </p>
-     * 
+     *
      * <p>
      * The return value is almost always positive. It can be zero 
      * if and only if the element itself has the prefix 
@@ -1239,7 +1210,7 @@ public class Element extends ParentNode {
      * used it for attributes to date. You really shouldn't do this.
      * Nonetheless, this is not malformed so XOM allows it.
      * </p>
-     * 
+     *
      * @return the number of namespaces declared by this element
      */
     public final int getNamespaceDeclarationCount() {
@@ -1344,7 +1315,7 @@ public class Element extends ParentNode {
      * namespace is reported with an empty string prefix if present.
      * Like most lists in Java, the first prefix is at index 0.
      * </p>
-     * 
+     *
      * <p>
      * If the namespaces on the element change for any reason 
      * (adding or removing an attribute in a namespace, adding 
@@ -1353,15 +1324,12 @@ public class Element extends ParentNode {
      * prefixes. Don't change the prefixes of an element while
      * iterating across them. 
      * </p>
-     * 
+     *
      * @param index the prefix to return
-     * 
      * @return the prefix
-     * 
      * @throws IndexOutOfBoundsException if <code>index</code> is 
      *     negative or greater than or equal to the number of 
-     *     namespaces declared by this element.
-     * 
+     *     namespaces declared by this element
      */
     public final String getNamespacePrefix(int index) {
         
@@ -1420,7 +1388,6 @@ public class Element extends ParentNode {
     
     
     /**
-     * 
      * <p>
      * Sets the URI from which this element was loaded,
      * and against which relative URLs in this element will be 
@@ -1428,9 +1395,8 @@ public class Element extends ParentNode {
      * this. Setting the base URI to null or the empty string removes 
      * any existing base URI.
      * </p>
-     * 
+     *
      * @param URI the new base URI for this element
-     * 
      * @throws MalformedURIException if <code>URI</code> is 
      *     not a legal RFC 3986 absolute URI
      */
@@ -1440,7 +1406,6 @@ public class Element extends ParentNode {
     
     
     /**
-     * 
      * <p>
      * Returns the absolute base URI against which relative URIs in 
      * this element should be resolved. <code>xml:base</code> 
@@ -1448,7 +1413,7 @@ public class Element extends ParentNode {
      * actual base URI of the document where the element was found
      * or which was set by <code>setBaseURI</code>.
      * </p>
-     * 
+     *
      * <p>
      * This URI is made absolute before it is returned 
      * by resolving the information in this element against the 
@@ -1457,7 +1422,7 @@ public class Element extends ParentNode {
      * URI in all circumstances. In this case, this method returns the
      * empty string to indicate the base URI of the current entity.
      * </p>
-     * 
+     *
      * <p>
      * If the element's <code>xml:base</code> attribute contains a 
      * value that is a syntactically illegal URI (e.g. %GF.html"),
@@ -1465,8 +1430,8 @@ public class Element extends ParentNode {
      * to behave as if the element did not have an <code>xml:base</code>
      * attribute. 
      * </p>
-     * 
-     * @return the base URI of this element 
+     *
+     * @return the base URI of this element
      */
      public String getBaseURI() {
 
@@ -1554,9 +1519,8 @@ public class Element extends ParentNode {
      * and descendants. However, it does not contain namespace 
      * declarations for namespaces inherited from ancestor elements.
      * </p>
-     * 
+     *
      * @return the XML representation of this element
-     * 
      */
     public final String toXML() {
         
@@ -1696,9 +1660,8 @@ public class Element extends ParentNode {
      * any tags, comments, or processing instructions after all 
      * entity and character references have been resolved.
      * </p>
-     * 
+     *
      * @return XPath string value of this element
-     * 
      */
     public final String getValue() {
 
@@ -1755,7 +1718,7 @@ public class Element extends ParentNode {
      * Creates a deep copy of this element with no parent,
      * that can be added to this document or a different one.
      * </p>
-     * 
+     *
      * <p>
      * Subclassers should be wary. Implementing this method is trickier
      * than it might seem, especially if you wish to avoid potential  
@@ -1764,7 +1727,7 @@ public class Element extends ParentNode {
      * override the {@link nu.xom.Element#shallowCopy() shallowCopy} 
      * method instead.
      * </p>
-     * 
+     *
      * @return a deep copy of this element with no parent
      */
     public Element copy() {
@@ -1783,7 +1746,7 @@ public class Element extends ParentNode {
      * and the {@link nu.xom.Element#Element(nu.xom.Element) 
      * copy constructor}. 
      * </p>
-     * 
+     *
      * <p>
      * Subclasses should override this method so that it
      * returns an instance of the subclass so that types
@@ -1806,7 +1769,7 @@ public class Element extends ParentNode {
      * for debugging and diagnosis. This is <em>not</em>
      * the XML representation of the element.
      * </p>
-     * 
+     *
      * @return a non-XML string representation of this element
      */
     public String toString() {

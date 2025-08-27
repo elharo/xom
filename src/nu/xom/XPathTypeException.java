@@ -23,10 +23,9 @@ package nu.xom;
  * <p>
  * Indicates that an XPath query returned a non-node-set.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.2.4
- * 
  */
 public class XPathTypeException extends XPathException {
     
@@ -48,7 +47,7 @@ public class XPathTypeException extends XPathException {
      * query. However, XOM makes no guarantees about the type of this 
      * object. 
      * </p>
-     * 
+     *
      * @return the query result
      */
     public Object getReturnValue() {

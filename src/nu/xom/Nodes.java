@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 
  * <p>
  * Implements a list of nodes for traversal purposes.
  * Changes to the document from which this list was generated
@@ -34,16 +33,15 @@ import java.util.List;
  * <code>Node</code> objects in the list and the document
  * are reflected in the other one.
  * </p>
- * 
+ *
  * <p>
  * There is no requirement that the list not contain duplicates,
  * or that all the members come from the same document. It is simply
  * a list of nodes. 
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
- *
  */
 public final class Nodes implements Iterable<Node> {
     
@@ -64,9 +62,8 @@ public final class Nodes implements Iterable<Node> {
      * <p>
      * Creates a node list containing a single node.
      * </p>
-     * 
+     *
      * @param node the node to insert in the list
-     * 
      * @throws NullPointerException if <code>node</code> is null
      */
     public Nodes(Node node) {
@@ -90,7 +87,7 @@ public final class Nodes implements Iterable<Node> {
      * Returns the number of nodes in the list.
      * This is guaranteed to be non-negative. 
      * </p>
-     * 
+     *
      * @return the number of nodes in the list
      */
     public int size() {
@@ -104,11 +101,9 @@ public final class Nodes implements Iterable<Node> {
      * The first node has index 0. The last node
      * has index <code>size()-1</code>.
      * </p>
-     * 
+     *
      * @param index the node to return
-     * 
      * @return the node at the specified position
-     * 
      * @throws IndexOutOfBoundsException if <code>index</code> is  
      *     negative or greater than or equal to the size of the list
      */
@@ -122,11 +117,9 @@ public final class Nodes implements Iterable<Node> {
      * Removes the index<sup>th</sup>node in the list.
      * Subsequent nodes have their indexes reduced by one.
      * </p>
-     * 
+     *
      * @param index the node to remove
-     * 
      * @return the node at the specified position
-     * 
      * @throws <code>IndexOutOfBoundsException</code> if index is  
      *     negative or greater than or equal to the size of the list
      */
@@ -140,10 +133,9 @@ public final class Nodes implements Iterable<Node> {
      * Inserts a node at the index<sup>th</sup> position in the list.
      * Subsequent nodes have their indexes increased by one.
      * </p>
-     * 
+     *
      * @param node the node to insert
      * @param index the position at which to insert the node
-     * 
      * @throws IndexOutOfBoundsException if <code>index</code> is  
      *     negative or strictly greater than the size of the list
      * @throws NullPointerException if <code>node</code> is null
@@ -160,9 +152,8 @@ public final class Nodes implements Iterable<Node> {
      * <p>
      * Adds a node at the end of this list.
      * </p>
-     * 
+     *
      * @param node the node to add to the list
-     * 
      * @throws NullPointerException if <code>node</code> is null
      */
     public void append(Node node) {
@@ -177,9 +168,8 @@ public final class Nodes implements Iterable<Node> {
      * <p>
      * Determines whether a node is contained in this list.
      * </p>
-     * 
+     *
      * @param node the node to search for
-     * 
      * @return true if this list contains the specified node;
      *     false otherwise
      */

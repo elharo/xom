@@ -26,10 +26,9 @@ package nu.xom;
  * a complete XML document including its root element,
  * prolog, and epilog.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
- * 
  */
 public class Document extends ParentNode {
 
@@ -38,12 +37,11 @@ public class Document extends ParentNode {
      * Creates a new <code>Document</code> object with the
      * specified root element.
      * </p>
-     * 
+     *
      * @param root the root element of this document
-     * 
-     * @throws NullPointerException if <code>root</code> is null
      * @throws MultipleParentException if <code>root</code> already 
      *     has a parent
+     * @throws NullPointerException if <code>root</code> is null
      */
     public Document(Element root) {
         _insertChild(root, 0);
@@ -54,9 +52,8 @@ public class Document extends ParentNode {
      * <p>
      * Creates a copy of this document.
      * </p>
-     * 
+     *
      * @param doc the document to copy
-     * 
      * @throws NullPointerException if <code>doc</code> is null
      */
     public Document(Document doc) {
@@ -138,11 +135,9 @@ public class Document extends ParentNode {
      * Returns this document's document type declaration, 
      * or null if it doesn't have one.
      * </p>
-     * 
-     * @return the document type declaration
-     * 
-     * @see #setDocType
      *
+     * @return the document type declaration
+     * @see #setDocType
      */
     public final DocType getDocType() {
         
@@ -164,13 +159,11 @@ public class Document extends ParentNode {
      * then it's inserted at that position. Otherwise, it's inserted
      * at the beginning of the document.
      * </p>
-     * 
+     *
      * @param doctype the document type declaration
-     * 
      * @throws MultipleParentException if <code>doctype</code> belongs 
      *      to another document
      * @throws NullPointerException if <code>doctype</code> is null
-     * 
      */
     public void setDocType(DocType doctype) {
         
@@ -200,7 +193,7 @@ public class Document extends ParentNode {
      * Returns this document's root element.
      * This is guaranteed to be non-null.
      * </p>
-     * 
+     *
      * @return the root element
      */
     public final Element getRootElement() {
@@ -221,9 +214,8 @@ public class Document extends ParentNode {
      * <p>
      * Replaces the current root element with a different root element.
      * </p>
-     * 
+     *
      * @param root the new root element
-     * 
      * @throws MultipleParentException if root has a parent
      * @throws NullPointerException if root is null
      */
@@ -256,9 +248,8 @@ public class Document extends ParentNode {
      * Setting the base URI to null or the empty string removes any
      * existing base URI.
      * </p>
-     * 
-     * @param URI the base URI of this document 
-     * 
+     *
+     * @param URI the base URI of this document
      * @throws MalformedURIException if <code>URI</code> is 
      *     not a legal absolute URI
      */
@@ -274,8 +265,8 @@ public class Document extends ParentNode {
      *   known; for instance if the document was created in memory with
      *   a constructor rather than by parsing an existing document.
      * </p>
-     * 
-     * @return the base URI of this document 
+     *
+     * @return the base URI of this document
      */
     public final String getBaseURI() {       
         return getActualBaseURI();
@@ -290,11 +281,9 @@ public class Document extends ParentNode {
      * removed. Instead, use <code>setRootElement</code> to replace
      * the existing root element with a different element.
      * </p>
-     * 
+     *
      * @param position index of the node to remove
-     * 
      * @return the node which was removed
-     * 
      * @throws IndexOutOfBoundsException if the index is negative or 
      *    greater than the number of children of this document - 1
      * @throws WellformednessException if the index points 
@@ -319,11 +308,9 @@ public class Document extends ParentNode {
      * Instead, use <code>setRootElement</code> to replace the
      * existing root element with a different element.
      * </p>
-     * 
+     *
      * @param child node to remove
-     * 
      * @return the node which was removed
-     * 
      * @throws NoSuchChildException if the node is not a
      *   child of this node
      * @throws WellformednessException if child is the root element
@@ -346,17 +333,16 @@ public class Document extends ParentNode {
      * then a <code>NoSuchChildException</code> is thrown. 
      * The root element can only be replaced by another element.
      * </p>
-     * 
+     *
      * @param oldChild the node removed from the tree
      * @param newChild the node inserted into the tree
-     * 
+     * @throws IllegalAddException if <code>newChild</code> is an
+     *     attribute or a text node
      * @throws MultipleParentException if <code>newChild</code> already
      *     has a parent
      * @throws NoSuchChildException if <code>oldChild</code> 
      *     is not a child of this node
      * @throws NullPointerException if either argument is null
-     * @throws IllegalAddException if <code>newChild</code> is an
-     *     attribute or a text node
      * @throws WellformednessException if <code>newChild</code> 
      *     <code>oldChild</code> is an element and 
      *     <code>newChild</code> is not
@@ -386,9 +372,8 @@ public class Document extends ParentNode {
      * any tags, comments, or processing instructions after all 
      * entity and character references have been resolved.
      * </p>
-     * 
+     *
      * @return  value of the root element of this document
-     * 
      */
     public final String getValue() {
         return getRootElement().getValue();
@@ -404,7 +389,7 @@ public class Document extends ParentNode {
      * Entity and character references are not preserved. 
      * The entire document is contained in this one string.
      * </p>
-     * 
+     *
      * @return a string containing this entire XML document
      */
     public final String toXML() {
@@ -429,7 +414,7 @@ public class Document extends ParentNode {
      * <p>
      * Returns a complete copy of this document.
      * </p>
-     * 
+     *
      * @return a deep copy of this <code>Document</code> object
      */
     public Document copy() {
@@ -448,7 +433,7 @@ public class Document extends ParentNode {
      * for debugging and diagnosis. This is <em>not</em>
      * the XML representation of this document.
      * </p>
-     * 
+     *
      * @return a non-XML string representation of this document
      */
     public final String toString() {

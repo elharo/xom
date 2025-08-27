@@ -27,10 +27,9 @@ package nu.xom;
  * an element that has the same prefix as the element but maps it
  * to a different URI. 
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 public class NamespaceConflictException 
   extends WellformednessException {
@@ -44,7 +43,7 @@ public class NamespaceConflictException
      * Creates a new <code>NamespaceConflictException</code> 
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public NamespaceConflictException(String message) {
@@ -57,7 +56,7 @@ public class NamespaceConflictException
      * Creates a new <code>NamespaceConflictException</code> 
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

@@ -25,10 +25,9 @@ package nu.xom;
  * Indicates an attempt to add a node in a wrong place; for instance 
  * adding a <code>Text</code> node to a <code>Document</code> object.
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 
 public class IllegalAddException extends WellformednessException {
@@ -42,7 +41,7 @@ public class IllegalAddException extends WellformednessException {
      * Creates a new <code>IllegalAddException</code> 
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public IllegalAddException(String message) {
@@ -55,7 +54,7 @@ public class IllegalAddException extends WellformednessException {
      * Creates a new <code>IllegalAddException</code> with a detail message
      * and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

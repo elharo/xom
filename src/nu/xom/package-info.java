@@ -30,9 +30,9 @@
  * representing the different things that can go wrong while working 
  * with XOM.
  * </p>
- * 
+ *
  * <img src="doc-files/xom.png" alt="" width="834" height="247">
- * 
+ *
  * @since 1.0
  */
 package nu.xom;

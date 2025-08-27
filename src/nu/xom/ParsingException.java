@@ -32,10 +32,9 @@ package nu.xom;
  *  are checked exceptions, because these depend on variable input,
  *  and thus problems may not all be detected during testing.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 public class ParsingException extends Exception {
 
@@ -53,7 +52,7 @@ public class ParsingException extends Exception {
      * Creates a new <code>ParsingException</code> with a detail message
      * and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */
@@ -68,7 +67,7 @@ public class ParsingException extends Exception {
      * Creates a new <code>ParsingException</code> with a detail message
      * and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
      * @param cause the original cause of this exception
@@ -85,7 +84,7 @@ public class ParsingException extends Exception {
      * Creates a new <code>ParsingException</code> with a detail message
      * and line and column numbers.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param lineNumber the approximate line number 
      *     where the problem occurs
@@ -103,7 +102,7 @@ public class ParsingException extends Exception {
      * Creates a new <code>ParsingException</code> with a detail message
      * and line and column numbers.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
      * @param lineNumber the approximate line number 
@@ -122,7 +121,7 @@ public class ParsingException extends Exception {
      * Creates a new <code>ParsingException</code> with a detail 
      * message, line and column numbers, and an underlying exception.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param uri the URI of the document that caused this exception
      * @param lineNumber the approximate line number 
@@ -146,7 +145,7 @@ public class ParsingException extends Exception {
      * Creates a new <code>ParsingException</code> with a detail 
      * message, line and column numbers, and an underlying exception.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param lineNumber the approximate line number 
      *     where the problem occurs
@@ -167,7 +166,7 @@ public class ParsingException extends Exception {
      * <p>
      * Creates a new <code>ParsingException</code> with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public ParsingException(String message) {
@@ -181,7 +180,7 @@ public class ParsingException extends Exception {
      * caused this exception. If the row number is not known,
      * -1 is returned.
      * </p>
-     * 
+     *
      * @return row number where the exception occurred
      */
     public int getLineNumber() {
@@ -194,7 +193,7 @@ public class ParsingException extends Exception {
      * caused this exception. If the column number is not known,
      * -1 is returned.
      * </p>
-     * 
+     *
      * @return column number where the exception occurred
      */
     public int getColumnNumber() {
@@ -209,7 +208,7 @@ public class ParsingException extends Exception {
      * because the document was parsed from a raw input stream or from
      * a string, it returns null. 
      * </p>
-     * 
+     *
      * @return the URI of the document that caused this exception
      */
     public String getURI() {
@@ -227,7 +226,7 @@ public class ParsingException extends Exception {
      * only be called once. Subsequent calls throw an 
      * <code>IllegalStateException</code>.
      * </p>
-     * 
+     *
      * <p>
      * This method is unnecessary in Java 1.4 where it could easily be
      * inherited from the superclass. However, including it here
@@ -235,9 +234,7 @@ public class ParsingException extends Exception {
      * </p>
      *
      * @param cause the root cause of this exception
-     * 
      * @return this <code>XMLException</code>
-     * 
      * @throws IllegalArgumentException if the cause is this exception
      *   (An exception cannot be its own cause.)
      * @throws IllegalStateException if this method is called twice
@@ -261,7 +258,7 @@ public class ParsingException extends Exception {
      * <p>
      * Returns the underlying exception that caused this exception.
      * </p>
-     * 
+     *
      * @return the root exception that caused this exception 
      *     to be thrown
      */
@@ -275,7 +272,7 @@ public class ParsingException extends Exception {
      * Returns a string suitable for display to the developer
      * summarizing what went wrong where.
      * </p>
-     * 
+     *
      * @return an exception message suitable for display to a developer
      */
     public String toString() {

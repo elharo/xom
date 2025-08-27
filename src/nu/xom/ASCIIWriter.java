@@ -25,7 +25,6 @@ import java.io.Writer;
 /**
  * @author Elliotte Rusty Harold
  * @version 1.0
- * 
  */
 class ASCIIWriter extends TextWriter {
 
@@ -33,7 +32,7 @@ class ASCIIWriter extends TextWriter {
      * <p>
      * Constructor for ASCIIWriter.
      * </p>
-     * 
+     *
      * @param out the <code>Writer</code> to write to
      * @param encoding the encoding the writer uses
      */
@@ -42,12 +41,9 @@ class ASCIIWriter extends TextWriter {
     }
 
     /**
-     * 
      * @param c the character tested for availability in the ASCII character set
-     * 
      * @return true if this character must be escaped 
      *              with a numeric character reference in ASCII
-     * 
      * @see nu.xom.TextWriter#needsEscaping(char)
      */
     boolean needsEscaping(char c) {

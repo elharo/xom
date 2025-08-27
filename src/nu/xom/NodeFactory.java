@@ -29,14 +29,14 @@ package nu.xom;
  * constructor, stuffs the resulting <code>Node</code> object in a 
  * length one <code>Nodes</code> object, and returns it. 
  * </p>
- * 
+ *
  * <p>
  * Subclassing this class allows builders to produce
  * instance of subclasses (for example,
  * <code>HTMLElement</code>) instead of the
  * base classes.
  * </p>
- * 
+ *
  * <p>
  * Subclasses can also filter content while building.
  * For example, namespaces could be added to or changed 
@@ -54,10 +54,9 @@ package nu.xom;
  * processing instructions, and not more than one <code>DocType</code> 
  * object.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.1
- * 
  */
 public class NodeFactory {
 
@@ -65,7 +64,6 @@ public class NodeFactory {
      * <p>
      * Constructs a new node factory.
      * </p>
-     * 
      */
     public NodeFactory() {}
     
@@ -75,7 +73,7 @@ public class NodeFactory {
      * with the specified name. The builder calls this
      * method to make the root element of the document.
      * </p>
-     * 
+     *
      * <p>
      * Subclasses may change the name, namespace, content, or other 
      * characteristics of the element returned.
@@ -87,10 +85,9 @@ public class NodeFactory {
      * from this method. Doing so will cause a 
      * <code>NullPointerException</code>.
      * </p>
-     * 
+     *
      * @param name the qualified name of the element
      * @param namespace the namespace URI of the element
-     * 
      * @return the new root element
      */
     public Element makeRootElement(String name, String namespace) {
@@ -103,7 +100,7 @@ public class NodeFactory {
      * Creates a new <code>Element</code> in the specified namespace 
      * with the specified name.
      * </p>
-     * 
+     *
      * <p>
      * Subclasses may change the name, namespace, content, or other 
      * characteristics of the <code>Element</code> returned.
@@ -116,10 +113,9 @@ public class NodeFactory {
      * <code>Nodes</code> object from the 
      * <code>finishMakingElement()</code> method.
      * </p>
-     * 
+     *
      * @param name the qualified name of the element
      * @param namespace the namespace URI of the element
-     * 
      * @return the new element
      */
     public Element startMakingElement(String name, String namespace) {
@@ -146,7 +142,7 @@ public class NodeFactory {
      * then the element (including all its contents) is not included 
      * in the finished document.
      * </p>
-     * 
+     *
      * <p>
      * To process an element at a time, override this method in a 
      * subclass so that it functions as a callback. When you're done
@@ -159,17 +155,15 @@ public class NodeFactory {
      * is testing if <code>element.getParent() instanceof 
      * Document</code>.
      * </p>
-     * 
+     *
      * <p>
      *  Do not detach <code>element</code> or any of its ancestors 
      *  while inside this method. Doing so can royally muck up the 
      *  build.
      * </p>
-     * 
+     *
      * @param element the finished <code>Element</code>
-     * 
      * @return the nodes to be added to the tree
-     * 
      */
     public Nodes finishMakingElement(Element element) {
         return new Nodes(element);
@@ -185,21 +179,21 @@ public class NodeFactory {
      * start-tag is read, this element is replaced by the real root.
      * This fake root should never be exposed.
      * </p>
-     * 
+     *
      * <p>
      *  The builder calls this method at the beginning of
      *  each document, before it calls any other method in this class.
      *  Thus this is a useful place to perform per-document 
      *  initialization tasks.
      * </p>
-     * 
+     *
      * <p>
      *  Subclasses may change the root element, content, 
      *  or other characteristics of the document 
      *  returned. However, this method must not return null
      *  or the builder will throw a <code>ParsingException</code>.
      * </p>
-     * 
+     *
      * @return the newly created <code>Document</code>
      */
     public Document startMakingDocument() {
@@ -216,7 +210,7 @@ public class NodeFactory {
      * call this  method if an exception is thrown while building 
      * a document.
      * </p>
-     * 
+     *
      * @param document the completed <code>Document</code>
      */
     public void finishMakingDocument(Document document) {}
@@ -228,7 +222,7 @@ public class NodeFactory {
      * attribute in the specified namespace 
      * with the specified name and type.
      * </p>
-     * 
+     *
      * <p>
      * Subclasses may change the nodes returned from this method.
      * They may return a <code>Nodes</code> object containing any 
@@ -239,12 +233,11 @@ public class NodeFactory {
      * Subclasses may return an empty <code>Nodes</code> to indicate  
      * the attribute should not be created.
      * </p>
-     * 
+     *
      * @param name the prefixed name of the attribute
      * @param URI the namespace URI
      * @param value the attribute value
      * @param type the attribute type
-     * 
      * @return the nodes to be added to the tree
      */
     public Nodes makeAttribute(String name, String URI, 
@@ -258,7 +251,7 @@ public class NodeFactory {
      * Returns a new <code>Nodes</code> object containing a 
      * comment with the specified text.
      * </p>
-     * 
+     *
      * <p>
      * Subclasses may change the content or other 
      * characteristics of the comment returned. 
@@ -272,9 +265,8 @@ public class NodeFactory {
      * the comment should not be included in the 
      * finished document.
      * </p>
-     * 
+     *
      * @param data the complete text content of the comment
-     * 
      * @return the nodes to be added to the tree
      */
     public Nodes makeComment(String data) {
@@ -288,7 +280,7 @@ public class NodeFactory {
      * <code>DocType</code> object with the specified root element
      * name, system ID, and public ID.
      * </p>
-     * 
+     *
      * <p>
      * Subclasses may change the root element name, public ID, 
      * system ID, or other characteristics of the <code>DocType</code> 
@@ -303,12 +295,11 @@ public class NodeFactory {
      * indicate the <code>DocType</code> should not be included in the 
      * finished document.
      * </p>
-     *  
+     *
      * @param rootElementName the declared, qualified name 
      *   for the root element
      * @param publicID the public ID of the external DTD subset
      * @param systemID the URL of the external DTD subset
-     * 
      * @return the nodes to be added to the document
      */
     public Nodes makeDocType(String rootElementName, 
@@ -322,7 +313,7 @@ public class NodeFactory {
      * Returns a new <code>Nodes</code> object containing a 
      * text node with the specified content.
      * </p>
-     * 
+     *
      * <p>
      * Subclasses may change the content or other characteristics of 
      * the text returned. Subclasses may also change the nodes 
@@ -333,10 +324,9 @@ public class NodeFactory {
      * the nodes returned must be parentless. Subclasses may return an 
      * empty <code>Nodes</code> to indicate the text should not be 
      * included in the finished document.
-     * </p> 
-     * 
+     * </p>
+     *
      * @param data the complete text content of the node
-     * 
      * @return the nodes to be added to the tree
      */
     public Nodes makeText(String data) {
@@ -349,9 +339,8 @@ public class NodeFactory {
      * Returns a new <code>Nodes</code> object containing a 
      * <code>CDATASection</code> node with the specified content.
      * </p>
-     * 
+     *
      * @param data the complete text content of the node
-     * 
      * @return the nodes to be added to the tree
      */
     Nodes makeCDATASection(String data) {
@@ -365,7 +354,7 @@ public class NodeFactory {
      * new <code>ProcessingInstruction</code> object with
      * the specified target and data.
      * </p>
-     * 
+     *
      * <p>
      * Subclasses may change the target, data, or other 
      * characteristics of the <code>ProcessingInstruction</code>
@@ -382,11 +371,10 @@ public class NodeFactory {
      * may return an empty <code>Nodes</code> to indicate the  
      * processing instruction should not be included in the 
      * finished document.
-     * </p> 
-     * 
+     * </p>
+     *
      * @param target the target of the processing instruction
      * @param data the data of the processing instruction
-     * 
      * @return the nodes to be added to the tree
      */
     public Nodes makeProcessingInstruction(

@@ -33,7 +33,6 @@ import org.xml.sax.ext.LexicalHandler;
 /**
  * @author Elliotte Rusty Harold
  * @version 1.3.3
- *
  */
 class XOMHandler 
   implements ContentHandler, LexicalHandler, DeclHandler, DTDHandler {

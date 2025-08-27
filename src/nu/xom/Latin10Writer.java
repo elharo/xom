@@ -23,15 +23,13 @@ package nu.xom;
 import java.io.Writer;
 
 /**
- * 
  * <p>
  *   ISO 8859-16, Romanian. Not yet supported by Sun's JDK as of 1.5 
  *   alpha. IBM's 1.4.1 JDK does support it.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- * 
  */
 class Latin10Writer extends TextWriter {
 

@@ -32,10 +32,9 @@ package nu.xom;
  *  are checked exceptions, because these depend on variable input,
  *  and thus all problems may not be detected during testing.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 public class XMLException extends RuntimeException {
 
@@ -98,7 +97,7 @@ public class XMLException extends RuntimeException {
      * only be called once. Subsequent calls throw an 
      * <code>IllegalStateException</code>.
      * </p>
-     * 
+     *
      * <p>
      * This method is unnecessary in Java 1.4 where it could easily be
      * inherited from the superclass. However, including it here
@@ -106,9 +105,7 @@ public class XMLException extends RuntimeException {
      * </p>
      *
      * @param cause the root cause of this exception
-     * 
      * @return this <code>XMLException</code>
-     * 
      * @throws IllegalArgumentException if the cause is this exception
      *   (An exception cannot be its own cause.)
      * @throws IllegalStateException if this method is called twice

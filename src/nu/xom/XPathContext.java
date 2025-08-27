@@ -26,14 +26,12 @@ import java.util.Map;
 import org.jaxen.NamespaceContext;
 
 /**
- *
  * <p>
  *  Provides namespace prefix bindings for use in an XPath expression.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.1
- *
  */
 public final class XPathContext {
 
@@ -48,7 +46,7 @@ public final class XPathContext {
      * prefix is also bound to the URI 
      * <code>http://www.w3.org/XML/1998/namespace</code>.
      * </p>
-     * 
+     *
      * @param prefix the prefix to bind
      * @param uri the namespace URI the prefix is bound to
      */
@@ -78,16 +76,14 @@ public final class XPathContext {
      * declaration. The binding of the <code>xml</code> prefix
      * may not be changed.
      * </p>
-     * 
+     *
      * @param prefix the prefix to bind
      * @param uri the namespace URI the prefix is bound to
-     * 
      * @throws NamespaceConflictException if the prefix is 
      *     <code>xml</code> and the URI is not
      *     <code>http://www.w3.org/XML/1998/namespace</code> or the
      *     prefix is the empty string
      * @throws NullPointerException if the prefix is null
-     * 
      */
     public void addNamespace(String prefix, String uri) {
         
@@ -125,9 +121,8 @@ public final class XPathContext {
      * the prefixes in scope on the element after the context
      * is returned does not change the context.
      * </p>
-     * 
+     *
      * @param element the element whose namespace bindings are copied
-     * 
      * @return all the namespace prefix mappings 
      *     in scope on the element
      */
@@ -158,10 +153,9 @@ public final class XPathContext {
      * this context. It returns null if this prefix is not bound
      * to a namespace in this context. The prefix is not checked 
      * for validity. If you pass in a prefix that is not an NCName,
-     * this method simply returns null. 
-     * 
+     * this method simply returns null.
+     *
      * @param prefix the prefix to look up
-     * 
      * @return the namespace URI associated with the specified prefix in
      *          this context or null
      */

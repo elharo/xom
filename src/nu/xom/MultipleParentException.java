@@ -25,11 +25,9 @@ package nu.xom;
  *  Indicates an attempt to add a node that already has a parent to the 
  *  same or a different parent.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- * 
- *
  */
 public class MultipleParentException extends IllegalAddException {
 
@@ -41,7 +39,7 @@ public class MultipleParentException extends IllegalAddException {
      * Creates a new <code>MultipleParentException</code> 
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public MultipleParentException(String message) {
@@ -53,7 +51,7 @@ public class MultipleParentException extends IllegalAddException {
      * Creates a new <code>MultipleParentException</code> 
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

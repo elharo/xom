@@ -29,10 +29,9 @@ package nu.xom;
  * are not legal non-colonized names as defined by <cite>Namespaces in 
  * XML</cite>.
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 public class IllegalNameException extends IllegalDataException {
 
@@ -45,7 +44,7 @@ public class IllegalNameException extends IllegalDataException {
      * Creates a new <code>IllegalNameException</code> 
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public IllegalNameException(String message) {
@@ -58,7 +57,7 @@ public class IllegalNameException extends IllegalDataException {
      * Creates a new <code>IllegalNameException</code> 
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

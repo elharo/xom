@@ -29,10 +29,9 @@ import java.io.Writer;
  *   characters that I haven't been able to track down, so this class 
  *   works around it buy escaping all non-BMP characters. 
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.0
- *
  */
 class UCSWriter extends TextWriter {
 

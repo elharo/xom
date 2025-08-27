@@ -29,10 +29,9 @@ package nu.xom;
  *   or a <code>Document</code>.
  *   It has essentially no internal substructure.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.3.0
- * 
  */
 public class Comment extends Node {
 
@@ -47,7 +46,7 @@ public class Comment extends Node {
      * allowed. Furthermore, the two hyphen string "--" is not allowed;
      * and the last character of the comment must not be a hyphen.
      * </p>
-     * 
+     *
      * @param data the initial text of the comment
      */
     public Comment(String data) {
@@ -60,7 +59,7 @@ public class Comment extends Node {
      * Creates a new comment that's a copy of its argument.
      * The copy has the same data but no parent node.
      * </p>
-     * 
+     *
      * @param comment the comment to copy
      */
     public Comment(Comment comment) {
@@ -84,7 +83,7 @@ public class Comment extends Node {
      * content of the node, not including the initial  
      * <code>&lt;--</code> and closing <code>--&gt;</code>.
      * </p>
-     * 
+     *
      * @return the content of the comment
      */
     public final String getValue() {
@@ -103,7 +102,7 @@ public class Comment extends Node {
      * Furthermore, the string may not contain a double hyphen 
      * (<code>--</code>) and may not end with a hyphen.
      * </p>
-     * 
+     *
      * @param data the text to install in the comment
      */
     public void setValue(String data) {
@@ -149,12 +148,10 @@ public class Comment extends Node {
      * Throws <code>IndexOutOfBoundsException</code> because 
      * comments do not have children.
      * </p>
-     * 
-     * @return never returns because comments do not have children;
-     *     Always throws an exception.
-     * 
+     *
      * @param position the index of the child node to return
-     * 
+     * @return never returns because comments do not have children;
+     *     Always throws an exception
      * @throws IndexOutOfBoundsException because comments 
      *     do not have children
      */
@@ -168,7 +165,7 @@ public class Comment extends Node {
      * <p>
      * Returns 0 because comments do not have children.
      * </p>
-     * 
+     *
      * @return zero
      */
     public final int getChildCount() {
@@ -185,7 +182,6 @@ public class Comment extends Node {
      *
      * @return a deep copy of this <code>Comment</code> 
      *     that is not part of a document
-     * 
      */
     public Comment copy()  {
         return new Comment(data);
@@ -198,7 +194,7 @@ public class Comment extends Node {
      *  form of the comment;
      *   for example, <code>&lt;--This is a comment--&gt;</code>. 
      * </p>
-     * 
+     *
      * @return a <code>String</code> containing a well-formed 
      *     XML comment
      */
@@ -216,7 +212,7 @@ public class Comment extends Node {
      *   and diagnosis. It deliberately does not return an actual 
      *   XML comment. 
      * </p>
-     * 
+     *
      * @return a representation of the <code>Comment</code> 
      *     as a <code>String</code>
      */

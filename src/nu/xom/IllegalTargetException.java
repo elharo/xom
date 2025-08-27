@@ -29,10 +29,9 @@ package nu.xom;
  *  non-colonized name or because it consists of the three letters
  *  "XML" in that order in any combination of case.
  * </p>
-
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- * 
  */
 public class IllegalTargetException extends IllegalNameException {
 
@@ -45,7 +44,7 @@ public class IllegalTargetException extends IllegalNameException {
      * Creates a new <code>IllegalTargetException</code> 
      * with a detail message.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      */
     public IllegalTargetException(String message) {
@@ -58,7 +57,7 @@ public class IllegalTargetException extends IllegalNameException {
      * Creates a new <code>IllegalTargetException</code> 
      * with a detail message and an underlying root cause.
      * </p>
-     * 
+     *
      * @param message a string indicating the specific problem
      * @param cause the original cause of this exception
      */

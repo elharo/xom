@@ -28,10 +28,9 @@ package nu.xom;
  * instruction data). This can never happen if the encoding is UTF-8 
  * or UTF-16.
  * </p>
- * 
+ *
  * @author Elliotte Rusty Harold
  * @version 1.1b3
- *
  */
 public class UnavailableCharacterException extends XMLException {
 
@@ -46,7 +45,7 @@ public class UnavailableCharacterException extends XMLException {
      * <p>
      * Creates a new <code>UnavailableCharacterException</code>.
      * </p>
-     * 
+     *
      * @param character the character which caused the exception
      * @param encoding the encoding which does not contain the character
      */
@@ -66,7 +65,7 @@ public class UnavailableCharacterException extends XMLException {
      * Returns the character which could not be written
      * in the current encoding.
      * </p>
-
+     *
      * @return the character which caused the exception
      */
     public char getCharacter() {
