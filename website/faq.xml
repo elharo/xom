@@ -264,7 +264,7 @@ The following are <emphasis>not</emphasis> legitimate needs:
 <para>
 Yes. All you really need is the xom.jar file.
 This contains all the core packages, but not the samples or unit tests.
-It has no dependencies besides the JDK 1.6 or later.
+It has no dependencies besides JDK 1.6 or later.
 </para>
 
 <para>
@@ -342,7 +342,7 @@ If the document you've built is still too large to handle, then you can try proc
 <qandaentry>
 <question>
 <para>
-   Will XOM run with Java 1.1? 1.2? 1.3? 1.4? 1.5? 1.6? 1.7? 1.8? 9? 11? 17? 21?
+   Will XOM run with Java 1.1? 1.2? 1.3? 1.4? 1.5? 1.6? 1.7? 1.8? 9? 11? 17? 21? 25?
 </para>
 </question>
 <answer>
