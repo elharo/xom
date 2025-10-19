@@ -63,7 +63,6 @@ subject line. The XOM home page is https://xom.nu/
     <property name="build.javadocs"  value="./build/apidocs"/>
     <property name="testoutput.dir"  value="./testresults"/>
     <property name="dist.dir"        value="./dist"/>    
-    <property name="clover.dir"      value="./clover"/>
     <property name="testreports.dir" value="./testreports" />
     <property name="jaxen.dir"       value="${build.dir}/jaxen-classes"/>
 
@@ -74,7 +73,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
     
-    <property name="excludes"       value=".clover, .DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, clover_html/**, clover/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb, jester*, trademark*"/>
+    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, xom.fb, jester*, trademark*"/>
 
     <property name="test.outputFormat" value="xml"/>   
     <property name="binary.jar" location="${dist.dir}/maven2/xom-${version}.jar" />
@@ -123,9 +122,6 @@ subject line. The XOM home page is https://xom.nu/
         <pathelement location="${tagsoup.jar}" />
       </classpath>
     </available>
-    
-    <available property="clover.installed" 
-               file="clover.jar" filepath="${ant-home}/lib/clover.jar" />
     
   </target>
   
@@ -413,14 +409,6 @@ XOM Build file
   <target name="apidoc"     depends="javadoc"/>
   <target name="betterdocs" depends="betterdoc"/>
 
-  <target name="-checkForClover" unless="clover.installed">
-    <echo>
-    The task you are trying to run requires Clover to be installed 
-    in the $ANT_HOME/lib directory. You can purchase Clover from
-    https://cenqua.com/
-    </echo>
-  </target>
-
   <!-- This task requires Ant 1.6 and TagSoup -->
   <target name="betterdoc" depends="compile"
           description="Generate the API documentation">
@@ -608,9 +596,6 @@ XOM Build file
     <delete dir="${build.dir}"/>
     <delete dir="${dist.dir}"/>
     <delete dir="${testoutput.dir}"/>
-    <delete dir=".clover"/>
-    <delete dir="clover"/>
-    <delete dir="clover_html"/>
     <delete>
       <fileset dir="." includes="junit*properties"/>
     </delete>
@@ -618,88 +603,7 @@ XOM Build file
   </target>
 
   
-  <!-- These tasks require Clover -->
-  <taskdef resource="clovertasks"/>
-  
-  <target name="with.clover" depends="init, -checkForClover">
-    <mkdir dir="${clover.dir}"/>
-    <clover-setup initString="${clover.dir}/xom_coverage.db">
-      <files>
-        <include name="nu/xom/**"/> <!-- work around Ant 1.6.3 bug  #34722 -->
-        <exclude name="nu/xom/UnicodeUtil.java"/>
-        <exclude name="nu/xom/Latin6Writer.java"/>
-        <exclude name="nu/xom/Latin8Writer.java"/>
-        <exclude name="nu/xom/Latin10Writer.java"/>
-        <exclude name="nu/xom/tests/FastTests.java"/>
-        <exclude name="nu/xom/tests/XOMTests.java"/>
-        <exclude name="nu/xom/samples/**"/>
-        <exclude name="nu/xom/pantry/**"/>
-        <exclude name="nu/xom/benchmarks/**"/>
-        <exclude name="nu/xom/tools/**" />
-      </files>
-    </clover-setup>
-  </target>
-
-  
-  <property name="ant-home" value="/opt/ant"/>
-
-  <target name="clover.html" depends="with.clover">
-    <clover-report>
-       <current outfile="clover_html" title="Clover results for ${Name} ${version}">
-       <format type="html"/>
-       </current>   
-    </clover-report>
-  </target>
-  
- 
-  <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
-  <target name="clovertest" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
-    <junit printsummary="on" fork="no">
-      <classpath refid="test.class.path" />
-      <classpath>
-        <pathelement path="${ant-home}/lib/clover.jar"/>
-      </classpath>
-      <formatter type="${test.outputFormat}" />
-      <batchtest fork="yes" todir="${testoutput.dir}">
-        <fileset dir="${build.src}">
-          <include name="**/*Test.java" />
-          <exclude name="**/pantry/*.java" />
-          <exclude name="**/MegaTest.java" />
-          <exclude name="**/benchmarks/*.java" />
-          <exclude name="**/tools/*.java" />
-          <exclude name="**/EBCDICTest.java" />
-          <exclude name="nu/xom/tests/FastTests.java"/>
-          <exclude name="nu/xom/tests/XOMTests.java"/>
-        </fileset>
-      </batchtest>
-    </junit>
-  </target> 
-
-  <!-- This task requires the ANT optional.jar. clover.jar, and junit.jar to be installed in ANT_HOME/lib -->
-  <target name="fastclover" depends="compile, -checkForClover" description="Run JUnit tests with clover.jar in classpath">
-    <junit printsummary="on" fork="no" failureproperty="testsfailed">
-      <classpath refid="test.class.path" />
-      <classpath>
-        <pathelement path="${ant-home}/lib/clover.jar"/>
-      </classpath>
-      <formatter type="${test.outputFormat}" />
-      <batchtest fork="yes" todir="${testoutput.dir}">
-        <fileset dir="${build.src}">
-          <include name="**/*Test.java" />
-          <exclude name="**/pantry/*.java" />
-          <exclude name="**/EncodingTest.java" />
-          <exclude name="**/XIncludeTest.java" />
-          <exclude name="**/MegaTest.java" />
-          <exclude name="**/benchmarks/*.java" />
-          <exclude name="**/tools/*.java" />
-          <exclude name="**/EBCDICTest.java" />
-          <exclude name="nu/xom/tests/FastTests.java"/>
-          <exclude name="nu/xom/tests/XOMTests.java"/>
-        </fileset>
-      </batchtest>
-    </junit>
-
-  </target> 
+  <property name="ant-home" value="/opt/ant"/> 
 
   <target name="maven" depends="maven2" />
 
