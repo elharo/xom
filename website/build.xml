@@ -1,6 +1,6 @@
 <project name="XOM documentation" default="all" basedir=".">
   <description>
-    Run stylesheets across DocBook source code using XOM
+    Run stylesheets across DocBook source code
   </description>
     
   <!-- set global properties for this build -->
@@ -19,13 +19,14 @@
     <tstamp/>
     <mkdir dir="${build.dest}"/>
     <mkdir dir="${parentdist.dir}"/>
-    <mkdir dir="lib/docbook-xsl-1.79.1/xhtml"/>
+    <mkdir dir="${build.dir}/website-tools"/>
     
-    <!-- Copy our minimal docbook.xsl -->
-    <copy file="docbook-minimal.xsl" tofile="lib/docbook-xsl-1.79.1/xhtml/docbook.xsl"/>
-    
-    <property name="docbook.xsl.dir" value="lib/docbook-xsl-1.79.1"/>
-    <echo message="Using DocBook XSL from: ${docbook.xsl.dir}"/>
+    <!-- Compile SimpleTransformer for website build -->
+    <javac srcdir="." destdir="${build.dir}/website-tools" 
+           includes="SimpleTransformer.java"
+           source="1.6" target="1.6" includeantruntime="false">
+      <classpath refid="xslt.class.path"/>
+    </javac>
   </target>
 
   <target name="finished_tutorial.xml" depends="init">
@@ -44,16 +45,16 @@
   </target>
 
   <target name="tutorial-simple" depends="init">
-    <java classname="nu.xom.samples.SimpleTransformer" output="${build.dest}/tutorial.xhtml" fork="yes" failonerror="true">
+    <java classname="SimpleTransformer" output="${build.dest}/tutorial.xhtml" fork="yes" failonerror="true">
       <arg value="tutorial-simple.xml"/>
-      <arg value="lib/docbook-xsl-1.79.1/xhtml/docbook.xsl"/>
+      <arg value="docbook-minimal.xsl"/>
       <classpath refid="xslt.class.path"/>
+      <classpath path="${build.dir}/website-tools"/>
     </java>
   </target>
 
   <target name="clean">
     <delete dir="${build.dir}"/>
-    <delete dir="lib"/>
   </target>
   
   <target name="all" depends="tutorial-simple"/>

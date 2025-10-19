@@ -1,6 +1,4 @@
 /* Simple XSLT transformer using JDK built-in processor */
-package nu.xom.samples;
-
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Node;
@@ -13,7 +11,7 @@ public class SimpleTransformer {
         
        if (args.length < 2) {
            System.err.println(
-             "Usage: java nu.xom.samples.SimpleTransformer document stylesheet"
+             "Usage: java SimpleTransformer document stylesheet"
            );
            return;   
        }
