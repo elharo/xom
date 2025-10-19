@@ -10,11 +10,8 @@ testresults/
 .vscode/
 .thumbnails/
 .nautilus-metafile.xml
-.clover
 .AppleFileInfo
 *.zip
-clover_html/
-clover/
 xom.gif
 data/XInclude-Test-Suite/
 data/xmlconf/

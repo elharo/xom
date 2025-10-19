@@ -25,10 +25,9 @@
      </para>
      
    <para>
-     <ulink url="http://www.cenqua.com/clover/">Clover</ulink> <ulink url="http://www.xom.nu/clover_html/">reports</ulink>
-    over 90% test coverage, and almost all 
-     the code that isn't tested is either specific to particular platforms 
-     or configurations or is believed to be unreachable in a properly functioning virtual machine. 
+    XOM has extensive test coverage, with almost all 
+     the code that isn't tested being either specific to particular platforms 
+     or configurations or believed to be unreachable in a properly functioning virtual machine. 
    </para>
   
   
