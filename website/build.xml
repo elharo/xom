@@ -8,13 +8,16 @@
   <property name="build.dest" value="${build.dir}/website"/>
   <property name="parentdist.dir"   value="../dist/website"/>
 
-  <path id="xslt.class.path">
-    <pathelement path="/opt/xml/saxon/saxon.jar"/>
+  <path id="xom.class.path">
+    <pathelement path="../xom-1.3.9.jar"/>
+    <pathelement path="../lib/xercesImpl-2.12.2.jar"/>
+    <pathelement path="../lib/xml-apis-1.4.01.jar"/>
+    <pathelement path="."/>
   </path>
 
   <path id="xerces.class.path">
-     <pathelement path="../lib/dtd-xercesImpl.jar"/> 
-     <pathelement path="../lib/xmlParserAPIs.jar"/> 
+     <pathelement path="../lib/xercesImpl-2.12.2.jar"/> 
+     <pathelement path="../lib/xml-apis-1.4.01.jar"/> 
   </path>
   
   <target name="init">
@@ -25,13 +28,19 @@
     <mkdir dir="${parentdist.dir}"/>
   </target>
 
-  <target name="finished_tutorial.xml" depends="init"
+  <target name="compile-utilities" depends="init" description="Compile XOM utilities">
+    <javac srcdir="." destdir="." includeantruntime="false">
+      <include name="XOMTransformer.java"/>
+      <include name="XOMXIncluder.java"/>
+      <classpath refid="xom.class.path"/>
+    </javac>
+  </target>
+
+  <target name="finished_tutorial.xml" depends="compile-utilities"
           description="Merge original chapters and examples into a single file">
-    <java classname="nu.xom.samples.XIncludeDriver" output="${build.dir}/finished_tutorial.xml" fork="yes" failonerror="true">
+    <java classname="XOMXIncluder" output="${build.dir}/finished_tutorial.xml" fork="yes" failonerror="true">
         <arg line="tutorial.xml"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath location="../build/classes"/>
-        <classpath location="../build/jaxen-classes"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>
 
@@ -53,122 +62,108 @@
      <arg value="faq.xml"/>
      <arg value="designprinciples.xml"/>
 	
-     <classpath refid="xerces.class.path"/>
-     <classpath location="../build/classes"/>
-     <classpath location="../build/jaxen-classes"/>
+     <classpath refid="xom.class.path"/>
     </java>
   </target>
 
 
   <target name="tutorial" description="Generate a single XHTML document" depends="finished_tutorial.xml">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/tutorial.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="XOMTransformer" output="${build.dest}/tutorial.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="${build.dir}/finished_tutorial.xml"/>
         <arg line="tutorial.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
-  <target name="design" depends="init" description="Design principles">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/designprinciples.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+  <target name="design" depends="compile-utilities" description="Design principles">
+    <java classname="XOMTransformer" output="${build.dest}/designprinciples.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="designprinciples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
-  <target name="license" depends="init" description="License for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/license.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+  <target name="license" depends="compile-utilities" description="License for XOM">
+    <java classname="XOMTransformer" output="${build.dest}/license.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="license.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
- <target name="infoset" depends="init" description="Infoset Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/infoset.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
+ <target name="infoset" depends="compile-utilities" description="Infoset Mapping">
+    <java classname="XOMTransformer" output="${build.dest}/infoset.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
         <arg line="infoset.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
- <target name="xpath" depends="init" description="XPath Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/xpath.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+ <target name="xpath" depends="compile-utilities" description="XPath Mapping">
+    <java classname="XOMTransformer" output="${build.dest}/xpath.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="xpath.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
-  <target name="faq" depends="init" description="FAQ list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/faq.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+  <target name="faq" depends="compile-utilities" description="FAQ list for XOM">
+    <java classname="XOMTransformer" output="${build.dest}/faq.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="faq.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
-  <target name="open" depends="init" description="Open Questions list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/openquestions.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+  <target name="open" depends="compile-utilities" description="Open Questions list for XOM">
+    <java classname="XOMTransformer" output="${build.dest}/openquestions.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="openquestions.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
-  <target name="future" depends="init" description="Future Directions for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/futuredirections.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+  <target name="future" depends="compile-utilities" description="Future Directions for XOM">
+    <java classname="XOMTransformer" output="${build.dest}/futuredirections.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="futuredirections.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
 
-  <target name="building" depends="init" description="How to build XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/building.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+  <target name="building" depends="compile-utilities" description="How to build XOM">
+    <java classname="XOMTransformer" output="${build.dest}/building.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="building.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
 
-  <target name="install" depends="init" description="How to install XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/install.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
+  <target name="install" depends="compile-utilities" description="How to install XOM">
+    <java classname="XOMTransformer" output="${build.dest}/install.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
         <arg line="install.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
 
-  <target name="testsuite" depends="init" description="How to test XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/testsuite.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+  <target name="testsuite" depends="compile-utilities" description="How to test XOM">
+    <java classname="XOMTransformer" output="${build.dest}/testsuite.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="testsuite.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
 
-  <target name="samples" depends="init" description="Example code">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/samples.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+  <target name="samples" depends="compile-utilities" description="Example code">
+    <java classname="XOMTransformer" output="${build.dest}/samples.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="samples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>
 
