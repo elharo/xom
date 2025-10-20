@@ -16,6 +16,7 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -23,6 +24,12 @@ import nu.xom.ParsingException;
 import nu.xom.Serializer;
 import nu.xom.xinclude.XIncludeException;
 import nu.xom.xinclude.XIncluder;
+
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+import org.xml.sax.SAXException;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 /**
  * Simple XInclude processor for documentation builds.
@@ -47,8 +54,31 @@ public class XOMXIncluder {
             System.exit(1);
         }
   
-        Builder builder = new Builder();
         try {
+            // Create parser with custom entity resolver
+            XMLReader reader = XMLReaderFactory.createXMLReader();
+            reader.setFeature("http://xml.org/sax/features/validation", false);
+            
+            // Custom entity resolver that provides a minimal DTD with common HTML entities
+            reader.setEntityResolver(new EntityResolver() {
+                public InputSource resolveEntity(String publicId, String systemId) {
+                    // For any DTD, return our local entity file
+                    if (systemId != null && systemId.endsWith(".dtd")) {
+                        try {
+                            java.io.FileReader fr = new java.io.FileReader("html-entities.dtd");
+                            return new InputSource(fr);
+                        } catch (Exception e) {
+                            // Fallback to empty
+                            return new InputSource(new StringReader(""));
+                        }
+                    }
+                    // Let other entities be resolved normally
+                    return null;
+                }
+            });
+            
+            Builder builder = new Builder(reader);
+            
             Document input = null;
             // Is args[0] a file or an absolute URL?
             if (args[0].indexOf("://") >= 0) {
@@ -62,6 +92,11 @@ public class XOMXIncluder {
             
             Serializer outputter = new Serializer(System.out, "ISO-8859-1");
             outputter.write(input);
+        }
+        catch (SAXException e) {
+            System.err.println("SAX error: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
         }
         catch (IOException e) {
             System.err.println("I/O error reading " + args[0] + " " + e.getMessage());

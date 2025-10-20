@@ -25,3 +25,5 @@ dist/
 xom.fb
 jester*
 trademark*
+website/*.class
+xom-*.jar

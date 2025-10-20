@@ -20,6 +20,16 @@ import nu.xom.Node;
 import nu.xom.Nodes;
 import nu.xom.xslt.XSLTransform;
 
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
+import org.xml.sax.SAXException;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import java.io.StringReader;
+import java.io.File;
+
+
+
 /**
  * Command-line XSLT transformer using XOM.
  * Replacement for Saxon's command-line interface for documentation builds.
@@ -48,10 +58,39 @@ public class XOMTransformer {
             System.exit(1);   
         }
   
-        Builder builder = new Builder();
         try {
+            // Create parser with custom entity resolver
+            XMLReader reader = XMLReaderFactory.createXMLReader();
+            reader.setFeature("http://xml.org/sax/features/validation", false);
+            
+            // Custom entity resolver that provides a minimal DTD with common HTML entities
+            reader.setEntityResolver(new EntityResolver() {
+                public InputSource resolveEntity(String publicId, String systemId) {
+                    // For any DTD, return our local entity file
+                    if (systemId != null && systemId.endsWith(".dtd")) {
+                        try {
+                            java.io.FileReader fr = new java.io.FileReader("html-entities.dtd");
+                            return new InputSource(fr);
+                        } catch (Exception e) {
+                            // Fallback to empty
+                            return new InputSource(new StringReader(""));
+                        }
+                    }
+                    // Let other entities be resolved normally
+                    return null;
+                }
+            });
+            
+            Builder builder = new Builder(reader);
+            
             Document doc = builder.build(args[0]);
             Document stylesheet = builder.build(args[1]);
+            
+            // Disable XPATH limits for complex stylesheets like DocBook
+            System.setProperty("jdk.xml.xpathExprGrpLimit", "0");
+            System.setProperty("jdk.xml.xpathExprOpLimit", "0");
+            System.setProperty("jdk.xml.xpathTotalOpLimit", "0");
+            
             XSLTransform transform = new XSLTransform(stylesheet);           
             
             Nodes output = transform.transform(doc);
