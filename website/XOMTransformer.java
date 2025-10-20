@@ -86,10 +86,9 @@ public class XOMTransformer {
             Document doc = builder.build(args[0]);
             Document stylesheet = builder.build(args[1]);
             
-            // Disable XPATH limits for complex stylesheets like DocBook
-            System.setProperty("jdk.xml.xpathExprGrpLimit", "0");
-            System.setProperty("jdk.xml.xpathExprOpLimit", "0");
-            System.setProperty("jdk.xml.xpathTotalOpLimit", "0");
+            // Use Saxon-HE as the XSLT processor for better DocBook compatibility
+            System.setProperty("javax.xml.transform.TransformerFactory", 
+                "net.sf.saxon.TransformerFactoryImpl");
             
             XSLTransform transform = new XSLTransform(stylesheet);           
             
