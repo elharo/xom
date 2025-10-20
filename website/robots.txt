@@ -1,0 +1,5 @@
+# robots.txt for XOM website
+# Allow all robots to crawl all pages
+
+User-agent: *
+Disallow:
