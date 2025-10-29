@@ -6,7 +6,7 @@ This directory contains the source files for the XOM website documentation.
 
 The documentation build uses XOM itself for all XML processing tasks:
 
-- **XOMTransformer** - Performs XSLT transformations using XOM
+- **nu.xom.samples.Transformer** - Performs XSLT transformations using XOM
 
 ## Dependencies
 
@@ -35,6 +35,6 @@ ant samples     # Build the samples documentation
 ## How It Works
 
 1. XML source files are processed with `nu.xom.samples.XIncludeDriver` to resolve XInclude directives
-2. The resulting documents are transformed using XOMTransformer with DocBook XSL stylesheets
+2. The resulting documents are transformed using `nu.xom.samples.Transformer` with DocBook XSL stylesheets
 3. XOM uses the default XSLT processor available in the JDK
 4. A custom entity resolver (`html-entities.dtd`) provides common HTML and Greek entities offline
