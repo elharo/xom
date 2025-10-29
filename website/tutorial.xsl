@@ -19,6 +19,7 @@
 <xsl:template name="user.head.content">
   <meta name="description"
         content="A quick introduction to XOM by Elliotte Rusty Harold" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
 </xsl:template>
 
 <xsl:template name="user.footer.navigation" xmlns:dt="http://xsltsl.org/date-time">
