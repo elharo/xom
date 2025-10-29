@@ -31,7 +31,6 @@
   <target name="compile-utilities" depends="init" description="Compile XOM utilities">
     <javac srcdir="." destdir="." includeantruntime="false">
       <include name="XOMTransformer.java"/>
-      <include name="XOMXIncluder.java"/>
       <classpath refid="xom.class.path"/>
     </javac>
   </target>
