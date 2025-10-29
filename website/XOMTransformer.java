@@ -1,4 +1,4 @@
-/* Copyright 2024 Elliotte Rusty Harold
+/* Copyright 2025 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -35,7 +35,7 @@ import java.io.File;
  * Replacement for Saxon's command-line interface for documentation builds.
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.9
+ * @version 1.4.0
  */
 public class XOMTransformer {
 
@@ -85,10 +85,6 @@ public class XOMTransformer {
             
             Document doc = builder.build(args[0]);
             Document stylesheet = builder.build(args[1]);
-            
-            // Use Saxon-HE as the XSLT processor for better DocBook compatibility
-            System.setProperty("javax.xml.transform.TransformerFactory", 
-                "net.sf.saxon.TransformerFactoryImpl");
             
             XSLTransform transform = new XSLTransform(stylesheet);           
             

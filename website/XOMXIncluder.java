@@ -1,4 +1,4 @@
-/* Copyright 2024 Elliotte Rusty Harold
+/* Copyright 2025 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -35,7 +35,7 @@ import org.xml.sax.InputSource;
  * Simple XInclude processor for documentation builds.
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.9
+ * @version 1.4.0
  */
 public class XOMXIncluder {
 
@@ -95,12 +95,10 @@ public class XOMXIncluder {
         }
         catch (SAXException e) {
             System.err.println("SAX error: " + e.getMessage());
-            e.printStackTrace();
             System.exit(1);
         }
         catch (IOException e) {
             System.err.println("I/O error reading " + args[0] + " " + e.getMessage());
-            e.printStackTrace();
             System.exit(1);
         }
         catch (ParsingException e) {

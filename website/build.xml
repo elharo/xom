@@ -10,15 +10,14 @@
 
   <path id="xom.class.path">
     <pathelement path="../xom-1.3.9.jar"/>
-    <pathelement path="../saxon-he.jar"/>
     <pathelement path="../lib/xercesImpl-2.12.2.jar"/>
     <pathelement path="../lib/xml-apis-1.4.01.jar"/>
     <pathelement path="."/>
   </path>
 
   <path id="xerces.class.path">
-     <pathelement path="../lib/xercesImpl-2.12.2.jar"/> 
-     <pathelement path="../lib/xml-apis-1.4.01.jar"/> 
+     <pathelement path="../lib/dtd-xercesImpl.jar"/> 
+     <pathelement path="../lib/xmlParserAPIs.jar"/> 
   </path>
   
   <target name="init">
@@ -37,11 +36,13 @@
     </javac>
   </target>
 
-  <target name="finished_tutorial.xml" depends="compile-utilities"
+  <target name="finished_tutorial.xml" depends="init"
           description="Merge original chapters and examples into a single file">
-    <java classname="XOMXIncluder" output="${build.dir}/finished_tutorial.xml" fork="yes" failonerror="true">
+    <java classname="nu.xom.samples.XIncludeDriver" output="${build.dir}/finished_tutorial.xml" fork="yes" failonerror="true">
         <arg line="tutorial.xml"/>
-        <classpath refid="xom.class.path"/>
+        <classpath refid="xerces.class.path"/>
+        <classpath location="../build/classes"/>
+        <classpath location="../build/jaxen-classes"/>
      </java>
   </target>
 
