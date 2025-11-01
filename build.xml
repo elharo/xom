@@ -65,8 +65,9 @@ subject line. The XOM home page is https://xom.nu/
     <property name="testreports.dir" value="./testreports" />
     <property name="jaxen.dir"       value="${build.dir}/jaxen-classes"/>
 
+    <property name="xercesVersion"   value="2.12.2"/>
     <property name="xmlapis.jar"     value="${lib.dir}/xml-apis-1.4.01.jar"/>
-    <property name="parser.jar"     value="${lib.dir}/xercesImpl-2.12.2.jar"/>
+    <property name="parser.jar"     value="${lib.dir}/xercesImpl-${xercesVersion}.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.2.1.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
@@ -136,7 +137,7 @@ XOM Build file
     samples        --> build the xom-samples.jar file
     compile        --> compile the source code
     javadoc        --> generate the API documentation
-    betterdoc      --> better formatted API documentation (requires Ant 1.6)
+    betterdoc      --> better formatted API documentation
     test           --> run JUnit test suite
     integration    --> run JUnit integration test suite (broken)
     testui         --> run JUnit test suite in GUI 
@@ -302,8 +303,8 @@ XOM Build file
         <attribute name="Bundle-RequiredExecutionEnvironment" value="JavaSE-1.6"/>
         <attribute name="Export-Package" value="nu.xom, nu.xom.canonical, nu.xom.converters, nu.xom.xinclude, nu.xom.xslt"/>
         <attribute name="Import-Package" value='javax.xml.transform.sax, javax.xml.transform, org.w3c.dom, org.xml.sax, org.xml.sax.helpers, org.xml.sax.ext,
-          org.apache.xerces.parsers;resolution:=optional;version="2.8.0", org.apache.xerces.impl;resolution:=optional;version="2.8.0", 
-          org.apache.xerces.jaxp;resolution:=optional;version="2.9.0", junit.framework;resolution:=optional;version="3.8.1",
+          org.apache.xerces.parsers;resolution:=optional;version="${xercesVersion}", org.apache.xerces.impl;resolution:=optional;version="${xercesVersion}", 
+          org.apache.xerces.jaxp;resolution:=optional;version="${xercesVersion}", junit.framework;resolution:=optional;version="3.8.1",
           com.sun.org.apache.xerces.internal.jaxp;resolution:=optional, com.sun.org.apache.xerces.internal.parsers;resolution:=optional'/>
 
         <section name="nu/xom/">
@@ -388,7 +389,7 @@ XOM Build file
              windowtitle="${Name} ${version}  API"
              docencoding="UTF-8"
              charset="UTF-8"
-             link="http://www.junit.org/junit/javadoc/3.8.1"
+             link="https://junit.org/junit/javadoc/3.8.1"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='https://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
        &lt;br /&gt; &lt;a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
@@ -425,7 +426,7 @@ XOM Build file
              docencoding="UTF-8"
              charset="UTF-8"
              noqualifier="java.lang:java.io"
-             link="http://www.junit.org/junit/javadoc/3.8.1"
+             link="https://junit.org/junit/javadoc/3.8.1"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='https://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
        &lt;br/&gt; &lt;a href='mailto:elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
@@ -530,6 +531,7 @@ XOM Build file
     <junit fork="yes" failureproperty="testsfailed">
        <classpath refid="test.class.path" />
        <formatter type="${test.outputFormat}" />
+       <formatter type="brief" usefile="false" />
        <batchtest fork="yes" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
@@ -569,6 +571,7 @@ XOM Build file
        </classpath>
        <classpath refid="run.class.path" />
        <formatter type="${test.outputFormat}" />
+       <formatter type="brief" usefile="false" />
        <batchtest fork="yes" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />

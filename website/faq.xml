@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
                       "https://docbook.org/xml/4.3/docbookx.dtd">
-<article class="faq" revision="20200126">
+<article class="faq" revision="20251101">
   <title>XOM FAQ</title>
 
   <articleinfo>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2002-2005, 2009, 2016, 2018, 2020, 2023</year>
+      <year>2002-2005, 2009, 2016, 2018, 2020, 2023, 2025</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo> 
@@ -292,7 +292,7 @@ There are a number of techniques you can use to speed up your XOM programs. Amon
 <itemizedlist>
   <listitem><para>If you're making many instances of the same thing (<classname>Element</classname>, <classname>DocType</classname>, <classname>Text</classname>, whatever), make a prototype object and copy it using the copy constructor or the <methodname>copy</methodname> method instead of constructing it directly from strings. This avoids the overhead of reverifying element names, PCDATA, etc. for each object created.</para></listitem>
 
- <listitem><para>Don't use XPath. XPath is currently implemented for convenience, simplicity, and robustness; not performance. It has not yet been profiled or optimized. (This may change in the future.) If you do use XPath, you might want to consider using <ulink url="http://saxon.sourceforge.net/">SAXON</ulink>, both of which provide some options to speed up XPath, instead of XOM 1.1's built-in XPath support. </para></listitem>
+ <listitem><para>Don't use XPath. XPath is currently implemented for convenience, simplicity, and robustness; not performance. It has not yet been profiled or optimized. (This may change in the future.) If you do use XPath, you might want to consider using <ulink url="https://www.saxonica.com/">SAXON</ulink> which provides some options to speed up XPath, instead of XOM's built-in XPath support. </para></listitem>
 
  <listitem><para>Consider doing more work in the <classname>NodeFactory</classname> as the document is constructed. </para></listitem>
 
@@ -367,7 +367,7 @@ XOM 1.3.8 includes internal changes for compatibility with Java 17+.
 <answer>
 <para>
 You should learn better than to believe everything you read on Slashdot. 
-The LGPL is completely compatible with Java. Claims that it is not are based on severe misunderstandings of either Java, the LGPL, or both. The <ulink url="http://www.gnu.org/licenses/lgpl-java.html">official word</ulink> from the FSF's David Turner is,
+The LGPL is completely compatible with Java. Claims that it is not are based on severe misunderstandings of either Java, the LGPL, or both. The <ulink url="https://www.gnu.org/licenses/lgpl-java.html">official word</ulink> from the FSF's David Turner is,
 </para>
 
 <blockquote>
@@ -434,7 +434,7 @@ at my presentation at the New York XML SIG.
 </question>
 <answer>
 <para>
-I'm somewhat familiar with the visitor pattern. I did explore it when 
+I'm familiar with the visitor pattern. I did explore it when 
 I was first designing XOM. I'm still not convinced it really fits 
 the XML problem space well. I don't like adding the extra method to 
 <classname>Node</classname> just to support this. I may be wrong here. 
@@ -544,9 +544,7 @@ Several of the  tests in <classname>XSLTransformTest</classname> including
 <methodname>testOASISMicrosoftConformanceSuite</methodname>, and 
 <methodname>testKeysPerfRepro3</methodname>
 fail in Java 1.4 due to bugs in the version of Xalan bundled with Sun's JDK.
-These tests  pass in Java 1.5. or later. They will also pass in 
-Java 1.4 if you put the version of Xalan found in the lib directory in
-your jre/lib/endorsed directory so it will override the one bundled with the JDK. 
+These tests pass in Java 1.5 or later. 
 </para>
 
 <para>
@@ -591,7 +589,7 @@ You can set any necessary serialization options directly on the <classname>Seria
 Use XPath. Specifically use the query
 </para>
 
-<informalexample><programlisting><![CDATA[Nodes namespaces = element.query("namespace::node()");]]></programlisting></informalexample>
+<informalexample><programlisting>Nodes namespaces = element.query("namespace::node()");</programlisting></informalexample>
 
 </answer>
 </qandaentry>
