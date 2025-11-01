@@ -136,7 +136,7 @@ XOM Build file
     samples        --> build the xom-samples.jar file
     compile        --> compile the source code
     javadoc        --> generate the API documentation
-    betterdoc      --> better formatted API documentation (requires Ant 1.6)
+    betterdoc      --> better formatted API documentation
     test           --> run JUnit test suite
     integration    --> run JUnit integration test suite (broken)
     testui         --> run JUnit test suite in GUI 
