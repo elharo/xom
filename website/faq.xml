@@ -544,7 +544,7 @@ Several of the  tests in <classname>XSLTransformTest</classname> including
 <methodname>testOASISMicrosoftConformanceSuite</methodname>, and 
 <methodname>testKeysPerfRepro3</methodname>
 fail in Java 1.4 due to bugs in the version of Xalan bundled with Sun's JDK.
-These tests pass in Java 1.5. or later. 
+These tests pass in Java 1.5 or later. 
 </para>
 
 <para>
