@@ -58,7 +58,6 @@ XOM uses Apache Ant as its build system. The main build file is `build.xml` at t
 
 - `ant compile` - Compile the source code (both core XOM and Jaxen)
 - `ant test` - Run JUnit tests using command line interface
-- `ant testui` - Run JUnit tests using GUI interface
 - `ant jar` - Create xom.jar
 - `ant samples` - Create xom-samples.jar
 - `ant javadoc` - Generate API documentation
