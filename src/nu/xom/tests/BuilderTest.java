@@ -1813,9 +1813,11 @@ public class BuilderTest extends XOMTestCase {
     // This test exposes a bug in Crimson, Xerces 2.5 and earlier, 
     // and possibly other parsers. I've reported the bug in Xerces,
     // and it is fixed in Xerces 2.6.
+    // Updated to use local file URL to avoid network dependency
     public void testBaseRelativeResolutionRemotelyWithDirectory()
-      throws IOException, ParsingException {
-        builder.build("http://www.ibiblio.org/xml");
+      throws IOException, ParsingException, UnsupportedEncodingException {
+        String url = "file://" + escapePath(inputDir.getAbsolutePath());
+        builder.build(url + "xml/index.xml");
     } 
 
     
