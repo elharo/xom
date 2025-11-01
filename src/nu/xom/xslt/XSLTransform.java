@@ -171,17 +171,28 @@ public final class XSLTransform {
      */ 
      private XSLTransform(Source source) throws XSLException {
          
+        TransformerFactory factory;
         try {
-            TransformerFactory factory 
-              = TransformerFactory.newInstance();
-            factory.setErrorListener(errorsAreFatal);
-            this.templates = factory.newTemplates(source);
+            factory = TransformerFactory.newInstance();
         }
         catch (TransformerFactoryConfigurationError error) {
-           throw new XSLException(
-             "Could not locate a TrAX TransformerFactory", error
-           );    
+        	try {  // fallback to system default XSLT 1.0 transformer
+                factory = TransformerFactory.newInstance(
+                  "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
+                  ClassLoader.getSystemClassLoader()
+                );
+        	}
+        	catch (TransformerFactoryConfigurationError error2) {
+                throw new XSLException(
+                        "Could not load TransformerFactory", error2
+                      ); 
+        	}
         } 
+        
+        factory.setErrorListener(errorsAreFatal);
+        try {
+          this.templates = factory.newTemplates(source);
+        }      
         catch (TransformerConfigurationException ex) {
            throw new XSLException(
              "Syntax error in stylesheet", ex
