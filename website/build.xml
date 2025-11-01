@@ -59,6 +59,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="${build.dir}/finished_tutorial.xml"/>
         <arg line="tutorial.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -70,6 +71,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="designprinciples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -81,6 +83,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="license.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -92,6 +95,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="infoset.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -103,6 +107,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="xpath.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -114,6 +119,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="faq.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -125,6 +131,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="openquestions.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -136,6 +143,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="futuredirections.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -148,6 +156,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="building.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -160,6 +169,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="install.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -172,6 +182,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="testsuite.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -184,6 +195,7 @@
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="samples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
