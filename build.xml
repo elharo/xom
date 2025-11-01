@@ -31,8 +31,8 @@ subject line. The XOM home page is https://xom.nu/
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
-    <property name="minorversion" value="3"/>
-    <property name="microversion" value="9"/>
+    <property name="minorversion" value="4"/>
+    <property name="microversion" value="0"/>
     <!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
@@ -43,7 +43,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <property name="jaxenversion" value="1.1.6"/>
     <!-- <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/> -->
-    <property name="year"    value="2023"/>
+    <property name="year"    value="2025"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
 
