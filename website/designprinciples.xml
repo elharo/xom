@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
                       "https://docbook.org/xml/4.3/docbookx.dtd">
-<article revision="20161210" status="rough">
+<article revision="20251101">
 
   <title>XOM Design Principles</title>
 
@@ -13,10 +13,10 @@
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2002-2004, 2006</year>
+      <year>2002-2004, 2006, 2025</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
-    <date>September 3, 2006</date>
+    <date>Novemeber 1, 2025</date>
   </articleinfo> 
 
 
@@ -1006,10 +1006,10 @@ bugs at one time or another. These include:
 </para>
 
 <itemizedlist>
-  <listitem><para><ulink url="http://pmd.sourceforge.net/">PMD</ulink></para></listitem>
-  <listitem><para><ulink url="http://findbugs.sourceforge.net/">FindBugs</ulink></para></listitem>
-  <listitem><para><ulink url="http://www.eclipse.org/">Eclipse 3.0</ulink></para></listitem>
-  <listitem><para><ulink url="http://java.sun.com/j2se/javadoc/doccheck/">doccheck</ulink></para></listitem>
+  <listitem><para><ulink url="https://pmd.github.io/">PMD</ulink></para></listitem>
+  <listitem><para><ulink url="https://findbugs.sourceforge.net/">FindBugs</ulink></para></listitem>
+  <listitem><para><ulink url="https://www.eclipse.org/">Eclipse IDE</ulink></para></listitem>
+  <listitem><para><ulink url="https://openjdk.org/projects/code-tools/doccheck/">doccheck</ulink></para></listitem>
 </itemizedlist>
 
 
@@ -1020,7 +1020,7 @@ bugs at one time or another. These include:
 
   <para>
     As part of the design of the XOM API, I reimplemented almost every example from
-    <ulink url="http://www.cafeconleche.org/books/xmljava/">Processing XML with Java</ulink>
+    <ulink url="https://www.cafeconleche.org/books/xmljava/">Processing XML with Java</ulink>
     in XOM. 
     (A few utility classes that were very specific to a particular API, and didn&rsquo;t really make sense
     for XOM, were omitted.)
