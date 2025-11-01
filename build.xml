@@ -453,7 +453,7 @@ XOM Build file
       </classpath>
     </javac>
     
-    <java classname="nu.xom.tools.XHTMLJavaDoc" fork="yes"> 
+    <java classname="nu.xom.tools.XHTMLJavaDoc" fork="true"> 
       <classpath refid="doc.class.path" />
       <arg value="build/apidocs"/> 
     </java>
@@ -528,11 +528,11 @@ XOM Build file
   <!-- This task requires the ANT optional.jar -->
   <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
 
-    <junit fork="yes" failureproperty="testsfailed">
+    <junit fork="true" failureproperty="testsfailed">
        <classpath refid="test.class.path" />
        <formatter type="${test.outputFormat}" />
        <formatter type="brief" usefile="false" />
-       <batchtest fork="yes" todir="${testoutput.dir}">
+       <batchtest fork="true" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
            <exclude name="**/pantry/*" />
@@ -572,7 +572,7 @@ XOM Build file
        <classpath refid="run.class.path" />
        <formatter type="${test.outputFormat}" />
        <formatter type="brief" usefile="false" />
-       <batchtest fork="yes" todir="${testoutput.dir}">
+       <batchtest fork="true" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
            <exclude name="**/pantry/*" />
@@ -586,7 +586,7 @@ XOM Build file
  
 
   <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
-    <java classname="junit.swingui.TestRunner" fork="yes" maxmemory="99m">
+    <java classname="junit.swingui.TestRunner" fork="true" maxmemory="99m">
       <sysproperty key="org.xml.sax.driver" value="org.apache.xerces.parsers.SAXParser"/> 
       <classpath refid="test.class.path" />
       <arg value="nu.xom.tests.XOMTests"/> 
