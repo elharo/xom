@@ -37,4 +37,3 @@ ant samples     # Build the samples documentation
 1. XML source files are processed with `nu.xom.samples.XIncludeDriver` to resolve XInclude directives
 2. The resulting documents are transformed using `nu.xom.samples.Transformer` with DocBook XSL stylesheets
 3. XOM uses the default XSLT processor available in the JDK
-4. A custom entity resolver (`html-entities.dtd`) provides common HTML and Greek entities offline
