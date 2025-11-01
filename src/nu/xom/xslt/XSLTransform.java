@@ -176,17 +176,17 @@ public final class XSLTransform {
             factory = TransformerFactory.newInstance();
         }
         catch (TransformerFactoryConfigurationError error) {
-        	try {  // fallback to system default XSLT 1.0 transformer
+            try {  // fallback to system default XSLT 1.0 transformer
                 factory = TransformerFactory.newInstance(
                   "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
                   ClassLoader.getSystemClassLoader()
                 );
-        	}
-        	catch (TransformerFactoryConfigurationError error2) {
+            }
+            catch (TransformerFactoryConfigurationError error2) {
                 throw new XSLException(
                         "Could not load TransformerFactory", error2
                       ); 
-        	}
+            }
         } 
         
         factory.setErrorListener(errorsAreFatal);
