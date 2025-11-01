@@ -1075,7 +1075,7 @@ public class Builder {
     
     // needed to work around a bug in Xerces and Crimson
     // for URLs with no trailing slashes (no path part) 
-    // such as https://www.cafeconleche.org.
+    // such as http://www.cafeconleche.org.
     // Also needed to work around a VM bug involving file URLs such as
     // file:///tmp/nosuchdirectory/../foo.xml
     // where "nosuchdirectory" does not exist.

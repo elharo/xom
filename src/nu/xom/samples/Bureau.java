@@ -35,7 +35,7 @@ import nu.xom.Element;
  * from flat, tabular data. A different version of this 
  * example was originally developed for Chapter 4 of 
  * <cite><a 
- * href="https://www.cafeconleche.org/books/xmljava/">Processing 
+ * href="http://www.cafeconleche.org/books/xmljava/">Processing 
  * XML with Java</a></cite>.
  * </p>
  * 

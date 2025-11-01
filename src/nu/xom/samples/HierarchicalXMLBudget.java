@@ -39,7 +39,7 @@ import nu.xom.Serializer;
  * from flat, tabular data. A different version of this 
  * example was originally developed for Chapter 4 of 
  * <cite><a target="_top"
- * href="https://www.cafeconleche.org/books/xmljava/">Processing 
+ * href="http://www.cafeconleche.org/books/xmljava/">Processing 
  * XML with Java</a></cite>.
  * </p>
  * 

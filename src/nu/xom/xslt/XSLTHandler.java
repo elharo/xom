@@ -268,7 +268,7 @@ class XSLTHandler
     public void processingInstruction(String target, String data) 
       throws SAXException {
 
-        // See https://saxon.sourceforge.net/saxon6.5.2/extensibility.html#Writing-output-filters
+        // See http://saxon.sourceforge.net/saxon6.5.2/extensibility.html#Writing-output-filters
         // to understand why we need to work around Saxon here
         if ("saxon:warning".equals(target)) {
             throw new SAXException("continue");   
