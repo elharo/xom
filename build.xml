@@ -42,7 +42,6 @@ subject line. The XOM home page is https://xom.nu/
          Problem is release version doesn't get a version qualifier. -->
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <property name="jaxenversion" value="1.1.6"/>
-    <!-- <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${versionqualifier}.osgi"/> -->
     <property name="year"    value="2023"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>

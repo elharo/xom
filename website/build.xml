@@ -160,6 +160,7 @@
       <fileset dir=".">
         <include name="*.html"/>
         <include name="*.txt"/>
+        <include name="favicon.ico"/>
       </fileset>
     </copy>
   </target>	
