@@ -8,13 +8,11 @@
   <property name="build.dest" value="${build.dir}/website"/>
   <property name="parentdist.dir"   value="../dist/website"/>
 
-  <path id="xslt.class.path">
-    <pathelement path="/opt/xml/saxon/saxon.jar"/>
-  </path>
-
-  <path id="xerces.class.path">
-     <pathelement path="../lib/dtd-xercesImpl.jar"/> 
-     <pathelement path="../lib/xmlParserAPIs.jar"/> 
+  <path id="xom.class.path">
+    <pathelement location="../build/classes"/>
+    <pathelement location="../build/jaxen-classes"/>
+    <pathelement path="../lib/xercesImpl-2.12.2.jar"/>
+    <pathelement path="../lib/xml-apis-1.4.01.jar"/>
   </path>
   
   <target name="init">
@@ -27,11 +25,9 @@
 
   <target name="finished_tutorial.xml" depends="init"
           description="Merge original chapters and examples into a single file">
-    <java classname="nu.xom.samples.XIncludeDriver" output="${build.dir}/finished_tutorial.xml" fork="yes" failonerror="true">
+    <java classname="nu.xom.samples.XIncludeDriver" output="${build.dir}/finished_tutorial.xml" fork="true" failonerror="true">
         <arg line="tutorial.xml"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath location="../build/classes"/>
-        <classpath location="../build/jaxen-classes"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>
 
@@ -53,122 +49,156 @@
      <arg value="faq.xml"/>
      <arg value="designprinciples.xml"/>
 	
-     <classpath refid="xerces.class.path"/>
-     <classpath location="../build/classes"/>
-     <classpath location="../build/jaxen-classes"/>
+     <classpath refid="xom.class.path"/>
     </java>
   </target>
 
 
   <target name="tutorial" description="Generate a single XHTML document" depends="finished_tutorial.xml">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/tutorial.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/tutorial.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="${build.dir}/finished_tutorial.xml"/>
         <arg line="tutorial.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
   <target name="design" depends="init" description="Design principles">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/designprinciples.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/designprinciples.xhtml" fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="designprinciples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
   <target name="license" depends="init" description="License for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/license.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/license.xhtml" fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="license.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
  <target name="infoset" depends="init" description="Infoset Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/infoset.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/infoset.xhtml" fork="true"  error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="infoset.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
  <target name="xpath" depends="init" description="XPath Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/xpath.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/xpath.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="xpath.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
   <target name="faq" depends="init" description="FAQ list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/faq.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/faq.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="faq.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
   <target name="open" depends="init" description="Open Questions list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/openquestions.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/openquestions.xhtml" fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="openquestions.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
   <target name="future" depends="init" description="Future Directions for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/futuredirections.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/futuredirections.xhtml" fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="futuredirections.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
 
   <target name="building" depends="init" description="How to build XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/building.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/building.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="building.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
 
   <target name="install" depends="init" description="How to install XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/install.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/install.xhtml" fork="true"  error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="install.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
 
   <target name="testsuite" depends="init" description="How to test XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/testsuite.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/testsuite.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="testsuite.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>	 
 
 
   <target name="samples" depends="init" description="Example code">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/samples.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/samples.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
+        <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
+        <jvmarg value="-Djavax.xml.transform.TransformerFactory=org.apache.xalan.processor.TransformerFactoryImpl"/>
         <arg line="samples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>
 
