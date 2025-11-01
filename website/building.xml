@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
                       "https://docbook.org/xml/4.3/docbookx.dtd">
-<article revision="20180715" status="rough">
+<article revision="20251101">
   <title>Building XOM</title>
 
    <para>
@@ -10,7 +10,7 @@
    </para>
   
    <para>
-     XOM includes an Ant build file. You can build XOM with Ant 1.6 or later.
+     XOM includes an Ant build file. You can build XOM with Ant 1.10 or later.
      Although all the code compiles back to Java 1.5,
      the build is targeted at Java 1.6 because it's hard to find a compiler
      that supports older versions these days.
@@ -18,10 +18,10 @@
 
   <para>
     Building XOM requires Apache Ant. If you don't already have it installed,
-    download it from <ulink url="http://ant.apache.org/">http://ant.apache.org/</ulink>.
+    download it from <ulink url="https://ant.apache.org/">https://ant.apache.org/</ulink>.
     Be sure to add the ant/bin directory to your path and point the
     ANT_HOME environment variable to wherever you've installed Ant, as explained in the 
-    <ulink url="http://ant.apache.org/manual/index.html">Ant 
+    <ulink url="https://ant.apache.org/manual/index.html">Ant 
     documentation</ulink>. Also set the JAVA_HOME environment variable to the location of your JDK, 
   </para>
   
@@ -33,34 +33,35 @@
 <computeroutput>Buildfile: build.xml
 
 help:
-     [echo]
+     [echo] 
      [echo] XOM Build file
      [echo] -------------------------------------------------------------
-     [echo]
+     [echo]     
      [echo]   available targets are:
-     [echo]
-     [echo]     help      --> print this message
-     [echo]     jar       --> build the xom.jar file
-     [echo]     samples   --> build the xom-samples.jar file
-     [echo]     compile   --> compile the source code
-     [echo]     compile15 --> compile the classes that depend on Java 1.5
-     [echo]     javadoc   --> generate the API documentation
-     [echo]     betterdoc --> better formatted API documentation (requires Ant 1.6)
-     [echo]     test      --> run JUnit test suite
-     [echo]     testui    --> run Junit test suite in GUI
-     [echo]     clean     --> clean up the build directory
-     [echo]     dist      --> the zip and .tar.gz files
-     [echo]
+     [echo]     
+     [echo]     help           --> print this message
+     [echo]     jar            --> build the xom.jar file
+     [echo]     samples        --> build the xom-samples.jar file
+     [echo]     compile        --> compile the source code
+     [echo]     javadoc        --> generate the API documentation
+     [echo]     betterdoc      --> better formatted API documentation
+     [echo]     test           --> run JUnit test suite
+     [echo]     integration    --> run JUnit integration test suite (broken)
+     [echo]     testui         --> run JUnit test suite in GUI 
+     [echo]     clean          --> clean up the build directory
+     [echo]     dist           --> the zip and .tar.gz files
+     [echo]     upload         --> upload archive files
+     [echo]       
+     [echo]   Use the option -Dfat=true to make Text objects bigger but faster.
+     [echo] 
      [echo] -------------------------------------------------------------
-     [echo]
-
-BUILD SUCCESSFUL
-Total time: 3 seconds</computeroutput></screen>
+     [echo] 
+</computeroutput></screen>
   
  <para>
     Most of these are self-explanatory. 
     Typing "ant compile" compiles the source base into the directory build/classes.
-    Typing ant jar compiles the files and stuffs them into a JAR archive. Typeing "ant javadoc"
+    Typing "ant jar" compiles the files and stuffs them into a JAR archive. Typing "ant javadoc"
     compiles the API documentation, etc. However, there are a couple of special cases to note:
   </para>
 
@@ -72,7 +73,7 @@ Total time: 3 seconds</computeroutput></screen>
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2004, 2023</year>
+      <year>2004, 2023, 2025</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo>
