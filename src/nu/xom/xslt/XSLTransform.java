@@ -134,6 +134,13 @@ public final class XSLTransform {
     private Map<String, Object> parameters = new HashMap<String, Object>();
     private static ErrorListener errorsAreFatal = new FatalListener();
     
+    /**
+     * The JDK's built-in TransformerFactory implementation used as a fallback
+     * when the configured factory is not available.
+     */
+    private static final String FALLBACK_TRANSFORMER_FACTORY = 
+        "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl";
+    
     
     private static class FatalListener implements ErrorListener {
 
@@ -181,9 +188,7 @@ public final class XSLTransform {
            // Fallback to JDK's built-in transformer if the configured one is not found
            try {
                TransformerFactory factory 
-                 = TransformerFactory.newInstance(
-                   "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
-                   null);
+                 = TransformerFactory.newInstance(FALLBACK_TRANSFORMER_FACTORY, null);
                factory.setErrorListener(errorsAreFatal);
                this.templates = factory.newTemplates(source);
            }
