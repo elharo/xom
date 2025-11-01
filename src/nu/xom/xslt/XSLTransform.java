@@ -178,9 +178,25 @@ public final class XSLTransform {
             this.templates = factory.newTemplates(source);
         }
         catch (TransformerFactoryConfigurationError error) {
-           throw new XSLException(
-             "Could not locate a TrAX TransformerFactory", error
-           );    
+           // Fallback to JDK's built-in transformer if the configured one is not found
+           try {
+               TransformerFactory factory 
+                 = TransformerFactory.newInstance(
+                   "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
+                   null);
+               factory.setErrorListener(errorsAreFatal);
+               this.templates = factory.newTemplates(source);
+           }
+           catch (TransformerFactoryConfigurationError fallbackError) {
+               throw new XSLException(
+                 "Could not locate a TrAX TransformerFactory", error
+               );    
+           }
+           catch (TransformerConfigurationException fallbackEx) {
+               throw new XSLException(
+                 "Syntax error in stylesheet", fallbackEx
+               );    
+           }
         } 
         catch (TransformerConfigurationException ex) {
            throw new XSLException(
