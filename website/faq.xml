@@ -292,7 +292,7 @@ There are a number of techniques you can use to speed up your XOM programs. Amon
 <itemizedlist>
   <listitem><para>If you're making many instances of the same thing (<classname>Element</classname>, <classname>DocType</classname>, <classname>Text</classname>, whatever), make a prototype object and copy it using the copy constructor or the <methodname>copy</methodname> method instead of constructing it directly from strings. This avoids the overhead of reverifying element names, PCDATA, etc. for each object created.</para></listitem>
 
- <listitem><para>Don't use XPath. XPath is currently implemented for convenience, simplicity, and robustness; not performance. It has not yet been profiled or optimized. (This may change in the future.) If you do use XPath, you might want to consider using <ulink url="https://saxon.sourceforge.net/">SAXON</ulink>, both of which provide some options to speed up XPath, instead of XOM 1.1's built-in XPath support. </para></listitem>
+ <listitem><para>Don't use XPath. XPath is currently implemented for convenience, simplicity, and robustness; not performance. It has not yet been profiled or optimized. (This may change in the future.) If you do use XPath, you might want to consider using <ulink url="https://www.saxonica.com/">SAXON</ulink>, both of which provide some options to speed up XPath, instead of XOM's built-in XPath support. </para></listitem>
 
  <listitem><para>Consider doing more work in the <classname>NodeFactory</classname> as the document is constructed. </para></listitem>
 

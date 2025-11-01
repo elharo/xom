@@ -1518,14 +1518,14 @@ public class BuilderTest extends XOMTestCase {
     // and possibly other parsers
     public void testBaseRelativeResolutionRemotely()
       throws IOException, ParsingException {
-        builder.build("https://www.cafeconleche.org");
+        builder.build("http://www.cafeconleche.org");
     }
     
     
     public void testCanonicalizeURLWithQueryString()
       throws IOException, ParsingException {
-        Document doc = builder.build("https://www.cafeconleche.org/?foo=bar");
-        assertEquals("https://www.cafeconleche.org/?foo=bar", doc.getBaseURI());
+        Document doc = builder.build("http://www.cafeconleche.org/?foo=bar");
+        assertEquals("http://www.cafeconleche.org/?foo=bar", doc.getBaseURI());
     }
   
   
@@ -1815,7 +1815,7 @@ public class BuilderTest extends XOMTestCase {
     // and it is fixed in Xerces 2.6.
     public void testBaseRelativeResolutionRemotelyWithDirectory()
       throws IOException, ParsingException {
-        builder.build("https://www.ibiblio.org/xml");
+        builder.build("http://www.ibiblio.org/xml");
     } 
 
     
@@ -1824,7 +1824,7 @@ public class BuilderTest extends XOMTestCase {
     // and it is fixed in Xerces 2.6.
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
-        builder.build("https://www.ibiblio.org/xml/redirecttest.xml");
+        builder.build("http://www.ibiblio.org/xml/redirecttest.xml");
     } 
 
     

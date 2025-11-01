@@ -985,7 +985,7 @@ public class XPathTest extends XOMTestCase {
         
         Element element = new Element("test");
         try {
-            element.query("document('https://www.ibiblio.org/aksdjhk/')/*");
+            element.query("document('http://www.ibiblio.org/aksdjhk/')/*");
             fail("That file doesn't exist!");
         }
         catch (XPathException success) {
