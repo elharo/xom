@@ -661,9 +661,9 @@ public class BaseURITest extends XOMTestCase {
         
         Builder builder = new Builder();
         Document doc = builder.build(
-          "http://www.ibiblio.org/xml/redirecttest.xml");
+          "https://www.ibiblio.org/xml/redirecttest.xml");
         assertEquals(
-          "http://www.cafeconleche.org/redirecttest.xml", 
+          "https://www.cafeconleche.org/redirecttest.xml", 
           doc.getBaseURI()
         );
         
@@ -683,7 +683,7 @@ public class BaseURITest extends XOMTestCase {
     // when parent and child come from different entities
     public void testElementsFromDifferentActualBases() {
         Element parent = new Element("parent");
-        parent.setBaseURI("http://www.cafeconleche.org/");
+        parent.setBaseURI("https://www.cafeconleche.org/");
         Element child = new Element("child");
         child.setBaseURI("http://www.example.com/");
         parent.appendChild(child);
@@ -697,14 +697,14 @@ public class BaseURITest extends XOMTestCase {
     public void testBadURIInElementsFromDifferentActualBases() {
         
         Element parent = new Element("parent");
-        parent.setBaseURI("http://www.cafeconleche.org/");
+        parent.setBaseURI("https://www.cafeconleche.org/");
         Element child = new Element("child");
         parent.appendChild(child);
         child.addAttribute(new Attribute("xml:base", 
           Namespace.XML_NAMESPACE,
           "%GF.html"));
         String base = child.getBaseURI();
-        assertEquals("http://www.cafeconleche.org/", base);
+        assertEquals("https://www.cafeconleche.org/", base);
         
     }
     
@@ -712,14 +712,14 @@ public class BaseURITest extends XOMTestCase {
     public void testBadURIInElementsFromSameActualBases() {
         
         Element parent = new Element("parent");
-        parent.setBaseURI("http://www.cafeconleche.org/");
+        parent.setBaseURI("https://www.cafeconleche.org/");
         Element child = new Element("child");
-        child.setBaseURI("http://www.cafeconleche.org/");
+        child.setBaseURI("https://www.cafeconleche.org/");
         parent.appendChild(child);
         child.addAttribute(new Attribute("xml:base", 
           Namespace.XML_NAMESPACE,
           "http://www.example.com/%5.html"));
-        assertEquals("http://www.cafeconleche.org/", child.getBaseURI());
+        assertEquals("https://www.cafeconleche.org/", child.getBaseURI());
         
     }
     
@@ -727,14 +727,14 @@ public class BaseURITest extends XOMTestCase {
     public void testBadURIInBaseAttributeWithParent() {
         
         Element parent = new Element("parent");
-        parent.setBaseURI("http://www.cafeconleche.org/");
+        parent.setBaseURI("https://www.cafeconleche.org/");
         Element child = new Element("child");
-        child.setBaseURI("http://www.cafeconleche.org/");
+        child.setBaseURI("https://www.cafeconleche.org/");
         parent.appendChild(child);
         child.addAttribute(new Attribute("xml:base", 
           Namespace.XML_NAMESPACE,
           "%TR.html"));
-        assertEquals("http://www.cafeconleche.org/", child.getBaseURI());
+        assertEquals("https://www.cafeconleche.org/", child.getBaseURI());
         
     }
     
