@@ -20,7 +20,7 @@
    <para>
      The <literal>nu.xom.tests</literal> package contains an ample set of 
      unit tests covering almost every line of code in the core API.
-     The test suite is based on <ulink url="http://www.junit.org">JUnit 3.8.1</ulink>.  You'll find the 
+     The test suite is based on <ulink url="https://junit.org">JUnit 3.8.1</ulink>.  You'll find the 
      junit.jar file in XOM's lib directory. Although JUnit is officially a framework for unit testing, some of XOM's tests definitely cross the boundary into acceptance testing. For example, one "unit test" runs the entire W3C XInclude test suite.  Two more unit tests run the entire OASIS XSLT conformance test suite. 
      </para>
      
@@ -32,12 +32,12 @@
   
   
    <para>
-     Normally, the easiest way to run the test suite is with <ulink url="http://ant.apache.org/">Apache  Ant</ulink>. Ant is not included. You'll need to download it and install it yourself if you don't already have it. 
+     Normally, the easiest way to run the test suite is with <ulink url="https://ant.apache.org/">Apache  Ant</ulink>. Ant is not included. You'll need to download it and install it yourself if you don't already have it. 
      You can test XOM with Ant 1.5, but some 
      other targets require Ant 1.6. 
  Be sure to add the ant/bin directory to your path and point the
     ANT_HOME environment variable to wherever you've installed Ant, as explained in the 
-    <ulink url="http://ant.apache.org/manual/index.html">Ant 
+    <ulink url="https://ant.apache.org/manual/index.html">Ant 
     documentation</ulink>. Also set the JAVA_HOME environment variable to the location of your JDK, 
   </para>
   
@@ -140,16 +140,16 @@ Total time: 2 minutes 13 seconds</computeroutput></screen>
   </para>
   
   <para>
-    A few of the tests make network connections to http://www.cafeconleche.org/ to check XOM's interaction with various HTTP features. For instance, the page http://www.cafeconleche.org/tests/data.txt 
-is loaded to test whether the XInclude engine handles language negotiation correctly. The URL http://www.cafeconleche.org/tests/content is loaded to test whether XInclude performs content negotiation properly. The URL
-http://www.ibiblio.org/xml/redirecttest.xml is used to 
+    A few of the tests make network connections to https://www.cafeconleche.org/ to check XOM's interaction with various HTTP features. For instance, the page https://www.cafeconleche.org/tests/data.txt 
+is loaded to test whether the XInclude engine handles language negotiation correctly. The URL https://www.cafeconleche.org/tests/content is loaded to test whether XInclude performs content negotiation properly. The URL
+https://www.ibiblio.org/xml/redirecttest.xml is used to 
 test whether XOM correctly handles HTTP redirection.
-A few tests load the page "http://www.cafeconleche.org/" just to test if they
+A few tests load the page "https://www.cafeconleche.org/" just to test if they
 can handle a moderately complex, real-world page. This page is edited by hand and is therefore occasionally malformed. If so, those tests will fail. Try again in a few hours, and the problem will probably be fixed. 
   </para>
   
   <para>
-    The XInclude test suite loads the <ulink url="http://www.w3.org/XML/Test/XInclude/">W3C XInclude test suite</ulink> over the Internet from  their <ulink url="http://dev.w3.org/cvsweb/2001/XInclude-Test-Suite/">public CVS server</ulink>. You can avoid this by installing it locally in 
+    The XInclude test suite loads the <ulink url="https://www.w3.org/XML/Test/XInclude/">W3C XInclude test suite</ulink> over the Internet from  their <ulink url="https://dev.w3.org/cvsweb/2001/XInclude-Test-Suite/">public CVS server</ulink>. You can avoid this by installing it locally in 
 data/XInclude-Test-Suite. However, I don't have permission to distribute it with XOM.  
   </para>
   
@@ -158,7 +158,7 @@ data/XInclude-Test-Suite. However, I don't have permission to distribute it with
     There is no official Canonical XML  test suite  (a serious oversight)
     so I've hacked one together by comparing the output of a number 
     of different canonical XML implementations when processing the 
-    <ulink url="http://www.w3.org/XML/Test/">W3C XML test suite</ulink>.
+    <ulink url="https://www.w3.org/XML/Test/">W3C XML test suite</ulink>.
     However, I do not have permission to redistribute the
     modified version of this test suite that's necessary, so for the moment you
     won't be able to run this particular test. You'll just have to take my work that it passes. Sorry. :-(
@@ -166,7 +166,7 @@ data/XInclude-Test-Suite. However, I don't have permission to distribute it with
   
   <para>
     Similarly, I cannot redistribute the 
-    <ulink url="http://www.oasis-open.org/committees/documents.php?wg_abbrev=xslt">OASIS XSLT conformance test suite</ulink>. However, you can download this one yourself and install it in data/oasis-xslt-testsuite; and the test cases will find it.
+    <ulink url="https://www.oasis-open.org/committees/documents.php?wg_abbrev=xslt">OASIS XSLT conformance test suite</ulink>. However, you can download this one yourself and install it in data/oasis-xslt-testsuite; and the test cases will find it.
   </para>
   
 
@@ -279,7 +279,7 @@ while running since otherwise the test might seem to be hung:
 </para>
 
   <para>
-    All of the XOM unit test classes inherit from <code><ulink url="http://www.cafeconleche.org/XOM/apidocs/nu/xom/tests/XOMTestCase.html">nu.xom.tests.XOMTestCase</ulink></code>. This is a subclass of <code>junit.framework.TestCase</code> that provides several
+    All of the XOM unit test classes inherit from <code><ulink url="https://xom.nu/apidocs/nu/xom/tests/XOMTestCase.html">nu.xom.tests.XOMTestCase</ulink></code>. This is a subclass of <code>junit.framework.TestCase</code> that provides several
 additional <code>assertEquals() </code>methods for comparing XOM nodes:
 <code>Text</code> objects, <code>Document</code> objects, <code>Attribute</code> objects, <code>Element</code> objects, and so forth. Mostly these behave as you'd expect with a few notable exceptions.
 You can use this class in your own test cases. 

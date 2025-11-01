@@ -389,7 +389,7 @@ XOM Build file
              windowtitle="${Name} ${version}  API"
              docencoding="UTF-8"
              charset="UTF-8"
-             link="http://www.junit.org/junit/javadoc/3.8.1"
+             link="https://junit.org/junit/javadoc/3.8.1"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='https://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
        &lt;br /&gt; &lt;a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
@@ -426,7 +426,7 @@ XOM Build file
              docencoding="UTF-8"
              charset="UTF-8"
              noqualifier="java.lang:java.io"
-             link="http://www.junit.org/junit/javadoc/3.8.1"
+             link="https://junit.org/junit/javadoc/3.8.1"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='https://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
        &lt;br/&gt; &lt;a href='mailto:elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">

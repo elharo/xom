@@ -19,7 +19,7 @@
   </articleinfo> 
  <para>
      XOM supports the following information items from the 
-     <ulink url="http://www.w3.org/TR/2004/REC-xml-infoset-20040204/">XML Information Set</ulink>,
+     <ulink url="https://www.w3.org/TR/2004/REC-xml-infoset-20040204/">XML Information Set</ulink>,
      all of which are need to implement the specification:
    </para>
    
