@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
                       "https://docbook.org/xml/4.3/docbookx.dtd">
-<article class="faq" revision="20200126">
+<article class="faq" revision="20251101">
   <title>XOM FAQ</title>
 
   <articleinfo>
@@ -12,7 +12,7 @@
     </author>
     <authorinitials>ERH</authorinitials>
     <copyright>
-      <year>2002-2005, 2009, 2016, 2018, 2020, 2023</year>
+      <year>2002-2005, 2009, 2016, 2018, 2020, 2023, 2025</year>
       <holder>Elliotte Rusty Harold</holder>
     </copyright>
   </articleinfo> 
@@ -434,7 +434,7 @@ at my presentation at the New York XML SIG.
 </question>
 <answer>
 <para>
-I'm somewhat familiar with the visitor pattern. I did explore it when 
+I'm familiar with the visitor pattern. I did explore it when 
 I was first designing XOM. I'm still not convinced it really fits 
 the XML problem space well. I don't like adding the extra method to 
 <classname>Node</classname> just to support this. I may be wrong here. 
@@ -544,9 +544,7 @@ Several of the  tests in <classname>XSLTransformTest</classname> including
 <methodname>testOASISMicrosoftConformanceSuite</methodname>, and 
 <methodname>testKeysPerfRepro3</methodname>
 fail in Java 1.4 due to bugs in the version of Xalan bundled with Sun's JDK.
-These tests  pass in Java 1.5. or later. They will also pass in 
-Java 1.4 if you put the version of Xalan found in the lib directory in
-your jre/lib/endorsed directory so it will override the one bundled with the JDK. 
+These tests pass in Java 1.5 or later. 
 </para>
 
 <para>
@@ -591,7 +589,7 @@ You can set any necessary serialization options directly on the <classname>Seria
 Use XPath. Specifically use the query
 </para>
 
-<informalexample><programlisting><![CDATA[Nodes namespaces = element.query("namespace::node()");]]></programlisting></informalexample>
+<informalexample><programlisting>Nodes namespaces = element.query("namespace::node()");</programlisting></informalexample>
 
 </answer>
 </qandaentry>
