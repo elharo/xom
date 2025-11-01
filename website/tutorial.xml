@@ -548,12 +548,12 @@ doc.setDocType(doctype);]]></programlisting></informalexample>
     The  <classname>Builder</classname> class is responsible for reading a document
     and constructing a XOM <classname>Document</classname>
     object from it. For example, this attempts to read the document 
-    at http://www.cafeconleche.org/:
+    at https://www.cafeconleche.org/:
   </para>
   
     <informalexample><programlisting>try {
   Builder parser = new Builder();
-  Document doc = parser.build("http://www.cafeconleche.org/");
+  Document doc = parser.build("https://www.cafeconleche.org/");
 }
 catch (ParsingException ex) {
   System.err.println("Cafe con Leche is malformed today. How embarrassing!");
@@ -613,7 +613,7 @@ catch (IOException ex) {
 
      <informalexample><programlisting>try {
   Builder parser = new Builder(true);
-  Document doc = parser.build("http://www.cafeconleche.org/");
+  Document doc = parser.build("https://www.cafeconleche.org/");
 }
 catch (ValidityException ex) {
   System.err.println("Cafe con Leche is invalid today. (Somewhat embarrassing.)");
@@ -635,7 +635,7 @@ catch (IOException ex) {
      <informalexample><programlisting>Document doc;
 try {
   Builder parser = new Builder(true);
-  doc = parser.build("http://www.cafeconleche.org/");
+  doc = parser.build("https://www.cafeconleche.org/");
 }
 catch (ValidityException ex) {
   doc = ex.getDocument();
@@ -830,7 +830,7 @@ validity errors in the document:
   </para>
   
   <screen>
-<computeroutput><![CDATA[$ java -classpath .:xom-1.0b3.jar NodeLister http://www.cafeconleche.org
+<computeroutput><![CDATA[$ java -classpath .:xom-1.0b3.jar NodeLister https://www.cafeconleche.org
 nu.xom.Element: html
  nu.xom.Text:
  nu.xom.Element: head
@@ -987,7 +987,7 @@ Top-down descent is the primary navigation path most XOM programs take, and the 
 </para>
 
 
-<screen>$ java -classpath .:../../build/xom-1.0b3.jar TitleSearch http://www.cafeconleche.org 
+<screen>$ java -classpath .:../../build/xom-1.0b3.jar TitleSearch https://www.cafeconleche.org 
 <computeroutput><![CDATA[Cafe con Leche XML News and Resources]]></computeroutput></screen>
 
 </sect2>
@@ -2004,7 +2004,7 @@ catch (IOException ex) {
   <informalexample>
 <programlisting>Builder builder = new Builder();
 Canonicalizer outputter = new Canonicalizer(System.out);
-Document input = builder.build("http://www.cafeconleche.org/");
+Document input = builder.build("https://www.cafeconleche.org/");
 outputter.write(input);</programlisting></informalexample>
 
 <para>When canonicalizing you do not have any options to choose the 

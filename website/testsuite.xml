@@ -279,7 +279,7 @@ while running since otherwise the test might seem to be hung:
 </para>
 
   <para>
-    All of the XOM unit test classes inherit from <code><ulink url="http://www.cafeconleche.org/XOM/apidocs/nu/xom/tests/XOMTestCase.html">nu.xom.tests.XOMTestCase</ulink></code>. This is a subclass of <code>junit.framework.TestCase</code> that provides several
+    All of the XOM unit test classes inherit from <code><ulink url="https://www.cafeconleche.org/XOM/apidocs/nu/xom/tests/XOMTestCase.html">nu.xom.tests.XOMTestCase</ulink></code>. This is a subclass of <code>junit.framework.TestCase</code> that provides several
 additional <code>assertEquals() </code>methods for comparing XOM nodes:
 <code>Text</code> objects, <code>Document</code> objects, <code>Attribute</code> objects, <code>Element</code> objects, and so forth. Mostly these behave as you'd expect with a few notable exceptions.
 You can use this class in your own test cases. 
