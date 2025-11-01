@@ -13,6 +13,8 @@
     <pathelement location="../build/jaxen-classes"/>
     <pathelement path="../lib/xercesImpl-2.12.2.jar"/>
     <pathelement path="../lib/xml-apis-1.4.01.jar"/>
+    <pathelement path="../lib2/docbook-xsl-1.79.2/tools/lib/xalan/xalan.jar"/>
+    <pathelement path="../lib2/docbook-xsl-1.79.2/tools/lib/xalan/serializer.jar"/>
   </path>
 
   <path id="xerces.class.path">
