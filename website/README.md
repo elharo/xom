@@ -12,7 +12,7 @@ The documentation build uses XOM itself for all XML processing tasks:
 
 The build requires:
 
-1. **XOM library** - The main XOM jar file (downloaded from Maven Central)
+1. **XOM library** - Built class files from `../build/classes` and `../build/jaxen-classes`
 2. **Xerces** - XML parser from `../lib/`
 3. **DocBook XSL** - Stylesheets from `../lib2/docbook-xsl-1.79.2/`
 
