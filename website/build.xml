@@ -58,6 +58,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/tutorial.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="${build.dir}/finished_tutorial.xml"/>
         <arg line="tutorial.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -68,6 +69,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/designprinciples.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="designprinciples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -78,6 +80,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/license.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="license.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -88,6 +91,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/infoset.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="infoset.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -98,6 +102,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/xpath.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="xpath.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -108,6 +113,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/faq.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="faq.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -118,6 +124,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/openquestions.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="openquestions.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -128,6 +135,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/futuredirections.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="futuredirections.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -139,6 +147,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/building.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="building.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -150,6 +159,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/install.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="install.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -161,6 +171,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/testsuite.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="testsuite.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
@@ -172,6 +183,7 @@
     <java classname="nu.xom.samples.Transformer" output="${build.dest}/samples.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
+        <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
         <arg line="samples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xom.class.path"/>
