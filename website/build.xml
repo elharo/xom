@@ -14,11 +14,6 @@
     <pathelement path="../lib/xercesImpl-2.12.2.jar"/>
     <pathelement path="../lib/xml-apis-1.4.01.jar"/>
   </path>
-
-  <path id="xerces.class.path">
-     <pathelement path="../lib/dtd-xercesImpl.jar"/> 
-     <pathelement path="../lib/xmlParserAPIs.jar"/> 
-  </path>
   
   <target name="init">
     <!-- Create the time stamp -->
@@ -32,9 +27,7 @@
           description="Merge original chapters and examples into a single file">
     <java classname="nu.xom.samples.XIncludeDriver" output="${build.dir}/finished_tutorial.xml" fork="yes" failonerror="true">
         <arg line="tutorial.xml"/>
-        <classpath refid="xerces.class.path"/>
-        <classpath location="../build/classes"/>
-        <classpath location="../build/jaxen-classes"/>
+        <classpath refid="xom.class.path"/>
      </java>
   </target>
 
