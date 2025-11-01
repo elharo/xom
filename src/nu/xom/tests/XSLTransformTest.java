@@ -1130,4 +1130,43 @@ public class XSLTransformTest extends XOMTestCase {
     }
     
     
+    public void testTransformerFactoryFallback() 
+      throws ParsingException, IOException, XSLException {
+        
+        // Test that XSLTransform falls back to built-in TransformerFactory
+        // when the configured one is not available
+        String oldFactory = System.getProperty("javax.xml.transform.TransformerFactory");
+        try {
+            // Set an invalid TransformerFactory class name
+            System.setProperty("javax.xml.transform.TransformerFactory", 
+                "org.apache.xalan.processor.TransformerFactoryImpl");
+            
+            File stylesheet = new File(inputDir, "identity.xsl");
+            Builder builder = new Builder();
+            Document stylesheetDoc = builder.build(stylesheet);
+            
+            // This should succeed by falling back to the built-in implementation
+            XSLTransform xform = new XSLTransform(stylesheetDoc);
+            
+            Element root = new Element("root");
+            root.appendChild(new Text("test data"));
+            Document input = new Document(root);
+            Nodes output = xform.transform(input);
+            
+            // Verify the transformation worked
+            assertEquals(root, output.get(0));
+        }
+        finally {
+            // Restore the original property
+            if (oldFactory == null) {
+                System.clearProperty("javax.xml.transform.TransformerFactory");
+            }
+            else {
+                System.setProperty("javax.xml.transform.TransformerFactory", oldFactory);
+            }
+        }
+        
+    }
+    
+    
 }
