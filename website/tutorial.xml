@@ -681,7 +681,7 @@ validity errors in the document:
       If you need to control the specific parser class used, you can create
       a SAX <interfacename>XMLReader</interfacename> in the usual way, and then pass it to the 
       <classname>Builder</classname> constructor. For instance, this would allow you to use John Cowan&rsquo;s 
-      <ulink url="http://mercury.ccil.org/~cowan/XML/tagsoup/">TagSoup</ulink> to parse an HTML document into XOM:
+      <ulink url="https://ccil.org/~cowan/XML/tagsoup/">TagSoup</ulink> to parse an HTML document into XOM:
    </para>
    
      <informalexample><programlisting>  try {      
@@ -1312,7 +1312,7 @@ can be moved from one document to another.
 </methodsynopsis>
 
 <para>
-Base URIs are calculated according to the <ulink url="http://www.w3.org/TR/xmlbase/">XML Base Specification</ulink>
+Base URIs are calculated according to the <ulink url="https://www.w3.org/TR/xmlbase/">XML Base Specification</ulink>
 and RFC 2396, taking account of both <markup>xml:base</markup> attributes and the original URIs of the entities 
 from which the node was parsed.
 In the cases of nodes created in memory with no obvious base URI, this method returns the empty string.
@@ -1995,7 +1995,7 @@ catch (IOException ex) {
   
   <para>
     The <classname>nu.xom.canonical.Canonicalizer</classname> class can 
-    serialize a XOM document as <ulink url="http://www.w3.org/TR/xml-c14n">canonical XML</ulink>. 
+    serialize a XOM document as <ulink url="https://www.w3.org/TR/xml-c14n">canonical XML</ulink>. 
     It is used much like a <classname>Serializer</classname>.
     For example, this code fragment 
     writes the canonical form of Cafe con Leche onto <varname>System.out</varname>:
@@ -2076,7 +2076,7 @@ catch (ValidityException ex) {
     looking in the <ulink url="apidocs/">JavaDoc</ulink> or 
     the <literal>nu.xom.samples</literal> package. If you still can't figure out how to do what 
     you need to do,  you can ask 
-    the <ulink url="http://lists.ibiblio.org/mailman/listinfo/xom-interest">xom-interest mailing list</ulink>.
+    the <ulink url="https://lists.ibiblio.org/mailman/listinfo/xom-interest">xom-interest mailing list</ulink>.
     I monitor it pretty closely, so most questions are responded to quickly. I prefer you to ask question about XOM on the list
     rather than e-mailing me personally, since if you have a question, chances are others do too.
     You do not need to subscribe to post. However, non-subscribers posts are moderated, so for the fastest response you may wish to subscribe. 

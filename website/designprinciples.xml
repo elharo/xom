@@ -973,7 +973,7 @@ necessary nor helpful. Method call chaining is not an improvement.
     breaking things. 
     Tests are present to verify correct behavior, and to make sure the right exceptions are thrown when
     incorrect behavior is encountered.
-    <ulink url="http://www.junit.org/">JUnit</ulink>
+    <ulink url="https://junit.org/">JUnit</ulink>
     is the testing framework of choice.
   </para>
   

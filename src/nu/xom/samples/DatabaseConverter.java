@@ -48,7 +48,7 @@ import nu.xom.XMLException;
  * from a relational database using JDBC. A different version of  
  * this example was originally developed for Chapter 4 of 
  * <cite><a 
- * href="http://www.cafeconleche.org/books/xmljava/">Processing
+ * href="https://www.cafeconleche.org/books/xmljava/">Processing
  * XML with Java</a></cite>.
  * </p>
  * 

@@ -20,7 +20,7 @@
 
  <para>
      XOM 1.1 supports 
-     <ulink url="http://www.w3.org/TR/xpath">XPath 1.0</ulink>
+     <ulink url="https://www.w3.org/TR/xpath">XPath 1.0</ulink>
      reasonably faithfully. However
      there are some differences between the XPath data model and the XOM data
      model you need to be aware of when using XPath. 
@@ -133,7 +133,7 @@ is empty because it is adjacent to non-empty <classname>Text</classname> objects
 
 <varlistentry>
      <term>Namespace Nodes</term>
-<listitem><para>XPath defines a <ulink url="http://www.w3.org/TR/xpath#namespace-nodes">namespace node</ulink> as a namespace in scope on an element. XOM mostly works with namespace declarations instead. When evaluating XPath expressions that use the <literal>namespace</literal> axis, XOM uses the XPath definition. However, 
+<listitem><para>XPath defines a <ulink url="https://www.w3.org/TR/xpath#namespace-nodes">namespace node</ulink> as a namespace in scope on an element. XOM mostly works with namespace declarations instead. When evaluating XPath expressions that use the <literal>namespace</literal> axis, XOM uses the XPath definition. However, 
 there is now a <classname>Namespace</classname> subclass of <classname>Node</classname> which is used solely in XPath results.
 These objects are created on the fly as necessary, and are not accessible from the rest of XOM. 
 </para></listitem>
@@ -164,7 +164,7 @@ because it is attempting to return this fictitious root.
      <term>Document Order</term>
      <listitem><para>XPath node-sets are unordered (like any set) and do not contain duplicates. The <classname>Nodes</classname> object returned 
 by the <methodname>query</methodname> method also does not contain duplicates.
-However, it orders all nodes in <ulink url="http://www.w3.org/TR/xpath#dt-document-order">document order</ulink>. Generally this is the order in which nodes would be encountered in a depth first traversal of the tree. Attributes and namespaces 
+However, it orders all nodes in <ulink url="https://www.w3.org/TR/xpath#dt-document-order">document order</ulink>. Generally this is the order in which nodes would be encountered in a depth first traversal of the tree. Attributes and namespaces 
 appear after their parent element in this order and before any child elements. However, otherwise their order is not guaranteed.
 </para></listitem>
 </varlistentry>
