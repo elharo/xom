@@ -176,27 +176,28 @@ public final class XSLTransform {
             factory = TransformerFactory.newInstance();
         }
         catch (TransformerFactoryConfigurationError error) {
-            try {  // fallback to system default XSLT 1.0 transformer
-                factory = TransformerFactory.newInstance(
-                  "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
-                  ClassLoader.getSystemClassLoader()
+            try { // fallback to system default XSLT 1.0 transformer
+                System.setProperty(
+                  "javax.xml.transform.TransformerFactory",
+                  "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl"
                 );
+                factory = TransformerFactory.newInstance();
             }
-            catch (TransformerFactoryConfigurationError error2) {
+            catch (TransformerFactoryConfigurationError ignored) {
                 throw new XSLException(
-                        "Could not load TransformerFactory", error2
+                        "Could not locate a TrAX TransformerFactory", error
                       ); 
             }
         } 
-        
+
         factory.setErrorListener(errorsAreFatal);
         try {
-          this.templates = factory.newTemplates(source);
+            this.templates = factory.newTemplates(source);
         }      
         catch (TransformerConfigurationException ex) {
-           throw new XSLException(
-             "Syntax error in stylesheet", ex
-           );    
+            throw new XSLException(
+              "Syntax error in stylesheet", ex
+            );    
         }
         
     }
@@ -298,7 +299,6 @@ public final class XSLTransform {
      * @param value the value of the parameter
      */
     public void setParameter(String name, String namespace, Object value) {
-       
        
        if (namespace == null || "".equals(namespace)) {
            _setParameter(name, value);
