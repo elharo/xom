@@ -25,7 +25,7 @@
 
   <target name="finished_tutorial.xml" depends="init"
           description="Merge original chapters and examples into a single file">
-    <java classname="nu.xom.samples.XIncludeDriver" output="${build.dir}/finished_tutorial.xml" fork="yes" failonerror="true">
+    <java classname="nu.xom.samples.XIncludeDriver" output="${build.dir}/finished_tutorial.xml" fork="true" failonerror="true">
         <arg line="tutorial.xml"/>
         <classpath refid="xom.class.path"/>
      </java>
@@ -55,7 +55,7 @@
 
 
   <target name="tutorial" description="Generate a single XHTML document" depends="finished_tutorial.xml">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/tutorial.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/tutorial.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -66,7 +66,7 @@
   </target>	 
 
   <target name="design" depends="init" description="Design principles">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/designprinciples.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/designprinciples.xhtml" fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -77,7 +77,7 @@
   </target>	 
 
   <target name="license" depends="init" description="License for XOM">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/license.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/license.xhtml" fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -88,7 +88,7 @@
   </target>	 
 
  <target name="infoset" depends="init" description="Infoset Mapping">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/infoset.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/infoset.xhtml" fork="true"  error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -99,7 +99,7 @@
   </target>	 
 
  <target name="xpath" depends="init" description="XPath Mapping">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/xpath.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/xpath.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -110,7 +110,7 @@
   </target>	 
 
   <target name="faq" depends="init" description="FAQ list for XOM">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/faq.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/faq.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -121,7 +121,7 @@
   </target>	 
 
   <target name="open" depends="init" description="Open Questions list for XOM">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/openquestions.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/openquestions.xhtml" fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -132,7 +132,7 @@
   </target>	 
 
   <target name="future" depends="init" description="Future Directions for XOM">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/futuredirections.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/futuredirections.xhtml" fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -144,7 +144,7 @@
 
 
   <target name="building" depends="init" description="How to build XOM">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/building.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/building.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -156,7 +156,7 @@
 
 
   <target name="install" depends="init" description="How to install XOM">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/install.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/install.xhtml" fork="true"  error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -168,7 +168,7 @@
 
 
   <target name="testsuite" depends="init" description="How to test XOM">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/testsuite.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/testsuite.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
@@ -180,7 +180,7 @@
 
 
   <target name="samples" depends="init" description="Example code">
-    <java classname="nu.xom.samples.Transformer" output="${build.dest}/samples.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="nu.xom.samples.Transformer" output="${build.dest}/samples.xhtml"  fork="true" error="${build.dir}/error.txt" failonerror="true">
         <jvmarg value="-Djdk.xml.xpathExprGrpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathExprOpLimit=0"/>
         <jvmarg value="-Djdk.xml.xpathTotalOpLimit=0"/>
