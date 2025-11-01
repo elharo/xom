@@ -303,8 +303,8 @@ XOM Build file
         <attribute name="Bundle-RequiredExecutionEnvironment" value="JavaSE-1.6"/>
         <attribute name="Export-Package" value="nu.xom, nu.xom.canonical, nu.xom.converters, nu.xom.xinclude, nu.xom.xslt"/>
         <attribute name="Import-Package" value='javax.xml.transform.sax, javax.xml.transform, org.w3c.dom, org.xml.sax, org.xml.sax.helpers, org.xml.sax.ext,
-          org.apache.xerces.parsers;resolution:=optional;version="2.8.0", org.apache.xerces.impl;resolution:=optional;version="2.8.0", 
-          org.apache.xerces.jaxp;resolution:=optional;version="2.9.0", junit.framework;resolution:=optional;version="3.8.1",
+          org.apache.xerces.parsers;resolution:=optional;version="2.12.2", org.apache.xerces.impl;resolution:=optional;version="2.12.2", 
+          org.apache.xerces.jaxp;resolution:=optional;version="2.12.2", junit.framework;resolution:=optional;version="3.8.1",
           com.sun.org.apache.xerces.internal.jaxp;resolution:=optional, com.sun.org.apache.xerces.internal.parsers;resolution:=optional'/>
 
         <section name="nu/xom/">
