@@ -36,8 +36,24 @@ import nu.xom.Text;
 /**
  * <p>
  * Provides utility methods to compare nodes for deep equality in an 
- * infoset sense.
+ * infoset sense. Tests extending this class work with JUnit 4's 
+ * legacy runner, allowing JUnit 3-style tests to run unchanged.
  * </p>
+ * 
+ * <p>
+ * Tests can optionally use JUnit 4 features like <code>org.junit.Assume</code>
+ * to conditionally skip tests. For example, to skip network-dependent tests:
+ * </p>
+ * 
+ * <pre><code>
+ * import static org.junit.Assume.assumeTrue;
+ * 
+ * public void testNetworkOperation() {
+ *     assumeTrue("Skipping network test", 
+ *                System.getenv("SKIP_NETWORK_TESTS") == null);
+ *     // test code here
+ * }
+ * </code></pre>
  *
  * @author Elliotte Rusty Harold
  * @version 1.1a2
