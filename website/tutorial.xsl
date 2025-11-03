@@ -7,14 +7,12 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 version='1.0'>
 
-<xsl:import href="/opt/xml/docbook-xsl/xhtml/docbook.xsl"/>
+  <xsl:import href="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
 
   <xsl:output method="xml" encoding="UTF-8"/>
-<xsl:param name="xref.with.number.and.title" select="0"/>
-               
-
-<xsl:variable name="arg.choice.opt.open.str"></xsl:variable>
-<xsl:variable name="arg.choice.opt.close.str"></xsl:variable>
+  <xsl:param name="xref.with.number.and.title" select="0"/>             
+  <xsl:variable name="arg.choice.opt.open.str"></xsl:variable>
+  <xsl:variable name="arg.choice.opt.close.str"></xsl:variable>
 
 <xsl:template name="user.head.content">
   <meta name="description"
