@@ -1824,7 +1824,8 @@ public class BuilderTest extends XOMTestCase {
             while (cause != null) {
                 if (cause instanceof java.net.UnknownHostException ||
                     cause instanceof java.net.ConnectException) {
-                    // Test skipped due to network unavailability
+                    // TODO: Use @Ignore or assumeTrue when we move to JUnit 4
+                    systemErr.println("Skipping testBaseRelativeResolutionRemotelyWithDirectory: network unavailable");
                     return;
                 }
                 cause = cause.getCause();
