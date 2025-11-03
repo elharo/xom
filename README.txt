@@ -24,8 +24,7 @@ so you may well want to use them. For example,
 $ java -classpath xom-samples.jar:xom-1.3.9.jar:lib/xml-apis.jar:lib/xercesImpl.jar nu.xom.samples.PrettyPrinter filename.xml
 
 junit.jar is only used for testing, and is
-not needed for normal operation of XOM. XOM uses JUnit 4.13.2 with
-legacy runner support, so tests written for JUnit 3 continue to work.
+not needed for normal operation of XOM.
 
 If you want to build XOM from source, you need Apache Ant
 1.6 or later. See https://ant.apache.org/. Once Ant is installed, building
