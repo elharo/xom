@@ -69,7 +69,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="xmlapis.jar"     value="${lib.dir}/xml-apis-1.4.01.jar"/>
     <property name="parser.jar"     value="${lib.dir}/xercesImpl-${xercesVersion}.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.2.1.jar"/>
-    <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
+    <property name="junit.jar"      value="${lib.dir}/junit-4.13.2.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
     
