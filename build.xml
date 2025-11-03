@@ -69,7 +69,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="xmlapis.jar"     value="${lib.dir}/xml-apis-1.4.01.jar"/>
     <property name="parser.jar"     value="${lib.dir}/xercesImpl-${xercesVersion}.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.2.1.jar"/>
-    <property name="junit.jar"      value="${lib.dir}/junit.jar"/>
+    <property name="junit.jar"      value="${lib.dir}/junit-4.13.2.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
     
@@ -389,7 +389,7 @@ XOM Build file
              windowtitle="${Name} ${version}  API"
              docencoding="UTF-8"
              charset="UTF-8"
-             link="https://junit.org/junit/javadoc/3.8.1"
+             link="https://junit.org/junit4/javadoc/4.13.2"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='https://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
        &lt;br /&gt; &lt;a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
@@ -426,7 +426,7 @@ XOM Build file
              docencoding="UTF-8"
              charset="UTF-8"
              noqualifier="java.lang:java.io"
-             link="https://junit.org/junit/javadoc/3.8.1"
+             link="https://junit.org/junit4/javadoc/4.13.2"
              doctitle="${Name} ${version}"
              bottom="Copyright 2002-${year} &lt;a href='https://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
        &lt;br/&gt; &lt;a href='mailto:elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
