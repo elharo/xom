@@ -35,7 +35,7 @@ dependencies {
 ## Dependencies
 
 
-XOM is not complete unto itself. It depends on an underlying SAX parser to read documents and feed the data into a tree structure. While theoretically any SAX2 compliant parser should work, Xerces 2.6.1 and later is the only one that I am fairly confident does work. Xerces 2.8.0 is included with the full distribution. This product includes software developed by the Apache Software Foundation (https://www.apache.org/). Piccolo 1.0.3, Crimson, GNU JAXP 1.0b1, the Oracle XML Parser for Java 9.2.0.2.0D and 9.2.0.5.0, and Xerces versions prior to 2.6.1 all have bugs that prevent them from doing what XOM needs them to do. (Note to XML parser vendors: XOM's test suite gives parsers a very thorough workout, and delves into some of the more obscure parts of the XML spec that many parsers get wrong. You could do a lot worse for testing than making sure all the XOM unit tests pass when using your parser.)
+XOM is not complete unto itself. It depends on an underlying SAX parser to read documents and feed the data into a tree structure. While theoretically any SAX2 compliant parser should work, Xerces 2.6.1 and later is the only one that I am fairly confident does work. Xerces 2.12.2 is included with the full distribution. This product includes software developed by the Apache Software Foundation (https://www.apache.org/). Piccolo 1.0.3, Crimson, GNU JAXP 1.0b1, the Oracle XML Parser for Java 9.2.0.2.0D and 9.2.0.5.0, and Xerces versions prior to 2.6.1 all have bugs that prevent them from doing what XOM needs them to do. (Note to XML parser vendors: XOM's test suite gives parsers a very thorough workout, and delves into some of the more obscure parts of the XML spec that many parsers get wrong. You could do a lot worse for testing than making sure all the XOM unit tests pass when using your parser.)
 
 Similarly XSLT support depends on a TrAX processor. XInclude and XML canonicalization, however, are native.
 
@@ -51,4 +51,5 @@ If you'd like to know more about XOM, I suggest starting with the [tutorial](htt
 - [Issue tracker: Report a defect or feature request](https://github.com/elharo/xom/issues/new)
 - [StackOverflow: Ask "how-to" and "why-didn't-it-work" questions](https://stackoverflow.com/questions/ask?tags=xom)
 - [xom-interest: For open-ended discussion](https://lists.ibiblio.org/mailman/listinfo/xom-interest)
+
 
