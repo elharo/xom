@@ -103,39 +103,6 @@ public class XIncludeTest extends XOMTestCase {
         System.setErr(systemErr);
     }    
     
-    /**
-     * Helper method to check if we're running in a CI environment.
-     * Network-dependent tests can use this to skip execution in CI
-     * where network connectivity may be unreliable.
-     * 
-     * @return true if running in CI, false otherwise
-     */
-    private boolean isRunningInCI() {
-        String ci = System.getenv("CI");
-        String githubActions = System.getenv("GITHUB_ACTIONS");
-        return "true".equalsIgnoreCase(ci) || "true".equalsIgnoreCase(githubActions);
-    }
-    
-    /**
-     * Helper method to check if an exception is network-related.
-     * Checks the exception chain for UnknownHostException or ConnectException.
-     * 
-     * @param e the exception to check
-     * @return true if the exception is network-related, false otherwise
-     */
-    private boolean isNetworkException(Exception e) {
-        Throwable cause = e;
-        while (cause != null) {
-            if (cause instanceof java.net.UnknownHostException ||
-                cause instanceof java.net.ConnectException ||
-                cause instanceof java.net.SocketException) {
-                return true;
-            }
-            cause = cause.getCause();
-        }
-        return false;
-    }
-    
     private void dumpResult(File original, Document result)
       throws IOException {
         
@@ -2283,7 +2250,7 @@ public class XIncludeTest extends XOMTestCase {
     // content negotiation
     public void testAcceptLanguageFrench() 
       throws ParsingException, IOException, XIncludeException {
-        if (isRunningInCI()) {
+        if (CITestUtil.isRunningInCI()) {
             // Skip network tests in CI where connectivity may be unreliable
             return;
         }
@@ -2296,14 +2263,14 @@ public class XIncludeTest extends XOMTestCase {
             );
             assertEquals(expectedResult, result);
         } catch (IOException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testAcceptLanguageFrench: network unavailable");
                 return;
             }
             throw e;
         } catch (XIncludeException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testAcceptLanguageFrench: network unavailable");
                 return;
@@ -2316,7 +2283,7 @@ public class XIncludeTest extends XOMTestCase {
     
     public void testAcceptLanguageEnglish() 
       throws ParsingException, IOException, XIncludeException {
-        if (isRunningInCI()) {
+        if (CITestUtil.isRunningInCI()) {
             // Skip network tests in CI where connectivity may be unreliable
             return;
         }
@@ -2329,14 +2296,14 @@ public class XIncludeTest extends XOMTestCase {
             );
             assertEquals(expectedResult, result);
         } catch (IOException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testAcceptLanguageEnglish: network unavailable");
                 return;
             }
             throw e;
         } catch (XIncludeException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testAcceptLanguageEnglish: network unavailable");
                 return;
@@ -2349,7 +2316,7 @@ public class XIncludeTest extends XOMTestCase {
     
     public void testAcceptPlainText() 
       throws ParsingException, IOException, XIncludeException {
-        if (isRunningInCI()) {
+        if (CITestUtil.isRunningInCI()) {
             // Skip network tests in CI where connectivity may be unreliable
             return;
         }
@@ -2362,14 +2329,14 @@ public class XIncludeTest extends XOMTestCase {
             );
             assertEquals(expectedResult, result);
         } catch (IOException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testAcceptPlainText: network unavailable");
                 return;
             }
             throw e;
         } catch (XIncludeException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testAcceptPlainText: network unavailable");
                 return;
@@ -2382,7 +2349,7 @@ public class XIncludeTest extends XOMTestCase {
     
     public void testAcceptHTML() 
       throws ParsingException, IOException, XIncludeException {
-        if (isRunningInCI()) {
+        if (CITestUtil.isRunningInCI()) {
             // Skip network tests in CI where connectivity may be unreliable
             return;
         }
@@ -2395,14 +2362,14 @@ public class XIncludeTest extends XOMTestCase {
             );
             assertEquals(expectedResult, result);
         } catch (IOException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testAcceptHTML: network unavailable");
                 return;
             }
             throw e;
         } catch (XIncludeException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testAcceptHTML: network unavailable");
                 return;

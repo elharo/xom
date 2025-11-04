@@ -101,39 +101,6 @@ public class BuilderTest extends XOMTestCase {
         System.setErr(systemErr);
         System.gc();
     }
-    
-    /**
-     * Helper method to check if we're running in a CI environment.
-     * Network-dependent tests can use this to skip execution in CI
-     * where network connectivity may be unreliable.
-     * 
-     * @return true if running in CI, false otherwise
-     */
-    private boolean isRunningInCI() {
-        String ci = System.getenv("CI");
-        String githubActions = System.getenv("GITHUB_ACTIONS");
-        return "true".equalsIgnoreCase(ci) || "true".equalsIgnoreCase(githubActions);
-    }
-    
-    /**
-     * Helper method to check if an exception is network-related.
-     * Checks the exception chain for UnknownHostException or ConnectException.
-     * 
-     * @param e the exception to check
-     * @return true if the exception is network-related, false otherwise
-     */
-    private boolean isNetworkException(Exception e) {
-        Throwable cause = e;
-        while (cause != null) {
-            if (cause instanceof java.net.UnknownHostException ||
-                cause instanceof java.net.ConnectException ||
-                cause instanceof java.net.SocketException) {
-                return true;
-            }
-            cause = cause.getCause();
-        }
-        return false;
-    }
        
     // Custom parser to test what happens when parser supplies 
     // malformed data
@@ -1550,14 +1517,14 @@ public class BuilderTest extends XOMTestCase {
     // and possibly other parsers
     public void testBaseRelativeResolutionRemotely()
       throws IOException, ParsingException {
-        if (isRunningInCI()) {
+        if (CITestUtil.isRunningInCI()) {
             // Skip network tests in CI where connectivity may be unreliable
             return;
         }
         try {
             builder.build("http://www.cafeconleche.org");
         } catch (IOException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testBaseRelativeResolutionRemotely: network unavailable");
                 return;
@@ -1569,7 +1536,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testCanonicalizeURLWithQueryString()
       throws IOException, ParsingException {
-        if (isRunningInCI()) {
+        if (CITestUtil.isRunningInCI()) {
             // Skip network tests in CI where connectivity may be unreliable
             return;
         }
@@ -1577,7 +1544,7 @@ public class BuilderTest extends XOMTestCase {
             Document doc = builder.build("http://www.cafeconleche.org/?foo=bar");
             assertEquals("http://www.cafeconleche.org/?foo=bar", doc.getBaseURI());
         } catch (IOException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testCanonicalizeURLWithQueryString: network unavailable");
                 return;
@@ -1874,14 +1841,14 @@ public class BuilderTest extends XOMTestCase {
     // This test requires network access and may be skipped if unavailable
     public void testBaseRelativeResolutionRemotelyWithDirectory()
       throws IOException, ParsingException {
-        if (isRunningInCI()) {
+        if (CITestUtil.isRunningInCI()) {
             // Skip network tests in CI where connectivity may be unreliable
             return;
         }
         try {
             builder.build("http://www.ibiblio.org/xml");
         } catch (IOException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testBaseRelativeResolutionRemotelyWithDirectory: network unavailable");
                 return;
@@ -1896,14 +1863,14 @@ public class BuilderTest extends XOMTestCase {
     // and it is fixed in Xerces 2.6.
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
-        if (isRunningInCI()) {
+        if (CITestUtil.isRunningInCI()) {
             // Skip network tests in CI where connectivity may be unreliable
             return;
         }
         try {
             builder.build("http://www.ibiblio.org/xml/redirecttest.xml");
         } catch (IOException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testRelativeURIResolutionAgainstARedirectedBase: network unavailable");
                 return;
@@ -3551,7 +3518,7 @@ public class BuilderTest extends XOMTestCase {
     
     public void testLocatorReturnsNullSystemIDWithoutRelativeURL() 
       throws ParsingException, IOException {
-        if (isRunningInCI()) {
+        if (CITestUtil.isRunningInCI()) {
             // Skip network tests in CI where connectivity may be unreliable
             return;
         }
@@ -3562,7 +3529,7 @@ public class BuilderTest extends XOMTestCase {
         try {
             builder.build(in);
         } catch (IOException e) {
-            if (isNetworkException(e)) {
+            if (CITestUtil.isNetworkException(e)) {
                 // Skip test if network is unavailable
                 systemErr.println("Skipping testLocatorReturnsNullSystemIDWithoutRelativeURL: network unavailable");
                 return;
@@ -3594,7 +3561,7 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testChemistry() throws ValidityException, ParsingException, IOException {
-      if (isRunningInCI()) {
+      if (CITestUtil.isRunningInCI()) {
           // Skip network tests in CI where connectivity may be unreliable
           return;
       }
@@ -3603,7 +3570,7 @@ public class BuilderTest extends XOMTestCase {
       try {
           builder.build(s);
       } catch (IOException e) {
-          if (isNetworkException(e)) {
+          if (CITestUtil.isNetworkException(e)) {
               // Skip test if network is unavailable
               systemErr.println("Skipping testChemistry: network unavailable");
               return;
