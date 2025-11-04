@@ -298,7 +298,7 @@ public class IDTest extends XOMTestCase {
                         Nodes recognizedIDs = getIDs(inputDoc);
                         assertEquals(expectedIDs.size(), recognizedIDs.size());
                         for (int k = 0; k < expectedIDs.size(); k++) {
-                            assertEquals(expectedIDs.get(i).getValue(), recognizedIDs.get(i).getValue());
+                            assertEquals(expectedIDs.get(k).getValue(), recognizedIDs.get(k).getValue());
                         }
                         if (errorExpected) fail("Did not detect xml:id error");
                     }
