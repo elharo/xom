@@ -1518,12 +1518,18 @@ public class BuilderTest extends XOMTestCase {
     // and possibly other parsers
     public void testBaseRelativeResolutionRemotely()
       throws IOException, ParsingException {
+        if (NetworkTestHelper.isRunningOnCI()) {
+            return; // Skip this test on CI due to unreliable network
+        }
         builder.build("http://www.cafeconleche.org");
     }
     
     
     public void testCanonicalizeURLWithQueryString()
       throws IOException, ParsingException {
+        if (NetworkTestHelper.isRunningOnCI()) {
+            return; // Skip this test on CI due to unreliable network
+        }
         Document doc = builder.build("http://www.cafeconleche.org/?foo=bar");
         assertEquals("http://www.cafeconleche.org/?foo=bar", doc.getBaseURI());
     }
@@ -1840,6 +1846,9 @@ public class BuilderTest extends XOMTestCase {
     // and it is fixed in Xerces 2.6.
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
+        if (NetworkTestHelper.isRunningOnCI()) {
+            return; // Skip this test on CI due to unreliable network
+        }
         builder.build("http://www.ibiblio.org/xml/redirecttest.xml");
     } 
 
@@ -3482,6 +3491,9 @@ public class BuilderTest extends XOMTestCase {
     
     public void testLocatorReturnsNullSystemIDWithoutRelativeURL() 
       throws ParsingException, IOException {
+        if (NetworkTestHelper.isRunningOnCI()) {
+            return; // Skip this test on CI due to unreliable network (external DTD)
+        }
         
         XMLReader reader = new SAXParser();
         reader = new LocatorFilter(reader);
@@ -3513,6 +3525,9 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testChemistry() throws ValidityException, ParsingException, IOException {
+      if (NetworkTestHelper.isRunningOnCI()) {
+          return; // Skip this test on CI due to unreliable network (external DTD)
+      }
       String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
       StringReader s = new StringReader(doc);
       builder.build(s);
