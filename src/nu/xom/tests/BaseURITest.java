@@ -667,8 +667,8 @@ public class BaseURITest extends XOMTestCase {
               doc.getBaseURI()
             );
         } catch (IOException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
+            if (CITestUtil.shouldIgnore(e)) {
+                // Skip test if network is unavailable in CI
                 System.err.println("Skipping testRelativeURIResolutionAgainstARedirectedBase: network unavailable");
                 return;
             }

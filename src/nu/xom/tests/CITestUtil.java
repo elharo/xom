@@ -66,4 +66,16 @@ class CITestUtil {
         }
         return false;
     }
+    
+    /**
+     * Helper method to determine if a network test failure should be ignored.
+     * Network test failures are only ignored when running in CI and the exception
+     * is network-related.
+     * 
+     * @param ex the exception to check
+     * @return true if the test failure should be ignored, false otherwise
+     */
+    static boolean shouldIgnore(Exception ex) {
+        return isRunningInCI() && isNetworkException(ex);
+    }
 }

@@ -331,8 +331,8 @@ public class SAXConverterTest extends XOMTestCase {
             Document doc = builder.build("http://www.cafeconleche.org/");
             convertAndCompare(doc);
         } catch (IOException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
+            if (CITestUtil.shouldIgnore(e)) {
+                // Skip test if network is unavailable in CI
                 System.err.println("Skipping testBigDoc: network unavailable");
                 return;
             }
