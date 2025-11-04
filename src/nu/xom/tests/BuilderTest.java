@@ -3525,12 +3525,12 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testChemistry() throws ValidityException, ParsingException, IOException {
-      if (NetworkTestHelper.isRunningOnCI()) {
-          return; // Skip this test on CI due to unreliable network (external DTD)
-      }
-      String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
-      StringReader s = new StringReader(doc);
-      builder.build(s);
+        if (NetworkTestHelper.isRunningOnCI()) {
+            return; // Skip this test on CI due to unreliable network (external DTD)
+        }
+        String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
+        StringReader s = new StringReader(doc);
+        builder.build(s);
     }
     
     public void testMisbehavingParserInternalDTDSubset() throws IOException {
