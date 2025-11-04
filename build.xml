@@ -528,10 +528,22 @@ XOM Build file
   <!-- This task requires the ANT optional.jar -->
   <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
 
+    <!-- Set default empty values for CI environment variables if not set -->
+    <property environment="env"/>
+    <condition property="ci.value" value="${env.CI}" else="">
+      <isset property="env.CI"/>
+    </condition>
+    <condition property="github_actions.value" value="${env.GITHUB_ACTIONS}" else="">
+      <isset property="env.GITHUB_ACTIONS"/>
+    </condition>
+
     <junit fork="true" failureproperty="testsfailed">
        <classpath refid="test.class.path" />
        <formatter type="${test.outputFormat}" />
        <formatter type="brief" usefile="false" />
+       <!-- Pass CI environment variables to forked JUnit processes -->
+       <env key="CI" value="${ci.value}" />
+       <env key="GITHUB_ACTIONS" value="${github_actions.value}" />
        <batchtest fork="true" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
