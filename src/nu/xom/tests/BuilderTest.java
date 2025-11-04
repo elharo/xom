@@ -1517,10 +1517,6 @@ public class BuilderTest extends XOMTestCase {
     // and possibly other parsers
     public void testBaseRelativeResolutionRemotely()
       throws IOException, ParsingException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
         try {
             builder.build("http://www.cafeconleche.org");
         } catch (IOException e) {
@@ -1536,10 +1532,6 @@ public class BuilderTest extends XOMTestCase {
     
     public void testCanonicalizeURLWithQueryString()
       throws IOException, ParsingException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
         try {
             Document doc = builder.build("http://www.cafeconleche.org/?foo=bar");
             assertEquals("http://www.cafeconleche.org/?foo=bar", doc.getBaseURI());
@@ -1841,10 +1833,6 @@ public class BuilderTest extends XOMTestCase {
     // This test requires network access and may be skipped if unavailable
     public void testBaseRelativeResolutionRemotelyWithDirectory()
       throws IOException, ParsingException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
         try {
             builder.build("http://www.ibiblio.org/xml");
         } catch (IOException e) {
@@ -1863,10 +1851,6 @@ public class BuilderTest extends XOMTestCase {
     // and it is fixed in Xerces 2.6.
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
         try {
             builder.build("http://www.ibiblio.org/xml/redirecttest.xml");
         } catch (IOException e) {
@@ -3518,10 +3502,6 @@ public class BuilderTest extends XOMTestCase {
     
     public void testLocatorReturnsNullSystemIDWithoutRelativeURL() 
       throws ParsingException, IOException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
         XMLReader reader = new SAXParser();
         reader = new LocatorFilter(reader);
         Builder builder = new Builder(reader);
@@ -3561,10 +3541,6 @@ public class BuilderTest extends XOMTestCase {
     }
     
     public void testChemistry() throws ValidityException, ParsingException, IOException {
-      if (CITestUtil.isRunningInCI()) {
-          // Skip network tests in CI where connectivity may be unreliable
-          return;
-      }
       String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
       StringReader s = new StringReader(doc);
       try {

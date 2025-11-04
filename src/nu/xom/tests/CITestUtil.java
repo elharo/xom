@@ -51,11 +51,11 @@ class CITestUtil {
      * Helper method to check if an exception is network-related.
      * Checks the exception chain for UnknownHostException or ConnectException.
      * 
-     * @param e the exception to check
+     * @param ex the exception to check
      * @return true if the exception is network-related, false otherwise
      */
-    static boolean isNetworkException(Exception e) {
-        Throwable cause = e;
+    static boolean isNetworkException(Exception ex) {
+        Throwable cause = ex;
         while (cause != null) {
             if (cause instanceof java.net.UnknownHostException ||
                 cause instanceof java.net.ConnectException ||

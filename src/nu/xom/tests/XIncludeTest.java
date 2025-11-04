@@ -2250,132 +2250,56 @@ public class XIncludeTest extends XOMTestCase {
     // content negotiation
     public void testAcceptLanguageFrench() 
       throws ParsingException, IOException, XIncludeException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
+      
         File input = new File(inputDir, "acceptfrench.xml");
         Document doc = builder.build(input);
-        try {
-            Document result = XIncluder.resolve(doc);
-            Document expectedResult = builder.build(
-              new File(outputDir, "acceptfrench.xml")
-            );
-            assertEquals(expectedResult, result);
-        } catch (IOException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
-                systemErr.println("Skipping testAcceptLanguageFrench: network unavailable");
-                return;
-            }
-            throw e;
-        } catch (XIncludeException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
-                systemErr.println("Skipping testAcceptLanguageFrench: network unavailable");
-                return;
-            }
-            throw e;
-        }
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File(outputDir, "acceptfrench.xml")
+        );
+        assertEquals(expectedResult, result);
         
     }
     
     
     public void testAcceptLanguageEnglish() 
       throws ParsingException, IOException, XIncludeException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
+      
         File input = new File(inputDir, "acceptenglish.xml");
         Document doc = builder.build(input);
-        try {
-            Document result = XIncluder.resolve(doc);
-            Document expectedResult = builder.build(
-              new File(outputDir, "acceptenglish.xml")
-            );
-            assertEquals(expectedResult, result);
-        } catch (IOException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
-                systemErr.println("Skipping testAcceptLanguageEnglish: network unavailable");
-                return;
-            }
-            throw e;
-        } catch (XIncludeException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
-                systemErr.println("Skipping testAcceptLanguageEnglish: network unavailable");
-                return;
-            }
-            throw e;
-        }
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File(outputDir, "acceptenglish.xml")
+        );
+        assertEquals(expectedResult, result);
         
     }
     
     
     public void testAcceptPlainText() 
       throws ParsingException, IOException, XIncludeException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
+      
         File input = new File(inputDir, "acceptplaintext.xml");
         Document doc = builder.build(input);
-        try {
-            Document result = XIncluder.resolve(doc);
-            Document expectedResult = builder.build(
-              new File(outputDir, "acceptplaintext.xml")
-            );
-            assertEquals(expectedResult, result);
-        } catch (IOException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
-                systemErr.println("Skipping testAcceptPlainText: network unavailable");
-                return;
-            }
-            throw e;
-        } catch (XIncludeException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
-                systemErr.println("Skipping testAcceptPlainText: network unavailable");
-                return;
-            }
-            throw e;
-        }
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File(outputDir, "acceptplaintext.xml")
+        );
+        assertEquals(expectedResult, result);
         
     }
     
     
     public void testAcceptHTML() 
       throws ParsingException, IOException, XIncludeException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
+      
         File input = new File(inputDir, "accepthtml.xml");
         Document doc = builder.build(input);
-        try {
-            Document result = XIncluder.resolve(doc);
-            Document expectedResult = builder.build(
-              new File(outputDir, "accepthtml.xml")
-            );
-            assertEquals(expectedResult, result);
-        } catch (IOException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
-                systemErr.println("Skipping testAcceptHTML: network unavailable");
-                return;
-            }
-            throw e;
-        } catch (XIncludeException e) {
-            if (CITestUtil.isNetworkException(e)) {
-                // Skip test if network is unavailable
-                systemErr.println("Skipping testAcceptHTML: network unavailable");
-                return;
-            }
-            throw e;
-        }
+        Document result = XIncluder.resolve(doc);
+        Document expectedResult = builder.build(
+          new File(outputDir, "accepthtml.xml")
+        );
+        assertEquals(expectedResult, result);
         
     }
     

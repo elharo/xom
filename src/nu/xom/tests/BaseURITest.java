@@ -658,10 +658,6 @@ public class BaseURITest extends XOMTestCase {
     
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
         Builder builder = new Builder();
         try {
             Document doc = builder.build(

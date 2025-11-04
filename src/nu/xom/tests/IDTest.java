@@ -236,10 +236,6 @@ public class IDTest extends XOMTestCase {
     
     public void testXMLIDTestSuiteFromW3CServer() 
       throws ParsingException, IOException {
-        if (CITestUtil.isRunningInCI()) {
-            // Skip network tests in CI where connectivity may be unreliable
-            return;
-        }
         try {
             URL base = new URL("https://www.w3.org/XML/2005/01/xml-id/test-suite.xml");
             Builder builder = new Builder();
