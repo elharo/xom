@@ -103,6 +103,7 @@ public class XIncludeTest extends XOMTestCase {
         System.setErr(systemErr);
     }    
     
+    
     private void dumpResult(File original, Document result)
       throws IOException {
         
