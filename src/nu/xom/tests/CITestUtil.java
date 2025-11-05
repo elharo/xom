@@ -1,4 +1,4 @@
-/* Copyright 2024 Elliotte Rusty Harold
+/* Copyright 2025 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -19,6 +19,8 @@
 */
 
 package nu.xom.tests;
+
+import java.io.IOException;
 
 /**
  * <p>
@@ -54,7 +56,7 @@ class CITestUtil {
      * @param ex the exception to check
      * @return true if the exception is network-related, false otherwise
      */
-    static boolean isNetworkException(Exception ex) {
+    static boolean isNetworkException(IOException ex) {
         Throwable cause = ex;
         while (cause != null) {
             if (cause instanceof java.net.UnknownHostException ||
@@ -75,7 +77,7 @@ class CITestUtil {
      * @param ex the exception to check
      * @return true if the test failure should be ignored, false otherwise
      */
-    static boolean shouldIgnore(Exception ex) {
+    static boolean shouldIgnore(IOException ex) {
         return isRunningInCI() && isNetworkException(ex);
     }
 }
