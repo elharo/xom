@@ -8,8 +8,10 @@
   <property name="build.dest" value="${build.dir}/website"/>
   <property name="parentdist.dir"   value="../dist/website"/>
 
-  <path id="xslt.class.path">
-    <pathelement path="/opt/xml/saxon/saxon.jar"/>
+  <!-- The JDK's XSLT engine cannot handle the DocBook XSLT stylesheets
+    so we bundle a really old version of Saxon. --> 
+  <path id="saxon.classpath">
+    <pathelement path="../lib2/saxon.jar"/>
   </path>
 
   <path id="xerces.class.path">
@@ -65,7 +67,7 @@
         <arg line="${build.dir}/finished_tutorial.xml"/>
         <arg line="tutorial.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -74,7 +76,7 @@
         <arg line="designprinciples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -83,7 +85,7 @@
         <arg line="license.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -92,7 +94,7 @@
         <arg line="infoset.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -101,7 +103,7 @@
         <arg line="xpath.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -110,7 +112,7 @@
         <arg line="faq.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -119,7 +121,7 @@
         <arg line="openquestions.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -128,7 +130,7 @@
         <arg line="futuredirections.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -138,7 +140,7 @@
         <arg line="building.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -148,7 +150,7 @@
         <arg line="install.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -158,7 +160,7 @@
         <arg line="testsuite.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>	 
 
@@ -168,7 +170,7 @@
         <arg line="samples.xml"/>
         <arg line="../lib2/docbook-xsl-1.79.2/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
-        <classpath refid="xslt.class.path"/>
+        <classpath refid="saxon.classpath"/>
      </java>
   </target>
 
