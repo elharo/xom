@@ -1519,13 +1519,13 @@ public class BuilderTest extends XOMTestCase {
       throws IOException, ParsingException {
         try {
             builder.build("http://www.cafeconleche.org");
-        } catch (IOException e) {
-            if (CITestUtil.shouldIgnore(e)) {
+        } catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
                 // Skip test if network is unavailable in CI
                 systemErr.println("Skipping testBaseRelativeResolutionRemotely: network unavailable");
                 return;
             }
-            throw e;
+            throw ex;
         }
     }
     
@@ -1535,13 +1535,13 @@ public class BuilderTest extends XOMTestCase {
         try {
             Document doc = builder.build("http://www.cafeconleche.org/?foo=bar");
             assertEquals("http://www.cafeconleche.org/?foo=bar", doc.getBaseURI());
-        } catch (IOException e) {
-            if (CITestUtil.shouldIgnore(e)) {
+        } catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
                 // Skip test if network is unavailable in CI
                 systemErr.println("Skipping testCanonicalizeURLWithQueryString: network unavailable");
                 return;
             }
-            throw e;
+            throw ex;
         }
     }
   
@@ -1835,13 +1835,13 @@ public class BuilderTest extends XOMTestCase {
       throws IOException, ParsingException {
         try {
             builder.build("http://www.ibiblio.org/xml");
-        } catch (IOException e) {
-            if (CITestUtil.shouldIgnore(e)) {
+        } catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
                 // Skip test if network is unavailable in CI
                 systemErr.println("Skipping testBaseRelativeResolutionRemotelyWithDirectory: network unavailable");
                 return;
             }
-            throw e;
+            throw ex;
         }
     } 
 
@@ -1853,13 +1853,13 @@ public class BuilderTest extends XOMTestCase {
       throws IOException, ParsingException {
         try {
             builder.build("http://www.ibiblio.org/xml/redirecttest.xml");
-        } catch (IOException e) {
-            if (CITestUtil.shouldIgnore(e)) {
+        } catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
                 // Skip test if network is unavailable in CI
                 systemErr.println("Skipping testRelativeURIResolutionAgainstARedirectedBase: network unavailable");
                 return;
             }
-            throw e;
+            throw ex;
         }
     } 
 
@@ -3508,13 +3508,13 @@ public class BuilderTest extends XOMTestCase {
         InputStream in = new FileInputStream("data/nonquirky.xhtml");
         try {
             builder.build(in);
-        } catch (IOException e) {
-            if (CITestUtil.shouldIgnore(e)) {
+        } catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
                 // Skip test if network is unavailable in CI
                 systemErr.println("Skipping testLocatorReturnsNullSystemIDWithoutRelativeURL: network unavailable");
                 return;
             }
-            throw e;
+            throw ex;
         }
         
     }
@@ -3545,13 +3545,13 @@ public class BuilderTest extends XOMTestCase {
       StringReader s = new StringReader(doc);
       try {
           builder.build(s);
-      } catch (IOException e) {
-          if (CITestUtil.shouldIgnore(e)) {
+      } catch (IOException ex) {
+          if (CITestUtil.shouldIgnore(ex)) {
               // Skip test if network is unavailable in CI
               systemErr.println("Skipping testChemistry: network unavailable");
               return;
           }
-          throw e;
+          throw ex;
       }
     }
     

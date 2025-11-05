@@ -270,13 +270,13 @@ public class IDTest extends XOMTestCase {
                     }
                 } // end for
             }
-        } catch (IOException e) {
-            if (CITestUtil.shouldIgnore(e)) {
+        } catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
                 // Skip test if network is unavailable in CI
                 System.err.println("Skipping testXMLIDTestSuiteFromW3CServer: network unavailable");
                 return;
             }
-            throw e;
+            throw ex;
         }
         
     }
