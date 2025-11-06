@@ -48,7 +48,6 @@ public class IDTest extends XOMTestCase {
     public IDTest(String name) {
         super(name);
     }
-
     
     public void testBuilderAllowsNonNCNameXmlIdAttributes() 
       throws ParsingException, IOException {
@@ -237,39 +236,47 @@ public class IDTest extends XOMTestCase {
     
     public void testXMLIDTestSuiteFromW3CServer() 
       throws ParsingException, IOException {
-        
-        URL base = new URL("https://www.w3.org/XML/2005/01/xml-id/test-suite.xml");
-        Builder builder = new Builder();
-        Document catalog = builder.build(base.openStream());
-        Element testsuite = catalog.getRootElement();
-        Elements testCatalogs = testsuite.getChildElements("test-catalog");
-        for (int i = 0; i < testCatalogs.size(); i++) {
-            Elements testcases = testCatalogs.get(i).getChildElements("test-case");
-            for (int j = 0; j < testcases.size(); j++) {
-                Element testcase = testcases.get(j);
-                String features = testcase.getAttributeValue("feature");
-                if (features != null && features.indexOf("xml11") >= 0) {
-                    continue; // skip test
-                }
-                URL testURL = new URL(base, testcase.getFirstChildElement("file-path").getValue() + "/");
-                Element scenario = testcase.getFirstChildElement("scenario");
-                boolean errorExpected = scenario.getAttribute("operation").getValue().equals("error");
-                Element input = scenario.getFirstChildElement("input-file");
-                URL inputFile = new URL(testURL, input.getValue());
-                Elements expectedIDs = scenario.getChildElements("id");
-                try {
-                    Document inputDoc = builder.build(inputFile.openStream());
-                    Nodes recognizedIDs = getIDs(inputDoc);
-                    assertEquals(expectedIDs.size(), recognizedIDs.size());
-                    for (int k = 0; k < expectedIDs.size(); k++) {
-                        assertEquals(expectedIDs.get(i).getValue(), recognizedIDs.get(i).getValue());
+        try {
+            URL base = new URL("https://www.w3.org/XML/2005/01/xml-id/test-suite.xml");
+            Builder builder = new Builder();
+            Document catalog = builder.build(base.openStream());
+            Element testsuite = catalog.getRootElement();
+            Elements testCatalogs = testsuite.getChildElements("test-catalog");
+            for (int i = 0; i < testCatalogs.size(); i++) {
+                Elements testcases = testCatalogs.get(i).getChildElements("test-case");
+                for (int j = 0; j < testcases.size(); j++) {
+                    Element testcase = testcases.get(j);
+                    String features = testcase.getAttributeValue("feature");
+                    if (features != null && features.indexOf("xml11") >= 0) {
+                        continue; // skip test
                     }
-                    if (errorExpected) fail("Did not detect xml:id error");
-                }
-                catch (ParsingException ex) {
-                    if (!errorExpected) throw ex;
-                }
-            } // end for
+                    URL testURL = new URL(base, testcase.getFirstChildElement("file-path").getValue() + "/");
+                    Element scenario = testcase.getFirstChildElement("scenario");
+                    boolean errorExpected = scenario.getAttribute("operation").getValue().equals("error");
+                    Element input = scenario.getFirstChildElement("input-file");
+                    URL inputFile = new URL(testURL, input.getValue());
+                    Elements expectedIDs = scenario.getChildElements("id");
+                    try {
+                        Document inputDoc = builder.build(inputFile.openStream());
+                        Nodes recognizedIDs = getIDs(inputDoc);
+                        assertEquals(expectedIDs.size(), recognizedIDs.size());
+                        for (int k = 0; k < expectedIDs.size(); k++) {
+                            assertEquals(expectedIDs.get(k).getValue(), recognizedIDs.get(k).getValue());
+                        }
+                        if (errorExpected) fail("Did not detect xml:id error");
+                    }
+                    catch (ParsingException ex) {
+                        if (!errorExpected) throw ex;
+                    }
+                } // end for
+            }
+        } catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
+                // Skip test if network is unavailable in CI
+                System.err.println("Skipping testXMLIDTestSuiteFromW3CServer: network unavailable");
+                return;
+            }
+            throw ex;
         }
         
     }

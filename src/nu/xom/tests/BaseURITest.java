@@ -658,14 +658,22 @@ public class BaseURITest extends XOMTestCase {
     
     public void testRelativeURIResolutionAgainstARedirectedBase()
       throws IOException, ParsingException {
-        
         Builder builder = new Builder();
-        Document doc = builder.build(
-          "http://www.ibiblio.org/xml/redirecttest.xml");
-        assertEquals(
-          "http://www.cafeconleche.org/redirecttest.xml", 
-          doc.getBaseURI()
-        );
+        try {
+            Document doc = builder.build(
+              "http://www.ibiblio.org/xml/redirecttest.xml");
+            assertEquals(
+              "http://www.cafeconleche.org/redirecttest.xml", 
+              doc.getBaseURI()
+            );
+        } catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
+                // Skip test if network is unavailable in CI
+                System.err.println("Skipping testRelativeURIResolutionAgainstARedirectedBase: network unavailable");
+                return;
+            }
+            throw ex;
+        }
         
     } 
    
