@@ -47,7 +47,7 @@ subject line. The XOM home page is https://xom.nu/
     <!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? 
          Problem is release version doesn't get a version qualifier. -->
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
-    <property name="jaxenversion" value="1.1.6"/>
+    <property name="jaxenversion" value="2.0.0"/>
     <property name="year"    value="2023"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -681,7 +681,7 @@ XOM Build file
 
 
   <target name="compile-jaxen" description="Compile Jaxen" depends="get-jaxen">
-    <javac srcdir="${build.dir}/jaxen-${jaxenversion}/src/java/main"
+    <javac srcdir="${build.dir}/jaxen-${jaxenversion}/core/src/java/main"
            destdir="${build.dir}/jaxen-classes"
            debug="${debug}"
            optimize="${optimize}"
