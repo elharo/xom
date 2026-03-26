@@ -2262,7 +2262,7 @@ public class XPathTest extends XOMTestCase {
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
-        File jaxenBase = new File("data/jaxen");
+        File jaxenBase = new File(System.getProperty("jaxen.data.dir", "build/jaxen-2.0.0"));
         Builder builder = new Builder();
         Document testDoc = builder.build(new File(jaxenBase, "xml/test/tests.xml"));
         Elements documents = testDoc.getRootElement().getChildElements("document");
