@@ -327,17 +327,9 @@ public class SAXConverterTest extends XOMTestCase {
     
     public void testBigDoc()
       throws IOException, SAXException, ParsingException {
-        try {
-            Document doc = builder.build("http://www.cafeconleche.org/");
-            convertAndCompare(doc);
-        } catch (IOException ex) {
-            if (CITestUtil.shouldIgnore(ex)) {
-                // Skip test if network is unavailable in CI
-                System.err.println("Skipping testBigDoc: network unavailable");
-                return;
-            }
-            throw ex;
-        }
+        File input = new File(new File("data"), "cafeconleche.org.html");
+        Document doc = builder.build(input);
+        convertAndCompare(doc);
     }
 
     
