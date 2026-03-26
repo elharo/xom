@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="nu.xom" module="xom"/>
+  <configurations>
+    <conf name="servlets" description="Dependencies for servlet samples"/>
+  </configurations>
+  <dependencies>
+    <dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="servlets->default"/>
+  </dependencies>
+</ivy-module>

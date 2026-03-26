@@ -24,9 +24,15 @@ subject line. The XOM home page is https://xom.nu/
     <description>
       Build XOM
     </description>
+
+  <!-- Ivy properties for dependency management -->
+  <property name="ivy.version"  value="2.5.3"/>
+  <property name="ivy.jar.dir"  value="${user.home}/.ant/lib"/>
+  <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy-${ivy.version}.jar"/>
+  <property name="ivy.lib.dir"  value="./lib2/ivy"/>
    
   <!-- set global properties for this build -->
-  <target name="init">
+  <target name="init" depends="ivy-resolve">
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
@@ -69,6 +75,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="xmlapis.jar"     value="${lib.dir}/xml-apis-1.4.01.jar"/>
     <property name="parser.jar"     value="${lib.dir}/xercesImpl-${xercesVersion}.jar"/>
     <property name="tagsoup.jar"    value="${lib2.dir}/tagsoup-1.2.1.jar"/>
+    <property name="servlet.jar"    value="${ivy.lib.dir}/servlet-api-2.5.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit-4.13.2.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
@@ -122,6 +129,8 @@ subject line. The XOM home page is https://xom.nu/
         <pathelement location="${tagsoup.jar}" />
       </classpath>
     </available>
+
+    <available property="servlet.jar.installed" file="${servlet.jar}"/>
     
   </target>
   
@@ -149,6 +158,27 @@ XOM Build file
 
 -------------------------------------------------------------
     </echo>
+  </target>
+
+  <target name="ivy-bootstrap" description="Download Apache Ivy if not present">
+    <mkdir dir="${ivy.jar.dir}"/>
+    <get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar"
+         dest="${ivy.jar.file}"
+         skipexisting="true"
+         usetimestamp="true"/>
+  </target>
+
+  <target name="ivy-resolve" depends="ivy-bootstrap" description="Resolve dependencies using Apache Ivy">
+    <taskdef resource="org/apache/ivy/ant/antlib.xml"
+             uri="antlib:org.apache.ivy.ant"
+             classpath="${ivy.jar.file}"/>
+    <mkdir dir="${ivy.lib.dir}"/>
+    <ivy:settings xmlns:ivy="antlib:org.apache.ivy.ant" id="ivy.settings" file="ivysettings.xml"/>
+    <ivy:resolve xmlns:ivy="antlib:org.apache.ivy.ant" file="ivy.xml" settingsRef="ivy.settings"/>
+    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
+                  pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+                  conf="servlets"
+                  settingsRef="ivy.settings"/>
   </target>
 
   <target name="prepare" depends="init, prepare-dirs, prepare-fat" />
