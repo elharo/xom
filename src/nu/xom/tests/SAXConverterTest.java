@@ -327,8 +327,7 @@ public class SAXConverterTest extends XOMTestCase {
     
     public void testBigDoc()
       throws IOException, SAXException, ParsingException {
-        File input = new File("data");
-        input = new File(input, "cafeconleche.org.html");
+        File input = new File(new File("data"), "cafeconleche.org.html");
         Document doc = builder.build(input);
         convertAndCompare(doc);
     }
