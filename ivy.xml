@@ -3,8 +3,10 @@
   <info organisation="nu.xom" module="xom"/>
   <configurations>
     <conf name="servlets" description="Dependencies for servlet samples"/>
+    <conf name="betterdoc" description="Dependencies for generating improved JavaDoc"/>
   </configurations>
   <dependencies>
     <dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="servlets->default"/>
+    <dependency org="org.ccil.cowan.tagsoup" name="tagsoup" rev="1.2.1" conf="betterdoc->default"/>
   </dependencies>
 </ivy-module>
