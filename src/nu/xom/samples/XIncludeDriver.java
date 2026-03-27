@@ -71,7 +71,6 @@ public class XIncludeDriver {
         }
         catch (IOException e) {
 			System.err.println("I/O error reading " + args[0] + " " + e.getMessage());
-			e.printStackTrace();
 			System.exit(2);
 		}
         catch (ParsingException e) {
