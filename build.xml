@@ -76,6 +76,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="parser.jar"     value="${lib.dir}/xercesImpl-${xercesVersion}.jar"/>
     <property name="tagsoup.jar"    value="${ivy.lib.dir}/tagsoup-1.2.1.jar"/>
     <property name="servlet.jar"    value="${ivy.lib.dir}/servlet-api-2.5.jar"/>
+    <property name="jarjar.jar"     value="${ivy.lib.dir}/jarjar-1.3.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit-4.13.2.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
@@ -182,6 +183,10 @@ XOM Build file
     <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
                   pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="betterdoc"
+                  settingsRef="ivy.settings"/>
+    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
+                  pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+                  conf="jarjar"
                   settingsRef="ivy.settings"/>
   </target>
 
@@ -302,7 +307,7 @@ XOM Build file
 
   <target name="jar" depends="compile" description="Create xom.jar">
      <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
-              classpath="${lib2.dir}/jarjar-1.0.jar"/>
+              classpath="${jarjar.jar}"/>
     <jarjar jarfile="${build.dir}/${name}-${version}.jar"
          basedir="${build.dest}"
          index="no"
