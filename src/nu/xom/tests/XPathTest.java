@@ -2264,12 +2264,13 @@ public class XPathTest extends XOMTestCase {
         
         File jaxenBase = new File(System.getProperty("jaxen.data.dir", "build/jaxen-2.0.0"));
         Builder builder = new Builder();
-        Document testDoc = builder.build(new File(jaxenBase, "xml/test/tests.xml"));
+        File integrationTests = new File(jaxenBase, "integration-tests");
+        Document testDoc = builder.build(new File(integrationTests, "xml/test/tests.xml"));
         Elements documents = testDoc.getRootElement().getChildElements("document");
         for (int i = 0; i < documents.size(); i++) {
             Element documentElement = documents.get(i);
             String url = documentElement.getAttributeValue("url");
-            Document source = builder.build(new File(jaxenBase, url));
+            Document source = builder.build(new File(integrationTests, url));
             Elements contextElements = documentElement.getChildElements("context");
             for (int j = 0; j < contextElements.size(); j++) {
                 Element contextElement = contextElements.get(j);
