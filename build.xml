@@ -60,7 +60,6 @@ subject line. The XOM home page is https://xom.nu/
     <property name="src.dir"    value="./src"/>
     <property name="fat.src"    value="./fatsrc"/>
     <property name="lib.dir"    value="./lib"/>
-    <property name="lib2.dir"   value="./lib2"/>
     <property name="packages"   value="nu.xom.*"/>
     <property name="jaxen.dir"  value="${build.dir}/jaxen-classes"/>
 
@@ -83,7 +82,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
     
-    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, ivy/**, xom.fb, jester*, trademark*"/>
+    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*"/>
 
     <property name="test.outputFormat" value="xml"/>   
     <property name="binary.jar" location="${dist.dir}/maven2/xom-${version}.jar" />
@@ -193,10 +192,6 @@ XOM Build file
     <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
                   pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="saxon"
-                  settingsRef="ivy.settings"/>
-    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
-                  pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
-                  conf="jaxen"
                   settingsRef="ivy.settings"/>
     <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
                   pattern="${ivy.lib.dir}/[artifact]-[revision]-[classifier].[ext]"
