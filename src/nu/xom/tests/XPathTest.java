@@ -22,8 +22,13 @@ package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.net.MalformedURLException;
 
 import nu.xom.Attribute;
@@ -2265,10 +2270,18 @@ public class XPathTest extends XOMTestCase {
         File jaxenBase = new File(System.getProperty("jaxen.data.dir", "build/jaxen-2.0.0"));
         File integrationTests = new File(jaxenBase, "integration-tests");
         if (!integrationTests.exists()) {
-            // jaxen source has not been extracted yet (e.g. running from an IDE without
-            // running "ant get-jaxen" first); skip the test rather than fail confusingly.
-            return;
+            // Attempt to self-extract from the bundled zip (e.g. when running from an IDE
+            // without having run "ant get-jaxen" first).
+            File destDir = jaxenBase.getParentFile();
+            if (destDir == null) destDir = new File(".");
+            File zipFile = new File(jaxenBase.getName() + "-src.zip");
+            if (zipFile.exists()) {
+                extractZip(zipFile, destDir);
+            }
         }
+        org.junit.Assume.assumeTrue(
+                "jaxen integration test data not available at " + integrationTests,
+                integrationTests.exists());
         Builder builder = new Builder();
         Document testDoc = builder.build(new File(integrationTests, "xml/test/tests.xml"));
         Elements documents = testDoc.getRootElement().getChildElements("document");
@@ -2397,6 +2410,41 @@ public class XPathTest extends XOMTestCase {
             }
         }
         return false;
+    }
+
+
+    private static void extractZip(File zipFile, File destDir) throws IOException {
+
+        ZipFile zip = new ZipFile(zipFile);
+        try {
+            Enumeration<? extends ZipEntry> entries = zip.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                File dest = new File(destDir, entry.getName());
+                if (entry.isDirectory()) {
+                    dest.mkdirs();
+                } else {
+                    dest.getParentFile().mkdirs();
+                    InputStream in = zip.getInputStream(entry);
+                    try {
+                        FileOutputStream out = new FileOutputStream(dest);
+                        try {
+                            byte[] buf = new byte[4096];
+                            int n;
+                            while ((n = in.read(buf)) != -1) {
+                                out.write(buf, 0, n);
+                            }
+                        } finally {
+                            out.close();
+                        }
+                    } finally {
+                        in.close();
+                    }
+                }
+            }
+        } finally {
+            zip.close();
+        }
     }
     
     
