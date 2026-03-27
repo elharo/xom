@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
-                      "https://docbook.org/xml/4.3/docbookx.dtd">
+<!DOCTYPE article [
+ <!ENTITY rsquo  "&#x2019;">
+]>
 <article revision="20161210" status="rough">
   <title>XOM License</title>
 
