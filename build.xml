@@ -60,13 +60,13 @@ subject line. The XOM home page is https://xom.nu/
     <property name="src.dir"    value="./src"/>
     <property name="fat.src"    value="./fatsrc"/>
     <property name="lib.dir"    value="./lib"/>
-    <property name="lib2.dir"   value="./lib2"/>
     <property name="packages"   value="nu.xom.*"/>
 
     <property name="build.dir"       value="./build"/>
     <property name="build.src"       value="./build/src"/>
     <property name="build.dest"      value="./build/classes"/>
     <property name="build.javadocs"  value="./build/apidocs"/>
+    <property name="jaxen.dir"       value="${build.dir}/jaxen-classes"/>
     <property name="testoutput.dir"  value="./testresults"/>
     <property name="dist.dir"        value="./dist"/>    
     <property name="testreports.dir" value="./testreports" />
@@ -82,7 +82,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
     
-    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, lib2/**, ivy/**, xom.fb, jester*, trademark*"/>
+    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*"/>
 
     <property name="test.outputFormat" value="xml"/>   
     <property name="binary.jar" location="${dist.dir}/maven2/xom-${version}.jar" />
@@ -97,7 +97,7 @@ subject line. The XOM home page is https://xom.nu/
       <pathelement location="${parser.jar}"/>
       <pathelement location="${xmlapis.jar}"/>
       <pathelement location="${junit.jar}"/>
-      <pathelement location="${jaxen.jar}"/>
+      <pathelement location="${jaxen.dir}"/>
       <pathelement location="${servlet.jar}"/>
     </path>
 
@@ -105,7 +105,7 @@ subject line. The XOM home page is https://xom.nu/
       <pathelement location="${xmlapis.jar}"/>
       <pathelement location="${parser.jar}"/>
       <pathelement location="${xom-core}"/>
-      <pathelement location="${jaxen.jar}"/>
+      <pathelement location="${jaxen.dir}"/>
     </path>
     
     <path id="test.class.path">
@@ -189,10 +189,8 @@ XOM Build file
     <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="saxon"
                   settingsRef="ivy.settings"/>
-    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
-                  conf="jaxen"
-                  settingsRef="ivy.settings"/>
-    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision]-[classifier].[ext]"
+    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
+                  pattern="${ivy.lib.dir}/[artifact]-[revision]-[classifier].[ext]"
                   conf="docbook"
                   settingsRef="ivy.settings"/>
     <unzip src="${ivy.lib.dir}/docbook-xsl-${docbook.xsl.version}-resources.zip"
@@ -209,6 +207,8 @@ XOM Build file
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.src}"/>
     <mkdir dir="${build.dest}"/>
+    <mkdir dir="${build.dir}/jaxen"/>
+    <mkdir dir="${build.dir}/jaxen-classes"/>
 
     <delete file="${build.src}/nu/xom/Text.java" failonerror="false"/>
 
@@ -226,8 +226,9 @@ XOM Build file
   </target>
 
 
-  <target name="compile-core" depends="prepare" 
+  <target name="compile-core" depends="prepare, compile-jaxen" 
           description="Compile the source code">
+    <echo message="Using Classpath: ${compile.classpath}"/>
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
@@ -323,9 +324,9 @@ XOM Build file
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*  nu/xom/integrationtests/*">
 
-      <zipfileset src="${jaxen.jar}"
-         excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/XPathTestBase.class org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/** org/jaxen/**Test.class org/jaxen/saxpath/base/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/pattern/** org/jaxen/saxpath/SAXPathParseException.class org/w3c/dom/UserDataHandler.class org/jaxen/pattern/PriorityTest.class META-INF/**">
-      </zipfileset>
+      <fileset dir="${jaxen.dir}"
+         excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/XPathTestBase.class org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/** org/jaxen/**Test.class org/jaxen/saxpath/base/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/pattern/** org/jaxen/saxpath/SAXPathParseException.class org/w3c/dom/UserDataHandler.class org/jaxen/pattern/PriorityTest.class">
+      </fileset>
     
       <rule pattern="org.jaxen.**" result="nu.xom.jaxen.@1"/>
 
@@ -693,6 +694,39 @@ XOM Build file
       </copy>
   </target>
 
+  <target name="compile-jaxen" description="Compile Jaxen" depends="get-jaxen">
+    <javac srcdir="${build.dir}/jaxen-${jaxenversion}/core/src/java/main"
+           destdir="${build.dir}/jaxen-classes"
+           debug="${debug}"
+           optimize="${optimize}"
+           deprecation="${deprecation}"
+           target="1.6"
+           source="1.6"
+           encoding="UTF-8"
+           includeAntRuntime="false"
+           excludes="org/jaxen/dom/** 
+                     org/jaxen/jdom/** 
+                     org/jaxen/dom4j/** 
+                     org/jaxen/pattern/** 
+                     org/jaxen/javabean/** 
+                     org/jaxen/xom/**
+                     org/jaxen/function/xslt/**
+                     org/jaxen/function/ext/**
+                     org/w3c/dom/**
+                     org/jaxen/saxpath/expr/DefaultPredicated.java
+                     org/jaxen/saxpath/helpers/DefaultXPathHandler.java
+                     org/jaxen/util/StackedIterator.java
+                     org/jaxen/util/XPath2XMLVisitor.java
+                     org/jaxen/util/LinkedIterator.java
+                     org/jaxen/util/SelfAxisIterator.java
+                     ">
+       <classpath refid="compile.class.path"/>
+    </javac>  
+  </target>
+  
+  <target name="get-jaxen" description="Download Jaxen source code" depends="prepare">
+      <unzip src="jaxen-${jaxenversion}-src.zip" dest="${build.dir}" />
+  </target>
 
   <target name="debug" depends="init" description="Print various Ant properties">
     <echoproperties/>
