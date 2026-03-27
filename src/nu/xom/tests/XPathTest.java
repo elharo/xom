@@ -2263,8 +2263,13 @@ public class XPathTest extends XOMTestCase {
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
         File jaxenBase = new File(System.getProperty("jaxen.data.dir", "build/jaxen-2.0.0"));
-        Builder builder = new Builder();
         File integrationTests = new File(jaxenBase, "integration-tests");
+        if (!integrationTests.exists()) {
+            // jaxen source has not been extracted yet (e.g. running from an IDE without
+            // running "ant get-jaxen" first); skip the test rather than fail confusingly.
+            return;
+        }
+        Builder builder = new Builder();
         Document testDoc = builder.build(new File(integrationTests, "xml/test/tests.xml"));
         Elements documents = testDoc.getRootElement().getChildElements("document");
         for (int i = 0; i < documents.size(); i++) {
