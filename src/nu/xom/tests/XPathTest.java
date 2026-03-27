@@ -2279,9 +2279,6 @@ public class XPathTest extends XOMTestCase {
                 extractZip(zipFile, destDir);
             }
         }
-        org.junit.Assume.assumeTrue(
-                "jaxen integration test data not available at " + integrationTests,
-                integrationTests.exists());
         Builder builder = new Builder();
         Document testDoc = builder.build(new File(integrationTests, "xml/test/tests.xml"));
         Elements documents = testDoc.getRootElement().getChildElements("document");
