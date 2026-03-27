@@ -125,13 +125,6 @@ subject line. The XOM home page is https://xom.nu/
     <property name="run.classpath" refid="run.class.path"/>
     <property name="doc.classpath" refid="doc.class.path"/>
 
-
-    <available property="tagsoup.installed" classname="org.ccil.cowan.tagsoup.Parser">
-      <classpath>
-        <pathelement location="${tagsoup.jar}" />
-      </classpath>
-    </available>
-
     <available property="servlet.jar.installed" file="${servlet.jar}"/>
     
   </target>
@@ -461,7 +454,6 @@ XOM Build file
   <target name="apidoc"     depends="javadoc"/>
   <target name="betterdocs" depends="betterdoc"/>
 
-  <!-- This task requires Ant 1.6 and TagSoup -->
   <target name="betterdoc" depends="compile"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
