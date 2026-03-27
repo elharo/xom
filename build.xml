@@ -61,12 +61,12 @@ subject line. The XOM home page is https://xom.nu/
     <property name="fat.src"    value="./fatsrc"/>
     <property name="lib.dir"    value="./lib"/>
     <property name="packages"   value="nu.xom.*"/>
-    <property name="jaxen.dir"  value="${build.dir}/jaxen-classes"/>
 
     <property name="build.dir"       value="./build"/>
     <property name="build.src"       value="./build/src"/>
     <property name="build.dest"      value="./build/classes"/>
     <property name="build.javadocs"  value="./build/apidocs"/>
+    <property name="jaxen.dir"       value="${build.dir}/jaxen-classes"/>
     <property name="testoutput.dir"  value="./testresults"/>
     <property name="dist.dir"        value="./dist"/>    
     <property name="testreports.dir" value="./testreports" />
@@ -232,6 +232,7 @@ XOM Build file
 
   <target name="compile-core" depends="prepare, compile-jaxen" 
           description="Compile the source code">
+    <echo message="Using Classpath: ${compile.classpath}"/>
     <javac srcdir="${build.src}"
            destdir="${build.dest}"
            debug="${debug}"
