@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
-<!DOCTYPE article [
- <!ENTITY rsquo  "&#x2019;">
- <!ENTITY mdash  "&#x2014;">
-]>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "https://cdn.docbook.org/schema/4.3/docbookx.dtd">
 <article revision="20251101">
 
   <title>XOM Design Principles</title>

@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3.0//EN"
+                      "https://cdn.docbook.org/schema/4.3/docbookx.dtd">
 <article revision="20200126" status="rough">
   <title>Installing XOM</title>
 
