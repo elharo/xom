@@ -9,9 +9,9 @@
   <property name="parentdist.dir"   value="../dist/website"/>
 
   <!-- The JDK's XSLT engine cannot handle the DocBook XSLT stylesheets
-    so we bundle a really old version of Saxon. --> 
+    so we use Saxon 6.5.3 loaded via Ivy from Maven Central. --> 
   <path id="saxon.classpath">
-    <pathelement path="../lib2/saxon.jar"/>
+    <pathelement path="../lib2/ivy/saxon-6.5.3.jar"/>
   </path>
 
   <path id="xerces.class.path">
