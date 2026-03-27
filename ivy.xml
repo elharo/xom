@@ -5,10 +5,12 @@
     <conf name="servlets" description="Dependencies for servlet samples"/>
     <conf name="betterdoc" description="Dependencies for generating improved JavaDoc"/>
     <conf name="jarjar" description="JarJar tool for repackaging Jaxen classes"/>
+    <conf name="saxon" description="Saxon 6.5.3 XSLT processor for website generation"/>
   </configurations>
   <dependencies>
     <dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="servlets->default"/>
     <dependency org="org.ccil.cowan.tagsoup" name="tagsoup" rev="1.2.1" conf="betterdoc->default"/>
     <dependency org="com.googlecode.jarjar" name="jarjar" rev="1.3" conf="jarjar->default"/>
+    <dependency org="saxon" name="saxon" rev="6.5.3" conf="saxon->default"/>
   </dependencies>
 </ivy-module>
