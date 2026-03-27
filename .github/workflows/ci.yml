@@ -30,7 +30,7 @@ jobs:
           ~/.ant/lib
           ~/.ivy2/
           lib/
-          lib2/
+          ivy/
         key: ${{ runner.os }}-ant-${{ hashFiles('build.xml', 'ivy.xml') }}
         restore-keys: |
           ${{ runner.os }}-ant-
@@ -38,6 +38,9 @@ jobs:
     - name: Run tests
       run: ant -Dtest.haltonfailure=true test
     
+    - name: Build dist
+      run: ant dist
+
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
