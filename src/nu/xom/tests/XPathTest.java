@@ -22,8 +22,13 @@ package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.net.MalformedURLException;
 
 import nu.xom.Attribute;
@@ -2262,17 +2267,25 @@ public class XPathTest extends XOMTestCase {
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
-        // TODO point this, at least optionally, at the jaxen directory in the zip file instead.
-        // However, first you'll have to push a jaxen 1.2.1 that fixes tests.xml.
-        String base = "https://raw.githubusercontent.com/jaxen-xpath/jaxen/0405c6aeea1955ca92012d2934cf18e80b367963/";
+        File jaxenBase = new File(System.getProperty("jaxen.data.dir", "build/jaxen-2.0.0"));
+        File integrationTests = new File(jaxenBase, "integration-tests");
+        if (!integrationTests.exists()) {
+            // Attempt to self-extract from the bundled zip (e.g. when running from an IDE
+            // without having run "ant get-jaxen" first).
+            File destDir = jaxenBase.getParentFile();
+            if (destDir == null) destDir = new File(".");
+            File zipFile = new File(jaxenBase.getName() + "-src.zip");
+            if (zipFile.exists()) {
+                extractZip(zipFile, destDir);
+            }
+        }
         Builder builder = new Builder();
-        Document testDoc = builder.build(base + "xml/test/tests.xml");
+        Document testDoc = builder.build(new File(integrationTests, "xml/test/tests.xml"));
         Elements documents = testDoc.getRootElement().getChildElements("document");
         for (int i = 0; i < documents.size(); i++) {
             Element documentElement = documents.get(i);
             String url = documentElement.getAttributeValue("url");
-            Document source = builder.build(
-              base + url);
+            Document source = builder.build(new File(integrationTests, url));
             Elements contextElements = documentElement.getChildElements("context");
             for (int j = 0; j < contextElements.size(); j++) {
                 Element contextElement = contextElements.get(j);
@@ -2394,6 +2407,41 @@ public class XPathTest extends XOMTestCase {
             }
         }
         return false;
+    }
+
+
+    private static void extractZip(File zipFile, File destDir) throws IOException {
+
+        ZipFile zip = new ZipFile(zipFile);
+        try {
+            Enumeration<? extends ZipEntry> entries = zip.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                File dest = new File(destDir, entry.getName());
+                if (entry.isDirectory()) {
+                    dest.mkdirs();
+                } else {
+                    dest.getParentFile().mkdirs();
+                    InputStream in = zip.getInputStream(entry);
+                    try {
+                        FileOutputStream out = new FileOutputStream(dest);
+                        try {
+                            byte[] buf = new byte[4096];
+                            int n;
+                            while ((n = in.read(buf)) != -1) {
+                                out.write(buf, 0, n);
+                            }
+                        } finally {
+                            out.close();
+                        }
+                    } finally {
+                        in.close();
+                    }
+                }
+            }
+        } finally {
+            zip.close();
+        }
     }
     
     
