@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ivy-module version="2.0">
+<ivy-module version="2.0" xmlns:ant="http://ant.apache.org/ivy/maven">
   <info organisation="nu.xom" module="xom"/>
   <configurations>
     <conf name="servlets" description="Dependencies for servlet samples"/>
@@ -16,7 +16,7 @@
     <dependency org="saxon" name="saxon" rev="6.5.3" conf="saxon->default"/>
     <dependency org="jaxen" name="jaxen" rev="2.0.0" conf="jaxen->default" transitive="false"/>
     <dependency org="net.sf.docbook" name="docbook-xsl" rev="1.79.1" conf="docbook->default">
-      <artifact name="docbook-xsl" type="zip" ext="zip" m:classifier="resources" xmlns:m="http://ant.apache.org/ivy/maven"/>
+      <artifact name="docbook-xsl" type="zip" ext="zip" ant:classifier="resources"/>
     </dependency>
   </dependencies>
 </ivy-module>
