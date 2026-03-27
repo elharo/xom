@@ -11,7 +11,6 @@ testresults/
 .thumbnails/
 .nautilus-metafile.xml
 .AppleFileInfo
-*.zip
 xom.gif
 data/XInclude-Test-Suite/
 data/xmlconf/
