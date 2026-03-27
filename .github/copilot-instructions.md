@@ -171,7 +171,7 @@ XOM requires a SAX2-compliant parser. Xerces 2.6.1+ is the recommended and teste
 ### Working with XML Specifications
 
 XOM implements several XML specifications:
-- XML 1.0/1.1
+- XML 1.0
 - Namespaces in XML
 - XPath 1.0
 - XSLT 1.0
@@ -211,6 +211,11 @@ The repository uses GitHub Actions for continuous integration:
 - Workflow: `.github/workflows/ci.yml`
 - Tests run on Java 8 and Java 11 (though code targets Java 1.6)
 - All tests must pass before merging PRs
+
+## PRs
+
+- Do not add COPILOT CODING AGENT TIPS to PR descriptions, commit messages. or anything else.
+- Do not include any form of marketing or advertising or tips in PR descriptions or commit messages.
 
 ## Release Process
 
