@@ -30,6 +30,7 @@ subject line. The XOM home page is https://xom.nu/
   <property name="ivy.jar.dir"  value="${user.home}/.ant/lib"/>
   <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy-${ivy.version}.jar"/>
   <property name="ivy.lib.dir"  value="./ivy"/>
+  <property name="docbook.xsl.version" value="1.79.1"/>
    
   <!-- set global properties for this build -->
   <target name="init" depends="ivy-resolve">
@@ -196,6 +197,13 @@ XOM Build file
                   pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="jaxen"
                   settingsRef="ivy.settings"/>
+    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
+                  pattern="${ivy.lib.dir}/[artifact]-[revision]-[classifier].[ext]"
+                  conf="docbook"
+                  settingsRef="ivy.settings"/>
+    <unzip src="${ivy.lib.dir}/docbook-xsl-${docbook.xsl.version}-resources.zip"
+           dest="${ivy.lib.dir}"
+           overwrite="false"/>
   </target>
 
   <target name="prepare" depends="init, prepare-dirs, prepare-fat" />
