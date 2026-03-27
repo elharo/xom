@@ -115,11 +115,11 @@ src/nu/xom/
 ### Build/Test Dependencies
 
 - `junit.jar` - JUnit testing framework (in lib/)
-- `jaxen-1.1.6-src.zip` - XPath engine source (bundled and compiled as part of build)
-- Various additional libraries in `lib2/` for specific features:
+- `jaxen-2.0.0-src.zip` - XPath engine source (bundled and compiled as part of build)
+- Various additional libraries loaded via Ivy for specific features:
   - `servlet-api-2.5.jar` - For servlet samples
   - `tagsoup-1.2.1.jar` - For HTML parsing
-  - `jarjar-1.0.jar` - For repackaging dependencies
+  - `jarjar-1.3.jar` - For repackaging dependencies
 
 ### Parser Requirements
 
@@ -217,4 +217,4 @@ The repository uses GitHub Actions for continuous integration:
 See `RELEASING.md` for detailed release instructions. Key points:
 - Version numbers are in `build.xml`, `README.md`, `README.txt`
 - Releases are published to Maven Central
-- Website is hosted on Google App Engine
+- Website is hosted on Dreamhost
