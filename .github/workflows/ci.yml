@@ -30,7 +30,6 @@ jobs:
           ~/.ant/lib
           ~/.ivy2/
           lib/
-          lib2/
         key: ${{ runner.os }}-ant-${{ hashFiles('build.xml', 'ivy.xml') }}
         restore-keys: |
           ${{ runner.os }}-ant-
