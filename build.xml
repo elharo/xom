@@ -19,7 +19,7 @@ You can contact Elliotte Rusty Harold by sending e-mail to
 elharo@ibiblio.org. Please include the word "XOM" in the
 subject line. The XOM home page is https://xom.nu/
 -->
-<project name="XOM" default="help" basedir=".">
+<project name="XOM" default="help" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 
     <description>
       Build XOM
@@ -175,30 +175,24 @@ XOM Build file
              uri="antlib:org.apache.ivy.ant"
              classpath="${ivy.jar.file}"/>
     <mkdir dir="${ivy.lib.dir}"/>
-    <ivy:settings xmlns:ivy="antlib:org.apache.ivy.ant" id="ivy.settings" file="ivysettings.xml"/>
-    <ivy:resolve xmlns:ivy="antlib:org.apache.ivy.ant" file="ivy.xml" settingsRef="ivy.settings"/>
-    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
-                  pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+    <ivy:settings id="ivy.settings" file="ivysettings.xml"/>
+    <ivy:resolve file="ivy.xml" settingsRef="ivy.settings"/>
+    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="servlets"
                   settingsRef="ivy.settings"/>
-    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
-                  pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="betterdoc"
                   settingsRef="ivy.settings"/>
-    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
-                  pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="jarjar"
                   settingsRef="ivy.settings"/>
-    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
-                  pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="saxon"
                   settingsRef="ivy.settings"/>
-    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
-                  pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="jaxen"
                   settingsRef="ivy.settings"/>
-    <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
-                  pattern="${ivy.lib.dir}/[artifact]-[revision]-[classifier].[ext]"
+    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision]-[classifier].[ext]"
                   conf="docbook"
                   settingsRef="ivy.settings"/>
     <unzip src="${ivy.lib.dir}/docbook-xsl-${docbook.xsl.version}-resources.zip"
