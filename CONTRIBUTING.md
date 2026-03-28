@@ -45,8 +45,6 @@ To run tests from the command line instead, use `ant test` at the repository roo
 
 ## Setting Up in Eclipse
 
-Eclipse includes built-in Ant support, so no additional plugins are required.
-
 Before importing into Eclipse, run `ant compile` from the repository root at least once. This downloads the Ivy-managed dependencies and compiles the bundled Jaxen library that XOM requires.
 
 Once you have done that, import the project:
