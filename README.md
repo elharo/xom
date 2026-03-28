@@ -40,30 +40,6 @@ XOM is not complete unto itself. It depends on an underlying SAX parser to read 
 Similarly XSLT support depends on a TrAX processor. XInclude and XML canonicalization, however, are native.
 
 
-## Importing into Eclipse
-
-Before importing into Eclipse, first compile the bundled Jaxen XPath library that XOM
-depends on. This requires [Apache Ant](https://ant.apache.org/) to be installed:
-
-```
-ant compile-jaxen
-```
-
-This creates the compiled Jaxen classes in `build/jaxen-classes/`.
-
-Next, create a new Java project in Eclipse pointing at the XOM checkout directory:
-
-1. Choose **File > New > Java Project**
-2. Uncheck **Use default location**, click **Browse…**, and select the XOM checkout directory
-3. Click **Next**, then open the **Libraries** tab
-4. Click **Add External JARs…** and add these JARs from the `lib/` directory:
-   - `xercesImpl-2.12.2.jar`
-   - `xml-apis-1.4.01.jar`
-   - `junit-4.13.2.jar`
-5. Click **Add Class Folder…** and add `build/jaxen-classes`
-6. Click **Finish**
-
-
 ## Learning More
 
 If you'd like to know more about XOM, I suggest starting with the [tutorial](https://xom.nu/tutorial.xhtml). XOM also includes a large collection of small [sample programs](https://xom.nu/samples.xhtml) that demonstrate various parts of the library. If you're curious about why XOM is the way it is, or if you would like to suggest future directions for XOM, you should read the [design principles](https://xom.nu/designprinciples.xhtml) on which XOM is based. If you have a question about XOM that is not answered in the API documentation or the FAQ, you can ask it on [Stack Overflow](https://stackoverflow.com/questions/ask?tags=xom) or the [xom-interest mailing list]((https://lists.ibiblio.org/mailman/listinfo/xom-interest)). You do not need to be subscribed to post, but non-subscriber questions are moderated. (Due to increasing amounts of non-subscriber spam, it is possible non-subscriber questions are missed. If you don't get an answer, please subscribe and try again.)
