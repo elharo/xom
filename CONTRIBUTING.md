@@ -47,8 +47,6 @@ To run tests from the command line instead, use `ant test` at the repository roo
 
 Before importing into Eclipse, run `ant compile` from the repository root at least once. This downloads the Ivy-managed dependencies and compiles the bundled Jaxen library that XOM requires.
 
-Alternatively, you can install the [Apache IvyDE](https://ant.apache.org/ivy/ivyde/) plugin (**Help → Eclipse Marketplace**, search for **IvyDE**) to let Eclipse resolve the Ivy-managed dependencies automatically. However, you must still run `ant compile` at least once to compile the bundled Jaxen library from source, as IvyDE does not handle that step.
-
 Once you have done that, import the project:
 
 1. Open Eclipse and choose **File → Import**.
