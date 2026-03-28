@@ -465,8 +465,6 @@ XOM Build file
   <target name="javadocs"   depends="javadoc" />
   <target name="apidocs"    depends="javadoc"/>
   <target name="apidoc"     depends="javadoc"/>
-  <target name="betterdoc"  depends="javadoc"/>
-  <target name="betterdocs" depends="javadoc"/>
 
   <property name="prefix" value="${name}-${version}" />
   
