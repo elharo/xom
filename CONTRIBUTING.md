@@ -6,8 +6,9 @@ Bug reports are welcome through the [GitHub issue tracker](https://github.com/el
 
 When filing a bug, please include:
 - A code fragment or JUnit test that demonstrates the problem
-- Only version 1.3.9 of XOM is supported.
 - The Java version and operating system you are running
+
+Only version 1.3.9 of XOM is supported. Patches are not released for earlier versions without a support contract.
 
 ## Feature Requests and Pull Requests
 
