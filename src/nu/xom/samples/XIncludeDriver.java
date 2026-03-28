@@ -71,13 +71,15 @@ public class XIncludeDriver {
         }
         catch (IOException e) {
 			System.err.println("I/O error reading " + args[0] + " " + e.getMessage());
-			e.printStackTrace();
+			System.exit(2);
 		}
         catch (ParsingException e) {
 			System.err.println("Malformed XML while processing " + args[0] + " " + e.getMessage());
+			System.exit(2);
 		}
         catch (XIncludeException e) {
 			System.err.println("XInclude error while processing " + args[0] + " " + e.getMessage());
+			System.exit(2);
 		} 
   
     }
