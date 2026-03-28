@@ -24,3 +24,21 @@ Changes most likely to be considered:
 Changes that are unlikely to be accepted:
 - New features or API additions
 - Performance "optimizations" (unless they come with really convincing evidence of actual performance problems and improvements)
+
+## Setting Up in IntelliJ IDEA
+
+XOM uses Apache Ant as its build system. IntelliJ IDEA does not include Ant support by default, so you must install the **Ant** plugin first:
+
+1. Open **File → Settings** (on macOS: **IntelliJ IDEA → Settings**).
+2. Go to **Plugins**, search for **Ant**, and install the **Ant** plugin by JetBrains.
+3. Restart IntelliJ IDEA when prompted.
+
+Once the plugin is installed, import the project:
+
+1. Open IntelliJ IDEA and choose **File → Open**.
+2. Navigate to the root of the XOM repository and click **OK**.
+3. Open the **Ant** tool window (**View → Tool Windows → Ant**).
+4. Click the **+** button in the Ant tool window and add the `build.xml` file from the repository root.
+5. Use the Ant tool window to run targets such as `compile`, `test`, or `jar`.
+
+To run tests from the command line instead, use `ant test` at the repository root.
