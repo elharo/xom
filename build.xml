@@ -614,6 +614,10 @@ XOM Build file
     <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
     <mkdir dir="${clover.db.dir}"/>
     <clover-setup initstring="${clover.db.dir}/coverage.db"/>
+    <!-- Tell Ant where to find the CloverCompilerAdapter class when resolving the build.compiler property -->
+    <path id="build.compiler.classpath">
+      <pathelement location="${clover.jar}"/>
+    </path>
     <!-- Add clover runtime to compile and test classpaths for instrumented code -->
     <augment id="compile.class.path">
       <pathelement location="${clover.jar}"/>
