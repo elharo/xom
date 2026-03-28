@@ -42,25 +42,26 @@ Similarly XSLT support depends on a TrAX processor. XInclude and XML canonicaliz
 
 ## Importing into Eclipse
 
-Eclipse project files are included in the repository. Before importing, you must first
-compile the bundled Jaxen XPath library, which XOM depends on:
+Before importing into Eclipse, first compile the bundled Jaxen XPath library that XOM
+depends on. This requires [Apache Ant](https://ant.apache.org/) to be installed:
 
 ```
 ant compile-jaxen
 ```
 
-This requires [Apache Ant](https://ant.apache.org/) to be installed.
+This creates the compiled Jaxen classes in `build/jaxen-classes/`.
 
-Once Jaxen is compiled, import the project into Eclipse:
+Next, create a new Java project in Eclipse pointing at the XOM checkout directory:
 
-1. Choose **File > Import…**
-2. Select **General > Existing Projects into Workspace** and click **Next**
-3. Click **Browse…** next to **Select root directory** and navigate to the XOM checkout directory
-4. Ensure **xom** is checked under **Projects** and click **Finish**
-
-Eclipse will use the pre-configured `.project` and `.classpath` files, which point to the
-libraries in `lib/` and the compiled Jaxen classes in `build/jaxen-classes/`. Eclipse's
-output goes to `build/eclipse-classes/` so it does not interfere with Ant builds.
+1. Choose **File > New > Java Project**
+2. Uncheck **Use default location**, click **Browse…**, and select the XOM checkout directory
+3. Click **Next**, then open the **Libraries** tab
+4. Click **Add External JARs…** and add these JARs from the `lib/` directory:
+   - `xercesImpl-2.12.2.jar`
+   - `xml-apis-1.4.01.jar`
+   - `junit-4.13.2.jar`
+5. Click **Add Class Folder…** and add `build/jaxen-classes`
+6. Click **Finish**
 
 
 ## Learning More
