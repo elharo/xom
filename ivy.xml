@@ -8,6 +8,7 @@
     <conf name="saxon" description="Saxon 6.5.3 XSLT processor for website generation"/>
     <conf name="jaxen" description="Jaxen XPath engine"/>
     <conf name="docbook" description="DocBook XSL stylesheets for website generation"/>
+    <conf name="clover" description="OpenClover code coverage tool"/>
   </configurations>
   <dependencies>
     <dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="servlets->default"/>
@@ -18,5 +19,6 @@
     <dependency org="net.sf.docbook" name="docbook-xsl" rev="1.79.1" conf="docbook->default">
       <artifact name="docbook-xsl" type="zip" ext="zip" ant:classifier="resources"/>
     </dependency>
+    <dependency org="org.openclover" name="clover" rev="4.5.2" conf="clover->default" transitive="false"/>
   </dependencies>
 </ivy-module>
