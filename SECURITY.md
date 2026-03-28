@@ -18,6 +18,13 @@ If it's some security tool logging a warning, that is 95% likely not to be a sec
 
 * Problems that only appear when your code (not XOM's) accepts untrusted, unvalidated user input
 
+## Defending Against XML Denial-of-Service Attacks
+
+XOM itself does not add defenses against XML entity expansion attacks such as the
+[billion laughs attack](https://en.wikipedia.org/wiki/Billion_laughs_attack), but you can
+configure the underlying parser to limit entity expansion. See the
+[FAQ](https://xom.nu/faq.xhtml#billionlaughs) for details.
+
 ## Possible Security Bugs in XOM
 
 If you can find one, none are currently known to exist:
