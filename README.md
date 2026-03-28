@@ -40,6 +40,29 @@ XOM is not complete unto itself. It depends on an underlying SAX parser to read 
 Similarly XSLT support depends on a TrAX processor. XInclude and XML canonicalization, however, are native.
 
 
+## Importing into Eclipse
+
+Eclipse project files are included in the repository. Before importing, you must first
+compile the bundled Jaxen XPath library, which XOM depends on:
+
+```
+ant compile-jaxen
+```
+
+This requires [Apache Ant](https://ant.apache.org/) to be installed.
+
+Once Jaxen is compiled, import the project into Eclipse:
+
+1. Choose **File > Import…**
+2. Select **General > Existing Projects into Workspace** and click **Next**
+3. Click **Browse…** next to **Select root directory** and navigate to the XOM checkout directory
+4. Ensure **xom** is checked under **Projects** and click **Finish**
+
+Eclipse will use the pre-configured `.project` and `.classpath` files, which point to the
+libraries in `lib/` and the compiled Jaxen classes in `build/jaxen-classes/`. Eclipse's
+output goes to `build/eclipse-classes/` so it does not interfere with Ant builds.
+
+
 ## Learning More
 
 If you'd like to know more about XOM, I suggest starting with the [tutorial](https://xom.nu/tutorial.xhtml). XOM also includes a large collection of small [sample programs](https://xom.nu/samples.xhtml) that demonstrate various parts of the library. If you're curious about why XOM is the way it is, or if you would like to suggest future directions for XOM, you should read the [design principles](https://xom.nu/designprinciples.xhtml) on which XOM is based. If you have a question about XOM that is not answered in the API documentation or the FAQ, you can ask it on [Stack Overflow](https://stackoverflow.com/questions/ask?tags=xom) or the [xom-interest mailing list]((https://lists.ibiblio.org/mailman/listinfo/xom-interest)). You do not need to be subscribed to post, but non-subscriber questions are moderated. (Due to increasing amounts of non-subscriber spam, it is possible non-subscriber questions are missed. If you don't get an answer, please subscribe and try again.)
