@@ -5,7 +5,7 @@
     
   <!-- set global properties for this build -->
   <property name="build.dir"  value="./build"/>
-  <property name="build.dest" value="${build.dir}/website"/>
+  <property name="website.dir" value="${build.dir}/website"/>
   <property name="parentdist.dir"   value="../dist/website"/>
 
   <!-- The JDK's XSLT engine cannot handle the DocBook XSLT stylesheets
@@ -23,8 +23,14 @@
     <!-- Create the time stamp -->
     <tstamp/>
 
-    <mkdir dir="${build.dest}"/>
+    <mkdir dir="${website.dir}"/>
     <mkdir dir="${parentdist.dir}"/>
+    <copy todir="${website.dir}">
+      <fileset dir="dtd"/>
+    </copy>
+    <copy todir="${build.dir}/dtd">
+      <fileset dir="dtd"/>
+    </copy>
   </target>
 
   <target name="finished_tutorial.xml" depends="init"
@@ -45,7 +51,7 @@
      <arg value="index.html"/>
      <arg value="faq.xml"/>
      <arg value="${build.dir}/finished_tutorial.xml"/>
-     <arg value="${build.dest}/tutorial.xhtml"/>
+     <arg value="${website.dir}/tutorial.xhtml"/>
      <arg value="infoset.xml"/>
      <arg value="xpath.xml"/>
      <arg value="license.xml"/>
@@ -63,7 +69,7 @@
 
 
   <target name="tutorial" description="Generate a single XHTML document" depends="finished_tutorial.xml">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/tutorial.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/tutorial.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="${build.dir}/finished_tutorial.xml"/>
         <arg line="tutorial.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -72,7 +78,7 @@
   </target>	 
 
   <target name="design" depends="init" description="Design principles">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/designprinciples.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/designprinciples.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="designprinciples.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -81,7 +87,7 @@
   </target>	 
 
   <target name="license" depends="init" description="License for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/license.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/license.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="license.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -90,7 +96,7 @@
   </target>	 
 
  <target name="infoset" depends="init" description="Infoset Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/infoset.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/infoset.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
         <arg line="infoset.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -99,7 +105,7 @@
   </target>	 
 
  <target name="xpath" depends="init" description="XPath Mapping">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/xpath.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/xpath.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="xpath.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -108,7 +114,7 @@
   </target>	 
 
   <target name="faq" depends="init" description="FAQ list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/faq.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/faq.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="faq.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -117,7 +123,7 @@
   </target>	 
 
   <target name="open" depends="init" description="Open Questions list for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/openquestions.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/openquestions.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="openquestions.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -126,7 +132,7 @@
   </target>	 
 
   <target name="future" depends="init" description="Future Directions for XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/futuredirections.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/futuredirections.xhtml" fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="futuredirections.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -136,7 +142,7 @@
 
 
   <target name="building" depends="init" description="How to build XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/building.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/building.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="building.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -146,7 +152,7 @@
 
 
   <target name="install" depends="init" description="How to install XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/install.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/install.xhtml" fork="yes"  error="${build.dir}/error.txt" failonerror="true">
         <arg line="install.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -156,7 +162,7 @@
 
 
   <target name="testsuite" depends="init" description="How to test XOM">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/testsuite.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/testsuite.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="testsuite.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -166,7 +172,7 @@
 
 
   <target name="samples" depends="init" description="Example code">
-    <java classname="com.icl.saxon.StyleSheet" output="${build.dest}/samples.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
+    <java classname="com.icl.saxon.StyleSheet" output="${website.dir}/samples.xhtml"  fork="yes" error="${build.dir}/error.txt" failonerror="true">
         <arg line="samples.xml"/>
         <arg line="../ivy/docbook/xhtml/docbook.xsl"/>
         <classpath refid="xerces.class.path"/>
@@ -176,7 +182,7 @@
 
 
   <target name="html" depends="init" description="Raw HTML files that don't need to be transformed">
-    <copy todir="${build.dest}">
+    <copy todir="${website.dir}">
       <fileset dir=".">
         <include name="*.html"/>
         <include name="*.txt"/>
@@ -188,7 +194,7 @@
 
   <target name="dist" depends="html, tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building">
     <copy todir="${parentdist.dir}" >  
-      <fileset dir="${build.dest}" includes="**"/>  
+      <fileset dir="${website.dir}" includes="**"/>  
     </copy> 
     <copy todir="${parentdist.dir}/whatswrong" >  
       <fileset dir="whatswrong" includes="**"/>  
