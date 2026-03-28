@@ -9,7 +9,7 @@ If it's some security tool logging a warning, that is 95% likely not to be a sec
 ## What is **NOT** a Security Bug in XOM
 
 1. Anything in your dependency tree whose source code is not in this repo. You control your classpath. XOM doesn't. If you don't like what's in the classpath, change it.
-2. Properly implementing XML 1.0 according to the specification. This includes loading external DTDs and processing the internal DTD subset.
+2. Properly implementing XML 1.0 according to the specification. This includes loading external DTDs and processing the internal DTD subset. (But see [How do I protect against the billion laughs attack](https://xom.nu/faq.xhtml#billionlaughs))
 3. Properly implementing Namespaces in XML according to the specification.
 4. Properly implementing XPath 1.0 and XSLT 1.0 according to the specifications.
 5. Being able to load a URL from Java code.
@@ -17,13 +17,6 @@ If it's some security tool logging a warning, that is 95% likely not to be a sec
 ## Probably Not Security Bugs in XOM
 
 * Problems that only appear when your code (not XOM's) accepts untrusted, unvalidated user input
-
-## Defending Against XML Denial-of-Service Attacks
-
-XOM itself does not add defenses against XML entity expansion attacks such as the
-[billion laughs attack](https://en.wikipedia.org/wiki/Billion_laughs_attack), but you can
-configure the underlying parser to limit entity expansion. See the
-[FAQ](https://xom.nu/faq.xhtml#billionlaughs) for details.
 
 ## Possible Security Bugs in XOM
 
