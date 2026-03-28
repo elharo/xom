@@ -595,6 +595,69 @@ Use XPath. Specifically use the query
 </qandaentry>
 
 
+<qandaentry id="billion-laughs">
+<question>
+
+<para>
+  How do I protect XOM against the billion laughs attack?
+</para>
+</question>
+<answer>
+<para>
+The <ulink url="https://en.wikipedia.org/wiki/Billion_laughs_attack">billion laughs attack</ulink>
+(also known as XML bomb or exponential entity expansion) is a denial-of-service attack
+that exploits recursive entity references in XML to exhaust memory.
+XOM delegates XML parsing to an underlying SAX parser (typically Xerces),
+so protection requires configuring that parser before passing it to XOM's
+<classname>Builder</classname>.
+</para>
+
+<para>
+The safest approach is to disallow DOCTYPE declarations entirely.
+This prevents all entity-expansion attacks, including billion laughs:
+</para>
+
+<informalexample><programlisting><![CDATA[XMLReader xerces = XMLReaderFactory.createXMLReader(
+    "org.apache.xerces.parsers.SAXParser");
+xerces.setFeature(
+    "http://apache.org/xml/features/disallow-doctype-decl", true);
+Builder parser = new Builder(xerces);]]></programlisting></informalexample>
+
+<para>
+If you need to allow DOCTYPE declarations (for example, to support
+DTD-based validation or entities you trust), you can instead enable
+Xerces's built-in security manager, which limits the number of entity
+expansions:
+</para>
+
+<informalexample><programlisting><![CDATA[import org.apache.xerces.util.SecurityManager;
+
+XMLReader xerces = XMLReaderFactory.createXMLReader(
+    "org.apache.xerces.parsers.SAXParser");
+SecurityManager sm = new SecurityManager();
+sm.setEntityExpansionLimit(100);
+xerces.setProperty(
+    "http://apache.org/xml/properties/security-manager", sm);
+Builder parser = new Builder(xerces);]]></programlisting></informalexample>
+
+<para>
+You can also enable secure processing via the standard
+<constant>XMLConstants.FEATURE_SECURE_PROCESSING</constant>
+feature, which enables several parser hardening options including
+entity expansion limits:
+</para>
+
+<informalexample><programlisting><![CDATA[import javax.xml.XMLConstants;
+
+XMLReader xerces = XMLReaderFactory.createXMLReader(
+    "org.apache.xerces.parsers.SAXParser");
+xerces.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+Builder parser = new Builder(xerces);]]></programlisting></informalexample>
+
+</answer>
+</qandaentry>
+
+
   </qandaset>
 
 
