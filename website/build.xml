@@ -25,6 +25,12 @@
 
     <mkdir dir="${build.dest}"/>
     <mkdir dir="${parentdist.dir}"/>
+    <copy todir="${build.dest}">
+      <fileset dir="dtd"/>
+    </copy>
+    <copy todir="${build.dir}">
+      <fileset dir="dtd"/>
+    </copy>
   </target>
 
   <target name="finished_tutorial.xml" depends="init"
