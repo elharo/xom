@@ -8,7 +8,7 @@ When filing a bug, please include:
 - A code fragment or JUnit test that demonstrates the problem
 - The Java version and operating system you are running
 
-Only version 1.3.9 of XOM is supported. Patches are not released for earlier versions without a support contract.
+All fixes are made on the latest release. Patches are not released for earlier versions without a support contract.
 
 ## Feature Requests and Pull Requests
 
@@ -21,7 +21,6 @@ Changes most likely to be considered:
 - Fixes for security vulnerabilities
 - Improvements to documentation or error messages
 
-Changes that are very unlikely to be accepted:
+Changes that are unlikely to be accepted:
 - New features or API additions
-- Changes to existing behavior
-- Dependency upgrades unless required for security
+- Performance "optimizations" (unless they come with really convincing evidence of actual performance problems and improvements)
