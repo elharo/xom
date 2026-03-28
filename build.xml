@@ -102,7 +102,6 @@ subject line. The XOM home page is https://xom.nu/
       <pathelement location="${junit.jar}"/>
       <pathelement location="${jaxen.dir}"/>
       <pathelement location="${servlet.jar}"/>
-      <pathelement location="${clover.jar}"/>
     </path>
 
     <path id="run.class.path">
@@ -115,7 +114,6 @@ subject line. The XOM home page is https://xom.nu/
     <path id="test.class.path">
       <path refid="run.class.path"/>
       <pathelement location="${junit.jar}"/>
-      <pathelement location="${clover.jar}"/>
     </path>
     
     <path id="doc.class.path">
@@ -616,6 +614,13 @@ XOM Build file
     <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
     <mkdir dir="${clover.db.dir}"/>
     <clover-setup initstring="${clover.db.dir}/coverage.db"/>
+    <!-- Add clover runtime to compile and test classpaths for instrumented code -->
+    <augment id="compile.class.path">
+      <pathelement location="${clover.jar}"/>
+    </augment>
+    <augment id="test.class.path">
+      <pathelement location="${clover.jar}"/>
+    </augment>
   </target>
 
   <target name="clover-report" depends="init" description="Generate OpenClover code coverage report">
