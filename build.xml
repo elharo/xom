@@ -82,8 +82,10 @@ subject line. The XOM home page is https://xom.nu/
     <property name="clover.jar"     value="${ivy.lib.dir}/clover-4.5.2.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
-    <property name="clover.db.dir"  value="${build.dir}/clover/db"/>
-    <property name="clover.report.dir" value="${build.dir}/clover/report"/>
+    <property name="clover.db.dir"      value="${build.dir}/clover/db"/>
+    <property name="clover.report.dir"  value="${build.dir}/clover/report"/>
+    <property name="clover.instr.src"   value="${build.dir}/clover/src"/>
+    <property name="clover.classes.dir" value="${build.dir}/clover/classes"/>
     
     <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*"/>
 
@@ -610,27 +612,83 @@ XOM Build file
   </target>
  
  
-  <target name="with.clover" depends="init" description="Enable OpenClover code coverage instrumentation">
+  <target name="with.clover" depends="prepare" description="Instrument XOM sources with OpenClover">
     <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
     <mkdir dir="${clover.db.dir}"/>
-    <clover-setup initstring="${clover.db.dir}/coverage.db"/>
-    <!-- Tell Ant where to find the CloverCompilerAdapter class when resolving the build.compiler property -->
-    <path id="build.compiler.classpath">
-      <pathelement location="${clover.jar}"/>
-    </path>
-    <!-- Add clover runtime to compile and test classpaths for instrumented code -->
-    <augment id="compile.class.path">
-      <pathelement location="${clover.jar}"/>
-    </augment>
-    <augment id="test.class.path">
-      <pathelement location="${clover.jar}"/>
-    </augment>
+    <mkdir dir="${clover.instr.src}"/>
+    <!-- Pre-instrument source files at the source level; avoids CloverCompilerAdapter classloading issues -->
+    <clover-instr srcdir="${build.src}" destdir="${clover.instr.src}"
+                  initstring="${clover.db.dir}/coverage.db"
+                  encoding="UTF-8"/>
+  </target>
+
+  <target name="compile-core-clover" depends="compile-jaxen, with.clover"
+          description="Compile OpenClover-instrumented XOM sources">
+    <mkdir dir="${clover.classes.dir}"/>
+    <javac srcdir="${clover.instr.src}"
+           destdir="${clover.classes.dir}"
+           debug="${debug}"
+           optimize="${optimize}"
+           deprecation="${deprecation}"
+           target="1.6"
+           source="1.6"
+           encoding="UTF-8"
+           includeAntRuntime="false"
+           excludes="nu/xom/pantry/* nu/xom/tools/* nu/xom/samples/*Servlet.java">
+      <classpath>
+        <path refid="compile.class.path"/>
+        <pathelement location="${clover.jar}"/>
+      </classpath>
+    </javac>
+    <copy file="${build.src}/nu/xom/characters.dat"  tofile="${clover.classes.dir}/nu/xom/characters.dat"/>
+    <copy file="${build.src}/nu/xom/compositions.dat" tofile="${clover.classes.dir}/nu/xom/compositions.dat"/>
+    <echo file="${clover.classes.dir}/nu/xom/version.txt">${version}</echo>
+  </target>
+
+  <target name="test-clover" depends="compile-core-clover"
+          description="Run JUnit tests against OpenClover-instrumented code">
+    <junit fork="true" failureproperty="testsfailed">
+      <classpath>
+        <pathelement location="${clover.classes.dir}"/>
+        <pathelement location="${clover.jar}"/>
+        <path refid="compile.class.path"/>
+      </classpath>
+      <sysproperty key="jaxen.data.dir" value="${build.dir}/jaxen-${jaxenversion}"/>
+      <formatter type="${test.outputFormat}"/>
+      <formatter type="brief" usefile="false"/>
+      <batchtest fork="true" todir="${testoutput.dir}">
+        <fileset dir="${build.src}">
+          <include name="**/*Test.java"/>
+          <exclude name="**/pantry/*"/>
+          <exclude name="**/MegaTest.java"/>
+          <exclude name="**/benchmarks/*.java"/>
+          <exclude name="**/integrationtests/*.java"/>
+          <exclude name="**/EBCDICTest.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+
+    <junitreport todir="${testoutput.dir}">
+      <fileset dir="${testoutput.dir}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report todir="${testoutput.dir}"/>
+    </junitreport>
+
+    <fail message="tests failed">
+      <condition>
+        <and>
+          <isset property="testsfailed"/>
+          <isset property="test.haltonfailure"/>
+        </and>
+      </condition>
+    </fail>
   </target>
 
   <target name="clover-report" depends="init" description="Generate OpenClover code coverage report">
     <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
     <mkdir dir="${clover.report.dir}"/>
-    <clover-report>
+    <clover-report initstring="${clover.db.dir}/coverage.db">
       <current outfile="${clover.report.dir}" title="${Name} ${version}">
         <format type="html"/>
       </current>
@@ -640,7 +698,7 @@ XOM Build file
     </clover-report>
   </target>
 
-  <target name="clover" depends="compile-jaxen, with.clover, compile, test, clover-report"
+  <target name="clover" depends="test-clover, clover-report"
           description="Run tests with OpenClover code coverage"/>
 
 
