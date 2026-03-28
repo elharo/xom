@@ -144,7 +144,6 @@ XOM Build file
     betterdoc      --> better formatted API documentation
     test           --> run JUnit test suite
     integration    --> run JUnit integration test suite (broken)
-    testui         --> run JUnit test suite in GUI 
     clean          --> clean up the build directory
     dist           --> the zip and .tar.gz files
     upload         --> upload archive files
@@ -623,15 +622,6 @@ XOM Build file
          </fileset>
       </batchtest>
     </junit>
-  </target>
- 
-
-  <target name="testui" depends="compile" description="Run JUnit tests using GUI interface">
-    <java classname="junit.swingui.TestRunner" fork="true" maxmemory="99m">
-      <sysproperty key="org.xml.sax.driver" value="org.apache.xerces.parsers.SAXParser"/> 
-      <classpath refid="test.class.path" />
-      <arg value="nu.xom.tests.XOMTests"/> 
-    </java>
   </target>
     
       
