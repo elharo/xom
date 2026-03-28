@@ -42,3 +42,19 @@ Once the plugin is installed, import the project:
 5. Use the Ant tool window to run targets such as `compile`, `test`, or `jar`.
 
 To run tests from the command line instead, use `ant test` at the repository root.
+
+## Setting Up in Eclipse
+
+Eclipse includes built-in Ant support, so no additional plugins are required.
+
+Before importing into Eclipse, run `ant compile` from the repository root at least once. This downloads the Ivy-managed dependencies and compiles the bundled Jaxen library that XOM requires.
+
+Once you have done that, import the project:
+
+1. Open Eclipse and choose **File → Import**.
+2. Select **Java → Java Project from Existing Ant Buildfile** and click **Next**.
+3. Click **Browse** next to the **Ant buildfile** field, navigate to `build.xml` at the root of the XOM repository, and click **Open**.
+4. In the **Javac declarations** list, select the first `javac` entry (the one for the main XOM sources), then click **Finish**.
+5. To run Ant targets such as `compile`, `test`, or `jar`, right-click `build.xml` in the Package Explorer and select **Run As → Ant Build...**.
+
+To run tests within Eclipse, right-click on any test class in `src/nu/xom/tests/` and select **Run As → JUnit Test**.
