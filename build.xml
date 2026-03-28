@@ -141,7 +141,6 @@ XOM Build file
     samples        --> build the xom-samples.jar file
     compile        --> compile the source code
     javadoc        --> generate the API documentation
-    betterdoc      --> better formatted API documentation
     test           --> run JUnit test suite
     integration    --> run JUnit integration test suite (broken)
     clean          --> clean up the build directory
@@ -412,44 +411,7 @@ XOM Build file
   </target>
 
   
-  <target name="javadoc" depends="prepare"
-          description="Generate the API documentation">
-          
-    <mkdir dir="${build.javadocs}"/>
-    
-    <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
-             sourcepath="${build.src}"
-             destdir="${build.javadocs}"
-             author="true"
-             version="true"
-             overview="overview.html"
-             use="true"
-             splitindex="true"
-             noindex="false"
-             windowtitle="${Name} ${version}  API"
-             docencoding="UTF-8"
-             charset="UTF-8"
-             link="https://junit.org/junit4/javadoc/4.13.2"
-             doctitle="${Name} ${version}"
-             bottom="Copyright 2002-${year} &lt;a href='https://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
-       &lt;br /&gt; &lt;a href='&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
-      <classpath refid="test.class.path"/>
-      
-    <fileset dir="${build.src}" defaultexcludes="yes">
-      <include name="nu/xom/tests/XOMTestCase.java" />
-    </fileset>
-      
-    </javadoc>
-  </target>
-  
-  
-  <!-- I can never remember the exact target name -->
-  <target name="javadocs"   depends="javadoc" />
-  <target name="apidocs"    depends="javadoc"/>
-  <target name="apidoc"     depends="javadoc"/>
-  <target name="betterdocs" depends="betterdoc"/>
-
-  <target name="betterdoc" depends="compile"
+  <target name="javadoc" depends="compile"
           description="Generate the API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="nu.xom.xslt, nu.xom.canonical, nu.xom.xinclude, nu.xom, nu.xom.converters"
@@ -497,6 +459,12 @@ XOM Build file
       <arg value="build/apidocs"/> 
     </java>
   </target>
+  
+  
+  <!-- I can never remember the exact target name -->
+  <target name="javadocs"   depends="javadoc" />
+  <target name="apidocs"    depends="javadoc"/>
+  <target name="apidoc"     depends="javadoc"/>
 
   <property name="prefix" value="${name}-${version}" />
   
@@ -520,7 +488,7 @@ XOM Build file
     </scp>
   </target>
     
-  <target name="zip" depends="jar, betterdoc, samples" 
+  <target name="zip" depends="jar, javadoc, samples" 
           description="Build zip file for distro">
 
     <zip destfile="${dist.dir}/${name}-${version}-src.zip">
@@ -538,7 +506,7 @@ XOM Build file
   </target>
   
   
-  <target name="tar" depends="jar, betterdoc, samples" 
+  <target name="tar" depends="jar, javadoc, samples" 
           description="Build tar file for distro">
 
     <tar destfile="${dist.dir}/${name}-${version}-src.tar">
@@ -650,7 +618,7 @@ XOM Build file
     </jar>
   </target>
   
-  <target name="javadoc.jar" depends="init, compile, betterdoc">
+  <target name="javadoc.jar" depends="init, compile, javadoc">
     <jar jarfile="${javadoc.jar}" basedir="${build.dir}/apidocs">
     </jar>
   </target>
@@ -714,7 +682,7 @@ XOM Build file
     <echoproperties/>
   </target>
   
-  <target name="website" depends="samples, betterdoc" description="Generate the website">
+  <target name="website" depends="samples, javadoc" description="Generate the website">
     <ant antfile="build.xml" dir="website" target="dist"/>
     <copy todir="${dist.dir}/website/apidocs">  
       <fileset dir="${build.javadocs}" includes="**"/>  
