@@ -11,13 +11,11 @@ testresults/
 .thumbnails/
 .nautilus-metafile.xml
 .AppleFileInfo
-xom.gif
 data/XInclude-Test-Suite/
 data/xmlconf/
 data/canonical/xmlconf/
 data/oasis*/ 
 testresults/ 
-pantry/
 workspace/
 junit*properties
 dist/

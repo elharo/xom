@@ -87,7 +87,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="clover.instr.src"   value="${build.dir}/clover/src"/>
     <property name="clover.classes.dir" value="${build.dir}/clover/classes"/>
     
-    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*"/>
+    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*"/>
 
     <property name="test.outputFormat" value="xml"/>   
     <property name="binary.jar" location="${dist.dir}/maven2/xom-${version}.jar" />
@@ -239,7 +239,7 @@ XOM Build file
            encoding="UTF-8"
            fork="true"
            includeAntRuntime="false"
-           excludes="nu/xom/pantry/* nu/xom/tools/* nu/xom/samples/*Servlet.java">
+           excludes="nu/xom/tools/* nu/xom/samples/*Servlet.java">
        <classpath refid="compile.class.path"/>
     </javac>
     <copy file="${build.src}/nu/xom/characters.dat" tofile="${build.dest}/nu/xom/characters.dat"/>
@@ -277,7 +277,7 @@ XOM Build file
          index="no"
          compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
-         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/* nu/xom/integrationtests/*">
+         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/tools/* nu/xom/integrationtests/*">
       <manifest>
         <attribute name="Sealed" value="true"/>
         <attribute name="Built-By" value="${user.name}"/>
@@ -322,7 +322,7 @@ XOM Build file
          index="no"
          compress="yes"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
-         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/pantry/* nu/xom/tools/*  nu/xom/integrationtests/*">
+         excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/tools/*  nu/xom/integrationtests/*">
 
       <fileset dir="${jaxen.dir}"
          excludes="**Demo.class **/package.html org/jaxen/xom/** org/jaxen/XPathTestBase.class org/jaxen/jdom/** org/jaxen/dom4j/** org/jaxen/javabean/** org/jaxen/dom/** org/jaxen/**Test.class org/jaxen/saxpath/base/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/saxpath/helpers/**Test.class org/jaxen/pattern/** org/jaxen/saxpath/SAXPathParseException.class org/w3c/dom/UserDataHandler.class org/jaxen/pattern/PriorityTest.class">
@@ -403,7 +403,7 @@ XOM Build file
          index="yes"
      compress="yes"
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
-         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/pantry/* nu/xom/integrationtests/*">
+         excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/integrationtests/*">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Specification-Title"    value="XOM Samples"/>
@@ -552,7 +552,6 @@ XOM Build file
        <batchtest fork="true" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
-           <exclude name="**/pantry/*" />
            <exclude name="**/MegaTest.java" />
             <exclude name="**/benchmarks/*.java" />
             <exclude name="**/integrationtests/*.java" />
@@ -633,7 +632,6 @@ XOM Build file
       <batchtest fork="true" todir="${testoutput.dir}">
         <fileset dir="${build.src}">
           <include name="**/*Test.java"/>
-          <exclude name="**/pantry/*"/>
           <exclude name="**/MegaTest.java"/>
           <exclude name="**/benchmarks/*.java"/>
           <exclude name="**/integrationtests/*.java"/>
@@ -688,7 +686,6 @@ XOM Build file
        <batchtest fork="true" todir="${testoutput.dir}">
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
-           <exclude name="**/pantry/*" />
            <exclude name="**/MegaTest.java" />
            <exclude name="**/benchmarks/*.java" />
            <exclude name="**/EBCDICTest.java" />
@@ -718,7 +715,6 @@ XOM Build file
       <exclude name= "nu/xom/benchmarks/**" />
       <exclude name= "nu/xom/tools/**" />
       <exclude name= "nu/xom/tests/**" />
-      <exclude name= "nu/xom/pantry/**" />
       <exclude name= "nu/xom/samples/**" />
     </jar>
   </target>
