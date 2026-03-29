@@ -79,8 +79,13 @@ subject line. The XOM home page is https://xom.nu/
     <property name="jarjar.jar"     value="${ivy.lib.dir}/jarjar-1.3.jar"/>
     <property name="saxon.jar"      value="${ivy.lib.dir}/saxon-6.5.3.jar"/>
     <property name="junit.jar"      value="${lib.dir}/junit-4.13.2.jar"/>
+    <property name="clover.jar"     value="${ivy.lib.dir}/clover-4.5.2.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
+    <property name="clover.db.dir"      value="${build.dir}/clover/db"/>
+    <property name="clover.report.dir"  value="${build.dir}/clover/report"/>
+    <property name="clover.instr.src"   value="${build.dir}/clover/src"/>
+    <property name="clover.classes.dir" value="${build.dir}/clover/classes"/>
     
     <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, xom.gif, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/pantry/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*"/>
 
@@ -142,6 +147,7 @@ XOM Build file
     compile        --> compile the source code
     javadoc        --> generate the API documentation
     test           --> run JUnit test suite
+    clover         --> run tests with OpenClover code coverage
     integration    --> run JUnit integration test suite (broken)
     clean          --> clean up the build directory
     dist           --> the zip and .tar.gz files
@@ -179,6 +185,9 @@ XOM Build file
                   settingsRef="ivy.settings"/>
     <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="saxon"
+                  settingsRef="ivy.settings"/>
+    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+                  conf="clover"
                   settingsRef="ivy.settings"/>
     <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
                   pattern="${ivy.lib.dir}/[artifact]-[revision]-[classifier].[ext]"
@@ -571,6 +580,96 @@ XOM Build file
   </target>
  
  
+  <target name="with.clover" depends="prepare" description="Instrument XOM sources with OpenClover">
+    <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
+    <mkdir dir="${clover.db.dir}"/>
+    <mkdir dir="${clover.instr.src}"/>
+    <!-- Pre-instrument source files at the source level; avoids CloverCompilerAdapter classloading issues -->
+    <clover-instr srcdir="${build.src}" destdir="${clover.instr.src}"
+                  initstring="${clover.db.dir}/coverage.db"
+                  encoding="UTF-8"/>
+  </target>
+
+  <target name="compile-core-clover" depends="compile-jaxen, with.clover"
+          description="Compile OpenClover-instrumented XOM sources">
+    <mkdir dir="${clover.classes.dir}"/>
+    <javac srcdir="${clover.instr.src}"
+           destdir="${clover.classes.dir}"
+           debug="${debug}"
+           optimize="${optimize}"
+           deprecation="${deprecation}"
+           target="1.6"
+           source="1.6"
+           encoding="UTF-8"
+           includeAntRuntime="false"
+           excludes="nu/xom/pantry/* nu/xom/tools/* nu/xom/samples/*Servlet.java">
+      <classpath>
+        <path refid="compile.class.path"/>
+        <pathelement location="${clover.jar}"/>
+      </classpath>
+    </javac>
+    <copy file="${build.src}/nu/xom/characters.dat"  tofile="${clover.classes.dir}/nu/xom/characters.dat"/>
+    <copy file="${build.src}/nu/xom/compositions.dat" tofile="${clover.classes.dir}/nu/xom/compositions.dat"/>
+    <echo file="${clover.classes.dir}/nu/xom/version.txt">${version}</echo>
+  </target>
+
+  <target name="test-clover" depends="compile-core-clover"
+          description="Run JUnit tests against OpenClover-instrumented code">
+    <junit fork="true" failureproperty="testsfailed">
+      <classpath>
+        <pathelement location="${clover.classes.dir}"/>
+        <pathelement location="${clover.jar}"/>
+        <path refid="compile.class.path"/>
+      </classpath>
+      <sysproperty key="jaxen.data.dir" value="${build.dir}/jaxen-${jaxenversion}"/>
+      <formatter type="${test.outputFormat}"/>
+      <formatter type="brief" usefile="false"/>
+      <batchtest fork="true" todir="${testoutput.dir}">
+        <fileset dir="${build.src}">
+          <include name="**/*Test.java"/>
+          <exclude name="**/pantry/*"/>
+          <exclude name="**/MegaTest.java"/>
+          <exclude name="**/benchmarks/*.java"/>
+          <exclude name="**/integrationtests/*.java"/>
+          <exclude name="**/EBCDICTest.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+
+    <junitreport todir="${testoutput.dir}">
+      <fileset dir="${testoutput.dir}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report todir="${testoutput.dir}"/>
+    </junitreport>
+
+    <fail message="tests failed">
+      <condition>
+        <and>
+          <isset property="testsfailed"/>
+          <isset property="test.haltonfailure"/>
+        </and>
+      </condition>
+    </fail>
+  </target>
+
+  <target name="clover-report" depends="init" description="Generate OpenClover code coverage report">
+    <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
+    <mkdir dir="${clover.report.dir}"/>
+    <clover-report initstring="${clover.db.dir}/coverage.db">
+      <current outfile="${clover.report.dir}" title="${Name} ${version}">
+        <format type="html"/>
+      </current>
+      <current outfile="${clover.report.dir}/clover.xml" title="${Name} ${version}">
+        <format type="xml"/>
+      </current>
+    </clover-report>
+  </target>
+
+  <target name="clover" depends="test-clover, clover-report"
+          description="Run tests with OpenClover code coverage"/>
+
+
   <target name="testjar" depends="jar" description="Run JUnit tests using jar file">
     <junit printsummary="on" fork="no">
        <classpath>
