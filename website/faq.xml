@@ -595,6 +595,45 @@ Use XPath. Specifically use the query
 </qandaentry>
 
 
+
+<qandaentry id="billionlaughs">
+<question>
+
+<para>
+  How do I protect against the billion laughs (XML entity expansion) attack?
+</para>
+</question>
+<answer>
+<para>
+The <ulink url="https://en.wikipedia.org/wiki/Billion_laughs_attack">billion laughs attack</ulink>
+(also known as an XML bomb or exponential entity expansion attack) exploits deeply nested
+XML entity references to cause the parser to consume an excessive amount of memory.
+To protect against this, configure the underlying SAX parser to enable
+<ulink url="https://docs.oracle.com/javase/8/docs/api/javax/xml/XMLConstants.html#FEATURE_SECURE_PROCESSING">JAXP secure processing</ulink>
+before passing it to XOM's <classname>Builder</classname>:
+</para>
+
+<informalexample><programlisting><![CDATA[  XMLReader reader = XMLReaderFactory.createXMLReader();
+  reader.setFeature("http://javax.xml.XMLConstants/feature/secure-processing", true);
+  Builder builder = new Builder(reader);]]></programlisting></informalexample>
+
+<para>
+JAXP secure processing limits entity expansion (to 64,000 by default in most implementations).
+If you are using Xerces directly, you can also control this limit via the
+<code>http://www.oracle.com/xml/jaxp/properties/entityExpansionLimit</code>
+system property or the Xerces-specific security manager:
+</para>
+
+<informalexample><programlisting><![CDATA[  XMLReader reader = XMLReaderFactory.createXMLReader(
+      "org.apache.xerces.parsers.SAXParser");
+  reader.setProperty(
+      "http://apache.org/xml/properties/security-manager",
+      new org.apache.xerces.util.SecurityManager());
+  Builder builder = new Builder(reader);]]></programlisting></informalexample>
+
+</answer>
+</qandaentry>
+
   </qandaset>
 
 
