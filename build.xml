@@ -608,7 +608,7 @@ XOM Build file
            source="1.6"
            encoding="UTF-8"
            includeAntRuntime="false"
-           excludes="nu/xom/pantry/* nu/xom/tools/* nu/xom/samples/* nu/xom/benchmarks/*">
+           excludes="nu/xom/tools/* nu/xom/samples/* nu/xom/benchmarks/*">
       <classpath>
         <path refid="compile.class.path"/>
         <pathelement location="${clover.jar}"/>
