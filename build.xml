@@ -587,7 +587,13 @@ XOM Build file
     <!-- Pre-instrument source files at the source level; avoids CloverCompilerAdapter classloading issues -->
     <clover-instr srcdir="${build.src}" destdir="${clover.instr.src}"
                   initstring="${clover.db.dir}/coverage.db"
-                  encoding="UTF-8"/>
+                  encoding="UTF-8">
+      <excludes>
+        <exclude name="nu/xom/samples/**"/>
+        <exclude name="nu/xom/benchmarks/**"/>
+        <exclude name="nu/xom/tools/**"/>
+      </excludes>
+    </clover-instr>
   </target>
 
   <target name="compile-core-clover" depends="compile-jaxen, with.clover"
@@ -602,7 +608,7 @@ XOM Build file
            source="1.6"
            encoding="UTF-8"
            includeAntRuntime="false"
-           excludes="nu/xom/pantry/* nu/xom/tools/* nu/xom/samples/*Servlet.java">
+           excludes="nu/xom/tools/* nu/xom/samples/* nu/xom/benchmarks/*">
       <classpath>
         <path refid="compile.class.path"/>
         <pathelement location="${clover.jar}"/>
