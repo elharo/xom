@@ -38,10 +38,11 @@ Once the plugin is installed, open the project. Use **File → New → Project f
 1. Open IntelliJ IDEA and choose **File → New → Project from Existing Sources**.
 2. Navigate to the root of the XOM repository and click **OK**.
 3. In the **Import Project** dialog, select **Create project from existing sources** and click **Next**.
-4. Accept the defaults on the remaining wizard pages and click **Finish**.
-5. Open the **Ant** tool window (**View → Tool Windows → Ant**).
-6. Click the **+** button in the Ant tool window and add the `build.xml` file from the repository root.
-7. Use the Ant tool window to run targets such as `compile`, `test`, or `jar`.
+4. On the **Source Directories** page, IntelliJ will propose source roots it detected. Remove every proposed root **except** `src`. In particular, remove `fatsrc` (an alternate source tree used only by the Ant fat build) and any directories under `build/` (generated Jaxen sources that cannot be compiled before the Ant build repackages them). Click **Next**.
+5. Accept the defaults on the remaining wizard pages and click **Finish**.
+6. Open the **Ant** tool window (**View → Tool Windows → Ant**).
+7. Click the **+** button in the Ant tool window and add the `build.xml` file from the repository root.
+8. Use the Ant tool window to run targets such as `compile`, `test`, or `jar`.
 
 To run tests from the command line instead, use `ant test` at the repository root.
 
