@@ -9,10 +9,12 @@
     <conf name="jaxen" description="Jaxen XPath engine"/>
     <conf name="docbook" description="DocBook XSL stylesheets for website generation"/>
     <conf name="clover" description="OpenClover code coverage tool"/>
+    <conf name="junit" description="JUnit test framework"/>
   </configurations>
   <dependencies>
     <dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="servlets->default"/>
     <dependency org="org.ccil.cowan.tagsoup" name="tagsoup" rev="1.2.1" conf="betterdoc->default"/>
+    <dependency org="junit" name="junit" rev="4.13.2" conf="junit->default" transitive="false"/>
     <dependency org="com.googlecode.jarjar" name="jarjar" rev="1.3" conf="jarjar->default"/>
     <dependency org="saxon" name="saxon" rev="6.5.3" conf="saxon->default"/>
     <dependency org="jaxen" name="jaxen" rev="2.0.0" conf="jaxen->default" transitive="false"/>
