@@ -695,10 +695,10 @@ XOM Build file
   </target>
     
       
-  <target name="clean" depends="init" description="Remove build files">
-    <delete dir="${build.dir}"/>
-    <delete dir="${dist.dir}"/>
-    <delete dir="${testoutput.dir}"/>
+  <target name="clean" description="Remove build files">
+    <delete dir="./build"/>
+    <delete dir="./dist"/>
+    <delete dir="./testresults"/>
     <delete>
       <fileset dir="." includes="junit*properties"/>
     </delete>
