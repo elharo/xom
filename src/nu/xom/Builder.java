@@ -359,7 +359,7 @@ public class Builder {
 
     /**
      * <p>
-     * Creates a optionally validating <code>Builder</code> based
+     * Creates an optionally validating <code>Builder</code> based
      * on the specified parser object. Custom SAX features and  
      * properties such as schema validation can be set on this
      * <code>XMLReader</code> before passing it to this method.
