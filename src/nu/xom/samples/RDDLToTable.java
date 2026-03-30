@@ -56,10 +56,10 @@ import nu.xom.Serializer;
  *       xlink:title="W3C NOTE XLink2RDF"
  *       xlink:role="http://www.w3.org/TR/html4/"
  *       xlink:arcrole="http://www.rddl.org/purposes#reference"
- *       xlink:href="http://www.w3.org/TR/xlink2rdf/"
+ *       xlink:href="https://www.w3.org/TR/xlink2rdf/"
  *       >
  *     &lt;li>
- *       &lt;a href="http://www.w3.org/TR/xlink2rdf/">
+ *       &lt;a href="https://www.w3.org/TR/xlink2rdf/">
  *        W3C Note Harvesting RDF Statements from XLinks
  *      &lt;/a>
  *    &lt;/li>
@@ -71,12 +71,12 @@ import nu.xom.Serializer;
  * &lt;caption>W3C NOTE XLink2RDF&lt;/caption>
  * &lt;tr>&lt;td>Role: &lt;/td>&lt;td>http://www.w3.org/TR/html4/&lt;/td>&lt;/tr>
  * &lt;tr>&lt;td>Arcrole: &lt;/td>&lt;td>http://www.rddl.org/purposes#reference&lt;/td>&lt;/tr>
- * &lt;tr>&lt;td>Href: &lt;/td>&lt;td>&lt;a href="http://www.w3.org/TR/xlink2rdf/">
+ * &lt;tr>&lt;td>Href: &lt;/td>&lt;td>&lt;a href="https://www.w3.org/TR/xlink2rdf/">
  *  http://www.w3.org/TR/xlink2rdf/&lt;/a>&lt;/td>&lt;/tr>
  * &lt;tr>
  *   &lt;td colspan="2">
  *     &lt;li>
- *       &lt;a href="http://www.w3.org/TR/xlink2rdf/">
+ *       &lt;a href="https://www.w3.org/TR/xlink2rdf/">
  *         W3C Note Harvesting RDF Statements from XLinks
  *       &lt;/a>
  *     &lt;/li>

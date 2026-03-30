@@ -92,10 +92,10 @@ public class ResourceToTable {
         xlink:title="W3C NOTE XLink2RDF"
         xlink:role="http://www.w3.org/TR/html4/"
         xlink:arcrole="http://www.rddl.org/purposes#reference"
-        xlink:href="http://www.w3.org/TR/xlink2rdf/"
+        xlink:href="https://www.w3.org/TR/xlink2rdf/"
         >
       <li>
-        <a href="http://www.w3.org/TR/xlink2rdf/">
+        <a href="https://www.w3.org/TR/xlink2rdf/">
           W3C Note Harvesting RDF Statements from XLinks
         </a>
       </li>
@@ -107,12 +107,12 @@ will turn into an XHTML table that looks like this:
   <caption>W3C NOTE XLink2RDF</caption>
   <tr><td>Role: </td><td>http://www.w3.org/TR/html4/</td></tr>
   <tr><td>Arcrole: </td><td>http://www.rddl.org/purposes#reference</td></tr>
-  <tr><td>Href: </td><td><a href="http://www.w3.org/TR/xlink2rdf/">
+  <tr><td>Href: </td><td><a href="https://www.w3.org/TR/xlink2rdf/">
    http://www.w3.org/TR/xlink2rdf/</a></td></tr>
   <tr>
     <td colspan="2">
       <li>
-        <a href="http://www.w3.org/TR/xlink2rdf/">
+        <a href="https://www.w3.org/TR/xlink2rdf/">
           W3C Note Harvesting RDF Statements from XLinks
         </a>
       </li>

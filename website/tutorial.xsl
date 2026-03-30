@@ -37,7 +37,7 @@
 </tr>
 <tr>
 <td width="34%" align="left"></td>
-<td width="32%" align="center"><a href="http://www.cafeconleche.org/">Up To Cafe con Leche</a></td>
+<td width="32%" align="center"><a href="https://www.cafeconleche.org/">Up To Cafe con Leche</a></td>
 <td width="34%" align="right"></td>
 </tr>
 </table>

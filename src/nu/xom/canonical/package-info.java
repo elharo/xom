@@ -25,7 +25,7 @@
  * <code>nu.xom.canonical</code>  
  * supports the output of 
  * <a target="_top"
- * href="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical XML</a>
+ * href="https://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical XML</a>
  * from XOM.
  * For basic canonicalization of existing documents, this (or any other tree-based
  * solution) is likely not as efficient as a streaming, SAX-based solution.
