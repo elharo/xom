@@ -87,7 +87,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="clover.instr.src"   value="${build.dir}/clover/src"/>
     <property name="clover.classes.dir" value="${build.dir}/clover/classes"/>
     
-    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*"/>
+    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*, .idea/**, **/*.iml, nbproject/**, .vscode/**"/>
 
     <property name="test.outputFormat" value="xml"/>   
     <property name="binary.jar" location="${dist.dir}/maven2/xom-${version}.jar" />
