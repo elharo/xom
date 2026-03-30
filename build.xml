@@ -78,7 +78,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="servlet.jar"    value="${ivy.lib.dir}/servlet-api-2.5.jar"/>
     <property name="jarjar.jar"     value="${ivy.lib.dir}/jarjar-1.3.jar"/>
     <property name="saxon.jar"      value="${ivy.lib.dir}/saxon-6.5.3.jar"/>
-    <property name="junit.jar"      value="${lib.dir}/junit-4.13.2.jar"/>
+    <property name="junit.jar"      value="${ivy.lib.dir}/junit-4.13.2.jar"/>
     <property name="clover.jar"     value="${ivy.lib.dir}/clover-4.5.2.jar"/>
     <property name="xom.jar"        value="${build.dir}/${name}-${version}.jar"/>
     <property name="xom-core"       value="${build.dest}"/>
@@ -188,6 +188,9 @@ XOM Build file
                   settingsRef="ivy.settings"/>
     <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="clover"
+                  settingsRef="ivy.settings"/>
+    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+                  conf="junit"
                   settingsRef="ivy.settings"/>
     <ivy:retrieve xmlns:ivy="antlib:org.apache.ivy.ant"
                   pattern="${ivy.lib.dir}/[artifact]-[revision]-[classifier].[ext]"
@@ -510,6 +513,7 @@ XOM Build file
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, **/.DS_Store"/>   
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/> 
       <zipfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>
+      <zipfileset fullpath="XOM/lib/junit-4.13.2.jar" file="${junit.jar}"/>
     </zip>
 
   </target>
@@ -529,7 +533,8 @@ XOM Build file
       <tarfileset prefix="XOM/apidocs" dir="./${build.dir}/apidocs" 
         excludes="**/.thumbnails/**, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, **/.DS_Store"/>   
       <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/> 
-      <tarfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>   
+      <tarfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>
+      <tarfileset fullpath="XOM/lib/junit-4.13.2.jar" file="${junit.jar}"/>
     </tar>
 
   </target>
