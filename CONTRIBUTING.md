@@ -33,13 +33,16 @@ XOM uses Apache Ant as its build system. IntelliJ IDEA does not include Ant supp
 2. Go to **Plugins**, search for **Ant**, and install the **Ant** plugin by JetBrains.
 3. Restart IntelliJ IDEA when prompted.
 
-Once the plugin is installed, import the project:
+Once the plugin is installed, open the project. Use **File → New → Project from Existing Sources** (not **File → Open**) to avoid IntelliJ incorrectly detecting the project as an Eclipse or Maven project:
 
-1. Open IntelliJ IDEA and choose **File → Open**.
+1. Open IntelliJ IDEA and choose **File → New → Project from Existing Sources**.
 2. Navigate to the root of the XOM repository and click **OK**.
-3. Open the **Ant** tool window (**View → Tool Windows → Ant**).
-4. Click the **+** button in the Ant tool window and add the `build.xml` file from the repository root.
-5. Use the Ant tool window to run targets such as `compile`, `test`, or `jar`.
+3. In the **Import Project** dialog, select **Create project from existing sources** and click **Next**.
+4. On the **Source Directories** page, IntelliJ will propose source roots it detected. Remove every proposed root **except** `src`. In particular, remove `fatsrc` (an alternate source tree used only by the Ant fat build) and any directories under `build/` (generated Jaxen sources that cannot be compiled before the Ant build repackages them). Click **Next**.
+5. Accept the defaults on the remaining wizard pages and click **Finish**.
+6. Open the **Ant** tool window (**View → Tool Windows → Ant**).
+7. Click the **+** button in the Ant tool window and add the `build.xml` file from the repository root.
+8. Use the Ant tool window to run targets such as `compile`, `test`, or `jar`.
 
 To run tests from the command line instead, use `ant test` at the repository root.
 
