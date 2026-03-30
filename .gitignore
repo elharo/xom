@@ -21,5 +21,7 @@ junit*properties
 dist/
 xom.fb
 jester*
-trademark*
+*.iml
+.idea/
+out/
 ivy/
