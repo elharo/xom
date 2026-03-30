@@ -54,9 +54,9 @@ import nu.xom.XPathContext;
 /**
  * <p>
  *   Writes XML in the format specified by <a target="_top"
- *   href="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical
+ *   href="https://www.w3.org/TR/2001/REC-xml-c14n-20010315">Canonical
  *   XML Version 1.0</a> or <a target="_top"
- *   href="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/">Exclusive
+ *   href="https://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/">Exclusive
  *   XML Canonicalization Version 1.0</a>. Canonical XML 1.1 support is in progress. 
  * </p>
  * 

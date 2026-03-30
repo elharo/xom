@@ -664,7 +664,7 @@ draconian focus on well-formedness is designed to avoid.
     or even that it has a publicly accessible
     <methodname>clone</methodname> method.
     (On this point, see 
-    <citation><citetitle pubwork="book"><ulink url="http://www.amazon.com/exec/obidos/ISBN%3D0201310058/ref%3Dnosim/cafeaulaitA/">Effective 
+    <citation><citetitle pubwork="book"><ulink url="https://www.amazon.com/exec/obidos/ISBN%3D0201310058/ref%3Dnosim/cafeaulaitA/">Effective 
     Java</ulink></citetitle>, <author>
       <firstname>Joshua</firstname>
       <surname>Bloch</surname>
@@ -724,11 +724,11 @@ Addison-Wesley, 2001, ISBN 0-201-31005-8, pp. 45-52.</citation>)
 <title>Problems detectable in testing throw  runtime exceptions</title>
 
   <para>
-  I got this idea from Bruce Eckel (<ulink url="http://www.mindview.net/Etc/Discussions/CheckedExceptions">Does
+  I got this idea from Bruce Eckel (<ulink url="https://www.mindview.net/Etc/Discussions/CheckedExceptions">Does
   Java need Checked Exceptions?</ulink><footnote>
         <para>
         Bruce Eckel, 
-        <citetitle pubwork="webpage"><ulink url="http://www.mindview.net/Etc/Discussions/CheckedExceptions">Does
+        <citetitle pubwork="webpage"><ulink url="https://www.mindview.net/Etc/Discussions/CheckedExceptions">Does
   Java need Checked Exceptions?</ulink></citetitle></para></footnote>, 
 ) and Joshua 
 Bloch  (<citation>Effective Java</citation>, 
@@ -737,14 +737,14 @@ for recoverable conditions and runtime exceptions for programming
 errors<footnote><para><citation>
 <citetitle pubwork="chapter">Use checked exceptions 
 for recoverable conditions and runtime exceptions for programming</citetitle>
-    <citetitle pubwork="book"><ulink url="http://www.amazon.com/exec/obidos/ISBN%3D0201310058/ref%3Dnosim/cafeaulaitA/">Effective 
+    <citetitle pubwork="book"><ulink url="https://www.amazon.com/exec/obidos/ISBN%3D0201310058/ref%3Dnosim/cafeaulaitA/">Effective 
     Java</ulink></citetitle>, <author>
       <firstname>Joshua</firstname>
       <surname>Bloch</surname>
     </author>,
 Addison-Wesley, 2001, ISBN 0-201-31005-8, pp. 172-173.</citation></para></footnote>&mdash;and 41&mdash;Avoid unnecessary use of checked exceptions<footnote><para><citation>
 <citetitle pubwork="chapter">Avoid unnecessary use of checked exceptions</citetitle>
-    <citetitle pubwork="book"><ulink url="http://www.amazon.com/exec/obidos/ISBN%3D0201310058/ref%3Dnosim/cafeaulaitA/">Effective 
+    <citetitle pubwork="book"><ulink url="https://www.amazon.com/exec/obidos/ISBN%3D0201310058/ref%3Dnosim/cafeaulaitA/">Effective 
     Java</ulink></citetitle>, <author>
       <firstname>Joshua</firstname>
       <surname>Bloch</surname>
