@@ -201,9 +201,9 @@
     </copy>
   </target>
 
-  <target name="clean" depends="init" description="Remove build files">
+  <target name="clean" description="Remove build files">
     <delete dir="${build.dir}"/>
-    <delete dir="${dist.dir}"/>
+    <delete dir="${parentdist.dir}"/>
   </target>
 </project>
 
