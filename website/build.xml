@@ -47,8 +47,9 @@
   <target name="valid" 
           description="Check validity of input documents and output"
           depends="tutorial">
-    <java classname="nu.xom.samples.Validator">
+    <java classname="nu.xom.samples.Validator" fork="yes" failonerror="true">
      <arg value="index.html"/>
+     <arg value="history.html"/>
      <arg value="faq.xml"/>
      <arg value="${build.dir}/finished_tutorial.xml"/>
      <arg value="${website.dir}/tutorial.xhtml"/>
@@ -192,7 +193,7 @@
   </target>	
 
 
-  <target name="dist" depends="html, tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building">
+  <target name="dist" depends="html, tutorial, faq, infoset, xpath, design, future, open, license, testsuite, samples, install, building, valid">
     <copy todir="${parentdist.dir}" >  
       <fileset dir="${website.dir}" includes="**"/>  
     </copy> 

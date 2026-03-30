@@ -46,29 +46,37 @@ public class Validator {
 
     Builder parser = new Builder(true);
 
+    boolean valid = true;
     for (String url : args) {
       try {
         parser.build(url);
         System.out.println(url + " is valid.");
       }
       catch (ValidityException ex) {
+        valid = false;
         System.out.println(url + " is not valid.");
         System.out.println(ex.getMessage());
         System.out.println(" at line " + ex.getLineNumber() 
           + ", column " + ex.getColumnNumber());
       }
       catch (ParsingException ex) {
+        valid = false;
         System.out.println(url + " is not well-formed.");
         System.out.println(ex.getMessage());
         System.out.println(" at line " + ex.getLineNumber() 
           + ", column " + ex.getColumnNumber());
       }
-      catch (IOException ex) { 
+      catch (IOException ex) {
+        valid = false;
         System.out.println(
          "Due to an IOException, the parser could not check " + url
         );
         ex.printStackTrace();
       }
+    }
+
+    if (!valid) {
+      System.exit(1);
     }
   
   }
