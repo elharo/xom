@@ -2,6 +2,7 @@
 <ivy-module version="2.0" xmlns:ant="http://ant.apache.org/ivy/maven">
   <info organisation="nu.xom" module="xom"/>
   <configurations>
+    <conf name="compile" description="Core compile-time dependencies (XML parser)"/>
     <conf name="servlets" description="Dependencies for servlet samples"/>
     <conf name="betterdoc" description="Dependencies for generating improved JavaDoc"/>
     <conf name="jarjar" description="JarJar tool for repackaging Jaxen classes"/>
@@ -12,6 +13,8 @@
     <conf name="junit" description="JUnit test framework"/>
   </configurations>
   <dependencies>
+    <dependency org="xerces" name="xercesImpl" rev="2.12.2" conf="compile->default" transitive="false"/>
+    <dependency org="xml-apis" name="xml-apis" rev="1.4.01" conf="compile->default" transitive="false"/>
     <dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="servlets->default"/>
     <dependency org="org.ccil.cowan.tagsoup" name="tagsoup" rev="1.2.1" conf="betterdoc->default"/>
     <dependency org="junit" name="junit" rev="4.13.2" conf="junit->default" transitive="false"/>
