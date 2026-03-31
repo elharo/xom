@@ -245,7 +245,7 @@ public class NamespacesTest extends XOMTestCase {
             fail("Got a namespace 3");
         }
         catch (IndexOutOfBoundsException ex) {
-           // success;   
+            assertEquals("No 3rd namespace", ex.getMessage());
         }
         
         
