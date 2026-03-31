@@ -70,6 +70,7 @@ final class Verifier {
     
     private static void loadFlags(ClassLoader loader) {
         
+        int FLAGS_SIZE = 65536;
         DataInputStream in = null;
         try {
             InputStream raw = loader.getResourceAsStream("nu/xom/characters.dat");
@@ -77,8 +78,8 @@ final class Verifier {
                 throw new RuntimeException("Broken XOM installation: "
                   + "could not load nu/xom/characters.dat");
             }
-            in = new DataInputStream(new BufferedInputStream(raw, 65536));
-            flags = new byte[65536];
+            in = new DataInputStream(new BufferedInputStream(raw, FLAGS_SIZE));
+            flags = new byte[FLAGS_SIZE];
             in.readFully(flags);
         }
         catch (IOException ex) {
