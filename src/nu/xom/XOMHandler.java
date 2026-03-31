@@ -375,8 +375,12 @@ class XOMHandler
     
     public void processingInstruction(String target, String data) throws SAXException {
               
-        if (!inDTD) flushText();
-        if (inDTD && !inInternalSubset()) return;
+        if (inDTD) {
+            if (!inInternalSubset()) return;
+        }
+        else {
+            flushText();
+        }
         Nodes result = factory.makeProcessingInstruction(target, data);
         
         for (int i = 0; i < result.size(); i++) {
@@ -488,8 +492,12 @@ class XOMHandler
     
     public void comment(char[] text, int start, int length) throws SAXException {
     
-        if (!inDTD) flushText();
-        if (inDTD && !inInternalSubset()) return;
+        if (inDTD) {
+            if (!inInternalSubset()) return;
+        }
+        else {
+            flushText();
+        }
 
         Nodes result = factory.makeComment(new String(text, start, length));
         
