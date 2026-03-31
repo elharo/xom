@@ -71,8 +71,8 @@ subject line. The XOM home page is https://xom.nu/
     <property name="dist.dir"        value="./dist"/>    
     <property name="testreports.dir" value="./testreports" />
     <property name="xercesVersion"   value="2.12.2"/>
-    <property name="xmlapis.jar"     value="${lib.dir}/xml-apis-1.4.01.jar"/>
-    <property name="parser.jar"     value="${lib.dir}/xercesImpl-${xercesVersion}.jar"/>
+    <property name="xmlapis.jar"     value="${ivy.lib.dir}/xml-apis-1.4.01.jar"/>
+    <property name="parser.jar"     value="${ivy.lib.dir}/xercesImpl-${xercesVersion}.jar"/>
     <property name="jaxen.jar"      value="${ivy.lib.dir}/jaxen-2.0.0.jar"/>
     <property name="tagsoup.jar"    value="${ivy.lib.dir}/tagsoup-1.2.1.jar"/>
     <property name="servlet.jar"    value="${ivy.lib.dir}/servlet-api-2.5.jar"/>
@@ -174,6 +174,9 @@ XOM Build file
     <mkdir dir="${ivy.lib.dir}"/>
     <ivy:settings id="ivy.settings" file="ivysettings.xml"/>
     <ivy:resolve file="ivy.xml" settingsRef="ivy.settings"/>
+    <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
+                  conf="compile"
+                  settingsRef="ivy.settings"/>
     <ivy:retrieve pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]"
                   conf="servlets"
                   settingsRef="ivy.settings"/>
@@ -514,6 +517,8 @@ XOM Build file
       <zipfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/> 
       <zipfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>
       <zipfileset fullpath="XOM/lib/junit-4.13.2.jar" file="${junit.jar}"/>
+      <zipfileset fullpath="XOM/lib/xercesImpl-${xercesVersion}.jar" file="${parser.jar}"/>
+      <zipfileset fullpath="XOM/lib/xml-apis-1.4.01.jar" file="${xmlapis.jar}"/>
     </zip>
 
   </target>
@@ -535,6 +540,8 @@ XOM Build file
       <tarfileset fullpath="XOM/${name}-${version}.jar" dir="./${build.dir}" includes="${name}-${version}.jar"/> 
       <tarfileset fullpath="XOM/${name}-samples.jar" dir="./${build.dir}" includes="${name}-samples.jar"/>
       <tarfileset fullpath="XOM/lib/junit-4.13.2.jar" file="${junit.jar}"/>
+      <tarfileset fullpath="XOM/lib/xercesImpl-${xercesVersion}.jar" file="${parser.jar}"/>
+      <tarfileset fullpath="XOM/lib/xml-apis-1.4.01.jar" file="${xmlapis.jar}"/>
     </tar>
 
   </target>
