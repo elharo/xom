@@ -2,6 +2,11 @@ name: Create Issues for TODO and ???? Comments
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/create-todo-issues.yml'
 
 permissions:
   issues: write
