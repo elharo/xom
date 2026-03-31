@@ -1,0 +1,419 @@
+name: Create Issues for TODO and ???? Comments
+
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create issue - JaxenNavigator remove recursion
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'JaxenNavigator: remove recursion in findByID',
+              body: `The \`findByID\` method in \`JaxenNavigator.java\` uses recursion to traverse the element tree. Consider converting this to an iterative approach to avoid potential stack overflow on deeply nested documents.\n\nLocation: \`src/nu/xom/JaxenNavigator.java\`, line 126\n\n\`\`\`java\n// ????remove recursion\npublic static Element findByID(Element top, String id) {\n    if (hasID(top, id)) return top;\n    else {\n        Elements children = top.getChildElements();\n        for (int i = 0; i < children.size(); i++) {\n            Element result = findByID(children.get(i), id);\n            if (result != null) return result;\n        }\n    }\n    return null;\n}\n\`\`\``,
+              labels: ['enhancement']
+            });
+
+      - name: Create issue - JaxenNavigator avoid list copy
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'JaxenNavigator: performance - avoid list copy in getNamespaceAxisIterator',
+              body: `In \`getNamespaceAxisIterator\` in \`JaxenNavigator.java\`, a new \`ArrayList\` is created by copying the bindings map. It may be possible to avoid this list copy and iterate directly over the map entries.\n\nLocation: \`src/nu/xom/JaxenNavigator.java\`, line 176\n\n\`\`\`java\n// ???? can probably avoid this list copy\nMap bindings = element.getNamespacePrefixesInScope();\nIterator iterator = bindings.entrySet().iterator();\nList result = new ArrayList(bindings.size()+1);\n\`\`\``,
+              labels: ['performance']
+            });
+
+      - name: Create issue - JaxenNavigator NoSuchElementException check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'JaxenNavigator: verify NoSuchElementException guard is necessary in iterator next()',
+              body: `In \`JaxenNavigator.java\`, the \`next()\` method checks if \`next == null\` and throws \`NoSuchElementException\`. The comment says "Correct? Yes. Necessary????" — it should be confirmed whether this guard is truly necessary or if it can be removed.\n\nLocation: \`src/nu/xom/JaxenNavigator.java\`, line 424\n\n\`\`\`java\nif (next == null) throw new NoSuchElementException(); // Correct? Yes. Necessary????\n\`\`\``,
+              labels: ['question']
+            });
+
+      - name: Create issue - JaxenNavigator isText ArrayList hack
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'JaxenNavigator: isText uses ArrayList hack - use a dedicated subclass instead',
+              body: `The \`isText()\` method in \`JaxenNavigator.java\` uses a hack to identify text node lists by checking if the object is an \`ArrayList\`. The comment notes that a separate special subclass of \`ArrayList\` should be used to identify it properly.\n\nLocation: \`src/nu/xom/JaxenNavigator.java\`, line 508\n\n\`\`\`java\n// ???? hack: need to use a separate special subclass of ArrayList I can identify.\n// But may not be necessary since this is not a public API. I don't \n// think there\'s any way to get a different ArrayList into this method.\nif (object instanceof ArrayList) {\n\`\`\``,
+              labels: ['refactoring']
+            });
+
+      - name: Create issue - JaxenConnector thread-safety
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'JaxenConnector: possible thread-safety issue with shared functionContext',
+              body: `In \`JaxenConnector.java\`, the \`functionContext\` field is static and shared across instances. Setting it via \`setFunctionContext(functionContext)\` may cause a race condition in concurrent usage.\n\nLocation: \`src/nu/xom/JaxenConnector.java\`, line 49\n\n\`\`\`java\nprivate static FunctionContext functionContext = new XPathFunctionContext(false);\n\nJaxenConnector(String expression) throws JaxenException {\n    super(expression, new JaxenNavigator());\n    // possible thread-safety issue????\n    this.setFunctionContext(functionContext);\n}\n\`\`\``,
+              labels: ['bug']
+            });
+
+      - name: Create issue - UnicodeWriter writeDoctypeDeclaration
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'UnicodeWriter: consider separate writeDoctypeDeclaration method for special characters',
+              body: `In \`UnicodeWriter.java\`, characters like \\t, \\n, and space are handled specially in the \`getUnicodeLength\` method. There is a question of whether these special characters (which may need escaping in doctype declarations) should be handled in their own \`writeDoctypeDeclaration\` method rather than the general-purpose method. This also affects PIs, XML declarations, and comments.\n\nLocation: \`src/nu/xom/UnicodeWriter.java\`, line 111\n\n\`\`\`java\n// Should these have their own writeDoctypeDeclaration method????\n// Also an issue with spaces and such in PIs, XML declaration, comments\nreturn -1;\n\`\`\``,
+              labels: ['refactoring']
+            });
+
+      - name: Create issue - Canonicalizer indexOf in Nodes
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Canonicalizer: consider moving indexOf helper method into Nodes class',
+              body: `The \`indexOf(Element element)\` private method in \`Canonicalizer.java\` duplicates functionality that could belong in the \`Nodes\` class. Moving it there (or adding a similar method) would reduce code duplication and improve the \`Nodes\` API.\n\nLocation: \`src/nu/xom/canonical/Canonicalizer.java\`, line 586\n\n\`\`\`java\n// ???? move into Nodes?\nprivate int indexOf(Element element) {\n    for (int i = 0; i < nodes.size(); i++) {\n        if (nodes.get(i) == element) return i;\n    }\n    return -1;\n}\n\`\`\``,
+              labels: ['refactoring']
+            });
+
+      - name: Create issue - Canonicalizer rework getOmittedBases
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Canonicalizer: rework getOmittedBases to not need the parent variable',
+              body: `The \`getOmittedBases\` method in \`Canonicalizer.java\` uses a \`parent\` variable that could be refactored away. This is a code cleanliness improvement.\n\nLocation: \`src/nu/xom/canonical/Canonicalizer.java\`, line 703\n\n\`\`\`java\nprivate List<String> getOmittedBases(Element element) {\n    ArrayList<String> bases = new ArrayList<String>();\n    // TODO(elharo): rework this to not need this next variable\n    ParentNode parent = element.getParent();\n    while (parent != null && parent instanceof Element && !nodes.contains(parent)) {\n\`\`\``,
+              labels: ['refactoring']
+            });
+
+      - name: Create issue - URIJoiner RFC 3986 algorithm bug
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'URIJoiner/URIUtil: possible bug in RFC 3986 URI resolution algorithm for paths ending in /..',
+              body: `Both \`URIJoiner.java\` and \`URIUtil.java\` contain code that appends a trailing slash to paths ending in \`/..\`. This workaround may indicate a bug in the RFC 3986 resolution algorithm implementation, or it may be a legitimate deviation not covered by the spec.\n\nLocations:\n- \`src/nu/xom/canonical/URIJoiner.java\`, line 47\n- \`src/nu/xom/URIUtil.java\`, line 83\n\n\`\`\`java\n// This seems to be necessary to handle base URLs like\n// http://www.example.com/test/data/..\n// but I don\'t think it\'s part of the 3986 algorithm. \n// ???? It may be a bug in that algorithm. Check.\nif (base.path.endsWith("/..")) base.path += \'/\';\n\`\`\`\n\nThis should be verified against RFC 3986 and test cases added to confirm correct behavior.`,
+              labels: ['bug']
+            });
+
+      - name: Create issue - XSLTHandler startDTD and xsl:output
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'XSLTHandler: investigate whether startDTD is called when xsl:output specifies a Doctype',
+              body: `In \`XSLTHandler.java\`, the \`startDTD\` method is empty. There is an open question about whether this method would be called by the XSLT processor when \`xsl:output\` specifies a DOCTYPE, and if so, whether it should add a DOCTYPE to the result tree.\n\nLocation: \`src/nu/xom/xslt/XSLTHandler.java\`, line 345\n\n\`\`\`java\n// ???? For Bill Pugh, would this method be called if xsl:output\n// specifies a Doctype? If it is, then we could add a DOCTYPE to the result tree.\npublic void startDTD(String name, String publicID, String systemID) {}\n\`\`\``,
+              labels: ['question']
+            });
+
+      - name: Create issue - XOMHandler untrusted parser DTD injection
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'XOMHandler: security - untrusted parser could inject bad names/values in internal DTD subset',
+              body: `In \`XOMHandler.java\`, the \`elementDecl\` method and other DTD declaration handlers accept names and values directly from the parser. An untrusted parser could push in bad names and values in declarations in the internal DTD subset. DTD declarations should perhaps also be created/validated through the factory.\n\nLocation: \`src/nu/xom/XOMHandler.java\`, line 527\n\n\`\`\`java\n// TODO(elharo) an untrusted parser could push in bad names and \n// values in declaration in the internal DTD subset.\n// Possibly declarations should be created in the factory too.\npublic void elementDecl(String name, String model) {\n\`\`\``,
+              labels: ['security']
+            });
+
+      - name: Create issue - XOMHandler escape system IDs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'XOMHandler: should system IDs in DTD declarations be escaped?',
+              body: `In \`XOMHandler.java\`, when building the internal DTD subset, system IDs are not escaped. There is an open question about whether system IDs could contain characters like ampersands that need escaping.\n\nLocations:\n- \`src/nu/xom/XOMHandler.java\`, line 656 (entity declaration)\n- \`src/nu/xom/XOMHandler.java\`, line 701 (unparsed entity declaration)\n\n\`\`\`java\n// need to escape system ID???? could it contain an ampersand?\ninternalDTDSubset.append(" SYSTEM \\"");\ninternalDTDSubset.append(systemID);\n\`\`\`\n\nVerify against the XML spec whether system IDs in the internal subset can contain characters that need escaping.`,
+              labels: ['bug']
+            });
+
+      - name: Create issue - Verifier buffer DataInputStream
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Verifier: performance - consider buffering DataInputStream when loading characters.dat',
+              body: `In \`Verifier.java\`, the \`DataInputStream\` reading from \`characters.dat\` is not wrapped in a \`BufferedInputStream\`. Adding buffering could improve startup performance.\n\nLocation: \`src/nu/xom/Verifier.java\`, line 79\n\n\`\`\`java\nInputStream raw = loader.getResourceAsStream("nu/xom/characters.dat");\n// buffer this????\nin = new DataInputStream(raw);\n\`\`\``,
+              labels: ['performance']
+            });
+
+      - name: Create issue - Serializer reset namespaces on exception
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Serializer: should NamespaceSupport be reset when an exception is thrown?',
+              body: `In \`Serializer.java\`, there is a question about whether the \`NamespaceSupport\` object should be reset when an exception occurs during serialization. If an exception is thrown mid-serialization, the namespace state could be inconsistent for subsequent use.\n\nLocation: \`src/nu/xom/Serializer.java\`, line 55\n\n\`\`\`java\n// ???? reset when exception is thrown?\nprivate NamespaceSupport namespaces = new NamespaceSupport();\n\`\`\``,
+              labels: ['bug']
+            });
+
+      - name: Create issue - Serializer indenting whitespace hotspot
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Serializer: performance - parent.indexOf(text) is a hotspot during indenting serialization',
+              body: `In \`Serializer.java\`, the \`isWhiteSpaceNode\` method calls \`parent.indexOf(text)\` which is identified as a major performance hotspot, accounting for approximately 12% of serialization time when indenting. This should be optimized.\n\nPossible optimization: instead of getting the position index, directly check the first and last children of the parent and compare them to the text node.\n\nLocation: \`src/nu/xom/Serializer.java\`, lines 813-825\n\n\`\`\`java\n// ???? This is a huge Hotspot. maybe 12% of serialization time\n// when indenting. Is there any way to eliminate this?\n// We only actually need to test a couple of positions, 0 and\n// parent.getChildCount()-1\nint position = parent.indexOf(text);\n\`\`\``,
+              labels: ['performance']
+            });
+
+      - name: Create issue - URIUtil unreachable code
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'URIUtil: verify unreachable code paths are still unreachable with Builder.canonicalizeURL',
+              body: `In \`URIUtil.java\`, there are commented-out code blocks handling URL paths starting with \`"./"\`, \`"../"\`, and equal to \`"."\` or \`".."\`. These were marked as unreachable in the context of XOM, but the comment now asks whether they are still unreachable since \`Builder.canonicalizeURL\` now calls this method.\n\nLocation: \`src/nu/xom/URIUtil.java\`, line 175\n\n\`\`\`java\n// These next three cases are unreachable in the context of XOM.\n// They may be needed in a more general public URIUtil.\n// ???? need to consider whether these are still unreachable now that\n// Builder.canonicalizeURL is calling this method.\n/* else if (path.equals(".") || path.equals("..")) { ... } */\n\`\`\``,
+              labels: ['question']
+            });
+
+      - name: Create issue - XPathContext remove method
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'XPathContext: consider adding a separate removeNamespace method',
+              body: `In \`XPathContext.java\`, setting a namespace URI to \`null\` is used to remove a namespace binding. It might be cleaner to add an explicit \`removeNamespace(String prefix)\` method rather than overloading \`addNamespace\` with null.\n\nLocation: \`src/nu/xom/XPathContext.java\`, line 109\n\n\`\`\`java\n// should there be a separate remove method????\nif (uri == null) {\n    namespaces.remove(prefix);\n}\n\`\`\``,
+              labels: ['enhancement']
+            });
+
+      - name: Create issue - XPathContext accept Node not Element
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'XPathContext: should the constructor accept a Node rather than an Element?',
+              body: `In \`XPathContext.java\`, the constructor that copies namespace bindings from a context node accepts an \`Element\`. There is an open question about whether it should accept a \`Node\` instead for greater flexibility.\n\nLocation: \`src/nu/xom/XPathContext.java\`, line 120\n\n\`\`\`java\n// should this be a Node rather than an Element????\n/**\n * Creates a new XPath context that contains all the namespace\n * bindings in scope on the element.\n */\n\`\`\``,
+              labels: ['enhancement']
+            });
+
+      - name: Create issue - Element Namespaces API
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Element: add more methods to Namespaces class to avoid accessing private data',
+              body: `In \`Element.java\`, the \`getNamespacePrefixesInScope\` method accesses private data of the \`Namespaces\` object. More public methods should be added to \`Namespaces\` to avoid this coupling.\n\nLocation: \`src/nu/xom/Element.java\`, line 1305\n\n\`\`\`java\n// add additional namespace prefixes\n// ???? should add more methods to Namespaces to avoid access to private data\nif (current.namespaces != null) {\n    int namespaceCount = current.namespaces.size();\n    for (int i = 0; i < namespaceCount; i++) {\n        String nsPrefix = current.namespaces.getPrefix(i);\n\`\`\``,
+              labels: ['refactoring']
+            });
+
+      - name: Create issue - Element ordinal error message
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Element: use ordinal strings (1st, 2nd, 3rd) in namespace index error message',
+              body: `In \`Element.java\`, when a namespace index is out of bounds, the error message uses a plain number (e.g., "No 2th namespace"). This should use ordinal strings like "1st", "2nd", "3rd" for readability.\n\nLocation: \`src/nu/xom/Element.java\`, line 1392\n\n\`\`\`java\nthrow new IndexOutOfBoundsException(\n    // ???? fix to use 3rd, 2nd, 1st as appropriate\n    "No " + index + "th namespace");\n\`\`\``,
+              labels: ['enhancement']
+            });
+
+      - name: Create issue - Element base vs baseURI
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Element: ambiguity in getBaseURI - check isAbsolute against base or baseURI variable?',
+              body: `In \`Element.java\`, the \`getBaseURI\` method calls \`URIUtil.isAbsolute(base)\` but the comment questions whether it should use \`base\` or \`baseURI\`. This potential bug should be investigated.\n\nLocation: \`src/nu/xom/Element.java\`, line 1506\n\n\`\`\`java\nelse if (legalURI(base)) {\n    if ("".equals(baseURI)) baseURI = base;\n    else if (URIUtil.isOpaque(base)) break; \n    else baseURI = URIUtil.absolutize(base, baseURI);\n    if (URIUtil.isAbsolute(base)) break;  // ???? base or baseURI\n}\n\`\`\``,
+              labels: ['bug']
+            });
+
+      - name: Create issue - XIncluder move getDirectoryBase to URIUtil
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'XIncluder: move getDirectoryBase into URIUtil when it becomes public',
+              body: `The \`getDirectoryBase\` private static method in \`XIncluder.java\` would be more appropriately placed in \`URIUtil\` as a utility method, especially if \`URIUtil\` is made public in a future version.\n\nLocation: \`src/nu/xom/xinclude/XIncluder.java\`, line 542\n\n\`\`\`java\n// ???? Move this into URIUtil when it goes public\nprivate static String getDirectoryBase(String parentBase) {\n    if (parentBase.endsWith("/")) return parentBase;\n    int lastSlash = parentBase.lastIndexOf(\'/\');\n    return parentBase.substring(0, lastSlash+1);\n}\n\`\`\``,
+              labels: ['refactoring']
+            });
+
+      - name: Create issue - NonVerifyingHandler simplify processingInstruction logic
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'NonVerifyingHandler: simplify processingInstruction logic into two clear cases',
+              body: `The \`processingInstruction\` method in \`NonVerifyingHandler.java\` has complex conditional logic mixing "in DTD" and "not in DTD" cases. This should be refactored into two clear, separate cases for readability. The same applies to the \`comment()\` method and the superclass.\n\nLocation: \`src/nu/xom/NonVerifyingHandler.java\`, line 170\n\n\`\`\`java\n// simplify logic???? into two cases in and not in DTD\n// ditto for comment() method and superclass\nif (!inDTD) flushText();\nelse if (!inInternalSubset()) return;\n\`\`\``,
+              labels: ['refactoring']
+            });
+
+      - name: Create issue - DOMConverter return Nodes
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'DOMConverter: consider whether convert(Document, NodeFactory) should return Nodes instead of Document',
+              body: `In \`DOMConverter.java\`, the \`convert(org.w3c.dom.Document, NodeFactory)\` method returns a \`nu.xom.Document\`. There is an open design question about whether it should return a \`Nodes\` object instead, which would be more flexible for cases where the factory produces a non-standard document structure.\n\nNote: This would be a breaking API change.\n\nLocation: \`src/nu/xom/converters/DOMConverter.java\`, line 101\n\n\`\`\`java\n// ???? should this return a Nodes instead?\npublic static Document convert(org.w3c.dom.Document domDocument,\n    NodeFactory factory) {\n\`\`\``,
+              labels: ['enhancement']
+            });
+
+      - name: Create issue - FastReproducer and Reproducer missing namespace copy
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'FastReproducer/Reproducer: copy() method does not copy additional namespace declarations',
+              body: `In both \`FastReproducer.java\` and \`Reproducer.java\`, the \`copy()\` method copies attributes but leaves commented-out code for copying namespace declarations. The comment "Weird; need to find just the additional namespaces" indicates the implementation is incomplete.\n\nLocations:\n- \`src/nu/xom/benchmarks/FastReproducer.java\`, line 112\n- \`src/nu/xom/benchmarks/Reproducer.java\`, line 119\n\n\`\`\`java\n// Weird; need to find just the additional namespaces????\n/* for (int i = original.getNamespaceDeclarationCount()-1; i >= 0; i--) {\n     copy.addNamespaceDeclaration(original.);\n} */\n\`\`\``,
+              labels: ['bug']
+            });
+
+      - name: Create issue - UnicodeUtil serialized HashMap
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'UnicodeUtil: consider storing compositions as serialized HashMap instead of UTF-8 pairs',
+              body: `In \`UnicodeUtil.java\`, Unicode compositions are loaded from \`compositions.dat\` as UTF-8 string pairs. An alternative would be to store the data as a pre-serialized \`HashMap\`, which could improve load time.\n\nLocation: \`src/nu/xom/UnicodeUtil.java\`, line 130\n\n\`\`\`java\n// ???? would it make sense to store a serialized HashMap instead????\ncompositions = new HashMap<String, String>();\n\`\`\``,
+              labels: ['performance']
+            });
+
+      - name: Create issue - UnicodeUtil getCombiningClass table lookup
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'UnicodeUtil: optimize getCombiningClass with table lookup instead of if-else chain',
+              body: `The \`getCombiningClass\` method in \`UnicodeUtil.java\` uses a very long chain of if-else statements for different Unicode code point ranges. This could be significantly optimized using a lookup table.\n\nLocation: \`src/nu/xom/UnicodeUtil.java\`, line 164\n\n\`\`\`java\nprivate static int getCombiningClass(int character) {\n    // ???? optimize with table lookup?\n    if (character <= 0x2ff) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;\n    if (character <= 0x314) return CANONICAL_COMBINING_CLASS_ABOVE;\n    // ... many more cases\n}\n\`\`\``,
+              labels: ['performance']
+            });
+
+      - name: Create issue - UnicodeUtil LAST_HANGUL_SYLLABLE
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'UnicodeUtil: verify LAST_HANGUL_SYLLABLE constant value is correct',
+              body: `In \`UnicodeUtil.java\`, there is a commented-out incorrect value for \`LAST_HANGUL_SYLLABLE\` (0xAC00) alongside the actual value (0xD7A3). The comment asks why tests still pass even if the wrong value were used — this should be investigated to ensure test coverage is adequate.\n\nLocation: \`src/nu/xom/UnicodeUtil.java\`, line 496\n\n\`\`\`java\nprivate final static int FIRST_HANGUL_SYLLABLE = 0xAC00;\n// even if this is not right; why do tests still pass????\n// private final static int LAST_HANGUL_SYLLABLE = 0xAC00; // FIXME \nprivate final static int LAST_HANGUL_SYLLABLE = 0xD7A3;\n\`\`\``,
+              labels: ['testing']
+            });
+
+      - name: Create issue - UnicodeUtil unnecessary Hangul invocations
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'UnicodeUtil: optimize normalize() to avoid unnecessary Hangul decompose/compose calls',
+              body: `In \`UnicodeUtil.java\`, the \`normalize()\` method always calls \`decomposeHangul\` and \`composeHangul\` even when there is no Hangul content. These calls should be conditional to improve performance.\n\nLocation: \`src/nu/xom/UnicodeUtil.java\`, lines 559 and 565\n\n\`\`\`java\nif (needsNormalizing) {\n    // ???? unnecessarily invoking this in many cases\n    s = decomposeHangul(s);\n    UnicodeString ustring = new UnicodeString(s);\n    UnicodeString decomposed = ustring.decompose(); \n    UnicodeString recomposed = decomposed.compose();\n    String result = recomposed.toString();\n    // ???? unnecessarily invoking this in many cases\n    result = composeHangul(result);\n}\n\`\`\``,
+              labels: ['performance']
+            });
+
+      - name: Create issue - OASISXSLTTest fragment parser
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'OASISXSLTTest: support fragment parsing by wrapping in element',
+              body: `In \`OASISXSLTTest.java\`, some XSLT test cases produce incomplete document fragments (not full XML documents) that cannot be parsed directly. The test catches \`IllegalAddException\` and silently skips these cases. A fragment parser approach (wrapping in an element, then unwrapping) could allow these test cases to be compared.\n\nLocations:\n- \`src/nu/xom/integrationtests/OASISXSLTTest.java\`, line 354\n- \`src/nu/xom/integrationtests/OASISXSLTTest.java\`, line 814\n\n\`\`\`java\ncatch (IllegalAddException ex) {\n    // A few of the test cases generate \n    // incomplete documents so we can\'t\n    // compare output. Perhaps I could\n    // wrap in an element, then get children\n    // to build a Nodes object rather than a\n    // Document???? i.e. a fragment parser?\n}\n\`\`\``,
+              labels: ['testing', 'enhancement']
+            });
+
+      - name: Create issue - XPathDriver wrap option
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'XPathDriver sample: add --wrap option like Saxon for XPath result serialization',
+              body: `In \`XPathDriver.java\`, the XPath result serialization could benefit from a wrap option (similar to Saxon\'s) or be based on the XQuery serialization format to properly serialize result sequences.\n\nLocation: \`src/nu/xom/samples/XPathDriver.java\`, line 62\n\n\`\`\`java\nfor (Node result : input.query(args[1])) {\n    // ???? add a wrap option like Saxon\n    // or based on the XQuery serialization format?\n    System.out.println(result.toXML());\n}\n\`\`\``,
+              labels: ['enhancement']
+            });
+
+      - name: Create issue - XMLWriter doPrefix cleanup
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'XMLWriter (test): doPrefix method needs cleanup',
+              body: `In \`src/nu/xom/tests/XMLWriter.java\`, the \`doPrefix\` method has a JavaDoc comment noting it "probably needs some cleanup." This should be reviewed and refactored.\n\nLocation: \`src/nu/xom/tests/XMLWriter.java\`, line 838\n\n\`\`\`java\n/**\n * Determine the prefix for an element or attribute name.\n *\n * TODO: this method probably needs some cleanup.\n */\nprivate String doPrefix(String uri, String qName, boolean isElement) {\n\`\`\``,
+              labels: ['refactoring']
+            });
+
+      - name: Create issue - CanonicalizerTest null byte array comparison
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'CanonicalizerTest/Canonicalizer11Test: assertEquals(byte[], byte[]) missing null check when one array is null',
+              body: `In both \`CanonicalizerTest.java\` and \`Canonicalizer11Test.java\`, the private \`assertEquals(byte[], byte[])\` helper method handles the case where both arrays are null but does not handle the case where exactly one of them is null, which would cause a NullPointerException.\n\nLocations:\n- \`src/nu/xom/tests/CanonicalizerTest.java\`, line 2216\n- \`src/nu/xom/tests/Canonicalizer11Test.java\`, line 402\n\n\`\`\`java\nprivate void assertEquals(byte[] expected, byte[] actual) {\n    if (expected == null && actual == null) {\n        return;\n    }\n    // what if one is null and the other isn\'t????\n    assertEquals(expected.length, actual.length); // NPE if one is null\n}\n\`\`\``,
+              labels: ['bug', 'testing']
+            });
+
+      - name: Create issue - BaseURITest uncertain test case
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'BaseURITest: verify testAbsoluteBaseURIEndsWithDotDot test case is correct',
+              body: `In \`BaseURITest.java\`, the test \`testAbsoluteBaseURIEndsWithDotDot\` has a comment noting "I\'m not sure about this one; need to check". The expected behavior of resolving a child URI against a base URI ending in \`/..\` should be verified against RFC 3986.\n\nLocation: \`src/nu/xom/tests/BaseURITest.java\`, line 1136\n\n\`\`\`java\n// I\'m not sure about this one; need to check????\npublic void testAbsoluteBaseURIEndsWithDotDot() {\n    Element root = new Element("root");\n    Attribute baseAttribute = new Attribute("xml:base", \n      Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/..");\n    // ...\n    assertEquals("http://www.example.com/data/test.xml", child.getBaseURI());\n}\n\`\`\``,
+              labels: ['testing']
+            });
