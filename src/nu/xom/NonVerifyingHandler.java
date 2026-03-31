@@ -167,10 +167,12 @@ class NonVerifyingHandler extends XOMHandler {
     
     public void processingInstruction(String target, String data) throws SAXException {
 
-        // simplify logic???? into two cases in and not in DTD
-        // ditto for comment() method and superclass
-        if (!inDTD) flushText();
-        else if (!inInternalSubset()) return;
+        if (inDTD) {
+            if (!inInternalSubset()) return;
+        }
+        else {
+            flushText();
+        }
         
         ProcessingInstruction result = ProcessingInstruction.build(target, data);
         
@@ -208,8 +210,12 @@ class NonVerifyingHandler extends XOMHandler {
     
     public void comment(char[] text, int start, int length) throws SAXException {
 
-        if (!inDTD) flushText();
-        else if (!inInternalSubset()) return;
+        if (inDTD) {
+            if (!inInternalSubset()) return;
+        }
+        else {
+            flushText();
+        }
 
         Comment result = Comment.build(new String(text, start, length));
 
