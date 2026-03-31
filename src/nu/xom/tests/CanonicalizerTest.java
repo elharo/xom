@@ -2213,8 +2213,11 @@ and expect to see
         if (expected == null && actual == null) {
             return;
         }
-        if (expected == null || actual == null) {
-            fail("One array is null and the other is not");
+        if (expected == null) {
+            fail("expected is null but actual is not");
+        }
+        if (actual == null) {
+            fail("actual is null but expected is not");
         }
         assertEquals(expected.length, actual.length);
         for (int i = 0; i < actual.length; i++) {
