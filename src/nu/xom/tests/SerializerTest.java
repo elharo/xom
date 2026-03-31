@@ -2140,6 +2140,70 @@ public class SerializerTest extends XOMTestCase {
         );      
         
     }
+
+
+    // The first Hangul syllable is U+AC00. Verify it is recognized as 
+    // a Hangul syllable and passes through NFC normalization correctly.
+    public void testNFCWithFirstHangulSyllable()
+      throws IOException {
+
+        root.appendChild("\uAC00"); // first Hangul syllable (FIRST_HANGUL_SYLLABLE)
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<root>\uAC00</root>\r\n",
+          result
+        );
+
+    }
+
+
+    // The last Hangul syllable is U+D7A3 (LAST_HANGUL_SYLLABLE). Verify it is
+    // recognized as a Hangul syllable and passes through NFC normalization correctly.
+    public void testNFCWithLastHangulSyllable()
+      throws IOException {
+
+        root.appendChild("\uD7A3"); // last Hangul syllable (LAST_HANGUL_SYLLABLE)
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<root>\uD7A3</root>\r\n",
+          result
+        );
+
+    }
+
+
+    // U+D7A3 is the last Hangul syllable, composed from the jamo
+    // U+1112 (Choseong Hieuh) + U+1175 (Jungseong I) + U+11C2 (Jongseong Hieuh).
+    // Verify that NFC normalization composes these jamo into U+D7A3.
+    public void testNFCWithJamoComposingToLastHangulSyllable()
+      throws IOException {
+
+        root.appendChild("\u1112\u1175\u11C2"); // jamo composing to last Hangul syllable U+D7A3
+        Serializer serializer = new Serializer(out);
+        serializer.setUnicodeNormalizationFormC(true);
+        serializer.write(doc);
+        serializer.flush();
+        out.close();
+        String result = new String(out.toByteArray(), "UTF-8");
+        assertEquals(
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+          + "<root>\uD7A3</root>\r\n",
+          result
+        );
+
+    }
     
     
     public void testNullOutputStream() {
