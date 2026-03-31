@@ -31,8 +31,16 @@ import nu.xom.ValidityException;
  *   Demonstrates validation via the <code>Builder</code> class.
  * </p>
  * 
+ * <p>Usage: <code>java nu.xom.samples.Validator [--strict] URL...</code></p>
+ * <p>
+ *   Validates each URL against its DTD. Without <code>--strict</code>,
+ *   errors are reported but the process exits normally. With
+ *   <code>--strict</code>, the process exits with status 1 on the
+ *   first error.
+ * </p>
+ * 
  * @author Elliotte Rusty Harold
- * @version 1.2.11
+ * @version 1.4.0
  *
  */
 public class Validator {
@@ -40,13 +48,26 @@ public class Validator {
   public static void main(String[] args) {
   
     if (args.length <= 0) {
-      System.out.println("Usage: java nu.xom.samples.Validator URL");
+      System.out.println("Usage: java nu.xom.samples.Validator [--strict] URL...");
+      return;
+    }
+
+    boolean strict = false;
+    int startIndex = 0;
+    if (args[0].equals("--strict")) {
+      strict = true;
+      startIndex = 1;
+    }
+
+    if (startIndex >= args.length) {
+      System.out.println("Usage: java nu.xom.samples.Validator [--strict] URL...");
       return;
     }
 
     Builder parser = new Builder(true);
 
-    for (String url : args) {
+    for (int i = startIndex; i < args.length; i++) {
+      String url = args[i];
       try {
         parser.build(url);
         System.out.println(url + " is valid.");
@@ -56,18 +77,27 @@ public class Validator {
         System.out.println(ex.getMessage());
         System.out.println(" at line " + ex.getLineNumber() 
           + ", column " + ex.getColumnNumber());
+        if (strict) {
+          System.exit(1);
+        }
       }
       catch (ParsingException ex) {
         System.out.println(url + " is not well-formed.");
         System.out.println(ex.getMessage());
         System.out.println(" at line " + ex.getLineNumber() 
           + ", column " + ex.getColumnNumber());
+        if (strict) {
+          System.exit(1);
+        }
       }
       catch (IOException ex) { 
         System.out.println(
          "Due to an IOException, the parser could not check " + url
         );
         ex.printStackTrace();
+        if (strict) {
+          System.exit(1);
+        }
       }
     }
   
