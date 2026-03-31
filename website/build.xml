@@ -48,6 +48,7 @@
           description="Check validity of input documents and output"
           depends="tutorial">
     <java classname="nu.xom.samples.Validator" fork="yes" failonerror="true">
+     <arg value="--strict"/>
      <arg value="index.html"/>
      <arg value="history.html"/>
      <arg value="faq.xml"/>

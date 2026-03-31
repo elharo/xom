@@ -40,13 +40,26 @@ public class Validator {
   public static void main(String[] args) {
   
     if (args.length <= 0) {
-      System.out.println("Usage: java nu.xom.samples.Validator URL");
+      System.out.println("Usage: java nu.xom.samples.Validator [--strict] URL...");
+      return;
+    }
+
+    boolean strict = false;
+    int startIndex = 0;
+    if (args[0].equals("--strict")) {
+      strict = true;
+      startIndex = 1;
+    }
+
+    if (startIndex >= args.length) {
+      System.out.println("Usage: java nu.xom.samples.Validator [--strict] URL...");
       return;
     }
 
     Builder parser = new Builder(true);
 
-    for (String url : args) {
+    for (int i = startIndex; i < args.length; i++) {
+      String url = args[i];
       try {
         parser.build(url);
         System.out.println(url + " is valid.");
@@ -56,21 +69,21 @@ public class Validator {
         System.out.println(ex.getMessage());
         System.out.println(" at line " + ex.getLineNumber() 
           + ", column " + ex.getColumnNumber());
-        System.exit(1);
+        if (strict) System.exit(1);
       }
       catch (ParsingException ex) {
         System.out.println(url + " is not well-formed.");
         System.out.println(ex.getMessage());
         System.out.println(" at line " + ex.getLineNumber() 
           + ", column " + ex.getColumnNumber());
-        System.exit(1);
+        if (strict) System.exit(1);
       }
       catch (IOException ex) { 
         System.out.println(
          "Due to an IOException, the parser could not check " + url
         );
         ex.printStackTrace();
-        System.exit(1);
+        if (strict) System.exit(1);
       }
     }
   
