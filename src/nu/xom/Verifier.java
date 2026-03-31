@@ -20,6 +20,7 @@
 
 package nu.xom;
 
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,8 +77,7 @@ final class Verifier {
                 throw new RuntimeException("Broken XOM installation: "
                   + "could not load nu/xom/characters.dat");
             }
-            // buffer this????
-            in = new DataInputStream(raw);
+            in = new DataInputStream(new BufferedInputStream(raw));
             flags = new byte[65536];
             in.readFully(flags);
         }
