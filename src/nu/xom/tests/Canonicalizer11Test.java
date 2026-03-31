@@ -399,7 +399,12 @@ public class Canonicalizer11Test extends TestCase {
         if (expected == null && actual == null) {
             return;
         }
-        // what if one is null and the other isn't????
+        if (expected == null) {
+            fail("expected is null but actual is not");
+        }
+        if (actual == null) {
+            fail("actual is null but expected is not");
+        }
         try {
             assertEquals(expected.length, actual.length);
             for (int i = 0; i < actual.length; i++) {
