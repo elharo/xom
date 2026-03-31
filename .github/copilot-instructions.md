@@ -135,6 +135,11 @@ XOM requires a SAX2-compliant parser. Xerces 2.6.1+ is the recommended and teste
 - **Clear error messages**: Exceptions should provide detailed, actionable error messages
 - **Namespace awareness**: All XOM code must properly handle XML namespaces
 
+### Java Style
+
+- Always use braces and multiple lines for if, for, and while blocks. Never put these on a single line.
+- Maintain format of surrounding code in the file.
+
 ### Testing Guidelines
 
 - All new features must have comprehensive tests
