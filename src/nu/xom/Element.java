@@ -1389,10 +1389,30 @@ public class Element extends ParentNode {
         }
         catch (NoSuchElementException ex) {
             throw new IndexOutOfBoundsException(
-              // ???? fix to use 3rd, 2nd, 1st as appropriate
-              "No " + index + "th namespace");   
+              "No " + toOrdinal(index) + " namespace");   
         }
         
+    }
+
+
+    private static String toOrdinal(int n) {
+        int mod100 = n % 100;
+        if (mod100 >= 11 && mod100 <= 13) {
+            return n + "th";
+        }
+        int mod10 = n % 10;
+        if (mod10 == 1) {
+            return n + "st";
+        }
+        else if (mod10 == 2) {
+            return n + "nd";
+        }
+        else if (mod10 == 3) {
+            return n + "rd";
+        }
+        else {
+            return n + "th";
+        }
     }
 
 
