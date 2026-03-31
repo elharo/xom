@@ -2,11 +2,6 @@ name: Create Issues for TODO and ???? Comments
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'copilot/convert-todo-and-placeholder-issues'
-    paths:
-      - '.github/workflows/create-todo-issues.yml'
 
 permissions:
   issues: write
@@ -36,7 +31,7 @@ jobs:
               repo: context.repo.repo,
               title: 'JaxenNavigator: performance - avoid list copy in getNamespaceAxisIterator',
               body: `In \`getNamespaceAxisIterator\` in \`JaxenNavigator.java\`, a new \`ArrayList\` is created by copying the bindings map. It may be possible to avoid this list copy and iterate directly over the map entries.\n\nLocation: \`src/nu/xom/JaxenNavigator.java\`, line 176\n\n\`\`\`java\n// ???? can probably avoid this list copy\nMap bindings = element.getNamespacePrefixesInScope();\nIterator iterator = bindings.entrySet().iterator();\nList result = new ArrayList(bindings.size()+1);\n\`\`\``,
-              labels: ['performance']
+              labels: ['enhancement']
             });
 
       - name: Create issue - JaxenNavigator NoSuchElementException check
@@ -60,7 +55,7 @@ jobs:
               repo: context.repo.repo,
               title: 'JaxenNavigator: isText uses ArrayList hack - use a dedicated subclass instead',
               body: `The \`isText()\` method in \`JaxenNavigator.java\` uses a hack to identify text node lists by checking if the object is an \`ArrayList\`. The comment notes that a separate special subclass of \`ArrayList\` should be used to identify it properly.\n\nLocation: \`src/nu/xom/JaxenNavigator.java\`, line 508\n\n\`\`\`java\n// ???? hack: need to use a separate special subclass of ArrayList I can identify.\n// But may not be necessary since this is not a public API. I don't \n// think there\'s any way to get a different ArrayList into this method.\nif (object instanceof ArrayList) {\n\`\`\``,
-              labels: ['refactoring']
+              labels: ['enhancement']
             });
 
       - name: Create issue - JaxenConnector thread-safety
@@ -84,7 +79,7 @@ jobs:
               repo: context.repo.repo,
               title: 'UnicodeWriter: consider separate writeDoctypeDeclaration method for special characters',
               body: `In \`UnicodeWriter.java\`, characters like \\t, \\n, and space are handled specially in the \`getUnicodeLength\` method. There is a question of whether these special characters (which may need escaping in doctype declarations) should be handled in their own \`writeDoctypeDeclaration\` method rather than the general-purpose method. This also affects PIs, XML declarations, and comments.\n\nLocation: \`src/nu/xom/UnicodeWriter.java\`, line 111\n\n\`\`\`java\n// Should these have their own writeDoctypeDeclaration method????\n// Also an issue with spaces and such in PIs, XML declaration, comments\nreturn -1;\n\`\`\``,
-              labels: ['refactoring']
+              labels: ['enhancement']
             });
 
       - name: Create issue - Canonicalizer indexOf in Nodes
@@ -96,7 +91,7 @@ jobs:
               repo: context.repo.repo,
               title: 'Canonicalizer: consider moving indexOf helper method into Nodes class',
               body: `The \`indexOf(Element element)\` private method in \`Canonicalizer.java\` duplicates functionality that could belong in the \`Nodes\` class. Moving it there (or adding a similar method) would reduce code duplication and improve the \`Nodes\` API.\n\nLocation: \`src/nu/xom/canonical/Canonicalizer.java\`, line 586\n\n\`\`\`java\n// ???? move into Nodes?\nprivate int indexOf(Element element) {\n    for (int i = 0; i < nodes.size(); i++) {\n        if (nodes.get(i) == element) return i;\n    }\n    return -1;\n}\n\`\`\``,
-              labels: ['refactoring']
+              labels: ['enhancement']
             });
 
       - name: Create issue - Canonicalizer rework getOmittedBases
@@ -108,7 +103,7 @@ jobs:
               repo: context.repo.repo,
               title: 'Canonicalizer: rework getOmittedBases to not need the parent variable',
               body: `The \`getOmittedBases\` method in \`Canonicalizer.java\` uses a \`parent\` variable that could be refactored away. This is a code cleanliness improvement.\n\nLocation: \`src/nu/xom/canonical/Canonicalizer.java\`, line 703\n\n\`\`\`java\nprivate List<String> getOmittedBases(Element element) {\n    ArrayList<String> bases = new ArrayList<String>();\n    // TODO(elharo): rework this to not need this next variable\n    ParentNode parent = element.getParent();\n    while (parent != null && parent instanceof Element && !nodes.contains(parent)) {\n\`\`\``,
-              labels: ['refactoring']
+              labels: ['enhancement']
             });
 
       - name: Create issue - URIJoiner RFC 3986 algorithm bug
@@ -168,7 +163,7 @@ jobs:
               repo: context.repo.repo,
               title: 'Verifier: performance - consider buffering DataInputStream when loading characters.dat',
               body: `In \`Verifier.java\`, the \`DataInputStream\` reading from \`characters.dat\` is not wrapped in a \`BufferedInputStream\`. Adding buffering could improve startup performance.\n\nLocation: \`src/nu/xom/Verifier.java\`, line 79\n\n\`\`\`java\nInputStream raw = loader.getResourceAsStream("nu/xom/characters.dat");\n// buffer this????\nin = new DataInputStream(raw);\n\`\`\``,
-              labels: ['performance']
+              labels: ['enhancement']
             });
 
       - name: Create issue - Serializer reset namespaces on exception
@@ -192,7 +187,7 @@ jobs:
               repo: context.repo.repo,
               title: 'Serializer: performance - parent.indexOf(text) is a hotspot during indenting serialization',
               body: `In \`Serializer.java\`, the \`isWhiteSpaceNode\` method calls \`parent.indexOf(text)\` which is identified as a major performance hotspot, accounting for approximately 12% of serialization time when indenting. This should be optimized.\n\nPossible optimization: instead of getting the position index, directly check the first and last children of the parent and compare them to the text node.\n\nLocation: \`src/nu/xom/Serializer.java\`, lines 813-825\n\n\`\`\`java\n// ???? This is a huge Hotspot. maybe 12% of serialization time\n// when indenting. Is there any way to eliminate this?\n// We only actually need to test a couple of positions, 0 and\n// parent.getChildCount()-1\nint position = parent.indexOf(text);\n\`\`\``,
-              labels: ['performance']
+              labels: ['enhancement']
             });
 
       - name: Create issue - URIUtil unreachable code
@@ -240,7 +235,7 @@ jobs:
               repo: context.repo.repo,
               title: 'Element: add more methods to Namespaces class to avoid accessing private data',
               body: `In \`Element.java\`, the \`getNamespacePrefixesInScope\` method accesses private data of the \`Namespaces\` object. More public methods should be added to \`Namespaces\` to avoid this coupling.\n\nLocation: \`src/nu/xom/Element.java\`, line 1305\n\n\`\`\`java\n// add additional namespace prefixes\n// ???? should add more methods to Namespaces to avoid access to private data\nif (current.namespaces != null) {\n    int namespaceCount = current.namespaces.size();\n    for (int i = 0; i < namespaceCount; i++) {\n        String nsPrefix = current.namespaces.getPrefix(i);\n\`\`\``,
-              labels: ['refactoring']
+              labels: ['enhancement']
             });
 
       - name: Create issue - Element ordinal error message
@@ -276,7 +271,7 @@ jobs:
               repo: context.repo.repo,
               title: 'XIncluder: move getDirectoryBase into URIUtil when it becomes public',
               body: `The \`getDirectoryBase\` private static method in \`XIncluder.java\` would be more appropriately placed in \`URIUtil\` as a utility method, especially if \`URIUtil\` is made public in a future version.\n\nLocation: \`src/nu/xom/xinclude/XIncluder.java\`, line 542\n\n\`\`\`java\n// ???? Move this into URIUtil when it goes public\nprivate static String getDirectoryBase(String parentBase) {\n    if (parentBase.endsWith("/")) return parentBase;\n    int lastSlash = parentBase.lastIndexOf(\'/\');\n    return parentBase.substring(0, lastSlash+1);\n}\n\`\`\``,
-              labels: ['refactoring']
+              labels: ['enhancement']
             });
 
       - name: Create issue - NonVerifyingHandler simplify processingInstruction logic
@@ -288,7 +283,7 @@ jobs:
               repo: context.repo.repo,
               title: 'NonVerifyingHandler: simplify processingInstruction logic into two clear cases',
               body: `The \`processingInstruction\` method in \`NonVerifyingHandler.java\` has complex conditional logic mixing "in DTD" and "not in DTD" cases. This should be refactored into two clear, separate cases for readability. The same applies to the \`comment()\` method and the superclass.\n\nLocation: \`src/nu/xom/NonVerifyingHandler.java\`, line 170\n\n\`\`\`java\n// simplify logic???? into two cases in and not in DTD\n// ditto for comment() method and superclass\nif (!inDTD) flushText();\nelse if (!inInternalSubset()) return;\n\`\`\``,
-              labels: ['refactoring']
+              labels: ['enhancement']
             });
 
       - name: Create issue - DOMConverter return Nodes
@@ -324,7 +319,7 @@ jobs:
               repo: context.repo.repo,
               title: 'UnicodeUtil: consider storing compositions as serialized HashMap instead of UTF-8 pairs',
               body: `In \`UnicodeUtil.java\`, Unicode compositions are loaded from \`compositions.dat\` as UTF-8 string pairs. An alternative would be to store the data as a pre-serialized \`HashMap\`, which could improve load time.\n\nLocation: \`src/nu/xom/UnicodeUtil.java\`, line 130\n\n\`\`\`java\n// ???? would it make sense to store a serialized HashMap instead????\ncompositions = new HashMap<String, String>();\n\`\`\``,
-              labels: ['performance']
+              labels: ['enhancement']
             });
 
       - name: Create issue - UnicodeUtil getCombiningClass table lookup
@@ -336,7 +331,7 @@ jobs:
               repo: context.repo.repo,
               title: 'UnicodeUtil: optimize getCombiningClass with table lookup instead of if-else chain',
               body: `The \`getCombiningClass\` method in \`UnicodeUtil.java\` uses a very long chain of if-else statements for different Unicode code point ranges. This could be significantly optimized using a lookup table.\n\nLocation: \`src/nu/xom/UnicodeUtil.java\`, line 164\n\n\`\`\`java\nprivate static int getCombiningClass(int character) {\n    // ???? optimize with table lookup?\n    if (character <= 0x2ff) return CANONICAL_COMBINING_CLASS_NOT_REORDERED;\n    if (character <= 0x314) return CANONICAL_COMBINING_CLASS_ABOVE;\n    // ... many more cases\n}\n\`\`\``,
-              labels: ['performance']
+              labels: ['enhancement']
             });
 
       - name: Create issue - UnicodeUtil LAST_HANGUL_SYLLABLE
@@ -360,7 +355,7 @@ jobs:
               repo: context.repo.repo,
               title: 'UnicodeUtil: optimize normalize() to avoid unnecessary Hangul decompose/compose calls',
               body: `In \`UnicodeUtil.java\`, the \`normalize()\` method always calls \`decomposeHangul\` and \`composeHangul\` even when there is no Hangul content. These calls should be conditional to improve performance.\n\nLocation: \`src/nu/xom/UnicodeUtil.java\`, lines 559 and 565\n\n\`\`\`java\nif (needsNormalizing) {\n    // ???? unnecessarily invoking this in many cases\n    s = decomposeHangul(s);\n    UnicodeString ustring = new UnicodeString(s);\n    UnicodeString decomposed = ustring.decompose(); \n    UnicodeString recomposed = decomposed.compose();\n    String result = recomposed.toString();\n    // ???? unnecessarily invoking this in many cases\n    result = composeHangul(result);\n}\n\`\`\``,
-              labels: ['performance']
+              labels: ['enhancement']
             });
 
       - name: Create issue - OASISXSLTTest fragment parser
@@ -396,7 +391,7 @@ jobs:
               repo: context.repo.repo,
               title: 'XMLWriter (test): doPrefix method needs cleanup',
               body: `In \`src/nu/xom/tests/XMLWriter.java\`, the \`doPrefix\` method has a JavaDoc comment noting it "probably needs some cleanup." This should be reviewed and refactored.\n\nLocation: \`src/nu/xom/tests/XMLWriter.java\`, line 838\n\n\`\`\`java\n/**\n * Determine the prefix for an element or attribute name.\n *\n * TODO: this method probably needs some cleanup.\n */\nprivate String doPrefix(String uri, String qName, boolean isElement) {\n\`\`\``,
-              labels: ['refactoring']
+              labels: ['enhancement']
             });
 
       - name: Create issue - CanonicalizerTest null byte array comparison
