@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Copyright 2002-2007, 2009-2013, 2018-2023 Elliotte Rusty Harold
+<!-- Copyright 2002-2007, 2009-2013, 2018-2026 Elliotte Rusty Harold
 
 This library is free software; you can redistribute 
 it and/or modify it under the terms of version 2.1 of 
@@ -59,7 +59,6 @@ subject line. The XOM home page is https://xom.nu/
 
     <property name="src.dir"      value="./src"/>
     <property name="fat.src"      value="./fatsrc"/>
-    <property name="licenses.dir" value="./licenses"/>
     <property name="packages"     value="nu.xom.*"/>
 
     <property name="build.dir"       value="./build"/>
@@ -88,7 +87,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="clover.instr.src"   value="${build.dir}/clover/src"/>
     <property name="clover.classes.dir" value="${build.dir}/clover/classes"/>
     
-    <property name="excludes"       value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*, .idea/**, **/*.iml, nbproject/**, .vscode/**"/>
+    <property name="excludes" value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*, .idea/**, **/*.iml, nbproject/**, .vscode/**"/>
 
     <property name="test.outputFormat" value="xml"/>   
     <property name="binary.jar" location="${dist.dir}/maven2/xom-${version}.jar" />
