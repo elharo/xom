@@ -98,7 +98,6 @@ public class DOMConverter {
     }
 
 
-    // ???? should this return a Nodes instead?
     /**
      * <p>
      * Translates a DOM <code>org.w3c.dom.Document</code> object 
