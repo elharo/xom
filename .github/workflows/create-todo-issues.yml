@@ -1,7 +1,6 @@
 name: Create Issues for TODO and ???? Comments
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - master
@@ -10,11 +9,13 @@ on:
 
 permissions:
   issues: write
+  contents: write
 
 jobs:
   create-issues:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Create issue - JaxenNavigator remove recursion
         uses: actions/github-script@v7
         with:
@@ -422,3 +423,13 @@ jobs:
               body: `In \`BaseURITest.java\`, the test \`testAbsoluteBaseURIEndsWithDotDot\` has a comment noting "I\'m not sure about this one; need to check". The expected behavior of resolving a child URI against a base URI ending in \`/..\` should be verified against RFC 3986.\n\nLocation: \`src/nu/xom/tests/BaseURITest.java\`, line 1136\n\n\`\`\`java\n// I\'m not sure about this one; need to check????\npublic void testAbsoluteBaseURIEndsWithDotDot() {\n    Element root = new Element("root");\n    Attribute baseAttribute = new Attribute("xml:base", \n      Namespace.XML_NAMESPACE, "http://www.example.com/data/limit/..");\n    // ...\n    assertEquals("http://www.example.com/data/test.xml", child.getBaseURI());\n}\n\`\`\``,
               labels: ['testing']
             });
+
+      - name: Delete this workflow after all issues have been created
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/create-todo-issues.yml
+          git commit -m "Remove create-todo-issues workflow after all issues created"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
