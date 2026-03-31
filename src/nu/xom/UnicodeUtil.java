@@ -492,10 +492,8 @@ final class UnicodeUtil {
     }
     
     
-    private final static int FIRST_HANGUL_SYLLABLE    = 0xAC00;
-    // even if this is not right; why do tests still pass????
-    // private final static int LAST_HANGUL_SYLLABLE     = 0xAC00; // FIXME 
-    private final static int LAST_HANGUL_SYLLABLE = 0xD7A3;
+    private final static int FIRST_HANGUL_SYLLABLE = 0xAC00;
+    private final static int LAST_HANGUL_SYLLABLE  = 0xD7A3;
 
     
     static int combineSurrogatePair(char highSurrogate, char lowSurrogate) {
