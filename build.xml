@@ -519,6 +519,7 @@ XOM Build file
       <zipfileset fullpath="XOM/lib/junit-4.13.2.jar" file="${junit.jar}"/>
       <zipfileset fullpath="XOM/lib/xercesImpl-${xercesVersion}.jar" file="${parser.jar}"/>
       <zipfileset fullpath="XOM/lib/xml-apis-1.4.01.jar" file="${xmlapis.jar}"/>
+      <zipfileset prefix="XOM/lib" dir="./licenses"/>
     </zip>
 
   </target>
@@ -542,6 +543,7 @@ XOM Build file
       <tarfileset fullpath="XOM/lib/junit-4.13.2.jar" file="${junit.jar}"/>
       <tarfileset fullpath="XOM/lib/xercesImpl-${xercesVersion}.jar" file="${parser.jar}"/>
       <tarfileset fullpath="XOM/lib/xml-apis-1.4.01.jar" file="${xmlapis.jar}"/>
+      <tarfileset prefix="XOM/lib" dir="./licenses"/>
     </tar>
 
   </target>
