@@ -77,7 +77,7 @@ final class Verifier {
                 throw new RuntimeException("Broken XOM installation: "
                   + "could not load nu/xom/characters.dat");
             }
-            in = new DataInputStream(new BufferedInputStream(raw));
+            in = new DataInputStream(new BufferedInputStream(raw, 65536));
             flags = new byte[65536];
             in.readFully(flags);
         }
