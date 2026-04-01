@@ -658,12 +658,11 @@ class XOMHandler
                 internalDTDSubset.append(" PUBLIC \""); 
                 internalDTDSubset.append(publicID); 
                 internalDTDSubset.append("\" \""); 
-                internalDTDSubset.append(systemID);       
+                internalDTDSubset.append(escapeReservedCharactersInDeclarations(systemID));       
             }
             else {
-                // need to escape system ID???? could it contain an ampersand?
                 internalDTDSubset.append(" SYSTEM \""); 
-                internalDTDSubset.append(systemID); 
+                internalDTDSubset.append(escapeReservedCharactersInDeclarations(systemID)); 
             }
             internalDTDSubset.append("\">\n");
             
@@ -706,7 +705,6 @@ class XOMHandler
     public void unparsedEntityDecl(String name, String publicID, 
      String systemID, String notationName) {
         
-        // escapable characters????
         if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (publicID != null) { 
@@ -714,14 +712,14 @@ class XOMHandler
                 internalDTDSubset.append(" PUBLIC \""); 
                 internalDTDSubset.append(publicID); 
                 internalDTDSubset.append("\" \""); 
-                internalDTDSubset.append(systemID); 
+                internalDTDSubset.append(escapeReservedCharactersInDeclarations(systemID)); 
                 internalDTDSubset.append("\" NDATA "); 
                 internalDTDSubset.append(notationName);       
             }
             else {
                 internalDTDSubset.append(name); 
                 internalDTDSubset.append(" SYSTEM \""); 
-                internalDTDSubset.append(systemID); 
+                internalDTDSubset.append(escapeReservedCharactersInDeclarations(systemID)); 
                 internalDTDSubset.append("\" NDATA "); 
                 internalDTDSubset.append(notationName);     
             }
