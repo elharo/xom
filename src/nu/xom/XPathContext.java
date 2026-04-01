@@ -117,7 +117,6 @@ public final class XPathContext {
     }
 
     
-    // should this be a Node rather than an Element????
     /**
      * <p>
      * Creates a new XPath context that contains all the namespace
