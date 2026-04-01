@@ -654,7 +654,6 @@ class XOMHandler
                 }
             }
 
-            // A SystemLiteral can be parsed without scanning for markup.
             if (publicID != null) { 
                 internalDTDSubset.append(" PUBLIC \""); 
                 internalDTDSubset.append(publicID); 
@@ -706,7 +705,6 @@ class XOMHandler
     public void unparsedEntityDecl(String name, String publicID, 
      String systemID, String notationName) {
         
-        // A SystemLiteral can be parsed without scanning for markup.
         if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (publicID != null) { 
