@@ -3399,8 +3399,8 @@ public class BuilderTest extends XOMTestCase {
         DocType doctype = doc.getDocType();
         assertEquals("  <!ENTITY % ccl SYSTEM \"pe.txt\">\n", doctype.getInternalDTDSubset());  
     }
+
     
-        
     public void testNMTOKENSNormalizationOfCarriageReturnLineFeedEntityReferences() 
       throws ParsingException, IOException {
         

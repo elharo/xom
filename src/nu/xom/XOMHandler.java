@@ -661,7 +661,6 @@ class XOMHandler
                 internalDTDSubset.append(systemID);       
             }
             else {
-                // need to escape system ID???? could it contain an ampersand?
                 internalDTDSubset.append(" SYSTEM \""); 
                 internalDTDSubset.append(systemID); 
             }
@@ -706,7 +705,6 @@ class XOMHandler
     public void unparsedEntityDecl(String name, String publicID, 
      String systemID, String notationName) {
         
-        // escapable characters????
         if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (publicID != null) { 
