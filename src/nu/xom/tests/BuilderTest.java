@@ -3401,58 +3401,6 @@ public class BuilderTest extends XOMTestCase {
     }
 
     
-    public void testExternalEntitySystemIDWithAmpersand()
-      throws ParsingException, IOException {
-        
-        String input = "<!DOCTYPE root [\n"
-          + "<!ENTITY test SYSTEM "
-          + "\"http://www.example.com/test?a=1&amp;b=2\">\n"
-          + "]><root />";
-        Builder builder = new Builder(false);
-        Document doc = builder.build(input, null);
-        String internalSubset = doc.getDocType().getInternalDTDSubset();
-        assertTrue(internalSubset,
-          internalSubset.indexOf("SYSTEM \"http://www.example.com/test?a=1&#x26;b=2\"") > 0);
-        
-    }
-
-
-    public void testUnparsedEntitySystemIDWithAmpersand()
-      throws ParsingException, IOException {
-        
-        String input = "<!DOCTYPE root [\n"
-          + "<!NOTATION gif PUBLIC \"-//test//EN\">\n"
-          + "<!ENTITY pic SYSTEM "
-          + "\"http://www.example.com/image?w=640&amp;h=480\" NDATA gif>\n"
-          + "]><root />";
-        Builder builder = new Builder(false);
-        Document doc = builder.build(input, null);
-        String internalSubset = doc.getDocType().getInternalDTDSubset();
-        assertTrue(internalSubset,
-          internalSubset.indexOf(
-            "SYSTEM \"http://www.example.com/image?w=640&#x26;h=480\" NDATA gif") > 0);
-        
-    }
-
-
-    public void testUnparsedEntityPublicSystemIDWithAmpersand()
-      throws ParsingException, IOException {
-        
-        String input = "<!DOCTYPE root [\n"
-          + "<!NOTATION gif PUBLIC \"-//test//EN\">\n"
-          + "<!ENTITY pic PUBLIC \"-//test//EN\" "
-          + "\"http://www.example.com/image?w=640&amp;h=480\" NDATA gif>\n"
-          + "]><root />";
-        Builder builder = new Builder(false);
-        Document doc = builder.build(input, null);
-        String internalSubset = doc.getDocType().getInternalDTDSubset();
-        assertTrue(internalSubset,
-          internalSubset.indexOf(
-            "\"http://www.example.com/image?w=640&#x26;h=480\" NDATA gif") > 0);
-        
-    }
-
-    
     public void testNMTOKENSNormalizationOfCarriageReturnLineFeedEntityReferences() 
       throws ParsingException, IOException {
         

@@ -654,15 +654,18 @@ class XOMHandler
                 }
             }
 
+            // System literals (XML spec production [11]) are delimited by
+            // quotes and treat & as a literal character, not an entity
+            // reference start. No escaping of & is needed here.
             if (publicID != null) { 
                 internalDTDSubset.append(" PUBLIC \""); 
                 internalDTDSubset.append(publicID); 
                 internalDTDSubset.append("\" \""); 
-                internalDTDSubset.append(escapeReservedCharactersInDeclarations(systemID));       
+                internalDTDSubset.append(systemID);       
             }
             else {
                 internalDTDSubset.append(" SYSTEM \""); 
-                internalDTDSubset.append(escapeReservedCharactersInDeclarations(systemID)); 
+                internalDTDSubset.append(systemID); 
             }
             internalDTDSubset.append("\">\n");
             
@@ -705,6 +708,8 @@ class XOMHandler
     public void unparsedEntityDecl(String name, String publicID, 
      String systemID, String notationName) {
         
+        // System literals (XML spec production [11]) treat & as a literal
+        // character, not an entity reference start. No escaping needed.
         if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (publicID != null) { 
@@ -712,14 +717,14 @@ class XOMHandler
                 internalDTDSubset.append(" PUBLIC \""); 
                 internalDTDSubset.append(publicID); 
                 internalDTDSubset.append("\" \""); 
-                internalDTDSubset.append(escapeReservedCharactersInDeclarations(systemID)); 
+                internalDTDSubset.append(systemID); 
                 internalDTDSubset.append("\" NDATA "); 
                 internalDTDSubset.append(notationName);       
             }
             else {
                 internalDTDSubset.append(name); 
                 internalDTDSubset.append(" SYSTEM \""); 
-                internalDTDSubset.append(escapeReservedCharactersInDeclarations(systemID)); 
+                internalDTDSubset.append(systemID); 
                 internalDTDSubset.append("\" NDATA "); 
                 internalDTDSubset.append(notationName);     
             }
