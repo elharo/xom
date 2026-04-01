@@ -654,9 +654,7 @@ class XOMHandler
                 }
             }
 
-            // System literals (XML spec production [11]) are delimited by
-            // quotes and treat & as a literal character, not an entity
-            // reference start. No escaping of & is needed here.
+            // A SystemLiteral can be parsed without scanning for markup.
             if (publicID != null) { 
                 internalDTDSubset.append(" PUBLIC \""); 
                 internalDTDSubset.append(publicID); 
@@ -708,8 +706,7 @@ class XOMHandler
     public void unparsedEntityDecl(String name, String publicID, 
      String systemID, String notationName) {
         
-        // System literals (XML spec production [11]) treat & as a literal
-        // character, not an entity reference start. No escaping needed.
+        // A SystemLiteral can be parsed without scanning for markup.
         if (inInternalSubset() && doctype != null) {
             internalDTDSubset.append("  <!ENTITY ");
             if (publicID != null) { 
