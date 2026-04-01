@@ -545,16 +545,26 @@ final class UnicodeUtil {
         boolean hasHangul = false;
             
         int length = s.length();
-        for (int i = 0; i < length; i++) {
+        int i = 0;
+        for (; i < length; i++) {
             char c = s.charAt(i);
             if (c > 255) {
                 needsNormalizing = true;
                 if (c >= FIRST_HANGUL_SYLLABLE && c <= LAST_HANGUL_SYLLABLE) {
                     hasHangul = true;
+                }
+                break;
+            }
+        }
+        if (needsNormalizing && !hasHangul) {
+            for (i = i + 1; i < length; i++) {
+                char c = s.charAt(i);
+                if (c >= FIRST_HANGUL_SYLLABLE && c <= LAST_HANGUL_SYLLABLE) {
+                    hasHangul = true;
                     break;
                 }
             }
-        } 
+        }
         
         if (needsNormalizing) {
             if (hasHangul) {
