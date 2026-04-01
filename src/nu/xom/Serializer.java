@@ -52,7 +52,6 @@ public class Serializer {
 
     private TextWriter escaper;
     private boolean preserveBaseURI = false;
-    // ???? reset when exception is thrown?
     private NamespaceSupport namespaces = new NamespaceSupport();
 
     
