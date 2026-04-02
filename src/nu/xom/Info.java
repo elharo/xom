@@ -31,7 +31,7 @@ import java.io.InputStreamReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.9
+ * @version 1.4.0
  * 
  */
 class Info {
@@ -39,13 +39,13 @@ class Info {
     
     public static void main(String[] args) {
     
-        String version = "1.3.9 or later";
+        String version = "1.4.0 or later";
         try {
             InputStream stream = ClassLoader.getSystemResourceAsStream("nu/xom/version.txt");
             BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
             version = in.readLine();
         } catch (Exception ex) {
-            version = "1.3.9 or later";
+            version = "1.4.0 or later";
         }
         
         System.out.println("This is XOM " + version + ", a new XML Object Model.");

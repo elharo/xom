@@ -26,13 +26,13 @@ Update the version number in
 7. Sign the files:
 
   ```
-  $ gpg -ab xom-1.3.9.pom
-  $ gpg -ab xom-1.3.9.jar
-  $ gpg -ab xom-1.3.9-javadoc.jar
-  $ gpg -ab xom-1.3.9-sources.jar
+  $ gpg -ab xom-1.4.0.pom
+  $ gpg -ab xom-1.4.0.jar
+  $ gpg -ab xom-1.4.0-javadoc.jar
+  $ gpg -ab xom-1.4.0-sources.jar
   ```
 
-8. `$ jar -cvf bundle.jar xom-1.3.9.pom xom-1.3.9.pom.asc xom-1.3.9.jar xom-1.3.9.jar.asc xom-1.3.9-javadoc.jar xom-1.3.9-javadoc.jar.asc xom-1.3.9-sources.jar xom-1.3.9-sources.jar.asc`
+8. `$ jar -cvf bundle.jar xom-1.4.0.pom xom-1.4.0.pom.asc xom-1.4.0.jar xom-1.4.0.jar.asc xom-1.4.0-javadoc.jar xom-1.4.0-javadoc.jar.asc xom-1.4.0-sources.jar xom-1.4.0-sources.jar.asc`
 
 9. Login to [oss.sonatype.org](https://oss.sonatype.org/#welcome).
 

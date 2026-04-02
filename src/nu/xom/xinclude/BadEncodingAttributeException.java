@@ -29,7 +29,7 @@ package nu.xom.xinclude;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.3.9
+ * @version 1.4.0
  */
 public class BadEncodingAttributeException extends XIncludeException {
 
