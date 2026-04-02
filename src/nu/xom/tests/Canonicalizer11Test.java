@@ -371,7 +371,7 @@ public class Canonicalizer11Test extends TestCase {
     // Tests that xml:base attributes with paths ending in /.. are
     // correctly resolved when canonicalizing a document subset.
     // Verifies the URIJoiner handles non-normalized base URIs per RFC 3986.
-    public void testXMLBaseEndsWithDotDot() throws ParsingException, IOException {
+    public void testXmlBaseEndsWithDotDot() throws ParsingException, IOException {
         File input = new File(canonical, "xmlbase-dotdot-input.xml");
         Document doc = builder.build(input);
         File expected = new File(canonical, "xmlbase-dotdot.output");

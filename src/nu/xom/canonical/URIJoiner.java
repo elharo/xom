@@ -127,6 +127,10 @@ class URIJoiner {
             else if (path.equals("/.")) {
                 path = "/";
             }
+            // Only apply /../ resolution for absolute paths (output starts with '/')
+            // or at the very start (empty output). Relative paths like "../../x"
+            // must pass through unchanged so the caller can use them directly
+            // as relative xml:base values in Canonical XML 1.1 processing.
             else if (path.startsWith("/../")
                      && (output.length() == 0 || output.charAt(0) == '/')) {
                 path = '/' + path.substring(4);
