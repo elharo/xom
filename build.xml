@@ -56,6 +56,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="debug"       value="off"/>
     <property name="optimize"    value="on"/>
     <property name="deprecation" value="off"/>
+    <property name="jvm"         value="java"/>
 
     <property name="src.dir"      value="./src"/>
     <property name="fat.src"      value="./fatsrc"/>
@@ -558,7 +559,7 @@ XOM Build file
   <!-- This task requires the ANT optional.jar -->
   <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
 
-    <junit fork="true" failureproperty="testsfailed">
+    <junit fork="true" jvm="${jvm}" failureproperty="testsfailed">
        <classpath refid="test.class.path" />
        <sysproperty key="jaxen.data.dir" value="${build.dir}/jaxen-${jaxenversion}"/>
        <formatter type="${test.outputFormat}" />
