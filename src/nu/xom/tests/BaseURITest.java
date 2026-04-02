@@ -1133,7 +1133,6 @@ public class BaseURITest extends XOMTestCase {
     }
     
     
-    // I'm not sure about this one; need to check????
     public void testAbsoluteBaseURIEndsWithDotDot() {
      
         Element root = new Element("root");
@@ -1260,6 +1259,54 @@ public class BaseURITest extends XOMTestCase {
         root.addAttribute(base);
         base.setValue(".");
         assertEquals("http://www.example.com/", root.getBaseURI());
+        
+    }
+    
+    
+    // When a base URI path ends in /.., appending "/" ensures merge()
+    // includes the ".." in the directory prefix so removeDotSegments()
+    // can traverse up correctly. See RFC 3986 sections 5.2.3 and 5.2.4.
+    public void testBaseURIEndsWithSlashDotDot() {
+    
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/a/b/..");
+        root.addAttribute(baseAttribute);
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "file.xml"));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/a/file.xml", child.getBaseURI());
+        
+    }
+    
+    
+    public void testBaseURIEndsWithSlashDotDotAtRoot() {
+    
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/a/..");
+        root.addAttribute(baseAttribute);
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "file.xml"));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/file.xml", child.getBaseURI());
+        
+    }
+    
+    
+    public void testBaseURIEndsWithMultipleSlashDotDot() {
+    
+        Element root = new Element("root");
+        Attribute baseAttribute = new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "http://www.example.com/a/b/c/..");
+        root.addAttribute(baseAttribute);
+        Element child = new Element("child");
+        child.addAttribute(new Attribute("xml:base", 
+          Namespace.XML_NAMESPACE, "file.xml"));
+        root.appendChild(child);
+        assertEquals("http://www.example.com/a/b/file.xml", child.getBaseURI());
         
     }
     
