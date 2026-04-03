@@ -30,7 +30,7 @@ package nu.xom;
  * </p>
 
  * @author Elliotte Rusty Harold
- * @version 1.4.0
+ * @version 1.3.9
  *
  */
 public class MalformedURIException extends IllegalDataException {
