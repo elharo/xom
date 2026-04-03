@@ -32,7 +32,7 @@ are quite a bit faster and less buggy than the ones bundled with the JDK, so you
 </para>
 
 
-<screen>$ java -classpath xom-samples.jar:xom-1.4.0:lib/xml-apis.jar:lib/xercesImpl.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
+<screen>$ java -classpath xom-samples.jar:xom-1.4.0.jar:lib/xml-apis.jar:lib/xercesImpl.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
 
 <para>
 You can leave out <filename>xalan.jar</filename> if you don't use any of the classes in
