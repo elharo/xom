@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xml:base="http://www.example.com/a/b/..">
+  <child xml:base="file.xml"></child>
+</root>

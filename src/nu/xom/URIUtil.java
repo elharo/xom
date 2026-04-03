@@ -77,10 +77,15 @@ class URIUtil {
         
         ParsedURI base = new ParsedURI(baseURI);
         
-        // This seems to be necessary to handle base URLs like
+        // RFC 3986's merge() takes everything up to (and including)
+        // the rightmost "/" in the base path as the directory prefix.
+        // When the base path ends in "/..", merge() treats ".." as a
+        // file name, so the merged path omits the ".." and
+        // removeDotSegments() has nothing to resolve.
+        // Appending "/" makes merge() include the "/.." in the prefix
+        // so that removeDotSegments() can correctly traverse up one
+        // directory level. This handles non-normalized base URIs such as
         // http://www.example.com/test/data/..
-        // but I don't think it's part of the 3986 algorithm. 
-        // ???? It may be a bug in that algorithm. Check.
         if (base.path.endsWith("/..")) base.path += '/';
         
         // The variable names R and T violate Java naming conventions.
