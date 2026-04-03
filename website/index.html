@@ -157,80 +157,11 @@ Commercial licenses are available for companies that wish to bundle XOM with the
 Last Modified May 14, 2023
 </p>
 </div>
-<div id="Navbar">
-    <h3>About XOM</h3>
-     <ul>
-	<li><a href="designprinciples.xhtml">Design Principles</a></li>
-	<li><a href="history.html">Release Notes</a></li>
-	<li><a href="faq.xhtml">FAQ</a></li>
-	<li><a href="install.xhtml">Installation Instructions</a></li>
-    <li><a href="infoset.xhtml">Infoset Mapping</a></li>
-    <li><a href="xpath.xhtml">XPath Mapping</a></li>
-	<li><a href="futuredirections.xhtml">Future Directions</a></li>
-	<li><a href="license.xhtml">License and Copyright</a></li>
-	<li><a href="https://lists.ibiblio.org/mailman/listinfo/xom-interest">Mailing Lists</a></li>
-	</ul>
-
-	<h3>Java API</h3>
-	<ul>
-	<li><a href="tutorial.xhtml">Tutorial</a></li>
-	<li><a href="apidocs/">JavaDoc</a></li>
-	<li><a href="samples.xhtml">Sample Code</a></li>
- </ul>
-
-
-	<h3>Downloads</h3>
-
-	<ul>
-	<li><a href="https://github.com/elharo/xom/">Source Repository</a></li>
-	<li><a href="https://github.com/elharo/xom/releases/download/v1.3.9/xom-1.3.9.jar">Minimal JAR file</a></li>
-	 <li><a href="https://github.com/elharo/xom/releases/download/v1.3.9/xom-1.3.9.zip">Complete distribution, zip format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
-	 <li><a href="https://github.com/elharo/xom/releases/download/v1.3.9/xom-1.3.9.tar.gz">Complete distribution, tar.gz format</a> (source code, API documentation, unit tests, sample programs, third party jars)</li>
-	 </ul>
- 
-	<h3>For Contributors</h3>
-
-	<ul>
-    <li><a href="contributor_license.txt">Contributor Agreement</a></li>
-	<li><a href="building.xhtml">Building XOM</a></li>
-	<li><a href="testsuite.xhtml">Test Suite</a></li>
-	 </ul>
-	 
-	 
-	<h3>Third Party Articles</h3>
-
-	<ul>
-	<li><a href="https://www.artima.com/intv/xmlapis.html">What's Wrong with XML APIs</a></li>
-    <li><a href="https://www.artima.com/intv/dom.html">The Good, the Bad, and the DOM</a></li>
-    <li><a href="https://www.artima.com/intv/jdom.html">A Design Review of JDOM</a></li>
-    <li><a href="https://www.artima.com/intv/learn.html">Lessons Learned from JDOM</a></li>
-    <li><a href="https://www.artima.com/intv/xomdesign.html">Design Principles and XOM</a></li>
-    <li><a href="https://www.artima.com/intv/airbags.html">Air Bags and Other Design Principles</a></li>
-    <li><a href="https://www.artima.com/intv/desbyuse.html">Designing by Dictatorship, Examples, and Tests</a></li>
-    <li><a href="https://www.artima.com/intv/readxml.html">The Human Side of XML</a></li>
-    <li><a href="https://www.artima.com/intv/schema.html">Organic Schemas and Outlier Data</a></li>
-    <li><a href="https://www.xml.com/pub/a/2002/11/27/xom.html">Getting Started with XOM</a></li>
-    <li><a href="https://www.ibm.com/developerworks/library/x-matters32/index.html">The XOM Java XML API</a></li>
-    <li><a href="https://workbench.cadenhead.org/news/3793/java-xom-xml-made-simpler">Java XOM: XML Made Simpler</a></li>
-    </ul>
-    
-         
-	<h3>Projects using XOM</h3>
-
-    <ul>
-      <li><a href='https://concordion.org/'>Concordion</a></li>
-      <li><a href='https://altsol.gr/sleepxomxml/'>Sleep</a></li>
-      <li><a href='https://code.google.com/p/openinfocard/'>openinfocard</a></li>
-      <li><a href='https://github.com/integrallis/excemel'>Excemel</a></li>
-      <li><a href="https://json-lib.sourceforge.net/">json-lib</a></li>
-      <li><a href="https://memoranda.sourceforge.net/">Memoranda</a></li>
-      <li><a href="https://carrierwave.sourceforge.net/">Carrierwave</a></li>
-      <li><a href="https://wurfl.sourceforge.net/">WURFL</a></li>
-      <li><a href="https://cafeconleche.org/SAXTest/">SAX Conformance Testing</a></li>
-      <li><a href="https://sourceforge.net/projects/smartfrog/">SmartFrog</a></li>
-      <li><a href="https://confluence.atlassian.com/fisheye/">FishEye</a></li>
-    </ul>
-
-</div>
+<div id="Navbar"></div>
+<script>
+fetch('sidebar.html')
+  .then(function(response) { return response.text(); })
+  .then(function(html) { document.getElementById('Navbar').innerHTML = html; });
+</script>
 </body>
 </html>
