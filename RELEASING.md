@@ -32,6 +32,11 @@ Update the version number in
   $ gpg -ab xom-1.3.9-sources.jar
   ```
 
+  Alternatively, run `ant bundle` from the repository root. This runs `ant sign` which
+  calls `gpg` for each artifact, then assembles `dist/maven2/bundle.jar`.
+  If your signing key is not the default GPG key, pass its ID:
+  `ant bundle -Dgpg.keyname=YOURKEYID`
+
 8. `$ jar -cvf bundle.jar xom-1.3.9.pom xom-1.3.9.pom.asc xom-1.3.9.jar xom-1.3.9.jar.asc xom-1.3.9-javadoc.jar xom-1.3.9-javadoc.jar.asc xom-1.3.9-sources.jar xom-1.3.9-sources.jar.asc`
 
 9. Login to [oss.sonatype.org](https://oss.sonatype.org/#welcome).

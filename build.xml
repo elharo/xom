@@ -153,6 +153,8 @@ XOM Build file
     clean          --> clean up the build directory
     dist           --> the zip and .tar.gz files
     upload         --> upload archive files
+    sign           --> GPG-sign Maven artifacts (use -Dgpg.keyname=ID to select key)
+    bundle         --> create bundle.jar of signed artifacts for Maven Central upload
       
   Use the option -Dfat=true to make Text objects bigger but faster.
 
@@ -758,6 +760,44 @@ XOM Build file
       </copy>
       <copy file="${package.jar}" tofile="${dist.dir}/maven2/${name}-${version}.jar">
       </copy>
+  </target>
+
+  <!-- Sign the Maven artifacts with GPG.
+       Optionally pass -Dgpg.keyname=YOURKEYID to select a specific key. -->
+  <target name="sign" depends="maven2"
+          description="Sign Maven artifacts with GPG for upload to Maven Central">
+    <condition property="gpg.args" value="--default-key ${gpg.keyname}" else="">
+      <isset property="gpg.keyname"/>
+    </condition>
+    <exec executable="gpg" failonerror="true">
+      <arg line="-ab ${gpg.args} ${dist.dir}/maven2/xom-${version}.pom"/>
+    </exec>
+    <exec executable="gpg" failonerror="true">
+      <arg line="-ab ${gpg.args} ${dist.dir}/maven2/xom-${version}.jar"/>
+    </exec>
+    <exec executable="gpg" failonerror="true">
+      <arg line="-ab ${gpg.args} ${dist.dir}/maven2/xom-${version}-javadoc.jar"/>
+    </exec>
+    <exec executable="gpg" failonerror="true">
+      <arg line="-ab ${gpg.args} ${dist.dir}/maven2/xom-${version}-sources.jar"/>
+    </exec>
+  </target>
+
+  <!-- Bundle the signed Maven artifacts into bundle.jar for upload to Maven Central. -->
+  <target name="bundle" depends="sign"
+          description="Create bundle.jar of signed Maven artifacts for upload to Maven Central">
+    <jar destfile="${dist.dir}/maven2/bundle.jar">
+      <fileset dir="${dist.dir}/maven2">
+        <include name="xom-${version}.pom"/>
+        <include name="xom-${version}.pom.asc"/>
+        <include name="xom-${version}.jar"/>
+        <include name="xom-${version}.jar.asc"/>
+        <include name="xom-${version}-javadoc.jar"/>
+        <include name="xom-${version}-javadoc.jar.asc"/>
+        <include name="xom-${version}-sources.jar"/>
+        <include name="xom-${version}-sources.jar.asc"/>
+      </fileset>
+    </jar>
   </target>
 
   <target name="compile-jaxen" description="Compile Jaxen" depends="get-jaxen">
