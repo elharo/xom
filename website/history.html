@@ -2110,12 +2110,6 @@ I also spent a lot of time improving the JavaDoc.
 Last Modified January 22, 2023
 </p>
 </div>
-<div id="Navbar"></div>
-<script>
-fetch('sidebar.html')
-  .then(function(response) { return response.text(); })
-  .then(function(html) { document.getElementById('Navbar').innerHTML = html; })
-  .catch(function(err) { console.error('Failed to load sidebar:', err); });
-</script>
+<div id="Navbar">@SIDEBAR@</div>
 </body>
 </html>

@@ -184,11 +184,23 @@
 
 
   <target name="html" depends="init" description="Raw HTML files that don't need to be transformed">
+    <loadfile property="sidebar.content" srcFile="sidebar.html"/>
+    <copy todir="${website.dir}" filtering="true">
+      <fileset dir=".">
+        <include name="index.html"/>
+        <include name="history.html"/>
+      </fileset>
+      <filterset>
+        <filter token="SIDEBAR" value="${sidebar.content}"/>
+      </filterset>
+    </copy>
     <copy todir="${website.dir}">
       <fileset dir=".">
         <include name="*.html"/>
         <include name="*.txt"/>
         <include name="favicon.ico"/>
+        <exclude name="index.html"/>
+        <exclude name="history.html"/>
       </fileset>
     </copy>
   </target>	
