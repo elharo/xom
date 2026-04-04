@@ -32,7 +32,7 @@ should be as simple as typing "ant compile" or "ant jar" in the xom
 directory. Type "ant help" to see other possible options.
 
 =======================================================================
-XOM is Copyright 2004, 2005, 2009, 2018-2023 Elliotte Rusty Harold
+XOM is Copyright 2004, 2005, 2009, 2018-2023, 2026 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
