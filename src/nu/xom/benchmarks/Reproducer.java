@@ -116,10 +116,10 @@ class Reproducer {
             Attribute att = original.getAttribute(i);
             copy.addAttribute(copy(att));
         }
-        // Weird; need to find just the additional namespaces????
-        /* for (int i = original.getNamespaceDeclarationCount()-1; i >= 0; i--) {
-             copy.addNamespaceDeclaration(original.);
-        } */
+        for (int i = original.getNamespaceDeclarationCount()-1; i >= 0; i--) {
+            String nsPrefix = original.getNamespacePrefix(i);
+            copy.addNamespaceDeclaration(nsPrefix, original.getNamespaceURI(nsPrefix));
+        }
         for (int i = 0; i < original.getChildCount(); i++) {
             Node node = copy(original.getChild(i));
             copy.appendChild(node);
