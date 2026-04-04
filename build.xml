@@ -783,10 +783,10 @@ XOM Build file
     </exec>
   </target>
 
-  <!-- Bundle the signed Maven artifacts into bundle.jar for upload to Maven Central. -->
+  <!-- Bundle the signed Maven artifacts into bundle.zip for upload to Maven Central. -->
   <target name="bundle" depends="sign"
           description="Create bundle.jar of signed Maven artifacts for upload to Maven Central">
-    <jar destfile="${dist.dir}/maven2/bundle.jar">
+    <zip destfile="${dist.dir}/maven2/bundle.zip">
       <fileset dir="${dist.dir}/maven2">
         <include name="xom-${version}.pom"/>
         <include name="xom-${version}.pom.asc"/>
@@ -797,7 +797,7 @@ XOM Build file
         <include name="xom-${version}-sources.jar"/>
         <include name="xom-${version}-sources.jar.asc"/>
       </fileset>
-    </jar>
+    </zip>
   </target>
 
   <target name="compile-jaxen" description="Compile Jaxen" depends="get-jaxen">
