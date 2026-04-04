@@ -37,7 +37,7 @@ Update the version number in
 
 10. Select xom/dist/maven2/bundle.zip and press **Upload Bundle**. If bundle.zip doesn't work, try individual artifacts instead. 
 
-11. If validation succeeds, press the Publoish button.
+11. If validation succeeds, press the Publish button.
 
 12. Tag the release on GitHub.
 
