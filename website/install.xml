@@ -22,7 +22,7 @@ use the <option>-classpath</option> option when invoking <command>javac</command
 <para>To check your download you can run one of the sample programs found in
 the <filename>xom-samples.jar</filename> file. For instance, <classname>nu.xom.samples.PrettyPrinter</classname>
 class formats an XML document by inserting and removing white space
-around element boundaries. In Java 1.4 and later you can run it from the
+around element boundaries. You can run it from the
 command line like this:</para>
 
 <screen>$ java -classpath xom-samples.jar:xom-1.4.0.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
