@@ -57,7 +57,7 @@ Update the version number in
 
 17. Release the repository.
 
-18. Tag the release on github.
+18. Tag the release on GitHub.
 
 19. Update README.md with the new version number.
 
