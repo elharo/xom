@@ -46,8 +46,13 @@ body {
 
 <h2>1.4.0</h2>
 
-<p>Fixes a bug in URI normalization that incorrectly resolved <code>/..</code> paths when computing base URIs in canonical XML.</p>
+<p>Fixes a bug in URI normalization that incorrectly resolved 
+<code>/..</code> paths when computing base URIs in canonical XML.</p>
 
+<p>This release also made a number of changes in the build
+system and backend to harden the build and release process against supply chain
+attacks. In particular, dependencies are now loaded from the Maven repository system
+with Apache Ivy and several manual steps have been automated.</p>
 
 <h2>1.3.9</h2>
 
@@ -197,7 +202,11 @@ you execute the JAR archive by typing
 <h2>1.2</h2>
 
 <p>
-The 1.2 release fixes a number of bugs, especially in canonicalization and XPath. However there's at least one bug fix in the core so I recommend all users upgrade. XOM 1.2 should be fully backwards compatible with code written to 1.0 and 1.1 APIs. 1.2 should also be somewhat easier to compile and edit due to various changes with UnicodeUtil and Jaxen. Actual new features in this release are fairly minor and include:
+The 1.2 release fixes a number of bugs, especially in canonicalization and XPath.
+However there's at least one bug fix in the core so I recommend all users upgrade.
+XOM 1.2 should be fully backwards compatible with code written to 1.0 and 1.1 APIs.
+1.2 should also be somewhat easier to compile and edit due to various changes with UnicodeUtil and Jaxen.
+Thank you. Actual new features in this release are fairly minor and include:
 </p>
 
 
@@ -2110,9 +2119,9 @@ I also spent a lot of time improving the JavaDoc.
 <div align="center">[ <a href="https://www.cafeconleche.org">Cafe con Leche</a> | 
 <a href="https://www.cafeaulait.org">Cafe au Lait</a> ]</div>
 <hr />
-<p>Copyright 2002-2005, 2009, 2013, 2018-2023 <a href="https://www.elharo.com/">Elliotte Rusty Harold</a><br />
+<p>Copyright 2002-2005, 2009, 2013, 2018-2023, 2026 <a href="https://www.elharo.com/">Elliotte Rusty Harold</a><br />
 <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg">elharo@ibiblio.org</a><br />
-Last Modified January 22, 2023
+Last Modified April 4, 2026
 </p>
 </div>
 <div id="Navbar">@SIDEBAR@</div>
