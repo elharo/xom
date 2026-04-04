@@ -39,7 +39,7 @@ Update the version number in
 
 11. If validation succeeds, press the Publish button.
 
-12. Tag the release on GitHub.
+12. Tag the release on GitHub. Code > Tags > Releases > Draft a New Release
 
 ## To update the website:
 
