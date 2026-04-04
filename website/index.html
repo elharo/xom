@@ -58,32 +58,49 @@ body {
     <li><a href="https://github.com/elharo/xom/">Source Repository</a></li>
 </ul>
 
-<p> XOM is designed to be easy to learn and easy to use. It works very straight-forwardly, and has a very shallow learning curve. Assuming you're already familiar with XML, you should be able to get up and running with XOM very quickly.</p>
-
-<p> 
-XOM is the only XML API that makes no compromises on correctness. 
-XOM only accepts namespace well-formed XML documents, and only allows you to create namespace well-formed XML documents. (In fact, it's a little stricter than that: it actually guarantees that all documents are round-trippable and 
-have well-defined XML infosets.) XOM manages your XML so you don't have to. 
-With XOM, you can focus on the unique value of your application, and trust XOM to get the XML right. 
-</p>
-
-<p> 
-XOM is fairly unique in that it is a dual streaming/tree-based API. Individual nodes in the tree can be processed while the document is still being built. The enables XOM programs to operate almost as fast as the underlying parser can supply data. You don't need to wait for the document to be completely parsed before you can start working with it.
-</p>
-
-<p> 
-XOM is very memory efficient. If you read an entire document into memory, XOM uses as little memory as possible. More importantly, XOM allows you to filter documents as they're built so you don't have to build the parts of the tree you aren't interested in. For instance, you can skip building text nodes that only represent boundary white space, if such white space is not significant in your application. You can even process a document piece by piece and throw away each piece when you're done with it. XOM has been used to process documents that are gigabytes in size. 
-</p>
-
-<p> 
-XOM includes built-in support for a number of XML technologies including 
-Namespaces in XML, XPath 1.0, XSLT 1.0, 
-XInclude, xml:id, xml:base, Canonical XML, and Exclusive Canonical XML. 
-XOM documents can be converted to and from SAX and DOM. 
-</p>
+<p>
+XOM is designed to be easy to learn and easy to use. It works very
+straightforwardly, and has a very shallow learning curve. Assuming
+you're already familiar with XML, you should be able to get up and
+running with XOM very quickly.</p>
 
 <p>
-XOM's Maven group ID is <code>xom</code> and its artifact ID is <code>xom</code>. To add a dependency on XOM using Maven, add this <code>dependency</code> element to your pom.xml:</p>
+XOM is the only XML API that makes no compromises on correctness.
+XOM only accepts namespace well-formed XML documents, and only allows
+you to create namespace well-formed XML documents. (In fact, it's a
+little stricter than that: it actually guarantees that all documents are
+round-trippable and have well-defined XML infosets.) XOM manages your
+XML so you don't have to. With XOM, you can focus on the unique value of
+your application, and trust XOM to get the XML right. </p>
+
+<p>
+XOM is fairly unique in that it is a dual streaming/tree-based API.
+Individual nodes in the tree can be processed while the document is
+still being built. This enables XOM programs to operate almost as fast as
+the underlying parser can supply data. You don't need to wait for the
+document to be completely parsed before you can start working with it.
+</p>
+
+<p> XOM is very memory efficient. If you read an entire document into
+memory, XOM uses as little memory as possible. More importantly, XOM
+allows you to filter documents as they're built so you don't have to
+build the parts of the tree you aren't interested in. For instance, you
+can skip building text nodes that only represent boundary white space,
+if such white space is not significant in your application. You can even
+process a document piece by piece and throw away each piece when you're
+done with it. XOM has been used to process documents that are gigabytes
+in size. </p>
+
+<p>
+XOM includes built-in support for a number of XML technologies
+including Namespaces in XML, XPath 1.0, XSLT 1.0, XInclude, xml:id,
+xml:base, Canonical XML, and Exclusive Canonical XML. XOM documents can
+be converted to and from SAX and DOM. </p>
+
+<p>
+XOM's Maven group ID is <code>xom</code> and its artifact ID is
+<code>xom</code>. To add a dependency on XOM using Maven, add this
+<code>dependency</code> element to your pom.xml:</p>
 
 <pre><code>&lt;dependency&gt;
   &lt;groupId&gt;xom&lt;/groupId&gt;
@@ -141,7 +158,7 @@ or the <a href="faq.xhtml">FAQ</a>, you can ask it on the <a href="https://lists
 mailing list</a>.
 You do not need to be subscribed to post, but non-subscriber questions are moderated.
 (Due to increasing amounts of non-subscriber spam, it is possible non-subscriber questions are missed. 
-If you don't get an answer, please subscribe and try again.)
+If you don't get an answer, subscribe and try again.)
 </p>
 
 <p>
@@ -152,9 +169,9 @@ Commercial licenses are available for companies that wish to bundle XOM with the
 <div align="center">[ <a href="https://cafe.elharo.com/">The Cafes</a> | <a href="https://www.cafeconleche.org">Cafe con Leche</a> | 
 <a href="https://www.cafeaulait.org">Cafe au Lait</a> ]</div>
 <hr />
-<p>Copyright 2002-2023 <a href="https://www.elharo.com/">Elliotte Rusty Harold</a><br />
+<p>Copyright 2002-2026 <a href="https://www.elharo.com/">Elliotte Rusty Harold</a><br />
 <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg">elharo@ibiblio.org</a><br />
-Last Modified May 14, 2023
+Last Modified April 4, 2026
 </p>
 </div>
 <div id="Navbar">@SIDEBAR@</div>
