@@ -39,25 +39,27 @@ Update the version number in
 
 8. `$ jar -cvf bundle.jar xom-1.4.0.pom xom-1.4.0.pom.asc xom-1.4.0.jar xom-1.4.0.jar.asc xom-1.4.0-javadoc.jar xom-1.4.0-javadoc.jar.asc xom-1.4.0-sources.jar xom-1.4.0-sources.jar.asc`
 
-9. Login to [oss.sonatype.org](https://oss.sonatype.org/#welcome).
+9. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 
-10. Select staging upload in the left hand column.
+10. Select Publish in the upper right hand corner.
 
-11. Upload Mode: Artifact Bundle
+11. Click Publish Component
 
-12. Select xom/dist/maven2/bundle.jar and press **Upload Bundle**. If bundle.jar doesn't work, try individual artifacts instead. 
+12. Fill in XOM release version as the title and add release notes in the box.
 
-13. Select staging repositories in the left hand side.
+13. Select xom/dist/maven2/bundle.jar and press **Upload Bundle**. If bundle.jar doesn't work, try individual artifacts instead. 
 
-14. Scroll to the bottom and find the bundle you just uploaded. Select it.
+14. Select staging repositories in the left hand side.
 
-15. Close the repository. Wait.
+15. Scroll to the bottom and find the bundle you just uploaded. Select it.
 
-16. Release the repository.
+16. Close the repository. Wait.
 
-17. Tag the release on github.
+17. Release the repository.
 
-18. Update README.md with the new version number.
+18. Tag the release on github.
+
+19. Update README.md with the new version number.
 
 ## To update the website:
 
