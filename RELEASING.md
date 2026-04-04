@@ -39,7 +39,11 @@ Update the version number in
 
 11. If validation succeeds, press the Publish button.
 
-12. Tag the release on GitHub. Code > Tags > Releases > Draft a New Release
+12. Draft the release on GitHub. Code > Tags > Releases > Draft a New Release
+  
+13. Upload the zip and .tar.gz and other assets to go with the release before publishing it.
+
+14. Publish the release.
 
 ## To update the website:
 
