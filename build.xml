@@ -786,17 +786,41 @@ XOM Build file
   <!-- Bundle the signed Maven artifacts into bundle.zip for upload to Maven Central. -->
   <target name="bundle" depends="sign"
           description="Create bundle.jar of signed Maven artifacts for upload to Maven Central">
-    <zip destfile="${dist.dir}/maven2/bundle.zip">
+    <checksum algorithm="MD5" fileext=".md5">
       <fileset dir="${dist.dir}/maven2">
         <include name="xom-${version}.pom"/>
+        <include name="xom-${version}.jar"/>
+        <include name="xom-${version}-javadoc.jar"/>
+        <include name="xom-${version}-sources.jar"/>
+      </fileset>
+    </checksum>
+    <checksum algorithm="SHA-1" fileext=".sha1">
+      <fileset dir="${dist.dir}/maven2">
+        <include name="xom-${version}.pom"/>
+        <include name="xom-${version}.jar"/>
+        <include name="xom-${version}-javadoc.jar"/>
+        <include name="xom-${version}-sources.jar"/>
+      </fileset>
+    </checksum>
+    <zip destfile="${dist.dir}/maven2/bundle.zip">
+      <zipfileset dir="${dist.dir}/maven2" prefix="xom/xom/${version}">
+        <include name="xom-${version}.pom"/>
         <include name="xom-${version}.pom.asc"/>
+        <include name="xom-${version}.pom.md5"/>
+        <include name="xom-${version}.pom.sha1"/>
         <include name="xom-${version}.jar"/>
         <include name="xom-${version}.jar.asc"/>
+        <include name="xom-${version}.jar.md5"/>
+        <include name="xom-${version}.jar.sha1"/>
         <include name="xom-${version}-javadoc.jar"/>
         <include name="xom-${version}-javadoc.jar.asc"/>
+        <include name="xom-${version}-javadoc.jar.md5"/>
+        <include name="xom-${version}-javadoc.jar.sha1"/>
         <include name="xom-${version}-sources.jar"/>
         <include name="xom-${version}-sources.jar.asc"/>
-      </fileset>
+        <include name="xom-${version}-sources.jar.md5"/>
+        <include name="xom-${version}-sources.jar.sha1"/>
+      </zipfileset>
     </zip>
   </target>
 
