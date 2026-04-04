@@ -783,7 +783,7 @@ XOM Build file
     </exec>
   </target>
 
-  <!-- Bundle the signed Maven artifacts into bundle.jar for upload to Maven Central. -->
+  <!-- Bundle the signed Maven artifacts into bundle.zip for upload to Maven Central. -->
   <target name="bundle" depends="sign"
           description="Create bundle.jar of signed Maven artifacts for upload to Maven Central">
     <zip destfile="${dist.dir}/maven2/bundle.zip">
