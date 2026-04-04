@@ -37,17 +37,13 @@ Update the version number in
 
 10. Select xom/dist/maven2/bundle.zip and press **Upload Bundle**. If bundle.zip doesn't work, try individual artifacts instead. 
 
-11. Select staging repositories in the left hand side.
+11. If validation succeeds, press the Publish button.
 
-12. Scroll to the bottom and find the bundle you just uploaded. Select it.
+12. Draft the release on GitHub. Code > Tags > Releases > Draft a New Release
+  
+13. Upload the zip and .tar.gz and other assets to go with the release before publishing it.
 
-13. Close the repository. Wait.
-
-14. Release the repository.
-
-15. Tag the release on GitHub.
-
-16. Update README.md with the new version number.
+14. Publish the release.
 
 ## To update the website:
 
