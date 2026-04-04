@@ -21,33 +21,33 @@ Update the version number in
 1. git checkout master
 2. git pull
 3. ant clean
-5. ant maven2
-6. Run `ant bundle` from the repository root. This runs `ant sign` which
+4. ant maven2
+5. Run `ant bundle` from the repository root. This runs `ant sign` which
   calls `gpg` for each artifact, then assembles `dist/maven2/bundle.zip`.
   If your signing key is not the default GPG key, pass its ID:
   `ant bundle -Dgpg.keyname=YOURKEYID`
 
-7. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
+6. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 
-9. Select Publish in the upper right hand corner.
+7. Select Publish in the upper right hand corner.
 
-10. Click Publish Component
+8. Click Publish Component
 
-11. Fill in XOM release version as the title and add release notes in the box.
+9. Fill in XOM release version as the title and add release notes in the box.
 
-12. Select xom/dist/maven2/bundle.zip and press **Upload Bundle**. If bundle.zip doesn't work, try individual artifacts instead. 
+10. Select xom/dist/maven2/bundle.zip and press **Upload Bundle**. If bundle.zip doesn't work, try individual artifacts instead. 
 
-13. Select staging repositories in the left hand side.
+11. Select staging repositories in the left hand side.
 
-14. Scroll to the bottom and find the bundle you just uploaded. Select it.
+12. Scroll to the bottom and find the bundle you just uploaded. Select it.
 
-15. Close the repository. Wait.
+13. Close the repository. Wait.
 
-16. Release the repository.
+14. Release the repository.
 
-17. Tag the release on GitHub.
+15. Tag the release on GitHub.
 
-18. Update README.md with the new version number.
+16. Update README.md with the new version number.
 
 ## To update the website:
 
