@@ -22,13 +22,12 @@ Update the version number in
 2. git pull
 3. ant clean
 5. ant maven2
-6. cd dist/maven2
-7. Run `ant bundle` from the repository root. This runs `ant sign` which
+6. Run `ant bundle` from the repository root. This runs `ant sign` which
   calls `gpg` for each artifact, then assembles `dist/maven2/bundle.zip`.
   If your signing key is not the default GPG key, pass its ID:
   `ant bundle -Dgpg.keyname=YOURKEYID`
 
-8. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
+7. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 
 9. Select Publish in the upper right hand corner.
 
