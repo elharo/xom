@@ -33,7 +33,7 @@ Update the version number in
   ```
 
   Alternatively, run `ant bundle` from the repository root. This runs `ant sign` which
-  calls `gpg` for each artifact, then assembles `dist/maven2/bundle.jar`.
+  calls `gpg` for each artifact, then assembles `dist/maven2/bundle.zip`.
   If your signing key is not the default GPG key, pass its ID:
   `ant bundle -Dgpg.keyname=YOURKEYID`
 
@@ -47,7 +47,7 @@ Update the version number in
 
 12. Fill in XOM release version as the title and add release notes in the box.
 
-13. Select xom/dist/maven2/bundle.jar and press **Upload Bundle**. If bundle.jar doesn't work, try individual artifacts instead. 
+13. Select xom/dist/maven2/bundle.zip and press **Upload Bundle**. If bundle.zip doesn't work, try individual artifacts instead. 
 
 14. Select staging repositories in the left hand side.
 
