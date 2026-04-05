@@ -55,7 +55,7 @@ public class ValidityExceptionTest extends XOMTestCase {
     public void testFourArgumentConstructor() {
             
         ParsingException ex = new ValidityException(message, 10000, 40000, cause);
-        assertEquals(message, ex.getMessage());
+        assertEquals(message + " at line 10000, column 40000", ex.getMessage());
         assertEquals(cause, ex.getCause()); 
         assertEquals(10000, ex.getLineNumber()); 
         assertEquals(40000, ex.getColumnNumber()); 
@@ -67,7 +67,7 @@ public class ValidityExceptionTest extends XOMTestCase {
             
         ParsingException ex = new ValidityException(
           message, "http://www.example.com/", 10000, 40000);
-        assertEquals(message, ex.getMessage());
+        assertEquals(message + " at line 10000, column 40000", ex.getMessage());
         assertNull(ex.getCause()); 
         assertEquals(10000, ex.getLineNumber()); 
         assertEquals(40000, ex.getColumnNumber()); 
@@ -79,7 +79,7 @@ public class ValidityExceptionTest extends XOMTestCase {
     public void testLineAndColumnNumbers() {
         
         ValidityException ex = new ValidityException(message, 10, 20);
-        assertEquals(message, ex.getMessage());
+        assertEquals(message + " at line 10, column 20", ex.getMessage());
         assertNull(ex.getCause());
         assertEquals(10, ex.getLineNumber()); 
         assertEquals(20, ex.getColumnNumber()); 
