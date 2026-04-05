@@ -272,6 +272,23 @@ public class ParsingException extends Exception {
     
     /**
      * <p>
+     * Returns the detail message, including line and column numbers
+     * if they are known.
+     * </p>
+     * 
+     * @return the detail message with positional information if available
+     */
+    public String getMessage() {
+        String message = super.getMessage();
+        if (lineNumber >= 0) {
+            return message + " at line " + lineNumber + ", column " + columnNumber;
+        }
+        return message;
+    }
+
+
+    /**
+     * <p>
      * Returns a string suitable for display to the developer
      * summarizing what went wrong where.
      * </p>
@@ -279,14 +296,7 @@ public class ParsingException extends Exception {
      * @return an exception message suitable for display to a developer
      */
     public String toString() {
-    	StringBuilder result = new StringBuilder(super.toString());
-        if (lineNumber >= 0) {
-            result.append(" at line ");
-            result.append(lineNumber);
-            result.append(", column ");
-            result.append(columnNumber);
-        }
-        
+        StringBuilder result = new StringBuilder(super.toString());
         if (this.uri != null) {
             result.append(" in ");
             result.append(uri);
