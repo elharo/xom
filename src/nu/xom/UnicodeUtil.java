@@ -542,26 +542,41 @@ final class UnicodeUtil {
     static String normalize(String s) {
 
         boolean needsNormalizing = false;
+        boolean hasHangul = false;
             
         int length = s.length();
-        for (int i = 0; i < length; i++) {
+        int i = 0;
+        for (; i < length; i++) {
             char c = s.charAt(i);
             if (c > 255) {
                 needsNormalizing = true;
+                if (c >= FIRST_HANGUL_SYLLABLE && c <= LAST_HANGUL_SYLLABLE) {
+                    hasHangul = true;
+                }
                 break;
             }
-        } 
+        }
+        if (needsNormalizing && !hasHangul) {
+            for (i = i + 1; i < length; i++) {
+                char c = s.charAt(i);
+                if (c >= FIRST_HANGUL_SYLLABLE && c <= LAST_HANGUL_SYLLABLE) {
+                    hasHangul = true;
+                    break;
+                }
+            }
+        }
         
         if (needsNormalizing) {
-            
-            // ???? unnecessarily invoking this in many cases
-            s = decomposeHangul(s);
+            if (hasHangul) {
+                s = decomposeHangul(s);
+            }
             UnicodeString ustring = new UnicodeString(s);
             UnicodeString decomposed = ustring.decompose(); 
             UnicodeString recomposed = decomposed.compose();
             String result = recomposed.toString();
-            // ???? unnecessarily invoking this in many cases
-            result = composeHangul(result);
+            if (hasHangul) {
+                result = composeHangul(result);
+            }
             return result;
         }
         
