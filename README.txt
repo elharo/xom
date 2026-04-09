@@ -27,7 +27,7 @@ junit.jar is only used for testing, and is
 not needed for normal operation of XOM.
 
 If you want to build XOM from source, you need Apache Ant
-1.6 or later. See https://ant.apache.org/. Once Ant is installed, building
+1.10.12 or later. See https://ant.apache.org/. Once Ant is installed, building
 should be as simple as typing "ant compile" or "ant jar" in the xom
 directory. Type "ant help" to see other possible options.
 

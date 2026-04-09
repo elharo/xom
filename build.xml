@@ -25,6 +25,9 @@ subject line. The XOM home page is https://xom.nu/
       Build XOM
     </description>
 
+  <!-- Reproducible builds: normalize timestamps in all zip/jar/tar archives (requires Ant 1.10.12+) -->
+  <property name="ant.build.reproducible" value="true"/>
+
   <!-- Ivy properties for dependency management -->
   <property name="ivy.version"  value="2.5.3"/>
   <property name="ivy.jar.dir"  value="${user.home}/.ant/lib"/>
@@ -34,6 +37,12 @@ subject line. The XOM home page is https://xom.nu/
    
   <!-- set global properties for this build -->
   <target name="init" depends="ivy-resolve">
+    <antversion property="ant.current.version"/>
+    <fail message="Ant 1.10.12 or later is required for reproducible builds. Current version: ${ant.current.version}">
+      <condition>
+        <not><antversion atleast="1.10.12"/></not>
+      </condition>
+    </fail>
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
@@ -289,7 +298,6 @@ XOM Build file
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/tools/* nu/xom/integrationtests/*">
       <manifest>
         <attribute name="Sealed" value="true"/>
-        <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Specification-Title"    value="XOM"/>
         <attribute name="Specification-Version"  value="${version}"/>
         <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
@@ -340,7 +348,6 @@ XOM Build file
       <rule pattern="org.jaxen.**" result="nu.xom.jaxen.@1"/>
 
       <manifest>
-        <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Specification-Title"    value="XOM"/>
         <attribute name="Specification-Version"  value="${version}"/>
         <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
@@ -414,7 +421,6 @@ XOM Build file
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
          excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/integrationtests/*">
       <manifest>
-        <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Specification-Title"    value="XOM Samples"/>
         <attribute name="Specification-Version"  value="${version}"/>
         <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
@@ -447,6 +453,7 @@ XOM Build file
              noqualifier="java.lang:java.io"
              link="https://junit.org/junit4/javadoc/4.13.2"
              doctitle="${Name} ${version}"
+             notimestamp="true"
              bottom="Copyright 2002-${year} &lt;a href='https://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
        &lt;br/&gt; &lt;a href='mailto:elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
       <classpath refid="test.class.path"/>
