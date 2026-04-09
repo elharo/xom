@@ -453,7 +453,6 @@ XOM Build file
              noqualifier="java.lang:java.io"
              link="https://junit.org/junit4/javadoc/4.13.2"
              doctitle="${Name} ${version}"
-             notimestamp="true"
              bottom="Copyright 2002-${year} &lt;a href='https://www.elharo.com/'&gt;Elliotte Rusty Harold&lt;/a&gt;
        &lt;br/&gt; &lt;a href='mailto:elharo%40ibiblio%2Eorg?Subject=XOM'&gt;elharo&#64;ibiblio&#46;org&lt;/a&gt;">
       <classpath refid="test.class.path"/>
