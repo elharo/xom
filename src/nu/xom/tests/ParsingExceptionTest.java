@@ -60,7 +60,7 @@ public class ParsingExceptionTest extends XOMTestCase {
     public void testFourArgumentConstructor() {
             
         ParsingException ex = new ParsingException(message, 100000, 400000, cause);
-        assertEquals(message, ex.getMessage());
+        assertEquals(message + " at line 100000, column 400000", ex.getMessage());
         assertEquals(cause, ex.getCause()); 
         assertEquals(100000, ex.getLineNumber()); 
         assertEquals(400000, ex.getColumnNumber()); 
@@ -70,7 +70,7 @@ public class ParsingExceptionTest extends XOMTestCase {
     
     public void testLineAndColumnNumbers() {
         ParsingException ex = new ParsingException(message, 10, 20);
-        assertEquals(message, ex.getMessage());
+        assertEquals(message + " at line 10, column 20", ex.getMessage());
         assertNull(ex.getCause());
         assertEquals(10, ex.getLineNumber()); 
         assertEquals(20, ex.getColumnNumber()); 
