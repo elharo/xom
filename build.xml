@@ -34,7 +34,9 @@ subject line. The XOM home page is https://xom.nu/
    
   <!-- set global properties for this build -->
   <target name="init" depends="ivy-resolve">
-    <tstamp/>
+    <property environment="env"/>
+    <!-- Fixed ISO-8601 UTC timestamp applied to all JAR entries for reproducible builds. -->
+    <property name="build.modtime" value="2026-04-10T00:00:00Z"/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
@@ -285,6 +287,7 @@ XOM Build file
          basedir="${build.dest}"
          index="no"
          compress="yes"
+         modificationtime="${build.modtime}"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/tools/* nu/xom/integrationtests/*">
       <manifest>
@@ -329,6 +332,7 @@ XOM Build file
          basedir="${build.dest}"
          index="no"
          compress="yes"
+         modificationtime="${build.modtime}"
          includes="nu/xom/* nu/xom/xslt/* nu/xom/xinclude/* nu/xom/converters/* nu/xom/canonical/* nu/xom/tests/XOMTestCase.class"
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/tools/*  nu/xom/integrationtests/*">
 
@@ -409,6 +413,7 @@ XOM Build file
          basedir="${build.dest}"
          index="yes"
      compress="yes"
+         modificationtime="${build.modtime}"
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
          excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/integrationtests/*">
       <manifest>
@@ -725,7 +730,8 @@ XOM Build file
   <target name="maven" depends="maven2" />
 
   <target name="sources.jar" depends="init, compile">
-    <jar jarfile="${sources.jar}" basedir="${build.dir}/src">
+    <jar jarfile="${sources.jar}" basedir="${build.dir}/src"
+         modificationtime="${build.modtime}">
       <exclude name= "nu/xom/benchmarks/**" />
       <exclude name= "nu/xom/tools/**" />
       <exclude name= "nu/xom/tests/**" />
@@ -734,7 +740,8 @@ XOM Build file
   </target>
   
   <target name="javadoc.jar" depends="init, compile, javadoc">
-    <jar jarfile="${javadoc.jar}" basedir="${build.dir}/apidocs">
+    <jar jarfile="${javadoc.jar}" basedir="${build.dir}/apidocs"
+         modificationtime="${build.modtime}">
     </jar>
   </target>
     
