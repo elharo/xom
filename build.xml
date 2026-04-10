@@ -289,7 +289,6 @@ XOM Build file
          excludes="nu/xom/samples/* nu/xom/benchmarks/* nu/xom/tools/* nu/xom/integrationtests/*">
       <manifest>
         <attribute name="Sealed" value="true"/>
-        <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Specification-Title"    value="XOM"/>
         <attribute name="Specification-Version"  value="${version}"/>
         <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
@@ -340,7 +339,6 @@ XOM Build file
       <rule pattern="org.jaxen.**" result="nu.xom.jaxen.@1"/>
 
       <manifest>
-        <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Specification-Title"    value="XOM"/>
         <attribute name="Specification-Version"  value="${version}"/>
         <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
@@ -414,7 +412,6 @@ XOM Build file
          includes="nu/xom/samples/* nu/xom/benchmarks/*"
          excludes="nu/xom/xslt/* nu/xom/xinclude/* nu/xom/tools/* nu/xom/converters/* nu/xom/canonical/* nu/xom/integrationtests/*">
       <manifest>
-        <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Specification-Title"    value="XOM Samples"/>
         <attribute name="Specification-Version"  value="${version}"/>
         <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
