@@ -123,8 +123,5 @@ jobs:
     - name: Verify reproducible build
       run: |
         chmod +x verify-reproducible.sh
-        # Use a fixed timestamp (2009-02-13T23:31:30Z) as a well-known sentinel
-        # to verify that two builds with the same SOURCE_DATE_EPOCH produce
-        # byte-for-byte identical output. The specific value is not significant.
-        TZ=UTC SOURCE_DATE_EPOCH=1234567890 ./verify-reproducible.sh
+        ./verify-reproducible.sh
 

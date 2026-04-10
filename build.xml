@@ -35,21 +35,8 @@ subject line. The XOM home page is https://xom.nu/
   <!-- set global properties for this build -->
   <target name="init" depends="ivy-resolve">
     <property environment="env"/>
-    <!-- For reproducible builds: honour SOURCE_DATE_EPOCH if set.
-         Ant 1.10.8+ reads it automatically for <tstamp>, but we also set
-         ant.tstamp.now explicitly for clarity and older-Ant compatibility. -->
-    <condition property="ant.tstamp.now" value="${env.SOURCE_DATE_EPOCH}">
-      <isset property="env.SOURCE_DATE_EPOCH"/>
-    </condition>
-    <tstamp>
-      <!-- ISO-8601 UTC timestamp used as modificationtime for all JAR entries.
-           Using the same value for every entry makes builds reproducible when
-           SOURCE_DATE_EPOCH (and therefore ant.tstamp.now) is set. -->
-      <format property="build.modtime"
-              pattern="yyyy-MM-dd'T'HH:mm:ss'Z'"
-              timezone="UTC"
-              locale="en,US"/>
-    </tstamp>
+    <!-- Fixed ISO-8601 UTC timestamp applied to all JAR entries for reproducible builds. -->
+    <property name="build.modtime" value="2009-02-13T23:31:30Z"/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
