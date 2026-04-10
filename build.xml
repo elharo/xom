@@ -36,7 +36,7 @@ subject line. The XOM home page is https://xom.nu/
   <target name="init" depends="ivy-resolve">
     <property environment="env"/>
     <!-- Fixed ISO-8601 UTC timestamp applied to all JAR entries for reproducible builds. -->
-    <property name="build.modtime" value="2009-02-13T23:31:30Z"/>
+    <property name="build.modtime" value="2026-04-10T00:00:00Z"/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
