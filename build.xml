@@ -25,9 +25,6 @@ subject line. The XOM home page is https://xom.nu/
       Build XOM
     </description>
 
-  <!-- Reproducible builds: normalize timestamps in all zip/jar/tar archives (requires Ant 1.10.12+) -->
-  <property name="ant.build.reproducible" value="true"/>
-
   <!-- Ivy properties for dependency management -->
   <property name="ivy.version"  value="2.5.3"/>
   <property name="ivy.jar.dir"  value="${user.home}/.ant/lib"/>
@@ -37,12 +34,6 @@ subject line. The XOM home page is https://xom.nu/
    
   <!-- set global properties for this build -->
   <target name="init" depends="ivy-resolve">
-    <antversion property="ant.current.version"/>
-    <fail message="Ant 1.10.12 or later is required for reproducible builds. Current version: ${ant.current.version}">
-      <condition>
-        <not><antversion atleast="1.10.12"/></not>
-      </condition>
-    </fail>
     <tstamp/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
