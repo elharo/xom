@@ -95,3 +95,33 @@ jobs:
       with:
         name: test-results-java-${{ matrix.java-version }}
         path: testresults/
+
+  reproducible-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v4
+      with:
+        java-version: 8
+        distribution: 'temurin'
+
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.ant/lib
+          ~/.ivy2/
+          lib/
+          ivy/
+        key: ${{ runner.os }}-ant-${{ hashFiles('build.xml', 'ivy.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-ant-
+
+    - name: Verify reproducible build
+      run: |
+        chmod +x verify-reproducible.sh
+        TZ=UTC SOURCE_DATE_EPOCH=1234567890 ./verify-reproducible.sh
+
