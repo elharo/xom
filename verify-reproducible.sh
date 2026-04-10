@@ -8,13 +8,17 @@
 # Usage:
 #   ./verify-reproducible.sh [SOURCE_DATE_EPOCH]
 #
-# If SOURCE_DATE_EPOCH is not provided, the script uses the timestamp
-# of the most recent git tag, or a fixed value of 0 (1970-01-01T00:00:00Z)
-# if no tags are found. Epoch 0 is a well-known sentinel used by
-# reproducible-builds tooling when no source date is available.
+# If SOURCE_DATE_EPOCH is not provided (neither as an argument nor as an
+# environment variable), a fixed sentinel value of 1234567890 is used.
+# This value (2009-02-13T23:31:30Z) is chosen as a well-known, memorable
+# timestamp ("Unix time billion") that is clearly artificial and distinct
+# from any real release date.
 #
 # For release builds, pass the epoch of the release date, e.g.:
 #   SOURCE_DATE_EPOCH=1700000000 ./verify-reproducible.sh
+
+# Fixed sentinel epoch used when no SOURCE_DATE_EPOCH is supplied.
+DEFAULT_EPOCH=1234567890
 
 set -e
 
@@ -26,31 +30,13 @@ for cmd in ant cp cmp sha256sum mktemp; do
     fi
 done
 
-# git is needed only for the automatic fallback
-GIT_AVAILABLE=false
-if command -v git >/dev/null 2>&1; then
-    GIT_AVAILABLE=true
-fi
-
 # Determine SOURCE_DATE_EPOCH
 if [ -n "$1" ]; then
     EPOCH="$1"
 elif [ -n "$SOURCE_DATE_EPOCH" ]; then
     EPOCH="$SOURCE_DATE_EPOCH"
 else
-    # Use the timestamp of the latest git tag, or 0 if none.
-    # Epoch 0 (1970-01-01T00:00:00Z) is used as a sentinel value by
-    # reproducible-builds tooling when no source date is available.
-    if [ "$GIT_AVAILABLE" = true ]; then
-        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-        if [ -n "$LATEST_TAG" ]; then
-            EPOCH=$(git log -1 --format=%ct "$LATEST_TAG" 2>/dev/null || echo "0")
-        else
-            EPOCH=0
-        fi
-    else
-        EPOCH=0
-    fi
+    EPOCH="$DEFAULT_EPOCH"
 fi
 
 export SOURCE_DATE_EPOCH="$EPOCH"
