@@ -1522,7 +1522,7 @@ public class Element extends ParentNode {
                     if ("".equals(baseURI)) baseURI = base;
                     else if (URIUtil.isOpaque(base)) break; 
                     else baseURI = URIUtil.absolutize(base, baseURI);
-                    if (URIUtil.isAbsolute(base)) break;  // ???? base or baseURI
+                    if (URIUtil.isAbsolute(base)) break;
                 }
             }
             current = current.getParent();
