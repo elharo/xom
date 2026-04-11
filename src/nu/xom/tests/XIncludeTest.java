@@ -25,13 +25,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
+
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -65,6 +73,12 @@ import nu.xom.xinclude.XIncluder;
  */
 public class XIncludeTest extends XOMTestCase {
 
+    private static final String CAFE_CON_LECHE_BASE
+      = "http://www.cafeconleche.org";
+    
+    private static final String XINCLUDE_NAMESPACE
+      = "http://www.w3.org/2001/XInclude";
+    
     private static boolean windows 
       = System.getProperty("os.name", "Unix").indexOf("Windows") >= 0;
     
@@ -82,9 +96,11 @@ public class XIncludeTest extends XOMTestCase {
     // annoyingly logs to System.err. This hides System.err 
     // before each test and restores it after each test.
     private PrintStream systemErr = System.err;
+    private HttpServer localTestServer;
+    private String localServerBase;
     
     
-    protected void setUp() {
+    protected void setUp() throws Exception {
         
         System.setErr(new PrintStream(new ByteArrayOutputStream()));
         
@@ -96,10 +112,41 @@ public class XIncludeTest extends XOMTestCase {
         outputDir = new File(outputDir, "xinclude");
         outputDir = new File(outputDir, "output");
         
+        localTestServer = HttpServer.create(new InetSocketAddress(0), 0);
+        localTestServer.createContext("/tests/data.txt", new HttpHandler() {
+            public void handle(HttpExchange exchange) throws IOException {
+                Headers requestHeaders = exchange.getRequestHeaders();
+                String body = "data\n";
+                if (headerContains(requestHeaders, "Accept-Language", "fr")) {
+                    body = "donnees\n";
+                }
+                sendResponse(exchange, body, "text/plain; charset=utf-8");
+            }
+        });
+        localTestServer.createContext("/tests/content", new HttpHandler() {
+            public void handle(HttpExchange exchange) throws IOException {
+                Headers requestHeaders = exchange.getRequestHeaders();
+                String body = "plain text\n";
+                String contentType = "text/plain; charset=utf-8";
+                if (headerContains(requestHeaders, "Accept", "text/html")) {
+                    body = "<html><body>content</body></html>\n";
+                    contentType = "text/html; charset=utf-8";
+                }
+                sendResponse(exchange, body, contentType);
+            }
+        });
+        localTestServer.start();
+        localServerBase = "http://127.0.0.1:" 
+          + localTestServer.getAddress().getPort();
+        
     }
     
     
-    protected void tearDown() {
+    protected void tearDown() throws Exception {
+        if (localTestServer != null) {
+            localTestServer.stop(0);
+            localTestServer = null;
+        }
         System.setErr(systemErr);
     }    
     
@@ -115,6 +162,71 @@ public class XIncludeTest extends XOMTestCase {
         FileOutputStream out = new FileOutputStream(output);
         Serializer serializer = new Serializer(out);
         serializer.write(result);        
+        
+    }
+    
+    
+    private static void sendResponse(HttpExchange exchange, String body,
+      String contentType) throws IOException {
+        
+        byte[] data = body.getBytes("UTF-8");
+        Headers responseHeaders = exchange.getResponseHeaders();
+        responseHeaders.set("Content-Type", contentType);
+        exchange.sendResponseHeaders(200, data.length);
+        OutputStream out = exchange.getResponseBody();
+        try {
+            out.write(data);
+        }
+        finally {
+            out.close();
+        }
+        
+    }
+    
+    
+    private static boolean headerContains(Headers headers, String headerName,
+      String expectedValue) {
+        
+        List<String> values = headers.get(headerName);
+        if (values == null) {
+            return false;
+        }
+        for (int i = 0; i < values.size(); i++) {
+            String value = values.get(i);
+            if (value != null 
+              && value.toLowerCase().indexOf(expectedValue) >= 0) {
+                return true;
+            }
+        }
+        return false;
+        
+    }
+    
+    
+    private void rewriteCafeConLecheURLs(Document doc) {
+        rewriteCafeConLecheURLs(doc.getRootElement());
+    }
+    
+    
+    private void rewriteCafeConLecheURLs(Element element) {
+        
+        if ("include".equals(element.getLocalName())
+          && XINCLUDE_NAMESPACE.equals(element.getNamespaceURI())) {
+            Attribute href = element.getAttribute("href");
+            if (href != null && href.getValue().startsWith(CAFE_CON_LECHE_BASE)) {
+                String value = href.getValue();
+                href.setValue(localServerBase 
+                  + value.substring(CAFE_CON_LECHE_BASE.length()));
+            }
+        }
+        
+        int childCount = element.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            Node child = element.getChild(i);
+            if (child instanceof Element) {
+                rewriteCafeConLecheURLs((Element) child);
+            }
+        }
         
     }
     
@@ -2254,6 +2366,7 @@ public class XIncludeTest extends XOMTestCase {
       
         File input = new File(inputDir, "acceptfrench.xml");
         Document doc = builder.build(input);
+        rewriteCafeConLecheURLs(doc);
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "acceptfrench.xml")
@@ -2268,6 +2381,7 @@ public class XIncludeTest extends XOMTestCase {
       
         File input = new File(inputDir, "acceptenglish.xml");
         Document doc = builder.build(input);
+        rewriteCafeConLecheURLs(doc);
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "acceptenglish.xml")
@@ -2282,6 +2396,7 @@ public class XIncludeTest extends XOMTestCase {
       
         File input = new File(inputDir, "acceptplaintext.xml");
         Document doc = builder.build(input);
+        rewriteCafeConLecheURLs(doc);
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "acceptplaintext.xml")
@@ -2296,6 +2411,7 @@ public class XIncludeTest extends XOMTestCase {
       
         File input = new File(inputDir, "accepthtml.xml");
         Document doc = builder.build(input);
+        rewriteCafeConLecheURLs(doc);
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "accepthtml.xml")
