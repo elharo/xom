@@ -78,6 +78,9 @@ public class XIncludeTest extends XOMTestCase {
     
     private static final String XINCLUDE_NAMESPACE
       = "http://www.w3.org/2001/XInclude";
+    private static final int EPHEMERAL_PORT = 0;
+    private static final int NO_BACKLOG = 0;
+    private static final int IMMEDIATE_STOP_DELAY = 0;
     
     private static boolean windows 
       = System.getProperty("os.name", "Unix").indexOf("Windows") >= 0;
@@ -112,7 +115,9 @@ public class XIncludeTest extends XOMTestCase {
         outputDir = new File(outputDir, "xinclude");
         outputDir = new File(outputDir, "output");
         
-        localTestServer = HttpServer.create(new InetSocketAddress(0), 0);
+        localTestServer = HttpServer.create(
+          new InetSocketAddress(EPHEMERAL_PORT), NO_BACKLOG
+        );
         localTestServer.createContext("/tests/data.txt", new HttpHandler() {
             public void handle(HttpExchange exchange) throws IOException {
                 Headers requestHeaders = exchange.getRequestHeaders();
@@ -144,7 +149,7 @@ public class XIncludeTest extends XOMTestCase {
     
     protected void tearDown() throws Exception {
         if (localTestServer != null) {
-            localTestServer.stop(0);
+            localTestServer.stop(IMMEDIATE_STOP_DELAY);
             localTestServer = null;
         }
         System.setErr(systemErr);
