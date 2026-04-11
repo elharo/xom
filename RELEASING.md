@@ -14,6 +14,14 @@ Update the version number in
 * website/index.html
 * website/history.html
 
+Update the reproducible-build timestamp in `build.xml`:
+
+* `build.modtime`
+
+Run the reproducible-build verifier:
+
+* `./verify-reproducible.sh`
+
 ## To push a new release to Maven Central:
 
 [Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
