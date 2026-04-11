@@ -192,7 +192,7 @@ public class XIncludeTest extends XOMTestCase {
         localTestServer.createContext(path, new HttpHandler() {
             public void handle(HttpExchange exchange) throws IOException {
                 sendResponse(exchange,
-                  readFile(new File(inputDir, fileName)),
+                  adjustFixtureBaseURI(readFile(new File(inputDir, fileName))),
                   "application/xml; charset=utf-8");
             }
         });
@@ -218,6 +218,13 @@ public class XIncludeTest extends XOMTestCase {
             }
         }
         return new String(out.toByteArray(), "UTF-8");
+        
+    }
+    
+    
+    private String adjustFixtureBaseURI(String xml) {
+        
+        return xml.replace("http://127.0.0.1", localServerBase);
         
     }
     
