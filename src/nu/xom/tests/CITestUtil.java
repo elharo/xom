@@ -51,7 +51,8 @@ class CITestUtil {
     
     /**
      * Helper method to check if an exception is network-related.
-     * Checks the exception chain for UnknownHostException or ConnectException.
+     * Checks the exception chain for UnknownHostException, ConnectException,
+     * SocketException, or HTTP 5xx server errors.
      * 
      * @param ex the exception to check
      * @return true if the exception is network-related, false otherwise
@@ -64,9 +65,37 @@ class CITestUtil {
                 cause instanceof java.net.SocketException) {
                 return true;
             }
+            if (cause instanceof IOException && isServerError((IOException) cause)) {
+                return true;
+            }
             cause = cause.getCause();
         }
         return false;
+    }
+
+
+    private static boolean isServerError(IOException ex) {
+        String message = ex.getMessage();
+        if (message == null) {
+            return false;
+        }
+        String marker = "Server returned HTTP response code: ";
+        int markerPosition = message.indexOf(marker);
+        if (markerPosition < 0) {
+            return false;
+        }
+        int start = markerPosition + marker.length();
+        int end = message.indexOf(' ', start);
+        if (end < 0) {
+            end = message.length();
+        }
+        try {
+            int code = Integer.parseInt(message.substring(start, end));
+            return code >= 500 && code <= 599;
+        }
+        catch (NumberFormatException ex2) {
+            return false;
+        }
     }
     
     /**
