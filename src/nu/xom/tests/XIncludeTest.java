@@ -191,10 +191,12 @@ public class XIncludeTest extends XOMTestCase {
         if (values == null) {
             return false;
         }
-        for (int i = 0; i < values.size(); i++) {
+        String expectedValueLowerCase = expectedValue.toLowerCase();
+        int size = values.size();
+        for (int i = 0; i < size; i++) {
             String value = values.get(i);
             if (value != null 
-              && value.toLowerCase().indexOf(expectedValue) >= 0) {
+              && value.toLowerCase().indexOf(expectedValueLowerCase) >= 0) {
                 return true;
             }
         }
