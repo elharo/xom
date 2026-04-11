@@ -22,6 +22,7 @@ package nu.xom.tests;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -129,6 +130,38 @@ public class XIncludeTest extends XOMTestCase {
                 sendResponse(exchange, body, contentType);
             }
         });
+        localTestServer.createContext("/data/xinclude/input/acceptfrench.xml",
+          new HttpHandler() {
+            public void handle(HttpExchange exchange) throws IOException {
+                sendResponse(exchange,
+                  readFile(new File(inputDir, "acceptfrench.xml")),
+                  "application/xml; charset=utf-8");
+            }
+        });
+        localTestServer.createContext("/data/xinclude/input/acceptenglish.xml",
+          new HttpHandler() {
+            public void handle(HttpExchange exchange) throws IOException {
+                sendResponse(exchange,
+                  readFile(new File(inputDir, "acceptenglish.xml")),
+                  "application/xml; charset=utf-8");
+            }
+        });
+        localTestServer.createContext("/data/xinclude/input/acceptplaintext.xml",
+          new HttpHandler() {
+            public void handle(HttpExchange exchange) throws IOException {
+                sendResponse(exchange,
+                  readFile(new File(inputDir, "acceptplaintext.xml")),
+                  "application/xml; charset=utf-8");
+            }
+        });
+        localTestServer.createContext("/data/xinclude/input/accepthtml.xml",
+          new HttpHandler() {
+            public void handle(HttpExchange exchange) throws IOException {
+                sendResponse(exchange,
+                  readFile(new File(inputDir, "accepthtml.xml")),
+                  "application/xml; charset=utf-8");
+            }
+        });
         localTestServer.start();
         localServerBase = "http://127.0.0.1:" 
           + localTestServer.getAddress().getPort();
@@ -174,6 +207,25 @@ public class XIncludeTest extends XOMTestCase {
         finally {
             out.close();
         }
+        
+    }
+    
+    
+    private static String readFile(File file) throws IOException {
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        FileInputStream in = new FileInputStream(file);
+        try {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(buffer)) >= 0) {
+                out.write(buffer, 0, bytesRead);
+            }
+        }
+        finally {
+            in.close();
+        }
+        return new String(out.toByteArray(), "UTF-8");
         
     }
     
@@ -2330,9 +2382,8 @@ public class XIncludeTest extends XOMTestCase {
     public void testAcceptLanguageFrench() 
       throws ParsingException, IOException, XIncludeException {
       
-        File input = new File(inputDir, "acceptfrench.xml");
-        Document doc = builder.build(input);
-        doc.setBaseURI(localServerBase + "/");
+        Document doc = builder.build(localServerBase
+          + "/data/xinclude/input/acceptfrench.xml");
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "acceptfrench.xml")
@@ -2345,9 +2396,8 @@ public class XIncludeTest extends XOMTestCase {
     public void testAcceptLanguageEnglish() 
       throws ParsingException, IOException, XIncludeException {
       
-        File input = new File(inputDir, "acceptenglish.xml");
-        Document doc = builder.build(input);
-        doc.setBaseURI(localServerBase + "/");
+        Document doc = builder.build(localServerBase
+          + "/data/xinclude/input/acceptenglish.xml");
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "acceptenglish.xml")
@@ -2360,9 +2410,8 @@ public class XIncludeTest extends XOMTestCase {
     public void testAcceptPlainText() 
       throws ParsingException, IOException, XIncludeException {
       
-        File input = new File(inputDir, "acceptplaintext.xml");
-        Document doc = builder.build(input);
-        doc.setBaseURI(localServerBase + "/");
+        Document doc = builder.build(localServerBase
+          + "/data/xinclude/input/acceptplaintext.xml");
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "acceptplaintext.xml")
@@ -2375,9 +2424,8 @@ public class XIncludeTest extends XOMTestCase {
     public void testAcceptHTML() 
       throws ParsingException, IOException, XIncludeException {
       
-        File input = new File(inputDir, "accepthtml.xml");
-        Document doc = builder.build(input);
-        doc.setBaseURI(localServerBase + "/");
+        Document doc = builder.build(localServerBase
+          + "/data/xinclude/input/accepthtml.xml");
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "accepthtml.xml")
