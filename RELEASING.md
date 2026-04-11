@@ -14,6 +14,10 @@ Update the version number in
 * website/index.html
 * website/history.html
 
+Update the reproducible-build timestamp in `build.xml`:
+
+* `build.modtime`
+
 Run the reproducible-build verifier:
 
 * `./verify-reproducible.sh`
