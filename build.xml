@@ -563,7 +563,7 @@ XOM Build file
 
  
   <!-- This task requires the ANT optional.jar -->
-  <target name="test" depends="compile" description="Run JUnit tests using command line user interface">
+  <target name="test" depends="compile" description="Run JUnit tests">
 
     <junit fork="true" jvm="${jvm}" failureproperty="testsfailed">
        <classpath refid="test.class.path" />
