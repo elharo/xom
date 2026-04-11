@@ -65,7 +65,7 @@ class Namespaces {
      * @param prefix the prefix whose URI is desired
      * 
      * @return the namespace URI for this prefix, or null if this 
-     *      prefix is not not mapped to a URI by these namespace 
+     *      prefix is not mapped to a URI by these namespace 
      *      declarations
      */
     String getURI(String prefix) {
