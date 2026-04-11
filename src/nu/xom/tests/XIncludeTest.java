@@ -72,9 +72,6 @@ import nu.xom.xinclude.XIncluder;
  *
  */
 public class XIncludeTest extends XOMTestCase {
-
-    private static final String CAFE_CON_LECHE_BASE
-      = "http://www.cafeconleche.org";
     
     private static boolean windows 
       = System.getProperty("os.name", "Unix").indexOf("Windows") >= 0;
@@ -200,35 +197,6 @@ public class XIncludeTest extends XOMTestCase {
         return false;
         
     }
-    
-    
-    private void rewriteCafeConLecheURLs(Document doc) {
-        rewriteCafeConLecheURLs(doc.getRootElement());
-    }
-    
-    
-    private void rewriteCafeConLecheURLs(Element element) {
-        
-        if ("include".equals(element.getLocalName())
-          && "http://www.w3.org/2001/XInclude".equals(element.getNamespaceURI())) {
-            Attribute href = element.getAttribute("href");
-            if (href != null && href.getValue().startsWith(CAFE_CON_LECHE_BASE)) {
-                String value = href.getValue();
-                href.setValue(localServerBase 
-                  + value.substring(CAFE_CON_LECHE_BASE.length()));
-            }
-        }
-        
-        int childCount = element.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            Node child = element.getChild(i);
-            if (child instanceof Element) {
-                rewriteCafeConLecheURLs((Element) child);
-            }
-        }
-        
-    }
-    
     
     public void testXPointersResolvedAgainstAcquiredInfoset() 
       throws ParsingException, IOException, XIncludeException {
@@ -2357,15 +2325,14 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
-    // These tests actually connect to IBiblio to load the included
-    // data. This is necessary because file URLs don't support
-    // content negotiation
+    // These tests use a local HTTP server to load included
+    // data because file URLs don't support content negotiation.
     public void testAcceptLanguageFrench() 
       throws ParsingException, IOException, XIncludeException {
       
         File input = new File(inputDir, "acceptfrench.xml");
         Document doc = builder.build(input);
-        rewriteCafeConLecheURLs(doc);
+        doc.setBaseURI(localServerBase + "/");
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "acceptfrench.xml")
@@ -2380,7 +2347,7 @@ public class XIncludeTest extends XOMTestCase {
       
         File input = new File(inputDir, "acceptenglish.xml");
         Document doc = builder.build(input);
-        rewriteCafeConLecheURLs(doc);
+        doc.setBaseURI(localServerBase + "/");
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "acceptenglish.xml")
@@ -2395,7 +2362,7 @@ public class XIncludeTest extends XOMTestCase {
       
         File input = new File(inputDir, "acceptplaintext.xml");
         Document doc = builder.build(input);
-        rewriteCafeConLecheURLs(doc);
+        doc.setBaseURI(localServerBase + "/");
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "acceptplaintext.xml")
@@ -2410,7 +2377,7 @@ public class XIncludeTest extends XOMTestCase {
       
         File input = new File(inputDir, "accepthtml.xml");
         Document doc = builder.build(input);
-        rewriteCafeConLecheURLs(doc);
+        doc.setBaseURI(localServerBase + "/");
         Document result = XIncluder.resolve(doc);
         Document expectedResult = builder.build(
           new File(outputDir, "accepthtml.xml")
