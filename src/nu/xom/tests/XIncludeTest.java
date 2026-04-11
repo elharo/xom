@@ -76,12 +76,6 @@ public class XIncludeTest extends XOMTestCase {
     private static final String CAFE_CON_LECHE_BASE
       = "http://www.cafeconleche.org";
     
-    private static final String XINCLUDE_NAMESPACE
-      = "http://www.w3.org/2001/XInclude";
-    private static final int EPHEMERAL_PORT = 0;
-    private static final int NO_BACKLOG = 0;
-    private static final int IMMEDIATE_STOP_DELAY = 0;
-    
     private static boolean windows 
       = System.getProperty("os.name", "Unix").indexOf("Windows") >= 0;
     
@@ -103,7 +97,7 @@ public class XIncludeTest extends XOMTestCase {
     private String localServerBase;
     
     
-    protected void setUp() throws Exception {
+    protected void setUp() throws IOException {
         
         System.setErr(new PrintStream(new ByteArrayOutputStream()));
         
@@ -115,9 +109,7 @@ public class XIncludeTest extends XOMTestCase {
         outputDir = new File(outputDir, "xinclude");
         outputDir = new File(outputDir, "output");
         
-        localTestServer = HttpServer.create(
-          new InetSocketAddress(EPHEMERAL_PORT), NO_BACKLOG
-        );
+        localTestServer = HttpServer.create(new InetSocketAddress(0), 0);
         localTestServer.createContext("/tests/data.txt", new HttpHandler() {
             public void handle(HttpExchange exchange) throws IOException {
                 Headers requestHeaders = exchange.getRequestHeaders();
@@ -147,9 +139,9 @@ public class XIncludeTest extends XOMTestCase {
     }
     
     
-    protected void tearDown() throws Exception {
+    protected void tearDown() {
         if (localTestServer != null) {
-            localTestServer.stop(IMMEDIATE_STOP_DELAY);
+            localTestServer.stop(0);
             localTestServer = null;
         }
         System.setErr(systemErr);
@@ -218,7 +210,7 @@ public class XIncludeTest extends XOMTestCase {
     private void rewriteCafeConLecheURLs(Element element) {
         
         if ("include".equals(element.getLocalName())
-          && XINCLUDE_NAMESPACE.equals(element.getNamespaceURI())) {
+          && "http://www.w3.org/2001/XInclude".equals(element.getNamespaceURI())) {
             Attribute href = element.getAttribute("href");
             if (href != null && href.getValue().startsWith(CAFE_CON_LECHE_BASE)) {
                 String value = href.getValue();
