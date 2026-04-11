@@ -84,11 +84,6 @@ public class OASISXSLTTest extends XOMTestCase {
     }  
 
     
-    /**
-     * This test can fail with some older XML/XSL library combinations.
-     * In particular, the test in DocTypeTest that loads Crimson may cause
-     * this test to fail.
-     */
     public void testKeysPerfRepro3()  
       throws IOException, ParsingException, XSLException {
         
@@ -112,10 +107,6 @@ public class OASISXSLTTest extends XOMTestCase {
     } 
     
     
-    /**
-     * Like the previous test, this test can fail with some older XML/XSL
-     * library combinations.
-     */
     public void testAxes_Axes62()  
       throws IOException, ParsingException, XSLException { 
         xalanTestCase("axes/axes62");
@@ -277,8 +268,6 @@ public class OASISXSLTTest extends XOMTestCase {
                                     continue;
                                 }
                                 else if (id.equals("axes_axes129")) {
-                                    // Xalan bug. Fixed in more recent
-                                    // version than some older bundled JDK releases
                                 }
                                 else if (id.equals("copy_copy56") 
                                   || id.equals("copy_copy58")
@@ -297,8 +286,6 @@ public class OASISXSLTTest extends XOMTestCase {
                                 } 
                                 else if (id.equals("idkey_idkey61")
                                   || id.equals("idkey_idkey62")) {
-                                    // Xalan bug. Fixed in more recent
-                                    // version than some older bundled JDK releases
                                     // See http://issues.apache.org/jira/browse/XALANJ-1318
                                 } 
                                 else if (id.equals("impincl_impincl11")) {
@@ -307,8 +294,6 @@ public class OASISXSLTTest extends XOMTestCase {
                                 }
                                 else if (id.equals("math_math110")
                                   || id.equals("math_math111")) {
-                                    // Xalan bug. Fixed in more recent
-                                    // version than some older bundled JDK releases
                                     // See http://issues.apache.org/jira/browse/XALANJ-1278
                                 }
                                 else if (id.equals("numbering_numbering17")
@@ -317,17 +302,11 @@ public class OASISXSLTTest extends XOMTestCase {
                                     // See http://issues.apache.org/jira/browse/XALANJ-1979
                                 }
                                 else if (id.equals("position_position104")) {
-                                    // Xalan bug. Fixed in more recent
-                                    // version than some older bundled JDK releases
                                 }
                                 else if (id.equals("position_position106")) {
-                                    // Xalan bug. Fixed in more recent
-                                    // version than some older bundled JDK releases
                                 }
                                 else if (id.equals("position_position107")
                                   || id.equals("position_position109")) {
-                                    // Xalan bug. Fixed in more recent
-                                    // version than some older bundled JDK releases
                                     // See http://issues.apache.org/jira/browse/XALANJ-1289
                                 } 
                                 else {
@@ -377,8 +356,6 @@ public class OASISXSLTTest extends XOMTestCase {
                             }
                             else if ("numberformat_numberformat45".equals(id)
                               || "numberformat_numberformat46".equals(id)) {  
-                                // This has been fixed in Xalan 2.5.2.
-                                // However, it's a bug in earlier versions of Xalan.
                                 // See http://issues.apache.org/jira/browse/XALANJ-805
                                 // XXX I think this might need an updated version of the test cases
                                 // and expected output at this point.
@@ -454,13 +431,9 @@ public class OASISXSLTTest extends XOMTestCase {
                     Document styleDoc = builder.build(style);
                     boolean strip = indentYes(styleDoc);
                     if ("BVTs_bvt002".equals(id) || "BVTs_bvt077".equals(id)) {
-                        // This has been fixed at least as of Xalan 2.6.0.
-                        // However, it's a bug in earlier versions of Xalan.
                         continue;
                     } 
                     else if ("XSLTFunctions_Bug76984".equals(id)) {
-                        // This has been fixed at least as of Xalan 2.6.0.
-                        // However, it's a bug in earlier versions of Xalan.
                         continue;
                     } 
                     else if ("BVTs_bvt020".equals(id) || "BVTs_bvt022".equals(id)
@@ -560,10 +533,6 @@ public class OASISXSLTTest extends XOMTestCase {
                     }
                     else if ("BVTs_bvt041".equals(id) || "BVTs_bvt063".equals(id)
                         || "BVTs_bvt070".equals(id)) {
-                        // Some older bundled Xalan releases do not recover
-                        // from this error involving multiple conflicting 
-                        // xsl:output at same import precedence, though
-                        // 2.6.0 does
                         continue;
                     } 
                     Document inputDoc = builder.build(input);
