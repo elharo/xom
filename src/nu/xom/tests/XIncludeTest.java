@@ -214,8 +214,9 @@ public class XIncludeTest extends XOMTestCase {
     private static String readFile(File file) throws IOException {
         
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        FileInputStream in = new FileInputStream(file);
+        FileInputStream in = null;
         try {
+            in = new FileInputStream(file);
             byte[] buffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = in.read(buffer)) >= 0) {
@@ -223,7 +224,9 @@ public class XIncludeTest extends XOMTestCase {
             }
         }
         finally {
-            in.close();
+            if (in != null) {
+                in.close();
+            }
         }
         return new String(out.toByteArray(), "UTF-8");
         
