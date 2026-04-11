@@ -130,38 +130,14 @@ public class XIncludeTest extends XOMTestCase {
                 sendResponse(exchange, body, contentType);
             }
         });
-        localTestServer.createContext("/data/xinclude/input/acceptfrench.xml",
-          new HttpHandler() {
-            public void handle(HttpExchange exchange) throws IOException {
-                sendResponse(exchange,
-                  readFile(new File(inputDir, "acceptfrench.xml")),
-                  "application/xml; charset=utf-8");
-            }
-        });
-        localTestServer.createContext("/data/xinclude/input/acceptenglish.xml",
-          new HttpHandler() {
-            public void handle(HttpExchange exchange) throws IOException {
-                sendResponse(exchange,
-                  readFile(new File(inputDir, "acceptenglish.xml")),
-                  "application/xml; charset=utf-8");
-            }
-        });
-        localTestServer.createContext("/data/xinclude/input/acceptplaintext.xml",
-          new HttpHandler() {
-            public void handle(HttpExchange exchange) throws IOException {
-                sendResponse(exchange,
-                  readFile(new File(inputDir, "acceptplaintext.xml")),
-                  "application/xml; charset=utf-8");
-            }
-        });
-        localTestServer.createContext("/data/xinclude/input/accepthtml.xml",
-          new HttpHandler() {
-            public void handle(HttpExchange exchange) throws IOException {
-                sendResponse(exchange,
-                  readFile(new File(inputDir, "accepthtml.xml")),
-                  "application/xml; charset=utf-8");
-            }
-        });
+        createInputFixtureContext("/data/xinclude/input/acceptfrench.xml",
+          "acceptfrench.xml");
+        createInputFixtureContext("/data/xinclude/input/acceptenglish.xml",
+          "acceptenglish.xml");
+        createInputFixtureContext("/data/xinclude/input/acceptplaintext.xml",
+          "acceptplaintext.xml");
+        createInputFixtureContext("/data/xinclude/input/accepthtml.xml",
+          "accepthtml.xml");
         localTestServer.start();
         localServerBase = "http://127.0.0.1:" 
           + localTestServer.getAddress().getPort();
@@ -207,6 +183,19 @@ public class XIncludeTest extends XOMTestCase {
         finally {
             out.close();
         }
+        
+    }
+    
+    
+    private void createInputFixtureContext(String path, final String fileName) {
+        
+        localTestServer.createContext(path, new HttpHandler() {
+            public void handle(HttpExchange exchange) throws IOException {
+                sendResponse(exchange,
+                  readFile(new File(inputDir, fileName)),
+                  "application/xml; charset=utf-8");
+            }
+        });
         
     }
     
