@@ -1834,7 +1834,7 @@ public class BuilderTest extends XOMTestCase {
     public void testBaseRelativeResolutionRemotelyWithDirectory()
       throws IOException, ParsingException {
         try {
-            builder.build("http://www.ibiblio.org/xml/");
+            builder.build("https://www.ibiblio.org/xml/");
         } catch (IOException ex) {
             if (CITestUtil.shouldIgnore(ex)) {
                 // Skip test if network is unavailable in CI
