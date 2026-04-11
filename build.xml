@@ -872,11 +872,5 @@ XOM Build file
       <fileset dir="${build.javadocs}" includes="**"/>  
     </copy>
   </target>
-
-  <target name="integration" description="Run conformance test suites">
-    <echo>
-      Placeholder for a target to run various conformance test suites.
-    </echo>
-  </target>
   
 </project>
