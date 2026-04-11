@@ -1302,7 +1302,6 @@ public class Element extends ParentNode {
             }
             
             // add additional namespace prefixes
-            // ???? should add more methods to Namespaces to avoid access to private data
             if (current.namespaces != null) {
                 int namespaceCount = current.namespaces.size();
                 for (int i = 0; i < namespaceCount; i++) {
@@ -1523,7 +1522,7 @@ public class Element extends ParentNode {
                     if ("".equals(baseURI)) baseURI = base;
                     else if (URIUtil.isOpaque(base)) break; 
                     else baseURI = URIUtil.absolutize(base, baseURI);
-                    if (URIUtil.isAbsolute(base)) break;  // ???? base or baseURI
+                    if (URIUtil.isAbsolute(base)) break;
                 }
             }
             current = current.getParent();

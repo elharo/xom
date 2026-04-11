@@ -51,7 +51,8 @@ class CITestUtil {
     
     /**
      * Helper method to check if an exception is network-related.
-     * Checks the exception chain for UnknownHostException or ConnectException.
+     * Checks the exception chain for UnknownHostException, ConnectException,
+     * or SocketException.
      * 
      * @param ex the exception to check
      * @return true if the exception is network-related, false otherwise
