@@ -342,7 +342,7 @@ class XSLTHandler
     // LexicalHandler events
     public void startCDATA() {}
     public void endCDATA() {}
-    // xsl:output doctype metadata is typically applied during serialization.
+    // xsl:output DOCTYPE metadata is typically applied during serialization.
     // TrAX processors generally do not report it via startDTD() when writing
     // to a SAXResult-backed tree model.
     public void startDTD(String name, String publicID, String systemID) {}
