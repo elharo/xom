@@ -151,7 +151,6 @@ XOM Build file
     javadoc        --> generate the API documentation
     test           --> run JUnit test suite
     clover         --> run tests with OpenClover code coverage
-    integration    --> run JUnit integration test suite (broken)
     clean          --> clean up the build directory
     dist           --> the zip and .tar.gz files
     upload         --> upload archive files
@@ -873,12 +872,6 @@ XOM Build file
     <copy todir="${dist.dir}/website/apidocs">  
       <fileset dir="${build.javadocs}" includes="**"/>  
     </copy>
-  </target>
-
-  <target name="integration" description="Run conformance test suites">
-    <echo>
-      Placeholder for a target to run various conformance test suites.
-    </echo>
   </target>
   
 </project>
