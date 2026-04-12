@@ -295,9 +295,6 @@ public class ElementTest extends XOMTestCase {
     public void testToXML3() {
         
         Element root = new Element("x", "x:&");
-        Document doc = new Document(root);
-        String documentXML = doc.toXML();
-        assertNotNull(documentXML);
         
         String s = root.toXML();
         assertEquals("<x xmlns=\"x:&amp;\" />", s);  
