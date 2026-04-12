@@ -968,6 +968,29 @@ public class XSLTransformTest extends XOMTestCase {
     }
     
     
+    public void testOutputDoctypeDoesNotAppearInResultTree() 
+      throws IOException, ParsingException, XSLException {
+        
+        Builder builder = new Builder();
+        String stylesheet = "<xsl:stylesheet version='1.0' "
+          + "xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>"
+          + "<xsl:output method='xml' doctype-public='-//XOM//DTD root 1.0//EN' "
+          + "doctype-system='http://example.com/root.dtd'/>"
+          + "<xsl:template match='/'><root/></xsl:template>"
+          + "</xsl:stylesheet>";
+        Document stylesheetDoc = builder.build(stylesheet, "http://www.example.org/");
+        XSLTransform xform = new XSLTransform(stylesheetDoc);
+        Document doc = builder.build("<input/>", "http://www.example.org/");
+        
+        Nodes result = xform.transform(doc);
+        
+        assertEquals(1, result.size());
+        assertTrue(result.get(0) instanceof Element);
+        assertEquals("root", ((Element) result.get(0)).getQualifiedName());
+        
+    }
+    
+    
     public void testToDocumentWithEmptyNodes() {
      
         try {

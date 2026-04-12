@@ -342,8 +342,9 @@ class XSLTHandler
     // LexicalHandler events
     public void startCDATA() {}
     public void endCDATA() {}
-    // ???? For Bill Pugh, would this method be called if xsl:output
-    // specifies a Doctype? If it is, then we coudl add a DOCTYPE to the result tree.
+    // xsl:output doctype metadata is typically applied during serialization.
+    // TrAX processors generally do not report it via startDTD() when writing
+    // to a SAXResult-backed tree model.
     public void startDTD(String name, String publicID, String systemID) {}
     public void endDTD() {}
     public void startEntity(String name) {}
