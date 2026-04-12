@@ -342,13 +342,7 @@ class XSLTHandler
     // LexicalHandler events
     public void startCDATA() {}
     public void endCDATA() {}
-    // startDTD() is not expected in this transform-to-tree path.
-    // If this is called, the processor behavior has changed and this code
-    // path should be revisited to determine whether the result tree should
-    // preserve a DocType node.
-    public void startDTD(String name, String publicID, String systemID) {
-        throw new RuntimeException("Unexpected startDTD() callback");
-    }
+    public void startDTD(String name, String publicID, String systemID) {}
     public void endDTD() {}
     public void startEntity(String name) {}
     public void endEntity(String name) {}
