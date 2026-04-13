@@ -536,7 +536,7 @@ class XOMHandler
         
         if (inInternalSubset() && doctype != null) {
             Verifier.checkXMLName(name);
-            checkNoMarkupCharacters(model, "element declaration model");
+            Verifier.checkNoMarkupCharacters(model, "element declaration model");
             StringBuilder declaration = new StringBuilder();
             declaration.append("<!ELEMENT ");
             declaration.append(name);
@@ -586,9 +586,9 @@ class XOMHandler
         if (inInternalSubset() && doctype != null) {
             Verifier.checkXMLName(elementName);
             Verifier.checkXMLName(attributeName);
-            checkNoMarkupCharacters(type, "attribute declaration type");
+            Verifier.checkNoMarkupCharacters(type, "attribute declaration type");
             if (mode != null) {
-                checkNoMarkupCharacters(mode, "attribute declaration mode");
+                Verifier.checkNoMarkupCharacters(mode, "attribute declaration mode");
             }
 
             StringBuilder declaration = new StringBuilder();
@@ -621,7 +621,7 @@ class XOMHandler
        String value) {   
         
         if (inInternalSubset() && doctype != null) {
-            checkEntityName(name);
+            Verifier.checkEntityName(name);
             StringBuilder declaration = new StringBuilder();
             declaration.append("<!ENTITY ");
             if (name.startsWith("%")) {
@@ -644,7 +644,7 @@ class XOMHandler
        String publicID, String systemID) {
 
         if (inInternalSubset() && doctype != null) {
-            checkEntityName(name);
+            Verifier.checkEntityName(name);
             StringBuilder declaration = new StringBuilder();
             declaration.append("<!ENTITY ");
             if (name.startsWith("%")) { 
@@ -767,27 +767,6 @@ class XOMHandler
     }
 
 
-    private static void checkNoMarkupCharacters(String value, String type) {
-
-        if (value.indexOf('<') >= 0 || value.indexOf('>') >= 0) {
-            throw new IllegalDataException("Illegal markup delimiter in " + type);
-        }
-
-    }
-
-
-    private static void checkEntityName(String name) {
-
-        if (name.startsWith("%")) {
-            Verifier.checkXMLName(name.substring(1));
-        }
-        else {
-            Verifier.checkXMLName(name);
-        }
-
-    }
-    
-    
     private static String escapeReservedCharactersInDeclarations(String s) {
         
         int length = s.length();
