@@ -773,6 +773,27 @@ final class Verifier {
 
     }
 
+    
+    static void checkNoMarkupCharacters(String value, String type) {
+
+        if (value.indexOf('<') >= 0 || value.indexOf('>') >= 0) {
+            throw new IllegalDataException("Illegal markup delimiter in " + type);
+        }
+
+    }
+
+
+    static void checkEntityName(String name) {
+
+        if (name.startsWith("%")) {
+            checkXMLName(name.substring(1));
+        }
+        else {
+            checkXMLName(name);
+        }
+
+    }
+
 
     private static boolean[] C0Table = new boolean[0x21];
     static {
