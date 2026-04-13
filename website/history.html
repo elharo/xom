@@ -49,6 +49,9 @@ body {
 <p><code>ParsingException.getMessage()</code> now includes the line and column number
 where the error occurred, if that information is available.</p>
 
+<p>Hardened internal DTD subset construction against untrusted SAX declaration callbacks
+by validating declaration names and rejecting malformed declaration fragments.</p>
+
 <h2>1.4.0</h2>
 
 <p>Fixes a bug in URI normalization that incorrectly resolved 
