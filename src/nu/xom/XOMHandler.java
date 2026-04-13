@@ -760,17 +760,9 @@ class XOMHandler
 
     private void appendInternalDTDDeclaration(String declaration) {
 
-        int originalLength = internalDTDSubset.length();
         internalDTDSubset.append("  ");
         internalDTDSubset.append(declaration);
         internalDTDSubset.append('\n');
-        try {
-            Verifier.checkInternalDTDSubset(internalDTDSubset.toString());
-        }
-        catch (RuntimeException ex) {
-            internalDTDSubset.setLength(originalLength);
-            throw ex;
-        }
 
     }
 
