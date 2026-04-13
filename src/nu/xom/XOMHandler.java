@@ -532,23 +532,24 @@ class XOMHandler
     }    
     
     
-    // TODO(elharo) an untrusted parser could push in bad names and 
-    // values in declaration in the internal DTD subset.
-    // Possibly declarations should be created in the factory too.
     public void elementDecl(String name, String model) {
         
         if (inInternalSubset() && doctype != null) {
-            internalDTDSubset.append("  <!ELEMENT ");
-            internalDTDSubset.append(name); 
-            internalDTDSubset.append(' '); 
-            internalDTDSubset.append(model); 
+            Verifier.checkXMLName(name);
+            checkNoMarkupCharacters(model, "element declaration model");
+            StringBuilder declaration = new StringBuilder();
+            declaration.append("<!ELEMENT ");
+            declaration.append(name);
+            declaration.append(' ');
+            declaration.append(model);
             // workaround for Crimson bug
             if (model.indexOf("#PCDATA") > 0 && model.indexOf('|') > 0) {
                 if (model.endsWith(")")) {
-                    internalDTDSubset.append('*');  
+                    declaration.append('*');
                 }
             }
-            internalDTDSubset.append(">\n"); 
+            declaration.append('>');
+            appendInternalDTDDeclaration(declaration.toString());
         }
         
     }
@@ -583,25 +584,34 @@ class XOMHandler
         }
         
         if (inInternalSubset() && doctype != null) {
-            internalDTDSubset.append("  <!ATTLIST ");
-            internalDTDSubset.append(elementName);
-            internalDTDSubset.append(' ');
-            internalDTDSubset.append(attributeName);
-            internalDTDSubset.append(' ');
-            internalDTDSubset.append(type);
+            Verifier.checkXMLName(elementName);
+            Verifier.checkXMLName(attributeName);
+            checkNoMarkupCharacters(type, "attribute declaration type");
             if (mode != null) {
-            internalDTDSubset.append(' ');
-                internalDTDSubset.append(mode);
+                checkNoMarkupCharacters(mode, "attribute declaration mode");
+            }
+
+            StringBuilder declaration = new StringBuilder();
+            declaration.append("<!ATTLIST ");
+            declaration.append(elementName);
+            declaration.append(' ');
+            declaration.append(attributeName);
+            declaration.append(' ');
+            declaration.append(type);
+            if (mode != null) {
+                declaration.append(' ');
+                declaration.append(mode);
             }
             if (defaultValue != null) {
-                internalDTDSubset.append(' ');
-                internalDTDSubset.append('"');
-                internalDTDSubset.append(
+                declaration.append(' ');
+                declaration.append('"');
+                declaration.append(
                   escapeReservedCharactersInDefaultAttributeValues(defaultValue)
                 );
-                internalDTDSubset.append('\"');         
+                declaration.append('\"');
             }
-            internalDTDSubset.append(">\n");   
+            declaration.append('>');
+            appendInternalDTDDeclaration(declaration.toString());
         }
         
     }
@@ -611,17 +621,20 @@ class XOMHandler
        String value) {   
         
         if (inInternalSubset() && doctype != null) {
-            internalDTDSubset.append("  <!ENTITY ");
+            checkEntityName(name);
+            StringBuilder declaration = new StringBuilder();
+            declaration.append("<!ENTITY ");
             if (name.startsWith("%")) {
-                internalDTDSubset.append("% "); 
-                internalDTDSubset.append(name.substring(1));
+                declaration.append("% ");
+                declaration.append(name.substring(1));
             }
             else {
-                internalDTDSubset.append(name); 
+                declaration.append(name);
             }
-            internalDTDSubset.append(" \""); 
-            internalDTDSubset.append(escapeReservedCharactersInDeclarations(value)); 
-            internalDTDSubset.append("\">\n"); 
+            declaration.append(" \"");
+            declaration.append(escapeReservedCharactersInDeclarations(value));
+            declaration.append("\">");
+            appendInternalDTDDeclaration(declaration.toString());
         }
         
     }
@@ -631,13 +644,15 @@ class XOMHandler
        String publicID, String systemID) {
 
         if (inInternalSubset() && doctype != null) {
-            internalDTDSubset.append("  <!ENTITY ");
+            checkEntityName(name);
+            StringBuilder declaration = new StringBuilder();
+            declaration.append("<!ENTITY ");
             if (name.startsWith("%")) { 
-                internalDTDSubset.append("% ");
-                internalDTDSubset.append(name.substring(1));
+                declaration.append("% ");
+                declaration.append(name.substring(1));
             }
             else {
-                internalDTDSubset.append(name);
+                declaration.append(name);
             }
                
             if (locator != null && URIUtil.isAbsolute(systemID)) {
@@ -655,16 +670,17 @@ class XOMHandler
             }
 
             if (publicID != null) { 
-                internalDTDSubset.append(" PUBLIC \""); 
-                internalDTDSubset.append(publicID); 
-                internalDTDSubset.append("\" \""); 
-                internalDTDSubset.append(systemID);       
+                declaration.append(" PUBLIC \"");
+                declaration.append(escapeReservedCharactersInDeclarations(publicID));
+                declaration.append("\" \"");
+                declaration.append(escapeReservedCharactersInDeclarations(systemID));
             }
             else {
-                internalDTDSubset.append(" SYSTEM \""); 
-                internalDTDSubset.append(systemID); 
+                declaration.append(" SYSTEM \"");
+                declaration.append(escapeReservedCharactersInDeclarations(systemID));
             }
-            internalDTDSubset.append("\">\n");
+            declaration.append("\">");
+            appendInternalDTDDeclaration(declaration.toString());
             
         }
         
@@ -674,29 +690,38 @@ class XOMHandler
     public void notationDecl(String name, String publicID, 
       String systemID) {
         
+        if (inInternalSubset() && doctype != null) {
+            Verifier.checkXMLName(name);
+        }
+        
+        if (publicID != null) {
+            publicID = escapeReservedCharactersInDeclarations(publicID);
+        }
         if (systemID != null) {
             systemID = escapeReservedCharactersInDeclarations(systemID);
         }
         
         if (inInternalSubset() && doctype != null) {
-            internalDTDSubset.append("  <!NOTATION ");
-            internalDTDSubset.append(name); 
+            StringBuilder declaration = new StringBuilder();
+            declaration.append("<!NOTATION ");
+            declaration.append(name);
             if (publicID != null) {
-                internalDTDSubset.append(" PUBLIC \""); 
-                internalDTDSubset.append(publicID);
-                internalDTDSubset.append('"'); 
+                declaration.append(" PUBLIC \"");
+                declaration.append(publicID);
+                declaration.append('"');
                 if (systemID != null) {
-                    internalDTDSubset.append(" \"");                                     
-                    internalDTDSubset.append(systemID);
-                    internalDTDSubset.append('"');                                     
+                    declaration.append(" \"");
+                    declaration.append(systemID);
+                    declaration.append('"');
                 }
             }
             else {
-                internalDTDSubset.append(" SYSTEM \""); 
-                internalDTDSubset.append(systemID);
-                internalDTDSubset.append('"');                 
+                declaration.append(" SYSTEM \"");
+                declaration.append(systemID);
+                declaration.append('"');
             }
-            internalDTDSubset.append(">\n"); 
+            declaration.append('>');
+            appendInternalDTDDeclaration(declaration.toString());
         }        
         
     }
@@ -706,26 +731,68 @@ class XOMHandler
      String systemID, String notationName) {
         
         if (inInternalSubset() && doctype != null) {
-            internalDTDSubset.append("  <!ENTITY ");
+            Verifier.checkXMLName(name);
+            Verifier.checkXMLName(notationName);
+            StringBuilder declaration = new StringBuilder();
+            declaration.append("<!ENTITY ");
             if (publicID != null) { 
-                internalDTDSubset.append(name); 
-                internalDTDSubset.append(" PUBLIC \""); 
-                internalDTDSubset.append(publicID); 
-                internalDTDSubset.append("\" \""); 
-                internalDTDSubset.append(systemID); 
-                internalDTDSubset.append("\" NDATA "); 
-                internalDTDSubset.append(notationName);       
+                declaration.append(name);
+                declaration.append(" PUBLIC \"");
+                declaration.append(escapeReservedCharactersInDeclarations(publicID));
+                declaration.append("\" \"");
+                declaration.append(escapeReservedCharactersInDeclarations(systemID));
+                declaration.append("\" NDATA ");
+                declaration.append(notationName);
             }
             else {
-                internalDTDSubset.append(name); 
-                internalDTDSubset.append(" SYSTEM \""); 
-                internalDTDSubset.append(systemID); 
-                internalDTDSubset.append("\" NDATA "); 
-                internalDTDSubset.append(notationName);     
+                declaration.append(name);
+                declaration.append(" SYSTEM \"");
+                declaration.append(escapeReservedCharactersInDeclarations(systemID));
+                declaration.append("\" NDATA ");
+                declaration.append(notationName);
             }
-            internalDTDSubset.append(">\n"); 
+            declaration.append('>');
+            appendInternalDTDDeclaration(declaration.toString());
         }
         
+    }
+
+
+    private void appendInternalDTDDeclaration(String declaration) {
+
+        int originalLength = internalDTDSubset.length();
+        internalDTDSubset.append("  ");
+        internalDTDSubset.append(declaration);
+        internalDTDSubset.append('\n');
+        try {
+            Verifier.checkInternalDTDSubset(internalDTDSubset.toString());
+        }
+        catch (RuntimeException ex) {
+            internalDTDSubset.setLength(originalLength);
+            throw ex;
+        }
+
+    }
+
+
+    private static void checkNoMarkupCharacters(String value, String type) {
+
+        if (value.indexOf('<') >= 0 || value.indexOf('>') >= 0) {
+            throw new IllegalDataException("Illegal markup delimiter in " + type);
+        }
+
+    }
+
+
+    private static void checkEntityName(String name) {
+
+        if (name.startsWith("%")) {
+            Verifier.checkXMLName(name.substring(1));
+        }
+        else {
+            Verifier.checkXMLName(name);
+        }
+
     }
     
     

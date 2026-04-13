@@ -3567,6 +3567,20 @@ public class BuilderTest extends XOMTestCase {
             assertNotNull(ex.getMessage());
         }
     }
+
+
+    public void testMisbehavingParserInjectsAdditionalDTDDeclaration() throws IOException {
+        XMLReader reader = new SAXParser();
+        reader = new InjectedDTDDeclarationFilter(reader);
+        Builder builder = new Builder(reader);
+        try {
+            builder.build(validDoc, "http://www.example.com");
+            fail("didn't catch injected internal DTD subset declaration");
+        }
+        catch (ParsingException ex) {
+            assertNotNull(ex.getMessage());
+        }
+    }
     
     private static class MalformedDTDFilter extends XMLFilterImpl implements
             XMLReader {
@@ -3580,6 +3594,23 @@ public class BuilderTest extends XOMTestCase {
                 value = new BadDeclHandler((DeclHandler) value);
             }
             super.setProperty(name, value);      
+        }
+
+    }
+
+
+    private static class InjectedDTDDeclarationFilter extends XMLFilterImpl implements
+            XMLReader {
+
+        public InjectedDTDDeclarationFilter(XMLReader reader) {
+            super.setParent(reader);
+        }
+
+        public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
+            if (name.equals("http://xml.org/sax/properties/declaration-handler")) {
+                value = new InjectedDeclHandler((DeclHandler) value);
+            }
+            super.setProperty(name, value);
         }
 
     }
@@ -3600,6 +3631,36 @@ public class BuilderTest extends XOMTestCase {
         // pass some malformed data here
         public void elementDecl(String name, String model) throws SAXException {
             handler.elementDecl("***()*" + name, model);
+        }
+
+        public void externalEntityDecl(String arg0, String arg1, String arg2)
+                throws SAXException {
+            handler.externalEntityDecl(arg0, arg1, arg2);
+        }
+
+        public void internalEntityDecl(String arg0, String arg1)
+                throws SAXException {
+            handler.internalEntityDecl(arg0, arg1);
+        }
+
+    }
+
+
+    private static class InjectedDeclHandler implements DeclHandler {
+
+        private DeclHandler handler;
+
+        public InjectedDeclHandler(DeclHandler handler) {
+            this.handler = handler;
+        }
+
+        public void attributeDecl(String arg0, String arg1, String arg2,
+                String arg3, String arg4) throws SAXException {
+            handler.attributeDecl(arg0, arg1, arg2, arg3, arg4);
+        }
+
+        public void elementDecl(String name, String model) throws SAXException {
+            handler.elementDecl(name + " EMPTY> <!ELEMENT injected", model);
         }
 
         public void externalEntityDecl(String arg0, String arg1, String arg2)
