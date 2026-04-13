@@ -49,8 +49,10 @@ body {
 <p><code>ParsingException.getMessage()</code> now includes the line and column number
 where the error occurred, if that information is available.</p>
 
-<p>Hardened internal DTD subset construction against untrusted SAX declaration callbacks
-by validating declaration names and rejecting malformed declaration fragments.</p>
+<p>Hardened internal DTD subset construction against malformed SAX declaration callbacks
+by validating declaration names and rejecting malformed declaration fragments supplied by
+untrusted parsers. This has no impact when using trusted parsers like Xerces or the JDK's
+bundled parser.</p>
 
 <h2>1.4.0</h2>
 
