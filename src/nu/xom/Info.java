@@ -21,6 +21,7 @@
 package nu.xom;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -40,12 +41,30 @@ class Info {
     public static void main(String[] args) {
     
         String version = "1.3.9 or later";
+        InputStream stream = null;
+        BufferedReader in = null;
         try {
-            InputStream stream = ClassLoader.getSystemResourceAsStream("nu/xom/version.txt");
-            BufferedReader in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-            version = in.readLine();
-        } catch (Exception ex) {
+            stream = ClassLoader.getSystemResourceAsStream("nu/xom/version.txt");
+            if (stream != null) {
+                in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+                version = in.readLine();
+            }
+        } catch (IOException ex) {
             version = "1.3.9 or later";
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ex) {
+                    // failure to close is harmless here
+                }
+            } else if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ex) {
+                    // failure to close is harmless here
+                }
+            }
         }
         
         System.out.println("This is XOM " + version + ", a new XML Object Model.");
