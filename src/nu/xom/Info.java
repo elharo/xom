@@ -41,9 +41,10 @@ class Info {
     public static void main(String[] args) {
     
         String version = "1.3.9 or later";
+        InputStream stream = null;
         BufferedReader in = null;
         try {
-            InputStream stream = ClassLoader.getSystemResourceAsStream("nu/xom/version.txt");
+            stream = ClassLoader.getSystemResourceAsStream("nu/xom/version.txt");
             if (stream != null) {
                 in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
                 version = in.readLine();
@@ -54,6 +55,12 @@ class Info {
             if (in != null) {
                 try {
                     in.close();
+                } catch (IOException ex) {
+                    // failure to close is harmless here
+                }
+            } else if (stream != null) {
+                try {
+                    stream.close();
                 } catch (IOException ex) {
                     // failure to close is harmless here
                 }
