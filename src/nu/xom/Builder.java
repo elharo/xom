@@ -646,6 +646,7 @@ public class Builder {
       throws ParsingException, ValidityException, IOException {
 
         InputStream fin = new FileInputStream(in);
+        try {
         // Java's toURL method doesn't properly escape file
         // names so we have to do it manually
         String absolute = in.getAbsolutePath();
@@ -980,7 +981,6 @@ public class Builder {
         }
         
         String base = url.toString();
-        try {
             Document doc = build(fin, base);
             return doc;
         }
