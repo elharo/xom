@@ -1,0 +1,244 @@
+name: File Bug Issues
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  file-issues:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'copilot/find-bugs-and-security-issues'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create issue - Resource leak in Builder.build(File)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "Resource leak in Builder.build(File)" \
+            --label "bug" \
+            --body "## Resource leak in \`Builder.build(File)\`
+
+          **File:** \`src/nu/xom/Builder.java\`
+          **Lines:** 648–989
+
+          ### Description
+
+          In the \`build(File in)\` method, a \`FileInputStream\` is created on line 648, but the \`try-finally\` block that ensures the stream is closed only begins on line 983. If an exception occurs during URL construction (lines 651–980), for example from \`File.getAbsolutePath()\` or character encoding, the \`FileInputStream\` will never be closed.
+
+          \`\`\`java
+          InputStream fin = new FileInputStream(in);  // line 648
+          // ... ~330 lines of URL construction code not in try-finally ...
+          String base = url.toString();
+          try {
+              Document doc = build(fin, base);  // line 984
+              return doc;
+          }
+          finally {
+              fin.close();  // line 988 — only reached if lines 648–982 succeed
+          }
+          \`\`\`
+
+          ### Suggested Fix
+
+          Move the \`try-finally\` block to immediately after the \`FileInputStream\` creation on line 648 so that the stream is guaranteed to be closed even if URL construction fails.
+
+          ### Severity
+
+          Medium — resource leak on exception during URL construction."
+
+      - name: Create issue - Resource leak in Info.main()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "Resource leak in Info.main()" \
+            --label "bug" \
+            --body "## Resource leak in \`Info.main()\`
+
+          **File:** \`src/nu/xom/Info.java\`
+          **Lines:** 44–46
+
+          ### Description
+
+          The \`main()\` method opens a \`ClassLoader.getSystemResourceAsStream()\`, wraps it in an \`InputStreamReader\` and \`BufferedReader\`, but never closes any of them. If an exception occurs after the stream is opened but before or during reading, the underlying native resource handle is leaked.
+
+          \`\`\`java
+          InputStream stream = ClassLoader.getSystemResourceAsStream(\"nu/xom/version.txt\");
+          BufferedReader in = new BufferedReader(new InputStreamReader(stream, \"UTF-8\"));
+          version = in.readLine();
+          // stream and reader are never closed
+          \`\`\`
+
+          ### Suggested Fix
+
+          Close the reader in a \`finally\` block:
+
+          \`\`\`java
+          BufferedReader in = null;
+          try {
+              InputStream stream = ClassLoader.getSystemResourceAsStream(\"nu/xom/version.txt\");
+              in = new BufferedReader(new InputStreamReader(stream, \"UTF-8\"));
+              version = in.readLine();
+          } catch (Exception ex) {
+              version = \"1.3.9 or later\";
+          } finally {
+              if (in != null) {
+                  try { in.close(); } catch (IOException ignored) {}
+              }
+          }
+          \`\`\`
+
+          ### Severity
+
+          Low — only affects the CLI entry point and the JVM exits immediately after."
+
+      - name: Create issue - Potential NullPointerException in XOMHandler.inInternalSubset()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "Potential NullPointerException in XOMHandler.inInternalSubset()" \
+            --label "bug" \
+            --body "## Potential NullPointerException in \`XOMHandler.inInternalSubset()\`
+
+          **File:** \`src/nu/xom/XOMHandler.java\`
+          **Line:** 566
+
+          ### Description
+
+          The \`inInternalSubset()\` method accesses \`locator.getSystemId()\` without checking whether \`locator\` is null when \`usingCrimson\` is true. The \`locator\` field is set via \`setDocumentLocator()\`, which SAX parsers are not strictly required to call. Other methods in the same class, such as \`startDocument()\` at line 103, properly null-check \`locator\` before use.
+
+          \`\`\`java
+          protected boolean inInternalSubset() {
+              if (!usingCrimson) {
+                  return !inExternalSubset;
+              }
+              String currentURI = locator.getSystemId();  // NPE if locator is null
+              // ...
+          }
+          \`\`\`
+
+          Contrast with \`startDocument()\`:
+          \`\`\`java
+          if (locator != null) {
+              documentBaseURI = locator.getSystemId();
+          }
+          \`\`\`
+
+          ### Suggested Fix
+
+          Add a null check for \`locator\`:
+
+          \`\`\`java
+          protected boolean inInternalSubset() {
+              if (!usingCrimson) {
+                  return !inExternalSubset;
+              }
+              if (locator == null) {
+                  return !inExternalSubset;
+              }
+              String currentURI = locator.getSystemId();
+              // ...
+          }
+          \`\`\`
+
+          ### Severity
+
+          Low — only affects the Crimson parser code path, and Crimson is rarely used."
+
+      - name: Create issue - Potential NullPointerException in NonVerifyingHandler.startElement()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "Potential NullPointerException in NonVerifyingHandler.startElement()" \
+            --label "bug" \
+            --body "## Potential NullPointerException in \`NonVerifyingHandler.startElement()\`
+
+          **File:** \`src/nu/xom/NonVerifyingHandler.java\`
+          **Line:** 61
+
+          ### Description
+
+          In \`startElement()\`, \`locator.getSystemId()\` is called without checking whether \`locator\` is null. The parent class \`XOMHandler\` null-checks \`locator\` in \`startDocument()\` (line 103), indicating the field can be null if the parser doesn't call \`setDocumentLocator()\`.
+
+          \`\`\`java
+          String baseURI = locator.getSystemId();  // NPE if locator is null
+          if (baseURI != null && !baseURI.equals(documentBaseURI)) {
+              element.setActualBaseURI(baseURI);
+          }
+          \`\`\`
+
+          ### Suggested Fix
+
+          Add a null check:
+
+          \`\`\`java
+          if (locator != null) {
+              String baseURI = locator.getSystemId();
+              if (baseURI != null && !baseURI.equals(documentBaseURI)) {
+                  element.setActualBaseURI(baseURI);
+              }
+          }
+          \`\`\`
+
+          ### Severity
+
+          Low — all mainstream SAX parsers call \`setDocumentLocator()\`, but the null check would be consistent with the parent class."
+
+      - name: Create issue - UnsynchronizedBufferedWriter.close() violates Writer contract
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "UnsynchronizedBufferedWriter.close() violates Writer contract" \
+            --label "bug" \
+            --body "## \`UnsynchronizedBufferedWriter.close()\` violates \`Writer\` contract
+
+          **File:** \`src/nu/xom/UnsynchronizedBufferedWriter.java\`
+          **Lines:** 84–86
+
+          ### Description
+
+          The \`close()\` method throws \`UnsupportedOperationException\` instead of flushing buffered data and closing the underlying writer. This violates the \`java.io.Writer\` contract, which specifies that \`close()\` should flush the stream and then close it, releasing any system resources.
+
+          \`\`\`java
+          public void close() throws IOException {
+              throw new UnsupportedOperationException(\"How'd we get here?\");
+          }
+          \`\`\`
+
+          The debug message \`\"How'd we get here?\"\` suggests the author expected this method would never be called. However, this could be triggered by any code that treats the writer generically (e.g., utility methods that close writers, or future refactoring).
+
+          ### Suggested Fix
+
+          Implement proper close behavior:
+
+          \`\`\`java
+          public void close() throws IOException {
+              flushInternal();
+              out.close();
+          }
+          \`\`\`
+
+          ### Severity
+
+          Medium — violates the standard \`Writer\` API contract and could cause unexpected exceptions if the writer is used through generic \`Writer\`/\`Closeable\` references."
+
+      - name: Delete this workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/file-bug-issues.yml
+          git commit -m "Remove file-bug-issues workflow after issues were created"
+          git push
