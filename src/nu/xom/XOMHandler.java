@@ -563,6 +563,9 @@ class XOMHandler
         if (!usingCrimson) {
             return !inExternalSubset;
         }
+        if (locator == null) {
+            return !inExternalSubset;
+        }
         String currentURI = locator.getSystemId();
         if (currentURI == this.documentBaseURI) return true;
         if (currentURI == null) return false;
