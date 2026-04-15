@@ -1,4 +1,4 @@
-/* Copyright 2002-2004, 2009 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2009, 2026 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -31,7 +31,7 @@ import java.io.InputStreamReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.9
+ * @version 1.4.1
  * 
  */
 class Info {
