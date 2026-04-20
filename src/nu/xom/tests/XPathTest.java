@@ -663,7 +663,7 @@ public class XPathTest extends XOMTestCase {
         XPathContext context = new XPathContext();
         try {
             context.addNamespace("foo:bar", "http://www.example.org");
-            fail("Allowed preix with colon");
+            fail("Allowed prefix with colon");
         }
         catch (IllegalNameException success) {
             assertNotNull(success.getMessage());
@@ -671,7 +671,7 @@ public class XPathTest extends XOMTestCase {
         
         try {
             context.addNamespace("foo bar", "http://www.example.org");
-            fail("Allowed preix with space");
+            fail("Allowed prefix with space");
         }
         catch (IllegalNameException success) {
             assertNotNull(success.getMessage());
