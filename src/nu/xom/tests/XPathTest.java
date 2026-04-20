@@ -2402,7 +2402,7 @@ public class XPathTest extends XOMTestCase {
 
         for (int i = 0; i < testElement.getAttributeCount(); i++) {
             Attribute a = testElement.getAttribute(i);
-            if ("http://jaxen.org/test-harness/var".equals(a.getNamespaceURI())) {
+            if ("https://github.com/jaxen-xpath/jaxen/test-harness/var".equals(a.getNamespaceURI())) {
                 return true;
             }
         }
