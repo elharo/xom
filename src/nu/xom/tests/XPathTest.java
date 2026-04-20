@@ -2267,8 +2267,8 @@ public class XPathTest extends XOMTestCase {
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
-        File jaxenBase = new File(System.getProperty("jaxen.data.dir", "build/jaxen-2.0.0"));
-        File integrationTests = new File(jaxenBase, "integration-tests");
+        File jaxenBase = new File("build/jaxen-2.0.1");
+        File integrationTests = new File(jaxenBase, "core");
         if (!integrationTests.exists()) {
             // Attempt to self-extract from the bundled zip (e.g. when running from an IDE
             // without having run "ant get-jaxen" first).
@@ -2402,7 +2402,7 @@ public class XPathTest extends XOMTestCase {
 
         for (int i = 0; i < testElement.getAttributeCount(); i++) {
             Attribute a = testElement.getAttribute(i);
-            if ("http://jaxen.org/test-harness/var".equals(a.getNamespaceURI())) {
+            if ("https://github.com/jaxen-xpath/jaxen/test-harness/var".equals(a.getNamespaceURI())) {
                 return true;
             }
         }
