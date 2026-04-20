@@ -658,7 +658,7 @@ public class Element extends ParentNode {
      * 
      * @return the index<sup>th</sup> attribute of this element
      * 
-     * @throws IndexOutofBoundsException if the index is negative 
+     * @throws IndexOutOfBoundsException if the index is negative 
      *   or greater than or equal to the number of attributes 
      *   of this element
      * 
@@ -1233,7 +1233,7 @@ public class Element extends ParentNode {
      * <p>
      * The return value is almost always positive. It can be zero 
      * if and only if the element itself has the prefix 
-     * <code>xml</code>; e.g. <code>&lt;xml:space /></code>.
+     * <code>xml</code>; e.g. <code>&lt;xml:space /&gt;</code>.
      * This is not endorsed by the XML specification. The prefix
      * <code>xml</code> is reserved for use by the W3C, which has only
      * used it for attributes to date. You really shouldn't do this.
