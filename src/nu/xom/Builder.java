@@ -646,341 +646,341 @@ public class Builder {
       throws ParsingException, ValidityException, IOException {
 
         InputStream fin = new FileInputStream(in);
-        // Java's toURL method doesn't properly escape file
-        // names so we have to do it manually
-        String absolute = in.getAbsolutePath();
-        StringBuilder url = new StringBuilder(fileURLPrefix);
-        int length = absolute.length();
-        char separatorChar = File.separatorChar;
-        for (int i = 0; i < length; i++) {
-            char c = absolute.charAt(i);
-            if (c == separatorChar) url.append('/');
-            else {
-                switch(c) {
-                    case ' ':  
-                        url.append("%20");
-                        break;
-                    case '!': 
-                        url.append(c);
-                        break;
-                    case '"': 
-                        url.append("%22");
-                        break;
-                    case '#':  
-                        url.append("%23");
-                        break;
-                    case '$':  
-                        url.append(c);
-                        break;
-                    case '%':  
-                        url.append("%25");
-                        break;
-                    case '&':  
-                        // ampersand does not need to be encoded in 
-                        // path part of URL
-                        url.append('&');
-                        break;
-                    case '\'':  
-                        url.append(c);
-                        break;
-                    case '(':  
-                        url.append(c);
-                        break;
-                    case ')':  
-                        url.append(c);
-                        break;
-                    case '*':  
-                        url.append(c);
-                        break;
-                    case '+':  
-                        url.append("%2B");
-                        break;
-                    case ',':  
-                        url.append(c);
-                        break;
-                    case '-':  
-                        url.append(c);
-                        break;
-                    case '.':  
-                        url.append(c);
-                        break;
-                    case '/':  
-                        url.append("%2F");
-                        break;
-                    case '0':  
-                        url.append(c);
-                        break;
-                    case '1':  
-                        url.append(c);
-                        break;
-                    case '2':  
-                        url.append(c);
-                        break;
-                    case '3':  
-                        url.append(c);
-                        break;
-                    case '4':  
-                        url.append(c);
-                        break;
-                    case '5':  
-                        url.append(c);
-                        break;
-                    case '6':  
-                        url.append(c);
-                        break;
-                    case '7':  
-                        url.append(c);
-                        break;
-                    case '8':  
-                        url.append(c);
-                        break;
-                    case '9':  
-                        url.append(c);
-                        break;
-                    case ':':  
-                        url.append(c);
-                        break;
-                    case ';':  
-                        url.append(c);
-                        break;
-                    case '<':  
-                        url.append("%3C");
-                        break;
-                    case '=':  
-                        url.append(c);
-                        break;
-                    case '>':  
-                        url.append("%3E");
-                        break;
-                    case '?':  
-                        url.append("%3F");
-                        break;
-                    case '@':  
-                        url.append("%40");
-                        break;
-                    case 'A':  
-                        url.append(c);
-                        break;
-                    case 'B':  
-                        url.append(c);
-                        break;
-                    case 'C':  
-                        url.append(c);
-                        break;
-                    case 'D':  
-                        url.append(c);
-                        break;
-                    case 'E':  
-                        url.append(c);
-                        break;
-                    case 'F':  
-                        url.append(c);
-                        break;
-                    case 'G':  
-                        url.append(c);
-                        break;
-                    case 'H':  
-                        url.append(c);
-                        break;
-                    case 'I':  
-                        url.append(c);
-                        break;
-                    case 'J':  
-                        url.append(c);
-                        break;
-                    case 'K':  
-                        url.append(c);
-                        break;
-                    case 'L':  
-                        url.append(c);
-                        break;
-                    case 'M':  
-                        url.append(c);
-                        break;
-                    case 'N':  
-                        url.append(c);
-                        break;
-                    case 'O':  
-                        url.append(c);
-                        break;
-                    case 'P':  
-                        url.append(c);
-                        break;
-                    case 'Q':  
-                        url.append(c);
-                        break;
-                    case 'R':  
-                        url.append(c);
-                        break;
-                    case 'S':  
-                        url.append(c);
-                        break;
-                    case 'T':  
-                        url.append(c);
-                        break;
-                    case 'U':  
-                        url.append(c);
-                        break;
-                    case 'V':  
-                        url.append(c);
-                        break;
-                    case 'W':  
-                        url.append(c);
-                        break;
-                    case 'X':  
-                        url.append(c);
-                        break;
-                    case 'Y':  
-                        url.append(c);
-                        break;
-                    case 'Z':  
-                        url.append(c);
-                        break;
-                    case '[':  
-                        url.append("%5B");
-                        break;
-                    case '\\':  
-                        url.append("%5C");
-                        break;
-                    case ']':  
-                        url.append("%5D");
-                        break;
-                    case '^':  
-                        url.append("%5E");
-                        break;
-                    case '_':  
-                        url.append(c);
-                        break;
-                    case '`':  
-                        url.append("%60");
-                        break;
-                    case 'a':  
-                        url.append(c);
-                        break;
-                    case 'b':  
-                        url.append(c);
-                        break;
-                    case 'c':  
-                        url.append(c);
-                        break;
-                    case 'd':  
-                        url.append(c);
-                        break;
-                    case 'e':  
-                        url.append(c);
-                        break;
-                    case 'f':  
-                        url.append(c);
-                        break;
-                    case 'g':  
-                        url.append(c);
-                        break;
-                    case 'h':  
-                        url.append(c);
-                        break;
-                    case 'i':  
-                        url.append(c);
-                        break;
-                    case 'j':  
-                        url.append(c);
-                        break;
-                    case 'k':  
-                        url.append(c);
-                        break;
-                    case 'l':  
-                        url.append(c);
-                        break;
-                    case 'm':  
-                        url.append(c);
-                        break;
-                    case 'n':  
-                        url.append(c);
-                        break;
-                    case 'o':  
-                        url.append(c);
-                        break;
-                    case 'p':  
-                        url.append(c);
-                        break;
-                    case 'q':  
-                        url.append(c);
-                        break;
-                    case 'r':  
-                        url.append(c);
-                        break;
-                    case 's':  
-                        url.append(c);
-                        break;
-                    case 't':  
-                        url.append(c);
-                        break;
-                    case 'u':  
-                        url.append(c);
-                        break;
-                    case 'v':  
-                        url.append(c);
-                        break;
-                    case 'w':  
-                        url.append(c);
-                        break;
-                    case 'x':  
-                        url.append(c);
-                        break;
-                    case 'y':  
-                        url.append(c);
-                        break;
-                    case 'z':  
-                        url.append(c);
-                        break;
-                    case '{':  
-                        url.append("%7B");
-                        break;
-                    case '|':  
-                        url.append("%7C");
-                        break;
-                    case '}':  
-                        url.append("%7D");
-                        break;
-                    case '~':  
-                        url.append(c);
-                        break;
-                    default: 
-                        if (c < 0xD800 || c > 0xDFFF) {
-                            url.append(URIUtil.percentEscape(c));
-                        }
-                        else if (c <= 0xDBFF) {
-                            // high surrogate; therefore we need to 
-                            // grab the next half before encoding
-                            i++;
-                            try {
-                                char low = absolute.charAt(i);
-                                String character = String.valueOf(c)+low;
-                                byte[] data = character.getBytes("UTF8");
-                                // Always exactly 4 bytes, unless the encoder is buggy
-                                for (int j=0; j < 4; j++) {
-                                    url.append('%');
-                                    String hex = Integer.toHexString(data[j]).toUpperCase();
-                                    url.append(hex.substring(hex.length()-2));
+        try {
+            // Java's toURL method doesn't properly escape file
+            // names so we have to do it manually
+            String absolute = in.getAbsolutePath();
+            StringBuilder url = new StringBuilder(fileURLPrefix);
+            int length = absolute.length();
+            char separatorChar = File.separatorChar;
+            for (int i = 0; i < length; i++) {
+                char c = absolute.charAt(i);
+                if (c == separatorChar) url.append('/');
+                else {
+                    switch(c) {
+                        case ' ':  
+                            url.append("%20");
+                            break;
+                        case '!': 
+                            url.append(c);
+                            break;
+                        case '"': 
+                            url.append("%22");
+                            break;
+                        case '#':  
+                            url.append("%23");
+                            break;
+                        case '$':  
+                            url.append(c);
+                            break;
+                        case '%':  
+                            url.append("%25");
+                            break;
+                        case '&':  
+                            // ampersand does not need to be encoded in 
+                            // path part of URL
+                            url.append('&');
+                            break;
+                        case '\'':  
+                            url.append(c);
+                            break;
+                        case '(':  
+                            url.append(c);
+                            break;
+                        case ')':  
+                            url.append(c);
+                            break;
+                        case '*':  
+                            url.append(c);
+                            break;
+                        case '+':  
+                            url.append("%2B");
+                            break;
+                        case ',':  
+                            url.append(c);
+                            break;
+                        case '-':  
+                            url.append(c);
+                            break;
+                        case '.':  
+                            url.append(c);
+                            break;
+                        case '/':  
+                            url.append("%2F");
+                            break;
+                        case '0':  
+                            url.append(c);
+                            break;
+                        case '1':  
+                            url.append(c);
+                            break;
+                        case '2':  
+                            url.append(c);
+                            break;
+                        case '3':  
+                            url.append(c);
+                            break;
+                        case '4':  
+                            url.append(c);
+                            break;
+                        case '5':  
+                            url.append(c);
+                            break;
+                        case '6':  
+                            url.append(c);
+                            break;
+                        case '7':  
+                            url.append(c);
+                            break;
+                        case '8':  
+                            url.append(c);
+                            break;
+                        case '9':  
+                            url.append(c);
+                            break;
+                        case ':':  
+                            url.append(c);
+                            break;
+                        case ';':  
+                            url.append(c);
+                            break;
+                        case '<':  
+                            url.append("%3C");
+                            break;
+                        case '=':  
+                            url.append(c);
+                            break;
+                        case '>':  
+                            url.append("%3E");
+                            break;
+                        case '?':  
+                            url.append("%3F");
+                            break;
+                        case '@':  
+                            url.append("%40");
+                            break;
+                        case 'A':  
+                            url.append(c);
+                            break;
+                        case 'B':  
+                            url.append(c);
+                            break;
+                        case 'C':  
+                            url.append(c);
+                            break;
+                        case 'D':  
+                            url.append(c);
+                            break;
+                        case 'E':  
+                            url.append(c);
+                            break;
+                        case 'F':  
+                            url.append(c);
+                            break;
+                        case 'G':  
+                            url.append(c);
+                            break;
+                        case 'H':  
+                            url.append(c);
+                            break;
+                        case 'I':  
+                            url.append(c);
+                            break;
+                        case 'J':  
+                            url.append(c);
+                            break;
+                        case 'K':  
+                            url.append(c);
+                            break;
+                        case 'L':  
+                            url.append(c);
+                            break;
+                        case 'M':  
+                            url.append(c);
+                            break;
+                        case 'N':  
+                            url.append(c);
+                            break;
+                        case 'O':  
+                            url.append(c);
+                            break;
+                        case 'P':  
+                            url.append(c);
+                            break;
+                        case 'Q':  
+                            url.append(c);
+                            break;
+                        case 'R':  
+                            url.append(c);
+                            break;
+                        case 'S':  
+                            url.append(c);
+                            break;
+                        case 'T':  
+                            url.append(c);
+                            break;
+                        case 'U':  
+                            url.append(c);
+                            break;
+                        case 'V':  
+                            url.append(c);
+                            break;
+                        case 'W':  
+                            url.append(c);
+                            break;
+                        case 'X':  
+                            url.append(c);
+                            break;
+                        case 'Y':  
+                            url.append(c);
+                            break;
+                        case 'Z':  
+                            url.append(c);
+                            break;
+                        case '[':  
+                            url.append("%5B");
+                            break;
+                        case '\\':  
+                            url.append("%5C");
+                            break;
+                        case ']':  
+                            url.append("%5D");
+                            break;
+                        case '^':  
+                            url.append("%5E");
+                            break;
+                        case '_':  
+                            url.append(c);
+                            break;
+                        case '`':  
+                            url.append("%60");
+                            break;
+                        case 'a':  
+                            url.append(c);
+                            break;
+                        case 'b':  
+                            url.append(c);
+                            break;
+                        case 'c':  
+                            url.append(c);
+                            break;
+                        case 'd':  
+                            url.append(c);
+                            break;
+                        case 'e':  
+                            url.append(c);
+                            break;
+                        case 'f':  
+                            url.append(c);
+                            break;
+                        case 'g':  
+                            url.append(c);
+                            break;
+                        case 'h':  
+                            url.append(c);
+                            break;
+                        case 'i':  
+                            url.append(c);
+                            break;
+                        case 'j':  
+                            url.append(c);
+                            break;
+                        case 'k':  
+                            url.append(c);
+                            break;
+                        case 'l':  
+                            url.append(c);
+                            break;
+                        case 'm':  
+                            url.append(c);
+                            break;
+                        case 'n':  
+                            url.append(c);
+                            break;
+                        case 'o':  
+                            url.append(c);
+                            break;
+                        case 'p':  
+                            url.append(c);
+                            break;
+                        case 'q':  
+                            url.append(c);
+                            break;
+                        case 'r':  
+                            url.append(c);
+                            break;
+                        case 's':  
+                            url.append(c);
+                            break;
+                        case 't':  
+                            url.append(c);
+                            break;
+                        case 'u':  
+                            url.append(c);
+                            break;
+                        case 'v':  
+                            url.append(c);
+                            break;
+                        case 'w':  
+                            url.append(c);
+                            break;
+                        case 'x':  
+                            url.append(c);
+                            break;
+                        case 'y':  
+                            url.append(c);
+                            break;
+                        case 'z':  
+                            url.append(c);
+                            break;
+                        case '{':  
+                            url.append("%7B");
+                            break;
+                        case '|':  
+                            url.append("%7C");
+                            break;
+                        case '}':  
+                            url.append("%7D");
+                            break;
+                        case '~':  
+                            url.append(c);
+                            break;
+                        default: 
+                            if (c < 0xD800 || c > 0xDFFF) {
+                                url.append(URIUtil.percentEscape(c));
+                            }
+                            else if (c <= 0xDBFF) {
+                                // high surrogate; therefore we need to 
+                                // grab the next half before encoding
+                                i++;
+                                try {
+                                    char low = absolute.charAt(i);
+                                    String character = String.valueOf(c)+low;
+                                    byte[] data = character.getBytes("UTF8");
+                                    // Always exactly 4 bytes, unless the encoder is buggy
+                                    for (int j=0; j < 4; j++) {
+                                        url.append('%');
+                                        String hex = Integer.toHexString(data[j]).toUpperCase();
+                                        url.append(hex.substring(hex.length()-2));
+                                    }
+                                }
+                                catch (IndexOutOfBoundsException ex) {
+                                    // file name contains a high half and not a low half
+                                    url = new StringBuilder(0);
+                                    break;
                                 }
                             }
-                            catch (IndexOutOfBoundsException ex) {
-                                // file name contains a high half and not a low half
+                            else {
+                                // low half not preceded by high half
+                                // Can't create a base URI
                                 url = new StringBuilder(0);
                                 break;
                             }
-                        }
-                        else {
-                            // low half not preceded by high half
-                            // Can't create a base URI
-                            url = new StringBuilder(0);
-                            break;
-                        }
+                    }
                 }
             }
-        }
-        
-        String base = url.toString();
-        try {
+            
+            String base = url.toString();
             Document doc = build(fin, base);
             return doc;
         }
