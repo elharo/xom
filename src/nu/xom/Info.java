@@ -1,4 +1,4 @@
-/* Copyright 2002-2004, 2009 Elliotte Rusty Harold
+/* Copyright 2002-2004, 2009, 2026 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -32,7 +32,7 @@ import java.io.InputStreamReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.9
+ * @version 1.4.1
  * 
  */
 class Info {
@@ -40,7 +40,7 @@ class Info {
     
     public static void main(String[] args) {
     
-        String version = "1.3.9 or later";
+        String version = "1.4.1 or later";
         InputStream stream = null;
         BufferedReader in = null;
         try {
@@ -50,7 +50,7 @@ class Info {
                 version = in.readLine();
             }
         } catch (IOException ex) {
-            version = "1.3.9 or later";
+            version = "1.4.1 or later";
         } finally {
             if (in != null) {
                 try {
@@ -68,7 +68,7 @@ class Info {
         }
         
         System.out.println("This is XOM " + version + ", a new XML Object Model.");
-        System.out.println("Copyright 2002-2009 Elliotte Rusty Harold");
+        System.out.println("Copyright 2002-2026 Elliotte Rusty Harold");
         System.out.println("https://xom.nu/");
         System.out.println();
         System.out.println("XOM is a class library intended to be used with other programs.");
