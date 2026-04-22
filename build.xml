@@ -36,12 +36,12 @@ subject line. The XOM home page is https://xom.nu/
   <target name="init" depends="ivy-resolve">
     <property environment="env"/>
     <!-- Fixed ISO-8601 UTC timestamp applied to all JAR entries for reproducible builds. -->
-    <property name="build.modtime" value="2026-04-10T00:00:00Z"/>
+    <property name="build.modtime" value="2026-04-22T00:00:00Z"/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="4"/>
-    <property name="microversion" value="0"/>
+    <property name="microversion" value="1"/>
     <!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>

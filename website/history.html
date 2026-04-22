@@ -46,7 +46,17 @@ body {
 
 <h2>1.4.1</h2>
 
-<p>Updated Jaxen to 2.0.1 to resolve a couple of edge conditions in XPath processing:</p>
+<p>Updated Jaxen to 2.0.1 to resolve some edge conditions in XPath processing:</p>
+
+<ul>
+<li>The <code>round()</code>function returns negative zero for values between -0.5 and -0.0.</li>
+<li>The <code>number()</code> function rejects some strings Java recognizes as a number but XPath does not.</li>
+<li>>No longer throw <code>NoSuchElementException</code> 
+when evaluating an XPath expression with multiple predicates and more nodes than predicates.</li>
+</ul>
+
+<p>Builds should now be fully reproducible as long as you 
+use the same JDK to build.</p>
 
 <p><code>ParsingException.getMessage()</code> now includes the line and column number
 where the error occurred, if that information is available.</p>
@@ -2133,7 +2143,7 @@ I also spent a lot of time improving the JavaDoc.
 <hr />
 <p>Copyright 2002-2005, 2009, 2013, 2018-2023, 2026 <a href="https://www.elharo.com/">Elliotte Rusty Harold</a><br />
 <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg">elharo@ibiblio.org</a><br />
-Last Modified April 4, 2026
+Last Modified April 22, 2026
 </p>
 </div>
 <div id="Navbar">@SIDEBAR@</div>
