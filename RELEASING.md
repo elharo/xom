@@ -46,11 +46,13 @@ Run the reproducible-build verifier:
 
 11. If validation succeeds, press the Publish button.
 
-12. Draft the release on GitHub. Code > Tags > Releases > Draft a New Release
-  
-13. Upload the zip and .tar.gz and other assets to go with the release before publishing it.
+12. ant dist
 
-14. Publish the release.
+13. Draft the release on GitHub. Code > Tags > Releases > Draft a New Release
+  
+14. Upload the zip and .tar.gz and other assets to go with the release before publishing it.
+
+15. Publish the release.
 
 ## To update the website:
 
