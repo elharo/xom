@@ -7,7 +7,6 @@ Add release notes to
 
 Update the version number in
 
-* RELEASING.md (this file)
 * README.md
 * README.txt
 * build.xml
