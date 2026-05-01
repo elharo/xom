@@ -6,15 +6,34 @@
 
    <para>
  XOM is a library. By itself, it doesn't do much of anything. It exists
-only to be used by other programs. It requires Java 1.5 or later. 
+only to be used by other programs. It requires Java 1.6 or later. 
 </para>
 
 <para>
-To install it you'll need to place the XOM JAR archive somewhere in your
-<envar>CLASSPATH</envar>. This archive is the file named something like <filename>xom-1.4.0.jar</filename>. 
+XOM's Maven group ID is "xom" and its artifact ID is "xom".
+To add a dependency on XOM using Maven, add this dependency element
+to your <filename>pom.xml</filename>:
+</para>
+
+<screen>&lt;dependency&gt;
+  &lt;groupId&gt;xom&lt;/groupId&gt;
+  &lt;artifactId&gt;xom&lt;/artifactId&gt;
+  &lt;version&gt;1.4.1&lt;/version&gt;
+&lt;/dependency&gt;</screen>
+
+<para>To add a dependency using Gradle:</para>
+
+<screen>dependencies {
+  implementation 'xom:xom:1.4.1'
+}</screen>
+
+<para>
+If you are not using a build tool like Maven or Gradle, you can install
+XOM manually by placing the XOM JAR archive somewhere in your
+<envar>CLASSPATH</envar>. This archive is the file named something like <filename>xom-1.4.1.jar</filename>. 
 (The version number may have changed if I've forgotten
 to update this document.) You can either put it in your <filename class="directory">jre/lib/ext</filename>
-directory, add <filename>xom-1.4.0.jar</filename> to your <envar>CLASSPATH</envar> environment variable, or
+directory, add <filename>xom-1.4.1.jar</filename> to your <envar>CLASSPATH</envar> environment variable, or
 use the <option>-classpath</option> option when invoking <command>javac</command> and 
 <command>java</command>.
 </para>
@@ -25,21 +44,7 @@ class formats an XML document by inserting and removing white space
 around element boundaries. You can run it from the
 command line like this:</para>
 
-<screen>$ java -classpath xom-samples.jar:xom-1.4.0.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
-
-<para>The versions of <filename>xalan.jar</filename>, <filename>xercesImpl.jar</filename>, and <filename>xml-apis.jar</filename> found in the <filename class="directory">lib</filename> directory
-are quite a bit faster and less buggy than the ones bundled with the JDK, so you may well want to use them. For example,
-</para>
-
-
-<screen>$ java -classpath xom-samples.jar:xom-1.4.0.jar:lib/xml-apis.jar:lib/xercesImpl.jar:lib/xalan.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
-
-<para>
-You can leave out <filename>xalan.jar</filename> if you don't use any of the classes in
-<literal>nu.xom.xslt</literal>. <filename>junit.jar</filename> 
-is only used for testing, and is
-not needed for normal operation of XOM.
-</para>
+<screen>$ java -classpath xom-samples.jar:xom-1.4.1.jar nu.xom.samples.PrettyPrinter filename.xml</screen>
 
  <articleinfo>
      <author>
