@@ -33,6 +33,17 @@ command line like this:
 
 $ java -classpath xom-samples.jar:xom-1.4.1.jar nu.xom.samples.PrettyPrinter filename.xml
 
+junit.jar is only used for testing, and is
+not needed for normal operation of XOM.
+
+Building from Source
+--------------------
+
+If you want to build XOM from source, you need Apache Ant
+1.6 or later. See https://ant.apache.org/. Once Ant is installed, building
+should be as simple as typing "ant compile" or "ant jar" in the xom
+directory. Type "ant help" to see other possible options.
+
 =======================================================================
 XOM is Copyright 2004, 2005, 2009, 2018-2023, 2026 Elliotte Rusty Harold
    
