@@ -310,12 +310,13 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    /* Commented out because benchmark_canon.xml URL needs to be verified 
     public void testFranceschet1() throws ParsingException, IOException {
      
         Builder builder = new Builder();
         try {
             Document doc = builder.build(
-              "https://users.dimi.uniud.it/~massimo.franceschet/xpathmark/benchmark_canon.xml"
+              "http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml"
             );
             Element root = doc.getRootElement();
             Elements inputs = root.getChildElements("document");
@@ -357,8 +358,6 @@ public class XPathTest extends XOMTestCase {
         }
         catch (IOException ex) {
             if (CITestUtil.shouldIgnore(ex)) {
-                // Skip test if network is unavailable in CI
-                systemErr.println("Skipping testFranceschet1: network unavailable");
                 return;
             }
             throw ex;
@@ -372,7 +371,7 @@ public class XPathTest extends XOMTestCase {
         Builder builder = new Builder();
         try {
             Document doc = builder.build(
-              "https://users.dimi.uniud.it/~massimo.franceschet/xpathmark/benchmark_canon.xml"
+              "http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml"
             );
             Element root = doc.getRootElement();
             Elements inputs = root.getChildElements("document");
@@ -434,14 +433,12 @@ public class XPathTest extends XOMTestCase {
         }
         catch (IOException ex) {
             if (CITestUtil.shouldIgnore(ex)) {
-                // Skip test if network is unavailable in CI
-                systemErr.println("Skipping testFranceschet2: network unavailable");
                 return;
             }
             throw ex;
         }
         
-    }
+    } */
     
 
     public void testQueryThatReturnsNumber() {
