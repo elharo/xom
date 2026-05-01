@@ -1,11 +1,6 @@
 XOM is a library. By itself, it doesn't do much of anything. It exists
 only to be used by other programs. It requires Java 1.6 or later.
 
-The easiest way to add XOM to your project is through Maven or Gradle.
-
-Maven
------
-
 XOM's Maven group ID is "xom" and its artifact ID is "xom".
 To add a dependency on XOM using Maven, add this dependency element
 to your pom.xml:
@@ -16,17 +11,11 @@ to your pom.xml:
     <version>1.4.1</version>
   </dependency>
 
-Gradle
-------
-
 To add a dependency using Gradle:
 
   dependencies {
     implementation 'xom:xom:1.4.1'
   }
-
-Manual Installation
--------------------
 
 If you are not using a build tool like Maven or Gradle, you can install
 XOM manually by placing the XOM JAR archive somewhere in your CLASSPATH.
