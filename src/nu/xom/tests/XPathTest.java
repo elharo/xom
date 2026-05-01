@@ -310,6 +310,142 @@ public class XPathTest extends XOMTestCase {
     }
     
 
+    public void testFranceschet1() throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        Document doc;
+        try {
+            doc = builder.build(
+              "https://users.dimi.uniud.it/~massimo.franceschet/xpathmark/benchmark_canon.xml"
+            );
+        }
+        catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
+                // Skip test if network is unavailable in CI
+                systemErr.println("Skipping testFranceschet1: network unavailable");
+                return;
+            }
+            throw ex;
+        }
+        Element root = doc.getRootElement();
+        Elements inputs = root.getChildElements("document");
+        Element input = inputs.get(0).getFirstChildElement("site");
+        input.detach();
+        
+        Nodes doc1Queries = root.query("child::query[starts-with(@id, 'Q')]");
+        
+        for (int i = 0; i < doc1Queries.size(); i++) {
+            Element query = (Element) doc1Queries.get(i);
+            String xpath = query.getFirstChildElement("syntax").getValue();
+            String id = query.getAttributeValue("id");
+            // this query needs special comparison code due to 
+            // adjacent text nodes
+            if ("Q21".equals(id)) continue;
+            // test suite bug relating to id() function
+            else if (xpath.indexOf("id(") >= 0) continue;
+            Nodes result = input.query(xpath);
+            Element answer = query.getFirstChildElement("answer");
+            Nodes expected = new Nodes();
+            for (int j = 0; j < answer.getChildCount(); j++) {
+                Node node = answer.getChild(j);
+                if (node instanceof Text) {
+                    if (!("".equals(node.getValue().trim()))) {
+                        expected.append(node);
+                    }
+                }
+                else {
+                    expected.append(node);
+                }
+            }
+            assertEquals("Failed query " + id, expected.size(), result.size());
+            for (int j = 0; j < result.size(); j++) {
+                Node expectedNode = expected.get(j);
+                Node actualNode = result.get(j);                
+                assertEquals(id + " " + expectedNode.toXML() + " " + actualNode.toXML(), expectedNode, actualNode);
+            }
+        }
+        
+    }
+    
+
+    public void testFranceschet2() throws ParsingException, IOException {
+     
+        Builder builder = new Builder();
+        Document doc;
+        try {
+            doc = builder.build(
+              "https://users.dimi.uniud.it/~massimo.franceschet/xpathmark/benchmark_canon.xml"
+            );
+        }
+        catch (IOException ex) {
+            if (CITestUtil.shouldIgnore(ex)) {
+                // Skip test if network is unavailable in CI
+                systemErr.println("Skipping testFranceschet2: network unavailable");
+                return;
+            }
+            throw ex;
+        }
+        Element root = doc.getRootElement();
+        Elements inputs = root.getChildElements("document");
+        Element input = inputs.get(1);
+        Document html = new Document(new Element("fake"));
+        int p = 0;
+        while (true) {
+            Node node = input.getChild(0);
+            if (node instanceof Element) break;
+            else {
+                node.detach();
+                if (node instanceof Text) continue;
+                html.insertChild(node, p++);
+            }
+        }    
+        Node newroot = input.getChild(0);
+        newroot.detach();
+        html.setRootElement((Element) newroot);
+        while (input.getChildCount() > 0) {
+            Node node = input.getChild(0);
+            node.detach();
+            if (node instanceof Text) continue;
+            html.appendChild(node);
+        }    
+        
+        Nodes doc2Queries = root.query("child::query[starts-with(@id, 'A')]");
+        
+        XPathContext context = new XPathContext();
+        context.addNamespace("svg", "http://www.w3.org/2000/svg");
+        context.addNamespace("xlink", "http://www.w3.org/1999/xlink");
+        
+        for (int i = 0; i < doc2Queries.size(); i++) {
+            Element query = (Element) doc2Queries.get(i);
+            String xpath = query.getFirstChildElement("syntax").getValue();
+            String id = query.getAttributeValue("id");
+
+            Nodes result = html.query(xpath, context);
+            Element answer = query.getFirstChildElement("answer");
+            Nodes expected = new Nodes();
+            for (int j = 0; j < answer.getChildCount(); j++) {
+                Node node = answer.getChild(j);
+                if (node instanceof Text) {
+                    if (!("".equals(node.getValue().trim()))) {
+                        expected.append(node);
+                    }
+                }
+                else {
+                    expected.append(node);
+                }
+            }
+            assertEquals("Failed query " + id, expected.size(), result.size());
+            for (int j = 0; j < result.size(); j++) {
+                Node expectedNode = expected.get(j);
+                Node actualNode = result.get(j);                
+                assertEquals(id + " " + expectedNode.toXML() + " " 
+                  + actualNode.toXML(), expectedNode, actualNode);
+            }
+        }
+        
+    }
+    
+
     public void testQueryThatReturnsNumber() {
         
         Element parent = new Element("Test");
@@ -2130,6 +2266,25 @@ public class XPathTest extends XOMTestCase {
         assertEquals(0, nodes.size());
         
     }
+    
+    
+/*    public void testMassimo() throws ParsingException, IOException {
+        
+        Builder builder = new Builder();
+        Document doc = builder.build("https://users.dimi.uniud.it/~massimo.franceschet/xpathmark/benchmark_canon.xml");
+        Element root = doc.getRootElement();
+        Element input_1 = root.getFirstChildElement("document_1");
+        Element input_2 = root.getFirstChildElement("document_2");
+        
+        Nodes queries = root.query("child::query[starts-with(@id, 'Q')]");
+        for (int i = 0; i < queries.size(); i++) {
+            Element query = (Element) queries.get(i);
+            String xpath = query.getFirstChildElement("syntax").getValue();
+            Nodes actual = input_1.query(xpath);
+            Elements expected = query.getChildElements();
+        }
+        
+    } */
     
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
