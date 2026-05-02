@@ -33,9 +33,6 @@ command line like this:
 
 $ java -classpath xom-samples.jar:xom-1.4.1.jar nu.xom.samples.PrettyPrinter filename.xml
 
-junit.jar is only used for testing, and is
-not needed for normal operation of XOM.
-
 Building from Source
 --------------------
 
