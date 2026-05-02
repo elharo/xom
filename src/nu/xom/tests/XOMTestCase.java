@@ -49,6 +49,8 @@ public class XOMTestCase extends TestCase {
      * <p>
      * Create a new <code>XOMTestCase</code> with the specified name.
      * </p>
+     *
+     * @param name name of the <code>XOMTestCase</code>
      */
     public XOMTestCase(String name) {
         super(name);   
