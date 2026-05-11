@@ -41,9 +41,9 @@ subject line. The XOM home page is https://xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="4"/>
-    <property name="microversion" value="1"/>
+    <property name="microversion" value="2"/>
     <!-- put a1, b2 etc. here in non-releases -->
-    <property name="versionqualifier" value=""/>
+    <property name="versionqualifier" value="-SNAPSHOT"/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
     <!-- OSGI wants a period before the a1/b2/d3 qualifier -->
     
@@ -770,9 +770,14 @@ XOM Build file
        Optionally pass -Dgpg.keyname=YOURKEYID to select a specific key. -->
   <target name="sign" depends="maven2"
           description="Sign Maven artifacts with GPG for upload to Maven Central">
-    <condition property="gpg.args" value="--default-key ${gpg.keyname}" else="">
+    <condition property="gpg.key.args" value="--default-key ${gpg.keyname}" else="">
       <isset property="gpg.keyname"/>
     </condition>
+    <condition property="gpg.passphrase.args"
+               value="--pinentry-mode loopback --passphrase ${gpg.passphrase}" else="">
+      <isset property="gpg.passphrase"/>
+    </condition>
+    <property name="gpg.args" value="${gpg.key.args} ${gpg.passphrase.args}"/>
     <exec executable="gpg" failonerror="true">
       <arg line="-ab ${gpg.args} ${dist.dir}/maven2/xom-${version}.pom"/>
     </exec>

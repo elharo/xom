@@ -1,0 +1,175 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Version to release (e.g. 1.4.2)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release ${{ inputs.releaseVersion }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Verify release branch
+      run: |
+        if [ "${GITHUB_REF_NAME}" = "master" ]; then
+          echo "Run this workflow from a release branch so master can stay on a SNAPSHOT version."
+          exit 1
+        fi
+
+    - name: Checkout source
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v4
+      with:
+        java-version: 8
+        distribution: temurin
+
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.ant/lib
+          ~/.ivy2/
+          ivy/
+        key: ${{ runner.os }}-ant-${{ hashFiles('build.xml', 'ivy.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-ant-
+
+    - name: Configure git identity
+      run: |
+        git config user.name  "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Set release version
+      env:
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        export TIMESTAMP
+        python - <<'PY'
+        import os
+        import re
+        from pathlib import Path
+
+        release = os.environ["RELEASE_VERSION"]
+        timestamp = os.environ["TIMESTAMP"]
+        parts = release.split(".")
+        if len(parts) != 3 or not all(part.isdigit() for part in parts):
+            raise SystemExit("releaseVersion must look like X.Y.Z")
+        major, minor, micro = parts
+
+        def replace(path, replacements):
+            text = Path(path).read_text()
+            for pattern, repl in replacements:
+                text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
+                if count < 1:
+                    raise SystemExit("Expected a match for %r in %s" % (pattern, path))
+            Path(path).write_text(text)
+
+        replace("build.xml", [
+            (r'(<property name="build\.modtime" value=")[^"]+("/>)', r'\g<1>' + timestamp + r'\g<2>'),
+            (r'(<property name="majorversion" value=")\d+("/>)', r'\g<1>' + major + r'\g<2>'),
+            (r'(<property name="minorversion" value=")\d+("/>)', r'\g<1>' + minor + r'\g<2>'),
+            (r'(<property name="microversion" value=")\d+("/>)', r'\g<1>' + micro + r'\g<2>'),
+            (r'(<property name="versionqualifier" value=")[^"]*("/>)', r'\g<1>\g<2>'),
+        ])
+
+        replace("README.md", [
+            (r'The current version of XOM is [0-9.]+', 'The current version of XOM is ' + release),
+            (r'<version>[0-9.]+</version>', '<version>' + release + '</version>'),
+            (r"compile 'xom:xom:[^']+'", "compile 'xom:xom:" + release + "'"),
+            (r'upgrade to [0-9.]+', 'upgrade to ' + release),
+        ])
+
+        replace("README.txt", [
+            (r'<version>[0-9.]+</version>', '<version>' + release + '</version>'),
+            (r"implementation 'xom:xom:[^']+'", "implementation 'xom:xom:" + release + "'"),
+            (r'xom-[0-9.]+\.jar', 'xom-' + release + '.jar'),
+        ])
+
+        replace("website/index.html", [
+            (r'xom-[0-9.]+\.jar', 'xom-' + release + '.jar'),
+            (r'xom-[0-9.]+\.zip', 'xom-' + release + '.zip'),
+            (r'xom-[0-9.]+\.tar\.gz', 'xom-' + release + '.tar.gz'),
+            (r'releases/download/v[0-9.]+/xom-[0-9.]+-src\.zip', 'releases/download/v' + release + '/xom-' + release + '-src.zip'),
+            (r'releases/download/v[0-9.]+/xom-[0-9.]+-src\.tar\.gz', 'releases/download/v' + release + '/xom-' + release + '-src.tar.gz'),
+            (r'&lt;version&gt;[0-9.]+&lt;/version&gt;', '&lt;version&gt;' + release + '&lt;/version&gt;'),
+            (r"compile 'xom:xom:[^']+'", "compile 'xom:xom:" + release + "'"),
+            (r'The current version of XOM is [0-9.]+', 'The current version of XOM is ' + release),
+            (r'upgrade to [0-9.]+', 'upgrade to ' + release),
+        ])
+
+        replace("src/nu/xom/Info.java", [
+            (r'@version [0-9.]+', '@version ' + release),
+            (r'"[0-9.]+ or later"', '"' + release + ' or later"'),
+        ])
+        PY
+
+    - name: Build release artifacts
+      run: |
+        ant clean
+        ant -Dtest.haltonfailure=true dist
+
+    - name: Import GPG key
+      if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
+      env:
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.gnupg
+        chmod 700 ~/.gnupg
+        printf '%s\n' 'pinentry-mode loopback' >> ~/.gnupg/gpg.conf
+        printf '%s\n' 'allow-loopback-pinentry' >> ~/.gnupg/gpg-agent.conf
+        printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
+
+    - name: Create signed Maven bundle
+      if: ${{ secrets.GPG_PRIVATE_KEY != '' && secrets.GPG_PASSPHRASE != '' }}
+      env:
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      run: |
+        KEYID=$(gpg --batch --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5; exit}')
+        if [ -z "$KEYID" ]; then
+          echo "No GPG secret key is available."
+          exit 1
+        fi
+        ant -Dgpg.keyname="$KEYID" -Dgpg.passphrase="$GPG_PASSPHRASE" bundle
+
+    - name: Commit release version and tag
+      env:
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        git add build.xml README.md README.txt website/index.html src/nu/xom/Info.java
+        git commit -m "Release ${RELEASE_VERSION}"
+        git tag -a "v${RELEASE_VERSION}" -m "Release ${RELEASE_VERSION}"
+
+    - name: Push release branch and tag
+      env:
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        git push origin "${GITHUB_REF_NAME}"
+        git push origin "v${RELEASE_VERSION}"
+
+    - name: Create GitHub release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        ASSETS="dist/xom-${RELEASE_VERSION}.jar dist/xom-${RELEASE_VERSION}.zip dist/xom-${RELEASE_VERSION}.tar.gz dist/xom-${RELEASE_VERSION}-src.zip dist/xom-${RELEASE_VERSION}-src.tar.gz"
+        if [ -f "dist/maven2/bundle.zip" ]; then
+          ASSETS="$ASSETS dist/maven2/bundle.zip"
+        fi
+        gh release create "v${RELEASE_VERSION}" $ASSETS \
+          --title "${RELEASE_VERSION}" \
+          --generate-notes \
+          --verify-tag

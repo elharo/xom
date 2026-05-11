@@ -1,23 +1,29 @@
 
 ## To prepare the release:
 
-Add release notes to 
+1. Make sure `master` is on the next `-SNAPSHOT` version in `build.xml`.
+
+2. Create a release branch from `master`.
+
+3. Add release notes to
 
 * website/history.html
 
-Update the version number in
+4. Run the **Release** GitHub Actions workflow from that release branch and
+   pass the release version (for example `1.4.2`).
 
-* README.md
-* README.txt
-* build.xml
-* website/index.html
-* website/history.html
+   The workflow automatically:
 
-Update the reproducible-build timestamp in `build.xml`:
+   * updates `build.xml`, `README.md`, `README.txt`, `website/index.html`,
+     and `src/nu/xom/Info.java` to the release version
+   * updates `build.modtime`
+   * runs `ant dist`
+   * optionally runs `ant bundle` if the GPG secrets are configured
+   * commits the release version on the release branch
+   * tags the release
+   * creates the GitHub release and uploads the built archives
 
-* `build.modtime`
-
-Run the reproducible-build verifier:
+5. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
 
@@ -25,34 +31,31 @@ Run the reproducible-build verifier:
 
 [Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
 
-1. git checkout master
-2. git pull
-3. ant clean
-4. ant maven2
-5. Run `ant bundle` from the repository root. This runs `ant sign` which
-  calls `gpg` for each artifact, then assembles `dist/maven2/bundle.zip`.
-  If your signing key is not the default GPG key, pass its ID:
-  `ant bundle -Dgpg.keyname=YOURKEYID`
+1. Check out the tagged release commit or release branch.
 
-6. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
+2. If the workflow created `dist/maven2/bundle.zip`, use that. Otherwise run
+   `ant bundle` from the repository root. This runs `ant sign` which calls
+   `gpg` for each artifact, then assembles `dist/maven2/bundle.zip`. If your
+   signing key is not the default GPG key, pass its ID:
+   `ant bundle -Dgpg.keyname=YOURKEYID`
 
-7. Select Publish in the upper right hand corner.
+3. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 
-8. Click Publish Component
+4. Select Publish in the upper right hand corner.
 
-9. Fill in XOM release version as the title and add release notes in the box.
+5. Click Publish Component
 
-10. Select xom/dist/maven2/bundle.zip and press **Upload Bundle**. If bundle.zip doesn't work, try individual artifacts instead. 
+6. Fill in XOM release version as the title and add release notes in the box.
 
-11. If validation succeeds, press the Publish button.
+7. Select `xom/dist/maven2/bundle.zip` and press **Upload Bundle**. If
+   `bundle.zip` doesn't work, try individual artifacts instead.
 
-12. ant dist
+8. If validation succeeds, press the Publish button.
 
-13. Draft the release on GitHub. Code > Tags > Releases > Draft a New Release
-  
-14. Upload the zip and .tar.gz and other assets to go with the release before publishing it.
+9. `ant dist`
 
-15. Publish the release.
+10. If needed, edit the GitHub release that the workflow created and attach any
+    additional assets before publishing it.
 
 ## To update the website:
 
