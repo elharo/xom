@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, 'release/**' ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, 'release/**' ]
 
 permissions:
   contents: read
@@ -12,6 +12,8 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      VERSION_QUALIFIER: ${{ github.event_name == 'push' && github.ref_name == 'master' && '-SNAPSHOT' || '' }}
     
     strategy:
       matrix:
@@ -39,10 +41,10 @@ jobs:
           ${{ runner.os }}-ant-
     
     - name: Run tests
-      run: ant -Dtest.haltonfailure=true test
+      run: ant -Dversionqualifier=${{ env.VERSION_QUALIFIER }} -Dtest.haltonfailure=true test
     
     - name: Build dist
-      run: ant dist
+      run: ant -Dversionqualifier=${{ env.VERSION_QUALIFIER }} dist
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
@@ -53,6 +55,8 @@ jobs:
 
   test-modern-jdk:
     runs-on: ubuntu-latest
+    env:
+      VERSION_QUALIFIER: ${{ github.event_name == 'push' && github.ref_name == 'master' && '-SNAPSHOT' || '' }}
 
     strategy:
       matrix:
@@ -87,7 +91,7 @@ jobs:
           ${{ runner.os }}-ant-
 
     - name: Run tests on JDK ${{ matrix.java-version }}
-      run: ant -Dtest.haltonfailure=true -Djvm=${{ steps.setup-test-jdk.outputs.path }}/bin/java test
+      run: ant -Dversionqualifier=${{ env.VERSION_QUALIFIER }} -Dtest.haltonfailure=true -Djvm=${{ steps.setup-test-jdk.outputs.path }}/bin/java test
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
@@ -98,6 +102,8 @@ jobs:
 
   reproducible-build:
     runs-on: ubuntu-latest
+    env:
+      VERSION_QUALIFIER: ${{ github.event_name == 'push' && github.ref_name == 'master' && '-SNAPSHOT' || '' }}
 
     steps:
     - uses: actions/checkout@v4
@@ -123,5 +129,4 @@ jobs:
     - name: Verify reproducible build
       run: |
         chmod +x verify-reproducible.sh
-        ./verify-reproducible.sh
-
+        VERSION_QUALIFIER=${{ env.VERSION_QUALIFIER }} ./verify-reproducible.sh

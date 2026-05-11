@@ -21,14 +21,19 @@ done
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
+ANT_ARGS=""
+if [ -n "$VERSION_QUALIFIER" ]; then
+    ANT_ARGS="-Dversionqualifier=$VERSION_QUALIFIER"
+fi
+
 # First build
 echo "--- First build ---"
-ant clean jar
+ant $ANT_ARGS clean jar
 cp build/xom-*.jar "$TMPDIR/build1.jar"
 
 # Second build (clean)
 echo "--- Second build ---"
-ant clean jar
+ant $ANT_ARGS clean jar
 cp build/xom-*.jar "$TMPDIR/build2.jar"
 
 # Compare
