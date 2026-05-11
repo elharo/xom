@@ -50,7 +50,10 @@ if ! grep -Eq "$SNAPSHOT_PATTERN" "$BUILD_FILE"; then
 fi
 
 # Replace the qualifier value on the versionqualifier property line, regardless of attribute order.
-sed '/name="versionqualifier"/ s/value="-SNAPSHOT"/value=""/' "$BUILD_FILE" > "$TMP_BUILD_FILE"
+if ! sed '/name="versionqualifier"/ { s/name="versionqualifier"[[:space:]]*value="-SNAPSHOT"/name="versionqualifier" value=""/; s/value="-SNAPSHOT"[[:space:]]*name="versionqualifier"/value="" name="versionqualifier"/; }' "$BUILD_FILE" > "$TMP_BUILD_FILE"; then
+    echo "ERROR: Failed to generate updated build file content in $TMP_BUILD_FILE." >&2
+    exit 1
+fi
 if [ ! -s "$TMP_BUILD_FILE" ]; then
     echo "ERROR: Failed to create updated build file content in $TMP_BUILD_FILE." >&2
     exit 1
