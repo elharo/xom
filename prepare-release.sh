@@ -41,13 +41,13 @@ if ! git checkout -b "$BRANCH"; then
 fi
 
 TMP_BUILD_FILE="${BUILD_FILE}.tmp"
-if ! grep -Eq '<property[[:space:]]+name="versionqualifier"[[:space:]]+value="-SNAPSHOT"[[:space:]]*/>' "$BUILD_FILE"; then
+if ! grep -Eq '<property[[:space:]]*name="versionqualifier"[[:space:]]*value="-SNAPSHOT"[[:space:]]*/>' "$BUILD_FILE"; then
     echo "ERROR: Expected versionqualifier property with -SNAPSHOT value was not found in $BUILD_FILE." >&2
     echo "Expected format like: <property name=\"versionqualifier\" value=\"-SNAPSHOT\"/>" >&2
     exit 1
 fi
 
-sed 's|<property[[:space:]]\+name="versionqualifier"[[:space:]]\+value="-SNAPSHOT"[[:space:]]*/>|<property name="versionqualifier" value=""/>|' "$BUILD_FILE" > "$TMP_BUILD_FILE"
+sed 's|<property\([[:space:]]*\)name="versionqualifier"\([[:space:]]*\)value="-SNAPSHOT"\([[:space:]]*\)/>|<property\1name="versionqualifier"\2value=""\3/>|' "$BUILD_FILE" > "$TMP_BUILD_FILE"
 if [ ! -s "$TMP_BUILD_FILE" ]; then
     echo "ERROR: Failed to create updated build file content in $TMP_BUILD_FILE." >&2
     exit 1
@@ -59,7 +59,7 @@ if git diff --quiet -- "$BUILD_FILE"; then
     exit 1
 fi
 
-if ! grep -q '<property name="versionqualifier" value=""/>' "$BUILD_FILE"; then
+if ! grep -Eq '<property[[:space:]]*name="versionqualifier"[[:space:]]*value=""[[:space:]]*/>' "$BUILD_FILE"; then
     echo "ERROR: Updated version qualifier property was not written correctly in $BUILD_FILE." >&2
     exit 1
 fi
