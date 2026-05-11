@@ -75,7 +75,7 @@ jobs:
             for pattern, repl in replacements:
                 text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
                 if count < 1:
-                    raise SystemExit("Expected a match for %r in %s" % (pattern, path))
+                    raise SystemExit("Could not update %s using pattern %s" % (path, pattern))
             Path(path).write_text(text)
 
         replace("build.xml", [
@@ -145,6 +145,8 @@ jobs:
           echo "GPG signing secrets not configured; skipping Maven bundle signing."
           exit 0
         fi
+        # Use the first imported secret key. If a different key is needed,
+        # configure the GPG secret to contain only that release key.
         KEYID=$(gpg --batch --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5; exit}')
         if [ -z "$KEYID" ]; then
           echo "No GPG secret key is available."
