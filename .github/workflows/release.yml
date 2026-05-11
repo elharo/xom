@@ -123,10 +123,13 @@ jobs:
         ant -Dtest.haltonfailure=true dist
 
     - name: Import GPG key
-      if: ${{ secrets.GPG_PRIVATE_KEY != '' }}
       env:
         GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
       run: |
+        if [ -z "$GPG_PRIVATE_KEY" ]; then
+          echo "No GPG private key configured; skipping Maven bundle signing."
+          exit 0
+        fi
         mkdir -p ~/.gnupg
         chmod 700 ~/.gnupg
         printf '%s\n' 'pinentry-mode loopback' >> ~/.gnupg/gpg.conf
@@ -134,10 +137,14 @@ jobs:
         printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
 
     - name: Create signed Maven bundle
-      if: ${{ secrets.GPG_PRIVATE_KEY != '' && secrets.GPG_PASSPHRASE != '' }}
       env:
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       run: |
+        if [ -z "$GPG_PRIVATE_KEY" ] || [ -z "$GPG_PASSPHRASE" ]; then
+          echo "GPG signing secrets not configured; skipping Maven bundle signing."
+          exit 0
+        fi
         KEYID=$(gpg --batch --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5; exit}')
         if [ -z "$KEYID" ]; then
           echo "No GPG secret key is available."
