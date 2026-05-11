@@ -41,7 +41,7 @@ subject line. The XOM home page is https://xom.nu/
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="4"/>
-    <property name="microversion" value="1"/>
+    <property name="microversion" value="2"/>
     <!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
@@ -50,7 +50,7 @@ subject line. The XOM home page is https://xom.nu/
     <!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? 
          Problem is release version doesn't get a version qualifier. -->
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
-    <property name="jaxenversion" value="2.0.1"/>
+    <property name="jaxenversion" value="2.0.2"/>
     <property name="year"    value="2026"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
@@ -860,7 +860,7 @@ XOM Build file
   </target>
   
   <target name="get-jaxen" description="Download Jaxen source code" depends="prepare">
-      <unzip src="jaxen-${jaxenversion}-src.zip" dest="${build.dir}" />
+      <unzip src="jaxen-${jaxenversion}-core-src.zip" dest="${build.dir}" />
   </target>
 
   <target name="debug" depends="init" description="Print various Ant properties">
