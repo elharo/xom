@@ -12,6 +12,8 @@ VERSION="$1"
 TAG="v$VERSION"
 BRANCH="release/$VERSION"
 BUILD_FILE="build.xml"
+SNAPSHOT_PATTERN='name="versionqualifier".*value="-SNAPSHOT"|value="-SNAPSHOT".*name="versionqualifier"'
+RELEASE_PATTERN='name="versionqualifier".*value=""|value="".*name="versionqualifier"'
 
 if ! git diff --quiet || ! git diff --cached --quiet; then
     echo "ERROR: Working tree must be clean before preparing a release." >&2
@@ -41,12 +43,13 @@ if ! git checkout -b "$BRANCH"; then
 fi
 
 TMP_BUILD_FILE="${BUILD_FILE}.tmp"
-if ! grep -Eq 'name="versionqualifier".*value="-SNAPSHOT"|value="-SNAPSHOT".*name="versionqualifier"' "$BUILD_FILE"; then
+if ! grep -Eq "$SNAPSHOT_PATTERN" "$BUILD_FILE"; then
     echo "ERROR: Expected versionqualifier property with -SNAPSHOT value was not found in $BUILD_FILE." >&2
     echo "Expected format like: <property name=\"versionqualifier\" value=\"-SNAPSHOT\"/>" >&2
     exit 1
 fi
 
+# Replace the qualifier value on the versionqualifier property line, regardless of attribute order.
 sed '/name="versionqualifier"/ s/value="-SNAPSHOT"/value=""/' "$BUILD_FILE" > "$TMP_BUILD_FILE"
 if [ ! -s "$TMP_BUILD_FILE" ]; then
     echo "ERROR: Failed to create updated build file content in $TMP_BUILD_FILE." >&2
@@ -59,7 +62,7 @@ if git diff --quiet -- "$BUILD_FILE"; then
     exit 1
 fi
 
-if ! grep -Eq 'name="versionqualifier".*value=""|value="".*name="versionqualifier"' "$BUILD_FILE"; then
+if ! grep -Eq "$RELEASE_PATTERN" "$BUILD_FILE"; then
     echo "ERROR: Updated version qualifier property was not written correctly in $BUILD_FILE." >&2
     exit 1
 fi
