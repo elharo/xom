@@ -35,7 +35,10 @@ if git rev-parse --verify --quiet "refs/tags/$TAG" >/dev/null; then
     exit 1
 fi
 
-git checkout -b "$BRANCH"
+if ! git checkout -b "$BRANCH"; then
+    echo "ERROR: Failed to create release branch $BRANCH." >&2
+    exit 1
+fi
 
 TMP_BUILD_FILE="${BUILD_FILE}.tmp"
 if ! grep -Eq '<property[[:space:]]+name="versionqualifier"[[:space:]]+value="-SNAPSHOT"[[:space:]]*/>' "$BUILD_FILE"; then
@@ -45,6 +48,10 @@ if ! grep -Eq '<property[[:space:]]+name="versionqualifier"[[:space:]]+value="-S
 fi
 
 sed 's|<property[[:space:]]\+name="versionqualifier"[[:space:]]\+value="-SNAPSHOT"[[:space:]]*/>|<property name="versionqualifier" value=""/>|' "$BUILD_FILE" > "$TMP_BUILD_FILE"
+if [ ! -s "$TMP_BUILD_FILE" ]; then
+    echo "ERROR: Failed to create updated build file content in $TMP_BUILD_FILE." >&2
+    exit 1
+fi
 mv "$TMP_BUILD_FILE" "$BUILD_FILE"
 
 if git diff --quiet -- "$BUILD_FILE"; then
@@ -58,8 +65,14 @@ if ! grep -q '<property name="versionqualifier" value=""/>' "$BUILD_FILE"; then
 fi
 
 git add "$BUILD_FILE"
-git commit -m "Prepare $VERSION release"
-git tag -a "$TAG" -m "XOM $VERSION"
+if ! git commit -m "Prepare $VERSION release"; then
+    echo "ERROR: Failed to commit release preparation changes." >&2
+    exit 1
+fi
+if ! git tag -a "$TAG" -m "XOM $VERSION"; then
+    echo "ERROR: Failed to create release tag $TAG." >&2
+    exit 1
+fi
 
 echo "Release branch and tag created:"
 echo "  Branch: $BRANCH"
