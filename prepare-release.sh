@@ -13,7 +13,7 @@ TAG="v$VERSION"
 BRANCH="release/$VERSION"
 BUILD_FILE="build.xml"
 
-if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
+if ! git diff --quiet || ! git diff --cached --quiet; then
     echo "ERROR: Working tree must be clean before preparing a release." >&2
     echo "Commit, stash, or discard local changes and try again." >&2
     exit 1
@@ -38,16 +38,22 @@ fi
 git checkout -b "$BRANCH"
 
 TMP_BUILD_FILE="${BUILD_FILE}.tmp"
-if ! grep -q '<property name="versionqualifier" value="-SNAPSHOT"/>' "$BUILD_FILE"; then
-    echo "ERROR: Expected SNAPSHOT version qualifier property not found in $BUILD_FILE." >&2
+if ! grep -Eq '<property[[:space:]]+name="versionqualifier"[[:space:]]+value="-SNAPSHOT"[[:space:]]*/>' "$BUILD_FILE"; then
+    echo "ERROR: Expected versionqualifier property with -SNAPSHOT value was not found in $BUILD_FILE." >&2
+    echo "Expected format like: <property name=\"versionqualifier\" value=\"-SNAPSHOT\"/>" >&2
     exit 1
 fi
 
-sed 's|<property name="versionqualifier" value="-SNAPSHOT"/>|<property name="versionqualifier" value=""/>|' "$BUILD_FILE" > "$TMP_BUILD_FILE"
+sed 's|<property[[:space:]]\+name="versionqualifier"[[:space:]]\+value="-SNAPSHOT"[[:space:]]*/>|<property name="versionqualifier" value=""/>|' "$BUILD_FILE" > "$TMP_BUILD_FILE"
 mv "$TMP_BUILD_FILE" "$BUILD_FILE"
 
 if git diff --quiet -- "$BUILD_FILE"; then
     echo "ERROR: Failed to update SNAPSHOT version qualifier in $BUILD_FILE." >&2
+    exit 1
+fi
+
+if ! grep -q '<property name="versionqualifier" value=""/>' "$BUILD_FILE"; then
+    echo "ERROR: Updated version qualifier property was not written correctly in $BUILD_FILE." >&2
     exit 1
 fi
 
