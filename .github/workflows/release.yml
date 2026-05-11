@@ -37,7 +37,7 @@ jobs:
         distribution: temurin
 
     - name: Cache dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.ant/lib
@@ -134,6 +134,7 @@ jobs:
         chmod 700 ~/.gnupg
         printf '%s\n' 'pinentry-mode loopback' >> ~/.gnupg/gpg.conf
         printf '%s\n' 'allow-loopback-pinentry' >> ~/.gnupg/gpg-agent.conf
+        gpgconf --reload gpg-agent
         printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
 
     - name: Create signed Maven bundle
