@@ -38,11 +38,16 @@ fi
 git checkout -b "$BRANCH"
 
 TMP_BUILD_FILE="${BUILD_FILE}.tmp"
-sed 's/\(<property name="versionqualifier" value="\)-SNAPSHOT\(".*\)/\1\2/' "$BUILD_FILE" > "$TMP_BUILD_FILE"
+if ! grep -q '<property name="versionqualifier" value="-SNAPSHOT"/>' "$BUILD_FILE"; then
+    echo "ERROR: Expected SNAPSHOT version qualifier property not found in $BUILD_FILE." >&2
+    exit 1
+fi
+
+sed 's/<property name="versionqualifier" value="-SNAPSHOT"\/>/<property name="versionqualifier" value=""\/>/' "$BUILD_FILE" > "$TMP_BUILD_FILE"
 mv "$TMP_BUILD_FILE" "$BUILD_FILE"
 
 if git diff --quiet -- "$BUILD_FILE"; then
-    echo "ERROR: No SNAPSHOT version qualifier found in $BUILD_FILE." >&2
+    echo "ERROR: Failed to update SNAPSHOT version qualifier in $BUILD_FILE." >&2
     exit 1
 fi
 
