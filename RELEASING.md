@@ -1,6 +1,17 @@
 
 ## To prepare the release:
 
+From `master` (or `main`), run:
+
+* `./prepare-release.sh X.Y.Z`
+
+This automates:
+
+1. Creating `release/X.Y.Z`
+2. Removing `-SNAPSHOT` from `build.xml`
+3. Committing the release-prep change
+4. Tagging `vX.Y.Z`
+
 Add release notes to 
 
 * website/history.html
