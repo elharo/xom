@@ -1,4 +1,4 @@
-/* Copyright 2005, 2006, 2012, 2018 Elliotte Rusty Harold
+/* Copyright 2005, 2006, 2012, 2018, 2026 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -56,7 +56,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.11
+ * @version 1.4.2
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -2267,7 +2267,7 @@ public class XPathTest extends XOMTestCase {
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
-        File jaxenBase = new File("build/jaxen-2.0.1");
+        File jaxenBase = new File("build/jaxen-2.0.2");
         File integrationTests = new File(jaxenBase, "core");
         if (!integrationTests.exists()) {
             // Attempt to self-extract from the bundled zip (e.g. when running from an IDE
