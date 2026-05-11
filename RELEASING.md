@@ -12,7 +12,7 @@ This automates:
 3. Committing the release-prep change
 4. Tagging `vX.Y.Z`
 
-Add release notes to 
+Add release notes to:
 
 * website/history.html
 

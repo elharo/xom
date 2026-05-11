@@ -13,7 +13,7 @@ TAG="v$VERSION"
 BRANCH="release/$VERSION"
 BUILD_FILE="build.xml"
 
-if ! git diff --quiet || ! git diff --cached --quiet; then
+if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
     echo "ERROR: Working tree must be clean before preparing a release." >&2
     echo "Commit, stash, or discard local changes and try again." >&2
     exit 1
@@ -43,7 +43,7 @@ if ! grep -q '<property name="versionqualifier" value="-SNAPSHOT"/>' "$BUILD_FIL
     exit 1
 fi
 
-sed 's/<property name="versionqualifier" value="-SNAPSHOT"\/>/<property name="versionqualifier" value=""\/>/' "$BUILD_FILE" > "$TMP_BUILD_FILE"
+sed 's|<property name="versionqualifier" value="-SNAPSHOT"/>|<property name="versionqualifier" value=""/>|' "$BUILD_FILE" > "$TMP_BUILD_FILE"
 mv "$TMP_BUILD_FILE" "$BUILD_FILE"
 
 if git diff --quiet -- "$BUILD_FILE"; then
