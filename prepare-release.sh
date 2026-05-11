@@ -13,8 +13,11 @@ TAG="v$VERSION"
 BRANCH="release/$VERSION"
 BUILD_FILE="build.xml"
 
-git diff --quiet
-git diff --cached --quiet
+if ! git diff --quiet || ! git diff --cached --quiet; then
+    echo "ERROR: Working tree must be clean before preparing a release." >&2
+    echo "Commit, stash, or discard local changes and try again." >&2
+    exit 1
+fi
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ "$CURRENT_BRANCH" != "master" ] && [ "$CURRENT_BRANCH" != "main" ]; then
@@ -34,7 +37,9 @@ fi
 
 git checkout -b "$BRANCH"
 
-sed -i 's/\(<property name="versionqualifier" value="\)-SNAPSHOT\(".*\)/\1\2/' "$BUILD_FILE"
+TMP_BUILD_FILE="${BUILD_FILE}.tmp"
+sed 's/\(<property name="versionqualifier" value="\)-SNAPSHOT\(".*\)/\1\2/' "$BUILD_FILE" > "$TMP_BUILD_FILE"
+mv "$TMP_BUILD_FILE" "$BUILD_FILE"
 
 if git diff --quiet -- "$BUILD_FILE"; then
     echo "ERROR: No SNAPSHOT version qualifier found in $BUILD_FILE." >&2
