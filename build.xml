@@ -75,7 +75,6 @@ subject line. The XOM home page is https://xom.nu/
     <property name="xercesVersion"   value="2.12.2"/>
     <property name="xmlapis.jar"     value="${ivy.lib.dir}/xml-apis-1.4.01.jar"/>
     <property name="parser.jar"      value="${ivy.lib.dir}/xercesImpl-${xercesVersion}.jar"/>
-    <property name="jaxen.jar"       value="${ivy.lib.dir}/jaxen-2.0.0.jar"/>
     <property name="tagsoup.jar"     value="${ivy.lib.dir}/tagsoup-1.2.1.jar"/>
     <property name="servlet.jar"     value="${ivy.lib.dir}/servlet-api-2.5.jar"/>
     <property name="jarjar.jar"      value="${ivy.lib.dir}/jarjar-1.3.jar"/>
