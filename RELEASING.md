@@ -1,29 +1,29 @@
 
 ## To prepare the release:
 
-1. Make sure `master` is on the next `-SNAPSHOT` version in `build.xml`.
+1. Add release notes to `website/history.html` on `master` before running the
+   release workflow so those notes are included when the workflow cuts the
+   release branch.
 
-2. Create a release branch from `master`.
-
-3. Add release notes to
-
-* website/history.html
-
-4. Run the **Release** GitHub Actions workflow from that release branch and
-   pass the release version (for example `1.4.2`).
+2. Run the **Release** GitHub Actions workflow from `master` and pass both the
+   release version (for example `1.4.2`) and the next development version (for
+   example `1.4.3`).
 
    The workflow automatically:
 
+   * creates the `release-${releaseVersion}` branch from `master`
    * updates `build.xml`, `README.md`, `README.txt`, `website/index.html`,
-     and `src/nu/xom/Info.java` to the release version
+     and `src/nu/xom/Info.java` on that branch to the release version
    * updates `build.modtime`
    * runs `ant dist`
    * optionally runs `ant bundle` if the GPG secrets are configured
    * commits the release version on the release branch
    * tags the release
+   * updates `master` to `${nextVersion}-SNAPSHOT` in `build.xml`
+   * pushes `master`, the release branch, and the tag
    * creates the GitHub release and uploads the built archives
 
-5. Run the reproducible-build verifier if you want an extra local check:
+3. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
 

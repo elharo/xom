@@ -7,6 +7,10 @@ on:
         description: 'Version to release (e.g. 1.4.2)'
         required: true
         type: string
+      nextVersion:
+        description: 'Next development version for master (e.g. 1.4.3)'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -17,10 +21,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Verify release branch
+    - name: Verify master branch
       run: |
-        if [ "${GITHUB_REF_NAME}" = "master" ]; then
-          echo "Run this workflow from a release branch so master can stay on a SNAPSHOT version."
+        if [ "${GITHUB_REF_NAME}" != "master" ]; then
+          echo "Run this workflow from master. The workflow will create the release branch and then advance master to the next SNAPSHOT version."
           exit 1
         fi
 
@@ -52,6 +56,37 @@ jobs:
         git config user.name  "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
+    - name: Validate versions and create release branch
+      env:
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+        NEXT_VERSION: ${{ inputs.nextVersion }}
+      run: |
+        python - <<'PY'
+        import os
+        import re
+
+        version_pattern = re.compile(r'^\d+\.\d+\.\d+$')
+        release = os.environ["RELEASE_VERSION"]
+        next_version = os.environ["NEXT_VERSION"]
+        if not version_pattern.match(release):
+            raise SystemExit("releaseVersion must look like X.Y.Z")
+        if not version_pattern.match(next_version):
+            raise SystemExit("nextVersion must look like X.Y.Z")
+        if release == next_version:
+            raise SystemExit("releaseVersion and nextVersion must be different")
+        PY
+        RELEASE_BRANCH="release-${RELEASE_VERSION}"
+        if git show-ref --verify --quiet "refs/heads/${RELEASE_BRANCH}"; then
+          echo "Local branch ${RELEASE_BRANCH} already exists."
+          exit 1
+        fi
+        if git ls-remote --exit-code --heads origin "${RELEASE_BRANCH}" >/dev/null 2>&1; then
+          echo "Remote branch ${RELEASE_BRANCH} already exists."
+          exit 1
+        fi
+        git switch -c "${RELEASE_BRANCH}"
+        echo "RELEASE_BRANCH=${RELEASE_BRANCH}" >> "${GITHUB_ENV}"
+
     - name: Set release version
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
@@ -65,10 +100,7 @@ jobs:
 
         release = os.environ["RELEASE_VERSION"]
         timestamp = os.environ["TIMESTAMP"]
-        parts = release.split(".")
-        if len(parts) != 3 or not all(part.isdigit() for part in parts):
-            raise SystemExit("releaseVersion must look like X.Y.Z")
-        major, minor, micro = parts
+        major, minor, micro = release.split(".")
 
         def replace(path, replacements):
             text = Path(path).read_text()
@@ -163,11 +195,41 @@ jobs:
         git commit -m "Release ${RELEASE_VERSION}"
         git tag -a "v${RELEASE_VERSION}" -m "Release ${RELEASE_VERSION}"
 
-    - name: Push release branch and tag
+    - name: Set next snapshot version on master
+      env:
+        NEXT_VERSION: ${{ inputs.nextVersion }}
+      run: |
+        git switch master
+        python - <<'PY'
+        import os
+        import re
+        from pathlib import Path
+
+        next_version = os.environ["NEXT_VERSION"]
+        major, minor, micro = next_version.split(".")
+        path = Path("build.xml")
+        text = path.read_text()
+        replacements = [
+            (r'(<property name="majorversion" value=")\d+("/>)', r'\g<1>' + major + r'\g<2>'),
+            (r'(<property name="minorversion" value=")\d+("/>)', r'\g<1>' + minor + r'\g<2>'),
+            (r'(<property name="microversion" value=")\d+("/>)', r'\g<1>' + micro + r'\g<2>'),
+            (r'(<property name="versionqualifier" value=")[^"]*("/>)', r'\g<1>-SNAPSHOT\g<2>'),
+        ]
+        for pattern, repl in replacements:
+            text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
+            if count < 1:
+                raise SystemExit("Could not update build.xml using pattern %s" % pattern)
+        path.write_text(text)
+        PY
+        git add build.xml
+        git commit -m "Prepare for ${NEXT_VERSION}-SNAPSHOT development"
+
+    - name: Push master, release branch, and tag
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
       run: |
-        git push origin "${GITHUB_REF_NAME}"
+        git push origin master
+        git push origin "${RELEASE_BRANCH}"
         git push origin "v${RELEASE_VERSION}"
 
     - name: Create GitHub release
