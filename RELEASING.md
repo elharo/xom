@@ -19,8 +19,11 @@
    * optionally runs `ant bundle` if the GPG secrets are configured
    * commits the release version on the release branch
    * tags the release
-   * updates `master` to `${nextVersion}-SNAPSHOT` in `build.xml`
-   * pushes `master`, the release branch, and the tag
+   * creates `prepare-${nextVersion}-snapshot` from `master`
+   * updates `build.xml` on that branch to `${nextVersion}-SNAPSHOT`
+   * pushes the release branch, the snapshot-preparation branch, and the tag
+   * opens a pull request from `prepare-${nextVersion}-snapshot` back to
+     `master` so the protected branch can be reviewed before it advances
    * creates the GitHub release and uploads the built archives
 
 3. Run the reproducible-build verifier if you want an extra local check:
