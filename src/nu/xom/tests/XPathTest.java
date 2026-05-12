@@ -2246,10 +2246,10 @@ public class XPathTest extends XOMTestCase {
     }
     
     
-/*    public void testMassimo() throws ParsingException, IOException {
+    public void testMassimo() throws ParsingException, IOException {
         
         Builder builder = new Builder();
-        Document doc = builder.build("http://staff.science.uva.nl/~francesc/xpathmark/benchmark_canon.xml");
+        Document doc = builder.build("https://users.dimi.uniud.it/~massimo.franceschet/old.xpathmark/benchmark_canon.xml");
         Element root = doc.getRootElement();
         Element input_1 = root.getFirstChildElement("document_1");
         Element input_2 = root.getFirstChildElement("document_2");
@@ -2262,7 +2262,7 @@ public class XPathTest extends XOMTestCase {
             Elements expected = query.getChildElements();
         }
         
-    } */
+    }
     
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
