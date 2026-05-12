@@ -252,7 +252,8 @@ jobs:
       run: |
         PR_NUMBER=$(gh pr list --head "${SNAPSHOT_BRANCH}" --base master --json number --jq '.[0].number // ""')
         if [ -n "${PR_NUMBER}" ]; then
-          echo "Pull request #${PR_NUMBER} already exists for ${SNAPSHOT_BRANCH}."
+          PR_URL=$(gh pr view "${PR_NUMBER}" --json url --jq .url)
+          echo "Pull request #${PR_NUMBER} already exists for ${SNAPSHOT_BRANCH}: ${PR_URL}"
           exit 0
         fi
         gh pr create \
