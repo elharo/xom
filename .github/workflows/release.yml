@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   release:
@@ -24,7 +25,7 @@ jobs:
     - name: Verify master branch
       run: |
         if [ "${GITHUB_REF_NAME}" != "master" ]; then
-          echo "Run this workflow from master. The workflow will create the release branch and then advance master to the next SNAPSHOT version."
+          echo "Run this workflow from master. The workflow will create the release branch and then open a PR to advance master to the next SNAPSHOT version."
           exit 1
         fi
 
@@ -56,7 +57,7 @@ jobs:
         git config user.name  "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
-    - name: Validate versions and create release branch
+    - name: Validate versions and create working branches
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
         NEXT_VERSION: ${{ inputs.nextVersion }}
@@ -76,6 +77,7 @@ jobs:
             raise SystemExit("releaseVersion and nextVersion must be different")
         PY
         RELEASE_BRANCH="release-${RELEASE_VERSION}"
+        SNAPSHOT_BRANCH="prepare-${NEXT_VERSION}-snapshot"
         if git show-ref --verify --quiet "refs/heads/${RELEASE_BRANCH}"; then
           echo "Local branch ${RELEASE_BRANCH} already exists."
           exit 1
@@ -84,8 +86,17 @@ jobs:
           echo "Remote branch ${RELEASE_BRANCH} already exists."
           exit 1
         fi
+        if git show-ref --verify --quiet "refs/heads/${SNAPSHOT_BRANCH}"; then
+          echo "Local branch ${SNAPSHOT_BRANCH} already exists."
+          exit 1
+        fi
+        if git ls-remote --exit-code --heads origin "${SNAPSHOT_BRANCH}" >/dev/null 2>&1; then
+          echo "Remote branch ${SNAPSHOT_BRANCH} already exists."
+          exit 1
+        fi
         git switch -c "${RELEASE_BRANCH}"
         echo "RELEASE_BRANCH=${RELEASE_BRANCH}" >> "${GITHUB_ENV}"
+        echo "SNAPSHOT_BRANCH=${SNAPSHOT_BRANCH}" >> "${GITHUB_ENV}"
 
     - name: Set release version
       env:
@@ -195,11 +206,12 @@ jobs:
         git commit -m "Release ${RELEASE_VERSION}"
         git tag -a "v${RELEASE_VERSION}" -m "Release ${RELEASE_VERSION}"
 
-    - name: Set next snapshot version on master
+    - name: Create next snapshot branch
       env:
         NEXT_VERSION: ${{ inputs.nextVersion }}
       run: |
         git switch master
+        git switch -c "${SNAPSHOT_BRANCH}"
         python - <<'PY'
         import os
         import re
@@ -224,13 +236,31 @@ jobs:
         git add build.xml
         git commit -m "Prepare for ${NEXT_VERSION}-SNAPSHOT development"
 
-    - name: Push master, release branch, and tag
+    - name: Push release branch, snapshot branch, and tag
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
       run: |
-        git push origin master
         git push origin "${RELEASE_BRANCH}"
+        git push origin "${SNAPSHOT_BRANCH}"
         git push origin "v${RELEASE_VERSION}"
+
+    - name: Open pull request for next snapshot
+      env:
+        GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+        NEXT_VERSION: ${{ inputs.nextVersion }}
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        PR_NUMBER=$(gh pr list --head "${SNAPSHOT_BRANCH}" --base master --json number --jq '.[0].number // ""')
+        if [ -n "${PR_NUMBER}" ]; then
+          PR_URL=$(gh pr view "${PR_NUMBER}" --json url --jq .url)
+          echo "Pull request #${PR_NUMBER} already exists for ${SNAPSHOT_BRANCH}: ${PR_URL}"
+          exit 0
+        fi
+        gh pr create \
+          --base master \
+          --head "${SNAPSHOT_BRANCH}" \
+          --title "Prepare for ${NEXT_VERSION}-SNAPSHOT development" \
+          --body "Automated follow-up to release ${RELEASE_VERSION}: update build.xml to ${NEXT_VERSION}-SNAPSHOT on a branch for review before merging into master."
 
     - name: Create GitHub release
       env:
