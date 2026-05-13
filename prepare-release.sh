@@ -56,7 +56,11 @@ def replace(path, replacements):
         Path(temp_path).write_text(text, encoding="utf-8")
         Path(temp_path).replace(path)
     except Exception:
-        Path(temp_path).unlink()
+        try:
+            if Path(temp_path).exists():
+                Path(temp_path).unlink()
+        except Exception:
+            pass
         raise
 
 
@@ -145,7 +149,7 @@ else:
     ])
 PY
 
-if [ "$CHECK_ONLY" = true ]; then
+if [ "$CHECK_ONLY" = "true" ]; then
     echo "Release files already match $RELEASE_VERSION"
 else
     echo "Updated release files for $RELEASE_VERSION"
