@@ -20,7 +20,8 @@
    * commits the release version on the release branch
    * tags the release
    * creates `prepare-${nextVersion}-snapshot` from `master`
-   * updates `build.xml` on that branch to `${nextVersion}-SNAPSHOT`
+   * updates `build.xml`, `README.md`, `README.txt`, `website/index.html`,
+     and `src/nu/xom/Info.java` on that branch to `${nextVersion}-SNAPSHOT`
    * pushes the release branch, the snapshot-preparation branch, and the tag
    * opens a pull request from `prepare-${nextVersion}-snapshot` back to
      `master` so the protected branch can be reviewed before it advances

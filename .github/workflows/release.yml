@@ -219,21 +219,53 @@ jobs:
 
         next_version = os.environ["NEXT_VERSION"]
         major, minor, micro = next_version.split(".")
-        path = Path("build.xml")
-        text = path.read_text()
-        replacements = [
+
+        def replace(path, replacements):
+            text = Path(path).read_text()
+            for pattern, repl in replacements:
+                text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
+                if count < 1:
+                    raise SystemExit("Could not update %s using pattern %s" % (path, pattern))
+            Path(path).write_text(text)
+
+        replace("build.xml", [
             (r'(<property name="majorversion" value=")\d+("/>)', r'\g<1>' + major + r'\g<2>'),
             (r'(<property name="minorversion" value=")\d+("/>)', r'\g<1>' + minor + r'\g<2>'),
             (r'(<property name="microversion" value=")\d+("/>)', r'\g<1>' + micro + r'\g<2>'),
             (r'(<property name="versionqualifier" value=")[^"]*("/>)', r'\g<1>-SNAPSHOT\g<2>'),
-        ]
-        for pattern, repl in replacements:
-            text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
-            if count < 1:
-                raise SystemExit("Could not update build.xml using pattern %s" % pattern)
-        path.write_text(text)
+        ])
+
+        replace("README.md", [
+            (r'The current version of XOM is [0-9.]+', 'The current version of XOM is ' + next_version),
+            (r'<version>[0-9.]+</version>', '<version>' + next_version + '</version>'),
+            (r"compile 'xom:xom:[^']+'", "compile 'xom:xom:" + next_version + "'"),
+            (r'upgrade to [0-9.]+', 'upgrade to ' + next_version),
+        ])
+
+        replace("README.txt", [
+            (r'<version>[0-9.]+</version>', '<version>' + next_version + '</version>'),
+            (r"implementation 'xom:xom:[^']+'", "implementation 'xom:xom:" + next_version + "'"),
+            (r'xom-[0-9.]+\.jar', 'xom-' + next_version + '.jar'),
+        ])
+
+        replace("website/index.html", [
+            (r'xom-[0-9.]+\.jar', 'xom-' + next_version + '.jar'),
+            (r'xom-[0-9.]+\.zip', 'xom-' + next_version + '.zip'),
+            (r'xom-[0-9.]+\.tar\.gz', 'xom-' + next_version + '.tar.gz'),
+            (r'releases/download/v[0-9.]+/xom-[0-9.]+-src\.zip', 'releases/download/v' + next_version + '/xom-' + next_version + '-src.zip'),
+            (r'releases/download/v[0-9.]+/xom-[0-9.]+-src\.tar\.gz', 'releases/download/v' + next_version + '/xom-' + next_version + '-src.tar.gz'),
+            (r'&lt;version&gt;[0-9.]+&lt;/version&gt;', '&lt;version&gt;' + next_version + '&lt;/version&gt;'),
+            (r"compile 'xom:xom:[^']+'", "compile 'xom:xom:" + next_version + "'"),
+            (r'The current version of XOM is [0-9.]+', 'The current version of XOM is ' + next_version),
+            (r'upgrade to [0-9.]+', 'upgrade to ' + next_version),
+        ])
+
+        replace("src/nu/xom/Info.java", [
+            (r'@version [0-9.]+', '@version ' + next_version),
+            (r'"[0-9.]+ or later"', '"' + next_version + ' or later"'),
+        ])
         PY
-        git add build.xml
+        git add build.xml README.md README.txt website/index.html src/nu/xom/Info.java
         git commit -m "Prepare for ${NEXT_VERSION}-SNAPSHOT development"
 
     - name: Push release branch, snapshot branch, and tag
@@ -260,7 +292,7 @@ jobs:
           --base master \
           --head "${SNAPSHOT_BRANCH}" \
           --title "Prepare for ${NEXT_VERSION}-SNAPSHOT development" \
-          --body "Automated follow-up to release ${RELEASE_VERSION}: update build.xml to ${NEXT_VERSION}-SNAPSHOT on a branch for review before merging into master."
+          --body "Automated follow-up to release ${RELEASE_VERSION}: update build.xml, README.md, README.txt, website/index.html, and src/nu/xom/Info.java to ${NEXT_VERSION}-SNAPSHOT on a branch for review before merging into master."
 
     - name: Create GitHub release
       env:
