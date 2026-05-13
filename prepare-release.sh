@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
@@ -50,8 +50,9 @@ def replace(path, replacements):
                 f"Pattern {pattern} matched 0 times in {path} "
                 f"(expected at least 1 match)"
             )
-    handle, temp_path = tempfile.mkstemp(dir=str(path.parent))
-    os.close(handle)
+    temp_file = tempfile.NamedTemporaryFile(dir=str(path.parent), delete=False)
+    temp_path = temp_file.name
+    temp_file.close()
     try:
         Path(temp_path).write_text(text, encoding="utf-8")
         Path(temp_path).replace(path)
