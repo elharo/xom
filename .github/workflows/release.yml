@@ -76,52 +76,7 @@ jobs:
         if release == next_version:
             raise SystemExit("releaseVersion and nextVersion must be different")
         PY
-        python - <<'PY'
-        import os
-        import re
-        from pathlib import Path
-
-        release = os.environ["RELEASE_VERSION"]
-
-        def assert_matches(path, patterns):
-            text = Path(path).read_text()
-            for pattern in patterns:
-                if not re.search(pattern, text, re.MULTILINE):
-                    raise SystemExit(
-                        "Update %s on master for release %s before running this workflow."
-                        % (path, release)
-                    )
-
-        assert_matches("README.md", [
-            r'The current version of XOM is ' + re.escape(release),
-            r'<version>' + re.escape(release) + r'</version>',
-            r"compile 'xom:xom:" + re.escape(release) + r"'",
-            r'upgrade to ' + re.escape(release),
-        ])
-
-        assert_matches("README.txt", [
-            r'<version>' + re.escape(release) + r'</version>',
-            r"implementation 'xom:xom:" + re.escape(release) + r"'",
-            r'xom-' + re.escape(release) + r'\.jar',
-        ])
-
-        assert_matches("website/index.html", [
-            r'xom-' + re.escape(release) + r'\.jar',
-            r'xom-' + re.escape(release) + r'\.zip',
-            r'xom-' + re.escape(release) + r'\.tar\.gz',
-            r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'-src\.zip',
-            r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'-src\.tar\.gz',
-            r'&lt;version&gt;' + re.escape(release) + r'&lt;/version&gt;',
-            r"compile 'xom:xom:" + re.escape(release) + r"'",
-            r'The current version of XOM is ' + re.escape(release),
-            r'upgrade to ' + re.escape(release),
-        ])
-
-        assert_matches("src/nu/xom/Info.java", [
-            r'@version ' + re.escape(release),
-            r'"' + re.escape(release) + r' or later"',
-        ])
-        PY
+        ./prepare-release.sh --check "${RELEASE_VERSION}"
         RELEASE_BRANCH="release-${RELEASE_VERSION}"
         SNAPSHOT_BRANCH="prepare-${NEXT_VERSION}-snapshot"
         if git show-ref --verify --quiet "refs/heads/${RELEASE_BRANCH}"; then
@@ -143,38 +98,6 @@ jobs:
         git switch -c "${RELEASE_BRANCH}"
         echo "RELEASE_BRANCH=${RELEASE_BRANCH}" >> "${GITHUB_ENV}"
         echo "SNAPSHOT_BRANCH=${SNAPSHOT_BRANCH}" >> "${GITHUB_ENV}"
-
-    - name: Set release version
-      env:
-        RELEASE_VERSION: ${{ inputs.releaseVersion }}
-      run: |
-        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-        export TIMESTAMP
-        python - <<'PY'
-        import os
-        import re
-        from pathlib import Path
-
-        release = os.environ["RELEASE_VERSION"]
-        timestamp = os.environ["TIMESTAMP"]
-        major, minor, micro = release.split(".")
-
-        def replace(path, replacements):
-            text = Path(path).read_text()
-            for pattern, repl in replacements:
-                text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
-                if count < 1:
-                    raise SystemExit("Could not update %s using pattern %s" % (path, pattern))
-            Path(path).write_text(text)
-
-        replace("build.xml", [
-            (r'(<property name="build\.modtime" value=")[^"]+("/>)', r'\g<1>' + timestamp + r'\g<2>'),
-            (r'(<property name="majorversion" value=")\d+("/>)', r'\g<1>' + major + r'\g<2>'),
-            (r'(<property name="minorversion" value=")\d+("/>)', r'\g<1>' + minor + r'\g<2>'),
-            (r'(<property name="microversion" value=")\d+("/>)', r'\g<1>' + micro + r'\g<2>'),
-            (r'(<property name="versionqualifier" value=")[^"]*("/>)', r'\g<1>\g<2>'),
-        ])
-        PY
 
     - name: Build release artifacts
       run: |
@@ -214,12 +137,10 @@ jobs:
         fi
         ant -Dgpg.keyname="$KEYID" -Dgpg.passphrase="$GPG_PASSPHRASE" bundle
 
-    - name: Commit release version and tag
+    - name: Tag release
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
       run: |
-        git add build.xml
-        git commit -m "Release ${RELEASE_VERSION}"
         git tag -a "v${RELEASE_VERSION}" -m "Release ${RELEASE_VERSION}"
 
     - name: Create next snapshot branch
