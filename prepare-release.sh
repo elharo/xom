@@ -45,8 +45,8 @@ def replace(path, replacements):
         text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
         if count < 1:
             raise SystemExit(
-                "Pattern %s matched 0 times in %s (expected at least 1 match)"
-                % (pattern, path)
+                f"Pattern {pattern} matched 0 times in {path} "
+                f"(expected at least 1 match)"
             )
     Path(path).write_text(text)
 
@@ -55,9 +55,7 @@ def assert_matches(path, patterns):
     text = Path(path).read_text()
     for pattern in patterns:
         if not re.search(pattern, text, re.MULTILINE):
-            raise SystemExit(
-                "Update %s for release %s before continuing." % (path, release)
-            )
+            raise SystemExit(f"Update {path} for release {release} before continuing.")
 
 
 if check_only:
