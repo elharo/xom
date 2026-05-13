@@ -25,6 +25,7 @@ python - <<'PY'
 from datetime import datetime, timezone
 import os
 import re
+import tempfile
 from pathlib import Path
 
 release = os.environ["RELEASE_VERSION"]
@@ -40,7 +41,8 @@ if not check_only:
 
 
 def replace(path, replacements):
-    text = Path(path).read_text()
+    path = Path(path)
+    text = path.read_text(encoding="utf-8")
     for pattern, repl in replacements:
         text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
         if count < 1:
@@ -48,11 +50,18 @@ def replace(path, replacements):
                 f"Pattern {pattern} matched 0 times in {path} "
                 f"(expected at least 1 match)"
             )
-    Path(path).write_text(text)
+    handle, temp_path = tempfile.mkstemp(dir=str(path.parent))
+    os.close(handle)
+    try:
+        Path(temp_path).write_text(text, encoding="utf-8")
+        Path(temp_path).replace(path)
+    except Exception:
+        Path(temp_path).unlink()
+        raise
 
 
 def assert_matches(path, patterns):
-    text = Path(path).read_text()
+    text = Path(path).read_text(encoding="utf-8")
     for pattern in patterns:
         if not re.search(pattern, text, re.MULTILINE):
             raise SystemExit(f"Update {path} for release {release} before continuing.")
