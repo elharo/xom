@@ -7,9 +7,14 @@ on:
         description: 'Version to release (e.g. 1.4.2)'
         required: true
         type: string
+      nextVersion:
+        description: 'Next development version for master (e.g. 1.4.3)'
+        required: true
+        type: string
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   release:
@@ -17,10 +22,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Verify release branch
+    - name: Verify master branch
       run: |
-        if [ "${GITHUB_REF_NAME}" = "master" ]; then
-          echo "Run this workflow from a release branch so master can stay on a SNAPSHOT version."
+        if [ "${GITHUB_REF_NAME}" != "master" ]; then
+          echo "Run this workflow from master. The workflow will create the release branch and then open a PR to advance master to the next SNAPSHOT version."
           exit 1
         fi
 
@@ -52,70 +57,47 @@ jobs:
         git config user.name  "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
 
-    - name: Set release version
+    - name: Validate versions and create working branches
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
+        NEXT_VERSION: ${{ inputs.nextVersion }}
       run: |
-        TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-        export TIMESTAMP
         python - <<'PY'
         import os
         import re
-        from pathlib import Path
 
+        version_pattern = re.compile(r'^\d+\.\d+\.\d+$')
         release = os.environ["RELEASE_VERSION"]
-        timestamp = os.environ["TIMESTAMP"]
-        parts = release.split(".")
-        if len(parts) != 3 or not all(part.isdigit() for part in parts):
+        next_version = os.environ["NEXT_VERSION"]
+        if not version_pattern.match(release):
             raise SystemExit("releaseVersion must look like X.Y.Z")
-        major, minor, micro = parts
-
-        def replace(path, replacements):
-            text = Path(path).read_text()
-            for pattern, repl in replacements:
-                text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
-                if count < 1:
-                    raise SystemExit("Could not update %s using pattern %s" % (path, pattern))
-            Path(path).write_text(text)
-
-        replace("build.xml", [
-            (r'(<property name="build\.modtime" value=")[^"]+("/>)', r'\g<1>' + timestamp + r'\g<2>'),
-            (r'(<property name="majorversion" value=")\d+("/>)', r'\g<1>' + major + r'\g<2>'),
-            (r'(<property name="minorversion" value=")\d+("/>)', r'\g<1>' + minor + r'\g<2>'),
-            (r'(<property name="microversion" value=")\d+("/>)', r'\g<1>' + micro + r'\g<2>'),
-            (r'(<property name="versionqualifier" value=")[^"]*("/>)', r'\g<1>\g<2>'),
-        ])
-
-        replace("README.md", [
-            (r'The current version of XOM is [0-9.]+', 'The current version of XOM is ' + release),
-            (r'<version>[0-9.]+</version>', '<version>' + release + '</version>'),
-            (r"compile 'xom:xom:[^']+'", "compile 'xom:xom:" + release + "'"),
-            (r'upgrade to [0-9.]+', 'upgrade to ' + release),
-        ])
-
-        replace("README.txt", [
-            (r'<version>[0-9.]+</version>', '<version>' + release + '</version>'),
-            (r"implementation 'xom:xom:[^']+'", "implementation 'xom:xom:" + release + "'"),
-            (r'xom-[0-9.]+\.jar', 'xom-' + release + '.jar'),
-        ])
-
-        replace("website/index.html", [
-            (r'xom-[0-9.]+\.jar', 'xom-' + release + '.jar'),
-            (r'xom-[0-9.]+\.zip', 'xom-' + release + '.zip'),
-            (r'xom-[0-9.]+\.tar\.gz', 'xom-' + release + '.tar.gz'),
-            (r'releases/download/v[0-9.]+/xom-[0-9.]+-src\.zip', 'releases/download/v' + release + '/xom-' + release + '-src.zip'),
-            (r'releases/download/v[0-9.]+/xom-[0-9.]+-src\.tar\.gz', 'releases/download/v' + release + '/xom-' + release + '-src.tar.gz'),
-            (r'&lt;version&gt;[0-9.]+&lt;/version&gt;', '&lt;version&gt;' + release + '&lt;/version&gt;'),
-            (r"compile 'xom:xom:[^']+'", "compile 'xom:xom:" + release + "'"),
-            (r'The current version of XOM is [0-9.]+', 'The current version of XOM is ' + release),
-            (r'upgrade to [0-9.]+', 'upgrade to ' + release),
-        ])
-
-        replace("src/nu/xom/Info.java", [
-            (r'@version [0-9.]+', '@version ' + release),
-            (r'"[0-9.]+ or later"', '"' + release + ' or later"'),
-        ])
+        if not version_pattern.match(next_version):
+            raise SystemExit("nextVersion must look like X.Y.Z")
+        if release == next_version:
+            raise SystemExit("releaseVersion and nextVersion must be different")
         PY
+        ./prepare-release.sh --check "${RELEASE_VERSION}"
+        RELEASE_BRANCH="release-${RELEASE_VERSION}"
+        SNAPSHOT_BRANCH="prepare-${NEXT_VERSION}-snapshot"
+        if git show-ref --verify --quiet "refs/heads/${RELEASE_BRANCH}"; then
+          echo "Local branch ${RELEASE_BRANCH} already exists."
+          exit 1
+        fi
+        if git ls-remote --exit-code --heads origin "${RELEASE_BRANCH}" >/dev/null 2>&1; then
+          echo "Remote branch ${RELEASE_BRANCH} already exists."
+          exit 1
+        fi
+        if git show-ref --verify --quiet "refs/heads/${SNAPSHOT_BRANCH}"; then
+          echo "Local branch ${SNAPSHOT_BRANCH} already exists."
+          exit 1
+        fi
+        if git ls-remote --exit-code --heads origin "${SNAPSHOT_BRANCH}" >/dev/null 2>&1; then
+          echo "Remote branch ${SNAPSHOT_BRANCH} already exists."
+          exit 1
+        fi
+        git switch -c "${RELEASE_BRANCH}"
+        echo "RELEASE_BRANCH=${RELEASE_BRANCH}" >> "${GITHUB_ENV}"
+        echo "SNAPSHOT_BRANCH=${SNAPSHOT_BRANCH}" >> "${GITHUB_ENV}"
 
     - name: Build release artifacts
       run: |
@@ -155,20 +137,67 @@ jobs:
         fi
         ant -Dgpg.keyname="$KEYID" -Dgpg.passphrase="$GPG_PASSPHRASE" bundle
 
-    - name: Commit release version and tag
+    - name: Create release tag
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
       run: |
-        git add build.xml README.md README.txt website/index.html src/nu/xom/Info.java
-        git commit -m "Release ${RELEASE_VERSION}"
         git tag -a "v${RELEASE_VERSION}" -m "Release ${RELEASE_VERSION}"
 
-    - name: Push release branch and tag
+    - name: Create next snapshot branch
+      env:
+        NEXT_VERSION: ${{ inputs.nextVersion }}
+      run: |
+        git switch master
+        git switch -c "${SNAPSHOT_BRANCH}"
+        python - <<'PY'
+        import os
+        import re
+        from pathlib import Path
+
+        next_version = os.environ["NEXT_VERSION"]
+        major, minor, micro = next_version.split(".")
+        path = Path("build.xml")
+        text = path.read_text()
+        replacements = [
+            (r'(<property name="majorversion" value=")\d+("/>)', r'\g<1>' + major + r'\g<2>'),
+            (r'(<property name="minorversion" value=")\d+("/>)', r'\g<1>' + minor + r'\g<2>'),
+            (r'(<property name="microversion" value=")\d+("/>)', r'\g<1>' + micro + r'\g<2>'),
+            (r'(<property name="versionqualifier" value=")[^"]*("/>)', r'\g<1>-SNAPSHOT\g<2>'),
+        ]
+        for pattern, repl in replacements:
+            text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
+            if count < 1:
+                raise SystemExit("Could not update build.xml using pattern %s" % pattern)
+        path.write_text(text)
+        PY
+        git add build.xml
+        git commit -m "Prepare for ${NEXT_VERSION}-SNAPSHOT development"
+
+    - name: Push release branch, snapshot branch, and tag
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
       run: |
-        git push origin "${GITHUB_REF_NAME}"
+        git push origin "${RELEASE_BRANCH}"
+        git push origin "${SNAPSHOT_BRANCH}"
         git push origin "v${RELEASE_VERSION}"
+
+    - name: Open pull request for next snapshot
+      env:
+        GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+        NEXT_VERSION: ${{ inputs.nextVersion }}
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        PR_NUMBER=$(gh pr list --head "${SNAPSHOT_BRANCH}" --base master --json number --jq '.[0].number // ""')
+        if [ -n "${PR_NUMBER}" ]; then
+          PR_URL=$(gh pr view "${PR_NUMBER}" --json url --jq .url)
+          echo "Pull request #${PR_NUMBER} already exists for ${SNAPSHOT_BRANCH}: ${PR_URL}"
+          exit 0
+        fi
+        gh pr create \
+          --base master \
+          --head "${SNAPSHOT_BRANCH}" \
+          --title "Prepare for ${NEXT_VERSION}-SNAPSHOT development" \
+          --body "Automated follow-up to release ${RELEASE_VERSION}: update build.xml to ${NEXT_VERSION}-SNAPSHOT on a branch for review before merging into master."
 
     - name: Create GitHub release
       env:

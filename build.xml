@@ -45,20 +45,13 @@ subject line. The XOM home page is https://xom.nu/
     <!-- put a1, b2 etc. here in non-releases -->
     <property name="versionqualifier" value="-SNAPSHOT"/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
+
     <!-- OSGI wants a period before the a1/b2/d3 qualifier -->
-    <condition property="bundleversionqualifier" value="SNAPSHOT" else="osgi">
-      <equals arg1="${versionqualifier}" arg2="-SNAPSHOT"/>
-    </condition>
-    
     <!-- Can I have an if statement here to check if ${microversion} is an empty string before adding a period? 
          Problem is release version doesn't get a version qualifier. -->
-<<<<<<< HEAD
-    <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.${bundleversionqualifier}"/>
-    <property name="jaxenversion" value="2.0.1"/>
-=======
     <property name="bundleversion" value="${majorversion}.${minorversion}.${microversion}.osgi"/>
     <property name="jaxenversion" value="2.0.2"/>
->>>>>>> master
+
     <property name="year"    value="2026"/>
 
     <echo message="----------- ${Name} ${version} ------------"/>
