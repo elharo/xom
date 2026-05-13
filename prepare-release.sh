@@ -20,21 +20,23 @@ fi
 
 export RELEASE_VERSION
 export CHECK_ONLY
-export TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 python - <<'PY'
+from datetime import datetime, timezone
 import os
 import re
 from pathlib import Path
 
 release = os.environ["RELEASE_VERSION"]
 check_only = os.environ["CHECK_ONLY"] == "true"
-timestamp = os.environ["TIMESTAMP"]
 
 if not re.match(r"^\d+\.\d+\.\d+$", release):
     raise SystemExit("Release version must look like X.Y.Z")
 
 major, minor, micro = release.split(".")
+timestamp = None
+if not check_only:
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def replace(path, replacements):
@@ -42,7 +44,10 @@ def replace(path, replacements):
     for pattern, repl in replacements:
         text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
         if count < 1:
-            raise SystemExit("Could not update %s using pattern %s" % (path, pattern))
+            raise SystemExit(
+                "Pattern %s matched 0 times in %s (expected at least 1 match)"
+                % (pattern, path)
+            )
     Path(path).write_text(text)
 
 

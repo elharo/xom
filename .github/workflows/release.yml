@@ -137,7 +137,7 @@ jobs:
         fi
         ant -Dgpg.keyname="$KEYID" -Dgpg.passphrase="$GPG_PASSPHRASE" bundle
 
-    - name: Tag release
+    - name: Create release tag
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
       run: |
