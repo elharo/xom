@@ -11,6 +11,7 @@ Update the version number in
 * README.txt
 * build.xml
 * website/index.html
+* website/sidebar.html
 
 Update the reproducible-build timestamp in `build.xml`:
 
