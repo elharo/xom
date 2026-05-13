@@ -2,12 +2,15 @@
 ## To prepare the release:
 
 1. Before running the release workflow, update `master` with the release notes
-   in `website/history.html`, then run `./prepare-release.sh X.Y.Z` (for
-   example `./prepare-release.sh 1.4.2`) to update `build.xml`, `README.md`,
-   `README.txt`, `website/index.html`, and `src/nu/xom/Info.java` to the
-   published release version before the workflow cuts the release branch.
+   in `website/history.html`.
 
-2. Run the **Release** GitHub Actions workflow from `master` and pass both the
+2. Run `./prepare-release.sh X.Y.Z` (for example
+   `./prepare-release.sh 1.4.2`) on `master` to update `build.xml`,
+   `README.md`, `README.txt`, `website/index.html`, and
+   `src/nu/xom/Info.java` to the published release version before the workflow
+   cuts the release branch.
+
+3. Run the **Release** GitHub Actions workflow from `master` and pass both the
    release version (for example `1.4.2`) and the next development version (for
    example `1.4.3`).
 
@@ -27,7 +30,7 @@
      `master` so the protected branch can be reviewed before it advances
    * creates the GitHub release and uploads the built archives
 
-3. Run the reproducible-build verifier if you want an extra local check:
+4. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
 
@@ -60,6 +63,40 @@
 
 10. If needed, edit the GitHub release that the workflow created and attach any
     additional assets before publishing it.
+
+## If the release fails before Maven Central publishes it:
+
+Treat the GitHub release, tag, and `prepare-${nextVersion}-snapshot` pull
+request as provisional until Maven Central has published the artifacts. Do not
+merge the snapshot-preparation pull request until Maven Central publication has
+succeeded.
+
+If Central validation, upload, or publishing fails in a way that requires code
+changes, do not burn the version. Instead:
+
+1. Leave `master` on the release version. If the snapshot-preparation pull
+   request is open, keep it unmerged. If it was merged by mistake, revert it so
+   `master` is back on the release version before recutting.
+
+2. Delete the provisional GitHub release and delete tag `vX.Y.Z`.
+
+3. Delete branch `release-X.Y.Z`.
+
+4. Close the `prepare-${nextVersion}-snapshot` pull request and delete branch
+   `prepare-${nextVersion}-snapshot`.
+
+5. Make the required fixes on `master`, keeping the intended release version in
+   `website/history.html`.
+
+6. Re-run `./prepare-release.sh X.Y.Z` on `master` so the release-versioned
+   files and `build.modtime` are refreshed for the recut.
+
+7. Run the **Release** workflow again with the same `releaseVersion` and
+   `nextVersion`.
+
+Only after Maven Central has published the artifacts should the release be
+treated as final and the `prepare-${nextVersion}-snapshot` pull request be
+merged.
 
 ## To update the website:
 
