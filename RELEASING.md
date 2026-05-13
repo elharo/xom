@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 ## To prepare the release:
 
 1. Make sure `master` is on the next `-SNAPSHOT` version in `build.xml`.
@@ -26,6 +27,29 @@
 5. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
+=======
+## To prepare the release:
+
+Add release notes to 
+
+* website/history.html
+
+Update the version number in
+
+* README.md
+* README.txt
+* build.xml
+* website/index.html
+* website/sidebar.html
+
+Update the reproducible-build timestamp in `build.xml`:
+
+* `build.modtime`
+
+Run the reproducible-build verifier:
+
+* `./verify-reproducible.sh`
+>>>>>>> master
 
 ## To push a new release to Maven Central:
 
