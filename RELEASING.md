@@ -1,9 +1,11 @@
 
 ## To prepare the release:
 
-1. Add release notes to `website/history.html` on `master` before running the
-   release workflow so those notes are included when the workflow cuts the
-   release branch.
+1. Before running the release workflow, update `master` with the release notes
+   in `website/history.html` and with the release version in `README.md`,
+   `README.txt`, `website/index.html`, and `src/nu/xom/Info.java` so the
+   workflow cuts the release branch from the already-prepared published
+   version.
 
 2. Run the **Release** GitHub Actions workflow from `master` and pass both the
    release version (for example `1.4.2`) and the next development version (for
@@ -11,17 +13,18 @@
 
    The workflow automatically:
 
+   * verifies that `README.md`, `README.txt`, `website/index.html`, and
+     `src/nu/xom/Info.java` on `master` already match the requested release
+     version
    * creates the `release-${releaseVersion}` branch from `master`
-   * updates `build.xml`, `README.md`, `README.txt`, `website/index.html`,
-     and `src/nu/xom/Info.java` on that branch to the release version
+   * updates `build.xml` on that branch to the release version
    * updates `build.modtime`
    * runs `ant dist`
    * optionally runs `ant bundle` if the GPG secrets are configured
    * commits the release version on the release branch
    * tags the release
    * creates `prepare-${nextVersion}-snapshot` from `master`
-   * updates `build.xml`, `README.md`, `README.txt`, `website/index.html`,
-     and `src/nu/xom/Info.java` on that branch to `${nextVersion}-SNAPSHOT`
+   * updates `build.xml` on that branch to `${nextVersion}-SNAPSHOT`
    * pushes the release branch, the snapshot-preparation branch, and the tag
    * opens a pull request from `prepare-${nextVersion}-snapshot` back to
      `master` so the protected branch can be reviewed before it advances
