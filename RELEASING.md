@@ -33,6 +33,8 @@
    * pushes the release branch, the snapshot-preparation branch, and the tag
    * opens a pull request from `prepare-${nextVersion}-snapshot` back to
      `master` so the protected branch can be reviewed before it advances
+   * uploads `dist/maven2/bundle.zip` to the workflow run artifacts as
+     `maven-central-bundle-${releaseVersion}` when signing is configured
    * creates the GitHub release and uploads the built archives
 
 5. Run the reproducible-build verifier if you want an extra local check:
@@ -45,11 +47,13 @@
 
 1. Check out the tagged release commit or release branch.
 
-2. If the workflow created `dist/maven2/bundle.zip`, use that. Otherwise run
-   `ant bundle` from the repository root. This runs `ant sign` which calls
-   `gpg` for each artifact, then assembles `dist/maven2/bundle.zip`. If your
-   signing key is not the default GPG key, pass its ID:
-   `ant bundle -Dgpg.keyname=YOURKEYID`
+2. Download `maven-central-bundle-X.Y.Z` from the **Artifacts** section of the
+   successful release workflow run and use the included `bundle.zip`. If the
+   artifact is not present, use `dist/maven2/bundle.zip` from the GitHub
+   release assets (if attached there), or run `ant bundle` from the repository
+   root. This runs `ant sign` which calls `gpg` for each artifact, then
+   assembles `dist/maven2/bundle.zip`. If your signing key is not the default
+   GPG key, pass its ID: `ant bundle -Dgpg.keyname=YOURKEYID`
 
 3. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 

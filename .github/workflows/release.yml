@@ -137,6 +137,13 @@ jobs:
         fi
         ant -Dgpg.keyname="$KEYID" -Dgpg.passphrase="$GPG_PASSPHRASE" bundle
 
+    - name: Upload Maven Central bundle artifact
+      if: ${{ hashFiles('dist/maven2/bundle.zip') != '' }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: maven-central-bundle-${{ inputs.releaseVersion }}
+        path: dist/maven2/bundle.zip
+
     - name: Create release tag
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
