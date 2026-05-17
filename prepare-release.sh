@@ -106,6 +106,12 @@ if check_only:
         r'upgrade to ' + re.escape(release),
     ])
 
+    assert_matches("website/sidebar.html", [
+        r'xom-' + re.escape(release) + r'\.jar',
+        r'xom-' + re.escape(release) + r'\.zip',
+        r'xom-' + re.escape(release) + r'\.tar\.gz',
+    ])
+
     assert_matches("src/nu/xom/Info.java", [
         r'@version ' + re.escape(release),
         r'"' + re.escape(release) + r' or later"',
@@ -144,6 +150,12 @@ else:
         (r'upgrade to [0-9.]+', 'upgrade to ' + release),
     ])
 
+    replace("website/sidebar.html", [
+        (r'xom-[0-9.]+\.jar', 'xom-' + release + '.jar'),
+        (r'xom-[0-9.]+\.zip', 'xom-' + release + '.zip'),
+        (r'xom-[0-9.]+\.tar\.gz', 'xom-' + release + '.tar.gz'),
+    ])
+
     replace("src/nu/xom/Info.java", [
         (r'@version [0-9.]+', '@version ' + release),
         (r'"[0-9.]+ or later"', '"' + release + ' or later"'),
@@ -164,13 +176,13 @@ else
         exit 1
     fi
     git switch -c "${PREPARE_BRANCH}"
-    git add build.xml README.md README.txt website/index.html src/nu/xom/Info.java
+    git add build.xml README.md README.txt website/index.html website/sidebar.html src/nu/xom/Info.java
     git commit -m "Prepare release ${RELEASE_VERSION}"
     git push origin "${PREPARE_BRANCH}"
     gh pr create \
         --base master \
         --head "${PREPARE_BRANCH}" \
         --title "Prepare release ${RELEASE_VERSION}" \
-        --body "Updates build.xml, README.md, README.txt, website/index.html, and src/nu/xom/Info.java to version ${RELEASE_VERSION} in preparation for the release workflow."
+        --body "Updates build.xml, README.md, README.txt, website/index.html, website/sidebar.html, and src/nu/xom/Info.java to version ${RELEASE_VERSION} in preparation for the release workflow."
     echo "Opened pull request for ${PREPARE_BRANCH}"
 fi

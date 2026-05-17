@@ -6,7 +6,7 @@
 
 2. Run `./prepare-release.sh X.Y.Z` (for example
    `./prepare-release.sh 1.4.2`) from `master` to update `build.xml`,
-   `README.md`, `README.txt`, `website/index.html`, and
+   `README.md`, `README.txt`, `website/index.html`, `website/sidebar.html`, and
    `src/nu/xom/Info.java` to the published release version. The script
    creates a `prepare-release-X.Y.Z` branch, commits the changes, pushes
    the branch, and opens a pull request.
