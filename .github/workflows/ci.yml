@@ -18,16 +18,16 @@ jobs:
         java-version: [8, 11]
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     
     - name: Set up JDK ${{ matrix.java-version }}
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: ${{ matrix.java-version }}
         distribution: 'temurin'
     
     - name: Cache dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       with:
         path: |
           ~/.ant/lib
@@ -45,7 +45,7 @@ jobs:
       run: ant dist
 
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: test-results-java-${{ matrix.java-version }}
@@ -59,23 +59,23 @@ jobs:
         java-version: [17, 21, 25]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Set up test JDK ${{ matrix.java-version }}
       id: setup-test-jdk
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: ${{ matrix.java-version }}
         distribution: 'temurin'
 
     - name: Set up compile JDK 8
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: 8
         distribution: 'temurin'
 
     - name: Cache dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       with:
         path: |
           ~/.ant/lib
@@ -90,7 +90,7 @@ jobs:
       run: ant -Dtest.haltonfailure=true -Djvm=${{ steps.setup-test-jdk.outputs.path }}/bin/java test
 
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: test-results-java-${{ matrix.java-version }}
@@ -100,16 +100,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Set up JDK 8
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: 8
         distribution: 'temurin'
 
     - name: Cache dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       with:
         path: |
           ~/.ant/lib
