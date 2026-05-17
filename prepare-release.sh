@@ -154,4 +154,23 @@ if [ "$CHECK_ONLY" = "true" ]; then
     echo "Release files already match $RELEASE_VERSION"
 else
     echo "Updated release files for $RELEASE_VERSION"
+    PREPARE_BRANCH="prepare-release-${RELEASE_VERSION}"
+    if git show-ref --verify --quiet "refs/heads/${PREPARE_BRANCH}"; then
+        echo "Local branch ${PREPARE_BRANCH} already exists." >&2
+        exit 1
+    fi
+    if git ls-remote --exit-code --heads origin "${PREPARE_BRANCH}" >/dev/null 2>&1; then
+        echo "Remote branch ${PREPARE_BRANCH} already exists." >&2
+        exit 1
+    fi
+    git switch -c "${PREPARE_BRANCH}"
+    git add build.xml README.md README.txt website/index.html src/nu/xom/Info.java
+    git commit -m "Prepare release ${RELEASE_VERSION}"
+    git push origin "${PREPARE_BRANCH}"
+    gh pr create \
+        --base master \
+        --head "${PREPARE_BRANCH}" \
+        --title "Prepare release ${RELEASE_VERSION}" \
+        --body "Updates build.xml, README.md, README.txt, website/index.html, and src/nu/xom/Info.java to version ${RELEASE_VERSION} in preparation for the release workflow."
+    echo "Opened pull request for ${PREPARE_BRANCH}"
 fi
