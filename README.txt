@@ -8,21 +8,21 @@ to your pom.xml:
   <dependency>
     <groupId>xom</groupId>
     <artifactId>xom</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.3</version>
   </dependency>
 
 To add a dependency using Gradle:
 
   dependencies {
-    implementation 'xom:xom:1.4.2'
+    implementation 'xom:xom:1.4.3'
   }
 
 If you are not using a build tool like Maven or Gradle, you can install
 XOM manually by placing the XOM JAR archive somewhere in your CLASSPATH.
-This archive is the file named something like xom-1.4.2.jar.
+This archive is the file named something like xom-1.4.3.jar.
 (The version number may have changed if I've forgotten to update this
 document.) You can put it in your jre/lib/ext directory, add
-xom-1.4.2.jar to your CLASSPATH environment variable, or use the
+xom-1.4.3.jar to your CLASSPATH environment variable, or use the
 -classpath option when invoking javac and java.
 
 To check your download you can run one of the sample programs found in
@@ -31,7 +31,7 @@ class formats an XML document by inserting and removing white space
 around element boundaries. You can run it from the
 command line like this:
 
-$ java -classpath xom-samples.jar:xom-1.4.2.jar nu.xom.samples.PrettyPrinter filename.xml
+$ java -classpath xom-samples.jar:xom-1.4.3.jar nu.xom.samples.PrettyPrinter filename.xml
 
 Building from Source
 --------------------
