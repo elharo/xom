@@ -5,12 +5,17 @@
    in `website/history.html`.
 
 2. Run `./prepare-release.sh X.Y.Z` (for example
-   `./prepare-release.sh 1.4.2`) on `master` to update `build.xml`,
+   `./prepare-release.sh 1.4.2`) from `master` to update `build.xml`,
    `README.md`, `README.txt`, `website/index.html`, and
-   `src/nu/xom/Info.java` to the published release version before the workflow
-   cuts the release branch.
+   `src/nu/xom/Info.java` to the published release version. The script
+   creates a `prepare-release-X.Y.Z` branch, commits the changes, pushes
+   the branch, and opens a pull request.
 
-3. Run the **Release** GitHub Actions workflow from `master` and pass both the
+3. Review and merge the pull request opened by `./prepare-release.sh` so
+   that `master` contains the release-versioned files before the workflow
+   runs.
+
+4. Run the **Release** GitHub Actions workflow from `master` and pass both the
    release version (for example `1.4.2`) and the next development version (for
    example `1.4.3`).
 
@@ -30,7 +35,7 @@
      `master` so the protected branch can be reviewed before it advances
    * creates the GitHub release and uploads the built archives
 
-4. Run the reproducible-build verifier if you want an extra local check:
+5. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
 
@@ -88,8 +93,9 @@ changes, do not burn the version. Instead:
 5. Make the required fixes on `master`, keeping the intended release version in
    `website/history.html`.
 
-6. Re-run `./prepare-release.sh X.Y.Z` on `master` so the release-versioned
-   files and `build.modtime` are refreshed for the recut.
+6. Re-run `./prepare-release.sh X.Y.Z` from `master` so the release-versioned
+   files and `build.modtime` are refreshed for the recut. Review and merge
+   the pull request it opens before proceeding.
 
 7. Run the **Release** workflow again with the same `releaseVersion` and
    `nextVersion`.
