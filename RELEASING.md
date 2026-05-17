@@ -1,23 +1,36 @@
 
 ## To prepare the release:
 
-Add release notes to 
+1. Before running the release workflow, update `master` with the release notes
+   in `website/history.html`.
 
-* website/history.html
+2. Run `./prepare-release.sh X.Y.Z` (for example
+   `./prepare-release.sh 1.4.2`) on `master` to update `build.xml`,
+   `README.md`, `README.txt`, `website/index.html`, and
+   `src/nu/xom/Info.java` to the published release version before the workflow
+   cuts the release branch.
 
-Update the version number in
+3. Run the **Release** GitHub Actions workflow from `master` and pass both the
+   release version (for example `1.4.2`) and the next development version (for
+   example `1.4.3`).
 
-* README.md
-* README.txt
-* build.xml
-* website/index.html
-* website/sidebar.html
+   The workflow automatically:
 
-Update the reproducible-build timestamp in `build.xml`:
+   * verifies that `build.xml`, `README.md`, `README.txt`,
+     `website/index.html`, `website/sidebar.html`, and `src/nu/xom/Info.java` on `master`
+     match the requested release version
+   * creates the `release-${releaseVersion}` branch from `master`
+   * runs `ant dist`
+   * optionally runs `ant bundle` if the GPG secrets are configured
+   * tags the release
+   * creates `prepare-${nextVersion}-snapshot` from `master`
+   * updates `build.xml` on that branch to `${nextVersion}-SNAPSHOT`
+   * pushes the release branch, the snapshot-preparation branch, and the tag
+   * opens a pull request from `prepare-${nextVersion}-snapshot` back to
+     `master` so the protected branch can be reviewed before it advances
+   * creates the GitHub release and uploads the built archives
 
-* `build.modtime`
-
-Run the reproducible-build verifier:
+4. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
 
@@ -25,34 +38,65 @@ Run the reproducible-build verifier:
 
 [Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
 
-1. git checkout master
-2. git pull
-3. ant clean
-4. ant maven2
-5. Run `ant bundle` from the repository root. This runs `ant sign` which
-  calls `gpg` for each artifact, then assembles `dist/maven2/bundle.zip`.
-  If your signing key is not the default GPG key, pass its ID:
-  `ant bundle -Dgpg.keyname=YOURKEYID`
+1. Check out the tagged release commit or release branch.
 
-6. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
+2. If the workflow created `dist/maven2/bundle.zip`, use that. Otherwise run
+   `ant bundle` from the repository root. This runs `ant sign` which calls
+   `gpg` for each artifact, then assembles `dist/maven2/bundle.zip`. If your
+   signing key is not the default GPG key, pass its ID:
+   `ant bundle -Dgpg.keyname=YOURKEYID`
 
-7. Select Publish in the upper right hand corner.
+3. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 
-8. Click Publish Component
+4. Select Publish in the upper right hand corner.
 
-9. Fill in XOM release version as the title and add release notes in the box.
+5. Click Publish Component
 
-10. Select xom/dist/maven2/bundle.zip and press **Upload Bundle**. If bundle.zip doesn't work, try individual artifacts instead. 
+6. Fill in XOM release version as the title and add release notes in the box.
 
-11. If validation succeeds, press the Publish button.
+7. Select `xom/dist/maven2/bundle.zip` and press **Upload Bundle**. If
+   `bundle.zip` doesn't work, try individual artifacts instead.
 
-12. ant dist
+8. If validation succeeds, press the Publish button.
 
-13. Draft the release on GitHub. Code > Tags > Releases > Draft a New Release
-  
-14. Upload the zip and .tar.gz and other assets to go with the release before publishing it.
+9. `ant dist`
 
-15. Publish the release.
+10. If needed, edit the GitHub release that the workflow created and attach any
+    additional assets before publishing it.
+
+## If the release fails before Maven Central publishes it:
+
+Treat the GitHub release, tag, and `prepare-${nextVersion}-snapshot` pull
+request as provisional until Maven Central has published the artifacts. Do not
+merge the snapshot-preparation pull request until Maven Central publication has
+succeeded.
+
+If Central validation, upload, or publishing fails in a way that requires code
+changes, do not burn the version. Instead:
+
+1. Leave `master` on the release version. If the snapshot-preparation pull
+   request is open, keep it unmerged. If it was merged by mistake, revert it so
+   `master` is back on the release version before recutting.
+
+2. Delete the provisional GitHub release and delete tag `vX.Y.Z`.
+
+3. Delete branch `release-X.Y.Z`.
+
+4. Close the `prepare-${nextVersion}-snapshot` pull request and delete branch
+   `prepare-${nextVersion}-snapshot`.
+
+5. Make the required fixes on `master`, keeping the intended release version in
+   `website/history.html`.
+
+6. Re-run `./prepare-release.sh X.Y.Z` on `master` so the release-versioned
+   files and `build.modtime` are refreshed for the recut.
+
+7. Run the **Release** workflow again with the same `releaseVersion` and
+   `nextVersion`.
+
+Only after Maven Central has published the artifacts should the release be
+treated as final and the `prepare-${nextVersion}-snapshot` pull request be
+merged.
 
 ## To update the website:
 

@@ -1,0 +1,214 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Version to release (e.g. 1.4.2)'
+        required: true
+        type: string
+      nextVersion:
+        description: 'Next development version for master (e.g. 1.4.3)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: Release ${{ inputs.releaseVersion }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Verify master branch
+      run: |
+        if [ "${GITHUB_REF_NAME}" != "master" ]; then
+          echo "Run this workflow from master. The workflow will create the release branch and then open a PR to advance master to the next SNAPSHOT version."
+          exit 1
+        fi
+
+    - name: Checkout source
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v4
+      with:
+        java-version: 8
+        distribution: temurin
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.ant/lib
+          ~/.ivy2/
+          ivy/
+        key: ${{ runner.os }}-ant-${{ hashFiles('build.xml', 'ivy.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-ant-
+
+    - name: Configure git identity
+      run: |
+        git config user.name  "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Validate versions and create working branches
+      env:
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+        NEXT_VERSION: ${{ inputs.nextVersion }}
+      run: |
+        python - <<'PY'
+        import os
+        import re
+
+        version_pattern = re.compile(r'^\d+\.\d+\.\d+$')
+        release = os.environ["RELEASE_VERSION"]
+        next_version = os.environ["NEXT_VERSION"]
+        if not version_pattern.match(release):
+            raise SystemExit("releaseVersion must look like X.Y.Z")
+        if not version_pattern.match(next_version):
+            raise SystemExit("nextVersion must look like X.Y.Z")
+        if release == next_version:
+            raise SystemExit("releaseVersion and nextVersion must be different")
+        PY
+        ./prepare-release.sh --check "${RELEASE_VERSION}"
+        RELEASE_BRANCH="release-${RELEASE_VERSION}"
+        SNAPSHOT_BRANCH="prepare-${NEXT_VERSION}-snapshot"
+        if git show-ref --verify --quiet "refs/heads/${RELEASE_BRANCH}"; then
+          echo "Local branch ${RELEASE_BRANCH} already exists."
+          exit 1
+        fi
+        if git ls-remote --exit-code --heads origin "${RELEASE_BRANCH}" >/dev/null 2>&1; then
+          echo "Remote branch ${RELEASE_BRANCH} already exists."
+          exit 1
+        fi
+        if git show-ref --verify --quiet "refs/heads/${SNAPSHOT_BRANCH}"; then
+          echo "Local branch ${SNAPSHOT_BRANCH} already exists."
+          exit 1
+        fi
+        if git ls-remote --exit-code --heads origin "${SNAPSHOT_BRANCH}" >/dev/null 2>&1; then
+          echo "Remote branch ${SNAPSHOT_BRANCH} already exists."
+          exit 1
+        fi
+        git switch -c "${RELEASE_BRANCH}"
+        echo "RELEASE_BRANCH=${RELEASE_BRANCH}" >> "${GITHUB_ENV}"
+        echo "SNAPSHOT_BRANCH=${SNAPSHOT_BRANCH}" >> "${GITHUB_ENV}"
+
+    - name: Build release artifacts
+      run: |
+        ant clean
+        ant -Dtest.haltonfailure=true dist
+
+    - name: Import GPG key
+      env:
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+      run: |
+        if [ -z "$GPG_PRIVATE_KEY" ]; then
+          echo "No GPG private key configured; skipping Maven bundle signing."
+          exit 0
+        fi
+        mkdir -p ~/.gnupg
+        chmod 700 ~/.gnupg
+        printf '%s\n' 'pinentry-mode loopback' >> ~/.gnupg/gpg.conf
+        printf '%s\n' 'allow-loopback-pinentry' >> ~/.gnupg/gpg-agent.conf
+        gpgconf --reload gpg-agent
+        printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
+
+    - name: Create signed Maven bundle
+      env:
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      run: |
+        if [ -z "$GPG_PRIVATE_KEY" ] || [ -z "$GPG_PASSPHRASE" ]; then
+          echo "GPG signing secrets not configured; skipping Maven bundle signing."
+          exit 0
+        fi
+        # Use the first imported secret key. If a different key is needed,
+        # configure the GPG secret to contain only that release key.
+        KEYID=$(gpg --batch --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5; exit}')
+        if [ -z "$KEYID" ]; then
+          echo "No GPG secret key is available."
+          exit 1
+        fi
+        ant -Dgpg.keyname="$KEYID" -Dgpg.passphrase="$GPG_PASSPHRASE" bundle
+
+    - name: Create release tag
+      env:
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        git tag -a "v${RELEASE_VERSION}" -m "Release ${RELEASE_VERSION}"
+
+    - name: Create next snapshot branch
+      env:
+        NEXT_VERSION: ${{ inputs.nextVersion }}
+      run: |
+        git switch master
+        git switch -c "${SNAPSHOT_BRANCH}"
+        python - <<'PY'
+        import os
+        import re
+        from pathlib import Path
+
+        next_version = os.environ["NEXT_VERSION"]
+        major, minor, micro = next_version.split(".")
+        path = Path("build.xml")
+        text = path.read_text()
+        replacements = [
+            (r'(<property name="majorversion" value=")\d+("/>)', r'\g<1>' + major + r'\g<2>'),
+            (r'(<property name="minorversion" value=")\d+("/>)', r'\g<1>' + minor + r'\g<2>'),
+            (r'(<property name="microversion" value=")\d+("/>)', r'\g<1>' + micro + r'\g<2>'),
+            (r'(<property name="versionqualifier" value=")[^"]*("/>)', r'\g<1>-SNAPSHOT\g<2>'),
+        ]
+        for pattern, repl in replacements:
+            text, count = re.subn(pattern, repl, text, flags=re.MULTILINE)
+            if count < 1:
+                raise SystemExit("Could not update build.xml using pattern %s" % pattern)
+        path.write_text(text)
+        PY
+        git add build.xml
+        git commit -m "Prepare for ${NEXT_VERSION}-SNAPSHOT development"
+
+    - name: Push release branch, snapshot branch, and tag
+      env:
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        git push origin "${RELEASE_BRANCH}"
+        git push origin "${SNAPSHOT_BRANCH}"
+        git push origin "v${RELEASE_VERSION}"
+
+    - name: Open pull request for next snapshot
+      env:
+        GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+        NEXT_VERSION: ${{ inputs.nextVersion }}
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        PR_NUMBER=$(gh pr list --head "${SNAPSHOT_BRANCH}" --base master --json number --jq '.[0].number // ""')
+        if [ -n "${PR_NUMBER}" ]; then
+          PR_URL=$(gh pr view "${PR_NUMBER}" --json url --jq .url)
+          echo "Pull request #${PR_NUMBER} already exists for ${SNAPSHOT_BRANCH}: ${PR_URL}"
+          exit 0
+        fi
+        gh pr create \
+          --base master \
+          --head "${SNAPSHOT_BRANCH}" \
+          --title "Prepare for ${NEXT_VERSION}-SNAPSHOT development" \
+          --body "Automated follow-up to release ${RELEASE_VERSION}: update build.xml to ${NEXT_VERSION}-SNAPSHOT on a branch for review before merging into master."
+
+    - name: Create GitHub release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        ASSETS="dist/xom-${RELEASE_VERSION}.jar dist/xom-${RELEASE_VERSION}.zip dist/xom-${RELEASE_VERSION}.tar.gz dist/xom-${RELEASE_VERSION}-src.zip dist/xom-${RELEASE_VERSION}-src.tar.gz"
+        if [ -f "dist/maven2/bundle.zip" ]; then
+          ASSETS="$ASSETS dist/maven2/bundle.zip"
+        fi
+        gh release create "v${RELEASE_VERSION}" $ASSETS \
+          --title "${RELEASE_VERSION}" \
+          --generate-notes \
+          --verify-tag
