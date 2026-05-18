@@ -1,10 +1,59 @@
 
 ## One-time repository setup:
 
-Configure the required repository secrets used by the release workflow:
+### Create a dedicated release signing key
 
-* `GPG_PRIVATE_KEY`: ASCII-armored private key used to sign Maven artifacts
-* `GPG_PASSPHRASE`: passphrase for that private key
+Use a key that is only for XOM releases (not your personal daily-use key):
+
+```bash
+gpg --full-generate-key
+```
+
+When prompted, choose:
+
+* key type: `RSA and RSA`
+* key size: `4096`
+* expiration: your team policy (no expiration is acceptable if that is your
+  policy)
+* user ID: release-maintainer identity for XOM
+
+List keys and copy the primary key fingerprint (40 hex characters):
+
+```bash
+gpg --list-secret-keys --keyid-format LONG
+```
+
+Publish the public key so Maven Central can verify signatures:
+
+```bash
+gpg --keyserver keys.openpgp.org --send-keys <KEY_FINGERPRINT>
+```
+
+Export the private key in ASCII-armored form for GitHub Actions:
+
+```bash
+gpg --armor --export-secret-keys <KEY_FINGERPRINT>
+```
+
+Copy the complete output, including:
+
+* `-----BEGIN PGP PRIVATE KEY BLOCK-----`
+* `-----END PGP PRIVATE KEY BLOCK-----`
+
+### Configure GitHub repository secrets
+
+In GitHub, open:
+**Settings → Secrets and variables → Actions → Repository secrets**
+
+Add these secrets:
+
+* `GPG_PRIVATE_KEY` (**required**): full ASCII-armored private key exported above
+* `GPG_PASSPHRASE` (**required**): passphrase for that signing key
+* `RELEASE_TOKEN` (**optional**): PAT with Contents: write; used instead of
+  `GITHUB_TOKEN` when branch protection blocks default token pushes
+
+If either required GPG secret is missing, the release workflow fails during key
+import/signing and does not create a release.
 
 ## To prepare the release:
 
