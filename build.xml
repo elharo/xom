@@ -714,7 +714,7 @@ XOM Build file
   
   <property name="ant-home" value="/opt/ant"/> 
 
-  <target name="maven" depends="jar, sources.jar, javadoc.jar" >
+  <target name="maven" depends="jar, sources.jar, javadoc.jar">
       <property name="pom.template" location="project.xml" />
       <property name="pom.file" location="${build.dir}/maven/project.xml" />
       <property name="package.jar" location="${build.dir}/${name}-${version}.jar"/>
