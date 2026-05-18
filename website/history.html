@@ -44,7 +44,6 @@ body {
   that strives for correctness and simplicity.
   </p>
 
-
 <h2>1.4.4</h2>
 
 <p>Updated Jaxen to 2.0.3 to resolve some edge conditions in XPath processing:</p>
@@ -54,12 +53,14 @@ body {
 <li>Fix id() to return unique node-set results even when the same id is passed in multiple times</li>
 </ul>
 
+<p>Xerces is no longer a default transitive dependency of XOM. If you want to use
+Apache Xerces instead of the JDK bundled Xerces, add it to your classpath.</p>
 
 <h2>1.4.3</h2>
 
 <p>This is a very minor patch to automate the release process
 and enhance supply chain security by upgrading some checksums to SHA-256.
-In the library itself there are essentially no changes.
+There are essentially no changes in the library itself. 
 Consequently I didn't bother to upload this release to Maven Central.
 </p>
 
