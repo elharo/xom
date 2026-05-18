@@ -4,27 +4,17 @@
 1. Before running the release workflow, update `master` with the release notes
    in `website/history.html`.
 
-2. Run `./prepare-release.sh X.Y.Z` (for example
-   `./prepare-release.sh 1.4.2`) from `master` to update `build.xml`,
-   `README.md`, `README.txt`, `website/index.html`, `website/sidebar.html`, and
-   `src/nu/xom/Info.java` to the published release version. The script
-   creates a `prepare-release-X.Y.Z` branch, commits the changes, pushes
-   the branch, and opens a pull request.
+2. Keep `master` on a `-SNAPSHOT` version in `build.xml`.
 
-3. Review and merge the pull request opened by `./prepare-release.sh` so
-   that `master` contains the release-versioned files before the workflow
-   runs.
-
-4. Run the **Release** GitHub Actions workflow from `master` and pass both the
+3. Run the **Release** GitHub Actions workflow from `master` and pass both the
    release version (for example `1.4.2`) and the next development version (for
    example `1.4.3`).
 
    The workflow automatically:
 
-   * verifies that `build.xml`, `README.md`, `README.txt`,
-     `website/index.html`, `website/sidebar.html`, and `src/nu/xom/Info.java` on `master`
-     match the requested release version
    * creates the `release-${releaseVersion}` branch from `master`
+   * runs `./prepare-release.sh --update-only ${releaseVersion}` on that
+     branch to remove `-SNAPSHOT` and set release-versioned files
    * runs `ant dist`
    * optionally runs `ant bundle` if the GPG secrets are configured
    * tags the release
@@ -97,9 +87,8 @@ changes, do not burn the version. Instead:
 5. Make the required fixes on `master`, keeping the intended release version in
    `website/history.html`.
 
-6. Re-run `./prepare-release.sh X.Y.Z` from `master` so the release-versioned
-   files and `build.modtime` are refreshed for the recut. Review and merge
-   the pull request it opens before proceeding.
+6. Re-run the **Release** workflow from `master` with the same
+   `releaseVersion` and `nextVersion`.
 
 7. Run the **Release** workflow again with the same `releaseVersion` and
    `nextVersion`.

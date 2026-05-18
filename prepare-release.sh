@@ -3,14 +3,18 @@
 set -e
 
 usage() {
-    echo "Usage: $0 [--check] X.Y.Z" >&2
+    echo "Usage: $0 [--check|--update-only] X.Y.Z" >&2
     exit 1
 }
 
 CHECK_ONLY=false
+UPDATE_ONLY=false
 
 if [ "$#" -eq 2 ] && [ "$1" = "--check" ]; then
     CHECK_ONLY=true
+    RELEASE_VERSION="$2"
+elif [ "$#" -eq 2 ] && [ "$1" = "--update-only" ]; then
+    UPDATE_ONLY=true
     RELEASE_VERSION="$2"
 elif [ "$#" -eq 1 ]; then
     RELEASE_VERSION="$1"
@@ -166,23 +170,25 @@ if [ "$CHECK_ONLY" = "true" ]; then
     echo "Release files already match $RELEASE_VERSION"
 else
     echo "Updated release files for $RELEASE_VERSION"
-    PREPARE_BRANCH="prepare-release-${RELEASE_VERSION}"
-    if git show-ref --verify --quiet "refs/heads/${PREPARE_BRANCH}"; then
-        echo "Local branch ${PREPARE_BRANCH} already exists." >&2
-        exit 1
+    if [ "$UPDATE_ONLY" != "true" ]; then
+        PREPARE_BRANCH="prepare-release-${RELEASE_VERSION}"
+        if git show-ref --verify --quiet "refs/heads/${PREPARE_BRANCH}"; then
+            echo "Local branch ${PREPARE_BRANCH} already exists." >&2
+            exit 1
+        fi
+        if git ls-remote --exit-code --heads origin "${PREPARE_BRANCH}" >/dev/null 2>&1; then
+            echo "Remote branch ${PREPARE_BRANCH} already exists." >&2
+            exit 1
+        fi
+        git switch -c "${PREPARE_BRANCH}"
+        git add build.xml README.md README.txt website/index.html website/sidebar.html src/nu/xom/Info.java
+        git commit -m "Prepare release ${RELEASE_VERSION}"
+        git push origin "${PREPARE_BRANCH}"
+        gh pr create \
+            --base master \
+            --head "${PREPARE_BRANCH}" \
+            --title "Prepare release ${RELEASE_VERSION}" \
+            --body "Updates build.xml, README.md, README.txt, website/index.html, website/sidebar.html, and src/nu/xom/Info.java to version ${RELEASE_VERSION} in preparation for the release workflow."
+        echo "Opened pull request for ${PREPARE_BRANCH}"
     fi
-    if git ls-remote --exit-code --heads origin "${PREPARE_BRANCH}" >/dev/null 2>&1; then
-        echo "Remote branch ${PREPARE_BRANCH} already exists." >&2
-        exit 1
-    fi
-    git switch -c "${PREPARE_BRANCH}"
-    git add build.xml README.md README.txt website/index.html website/sidebar.html src/nu/xom/Info.java
-    git commit -m "Prepare release ${RELEASE_VERSION}"
-    git push origin "${PREPARE_BRANCH}"
-    gh pr create \
-        --base master \
-        --head "${PREPARE_BRANCH}" \
-        --title "Prepare release ${RELEASE_VERSION}" \
-        --body "Updates build.xml, README.md, README.txt, website/index.html, website/sidebar.html, and src/nu/xom/Info.java to version ${RELEASE_VERSION} in preparation for the release workflow."
-    echo "Opened pull request for ${PREPARE_BRANCH}"
 fi

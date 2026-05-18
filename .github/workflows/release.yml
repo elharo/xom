@@ -76,7 +76,6 @@ jobs:
         if release == next_version:
             raise SystemExit("releaseVersion and nextVersion must be different")
         PY
-        ./prepare-release.sh --check "${RELEASE_VERSION}"
         RELEASE_BRANCH="release-${RELEASE_VERSION}"
         SNAPSHOT_BRANCH="prepare-${NEXT_VERSION}-snapshot"
         if git show-ref --verify --quiet "refs/heads/${RELEASE_BRANCH}"; then
@@ -96,6 +95,9 @@ jobs:
           exit 1
         fi
         git switch -c "${RELEASE_BRANCH}"
+        ./prepare-release.sh --update-only "${RELEASE_VERSION}"
+        git add build.xml README.md README.txt website/index.html website/sidebar.html src/nu/xom/Info.java
+        git commit -m "Prepare release ${RELEASE_VERSION}"
         echo "RELEASE_BRANCH=${RELEASE_BRANCH}" >> "${GITHUB_ENV}"
         echo "SNAPSHOT_BRANCH=${SNAPSHOT_BRANCH}" >> "${GITHUB_ENV}"
 
