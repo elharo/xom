@@ -45,11 +45,23 @@ body {
   </p>
 
 
+<h2>1.4.4</h2>
+
+<p>Updated Jaxen to 2.0.3 to resolve some edge conditions in XPath processing:</p>
+
+<ul>
+<li>Fix predicate numeric comparison to return no results for positions with non-zero fractional parts</li>
+<li>Fix id() to return unique node-set results even when the same id is passed in multiple times</li>
+</ul>
+
+
 <h2>1.4.3</h2>
 
 <p>This is a very minor patch to automate the release process
 and enhance supply chain security by upgrading some checksums to SHA-256.
-In the library itself there are essentially no changes.</p>
+In the library itself there are essentially no changes.
+Consequently I didn't bother to upload this release to Maven Central.
+</p>
 
 <h2>1.4.2</h2>
 
@@ -2160,7 +2172,7 @@ I also spent a lot of time improving the JavaDoc.
 <hr />
 <p>Copyright 2002-2005, 2009, 2013, 2018-2023, 2026 <a href="https://www.elharo.com/">Elliotte Rusty Harold</a><br />
 <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg">elharo@ibiblio.org</a><br />
-Last Modified May 17, 2026
+Last Modified May 18, 2026
 </p>
 </div>
 <div id="Navbar">@SIDEBAR@</div>

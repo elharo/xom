@@ -56,7 +56,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.4.2
+ * @version 1.4.4
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -2266,7 +2266,7 @@ public class XPathTest extends XOMTestCase {
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
-        File jaxenBase = new File("build/jaxen-2.0.2");
+        File jaxenBase = new File("build/jaxen-2.0.3");
         File integrationTests = new File(jaxenBase, "core");
         if (!integrationTests.exists()) {
             // Attempt to self-extract from the bundled zip (e.g. when running from an IDE
