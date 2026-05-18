@@ -47,7 +47,7 @@
    * creates the GitHub release only after `dist/maven2/bundle.zip` is created
      and uploads the built archives (including `bundle.zip`)
 
-5. Run the reproducible-build verifier if you want an extra local check:
+6. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
 
