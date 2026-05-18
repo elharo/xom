@@ -1,4 +1,11 @@
 
+## One-time repository setup:
+
+Configure the required repository secrets used by the release workflow:
+
+* `GPG_PRIVATE_KEY`: ASCII-armored private key used to sign Maven artifacts
+* `GPG_PASSPHRASE`: passphrase for that private key
+
 ## To prepare the release:
 
 1. Before running the release workflow, update `master` with the release notes
@@ -15,16 +22,7 @@
    that `master` contains the release-versioned files before the workflow
    runs.
 
-4. Configure the required repository secrets used by the workflow:
-
-   * `GPG_PRIVATE_KEY`: ASCII-armored private key used to sign Maven artifacts
-   * `GPG_PASSPHRASE`: passphrase for that private key
-
-   The workflow now requires both secrets. If either secret is missing, key
-   import fails, signing fails, or `dist/maven2/bundle.zip` is not produced,
-   the workflow fails and does not create a GitHub release.
-
-5. Run the **Release** GitHub Actions workflow from `master` and pass both the
+4. Run the **Release** GitHub Actions workflow from `master` and pass both the
    release version (for example `1.4.2`) and the next development version (for
    example `1.4.3`).
 
@@ -47,7 +45,7 @@
    * creates the GitHub release only after `dist/maven2/bundle.zip` is created
      and uploads the built archives (including `bundle.zip`)
 
-6. Run the reproducible-build verifier if you want an extra local check:
+5. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
 
@@ -58,10 +56,7 @@
 1. Check out the tagged release commit or release branch.
 
 2. Download `maven-central-bundle-X.Y.Z` from the **Artifacts** section of the
-   successful release workflow run and use the included `bundle.zip`. This
-   artifact is mandatory for a successful release workflow run; if it is not
-   present, treat the release as failed, fix signing configuration, and rerun
-   the workflow.
+   successful release workflow run and use the included `bundle.zip`.
 
 3. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 
