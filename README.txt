@@ -17,6 +17,9 @@ To add a dependency using Gradle:
     implementation 'xom:xom:1.4.3'
   }
 
+The published Maven dependency marks Xerces as optional. If your runtime
+does not already provide a suitable SAX2 parser, add one explicitly.
+
 If you are not using a build tool like Maven or Gradle, you can install
 XOM manually by placing the XOM JAR archive somewhere in your CLASSPATH.
 This archive is the file named something like xom-1.4.3.jar.
