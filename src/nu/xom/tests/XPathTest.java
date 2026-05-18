@@ -56,7 +56,7 @@ import nu.xom.XPathTypeException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.4.2
+ * @version 1.4.4
  *
  */
 public class XPathTest extends XOMTestCase {
@@ -2266,14 +2266,14 @@ public class XPathTest extends XOMTestCase {
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
-        File jaxenBase = new File("build/jaxen-2.0.2");
-        File integrationTests = new File(jaxenBase, "core");
+        File jaxenBase = new File("build/jaxen-2.0.3");
+        File integrationTests = new File(jaxenBase, "core/src");
         if (!integrationTests.exists()) {
             // Attempt to self-extract from the bundled zip (e.g. when running from an IDE
             // without having run "ant get-jaxen" first).
             File destDir = jaxenBase.getParentFile();
             if (destDir == null) destDir = new File(".");
-            File zipFile = new File(jaxenBase.getName() + "-src.zip");
+            File zipFile = new File(jaxenBase.getName() + "-core-src.zip");
             if (zipFile.exists()) {
                 extractZip(zipFile, destDir);
             }
