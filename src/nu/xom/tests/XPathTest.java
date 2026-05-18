@@ -2273,13 +2273,13 @@ public class XPathTest extends XOMTestCase {
             // without having run "ant get-jaxen" first).
             File destDir = jaxenBase.getParentFile();
             if (destDir == null) destDir = new File(".");
-            File zipFile = new File(jaxenBase.getName() + "-src.zip");
+            File zipFile = new File(jaxenBase.getName() + "-core-src.zip");
             if (zipFile.exists()) {
                 extractZip(zipFile, destDir);
             }
         }
         Builder builder = new Builder();
-        Document testDoc = builder.build(new File(integrationTests, "xml/test/tests.xml"));
+        Document testDoc = builder.build(new File(integrationTests, "src/xml/test/tests.xml"));
         Elements documents = testDoc.getRootElement().getChildElements("document");
         for (int i = 0; i < documents.size(); i++) {
             Element documentElement = documents.get(i);
