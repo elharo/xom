@@ -2267,7 +2267,7 @@ public class XPathTest extends XOMTestCase {
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
         File jaxenBase = new File("build/jaxen-2.0.3");
-        File integrationTests = new File(jaxenBase, "core");
+        File integrationTests = new File(jaxenBase, "core/src");
         if (!integrationTests.exists()) {
             // Attempt to self-extract from the bundled zip (e.g. when running from an IDE
             // without having run "ant get-jaxen" first).
@@ -2279,7 +2279,7 @@ public class XPathTest extends XOMTestCase {
             }
         }
         Builder builder = new Builder();
-        Document testDoc = builder.build(new File(integrationTests, "src/xml/test/tests.xml"));
+        Document testDoc = builder.build(new File(integrationTests, "xml/test/tests.xml"));
         Elements documents = testDoc.getRootElement().getChildElements("document");
         for (int i = 0; i < documents.size(); i++) {
             Element documentElement = documents.get(i);
