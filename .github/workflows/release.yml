@@ -138,11 +138,11 @@ jobs:
         ant -Dgpg.keyname="$KEYID" -Dgpg.passphrase="$GPG_PASSPHRASE" bundle
 
     - name: Upload Maven Central bundle artifact
-      if: ${{ hashFiles('dist/maven2/bundle.zip') != '' }}
+      if: ${{ hashFiles('dist/maven/bundle.zip') != '' }}
       uses: actions/upload-artifact@v7
       with:
         name: maven-central-bundle-${{ inputs.releaseVersion }}
-        path: dist/maven2/bundle.zip
+        path: dist/maven/bundle.zip
 
     - name: Create release tag
       env:
@@ -212,8 +212,8 @@ jobs:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
       run: |
         ASSETS="dist/xom-${RELEASE_VERSION}.jar dist/xom-${RELEASE_VERSION}.zip dist/xom-${RELEASE_VERSION}.tar.gz dist/xom-${RELEASE_VERSION}-src.zip dist/xom-${RELEASE_VERSION}-src.tar.gz"
-        if [ -f "dist/maven2/bundle.zip" ]; then
-          ASSETS="$ASSETS dist/maven2/bundle.zip"
+        if [ -f "dist/maven/bundle.zip" ]; then
+          ASSETS="$ASSETS dist/maven/bundle.zip"
         fi
         gh release create "v${RELEASE_VERSION}" $ASSETS \
           --title "${RELEASE_VERSION}" \
