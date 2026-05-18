@@ -587,14 +587,7 @@ XOM Build file
       <report todir="${testoutput.dir}" />
     </junitreport>
 
-    <fail message="tests failed">
-      <condition>
-        <and>
-          <isset property="testsfailed"/>
-          <isset property="test.haltonfailure"/>
-        </and>
-      </condition>
-    </fail>
+    <fail message="tests failed" if="testsfailed"/>
 
   </target>
  
@@ -667,14 +660,7 @@ XOM Build file
       <report todir="${testoutput.dir}"/>
     </junitreport>
 
-    <fail message="tests failed">
-      <condition>
-        <and>
-          <isset property="testsfailed"/>
-          <isset property="test.haltonfailure"/>
-        </and>
-      </condition>
-    </fail>
+    <fail message="tests failed" if="testsfailed"/>
   </target>
 
   <target name="clover-report" depends="init" description="Generate OpenClover code coverage report">
