@@ -95,9 +95,9 @@ if check_only:
     ])
 
     assert_matches("website/index.html", [
-        r'xom-' + re.escape(release) + r'\.jar',
-        r'xom-' + re.escape(release) + r'\.zip',
-        r'xom-' + re.escape(release) + r'\.tar\.gz',
+        r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'\.jar',
+        r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'\.zip',
+        r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'\.tar\.gz',
         r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'-src\.zip',
         r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'-src\.tar\.gz',
         r'&lt;version&gt;' + re.escape(release) + r'&lt;/version&gt;',
@@ -107,9 +107,9 @@ if check_only:
     ])
 
     assert_matches("website/sidebar.html", [
-        r'xom-' + re.escape(release) + r'\.jar',
-        r'xom-' + re.escape(release) + r'\.zip',
-        r'xom-' + re.escape(release) + r'\.tar\.gz',
+        r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'\.jar',
+        r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'\.zip',
+        r'releases/download/v' + re.escape(release) + r'/xom-' + re.escape(release) + r'\.tar\.gz',
     ])
 
     assert_matches("src/nu/xom/Info.java", [
@@ -139,9 +139,9 @@ else:
     ])
 
     replace("website/index.html", [
-        (r'xom-[0-9.]+\.jar', 'xom-' + release + '.jar'),
-        (r'xom-[0-9.]+\.zip', 'xom-' + release + '.zip'),
-        (r'xom-[0-9.]+\.tar\.gz', 'xom-' + release + '.tar.gz'),
+        (r'releases/download/v[0-9.]+/xom-[0-9.]+\.jar', 'releases/download/v' + release + '/xom-' + release + '.jar'),
+        (r'releases/download/v[0-9.]+/xom-[0-9.]+\.zip', 'releases/download/v' + release + '/xom-' + release + '.zip'),
+        (r'releases/download/v[0-9.]+/xom-[0-9.]+\.tar\.gz', 'releases/download/v' + release + '/xom-' + release + '.tar.gz'),
         (r'releases/download/v[0-9.]+/xom-[0-9.]+-src\.zip', 'releases/download/v' + release + '/xom-' + release + '-src.zip'),
         (r'releases/download/v[0-9.]+/xom-[0-9.]+-src\.tar\.gz', 'releases/download/v' + release + '/xom-' + release + '-src.tar.gz'),
         (r'&lt;version&gt;[0-9.]+&lt;/version&gt;', '&lt;version&gt;' + release + '&lt;/version&gt;'),
@@ -151,9 +151,9 @@ else:
     ])
 
     replace("website/sidebar.html", [
-        (r'xom-[0-9.]+\.jar', 'xom-' + release + '.jar'),
-        (r'xom-[0-9.]+\.zip', 'xom-' + release + '.zip'),
-        (r'xom-[0-9.]+\.tar\.gz', 'xom-' + release + '.tar.gz'),
+        (r'releases/download/v[0-9.]+/xom-[0-9.]+\.jar', 'releases/download/v' + release + '/xom-' + release + '.jar'),
+        (r'releases/download/v[0-9.]+/xom-[0-9.]+\.zip', 'releases/download/v' + release + '/xom-' + release + '.zip'),
+        (r'releases/download/v[0-9.]+/xom-[0-9.]+\.tar\.gz', 'releases/download/v' + release + '/xom-' + release + '.tar.gz'),
     ])
 
     replace("src/nu/xom/Info.java", [
