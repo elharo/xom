@@ -1,3 +1,58 @@
+## One-time repository setup:
+
+### Create a dedicated release signing key
+
+Use a key that is only for XOM releases (not your personal daily-use key):
+
+```bash
+gpg --full-generate-key
+```
+
+When prompted, choose:
+
+* key type: `RSA and RSA`
+* key size: `4096`
+* expiration: your team policy (no expiration is acceptable if that is your
+  policy)
+* user ID: release-maintainer identity for XOM
+
+List keys and copy the primary key fingerprint (40 hex characters):
+
+```bash
+gpg --list-secret-keys --keyid-format LONG
+```
+
+Publish the public key so Maven Central can verify signatures:
+
+```bash
+gpg --keyserver keys.openpgp.org --send-keys <KEY_FINGERPRINT>
+```
+
+Export the private key in ASCII-armored form for GitHub Actions:
+
+```bash
+gpg --armor --export-secret-keys <KEY_FINGERPRINT>
+```
+
+Copy the complete output, including:
+
+* `-----BEGIN PGP PRIVATE KEY BLOCK-----`
+* `-----END PGP PRIVATE KEY BLOCK-----`
+
+### Configure GitHub repository secrets
+
+In GitHub, open:
+**Settings → Secrets and variables → Actions → Repository secrets**
+
+Add these secrets:
+
+* `GPG_PRIVATE_KEY` (**required**): full ASCII-armored private key exported above
+* `GPG_PASSPHRASE` (**required**): passphrase for that signing key
+* `RELEASE_TOKEN` (**optional**): PAT with Contents: write; used instead of
+  `GITHUB_TOKEN` when branch protection blocks default token pushes
+
+If either required GPG secret is missing, the release workflow fails during key
+import/signing and does not create a release.
 
 ## To prepare the release:
 
@@ -26,7 +81,7 @@
      match the requested release version
    * creates the `release-${releaseVersion}` branch from `master`
    * runs `ant dist`
-   * optionally runs `ant bundle` if the GPG secrets are configured
+   * imports the configured GPG private key and runs `ant bundle`
    * tags the release
    * creates `prepare-${nextVersion}-snapshot` from `master`
    * updates `build.xml` on that branch to `${nextVersion}-SNAPSHOT`
@@ -34,8 +89,10 @@
    * opens a pull request from `prepare-${nextVersion}-snapshot` back to
      `master` so the protected branch can be reviewed before it advances
    * uploads `dist/maven2/bundle.zip` to the workflow run artifacts as
-     `maven-central-bundle-${releaseVersion}` when signing is configured
-   * creates the GitHub release and uploads the built archives
+     `maven-central-bundle-${releaseVersion}`
+   * creates the GitHub release only after `dist/maven2/bundle.zip` is created
+     and uploads the built archives (including `bundle.zip`)
+
 
 5. Run the reproducible-build verifier if you want an extra local check:
 
@@ -48,12 +105,7 @@
 1. Check out the tagged release commit or release branch.
 
 2. Download `maven-central-bundle-X.Y.Z` from the **Artifacts** section of the
-   successful release workflow run and use the included `bundle.zip`. If the
-   artifact is not present, use `dist/maven2/bundle.zip` from the GitHub
-   release assets (if attached there), or run `ant bundle` from the repository
-   root. This runs `ant sign` which calls `gpg` for each artifact, then
-   assembles `dist/maven2/bundle.zip`. If your signing key is not the default
-   GPG key, pass its ID: `ant bundle -Dgpg.keyname=YOURKEYID`
+   successful release workflow run and use the included `bundle.zip`.
 
 3. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 

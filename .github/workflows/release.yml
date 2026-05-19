@@ -107,10 +107,15 @@ jobs:
     - name: Import GPG key
       env:
         GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       run: |
         if [ -z "$GPG_PRIVATE_KEY" ]; then
-          echo "No GPG private key configured; skipping Maven bundle signing."
-          exit 0
+          echo "::error::Missing required secret GPG_PRIVATE_KEY. Configure the ASCII-armored private key for release signing."
+          exit 1
+        fi
+        if [ -z "$GPG_PASSPHRASE" ]; then
+          echo "::error::Missing required secret GPG_PASSPHRASE. Configure the passphrase for the release signing key."
+          exit 1
         fi
         mkdir -p ~/.gnupg
         chmod 700 ~/.gnupg
@@ -118,27 +123,24 @@ jobs:
         printf '%s\n' 'allow-loopback-pinentry' >> ~/.gnupg/gpg-agent.conf
         gpgconf --reload gpg-agent
         printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
+        KEYID=$(gpg --batch --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5; exit}')
+        if [ -z "$KEYID" ]; then
+          echo "::error::No GPG secret key is available after import."
+          exit 1
+        fi
+        echo "GPG_KEYID=${KEYID}" >> "${GITHUB_ENV}"
 
     - name: Create signed Maven bundle
       env:
-        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       run: |
-        if [ -z "$GPG_PRIVATE_KEY" ] || [ -z "$GPG_PASSPHRASE" ]; then
-          echo "GPG signing secrets not configured; skipping Maven bundle signing."
-          exit 0
-        fi
-        # Use the first imported secret key. If a different key is needed,
-        # configure the GPG secret to contain only that release key.
-        KEYID=$(gpg --batch --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5; exit}')
-        if [ -z "$KEYID" ]; then
-          echo "No GPG secret key is available."
+        ant -Dgpg.keyname="${GPG_KEYID}" -Dgpg.passphrase="${GPG_PASSPHRASE}" bundle
+        if [ ! -s dist/maven2/bundle.zip ]; then
+          echo "::error::dist/maven2/bundle.zip was not created."
           exit 1
         fi
-        ant -Dgpg.keyname="$KEYID" -Dgpg.passphrase="$GPG_PASSPHRASE" bundle
 
     - name: Upload Maven Central bundle artifact
-      if: ${{ hashFiles('dist/maven2/bundle.zip') != '' }}
       uses: actions/upload-artifact@v7
       with:
         name: maven-central-bundle-${{ inputs.releaseVersion }}
@@ -211,10 +213,7 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
       run: |
-        ASSETS="dist/xom-${RELEASE_VERSION}.jar dist/xom-${RELEASE_VERSION}.zip dist/xom-${RELEASE_VERSION}.tar.gz dist/xom-${RELEASE_VERSION}-src.zip dist/xom-${RELEASE_VERSION}-src.tar.gz"
-        if [ -f "dist/maven2/bundle.zip" ]; then
-          ASSETS="$ASSETS dist/maven2/bundle.zip"
-        fi
+        ASSETS="dist/xom-${RELEASE_VERSION}.jar dist/xom-${RELEASE_VERSION}.zip dist/xom-${RELEASE_VERSION}.tar.gz dist/xom-${RELEASE_VERSION}-src.zip dist/xom-${RELEASE_VERSION}-src.tar.gz dist/maven2/bundle.zip"
         gh release create "v${RELEASE_VERSION}" $ASSETS \
           --title "${RELEASE_VERSION}" \
           --generate-notes \
