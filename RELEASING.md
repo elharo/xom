@@ -1,4 +1,3 @@
-
 ## One-time repository setup:
 
 ### Create a dedicated release signing key
@@ -94,6 +93,7 @@ import/signing and does not create a release.
    * creates the GitHub release only after `dist/maven2/bundle.zip` is created
      and uploads the built archives (including `bundle.zip`)
 
+
 5. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
@@ -170,4 +170,4 @@ merged.
 
 4. cd dist/website
 
-5. Upload the site to Dreamhost (add details...)
+5. Upload the site from dist/website (not build/website!) to Dreamhost using sftp or scp.

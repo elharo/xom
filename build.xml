@@ -40,10 +40,10 @@ subject line. The XOM home page is https://xom.nu/
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
-    <property name="minorversion" value="4"/>
-    <property name="microversion" value="4"/>
+    <property name="minorversion" value="5"/>
+    <property name="microversion" value="0"/>
     <!-- put a1, b2 etc. here in non-releases -->
-    <property name="versionqualifier" value=""/>
+    <property name="versionqualifier" value="-SNAPSHOT"/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
 
     <!-- OSGI wants a period before the a1/b2/d3 qualifier -->
@@ -788,6 +788,22 @@ XOM Build file
   <!-- Bundle the signed Maven artifacts into bundle.zip for upload to Maven Central. -->
   <target name="bundle" depends="sign"
           description="Create bundle.jar of signed Maven artifacts for upload to Maven Central">
+    <checksum algorithm="MD5" fileext=".md5">
+      <fileset dir="${dist.dir}/maven2">
+        <include name="xom-${version}.pom"/>
+        <include name="xom-${version}.jar"/>
+        <include name="xom-${version}-javadoc.jar"/>
+        <include name="xom-${version}-sources.jar"/>
+      </fileset>
+    </checksum>
+    <checksum algorithm="SHA-1" fileext=".sha1">
+      <fileset dir="${dist.dir}/maven2">
+        <include name="xom-${version}.pom"/>
+        <include name="xom-${version}.jar"/>
+        <include name="xom-${version}-javadoc.jar"/>
+        <include name="xom-${version}-sources.jar"/>
+      </fileset>
+    </checksum>
     <checksum algorithm="SHA-256" fileext=".sha256">
       <fileset dir="${dist.dir}/maven2">
         <include name="xom-${version}.pom"/>
@@ -800,15 +816,23 @@ XOM Build file
       <zipfileset dir="${dist.dir}/maven2" prefix="xom/xom/${version}">
         <include name="xom-${version}.pom"/>
         <include name="xom-${version}.pom.asc"/>
+        <include name="xom-${version}.pom.md5"/>
+        <include name="xom-${version}.pom.sha1"/>
         <include name="xom-${version}.pom.sha256"/>
         <include name="xom-${version}.jar"/>
         <include name="xom-${version}.jar.asc"/>
+        <include name="xom-${version}.jar.md5"/>
+        <include name="xom-${version}.jar.sha1"/>
         <include name="xom-${version}.jar.sha256"/>
         <include name="xom-${version}-javadoc.jar"/>
         <include name="xom-${version}-javadoc.jar.asc"/>
+        <include name="xom-${version}-javadoc.jar.md5"/>
+        <include name="xom-${version}-javadoc.jar.sha1"/>
         <include name="xom-${version}-javadoc.jar.sha256"/>
         <include name="xom-${version}-sources.jar"/>
         <include name="xom-${version}-sources.jar.asc"/>
+        <include name="xom-${version}-sources.jar.md5"/>
+        <include name="xom-${version}-sources.jar.sha1"/>
         <include name="xom-${version}-sources.jar.sha256"/>
       </zipfileset>
     </zip>
