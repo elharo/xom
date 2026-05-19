@@ -93,9 +93,9 @@ subject line. The XOM home page is https://xom.nu/
     <property name="excludes" value=".DS_Store, **/.DS_Store, **/.AppleFileInfo, **/*.zip, **/.thumbnails/**, data/XInclude-Test-Suite/**, data/xmlconf/**, data/canonical/xmlconf/**, data/oasis*/**, **/testresults/**, **/workspace/**, **/junit*properties, **/.nautilus-metafile.xml, website/**, **/.project, **/.classpath, build/**, dist/**, .settings/**, ivy/**, xom.fb, jester*, trademark*, .idea/**, **/*.iml, nbproject/**, .vscode/**"/>
 
     <property name="test.outputFormat" value="xml"/>   
-    <property name="binary.jar" location="${dist.dir}/maven2/xom-${version}.jar" />
-    <property name="sources.jar" location="${dist.dir}/maven2/xom-${version}-sources.jar" />
-    <property name="javadoc.jar" location="${dist.dir}/maven2/xom-${version}-javadoc.jar" />
+    <property name="binary.jar" location="${dist.dir}/maven/xom-${version}.jar" />
+    <property name="sources.jar" location="${dist.dir}/maven/xom-${version}-sources.jar" />
+    <property name="javadoc.jar" location="${dist.dir}/maven/xom-${version}-javadoc.jar" />
     
     <property name="ossrh-snapshots-repository-url" value="https://oss.sonatype.org/content/repositories/snapshots/" />
     <property name="ossrh-staging-repository-url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
@@ -212,7 +212,7 @@ XOM Build file
   
   <target name="prepare-dirs" depends="init">
     <mkdir dir="${dist.dir}"/>
-    <mkdir dir="${dist.dir}/maven2"/>
+    <mkdir dir="${dist.dir}/maven"/>
     <mkdir dir="${testoutput.dir}"/>
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.src}"/>
@@ -505,7 +505,7 @@ XOM Build file
         <fileset file="${dist.dir}/${name}-${version}.tar.gz" />
         <fileset file="${dist.dir}/${name}-${version}-src.tar.gz" />
         <fileset file="${dist.dir}/${name}-${version}.jar" />
-        <fileset file="${dist.dir}/maven2/xom-maven-${version}.jar" />
+        <fileset file="${dist.dir}/maven/xom-maven-${version}.jar" />
     </scp>
   </target>
     
@@ -714,7 +714,26 @@ XOM Build file
   
   <property name="ant-home" value="/opt/ant"/> 
 
-  <target name="maven" depends="maven2" />
+  <target name="maven" depends="jar, sources.jar, javadoc.jar">
+      <property name="pom.template" location="project.xml" />
+      <property name="pom.file" location="${build.dir}/maven/project.xml" />
+      <property name="package.jar" location="${build.dir}/${name}-${version}.jar"/>
+      <property name="license" location="LICENSE.txt" />
+      <copy file="${pom.template}" tofile="${pom.file}">
+        <filterset>
+         <filter token="VERSION" value="${version}"/>
+       </filterset>
+      </copy>
+      <copy file="${pom.file}" tofile="${dist.dir}/maven/xom-${version}.pom">
+        <filterset>
+         <filter token="VERSION" value="${version}"/>
+       </filterset>
+      </copy>
+      <copy file="${package.jar}" tofile="${dist.dir}/maven/${name}-${version}.jar">
+      </copy>
+  </target>
+
+  <target name="maven2" depends="maven" />
 
   <target name="sources.jar" depends="init, compile">
     <jar jarfile="${sources.jar}" basedir="${build.dir}/src"
@@ -732,30 +751,12 @@ XOM Build file
     </jar>
   </target>
     
-  <!-- Generate a Maven JAR for uploading to OSRRH and hence placement onto ibiblio and mirrors. 
+  <!-- Generate Maven artifacts for uploading to OSSRH and hence placement onto ibiblio and mirrors.
       See https://maven.apache.org/guides/mini/guide-central-repository-upload.html -->
-  <target name="maven2" depends="jar, sources.jar, javadoc.jar" >
-      <property name="pom2.template" location="project2.xml" />
-      <property name="pom2.file" location="${build.dir}/maven2/project.xml" />
-      <property name="package.jar" location="${build.dir}/${name}-${version}.jar"/>
-      <property name="license" location="LICENSE.txt" />
-      <copy file="${pom2.template}" tofile="${pom2.file}">
-        <filterset>
-         <filter token="VERSION" value="${version}"/>
-       </filterset>
-      </copy>
-      <copy file="${pom2.file}" tofile="${dist.dir}/maven2/xom-${version}.pom">
-        <filterset>
-         <filter token="VERSION" value="${version}"/>
-       </filterset>
-      </copy>
-      <copy file="${package.jar}" tofile="${dist.dir}/maven2/${name}-${version}.jar">
-      </copy>
-  </target>
 
   <!-- Sign the Maven artifacts with GPG.
        Optionally pass -Dgpg.keyname=YOURKEYID to select a specific key. -->
-  <target name="sign" depends="maven2"
+  <target name="sign" depends="maven"
           description="Sign Maven artifacts with GPG for upload to Maven Central">
     <condition property="gpg.key.args" value="--default-key ${gpg.keyname}" else="">
       <isset property="gpg.keyname"/>
@@ -772,16 +773,16 @@ XOM Build file
     </condition>
     <property name="gpg.args" value="${gpg.key.args}${gpg.arg.separator}${gpg.passphrase.args}"/>
     <exec executable="gpg" failonerror="true">
-      <arg line="-ab ${gpg.args} ${dist.dir}/maven2/xom-${version}.pom"/>
+      <arg line="-ab ${gpg.args} ${dist.dir}/maven/xom-${version}.pom"/>
     </exec>
     <exec executable="gpg" failonerror="true">
-      <arg line="-ab ${gpg.args} ${dist.dir}/maven2/xom-${version}.jar"/>
+      <arg line="-ab ${gpg.args} ${dist.dir}/maven/xom-${version}.jar"/>
     </exec>
     <exec executable="gpg" failonerror="true">
-      <arg line="-ab ${gpg.args} ${dist.dir}/maven2/xom-${version}-javadoc.jar"/>
+      <arg line="-ab ${gpg.args} ${dist.dir}/maven/xom-${version}-javadoc.jar"/>
     </exec>
     <exec executable="gpg" failonerror="true">
-      <arg line="-ab ${gpg.args} ${dist.dir}/maven2/xom-${version}-sources.jar"/>
+      <arg line="-ab ${gpg.args} ${dist.dir}/maven/xom-${version}-sources.jar"/>
     </exec>
   </target>
 
@@ -789,7 +790,7 @@ XOM Build file
   <target name="bundle" depends="sign"
           description="Create bundle.jar of signed Maven artifacts for upload to Maven Central">
     <checksum algorithm="MD5" fileext=".md5">
-      <fileset dir="${dist.dir}/maven2">
+      <fileset dir="${dist.dir}/maven">
         <include name="xom-${version}.pom"/>
         <include name="xom-${version}.jar"/>
         <include name="xom-${version}-javadoc.jar"/>
@@ -797,7 +798,7 @@ XOM Build file
       </fileset>
     </checksum>
     <checksum algorithm="SHA-1" fileext=".sha1">
-      <fileset dir="${dist.dir}/maven2">
+      <fileset dir="${dist.dir}/maven">
         <include name="xom-${version}.pom"/>
         <include name="xom-${version}.jar"/>
         <include name="xom-${version}-javadoc.jar"/>
@@ -805,15 +806,15 @@ XOM Build file
       </fileset>
     </checksum>
     <checksum algorithm="SHA-256" fileext=".sha256">
-      <fileset dir="${dist.dir}/maven2">
+      <fileset dir="${dist.dir}/maven">
         <include name="xom-${version}.pom"/>
         <include name="xom-${version}.jar"/>
         <include name="xom-${version}-javadoc.jar"/>
         <include name="xom-${version}-sources.jar"/>
       </fileset>
     </checksum>
-    <zip destfile="${dist.dir}/maven2/bundle.zip">
-      <zipfileset dir="${dist.dir}/maven2" prefix="xom/xom/${version}">
+    <zip destfile="${dist.dir}/maven/bundle.zip">
+      <zipfileset dir="${dist.dir}/maven" prefix="xom/xom/${version}">
         <include name="xom-${version}.pom"/>
         <include name="xom-${version}.pom.asc"/>
         <include name="xom-${version}.pom.md5"/>

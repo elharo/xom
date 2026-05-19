@@ -88,11 +88,10 @@ import/signing and does not create a release.
    * pushes the release branch, the snapshot-preparation branch, and the tag
    * opens a pull request from `prepare-${nextVersion}-snapshot` back to
      `master` so the protected branch can be reviewed before it advances
-   * uploads `dist/maven2/bundle.zip` to the workflow run artifacts as
+   * uploads `dist/maven/bundle.zip` to the workflow run artifacts as
      `maven-central-bundle-${releaseVersion}`
    * creates the GitHub release only after `dist/maven2/bundle.zip` is created
      and uploads the built archives (including `bundle.zip`)
-
 
 5. Run the reproducible-build verifier if you want an extra local check:
 
@@ -103,6 +102,7 @@ import/signing and does not create a release.
 [Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
 
 1. Check out the tagged release commit or release branch.
+
 
 2. Download `maven-central-bundle-X.Y.Z` from the **Artifacts** section of the
    successful release workflow run and use the included `bundle.zip`.
@@ -115,7 +115,7 @@ import/signing and does not create a release.
 
 6. Fill in XOM release version as the title and add release notes in the box.
 
-7. Select `xom/dist/maven2/bundle.zip` and press **Upload Bundle**. If
+7. Select `xom/dist/maven/bundle.zip` and press **Upload Bundle**. If
    `bundle.zip` doesn't work, try individual artifacts instead.
 
 8. If validation succeeds, press the Publish button.

@@ -141,10 +141,14 @@ jobs:
         fi
 
     - name: Upload Maven Central bundle artifact
+<<<<<<< HEAD
+      if: ${{ hashFiles('dist/maven/bundle.zip') != '' }}
+=======
+>>>>>>> master
       uses: actions/upload-artifact@v7
       with:
         name: maven-central-bundle-${{ inputs.releaseVersion }}
-        path: dist/maven2/bundle.zip
+        path: dist/maven/bundle.zip
 
     - name: Create release tag
       env:
@@ -213,7 +217,7 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
       run: |
-        ASSETS="dist/xom-${RELEASE_VERSION}.jar dist/xom-${RELEASE_VERSION}.zip dist/xom-${RELEASE_VERSION}.tar.gz dist/xom-${RELEASE_VERSION}-src.zip dist/xom-${RELEASE_VERSION}-src.tar.gz dist/maven2/bundle.zip"
+        ASSETS="dist/xom-${RELEASE_VERSION}.jar dist/xom-${RELEASE_VERSION}.zip dist/xom-${RELEASE_VERSION}.tar.gz dist/xom-${RELEASE_VERSION}-src.zip dist/xom-${RELEASE_VERSION}-src.tar.gz dist/maven/bundle.zip"
         gh release create "v${RELEASE_VERSION}" $ASSETS \
           --title "${RELEASE_VERSION}" \
           --generate-notes \
