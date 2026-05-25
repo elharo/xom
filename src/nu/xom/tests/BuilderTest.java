@@ -3465,8 +3465,7 @@ public class BuilderTest extends XOMTestCase {
             if ("not-wf".equals(type)) continue;
             String uri = test.getAttributeValue("URI");
             String base = test.getBaseURI();
-            // Hack because URIUtil isn't public; and I don't want to
-            // depend on 1.4 only java.net.URI
+            // Hack because URIUtil isn't public
             parent.setBaseURI(base);
             child.addAttribute(new Attribute("xml:base", 
               "http://www.w3.org/XML/1998/namespace", uri));

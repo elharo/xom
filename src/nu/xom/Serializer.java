@@ -211,8 +211,8 @@ public class Serializer {
         }
         else if (encodingUpperCase.equals("ISO-8859-11") 
           || encodingUpperCase.equals("TIS-620")) {
-           // Java doesn't recognize the name ISO-8859-11 and 
-           // Java 1.3 and earlier don't recognize TIS-620
+           // Java doesn't recognize the name ISO-8859-11 or TIS-620;
+           // use the alias TIS620 instead
            writer = new OutputStreamWriter(out, "TIS620");  
         }
         else writer = new OutputStreamWriter(out, encoding);

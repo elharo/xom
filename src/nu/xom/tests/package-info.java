@@ -36,9 +36,6 @@
  * if the parser is buggy. Xerces 2.6.1 is the only parser which is currently
  * known to be able to run all the tests. Earlier versions of Xerces 2.x
  * cannot successfully run all the tests.
- * The IBM JVM 1.4.1 bundles an earlier version of Xerces which overrides the one bundled with XOM.
- * For this reason, a few tests will fail when using that VM. These tests should pass when using the
- * Sun VMs. 
  * </p>
  * 
  * <p>
