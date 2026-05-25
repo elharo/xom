@@ -73,6 +73,12 @@ public class CanonicalizationException extends RuntimeException {
      * only be called once. Subsequent calls throw an 
      * <code>IllegalStateException</code>.
      * </p>
+     * 
+     * <p>
+     * This method is unnecessary in Java 1.4 where it could easily be
+     * inherited from the superclass. However, including it here
+     * allows this method to be used in Java 1.3 and earlier.
+     * </p>
      *
      * @param cause the root cause of this exception
      * 

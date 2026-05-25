@@ -1481,7 +1481,8 @@ public class CanonicalizerTest extends XOMTestCase {
             if ("not-wf".equals(type)) continue;
             String uri = test.getAttributeValue("URI");
             String base = test.getBaseURI();
-            // Hack because URIUtil isn't public
+            // Hack because URIUtil isn't public; and I don't want to
+            // depend on 1.4 only java.net.URI
             parent.setBaseURI(base);
 
             child.addAttribute(new Attribute("xml:base", 
@@ -1844,7 +1845,8 @@ and expect to see
             if ("not-wf".equals(type)) continue;
             String uri = test.getAttributeValue("URI");
             String base = test.getBaseURI();
-            // Hack because URIUtil isn't public
+            // Hack because URIUtil isn't public; and I don't want to
+            // depend on 1.4 only java.net.URI
             Element parent = new Element("e");
             parent.setBaseURI(base);
             Element child = new Element("a");
