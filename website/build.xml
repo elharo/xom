@@ -28,8 +28,14 @@
     <copy todir="${website.dir}">
       <fileset dir="dtd"/>
     </copy>
+    <copy todir="${website.dir}/dtd">
+      <fileset dir="../data/dtd" includes="xhtml*.dtd,xhtml*.ent"/>
+    </copy>
     <copy todir="${build.dir}/dtd">
       <fileset dir="dtd"/>
+    </copy>
+    <copy todir="${build.dir}/dtd">
+      <fileset dir="../data/dtd" includes="xhtml*.dtd,xhtml*.ent"/>
     </copy>
   </target>
 
@@ -46,11 +52,11 @@
   
   <target name="valid" 
           description="Check validity of input documents and output"
-          depends="tutorial">
+          depends="html, tutorial">
     <java classname="nu.xom.samples.Validator" fork="yes" failonerror="true">
      <arg value="--strict"/>
-     <arg value="index.html"/>
-     <arg value="history.html"/>
+     <arg value="${website.dir}/index.html"/>
+     <arg value="${website.dir}/history.html"/>
      <arg value="faq.xml"/>
      <arg value="${build.dir}/finished_tutorial.xml"/>
      <arg value="${website.dir}/tutorial.xhtml"/>
@@ -220,4 +226,3 @@
     <delete dir="${parentdist.dir}"/>
   </target>
 </project>
-
