@@ -167,8 +167,6 @@ public class EncodingTest extends XOMTestCase {
     }
     
     public void testGreek() throws ParsingException, IOException {
-        // This test seems to fail in Java 1.5, at least on Mac OS X
-        // It passes in 1.4. The problem is the delete character 127
         checkAll("ISO-8859-7");
     }
     
@@ -200,32 +198,20 @@ public class EncodingTest extends XOMTestCase {
         checkAll("Cp037");
     }
     
-    // These encodings are only available after Java 1.3
-    private static boolean java14OrLater = false;
-    
-    static {
-        String version = System.getProperty("java.version");
-        String majorVersion = version.substring(0, 3);
-        double versionNumber = Double.parseDouble(majorVersion);
-        if (versionNumber >= 1.4) java14OrLater = true; 
-    }   
-    
     public void testLatin7() throws ParsingException, IOException {
-        if (java14OrLater) checkAll("ISO-8859-13");
+        checkAll("ISO-8859-13");
     }
     
     public void testLatin9() throws ParsingException, IOException {
-        if (java14OrLater) checkAll("ISO-8859-15");
+        checkAll("ISO-8859-15");
     } 
 
     public void testGB18030() throws ParsingException, IOException {
-        if (java14OrLater) checkAll("GB18030");
+        checkAll("GB18030");
     } 
 
     // These encodings are not installed in all distributions by 
-    // default. They are only found currently in IBM's Java 1.4.1 VM. 
-    // They don't seem to be supported in the 1.5 alpha
-    // either.    
+    // default.
     public void testUCS4() throws ParsingException, IOException {
         if (charsetAvailable("ISO-10646-UCS-4")) checkAll("ISO-10646-UCS-4");
     } 

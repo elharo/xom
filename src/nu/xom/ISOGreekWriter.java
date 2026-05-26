@@ -153,14 +153,8 @@ class ISOGreekWriter extends TextWriter {
         }
         switch (c) { // assorted characters
             case 0x2015: return false; // HORIZONTAL BAR
-            // A bug in Java 1.4 and 1.3 prevents a LEFT and RIGHT 
-            // SINGLE QUOTATION MARKs
-            // from being correctly output
-            // as the actual character in this encoding
-            // even though it does exist in the 
-            // ISO-8859-7 character set.
-            // case 0x2018: return false; // LEFT SINGLE QUOTATION MARK
-            // case 0x2019: return false; // RIGHT SINGLE QUOTATION MARK        
+            case 0x2018: return false; // LEFT SINGLE QUOTATION MARK
+            case 0x2019: return false; // RIGHT SINGLE QUOTATION MARK        
         }
         return true;
     }
