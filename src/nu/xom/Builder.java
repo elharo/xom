@@ -183,7 +183,9 @@ public class Builder {
         "com.icl.saxon.aelfred.SAXDriver",
         "org.dom4j.io.aelfred2.SAXDriver",
         "org.dom4j.io.aelfred.SAXDriver",
-        "org.xmlpull.v1.sax2.Driver" // android
+        "org.xmlpull.v1.sax2.Driver", // android
+        "org.kxml2.io.KXmlParser", // android kxml2
+        "org.xml.sax.helpers.XMLReaderFactory$Driver" // android
     };
 
     
@@ -261,14 +263,26 @@ public class Builder {
                 );
             }
             else {
-                parser.setFeature(
-                  "http://xml.org/sax/features/external-general-entities",
-                  true
-                );
-                parser.setFeature(
-                 "http://xml.org/sax/features/external-parameter-entities",
-                  true
-                );
+                try {
+                    parser.setFeature(
+                      "http://xml.org/sax/features/external-general-entities",
+                      true
+                    );
+                }
+                catch (SAXException ex) {
+                    // This parser does not support external general entities.
+                    // We can live without that on platforms such as Android.
+                }
+                try {
+                    parser.setFeature(
+                     "http://xml.org/sax/features/external-parameter-entities",
+                      true
+                    );
+                }
+                catch (SAXException ex) {
+                    // This parser does not support external parameter entities.
+                    // We can live without that on platforms such as Android.
+                }
             }
         }
         else {

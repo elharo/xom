@@ -2978,20 +2978,17 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
-    public void testNonEntityResolvingParserException() throws SAXException {
+    // A parser that does not support external entity features is now
+    // accepted, since platforms such as Android may not support them.
+    public void testNonEntityResolvingParserAccepted() throws SAXException {
         
         XMLReader parser = XMLReaderFactory.createXMLReader(
           "org.apache.xerces.parsers.SAXParser");
         XMLFilter filter = new NonEntityResolvingFilter();
         filter.setParent(parser);
         
-        try {
-            new Builder(filter, false, null);
-            fail("Accepted a non-entity resolving parser");
-        }
-        catch (XMLException success) {
-            assertNotNull(success.getMessage());
-        }
+        // Should not throw; we tolerate parsers that lack external entity support
+        new Builder(filter, false, null);
         
     }
   
