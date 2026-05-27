@@ -262,27 +262,21 @@ public class Builder {
                   new NamespaceWellformednessRequired()
                 );
             }
+            else if (parserName.equals("org.kxml2.io.KXmlParser") // Android parsers
+              || parserName.equals("org.xml.sax.helpers.XMLReaderFactory$Driver")
+              || parserName.equals("org.xmlpull.v1.sax2.Driver")) {
+                // Android parsers do not support external entity features;
+                // skip setting them.
+            }
             else {
-                try {
-                    parser.setFeature(
-                      "http://xml.org/sax/features/external-general-entities",
-                      true
-                    );
-                }
-                catch (SAXException ex) {
-                    // This parser does not support external general entities.
-                    // We can live without that on platforms such as Android.
-                }
-                try {
-                    parser.setFeature(
-                     "http://xml.org/sax/features/external-parameter-entities",
-                      true
-                    );
-                }
-                catch (SAXException ex) {
-                    // This parser does not support external parameter entities.
-                    // We can live without that on platforms such as Android.
-                }
+                parser.setFeature(
+                  "http://xml.org/sax/features/external-general-entities",
+                  true
+                );
+                parser.setFeature(
+                 "http://xml.org/sax/features/external-parameter-entities",
+                  true
+                );
             }
         }
         else {
