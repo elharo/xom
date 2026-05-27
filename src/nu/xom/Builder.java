@@ -183,7 +183,9 @@ public class Builder {
         "com.icl.saxon.aelfred.SAXDriver",
         "org.dom4j.io.aelfred2.SAXDriver",
         "org.dom4j.io.aelfred.SAXDriver",
-        "org.xmlpull.v1.sax2.Driver" // android
+        "org.xmlpull.v1.sax2.Driver", // android
+        "org.kxml2.io.KXmlParser", // android kxml2
+        "org.xml.sax.helpers.XMLReaderFactory$Driver" // android
     };
 
     
@@ -259,6 +261,12 @@ public class Builder {
                 parser.setErrorHandler(
                   new NamespaceWellformednessRequired()
                 );
+            }
+            else if (parserName.equals("org.kxml2.io.KXmlParser") // Android parsers
+              || parserName.equals("org.xml.sax.helpers.XMLReaderFactory$Driver")
+              || parserName.equals("org.xmlpull.v1.sax2.Driver")) {
+                // Android parsers do not support external entity features;
+                // skip setting them.
             }
             else {
                 parser.setFeature(
