@@ -104,7 +104,7 @@ import/signing and does not create a release.
 1. Download `maven-central-bundle-X.Y.Z` from the **Artifacts** section of the
    successful release workflow run and use the included `bundle.zip`.
 
-2. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
+2. Log in to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 
 3. Select Publish in the upper right hand corner.
 
