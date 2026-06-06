@@ -2266,7 +2266,7 @@ public class XPathTest extends XOMTestCase {
     
     public void testJaxenIntegrationTest() throws ParsingException, IOException {
         
-        File jaxenBase = new File("build/jaxen-2.0.3");
+        File jaxenBase = new File("build/jaxen-2.0.6");
         File integrationTests = new File(jaxenBase, "core/src");
         if (!integrationTests.exists()) {
             // Attempt to self-extract from the bundled zip (e.g. when running from an IDE
