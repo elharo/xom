@@ -101,28 +101,22 @@ import/signing and does not create a release.
 
 [Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
 
-1. Check out the tagged release commit or release branch.
-
-
-2. Download `maven-central-bundle-X.Y.Z` from the **Artifacts** section of the
+1. Download `maven-central-bundle-X.Y.Z` from the **Artifacts** section of the
    successful release workflow run and use the included `bundle.zip`.
 
-3. Login to the [Central Publishing Portal](https://central.sonatype.com/publishing).
+2. Log in to the [Central Publishing Portal](https://central.sonatype.com/publishing).
 
-4. Select Publish in the upper right hand corner.
+3. Select Publish in the upper right hand corner.
 
-5. Click Publish Component
+4. Click Publish Component
 
-6. Fill in XOM release version as the title and add release notes in the box.
+5. Fill in XOM release version as the title and add release notes in the box.
 
-7. Select `xom/dist/maven/bundle.zip` and press **Upload Bundle**. If
-   `bundle.zip` doesn't work, try individual artifacts instead.
+6. Locate `maven-central-bundle-X.Y.Z` and press **Upload Bundle**.
 
-8. If validation succeeds, press the Publish button.
+7. If validation succeeds, press the Publish button.
 
-9. `ant dist`
-
-10. If needed, edit the GitHub release that the workflow created and attach any
+8. If needed, edit the GitHub release that the workflow created and attach any
     additional assets before publishing it.
 
 ## If the release fails before Maven Central publishes it:
