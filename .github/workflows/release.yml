@@ -135,16 +135,13 @@ jobs:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       run: |
         ant -Dgpg.keyname="${GPG_KEYID}" -Dgpg.passphrase="${GPG_PASSPHRASE}" bundle
-        if [ ! -s dist/maven2/bundle.zip ]; then
-          echo "::error::dist/maven2/bundle.zip was not created."
+        if [ ! -s dist/maven/bundle.zip ]; then
+          echo "::error::dist/maven/bundle.zip was not created."
           exit 1
         fi
 
     - name: Upload Maven Central bundle artifact
-<<<<<<< HEAD
       if: ${{ hashFiles('dist/maven/bundle.zip') != '' }}
-=======
->>>>>>> master
       uses: actions/upload-artifact@v7
       with:
         name: maven-central-bundle-${{ inputs.releaseVersion }}
