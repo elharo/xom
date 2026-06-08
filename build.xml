@@ -36,14 +36,14 @@ subject line. The XOM home page is https://xom.nu/
   <target name="init" depends="ivy-resolve">
     <property environment="env"/>
     <!-- Fixed ISO-8601 UTC timestamp applied to all JAR entries for reproducible builds. -->
-    <property name="build.modtime" value="2026-06-05T20:13:26Z"/>
+    <property name="build.modtime" value="2026-06-08T13:03:37Z"/>
     <property name="Name"    value="XOM"/>
     <property name="name"    value="xom"/>
     <property name="majorversion" value="1"/>
     <property name="minorversion" value="4"/>
     <property name="microversion" value="5"/>
     <!-- put a1, b2 etc. here in non-releases -->
-    <property name="versionqualifier" value="-SNAPSHOT"/>
+    <property name="versionqualifier" value=""/>
     <property name="version" value="${majorversion}.${minorversion}.${microversion}${versionqualifier}"/>
 
     <!-- OSGI wants a period before the a1/b2/d3 qualifier -->

@@ -32,7 +32,7 @@ import java.io.InputStreamReader;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.4.4
+ * @version 1.4.5
  * 
  */
 class Info {
@@ -40,7 +40,7 @@ class Info {
     
     public static void main(String[] args) {
     
-        String version = "1.4.4 or later";
+        String version = "1.4.5 or later";
         InputStream stream = null;
         BufferedReader in = null;
         try {
@@ -50,7 +50,7 @@ class Info {
                 version = in.readLine();
             }
         } catch (IOException ex) {
-            version = "1.4.4 or later";
+            version = "1.4.5 or later";
         } finally {
             if (in != null) {
                 try {
