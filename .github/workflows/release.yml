@@ -157,16 +157,10 @@ jobs:
           echo "::error::Missing required secrets MAVEN_CENTRAL_USERNAME or MAVEN_CENTRAL_PASSWORD. See RELEASING.md for setup instructions."
           exit 1
         fi
-        TOKEN=$(python3 -c "
-        import base64, os
-        u = os.environ['MAVEN_CENTRAL_USERNAME']
-        p = os.environ['MAVEN_CENTRAL_PASSWORD']
-        print(base64.b64encode(f'{u}:{p}'.encode()).decode())
-        ")
         HTTP_STATUS=$(curl --silent \
           --output /tmp/maven-central-response.txt \
           --write-out "%{http_code}" \
-          --header "Authorization: Bearer ${TOKEN}" \
+          --user "${MAVEN_CENTRAL_USERNAME}:${MAVEN_CENTRAL_PASSWORD}" \
           --form "name=xom-${RELEASE_VERSION}" \
           --form "publishingType=AUTOMATIC" \
           --form "bundle=@dist/maven/bundle.zip" \
