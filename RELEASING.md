@@ -39,6 +39,13 @@ Copy the complete output, including:
 * `-----BEGIN PGP PRIVATE KEY BLOCK-----`
 * `-----END PGP PRIVATE KEY BLOCK-----`
 
+### Create Maven Central portal credentials
+
+Log in to the [Central Publishing Portal](https://central.sonatype.com) and
+navigate to **Account → Generate User Token**.  Copy the generated
+**Username** and **Password** (these are token credentials, not your login
+password).
+
 ### Configure GitHub repository secrets
 
 In GitHub, open:
@@ -48,11 +55,15 @@ Add these secrets:
 
 * `GPG_PRIVATE_KEY` (**required**): full ASCII-armored private key exported above
 * `GPG_PASSPHRASE` (**required**): passphrase for that signing key
+* `MAVEN_CENTRAL_USERNAME` (**required**): username from the Central Portal
+  User Token (generated above)
+* `MAVEN_CENTRAL_PASSWORD` (**required**): password from the Central Portal
+  User Token (generated above)
 * `RELEASE_TOKEN` (**optional**): PAT with Contents: write; used instead of
   `GITHUB_TOKEN` when branch protection blocks default token pushes
 
-If either required GPG secret is missing, the release workflow fails during key
-import/signing and does not create a release.
+If any required secret is missing, the release workflow fails before creating a
+release.
 
 ## To prepare the release:
 
@@ -82,6 +93,8 @@ import/signing and does not create a release.
    * creates the `release-${releaseVersion}` branch from `master`
    * runs `ant dist`
    * imports the configured GPG private key and runs `ant bundle`
+   * uploads the signed bundle to Maven Central with `publishingType=AUTOMATIC`
+     (Maven Central validation and publication happen automatically)
    * tags the release
    * creates `prepare-${nextVersion}-snapshot` from `master`
    * updates `build.xml` on that branch to `${nextVersion}-SNAPSHOT`
@@ -90,44 +103,44 @@ import/signing and does not create a release.
      `master` so the protected branch can be reviewed before it advances
    * uploads `dist/maven/bundle.zip` to the workflow run artifacts as
      `maven-central-bundle-${releaseVersion}`
-   * creates the GitHub release only after `dist/maven2/bundle.zip` is created
+   * creates the GitHub release only after `dist/maven/bundle.zip` is created
      and uploads the built archives (including `bundle.zip`)
 
 5. Run the reproducible-build verifier if you want an extra local check:
 
 * `./verify-reproducible.sh`
 
-## To push a new release to Maven Central:
+## Maven Central publishing
 
-[Generic instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html)
+Maven Central publishing is handled automatically by the **Release** workflow.
+After the signed bundle is uploaded, the Central Portal validates it and
+publishes the artifacts without further manual intervention
+(`publishingType=AUTOMATIC`).
 
-1. Download `maven-central-bundle-X.Y.Z` from the **Artifacts** section of the
-   successful release workflow run and use the included `bundle.zip`.
-
-2. Log in to the [Central Publishing Portal](https://central.sonatype.com/publishing).
-
-3. Select Publish in the upper right hand corner.
-
-4. Click Publish Component
-
-5. Fill in XOM release version as the title and add release notes in the box.
-
-6. Locate `maven-central-bundle-X.Y.Z` and press **Upload Bundle**.
-
-7. If validation succeeds, press the Publish button.
-
-8. If needed, edit the GitHub release that the workflow created and attach any
-    additional assets before publishing it.
+The workflow run artifacts still include `maven-central-bundle-${releaseVersion}`
+for auditing purposes.  If you need to re-upload a bundle manually (e.g. after
+a failed workflow run that already created the tag), download `bundle.zip` from
+the workflow artifacts and follow the
+[manual bundle upload instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html).
 
 ## If the release fails before Maven Central publishes it:
 
+If the workflow fails at the **Publish bundle to Maven Central** step (or
+earlier), nothing has been pushed to remote.  Fix the problem and re-run the
+**Release** workflow with the same versions.
+
+If the workflow fails at a step **after** Maven Central accepted the bundle
+(i.e. during tag push, snapshot branch push, PR creation, or GitHub release
+creation), the Central Portal already has the artifact and will validate and
+publish it automatically.  The GitHub-side artifacts may be in a partial state:
+
 Treat the GitHub release, tag, and `prepare-${nextVersion}-snapshot` pull
-request as provisional until Maven Central has published the artifacts. Do not
+request as provisional until Maven Central has finished publishing.  Do not
 merge the snapshot-preparation pull request until Maven Central publication has
 succeeded.
 
-If Central validation, upload, or publishing fails in a way that requires code
-changes, do not burn the version. Instead:
+If re-running requires code changes (e.g. a Central validation failure), do not
+burn the version.  Instead:
 
 1. Leave `master` on the release version. If the snapshot-preparation pull
    request is open, keep it unmerged. If it was merged by mistake, revert it so

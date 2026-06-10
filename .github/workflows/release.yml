@@ -147,6 +147,38 @@ jobs:
         name: maven-central-bundle-${{ inputs.releaseVersion }}
         path: dist/maven/bundle.zip
 
+    - name: Publish bundle to Maven Central
+      env:
+        MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+        MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        RELEASE_VERSION: ${{ inputs.releaseVersion }}
+      run: |
+        if [ -z "$MAVEN_CENTRAL_USERNAME" ] || [ -z "$MAVEN_CENTRAL_PASSWORD" ]; then
+          echo "::error::Missing required secrets MAVEN_CENTRAL_USERNAME or MAVEN_CENTRAL_PASSWORD. See RELEASING.md for setup instructions."
+          exit 1
+        fi
+        TOKEN=$(python3 -c "
+        import base64, os
+        u = os.environ['MAVEN_CENTRAL_USERNAME']
+        p = os.environ['MAVEN_CENTRAL_PASSWORD']
+        print(base64.b64encode(f'{u}:{p}'.encode()).decode())
+        ")
+        HTTP_STATUS=$(curl --silent \
+          --output /tmp/maven-central-response.txt \
+          --write-out "%{http_code}" \
+          --header "Authorization: Bearer ${TOKEN}" \
+          --form "name=xom-${RELEASE_VERSION}" \
+          --form "publishingType=AUTOMATIC" \
+          --form "bundle=@dist/maven/bundle.zip" \
+          "https://central.sonatype.com/api/v1/publisher/upload")
+        echo "Maven Central response:"
+        cat /tmp/maven-central-response.txt
+        if [ "${HTTP_STATUS}" -lt 200 ] || [ "${HTTP_STATUS}" -ge 300 ]; then
+          echo "::error::Maven Central upload failed with HTTP status ${HTTP_STATUS}."
+          exit 1
+        fi
+        echo "Maven Central bundle uploaded successfully (HTTP ${HTTP_STATUS})."
+
     - name: Create release tag
       env:
         RELEASE_VERSION: ${{ inputs.releaseVersion }}
