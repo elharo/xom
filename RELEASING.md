@@ -42,7 +42,7 @@ Copy the complete output, including:
 ### Create Maven Central portal credentials
 
 Log in to the [Central Publishing Portal](https://central.sonatype.com) and
-navigate to **Account → Generate User Token**.  Copy the generated
+navigate to **Account → Generate User Token**. Copy the generated
 **Username** and **Password** (these are token credentials, not your login
 password).
 
@@ -118,7 +118,7 @@ publishes the artifacts without further manual intervention
 (`publishingType=AUTOMATIC`).
 
 The workflow run artifacts still include `maven-central-bundle-${releaseVersion}`
-for auditing purposes.  If you need to re-upload a bundle manually (e.g. after
+for auditing purposes. If you need to re-upload a bundle manually (e.g. after
 a failed workflow run that already created the tag), download `bundle.zip` from
 the workflow artifacts and follow the
 [manual bundle upload instructions](https://central.sonatype.org/pages/manual-staging-bundle-creation-and-deployment.html).
@@ -126,21 +126,21 @@ the workflow artifacts and follow the
 ## If the release fails before Maven Central publishes it:
 
 If the workflow fails at the **Publish bundle to Maven Central** step (or
-earlier), nothing has been pushed to remote.  Fix the problem and re-run the
+earlier), nothing has been pushed to remote. Fix the problem and re-run the
 **Release** workflow with the same versions.
 
 If the workflow fails at a step **after** Maven Central accepted the bundle
 (i.e. during tag push, snapshot branch push, PR creation, or GitHub release
 creation), the Central Portal already has the artifact and will validate and
-publish it automatically.  The GitHub-side artifacts may be in a partial state:
+publish it automatically. The GitHub-side artifacts may be in a partial state:
 
 Treat the GitHub release, tag, and `prepare-${nextVersion}-snapshot` pull
-request as provisional until Maven Central has finished publishing.  Do not
+request as provisional until Maven Central has finished publishing. Do not
 merge the snapshot-preparation pull request until Maven Central publication has
 succeeded.
 
 If re-running requires code changes (e.g. a Central validation failure), do not
-burn the version.  Instead:
+burn the version. Instead:
 
 1. Leave `master` on the release version. If the snapshot-preparation pull
    request is open, keep it unmerged. If it was merged by mistake, revert it so
