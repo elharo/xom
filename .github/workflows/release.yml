@@ -157,18 +157,23 @@ jobs:
           echo "::error::Missing required secrets MAVEN_CENTRAL_USERNAME or MAVEN_CENTRAL_PASSWORD. See RELEASING.md for setup instructions."
           exit 1
         fi
+        NETRC=$(mktemp)
+        chmod 600 "${NETRC}"
+        printf "machine central.sonatype.com\nlogin %s\npassword %s\n" \
+          "${MAVEN_CENTRAL_USERNAME}" "${MAVEN_CENTRAL_PASSWORD}" > "${NETRC}"
         HTTP_STATUS=$(curl --silent \
           --output /tmp/maven-central-response.txt \
           --write-out "%{http_code}" \
-          --user "${MAVEN_CENTRAL_USERNAME}:${MAVEN_CENTRAL_PASSWORD}" \
+          --netrc-file "${NETRC}" \
           --form "name=xom-${RELEASE_VERSION}" \
           --form "publishingType=AUTOMATIC" \
           --form "bundle=@dist/maven/bundle.zip" \
           "https://central.sonatype.com/api/v1/publisher/upload")
-        echo "Maven Central response:"
-        cat /tmp/maven-central-response.txt
+        rm -f "${NETRC}"
+        RESPONSE=$(cat /tmp/maven-central-response.txt)
+        echo "Maven Central response: ${RESPONSE}"
         if [ "${HTTP_STATUS}" -lt 200 ] || [ "${HTTP_STATUS}" -ge 300 ]; then
-          echo "::error::Maven Central upload failed with HTTP status ${HTTP_STATUS}."
+          echo "::error::Maven Central upload failed with HTTP status ${HTTP_STATUS}: ${RESPONSE}"
           exit 1
         fi
         echo "Maven Central bundle uploaded successfully (HTTP ${HTTP_STATUS})."
