@@ -80,7 +80,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.2.11
+ * @version 1.4.6
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -1491,10 +1491,20 @@ public class BuilderTest extends XOMTestCase {
         
     }
     
-    
+   
     public void testBaseRelativeResolution()
       throws IOException, ParsingException {
         builder.build(new File(inputDir, "baserelative/test.xml"));
+    }
+
+
+    public void testBuildFromRelativeURLAsString()
+      throws IOException, ParsingException, SAXException {
+        // testing workaround for a specific bug JDK-8149906 in the JDK bundled parser
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+            "com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser");
+        Builder builder = new Builder(parser);
+        builder.build("data/baserelative/test.xml");
     }
     
     

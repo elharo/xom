@@ -29,6 +29,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UTFDataFormatException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.xml.sax.ErrorHandler;
@@ -52,7 +54,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.3.9
+ * @version 1.4.6
  * 
  */
 public class Builder {
@@ -171,8 +173,8 @@ public class Builder {
     private static String[] parsers = {
         "nu.xom.XML1_0Parser",
         "org.apache.xerces.parsers.SAXParser",
-        "org.apache.xerces.jaxp.SAXParserImpl$JAXPSAXParser", // xerces-2.9.x
-        "com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser", // JDK 1.6
+        "org.apache.xerces.jaxp.SAXParserImpl$JAXPSAXParser", // xerces-2.9.0+
+        "com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser", // JDK 1.6+
         "com.sun.org.apache.xerces.internal.parsers.SAXParser",
         "gnu.xml.aelfred2.XmlReader",
         "org.apache.crimson.parser.XMLReaderImpl",
@@ -522,7 +524,7 @@ public class Builder {
      * </p>
      * 
      * <p>
-     * Note that relative URLs generally do not work here, as
+     * Relative URLs do not always work here, as
      * there's no base to resolve them against. This includes 
      * relative URLs that point into the file system, though this 
      * is somewhat platform dependent. Furthermore, <code>file</code> 
@@ -547,10 +549,20 @@ public class Builder {
     public Document build(String systemID) 
       throws ParsingException, ValidityException, IOException {
 
+        // Convert relative URIs to files. This is a Work around for JDK-8149906
+        try { 
+            URI uri = new URI(systemID);
+            if (!uri.isAbsolute()) {
+                return build(new File(systemID));
+            }
+        } 
+        catch (URISyntaxException ex) {
+            // probably fails later anyway but we'll let the parser sort out the systemID
+        }
+        
         systemID = canonicalizeURL(systemID);
         InputSource source = new InputSource(systemID);
         return build(source);
-        
     }
 
     
