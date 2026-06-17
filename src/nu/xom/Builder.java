@@ -549,7 +549,8 @@ public class Builder {
     public Document build(String systemID) 
       throws ParsingException, ValidityException, IOException {
 
-        // Convert relative URIs to files. This is a Work around for JDK-8149906
+        // Convert relative URIs to files. This is a work-around for JDK-8149906.
+        // https://bugs.openjdk.org/browse/JDK-8149906
         try { 
             URI uri = new URI(systemID);
             if (!uri.isAbsolute()) {
