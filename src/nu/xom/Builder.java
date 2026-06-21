@@ -1171,7 +1171,7 @@ public class Builder {
         catch (RuntimeException ex) {
             // Work-around for non-conformant parsers, especially Piccolo
             ParsingException pex 
-              = new ParsingException(ex.getMessage(), in.getSystemId(), ex);
+              = new ParserBugException(ex.getMessage(), in.getSystemId(), ex);
             throw pex;
         }
         catch (UTFDataFormatException ex) {

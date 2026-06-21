@@ -65,6 +65,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.NodeFactory;
+import nu.xom.ParserBugException;
 import nu.xom.ParsingException;
 import nu.xom.ProcessingInstruction;
 import nu.xom.Serializer;
@@ -3025,6 +3026,17 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
+    private static class NullPointerReader extends XMLFilterImpl {
+        
+        public void setFeature(String name, boolean value) {};
+        
+        public void parse(InputSource in) {
+            throw new NullPointerException("test null pointer");
+        }
+        
+    }
+    
+    
     public void testParserThrowsNullPointerException() 
       throws SAXException, IOException {
         
@@ -3040,6 +3052,26 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (ParsingException success) {
             assertEquals(cause, success.getCause());
+        }
+        
+    }
+    
+    
+    public void testParserThrowsNullPointerExceptionWrappedInParserBug() 
+      throws ParsingException, IOException {
+        
+        XMLReader parser = new NullPointerReader();
+        Builder builder = new Builder(parser);
+        
+        try {
+            builder.build("http://www.example.org/");
+            fail("Expected ParserBugException");
+        }
+        catch (ParserBugException success) {
+            assertNotNull(success.getMessage());
+            assertTrue(success.getMessage().contains("Bug in the underlying parser"));
+            assertTrue(success.getCause() instanceof NullPointerException);
+            assertEquals("http://www.example.org/", success.getURI());
         }
         
     }
