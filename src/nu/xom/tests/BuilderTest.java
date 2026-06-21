@@ -3079,6 +3079,7 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (ParserBugException success) {
             assertEquals(throwable, success.getCause());
+            assertTrue(success.getMessage().contains(ExceptionTester.class.getName()));
         }
 
     }

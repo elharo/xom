@@ -1,4 +1,4 @@
-/* Copyright 2024 Elliotte Rusty Harold
+/* Copyright 2026 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
