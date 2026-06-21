@@ -49,7 +49,7 @@ public class ParserBugException extends ParsingException {
      * @param uri the URI of the document being parsed
      * @param cause the original runtime exception thrown by the parser
      */
-    public ParserBugException(String message, String uri, Throwable cause) {
+    ParserBugException(String message, String uri, Throwable cause) {
         super("Bug in the underlying parser: " + message
           + ". Please report this bug to the parser vendor.", uri, cause);
     }
