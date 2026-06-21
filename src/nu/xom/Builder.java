@@ -33,6 +33,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import javax.xml.parsers.FactoryConfigurationError;
+
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -1169,9 +1171,33 @@ public class Builder {
             throw new ParsingException(ex.getMessage(), ex);
         }
         catch (RuntimeException ex) {
-            // Work-around for non-conformant parsers, especially Piccolo
-            ParsingException pex 
-              = new ParserBugException(ex.getMessage(), in.getSystemId(), ex);
+            // Work-around for non-conformant or buggy parsers, especially Piccolo
+            ParsingException pex
+                = new ParserBugException(ex.getMessage(), in.getSystemId(), ex);
+            throw pex;
+        }
+        catch (LinkageError err) {
+            // Workaround buggy parsers and prevent DoS attacks
+            ParsingException pex
+                = new ParserBugException(err.getMessage(), in.getSystemId(), err);
+            throw pex;
+        }
+        catch (StackOverflowError err) {
+            // Workaround buggy parsers and prevent DoS attacks
+            ParsingException pex
+                = new ParserBugException(err.getMessage(), in.getSystemId(), err);
+            throw pex;
+        }
+        catch (AssertionError err) {
+            // Workaround buggy parsers and prevent DoS attacks
+            ParsingException pex
+                = new ParserBugException(err.getMessage(), in.getSystemId(), err);
+            throw pex;
+        }
+        catch (FactoryConfigurationError err) {
+            // Workaround buggy parsers and prevent DoS attacks
+            ParsingException pex
+                = new ParserBugException(err.getMessage(), in.getSystemId(), err);
             throw pex;
         }
         catch (UTFDataFormatException ex) {

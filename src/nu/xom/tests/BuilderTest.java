@@ -41,6 +41,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 
+import javax.xml.parsers.FactoryConfigurationError;
+
 import org.apache.xerces.parsers.SAXParser;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -3011,69 +3013,74 @@ public class BuilderTest extends XOMTestCase {
     // parsers, especially Piccolo. 
     private static class ExceptionTester extends XMLFilterImpl {
         
-        private Exception ex;
+        private Throwable ex;
         
-        ExceptionTester(Exception ex) {
+        ExceptionTester(Throwable ex) {
             this.ex = ex;
         }
         
         public void parse(InputSource in) throws IOException, SAXException {
             if (ex instanceof IOException) throw (IOException) ex;
             else if (ex instanceof SAXException) throw (SAXException) ex;
-            else throw (RuntimeException) ex;
-        }
-        
-    }
-    
-    
-    private static class NullPointerReader extends XMLFilterImpl {
-        
-        public void setFeature(String name, boolean value) {};
-        
-        public void parse(InputSource in) {
-            throw new NullPointerException("test null pointer");
+            else if (ex instanceof RuntimeException) throw (RuntimeException) ex;
+            else throw (Error) ex;
         }
         
     }
     
     
     public void testParserThrowsNullPointerException() 
-      throws SAXException, IOException {
-        
-        XMLReader parser = XMLReaderFactory.createXMLReader(
-          "org.apache.xerces.parsers.SAXParser");
-        Exception cause = new NullPointerException();
-        XMLFilter filter = new ExceptionTester(cause);
-        filter.setParent(parser);
-        Builder builder = new Builder(filter);
-        
-        try {
-            builder.build("<data/>");
-        }
-        catch (ParsingException success) {
-            assertEquals(cause, success.getCause());
-        }
-        
+      throws SAXException, IOException, ParsingException {
+        checkParserThrows(new NullPointerException());        
+    }
+
+
+    public void testParserThrowsStackOverflowError()
+      throws SAXException, IOException, ParsingException {
+        checkParserThrows(new StackOverflowError());
     }
     
     
-    public void testParserThrowsNullPointerExceptionWrappedInParserBug() 
-      throws ParsingException, IOException {
-        
-        XMLReader parser = new NullPointerReader();
-        Builder builder = new Builder(parser);
-        
+    public void testParserThrowsAssertionError()
+      throws SAXException, IOException, ParsingException {
+        checkParserThrows(new AssertionError());
+    }
+
+
+    public void testParserThrowsLinkageError()
+        throws SAXException, IOException, ParsingException {
+        checkParserThrows(new LinkageError());
+    }
+
+    
+    public void testParserThrowsNoClassDefFoundError()
+        throws SAXException, IOException, ParsingException {
+        checkParserThrows(new NoClassDefFoundError());
+    }
+
+
+    public void testParserThrowsFactoryConfigurationError()
+        throws SAXException, IOException, ParsingException {
+        checkParserThrows(new FactoryConfigurationError());
+    }
+    
+    
+    private static void checkParserThrows(Throwable throwable)
+      throws SAXException, IOException, ParsingException {
+
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+            "org.apache.xerces.parsers.SAXParser");
+        XMLFilter filter = new ExceptionTester(throwable);
+        filter.setParent(parser);
+        Builder builder = new Builder(filter);
+
         try {
-            builder.build("http://www.example.org/");
-            fail("Expected ParserBugException");
+            builder.build("<data/>");
         }
         catch (ParserBugException success) {
-            assertNotNull(success.getMessage());
-            assertTrue(success.getMessage().contains("Bug in the underlying parser"));
-            assertTrue(success.getCause() instanceof NullPointerException);
-            assertEquals("http://www.example.org/", success.getURI());
+            assertEquals(throwable, success.getCause());
         }
-        
+
     }
     
     
