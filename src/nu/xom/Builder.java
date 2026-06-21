@@ -56,7 +56,7 @@ import org.apache.xerces.impl.Version;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.4.6
+ * @version 1.5.0
  * 
  */
 public class Builder {
@@ -1172,32 +1172,33 @@ public class Builder {
         }
         catch (RuntimeException ex) {
             // Work-around for non-conformant or buggy parsers, especially Piccolo
+            parser.getClass().getName();
             ParsingException pex
-                = new ParserBugException(ex.getMessage(), in.getSystemId(), ex);
+                = new ParserBugException(parser, ex.getMessage(), in.getSystemId(), ex);
             throw pex;
         }
         catch (LinkageError err) {
             // Workaround buggy parsers and prevent DoS attacks
             ParsingException pex
-                = new ParserBugException(err.getMessage(), in.getSystemId(), err);
+                = new ParserBugException(parser, err.getMessage(), in.getSystemId(), err);
             throw pex;
         }
         catch (StackOverflowError err) {
             // Workaround buggy parsers and prevent DoS attacks
             ParsingException pex
-                = new ParserBugException(err.getMessage(), in.getSystemId(), err);
+                = new ParserBugException(parser, err.getMessage(), in.getSystemId(), err);
             throw pex;
         }
         catch (AssertionError err) {
             // Workaround buggy parsers and prevent DoS attacks
             ParsingException pex
-                = new ParserBugException(err.getMessage(), in.getSystemId(), err);
+                = new ParserBugException(parser, err.getMessage(), in.getSystemId(), err);
             throw pex;
         }
         catch (FactoryConfigurationError err) {
             // Workaround buggy parsers and prevent DoS attacks
             ParsingException pex
-                = new ParserBugException(err.getMessage(), in.getSystemId(), err);
+                = new ParserBugException(parser, err.getMessage(), in.getSystemId(), err);
             throw pex;
         }
         catch (UTFDataFormatException ex) {

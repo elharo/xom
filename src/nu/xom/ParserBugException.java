@@ -20,12 +20,16 @@
 
 package nu.xom;
 
+
+import org.xml.sax.XMLReader;
+
 /**
  * <p>
  *  Thrown when the underlying XML parser throws an unexpected
  *  runtime exception such as {@link NullPointerException} or
  *  {@link IndexOutOfBoundsException}. This generally indicates a bug
- *  in the parser itself rather than in the XML being parsed.
+ *  in the parser itself rather than in the XML being parsed, though
+ *  it can sometimes indicate both.
  * </p>
  * 
  * @author Elliotte Rusty Harold
@@ -49,8 +53,8 @@ public class ParserBugException extends ParsingException {
      * @param uri the URI of the document being parsed
      * @param cause the original runtime exception thrown by the parser
      */
-    ParserBugException(String message, String uri, Throwable cause) {
-        super("Bug in the underlying parser: " + message
+    ParserBugException(XMLReader parser, String message, String uri, Throwable cause) {
+        super("Probable bug in the underlying parser: " + parser.getClass().getName() + "; " + message
           + ". Please report this bug to the parser vendor.", uri, cause);
     }
 
