@@ -3033,6 +3033,8 @@ public class BuilderTest extends XOMTestCase {
         
         private static final byte[] PREFIX;
         private static final byte[] SUFFIX;
+        private static final byte[] A_BYTES = new byte[8192];
+        private static final long COMMENT_LENGTH = (long) Integer.MAX_VALUE + 10;
         static {
             try {
                 PREFIX = "<root><!--".getBytes("UTF-8");
@@ -3041,8 +3043,10 @@ public class BuilderTest extends XOMTestCase {
             catch (UnsupportedEncodingException ex) {
                 throw new RuntimeException(ex);
             }
+            for (int i = 0; i < A_BYTES.length; i++) {
+                A_BYTES[i] = 'A';
+            }
         }
-        private static final long COMMENT_LENGTH = (long) Integer.MAX_VALUE + 10;
         
         private int prefixIndex;
         private long commentIndex;
@@ -3057,9 +3061,7 @@ public class BuilderTest extends XOMTestCase {
             }
             if (commentIndex < COMMENT_LENGTH) {
                 int toCopy = (int) Math.min(len, COMMENT_LENGTH - commentIndex);
-                for (int i = 0; i < toCopy; i++) {
-                    b[off + i] = 'A';
-                }
+                System.arraycopy(A_BYTES, 0, b, off, toCopy);
                 commentIndex += toCopy;
                 return toCopy;
             }
