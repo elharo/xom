@@ -22,16 +22,11 @@ package nu.xom.samples;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
-import nu.xom.ValidityException;
-import nu.xom.xinclude.BadParseAttributeException;
-import nu.xom.xinclude.InclusionLoopException;
-import nu.xom.xinclude.NoIncludeLocationException;
 import nu.xom.xinclude.XIncludeException;
 import nu.xom.xinclude.XIncluder;
 
@@ -70,17 +65,16 @@ public class XIncludeDriver {
             outputter.write(input);
         }
         catch (IOException e) {
-			System.err.println("I/O error reading " + args[0] + " " + e.getMessage());
-			System.exit(2);
-		}
+			      System.err.println("I/O error reading " + args[0] + " " + e.getMessage());
+			      System.exit(2);
+		    }
         catch (ParsingException e) {
-			System.err.println("Malformed XML while processing " + args[0] + " " + e.getMessage());
-			System.exit(2);
-		}
+			      System.err.println("Malformed XML while processing " + args[0] + " " + e.getMessage());
+			      System.exit(2);
+		    }
         catch (XIncludeException e) {
-			System.err.println("XInclude error while processing " + args[0] + " " + e.getMessage());
-			System.exit(2);
-		} 
-  
+			      System.err.println("XInclude error while processing " + args[0] + " " + e.getMessage());
+			      System.exit(2);
+        }
     }
 }
