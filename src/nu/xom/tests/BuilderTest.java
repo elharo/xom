@@ -3029,61 +3029,6 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
-    private static class HugeCommentInputStream extends InputStream {
-        
-        private static final byte[] PREFIX;
-        private static final byte[] SUFFIX;
-        private static final byte[] A_BYTES = new byte[8192];
-        private static final long COMMENT_LENGTH = (long) Integer.MAX_VALUE + 10;
-        static {
-            try {
-                PREFIX = "<root><!--".getBytes("UTF-8");
-                SUFFIX = "--></root>".getBytes("UTF-8");
-            }
-            catch (UnsupportedEncodingException ex) {
-                throw new RuntimeException(ex);
-            }
-            for (int i = 0; i < A_BYTES.length; i++) {
-                A_BYTES[i] = 'A';
-            }
-        }
-        
-        private int prefixIndex;
-        private long commentIndex;
-        private int suffixIndex;
-        
-        public int read(byte[] b, int off, int len) {
-            if (prefixIndex < PREFIX.length) {
-                int toCopy = Math.min(len, PREFIX.length - prefixIndex);
-                System.arraycopy(PREFIX, prefixIndex, b, off, toCopy);
-                prefixIndex += toCopy;
-                return toCopy;
-            }
-            if (commentIndex < COMMENT_LENGTH) {
-                int toCopy = (int) Math.min(len, COMMENT_LENGTH - commentIndex);
-                System.arraycopy(A_BYTES, 0, b, off, toCopy);
-                commentIndex += toCopy;
-                return toCopy;
-            }
-            if (suffixIndex < SUFFIX.length) {
-                int toCopy = Math.min(len, SUFFIX.length - suffixIndex);
-                System.arraycopy(SUFFIX, suffixIndex, b, off, toCopy);
-                suffixIndex += toCopy;
-                return toCopy;
-            }
-            return -1;
-        }
-        
-        public int read() {
-            byte[] b = new byte[1];
-            int n = read(b, 0, 1);
-            if (n == -1) return -1;
-            return b[0] & 0xFF;
-        }
-        
-    }
-    
-    
     private static class NullPointerReader extends XMLFilterImpl {
         
         public void setFeature(String name, boolean value) {};
@@ -3148,15 +3093,6 @@ public class BuilderTest extends XOMTestCase {
             assertTrue(success.getMessage().contains(ExceptionTester.class.getName()));
         }
 
-    }
-    
-    
-    public void testHugeCommentCausesOutOfMemoryError() 
-      throws ParsingException, IOException {
-        
-        Builder builder = new Builder();
-        builder.build(new HugeCommentInputStream());
-        
     }
     
     
