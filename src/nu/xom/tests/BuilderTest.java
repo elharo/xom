@@ -3596,13 +3596,13 @@ public class BuilderTest extends XOMTestCase {
             // Here we expect that because there's no Locator
             // there's no base URL. As a result, the DTD is looked for in the
             // current working directory, which is the wrong place. 
-            // Therefore this IOException is thrown. 
+            // Therefore, this IOException is thrown. 
         }
         
     }
     
-    public void testChemistry() throws ValidityException, ParsingException, IOException {
-      String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
+    public void testChemistry() throws ParsingException, IOException {
+      String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"https://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
       StringReader s = new StringReader(doc);
       try {
           builder.build(s);
