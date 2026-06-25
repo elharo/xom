@@ -563,9 +563,10 @@ XOM Build file
   </target>
 
  
-  <!-- This task requires the ANT optional.jar -->
-  <target name="test" depends="compile" description="Run JUnit tests">
+  <target name="test" depends="unit-tests, integration-tests" description="Run unit and integration tests" >
 
+
+  <target name="unit-tests" depends="compile" description="Run JUnit tests">
     <junit fork="true" jvm="${jvm}" failureproperty="testsfailed">
        <classpath refid="test.class.path" />
        <sysproperty key="jaxen.data.dir" value="${build.dir}/jaxen-${jaxenversion}"/>
@@ -583,17 +584,6 @@ XOM Build file
       </batchtest>
     </junit>
 
-  <target name="test-huge" depends="compile" description="Run huge comment OOM test with constrained heap">
-    <junit fork="true" jvm="${jvm}">
-       <classpath refid="test.class.path" />
-       <jvmarg value="-Xmx256m" />
-       <sysproperty key="jaxen.data.dir" value="${build.dir}/jaxen-${jaxenversion}"/>
-       <formatter type="${test.outputFormat}" />
-       <formatter type="brief" usefile="false" />
-       <test name="nu.xom.tests.HugeCommentTest" />
-    </junit>
-  </target>
-
     <junitreport todir="${testoutput.dir}">
       <fileset dir="${testoutput.dir}">
         <include name="TEST-*.xml" />
@@ -604,8 +594,20 @@ XOM Build file
     <fail message="tests failed" if="testsfailed"/>
 
   </target>
- 
- 
+
+
+  <target name="integration-tests" depends="compile" description="Run huge comment OOM test with constrained heap">
+    <junit fork="true" jvm="${jvm}">
+       <classpath refid="test.class.path" />
+       <jvmarg value="-Xmx256m" />
+       <sysproperty key="jaxen.data.dir" value="${build.dir}/jaxen-${jaxenversion}"/>
+       <formatter type="${test.outputFormat}" />
+       <formatter type="brief" usefile="false" />
+       <test name="nu.xom.tests.HugeCommentTest" />
+    </junit>
+  </target> 
+
+
   <target name="with.clover" depends="prepare" description="Instrument XOM sources with OpenClover">
     <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
     <mkdir dir="${clover.db.dir}"/>
