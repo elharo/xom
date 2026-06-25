@@ -213,7 +213,7 @@ public class AttributeTest extends XOMTestCase {
         assertEquals("http://www.example.com/<", a1.getValue());
         
         a1.setValue("http://www.example.com/\u00FE");
-        assertEquals(a1.getValue(), "http://www.example.com/\u00FE");
+        assertEquals("http://www.example.com/\u00FE", a1.getValue());
         
     }
 
@@ -252,7 +252,7 @@ public class AttributeTest extends XOMTestCase {
         assertEquals(xmlNamespace, a1.getNamespaceURI());
 
         Attribute a2 = new Attribute("xml:space", xmlNamespace, "preserve");
-        assertEquals(a2.getLocalName(), "space");
+        assertEquals("space", a2.getLocalName());
         assertEquals("xml:space", a2.getQualifiedName());
         assertEquals(xmlNamespace, a2.getNamespaceURI());
 
@@ -674,12 +674,12 @@ public class AttributeTest extends XOMTestCase {
         assertEquals(1, element.getAttributeCount());
         element.addAttribute(a2);
         assertEquals(
-          element.getAttributeValue("data", "http://www.example.com"), 
-          "valueBar"
+            "valueBar",
+            element.getAttributeValue("data", "http://www.example.com")
         );
         assertEquals(1, element.getAttributeCount());
         element.addAttribute(a3);
-        assertEquals(element.getAttributeValue("data"), "valueFoo");
+        assertEquals("valueFoo", element.getAttributeValue("data"));
         assertEquals("valueBar", 
           element.getAttributeValue("data", "http://www.example.com"));
         assertEquals(2, element.getAttributeCount());

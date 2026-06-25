@@ -336,7 +336,7 @@ public class DocTypeTest extends XOMTestCase {
         Builder builder = new Builder();
         Document doc = builder.build("data/outer21.xml");
         String subset = doc.getDocType().getInternalDTDSubset();
-        assertEquals(subset, subset.indexOf("file:/"), -1);
+        assertEquals(subset, -1, subset.indexOf("file:/"));
 
     }
     
@@ -350,7 +350,7 @@ public class DocTypeTest extends XOMTestCase {
             Builder builder = new Builder(crimson);
             Document doc = builder.build("data/outer21.xml");
             String subset = doc.getDocType().getInternalDTDSubset();
-            assertEquals(subset, subset.indexOf("file:/"), -1);
+            assertEquals(subset, -1, subset.indexOf("file:/"));
         } 
         catch (SAXException ex) {
             // can't test Crimson if you can't load it
@@ -604,7 +604,7 @@ public class DocTypeTest extends XOMTestCase {
         
         // one space is legal
         DocType test = new DocType("root", "test test", "http://www.example.org");
-        assertEquals(test.getPublicID(), "test test");
+        assertEquals("test test", test.getPublicID());
 
     }
     

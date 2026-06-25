@@ -417,7 +417,7 @@ public class ElementTest extends XOMTestCase {
         catch (NamespaceConflictException success) {
             assertNotNull(success.getMessage());
         }
-        assertEquals(e.getNamespaceURI("xml"), xmlNamespace);
+        assertEquals(xmlNamespace, e.getNamespaceURI("xml"));
         
         // This should succeed
         e.addNamespaceDeclaration("xml", xmlNamespace);
@@ -774,17 +774,17 @@ public class ElementTest extends XOMTestCase {
         String uri = "http://www.red.com/";
         Element e = new Element(name, uri);
 
-        assertEquals(e.getValue(), "");
+        assertEquals("", e.getValue());
         
         e.appendChild(new Text("data"));
-        assertEquals(e.getValue(), "data");
+        assertEquals("data", e.getValue());
         e.appendChild(new Text(" moredata"));
-        assertEquals(e.getValue(), "data moredata");
+        assertEquals("data moredata", e.getValue());
         e.appendChild(new Comment(" moredata"));
-        assertEquals(e.getValue(), "data moredata");
+        assertEquals("data moredata", e.getValue());
         e.appendChild(
           new ProcessingInstruction("target", "moredata"));
-        assertEquals(e.getValue(), "data moredata");
+        assertEquals("data moredata", e.getValue());
         
         Element e2 = new Element("child");
         e.appendChild(e2);
@@ -916,7 +916,7 @@ public class ElementTest extends XOMTestCase {
         String uri = "http://www.red.com/";
         Element e = new Element(name, uri);
 
-        assertEquals(e.getNamespaceURI(), uri);
+        assertEquals(uri, e.getNamespaceURI());
         
         for (int i = 0; i < legal.length; i++) {
             e.setNamespaceURI(legal[i]);          

@@ -68,7 +68,7 @@ public class IDTest extends XOMTestCase {
           "http://www.w3.org/XML/1998/namespace", "name");
         assertEquals("name", id.getValue());
         id.setValue("not a name");
-        assertEquals(id.getValue(), "not a name");
+        assertEquals("not a name", id.getValue());
         
     }
 

@@ -30,7 +30,7 @@ import nu.xom.Element;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.5.0
  *
  */
 public class AttributesTest extends XOMTestCase {
@@ -67,12 +67,14 @@ public class AttributesTest extends XOMTestCase {
         }
         try {
             threeAttributes.getAttribute(4);
+            fail("Should have thrown IndexOutOfBoundsException");
         }
         catch (IndexOutOfBoundsException success) {
-            assertNotNull(success.getMessage());   
+            assertNotNull(success.getMessage());
         }
         try {
             threeAttributes.getAttribute(-1);
+            fail("Should have thrown IndexOutOfBoundsException");
         }
         catch (IndexOutOfBoundsException success) {
             assertNotNull(success.getMessage());   

@@ -150,7 +150,7 @@ public class NamespacesTest extends XOMTestCase {
     
     public void testAllowCapitalSchemes() {       
         noNamespaces.addNamespaceDeclaration("pre", "HTTP://WWW.EXAMPLE.COM/");
-        assertEquals(noNamespaces.getNamespaceURI("pre"), "HTTP://WWW.EXAMPLE.COM/"); 
+        assertEquals("HTTP://WWW.EXAMPLE.COM/", noNamespaces.getNamespaceURI("pre")); 
     }
 
     

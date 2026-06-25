@@ -76,9 +76,9 @@ public class NodeFactoryTest extends XOMTestCase {
           2, root.getChildCount());
         assertEquals("18", doc.getValue());
         Node first = root.getChild(0);
-        assertEquals(first.getValue(), "1");        
+        assertEquals("1", first.getValue());        
         Node second = root.getChild(1);
-        assertEquals(second.getValue(), "8");   
+        assertEquals("8", second.getValue());   
         
     }
 
@@ -211,9 +211,9 @@ public class NodeFactoryTest extends XOMTestCase {
         );
         assertEquals("18", doc.getValue());
         Node first = root.getChild(0);
-        assertEquals(first.getValue(), "1");        
+        assertEquals("1", first.getValue());        
         Node second = root.getChild(1);
-        assertEquals(second.getValue(), "8");   
+        assertEquals("8", second.getValue());   
 
     }
 

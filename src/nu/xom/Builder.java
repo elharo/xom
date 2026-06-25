@@ -1172,7 +1172,6 @@ public class Builder {
         }
         catch (RuntimeException ex) {
             // Work-around for non-conformant or buggy parsers, especially Piccolo
-            parser.getClass().getName();
             ParsingException pex
                 = new ParserBugException(parser, ex.getMessage(), in.getSystemId(), ex);
             throw pex;
