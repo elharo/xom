@@ -1,4 +1,4 @@
-/* Copyright 2002, 2003 Elliotte Rusty Harold
+/* Copyright 2002, 2003, 2026 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -21,6 +21,9 @@
 package nu.xom.benchmarks;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 import java.text.DecimalFormat;
 
 import nu.xom.Attribute;
@@ -37,7 +40,7 @@ import nu.xom.ParsingException;
  * 
  * 
  * @author Elliotte Rusty Harold
- * @version 1.0
+ * @version 1.5.0
  *
  */
 class MemoryTest {
@@ -92,9 +95,12 @@ class MemoryTest {
         
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
-        Runtime r = Runtime.getRuntime();
-        System.gc(); System.gc(); System.gc();
-        long before = r.totalMemory() - r.freeMemory();
+
+        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+
+        MemoryUsage heapBefore = memoryMXBean.getHeapMemoryUsage();
+        long before = heapBefore.getUsed();
+        
         Document doc;
         if (args.length > 0) {
             Builder builder = new Builder();
@@ -104,19 +110,16 @@ class MemoryTest {
         else {
             doc = makeFullUnicode();
         }
-        long after = r.totalMemory() - r.freeMemory();
+        
+        MemoryUsage heapAfter = memoryMXBean.getHeapMemoryUsage();
+        long after = heapAfter.getUsed();
+        
         double usage = (after - before)/(1024.0*1024.0);
-        System.out.println("Memory used: " 
-          + format.format(usage) + "M");
-        System.gc(); System.gc(); System.gc();
-        long postGC = r.totalMemory() - r.freeMemory();
-        usage = (postGC - before)/(1024.0*1024.0);
-        System.out.println("Memory used after garbage collection: " 
-          + format.format(usage) + "M");
+        System.out.println("Memory used: " + format.format(usage) + "M");
        
         // Make sure the document isn't prematurely garbage collected
-        System.out.println("Meaningless number: " 
-          + doc.toXML().length());
+        System.out.println("Meaningless number: " + doc.toXML().length());
     }
 
 }
+
