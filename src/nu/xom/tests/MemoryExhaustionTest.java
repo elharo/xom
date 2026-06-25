@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import java.util.Arrays;
 import junit.framework.TestCase;
 import nu.xom.Builder;
 import nu.xom.ParsingException;
@@ -49,9 +50,7 @@ public class MemoryExhaustionTest extends TestCase {
             catch (UnsupportedEncodingException ex) {
                 throw new RuntimeException(ex);
             }
-            for (int i = 0; i < A_BYTES.length; i++) {
-                A_BYTES[i] = 'A';
-            }
+            Arrays.fill(A_BYTES, (byte) 'A');
         }
         
         private int prefixIndex;
