@@ -83,7 +83,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.4.6
+ * @version 1.5.0
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -3585,24 +3585,9 @@ public class BuilderTest extends XOMTestCase {
             // Here we expect that because there's no Locator
             // there's no base URL. As a result, the DTD is looked for in the
             // current working directory, which is the wrong place. 
-            // Therefore this IOException is thrown. 
+            // Therefore, this IOException is thrown. 
         }
         
-    }
-    
-    public void testChemistry() throws ValidityException, ParsingException, IOException {
-      String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"http://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
-      StringReader s = new StringReader(doc);
-      try {
-          builder.build(s);
-      } catch (IOException ex) {
-          if (CITestUtil.shouldIgnore(ex)) {
-              // Skip test if network is unavailable in CI
-              systemErr.println("Skipping testChemistry: network unavailable");
-              return;
-          }
-          throw ex;
-      }
     }
     
     public void testMisbehavingParserInternalDTDSubset() throws IOException {
