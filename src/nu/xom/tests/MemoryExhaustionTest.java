@@ -28,7 +28,12 @@ import junit.framework.TestCase;
 import nu.xom.Builder;
 import nu.xom.ParsingException;
 
-public class HugeCommentTest extends TestCase {
+/**
+ * Mostly tests that verify behavior in the face of billion laughs attack and other failures
+ * that happen in memory constrained environments. These run in a 
+ * separate VM with small heaps to trigger the issue being tested for sooner.
+ */
+public class MemoryExhaustionTest extends TestCase {
 
     private static class HugeCommentInputStream extends InputStream {
         
