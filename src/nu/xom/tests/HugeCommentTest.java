@@ -24,10 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import junit.framework.TestCase;
 import nu.xom.Builder;
 import nu.xom.ParsingException;
 
-public class HugeCommentTest {
+public class HugeCommentTest extends TestCase {
 
     private static class HugeCommentInputStream extends InputStream {
         

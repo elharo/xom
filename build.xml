@@ -150,6 +150,7 @@ XOM Build file
     compile        --> compile the source code
     javadoc        --> generate the API documentation
     test           --> run JUnit test suite
+    test-huge      --> run huge comment OOM test with -Xmx256m
     clover         --> run tests with OpenClover code coverage
     clean          --> clean up the build directory
     dist           --> the zip and .tar.gz files
@@ -577,9 +578,21 @@ XOM Build file
             <exclude name="**/benchmarks/*.java" />
             <exclude name="**/integrationtests/*.java" />
            <exclude name="**/EBCDICTest.java" />
+           <exclude name="**/HugeCommentTest.java" />
          </fileset>
       </batchtest>
     </junit>
+
+  <target name="test-huge" depends="compile" description="Run huge comment OOM test with constrained heap">
+    <junit fork="true" jvm="${jvm}">
+       <classpath refid="test.class.path" />
+       <jvmarg value="-Xmx256m" />
+       <sysproperty key="jaxen.data.dir" value="${build.dir}/jaxen-${jaxenversion}"/>
+       <formatter type="${test.outputFormat}" />
+       <formatter type="brief" usefile="false" />
+       <test name="nu.xom.tests.HugeCommentTest" />
+    </junit>
+  </target>
 
     <junitreport todir="${testoutput.dir}">
       <fileset dir="${testoutput.dir}">
@@ -650,6 +663,7 @@ XOM Build file
           <exclude name="**/benchmarks/*.java"/>
           <exclude name="**/integrationtests/*.java"/>
           <exclude name="**/EBCDICTest.java"/>
+          <exclude name="**/HugeCommentTest.java"/>
         </fileset>
       </batchtest>
     </junit>
