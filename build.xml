@@ -563,7 +563,7 @@ XOM Build file
   </target>
 
  
-  <target name="test" depends="unit-tests, integration-tests" description="Run unit and integration tests" >
+  <target name="test" depends="unit-tests, integration-tests" description="Run unit and integration tests"/>
 
 
   <target name="unit-tests" depends="compile" description="Run JUnit tests">
