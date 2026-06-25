@@ -3089,6 +3089,7 @@ public class BuilderTest extends XOMTestCase {
 
         try {
             builder1.build("<data/>");
+            fail("should have thrown OutOfMemoryError");
         }
         catch (OutOfMemoryError success) {
             assertEquals(throwable, success);
