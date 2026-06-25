@@ -93,8 +93,12 @@ public class MemoryExhaustionTest extends TestCase {
       throws ParsingException, IOException {
         
         Builder builder = new Builder();
-        builder.build(new HugeCommentInputStream());
-        
+        try {
+            builder.build(new HugeCommentInputStream());
+            fail("should have thrown OutOfMemoryError");
+        }
+        catch (OutOfMemoryError expected) {   
+        }  
     }
 
 }

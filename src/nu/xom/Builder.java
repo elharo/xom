@@ -1194,6 +1194,19 @@ public class Builder {
                 = new ParserBugException(parser, err.getMessage(), in.getSystemId(), err);
             throw pex;
         }
+        catch (OutOfMemoryError err) {
+            // Specifically the case where the OutOfMemoryError is
+            // caused by requesting a larger than 2.1 GB array; not for the 
+            // case where heap is actually exhausted
+            if (err.getMessage() != null && err.getMessage().contains("Requested array size")) {
+                ParsingException pex
+                  = new ParserBugException(parser, err.getMessage(), in.getSystemId(), err);
+                throw pex;
+            }
+            else {
+                throw err; // heap exhausted
+            }
+        }
         catch (FactoryConfigurationError err) {
             // Workaround buggy parsers and prevent DoS attacks
             ParsingException pex

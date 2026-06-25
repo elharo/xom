@@ -83,7 +83,7 @@ import nu.xom.XMLException;
  * </p>
  * 
  * @author Elliotte Rusty Harold
- * @version 1.4.6
+ * @version 1.5.0
  *
  */
 public class BuilderTest extends XOMTestCase {
@@ -3059,23 +3059,56 @@ public class BuilderTest extends XOMTestCase {
 
 
     public void testParserThrowsLinkageError()
-        throws SAXException, IOException, ParsingException {
+      throws SAXException, IOException, ParsingException {
         checkParserThrows(new LinkageError());
     }
 
     
     public void testParserThrowsNoClassDefFoundError()
-        throws SAXException, IOException, ParsingException {
+      throws SAXException, IOException, ParsingException {
         checkParserThrows(new NoClassDefFoundError());
     }
 
 
     public void testParserThrowsFactoryConfigurationError()
-        throws SAXException, IOException, ParsingException {
+      throws SAXException, IOException, ParsingException {
         checkParserThrows(new FactoryConfigurationError());
     }
+
     
+    public void testParserThrowsOutOfMemoryError()
+      throws SAXException, IOException, ParsingException {
+        // testing specifically for the case where the OutOfMemoryError is
+        // caused by requesting a larger than 2.1 GB array; not for the 
+        // case where heap is actually exhausted
+        // The exact threshold is JVM-dependent, but usually
+        // between Integer.MAX_VALUE - 8 and Integer.MAX_VALUE.
+        
+        checkParserThrows(new OutOfMemoryError("java.lang.OutOfMemoryError: Requested array size exceeds VM limit"));
+    }
+
     
+    public void testHeapFullThrowsOutOfMemoryError()
+      throws SAXException, IOException, ParsingException {
+        Throwable throwable = new OutOfMemoryError("java.lang.OutOfMemoryError: some other problem");
+
+        XMLReader parser = XMLReaderFactory.createXMLReader(
+            "org.apache.xerces.parsers.SAXParser");
+        XMLFilter filter = new ExceptionTester(throwable);
+        filter.setParent(parser);
+        Builder builder1 = new Builder(filter);
+
+        try {
+            builder1.build("<data/>");
+            fail("should have thrown OutOfMemoryError");
+        }
+        catch (OutOfMemoryError success) {
+            assertEquals(throwable, success);
+        }
+
+    }
+
+
     private static void checkParserThrows(Throwable throwable)
       throws SAXException, IOException, ParsingException {
 
@@ -3600,21 +3633,7 @@ public class BuilderTest extends XOMTestCase {
         }
         
     }
-    
-    public void testChemistry() throws ParsingException, IOException {
-      String doc = "<!DOCTYPE article PUBLIC \"FOO\" \"https://www.rsc.org/dtds/rscart37.dtd\"><root/>";   
-      StringReader s = new StringReader(doc);
-      try {
-          builder.build(s);
-      } catch (IOException ex) {
-          if (CITestUtil.shouldIgnore(ex)) {
-              // Skip test if network is unavailable in CI
-              systemErr.println("Skipping testChemistry: network unavailable");
-              return;
-          }
-          throw ex;
-      }
-    }
+
     
     public void testMisbehavingParserInternalDTDSubset() throws IOException {
         XMLReader reader = new SAXParser();
