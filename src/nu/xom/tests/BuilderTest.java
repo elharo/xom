@@ -3029,17 +3029,6 @@ public class BuilderTest extends XOMTestCase {
     }
     
     
-    private static class NullPointerReader extends XMLFilterImpl {
-        
-        public void setFeature(String name, boolean value) {};
-        
-        public void parse(InputSource in) {
-            throw new NullPointerException("test null pointer");
-        }
-        
-    }
-    
-    
     public void testParserThrowsNullPointerException() 
       throws SAXException, IOException, ParsingException {
         checkParserThrows(new NullPointerException());        
