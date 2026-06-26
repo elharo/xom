@@ -48,7 +48,7 @@ body {
 	
 <h2>1.5.0</h2>
 
-<p>Introduced a new <code>ParserBugException</code> as a subclass of <code>ParsingException</code>.
+<p>Introduced a new checked <code>ParserBugException</code> as a subclass of <code>ParsingException</code>.
    This is now used to catch and report issues that might be caused by bugs in or attacks on the
    underlying SAX2 parser. In previous releases, runtime exceptions were already caught
   (mostly by fortuitous happenstance), but the new more security-aware code also catches
@@ -56,6 +56,13 @@ body {
   zero-day, DoS, and resource-exhaustion attacks that target issues in the underlying parser.
   A single malicious document may fail to parse, but should not shut down the entire thread.
 </p>
+
+  <p>Introduced a new runtime <code>DataCapacityException</code> as a subclass of <code>XMLException</code>.
+    This exception is used to catch and report issues caused by excessively large input data beyond 
+    what XOM can handle. This better protects against DoS and resource-exhaustion attacks.
+    It also improves reporting of actual problems when there's something like a
+    BASE-64 encoded video in the middle of an XML document.
+  </p>
 
 	
 <h2>1.4.6</h2>
@@ -2199,7 +2206,7 @@ I also spent a lot of time improving the JavaDoc.
 <hr />
 <p>Copyright 2002-2005, 2009, 2013, 2018-2023, 2026 <a href="https://www.elharo.com/">Elliotte Rusty Harold</a><br />
 <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;elharo%40ibiblio%2Eorg">elharo@ibiblio.org</a><br />
-Last Modified June 21, 2026
+Last Modified June 26, 2026
 </p>
 </div>
 <div id="Navbar">@SIDEBAR@</div>
