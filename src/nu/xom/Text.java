@@ -1,4 +1,4 @@
-/* Copyright 2002-2005, 2010 Elliotte Rusty Harold
+/* Copyright 2002-2005, 2010, 2026 Elliotte Rusty Harold
    
    This library is free software; you can redistribute it and/or modify
    it under the terms of version 2.1 of the GNU Lesser General Public 
@@ -32,14 +32,15 @@ import java.io.UnsupportedEncodingException;
  * 
  * <p>
  *   The maximum size of a String or an array in Java limits the maximum
- *   size of a text node to about 2 gigabytes. If you're stuffing Base-64 
+ *   size of a text node to about 2.1 billion ASCII characters and somewhat 
+ *   less for non-ASCII characters. If you're stuffing Base-64 
  *   encoded movies inside one node, you will have problems. Try breaking 
  *   up the text into smaller, contiguous chunks. Even then you will
  *   probably not be able to use XPath on the result. 
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.3.0
+ * @version 1.5.0
  *
  */
 public class Text extends Node {
@@ -94,6 +95,9 @@ public class Text extends Node {
         try {
             result.data = data.getBytes("UTF8");   
         }
+        catch (OutOfMemoryError ex) {
+            throw new DataCapacityException("Provided text exceeds the maximum size for a XOM Text node.", ex);
+        }
         catch (UnsupportedEncodingException ex) {
             throw new RuntimeException(
               "Bad VM! Does not support UTF-8"
@@ -134,9 +138,12 @@ public class Text extends Node {
         try {
             this.data = data.getBytes("UTF8");   
         }
+        catch (OutOfMemoryError ex) {
+            throw new DataCapacityException("Provided text exceeds the maximum size for a XOM Text node.", ex);
+        }
         catch (UnsupportedEncodingException ex) {
             throw new RuntimeException(
-              "Bad VM! Does not support UTF-8"
+                "Bad VM! Does not support UTF-8"
             );
         }
         
