@@ -596,16 +596,23 @@ XOM Build file
   </target>
 
   <!-- TODO move Megatest here --> 
-  <target name="integration-tests" depends="compile" description="Run huge comment OOM test with constrained heap">
+  <target name="integration-tests" depends="compile" description="Run huge OOM test with constrained heap">
     <junit fork="true" jvm="${jvm}" failureproperty="integrationtestsfailed">
        <classpath refid="test.class.path" />
+       <formatter type="${test.outputFormat}" />
+       <formatter type="brief" usefile="false" />
        <!-- reduce heap size to trigger the OOMs we're testing sooner -->
        <jvmarg value="-Xmx256m" />
        <sysproperty key="jaxen.data.dir" value="${build.dir}/jaxen-${jaxenversion}"/>
-       <formatter type="${test.outputFormat}" />
-       <formatter type="brief" usefile="false" />
-       <test name="nu.xom.tests.MemoryExhaustionTest" />
+       <test name="nu.xom.tests.MemoryExhaustionTest" todir="${testoutput.dir}"/>
     </junit>
+
+    <junitreport todir="${testoutput.dir}">
+      <fileset dir="${testoutput.dir}">
+        <include name="TEST-*.xml" />
+      </fileset>
+      <report todir="${testoutput.dir}" />
+    </junitreport>
 
     <fail message="tests failed" if="integrationtestsfailed"/>
   </target> 
