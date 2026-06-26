@@ -95,6 +95,9 @@ public class Text extends Node {
         try {
             result.data = data.getBytes("UTF8");   
         }
+        catch (NegativeArraySizeException ex) {
+            throw new DataCapacityException("Provided text exceeds the maximum size for a XOM Text node.", ex);
+        }
         catch (OutOfMemoryError ex) {
             throw new DataCapacityException("Provided text exceeds the maximum size for a XOM Text node.", ex);
         }
@@ -137,6 +140,11 @@ public class Text extends Node {
         else Verifier.checkPCDATA(data);
         try {
             this.data = data.getBytes("UTF8");   
+        }
+        // Different VMs throw different exceptions when they're trying to decode
+        // a too-big string into a byte array in UTF-8
+        catch (NegativeArraySizeException ex) {
+            throw new DataCapacityException("Provided text exceeds the maximum size for a XOM Text node.", ex);
         }
         catch (OutOfMemoryError ex) {
             throw new DataCapacityException("Provided text exceeds the maximum size for a XOM Text node.", ex);
