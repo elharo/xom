@@ -66,8 +66,6 @@ public class MegaTextTest extends XOMTestCase {
     char[] buffer = new char[count];
     Arrays.fill(buffer, c);
 
-    // In Java 1.6, this constructor performs a System.arraycopy 
-    // to create the internal char array of the new String.
     return new String(buffer);
   }
 
