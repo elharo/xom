@@ -20,8 +20,6 @@
 
 package nu.xom;
 
-import java.io.UnsupportedEncodingException;
-
 /**
  * <p>
  *   This class represents a run of text. 
@@ -39,13 +37,13 @@ import java.io.UnsupportedEncodingException;
  * </p>
  *
  * @author Elliotte Rusty Harold
- * @version 1.3.0
+ * @version 1.5.0
  *
  */
 public class Text extends Node {
 
     
-    private byte[] data;
+    private String value;
     
     
     /**
@@ -81,7 +79,7 @@ public class Text extends Node {
         // I'm relying here on the data array being immutable.
         // If this ever changes, e.g. by adding an append method,
         // this method needs to change too.
-        this.data = text.data;
+        this.value = text.value;
     }
 
     
@@ -91,14 +89,7 @@ public class Text extends Node {
     static Text build(String data) {
         
         Text result = new Text();
-        try {
-            result.data = data.getBytes("UTF8");   
-        }
-        catch (UnsupportedEncodingException ex) {
-            throw new RuntimeException(
-              "Bad VM! Does not support UTF-8"
-            );
-        } 
+        result.value = data;
         return result;
         
     }
@@ -131,14 +122,7 @@ public class Text extends Node {
         
         if (data == null) data = "";
         else Verifier.checkPCDATA(data);
-        try {
-            this.data = data.getBytes("UTF8");   
-        }
-        catch (UnsupportedEncodingException ex) {
-            throw new RuntimeException(
-              "Bad VM! Does not support UTF-8"
-            );
-        }
+        this.value = data;
         
     }
 
@@ -152,16 +136,7 @@ public class Text extends Node {
      * @return the content of the node
      */
     public final String getValue() {
-        
-        try {
-            return new String(data, "UTF8");
-        } 
-        catch (UnsupportedEncodingException ex) {
-            throw new RuntimeException(
-              "Bad VM! Does not support UTF-8"
-            );
-        }
-        
+        return value;
     }
 
     
@@ -466,7 +441,7 @@ public class Text extends Node {
 
 
     boolean isEmpty() {
-        return this.data.length == 0;
+        return this.value.isEmpty();
     }
 
     
