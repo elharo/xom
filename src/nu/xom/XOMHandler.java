@@ -318,7 +318,9 @@ class XOMHandler
         
     }
   
-    
+    // Use both textString and buffer here to optimize
+    // the common case where the entire text node is passed to the
+    // characters() method in one call.
     protected String textString = null;
     protected StringBuilder buffer = null;
   
