@@ -60,7 +60,7 @@ public class MegaTextTest extends XOMTestCase {
    * in a single byte array of UTF-8 it can't handle something this large.
    */
   private static String makeBigString() {
-    int count = 740000000; // 740 million
+    int count = 715827885; // 716 million
     char c = '\u4E2D'; // 中 which means "middle"
 
     char[] buffer = new char[count];
