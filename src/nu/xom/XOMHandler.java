@@ -84,6 +84,8 @@ class XOMHandler
         locator = null;
         doctype = null;
         internalDTDSubset = null;
+        buffer = null;
+        textString = null;
     }
 
     
@@ -108,6 +110,7 @@ class XOMHandler
             document.setBaseURI(documentBaseURI);
         }
         buffer = null;
+        textString = null;
         
     }
   
