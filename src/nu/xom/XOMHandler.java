@@ -56,8 +56,9 @@ class XOMHandler
     protected StringBuilder internalDTDSubset;
     protected NodeFactory   factory;
               boolean       usingCrimson = false;
-    
-    
+    private boolean abortRequested = false;
+
+
     XOMHandler(NodeFactory factory) {
         this.factory = factory; 
     }   
@@ -108,6 +109,7 @@ class XOMHandler
             document.setBaseURI(documentBaseURI);
         }
         buffer = null;
+        abortRequested = false;
         
     }
   
@@ -121,6 +123,7 @@ class XOMHandler
     public void startElement(String namespaceURI, String localName, 
       String qualifiedName, org.xml.sax.Attributes attributes) throws SAXException {
 
+        checkHeap();
         flushText();
         Element element;
         if (parent != document) {
@@ -224,7 +227,7 @@ class XOMHandler
 
 
     public void endElement(
-      String namespaceURI, String localName, String qualifiedName) {
+      String namespaceURI, String localName, String qualifiedName) throws SAXException {
         
         // If we're immediately inside a skipped element
         // we need to reset current to null, not to the parent
@@ -324,6 +327,7 @@ class XOMHandler
     protected StringBuilder buffer = null;
   
     public void characters(char[] text, int start, int length) throws SAXException {
+        checkHeap();
         if (length <= 0) return;
         if (textString == null) textString = new String(text, start, length);
         else {
@@ -341,8 +345,8 @@ class XOMHandler
 
 
     // accumulate all text that's in the buffer into a text node
-    private void flushText() {
-        
+    private void flushText() throws SAXException {
+        checkHeap();
         if (buffer != null) {
             textString = buffer.toString();
             buffer = null;
@@ -380,7 +384,7 @@ class XOMHandler
   
     
     public void processingInstruction(String target, String data) throws SAXException {
-              
+        checkHeap();
         if (inDTD) {
             if (!inInternalSubset()) return;
         }
@@ -424,7 +428,7 @@ class XOMHandler
     public void startPrefixMapping(String prefix, String uri) {}
     public void endPrefixMapping(String prefix) {}
 
-    public void skippedEntity(String name) {
+    public void skippedEntity(String name) throws SAXException {
         
         // Xerces 2.7 now calls this method in the DTD 
         // for parameter entities it doesn't resolve. We can ignore these.
@@ -438,7 +442,7 @@ class XOMHandler
     // LexicalHandler events
     public void startDTD(String rootName, String publicID, 
       String systemID) throws SAXException {
-      
+        checkHeap();
         inDTD = true;
         Nodes result = factory.makeDocType(rootName, publicID, systemID);
         for (int i = 0; i < result.size(); i++) {
@@ -471,7 +475,8 @@ class XOMHandler
     // but Crimson and possibly other parsers don't properly
     // report these entities, or perhaps just not tag them
     // with [dtd] like they're supposed to.
-    public void startEntity(String name) {
+    public void startEntity(String name) throws SAXException {
+      checkHeap();
       if (name.equals("[dtd]")) inExternalSubset = true;
     }
     
@@ -497,7 +502,7 @@ class XOMHandler
 
     
     public void comment(char[] text, int start, int length) throws SAXException {
-    
+        checkHeap();
         if (inDTD) {
             if (!inInternalSubset()) return;
         }
@@ -538,8 +543,8 @@ class XOMHandler
     }    
     
     
-    public void elementDecl(String name, String model) {
-        
+    public void elementDecl(String name, String model) throws SAXException {
+        checkHeap();
         if (inInternalSubset() && doctype != null) {
             Verifier.checkXMLName(name);
             Verifier.checkNoMarkupCharacters(model, "element declaration model");
@@ -580,8 +585,9 @@ class XOMHandler
 
     public void attributeDecl(String elementName, 
       String attributeName, String type, String mode, 
-      String defaultValue)  {
-    
+      String defaultValue) throws SAXException {
+        checkHeap();
+
         // workaround for Crimson bug
         if (type.startsWith("NOTATION ")) {
             if (type.indexOf('(') == -1 && ! type.endsWith(")")) {
@@ -624,8 +630,9 @@ class XOMHandler
   
     
     public void internalEntityDecl(String name, 
-       String value) {   
-        
+       String value) throws SAXException {
+        checkHeap();
+
         if (inInternalSubset() && doctype != null) {
             Verifier.checkEntityName(name);
             StringBuilder declaration = new StringBuilder();
@@ -647,7 +654,8 @@ class XOMHandler
   
     
     public void externalEntityDecl(String name, 
-       String publicID, String systemID) {
+       String publicID, String systemID) throws SAXException {
+        checkHeap();
 
         if (inInternalSubset() && doctype != null) {
             Verifier.checkEntityName(name);
@@ -694,8 +702,9 @@ class XOMHandler
     
     
     public void notationDecl(String name, String publicID, 
-      String systemID) {
-        
+      String systemID) throws SAXException {
+        checkHeap();
+
         if (inInternalSubset() && doctype != null) {
             Verifier.checkXMLName(name);
         }
@@ -734,8 +743,9 @@ class XOMHandler
    
     
     public void unparsedEntityDecl(String name, String publicID, 
-     String systemID, String notationName) {
-        
+     String systemID, String notationName) throws SAXException {
+        checkHeap();
+
         if (inInternalSubset() && doctype != null) {
             Verifier.checkXMLName(name);
             Verifier.checkXMLName(notationName);
@@ -1030,5 +1040,13 @@ class XOMHandler
 
 
     void requestAbort() {
+        this.abortRequested = true;
+    }
+
+    
+    private void checkHeap() throws SAXException {
+        if (abortRequested) {
+            throw new SAXException("Memory Limit Approaching");
+        }
     }
 }
