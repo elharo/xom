@@ -1028,5 +1028,7 @@ class XOMHandler
         
     }
 
-    
+
+    void requestAbort() {
+    }
 }
