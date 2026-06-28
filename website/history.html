@@ -49,6 +49,23 @@ body {
 <h2>1.5.0</h2>
 
 <p>
+This release focuses on preventing Denial-of-Service (DoS) attacks that can be triggered
+by malicious input documents. In particular:
+</p>
+
+	
+<ul>
+	<li>
+	Memory usage during parsing is monitored. If the heap gets more than 90% full, 
+	parsing is aborted and memory reclaimed. The error is reported by throwing the existing
+	checked ParsingException. Thus, a single malicious document may temporarily consume
+	resources and processing power, but won't bring down the thread or application.
+	This enables XOM to process untrusted input without restricting the
+	XML syntax documents can use. DTDs and internal and external entity references
+	remain fully supported.</li>
+</ul>
+	
+<p>
 Introduced a new <code>ParserBugException</code> as a subclass of <code>ParsingException</code>.
 This is now used to catch and report issues that might be caused by bugs in or attacks on the
 underlying SAX2 parser. In previous releases, runtime exceptions were already caught
