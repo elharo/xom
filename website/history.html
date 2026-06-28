@@ -63,28 +63,29 @@ by malicious input documents. In particular:
 	This enables XOM to process untrusted input without restricting the
 	XML syntax documents can use. DTDs and internal and external entity references
 	remain fully supported.</li>
+
+	<li>
+		A new <code>ParserBugException</code>  (a subclass of <code>ParsingException</code>)
+		is used to catch and report issues that might be caused by bugs in or attacks on the
+		underlying SAX2 parser. In previous releases, runtime exceptions were already caught
+		(mostly by fortuitous happenstance), but the new more security-aware code also catches
+		several recoverable errors such as <code>StackOverflowError</code>. This better protects against
+		zero-day, DoS, and resource-exhaustion attacks that target issues in the underlying parser.
+		A single malicious document may fail to parse, but should not shut down the entire thread.
+	</li>
+
+	<li>
+		Excessively long text runs in input documents now throw a <code>ParsingException</code> instead of
+		an <code>OutOfMemoryError</code>. This will likely happen somewhere between 1 and 2 GB of text,
+		depending on exactly how the parser feeds documents to XOM. It would be possible
+		to reliably parse text nodes up to 2.1 GB before throwing if anyone actually needs that.
+		It would even be possible to parse text nodes larger than 2.1 GB by splitting them
+		into multiple <code>Text</code> nodes, but that would first require further
+		hardening of XOM against heap exhaustion attacks. For now this at least prevents
+		a single malicious document from crashing the entire thread.
+	</li>
+
 </ul>
-	
-<p>
-Introduced a new <code>ParserBugException</code> as a subclass of <code>ParsingException</code>.
-This is now used to catch and report issues that might be caused by bugs in or attacks on the
-underlying SAX2 parser. In previous releases, runtime exceptions were already caught
-(mostly by fortuitous happenstance), but the new more security-aware code also catches
-several recoverable errors such as <code>StackOverflowError</code>. This better protects against
-zero-day, DoS, and resource-exhaustion attacks that target issues in the underlying parser.
-A single malicious document may fail to parse, but should not shut down the entire thread.
-</p>
-  
-<p>
-Excessively long text runs in input documents now cause a <code>ParsingException</code> to be thrown instead of an
-<code>OutOfMemoryError</code>. This will likely happen somewhere between 1 and 2 GB of text,
-depending on exactly how the parser feeds documents to XOM. It would be possible 
-to reliably parse text nodes up to 2.1 GB before throwing if anyone actually needs that.
-It would even be possible to parse text nodes larger than 2.1 GB by splitting them
-into multiple <code>Text</code> nodes, but that would first require further
-hardening of XOM against heap exhaustion attacks. For now this at least prevents
-a single malicious document from crashing the entire thread.
-</p>
 
 <p>
 The internal optimizations in Text have been flip-flopped to improve performance in Java 9 and later
