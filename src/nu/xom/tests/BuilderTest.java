@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Reader;
@@ -41,6 +42,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 
+import java.util.Arrays;
 import javax.xml.parsers.FactoryConfigurationError;
 
 import org.apache.xerces.parsers.SAXParser;
@@ -77,14 +79,11 @@ import nu.xom.XMLException;
 
 
 /**
- * <p>
  *  Tests building documents from streams, strings, files,
  *  and other input sources.
- * </p>
  * 
  * @author Elliotte Rusty Harold
  * @version 1.5.0
- *
  */
 public class BuilderTest extends XOMTestCase {
 
@@ -3582,6 +3581,52 @@ public class BuilderTest extends XOMTestCase {
         }
         
     }
+
+    
+    public void testBuilderThrowsParsingExceptionForMassiveText() throws IOException {
+        Reader reader = new java.io.Reader() {
+            private final String startTag = "<root>";
+            private final String endTag = "</root>";
+            private long totalRead = 0;
+            private final long limit = 2200000000L;
+            private final char[] chunk = new char[8192];
+            private int startPosition = 0;
+            private int endPosition = 0;
+
+            {
+                Arrays.fill(chunk, 'A');
+            }
+
+            public int read(char[] cbuf, int off, int len) {
+                int charsRead = 0;
+                // Write <root>
+                while (startPosition < startTag.length() && charsRead < len) {
+                    cbuf[off + charsRead++] = startTag.charAt(startPosition++);
+                }
+                // Write more text than can fit in a string
+                while (totalRead < limit && charsRead < len) {
+                    int toRead = (int) Math.min(len - charsRead, chunk.length);
+                    System.arraycopy(chunk, 0, cbuf, off + charsRead, toRead);
+                    charsRead += toRead;
+                    totalRead += toRead;
+                }
+                // Write </root> 
+                while (endPosition < endTag.length() && charsRead < len) {
+                    cbuf[off + charsRead++] = endTag.charAt(endPosition++);
+                }
+                return charsRead == 0 ? -1 : charsRead;
+            }
+            public void close() {}
+        };
+
+        Builder builder = new Builder();
+        try {
+            builder.build(reader);
+            fail("Should have thrown ParsingException");
+        } catch (ParsingException expected) {
+            assertNotNull(expected.getMessage());
+        }
+    }
     
     public void testLocatorReturnsNullSystemIDWithoutRelativeURL() 
       throws ParsingException, IOException {
@@ -3615,8 +3660,8 @@ public class BuilderTest extends XOMTestCase {
         }
         catch (IOException success) {
         assertNotNull(success.getMessage());
-            // Here we expect that because there's no Locator
-            // there's no base URL. As a result, the DTD is looked for in the
+            // Here we expect that because there's no Locator, there's no base URL.
+            // As a result, the DTD is looked for in the
             // current working directory, which is the wrong place. 
             // Therefore, this IOException is thrown. 
         }

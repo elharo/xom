@@ -32,8 +32,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.3.3
- *
+ * @version 1.5.0
  */
 class XOMHandler 
   implements ContentHandler, LexicalHandler, DeclHandler, DTDHandler {
@@ -329,7 +328,12 @@ class XOMHandler
         if (textString == null) textString = new String(text, start, length);
         else {
             if (buffer == null) buffer = new StringBuilder(textString);
-            buffer.append(text, start, length);
+            try {
+                buffer.append(text, start, length);
+            }
+            catch (OutOfMemoryError ex) {
+                throw new SAXException("Text node exceeds " + (buffer.length() + length) + " characters");
+            }
         }
         if (finishedCDATA) inCDATA = false;
         
