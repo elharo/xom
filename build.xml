@@ -574,8 +574,8 @@ XOM Build file
          <fileset dir="${build.src}">
            <include name="**/*Test.java" />
            <exclude name="**/MegaTest.java" />
-            <exclude name="**/benchmarks/*.java" />
-            <exclude name="**/integrationtests/*.java" />
+           <exclude name="**/benchmarks/*.java" />
+           <exclude name="**/integrationtests/*.java" />
            <exclude name="**/EBCDICTest.java" />
          </fileset>
       </batchtest>

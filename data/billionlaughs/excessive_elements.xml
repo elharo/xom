@@ -5,5 +5,9 @@
   <!ENTITY d "&c;&c;&c;&c;&c;&c;&c;&c;&c;&c;">
   <!ENTITY e "&d;&d;&d;&d;&d;&d;&d;&d;&d;&d;">
   <!ENTITY f "&e;&e;&e;&e;&e;&e;&e;&e;&e;&e;">
+  <!ENTITY g "&f;&f;&f;&f;&f;&f;&f;&f;&f;&f;">
+  <!ENTITY h "&g;&g;&g;&g;&g;&g;&g;&g;&g;&g;">
+  <!ENTITY i "&h;&h;&h;&h;&h;&h;&h;&h;&h;&h;">
+  <!ENTITY j "&i;&i;&i;&i;&i;&i;&i;&i;&i;&i;">
 ]>
-<doc>&f;</doc>
+<doc>&j;</doc>
