@@ -60,6 +60,9 @@ public class BillionLaughsTest extends XOMTestCase {
     public void testExcessiveElements() throws IOException {
         try {
             builder.build(new File(inputDir, "excessive_elements.xml"));
+            // This test can fail with a very large heap. If terabyte heaps
+            // become a thing in the future, then excessive_elements.xml may
+            // need to be made even larger to trigger the exception.
             fail("should have thrown ParsingException");
         } catch (ParsingException expected) {
             assertTrue(expected.getCause() instanceof SAXException);
