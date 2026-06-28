@@ -48,25 +48,27 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import org.apache.xerces.impl.Version;
 
 /**
- * <p>
  * This class is responsible for creating XOM <code>Document</code> 
  * objects  from a URL, file, string, or input stream by reading   
  * an XML document. A SAX parser is used to read the   
  * document and report any well-formedness errors.
- * </p>
  * 
  * @author Elliotte Rusty Harold
  * @version 1.5.0
- * 
  */
 public class Builder {
 
-    
+
     private XMLReader   parser;
     private NodeFactory factory;
-    
-    private static double xercesVersion = 2.6;
-    
+
+
+    /**
+     * If the heap gets this full, abort parsing and report a possible DoS attack.
+     */
+    private static final double MAX_MEMORY_PERCENTAGE = 0.90;
+    private static double xercesVersion = 2.6;    
+
     static {  
 
         try {
@@ -1129,9 +1131,7 @@ public class Builder {
     
     
     /**
-     * <p>
      * Reads the document from a SAX <code>InputSource</code>.
-     * </p>
      * 
      * @param in the input source from which the document is read
      * 
@@ -1147,7 +1147,9 @@ public class Builder {
     private Document build(InputSource in) 
       throws ParsingException, ValidityException, IOException {
 
+        
         XOMHandler handler = (XOMHandler) parser.getContentHandler();
+        MemoryMonitor.attachMonitor(handler, MAX_MEMORY_PERCENTAGE);
         Document result = null;
         try {
             parser.parse(in);
