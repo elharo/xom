@@ -1,0 +1,9 @@
+<!DOCTYPE doc [
+  <!ENTITY a "<a></a>">
+  <!ENTITY b "&a;&a;&a;&a;&a;&a;&a;&a;&a;&a;">
+  <!ENTITY c "&b;&b;&b;&b;&b;&b;&b;&b;&b;&b;">
+  <!ENTITY d "&c;&c;&c;&c;&c;&c;&c;&c;&c;&c;">
+  <!ENTITY e "&d;&d;&d;&d;&d;&d;&d;&d;&d;&d;">
+  <!ENTITY f "&e;&e;&e;&e;&e;&e;&e;&e;&e;&e;">
+]>
+<doc>&f;</doc>
