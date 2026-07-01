@@ -20,10 +20,8 @@
 
 package nu.xom.tests;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 
 import nu.xom.Builder;
 import nu.xom.ParsingException;
